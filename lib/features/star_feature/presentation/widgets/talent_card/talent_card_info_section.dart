@@ -46,12 +46,34 @@ class TalentCardInfoSection extends StatelessWidget {
             child: CircleAvatar(
               radius: 25,
               backgroundColor: Colors.grey[300],
-              backgroundImage: talent.user.image.isNotEmpty
-                  ? NetworkImage(talent.user.image)
-                  : null,
-              child: talent.user.image.isEmpty
-                  ? Image(image: AssetImage(Assets.profile))
-                  : null,
+              child: talent.user.image.isNotEmpty
+                  ? ClipOval(
+                      child: Image.network(
+                        talent.user.image,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildFallbackAvatar();
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.grey[300],
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.grey),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : _buildFallbackAvatar(),
             ),
           ),
           SizedBox(width: 12),
@@ -137,6 +159,18 @@ class TalentCardInfoSection extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFallbackAvatar() {
+    return Container(
+      width: 50,
+      height: 50,
+      color: Colors.grey[300],
+      child: Image.asset(
+        Assets.logo,
+        fit: BoxFit.contain,
       ),
     );
   }

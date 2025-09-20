@@ -61,10 +61,17 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   bool _isLoadingVideo = false;
   bool _isLoadingThumbnail = false;
 
+  // Manual duration input
+  int? _manualDuration;
+  bool _showManualDurationInput = false;
+  final TextEditingController _durationController = TextEditingController();
+
   final FocusNode _titleFocusNode = FocusNode();
   bool _isUploading = false;
   String _uploadStatus = '';
   double _uploadProgress = 0.0;
+  bool _preventDoubleSubmit = false;
+  String? _currentUploadId;
 
   // Create instance of Bunny uploader
   final BunnyVideoUploader _bunnyUploader = BunnyVideoUploader();
@@ -87,7 +94,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _titleController,
-                enabled: !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
+                enabled: !_isUploading &&
+                    !_isLoadingVideo &&
+                    !_isLoadingThumbnail &&
+                    !_preventDoubleSubmit,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -136,7 +146,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _descriptionController,
-                enabled: !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
+                enabled: !_isUploading &&
+                    !_isLoadingVideo &&
+                    !_isLoadingThumbnail &&
+                    !_preventDoubleSubmit,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -254,7 +267,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
               // Publish button
               ElevatedButton(
-                onPressed: _isUploading
+                onPressed: (_isUploading || _preventDoubleSubmit)
                     ? null
                     : () async {
                         ManageVibration.vibrate();
@@ -354,7 +367,9 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   ),
                   SizedBox(width: 12.w),
                   Text(
-                    context.isArabic ? 'جاري تحميل الفئات...' : 'Loading categories...',
+                    context.isArabic
+                        ? 'جاري تحميل الفئات...'
+                        : 'Loading categories...',
                     style: TextStyle(
                       color: AppColors.getTextColor(context).withOpacity(0.6),
                       fontSize: 14,
@@ -417,7 +432,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
   Widget _buildVideoSection() {
     return GestureDetector(
-      onTap: _isUploading
+      onTap: (_isUploading || _preventDoubleSubmit)
           ? null
           : () {
               ManageVibration.vibrate();
@@ -440,9 +455,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
             width: 1.5,
           ),
         ),
-        child: _selectedVideo != null &&
-                _videoController?.value.isInitialized == true
-            ? _buildAdaptiveVideoPlayer()
+        child: _selectedVideo != null
+            ? (_videoController?.value.isInitialized == true
+                ? _buildAdaptiveVideoPlayer()
+                : _buildVideoPreparingState())
             : _buildVideoPlaceholder(),
       ),
     );
@@ -694,6 +710,97 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     );
   }
 
+  Widget _buildVideoLoadingIndicator() {
+    return SizedBox(
+      height: 220.h,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: AppColors.getTextColor(context).withOpacity(0.05),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.check_circle,
+              size: 48,
+              color: Colors.green,
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            context.isArabic ? 'تم اختيار الفيديو ✓' : 'Video Selected ✓',
+            style: TextStyle(
+              color: Colors.green,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          if (_videoController == null ||
+              !_videoController!.value.isInitialized)
+            Column(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.getRedColor(context),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  context.isArabic
+                      ? 'جاري تحضير الفيديو...'
+                      : 'Preparing video...',
+                  style: TextStyle(
+                    color: AppColors.getTextColor(context).withOpacity(0.6),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVideoPreparingState() {
+    return SizedBox(
+      height: 220.h,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.getRedColor(context),
+                ),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              context.isArabic ? 'جاري تحضير الفيديو...' : 'Preparing video...',
+              style: TextStyle(
+                color: AppColors.getTextColor(context).withOpacity(0.7),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildVideoPlaceholder() {
     return SizedBox(
       height: 220.h,
@@ -770,7 +877,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
   Widget _buildThumbnailSection() {
     return GestureDetector(
-      onTap: _isUploading
+      onTap: (_isUploading || _preventDoubleSubmit)
           ? null
           : () {
               ManageVibration.vibrate();
@@ -805,7 +912,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                     top: 8,
                     right: 8,
                     child: GestureDetector(
-                      onTap: _isUploading
+                      onTap: (_isUploading || _preventDoubleSubmit)
                           ? null
                           : () {
                               ManageVibration.vibrate();
@@ -875,18 +982,42 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   }
 
   Future<void> _initializeVideo(String path) async {
-    if (_videoController != null) {
-      await _videoController!.dispose();
+    try {
+      if (_videoController != null) {
+        await _videoController!.dispose();
+      }
+
+      _videoController = VideoPlayerController.file(File(path));
+      await _videoController!.initialize();
+
+      if (mounted) {
+        setState(() {});
+
+        // Auto play and loop
+        _videoController!.play();
+        _videoController!.setLooping(true);
+      }
+    } catch (e) {
+      print('Error initializing video: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.isArabic
+                  ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
+                  : 'Error loading video. Please try again.',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+
+        // Reset video selection on error
+        setState(() {
+          _selectedVideo = null;
+          _videoController = null;
+        });
+      }
     }
-
-    _videoController = VideoPlayerController.file(File(path));
-    await _videoController!.initialize();
-
-    setState(() {});
-
-    // Auto play and loop
-    _videoController!.play();
-    _videoController!.setLooping(true);
   }
 
   // Future<void> _handleSubmit() async {
@@ -923,7 +1054,16 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   // }
 
   Future<void> _handleSubmit() async {
+    // Prevent double submission
+    if (_isUploading || _preventDoubleSubmit) {
+      print("⚠️ Upload already in progress, ignoring duplicate request");
+      return;
+    }
+
     if (!_formKey.currentState!.validate()) return;
+
+    // Set prevention flag immediately
+    _preventDoubleSubmit = true;
 
     // تحقق إضافي من الوصف
     final description = _descriptionController.text.trim();
@@ -936,18 +1076,19 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
     if (_selectedVideo == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.isArabic
-              ? 'يرجى اختيار فيديو'
-              : 'Please select a video'),
+          content: Text(
+              context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
@@ -960,6 +1101,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
@@ -972,19 +1114,32 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           backgroundColor: Colors.red,
         ),
       );
+      _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
-    // // Check subscription first
+    // Check subscription first - for now skip subscription check
     // serviceLocator<SubscriptionController>().checkIfUserSubscribed(
     //   onSubscribed: () => _performUpload(),
     //   subCategoryId: Constants.tubeSubCategory,
     // );
 
+    // Direct upload for testing
     _performUpload();
   }
 
   Future<void> _performUpload() async {
+    // Double check to prevent multiple uploads
+    if (_isUploading) {
+      print("⚠️ Upload already in progress in _performUpload, aborting");
+      return;
+    }
+
+    // Generate unique upload ID for tracking
+    final uploadId = DateTime.now().millisecondsSinceEpoch.toString();
+    _currentUploadId = uploadId;
+    print("🆔 Starting new upload with ID: $uploadId");
+
     setState(() {
       _isUploading = true;
       _uploadProgress = 0.0;
@@ -1002,16 +1157,26 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
             : 'Getting video information...';
       });
 
-      final duration =
-          await videoPickerHelper.getVideoDuration(_selectedVideo!);
+      int? duration = await videoPickerHelper.getVideoDuration(_selectedVideo!);
+
+      // إذا فشل في الحصول على المدة، استخدم المدة اليدوية أو قيمة افتراضية
       if (duration == null) {
-        _showError(context.isArabic
-            ? 'فشل في الحصول على مدة الفيديو'
-            : 'Failed to get video duration');
-        return;
+        if (_manualDuration != null) {
+          duration = _manualDuration!;
+          print("📹 Using manual duration: ${duration}s");
+        } else {
+          // اعرض خيار للمستخدم لإدخال المدة يدوياً
+          duration = await _showDurationInputDialog();
+          if (duration == null) {
+            _showError(context.isArabic
+                ? 'يرجى إدخال مدة الفيديو'
+                : 'Please enter video duration');
+            return;
+          }
+        }
       }
 
-      print("📹 Video duration: ${duration}s");
+      print("📹 Final video duration: ${duration}s");
 
       // Validate video
       final validation =
@@ -1041,6 +1206,8 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
         videoFile: _selectedVideo!,
         thumbnailFile: _selectedThumbnail!,
         subCategoryId: Constants.tubeSubCategory,
+        categoryId: _selectedCategory!.id, // إضافة categoryId
+        videoDuration: duration, // إضافة duration المحسوبة
         onStatusUpdate: (status) {
           setState(() {
             _uploadStatus = status;
@@ -1060,7 +1227,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
       result.fold(
         (failure) {
-          print("❌ Upload failed: ${failure.toString()}");
+          print("❌ Upload failed for ID $uploadId: ${failure.toString()}");
 
           var currentContext =
               AppPages.router.configuration.navigatorKey.currentContext!;
@@ -1101,14 +1268,18 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           // _showError(errorMessage);
         },
         (success) {
-          print("✅ Upload successful!");
-          _showSuccess(context.isArabic
-              ? 'تم رفع الفيديو بنجاح!'
-              : 'Video uploaded successfully!');
+          print("✅ Upload successful for ID $uploadId!");
+
+          // Show success message with processing note
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                  : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.');
 
           // Clear form and navigate back
           _clearForm();
-          Future.delayed(Duration(seconds: 2), () {
+          Future.delayed(Duration(seconds: 4), () {
             if (mounted) {
               Navigator.of(context).pop();
             }
@@ -1121,11 +1292,14 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           ? 'حدث خطأ غير متوقع: $e'
           : 'An unexpected error occurred: $e');
     } finally {
+      print("🔄 Cleaning up upload ID: $uploadId");
       if (mounted) {
         setState(() {
           _isUploading = false;
           _uploadProgress = 0.0;
           _uploadStatus = '';
+          _preventDoubleSubmit = false; // Reset double submission prevention
+          _currentUploadId = null; // Clear upload ID
         });
       }
     }
@@ -1134,49 +1308,141 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
   void _showError(String message) {
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 8),
-        action: SnackBarAction(
-          label: context.isArabic ? 'إغلاق' : 'Close',
-          textColor: Colors.white,
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-      ),
-    );
+    showErrorMessage(context, message);
   }
 
-  void _showSuccess(String message) {
-    if (!mounted) return;
+  // Dialog لإدخال مدة الفيديو يدوياً
+  Future<int?> _showDurationInputDialog() async {
+    _durationController.clear();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: 8),
-            Expanded(child: Text(message)),
+    return showDialog<int>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: AppColors.getFindFillColor(context),
+          title: Text(
+            context.isArabic ? 'إدخال مدة الفيديو' : 'Enter Video Duration',
+            style: TextStyle(
+              color: AppColors.getTextColor(context),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.isArabic
+                    ? 'لم نتمكن من الحصول على مدة الفيديو تلقائياً. يرجى إدخال المدة بالثواني:'
+                    : 'Unable to get video duration automatically. Please enter duration in seconds:',
+                style: TextStyle(
+                  color: AppColors.getTextColor(context).withOpacity(0.8),
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _durationController,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                style: TextStyle(
+                  color: AppColors.getTextColor(context),
+                ),
+                decoration: InputDecoration(
+                  hintText: context.isArabic ? 'مثال: 120' : 'Example: 120',
+                  hintStyle: TextStyle(
+                    color: AppColors.getTextColor(context).withOpacity(0.5),
+                  ),
+                  filled: true,
+                  fillColor: AppColors.getFindFillColor(context),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: AppColors.getTextColor(context).withOpacity(0.3),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: AppColors.getRedColor(context),
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                context.isArabic
+                    ? 'تلميح: دقيقة واحدة = 60 ثانية'
+                    : 'Tip: 1 minute = 60 seconds',
+                style: TextStyle(
+                  color: AppColors.getTextColor(context).withOpacity(0.6),
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(null),
+              child: Text(
+                context.isArabic ? 'إلغاء' : 'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final durationText = _durationController.text.trim();
+                final duration = int.tryParse(durationText);
+
+                if (duration != null && duration > 0 && duration <= 3600) {
+                  // حفظ المدة للاستخدام المستقبلي
+                  _manualDuration = duration;
+                  Navigator.of(dialogContext).pop(duration);
+                } else {
+                  // عرض خطأ
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'يرجى إدخال مدة صحيحة (1-3600 ثانية)'
+                            : 'Please enter valid duration (1-3600 seconds)',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.getRedColor(context),
+              ),
+              child: Text(
+                context.isArabic ? 'تأكيد' : 'Confirm',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ],
-        ),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 3),
-      ),
+        );
+      },
     );
   }
 
   void _clearForm() {
     _titleController.clear();
     _descriptionController.clear();
+    _durationController.clear();
     setState(() {
       _selectedVideo = null;
       _selectedThumbnail = null;
       _videoMediaId = null;
       _thumbnailMediaId = null;
       _selectedCategory = null;
+      _manualDuration = null;
+      _showManualDurationInput = false;
+      _isLoadingVideo = false;
+      _isLoadingThumbnail = false;
     });
     _videoController?.dispose();
     _videoController = null;
@@ -1187,6 +1453,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     _titleController.dispose();
     _titleFocusNode.dispose();
     _descriptionController.dispose();
+    _durationController.dispose();
     _videoController?.dispose();
     super.dispose();
   }
@@ -1206,7 +1473,8 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     });
 
     try {
-      final getActiveCategoriesUseCase = serviceLocator<GetActiveCategoriesUseCase>();
+      final getActiveCategoriesUseCase =
+          serviceLocator<GetActiveCategoriesUseCase>();
       final result = await getActiveCategoriesUseCase(NoParams());
 
       result.fold(

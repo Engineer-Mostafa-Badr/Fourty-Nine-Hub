@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../common/functions/global/upload_file.dart';
 import '../utils/constants.dart';
@@ -36,20 +37,26 @@ class UploadManager {
     required File videoFile,
     required File thumbnailFile,
     required String subCategoryId,
+    required String categoryId, // إضافة categoryId
   }) async {
     int retryCount = 0;
 
     while (retryCount < StarConstants.maxRetries) {
       try {
         // Stage 1: Validate video
-        _updateStage(UploadStage.validating, 'Validating video file...');
+        _updateStage(
+            UploadStage.validating,
+            context.isArabic
+                ? 'جاري التحقق من الفيديو...'
+                : 'Validating video file...');
         final validationResult =
             await _videoHelper.validateVideoForUpload(videoFile);
 
         if (!(validationResult['isValid'] as bool)) {
           final errors = validationResult['errors'] as List<String>;
-          return Left(
-              UnknownFailure('Video validation failed: ${errors.join(', ')}'));
+          return Left(UnknownFailure(context.isArabic
+              ? 'فشل التحقق من الفيديو: ${errors.join(', ')}'
+              : 'Video validation failed: ${errors.join(', ')}'));
         }
 
         // Stage 2: Get video duration
@@ -60,11 +67,17 @@ class UploadManager {
             await Future.delayed(Duration(seconds: 2));
             continue;
           }
-          return Left(UnknownFailure('Failed to get video duration'));
+          return Left(UnknownFailure(context.isArabic
+              ? 'فشل الحصول على مدة الفيديو'
+              : 'Failed to get video duration'));
         }
 
         // Stage 3: Create video entry
-        _updateStage(UploadStage.creatingEntry, 'Creating video entry...');
+        _updateStage(
+            UploadStage.creatingEntry,
+            context.isArabic
+                ? 'جاري انشاء الفيديو...'
+                : 'Creating video entry...');
         final bunnyResponse =
             await _bunnyUploader.createBunnyVideo(title: title);
 
@@ -75,7 +88,11 @@ class UploadManager {
         final bunnyData = bunnyResponse.getOrElse(() => throw Exception());
 
         // Stage 4: Upload thumbnail
-        _updateStage(UploadStage.uploadingThumbnail, 'Uploading thumbnail...');
+        _updateStage(
+            UploadStage.uploadingThumbnail,
+            context.isArabic
+                ? 'جاري تحميل الصورة...'
+                : 'Uploading thumbnail...');
         String? thumbnailMediaId;
 
         final uploadFile = UploadFile();
@@ -94,11 +111,14 @@ class UploadManager {
             await Future.delayed(Duration(seconds: 2));
             continue;
           }
-          return Left(UnknownFailure('Failed to upload thumbnail'));
+          return Left(UnknownFailure(context.isArabic
+              ? 'فشل تحميل الصورة'
+              : 'Failed to upload thumbnail'));
         }
 
         // Stage 5: Upload video to Bunny CDN
-        _updateStage(UploadStage.uploadingVideo, 'Uploading video...');
+        _updateStage(UploadStage.uploadingVideo,
+            context.isArabic ? 'جاري تحميل الفيديو...' : 'Uploading video...');
 
         final videoUploadResult = await _bunnyUploader.uploadVideoToBunny(
           videoFile: videoFile,
@@ -111,7 +131,11 @@ class UploadManager {
 
         if (videoUploadResult.isRight()) {
           // Stage 6: Finalize upload
-          _updateStage(UploadStage.finalizing, 'Finalizing upload...');
+          _updateStage(
+              UploadStage.finalizing,
+              context.isArabic
+                  ? 'جاري تحميل الفيديو...'
+                  : 'Finalizing upload...');
 
           final finalResult = await _bunnyUploader.submitVideoPost(
             videoData: VideoUploadEntity(
@@ -119,13 +143,14 @@ class UploadManager {
               description: description,
               videoMediaId: bunnyData.mediaId,
               thumbnailMediaId: thumbnailMediaId!,
+              category: categoryId, // إضافة categoryId المطلوب
               duration: duration,
             ),
           );
 
           if (finalResult.isRight()) {
-            _updateStage(
-                UploadStage.completed, 'Upload completed successfully!');
+            _updateStage(UploadStage.completed,
+                context.isArabic ? 'نجاح' : 'Upload completed successfully!');
             return const Right(true);
           } else {
             return finalResult;
@@ -133,7 +158,9 @@ class UploadManager {
         } else {
           if (retryCount < StarConstants.maxRetries - 1) {
             retryCount++;
-            _updateStatus('Upload failed, retrying...');
+            _updateStatus(context.isArabic
+                ? 'فشل تحميل الفيديو، إعادة المحاولة...'
+                : 'Upload failed, retrying...');
             await Future.delayed(Duration(seconds: 3));
             continue;
           } else {
@@ -143,11 +170,14 @@ class UploadManager {
       } catch (e) {
         if (retryCount < StarConstants.maxRetries - 1) {
           retryCount++;
-          _updateStatus('Error occurred, retrying...');
+          _updateStatus(context.isArabic
+              ? 'حدث خطأ، إعادة المحاولة...'
+              : 'Error occurred, retrying...');
           await Future.delayed(Duration(seconds: 2));
           continue;
         } else {
-          _updateStage(UploadStage.failed, 'Upload failed: ${e.toString()}');
+          _updateStage(UploadStage.failed,
+              context.isArabic ? 'فشل' : 'Upload failed: ${e.toString()}');
           return Left(UnknownFailure(
               'Upload failed after ${StarConstants.maxRetries} attempts: ${e.toString()}'));
         }

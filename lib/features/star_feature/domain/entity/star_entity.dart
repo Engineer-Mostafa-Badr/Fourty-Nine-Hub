@@ -12,8 +12,9 @@ class StarEntity {
   final num averageRating;
   final bool haveStories;
   final int storyCount;
-  final int likes; // Added likes property
-  final int dislikes; // Added dislikes property
+  final int likes;
+  final int dislikes;
+  final bool isRate;
 
   DateTime? createdAt;
   String? createAt;
@@ -37,6 +38,7 @@ class StarEntity {
     required this.storyCount,
     this.likes = 0, // Default value for likes
     this.dislikes = 0, // Default value for dislikes
+    this.isRate = false, // Default value for isRate
     this.createdAt,
     this.createAt,
   });
@@ -54,6 +56,7 @@ class StarEntity {
     int? storyCount,
     int? likes, // Added likes parameter
     int? dislikes, // Added dislikes parameter
+    bool? isRate, // Added isRate parameter
     DateTime? createdAt,
     String? createAt,
   }) =>
@@ -68,8 +71,9 @@ class StarEntity {
         averageRating: averageRating ?? this.averageRating,
         haveStories: haveStories ?? this.haveStories,
         storyCount: storyCount ?? this.storyCount,
-        likes: likes ?? this.likes, // Added likes assignment
-        dislikes: dislikes ?? this.dislikes, // Added dislikes assignment
+        likes: likes ?? this.likes,
+        dislikes: dislikes ?? this.dislikes,
+        isRate: isRate ?? this.isRate,
         createdAt: createdAt ?? this.createdAt,
         createAt: createAt ?? this.createAt,
       );

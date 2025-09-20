@@ -152,11 +152,11 @@ class DI {
 
     // database
     serviceLocator.registerLazySingleton<Database>(
-            () => SQFLiteDataSource.instance.database);
+        () => SQFLiteDataSource.instance.database);
 
     // dio
     serviceLocator.registerLazySingleton<Dio>(
-          () => Dio(
+      () => Dio(
         BaseOptions(
           baseUrl: kReleaseMode
               ? EndPoints.productionBaseUrl
@@ -168,31 +168,29 @@ class DI {
           },
         ),
       )..interceptors.addAll([
-        SubscriptionInterceptor(),
-        if (kDebugMode)
-          PrettyDioLogger(
-            requestHeader: true,
-            requestBody: true,
-            responseBody: true,
-            responseHeader: false,
-            error: true,
-            compact: true,
-            maxWidth: 90,
-          )
-      ]),
+          SubscriptionInterceptor(),
+          if (kDebugMode)
+            PrettyDioLogger(
+              requestHeader: true,
+              requestBody: true,
+              responseBody: true,
+              responseHeader: false,
+              error: true,
+              compact: true,
+              maxWidth: 90,
+            )
+        ]),
     );
-
-
 
     //for gifts
     serviceLocator.registerLazySingleton(() => GiftsCubit(serviceLocator()));
 
     // Register the StoryRepository
     serviceLocator.registerLazySingleton<StoryRepository>(
-          () => StoryRepository(),
+      () => StoryRepository(),
     );
     serviceLocator.registerLazySingleton<GetGiftsUseCase>(
-          () => GetGiftsUseCase(serviceLocator()),
+      () => GetGiftsUseCase(serviceLocator()),
     );
     // serviceLocator.registerLazySingleton<UpdateSocketLocationUseCase>(
     //   () => UpdateSocketLocationUseCase(serviceLocator()),
@@ -200,17 +198,17 @@ class DI {
 
     // // Register the TinderRepository
     serviceLocator.registerLazySingleton<TinderRepository>(
-          () => TinderRepositoryImpl(serviceLocator()),
+      () => TinderRepositoryImpl(serviceLocator()),
     );
     serviceLocator.registerLazySingleton<GetTripInfoCubit>(
-          () => GetTripInfoCubit(repository: serviceLocator()),
+      () => GetTripInfoCubit(repository: serviceLocator()),
     );
 
     serviceLocator.registerLazySingleton<ShowOffersCubit>(
-          () => ShowOffersCubit(repository: serviceLocator()),
+      () => ShowOffersCubit(repository: serviceLocator()),
     );
     serviceLocator.registerLazySingleton<RequestRiderTripCubit>(
-          () => RequestRiderTripCubit(repository: serviceLocator()),
+      () => RequestRiderTripCubit(repository: serviceLocator()),
     );
 
     //
@@ -295,7 +293,7 @@ class DI {
     //     .registerLazySingleton<TinderViewCubit>(() => TinderViewCubit());
 
     serviceLocator.registerLazySingleton<ApiConsumer>(
-          () => BaseApiConsumer(
+      () => BaseApiConsumer(
         serviceLocator(),
       ),
     );
@@ -307,14 +305,12 @@ class DI {
     serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     // base repo
     serviceLocator.registerLazySingleton(
-          () => BaseRepository(),
+      () => BaseRepository(),
     );
     // json parser
     serviceLocator.registerLazySingleton<JsonParser>(
-          () => JsonParser(),
+      () => JsonParser(),
     );
-
-
 
     // auth service locator
     await AuthServiceLocator.execute(serviceLocator: serviceLocator);
@@ -396,7 +392,7 @@ class DI {
 
     //! Exchange Currency
     CurrencyServiceLocator.execute(serviceLocator: serviceLocator);
-    
+
     //! Ten Percent
     TenPercentServiceLocator.execute(serviceLocator: serviceLocator);
   }
@@ -424,14 +420,14 @@ class DI {
     serviceLocator.registerLazySingleton(() => SendCallCubit());
     serviceLocator.registerLazySingleton(() => CallCubit());
     serviceLocator.registerLazySingleton<FcmNotificationHelper>(
-            () => FcmNotificationHelperImpl(serviceLocator()));
+        () => FcmNotificationHelperImpl(serviceLocator()));
     serviceLocator.registerLazySingleton(() => FirebaseMessaging.instance);
     serviceLocator
         .registerLazySingleton(() => GetAgoraTokenUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<CallRepository>(
-            () => CallRepositoryImpl(serviceLocator()));
+        () => CallRepositoryImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CallRemoteDatasource>(
-            () => CallRemoteDatasourceImpl());
+        () => CallRemoteDatasourceImpl());
 
     serviceLocator
         .registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());

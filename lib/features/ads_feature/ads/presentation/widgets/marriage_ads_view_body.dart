@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -26,6 +27,8 @@ import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../filter_ads/presentation/pages/filter_ads.dart';
+import '../../../../subcategories/presentation/widgets/search_bar_widget.dart';
+import '../../../../subcategories/presentation/pages/ads_search_view.dart';
 
 class MarriageAdsViewBody extends StatefulWidget {
   final SubcategoriesCubit controller;
@@ -48,6 +51,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+  late FocusNode _searchFocusNode;
 
   void animateTaps() {
     _tabController = TabController(
@@ -88,10 +92,21 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              Icon(
-                Icons.search,
-                color:
-                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              InkWell(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  context
+                      .read<SubcategoriesCubit>()
+                      .toggleMyAds('isSearchAdsOpen');
+                },
+                child: Icon(
+                  Icons.search,
+                  color: context.read<SubcategoriesCubit>().isSearchAdsOpen
+                      ? AppColors.SECONDARY_COLOR
+                      : (context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR),
+                ),
               ),
               const SizedBox(
                 width: 8,
@@ -166,6 +181,159 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                         .toggleMyAds('isMyAdsOpen');
                     // context.push(Routes.MYADDS);
                   },
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Sizer(),
+        if (context.read<SubcategoriesCubit>().isSearchAdsOpen)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SearchBarWidget(
+              focusNode: _searchFocusNode,
+              onChanged: (value) {
+                context.read<SubcategoriesCubit>().searchAds(
+                      value: value,
+                      mainCategoryId: widget.state.mainCategory?.id ?? '',
+                    );
+              },
+            ),
+          ),
+        if (context.read<SubcategoriesCubit>().isSearchAdsOpen) const Sizer(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () async {
+                    ManageVibration.vibrate();
+                    dynamic data = await context.push(
+                      Routes.FILTERADS,
+                      extra: FilterAdsParams(
+                        categorization: CategorizationEntity(
+                          mainCategory: widget.state.mainCategory!,
+                          fromMarriage: true,
+                          subCategory: widget.state.subCategories![widget
+                                  .state.subCategories
+                                  ?.indexWhere((element) =>
+                                      element.isSelected == true) ??
+                              0],
+                        ),
+                        userType: '',
+                      ),
+                    );
+
+                    if (data != null) {
+                      print("objectsdaa");
+                      widget.controller.changeFilterModel(data);
+                      widget.controller.loadFilterData(
+                        model: data,
+                        filter: 'user',
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 42,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      color: AppColors.getButtonPrimaryColor(context),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Label(
+                            text: LocaleKeys.filter.localize,
+                            style: Styles.mediumText(
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        SvgPicture.asset(
+                          Assets.arrowIcon,
+                          width: 12,
+                          height: 12,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.getReversedTextColor(context),
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: InkWell(
+                  onTap: () async {
+                    ManageVibration.vibrate();
+                    dynamic data = await context.push(
+                        Routes.GOVERNORATEFILTERADS,
+                        extra: CategorizationEntity(
+                            mainCategory: widget.state.mainCategory!,
+                            fromMarriage: true,
+                            subCategory: widget.state.subCategories![widget
+                                    .state.subCategories
+                                    ?.indexWhere((element) =>
+                                        element.isSelected == true) ??
+                                0]));
+                    if (data != null) {
+                      print("data.cityId${data.cityId}");
+                      print("data.governorateId${data.governorateId}");
+                      print("objectsdaa");
+                      widget.controller.state.city = data.cityId;
+                      widget.controller.state.governorate = data.governorateId;
+                      widget.controller.changeFilterModel(data);
+                      await widget.controller
+                          .loadFilterData(model: data, filter: 'user');
+                    }
+                  },
+                  child: Container(
+                    height: 42,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      color: AppColors.getButtonPrimaryColor(context),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Label(
+                            text: LocaleKeys.city.localize,
+                            style: Styles.mediumText(
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ),
+                        ),
+                        Spacer(),
+                        SvgPicture.asset(
+                          Assets.arrowIcon,
+                          width: 12,
+                          height: 12,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.getReversedTextColor(context),
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -349,7 +517,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         //       ],
         //     ),
         //   ),
-        const Sizer(),
+        // const Sizer(),
 
         // if (widget.state.subCategories != null)
         //   SizedBox(
@@ -385,226 +553,32 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         if (widget.state.subCategories != null)
           SizedBox(
             height: 70.h,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Row(
-                    children: [
-                      Sizer(),
-                      InkWell(
-                        onTap: () async {
-                          ManageVibration.vibrate();
-                          dynamic data = await context.push(
-                            Routes.FILTERADS,
-                            extra: FilterAdsParams(
-                              categorization: CategorizationEntity(
-                                mainCategory: widget.state.mainCategory!,
-                                fromMarriage: true,
-                                subCategory: widget.state.subCategories![widget
-                                        .state.subCategories
-                                        ?.indexWhere((element) =>
-                                            element.isSelected == true) ??
-                                    0],
-                              ),
-                              userType: '',
-                            ),
-                          );
-
-                          if (data != null) {
-                            print("objectsdaa");
-                            widget.controller.changeFilterModel(data);
-                            widget.controller.loadFilterData(
-                              model: data,
-                              filter: 'user',
-                            );
-                          }
-                        },
-                        child: Container(
-                          height: 32,
-                          width: 100,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: ShapeDecoration(
-                            color: AppColors.getButtonPrimaryColor(context),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                Assets.filter,
-                                width: 16,
-                                height: 16,
-                                color: AppColors.getReversedTextColor(context),
-                              ),
-                              const Sizer(),
-                              Label(
-                                text: LocaleKeys.filter.localize,
-                                style: Styles.mediumText(
-                                  fontSize: 24,
-                                  color:
-                                      AppColors.getReversedTextColor(context),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Sizer(),
-                      InkWell(
-                        onTap: () async {
-                          ManageVibration.vibrate();
-                          dynamic data = await context.push(
-                              Routes.GOVERNORATEFILTERADS,
-                              extra: CategorizationEntity(
-                                  mainCategory: widget.state.mainCategory!,
-                                  fromMarriage: true,
-                                  subCategory: widget.state.subCategories![
-                                      widget.state.subCategories?.indexWhere(
-                                              (element) =>
-                                                  element.isSelected == true) ??
-                                          0]));
-                          if (data != null) {
-                            print("data.cityId${data.cityId}");
-                            print("data.governorateId${data.governorateId}");
-                            print("objectsdaa");
-                            widget.controller.state.city = data.cityId;
-                            widget.controller.state.governorate =
-                                data.governorateId;
-                            widget.controller.changeFilterModel(data);
-                            await widget.controller
-                                .loadFilterData(model: data, filter: 'user');
-                          }
-                        },
-                        child: Container(
-                          height: 32,
-                          width: 100,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 0),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: ShapeDecoration(
-                            color: AppColors.getButtonPrimaryColor(context),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                Assets.hotelFilter,
-                                width: 16,
-                                height: 16,
-                                color: AppColors.getReversedTextColor(context),
-                              ),
-                              const Sizer(),
-                              Label(
-                                text: LocaleKeys.city.localize,
-                                style: Styles.mediumText(
-                                  fontSize: 24,
-                                  color:
-                                      AppColors.getReversedTextColor(context),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Sizer(),
-                      /* Expanded(
-                child: FilterButtonItem(
-                  title: LocaleKeys.filter.localize,
-                  onTap: () async {
-                    dynamic data = await context.push(
-                      Routes.FILTERADS,
-                      extra: CategorizationEntity(
-                        mainCategory: widget.state.mainCategory!,
-                        fromMarriage: true,
-                        subCategory: widget.state.subCategories![
-                            widget.state.subCategories?.indexWhere(
-                                    (element) => element.isSelected == true) ??
-                                0],
-                      ),
-                    );
-                    if (data != null) {
-                      print("objectsdaa");
-                      widget.controller.changeFilterModel(data);
-                      widget.controller.loadFilterData(
-                        model: data,
-                        filter: 'user',
-                      );
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: FilterButtonItem(
-                  title: LocaleKeys.city.localize,
-                  onTap: () async {
-      ManageVibration.vibrate();
-                    dynamic data = await context.push(
-                        Routes.GOVERNORATEFILTERADS,
-                        extra: CategorizationEntity(
-                            mainCategory: widget.state.mainCategory!,
-                            fromMarriage: true,
-                            subCategory: widget.state.subCategories![widget
-                                    .state.subCategories
-                                    ?.indexWhere((element) =>
-                                        element.isSelected == true) ??
-                                0]));
-                    if (data != null) {
-                      print("data.cityId${data.cityId}");
-                      print("data.governorateId${data.governorateId}");
-                      print("objectsdaa");
-                      widget.controller.state.city = data.cityId;
-                      widget.controller.state.governorate = data.governorateId;
-                      widget.controller.changeFilterModel(data);
-                      await widget.controller
-                          .loadFilterData(model: data, filter: 'user');
-                    }
-                  },
-                ),
-              ),*/
-                    ],
-                  ),
-                  TabBar(
-                    isScrollable: true,
-                    controller: _tabController,
-                    onTap: (index) async {
-                      await widget.controller.changeSubCatIndex(index);
-                    },
-                    padding: EdgeInsets.zero,
-                    labelPadding: const EdgeInsetsDirectional.only(end: 10),
-                    indicatorColor: Colors.transparent,
-                    dividerColor: Colors.transparent,
-                    tabAlignment: TabAlignment.start,
-                    tabs: List.generate(
-                      widget.state.subCategories?.length ?? 0,
-                      (index) {
-                        return Padding(
-                          padding: EdgeInsetsDirectional.only(
-                            start: 0,
-                            end: index == widget.state.subCategories!.length - 1
-                                ? 16.0
-                                : 0,
-                          ),
-                          child: SubCategoryListViewItem(
-                            subCategory: widget.state.subCategories?[index],
-                          ),
-                        );
-                      },
+            child: TabBar(
+              isScrollable: true,
+              controller: _tabController,
+              onTap: (index) async {
+                await widget.controller.changeSubCatIndex(index);
+              },
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              labelPadding: const EdgeInsetsDirectional.only(end: 10),
+              indicatorColor: Colors.transparent,
+              dividerColor: Colors.transparent,
+              tabAlignment: TabAlignment.start,
+              tabs: List.generate(
+                widget.state.subCategories?.length ?? 0,
+                (index) {
+                  return Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: 0,
+                      end: index == widget.state.subCategories!.length - 1
+                          ? 16.0
+                          : 0,
                     ),
-                  ),
-                ],
+                    child: SubCategoryListViewItem(
+                      subCategory: widget.state.subCategories?[index],
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -624,6 +598,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     _tabController = TabController(
         length: widget.state.subCategories?.length ?? 0, vsync: this);
     _scrollController = ScrollController();
+    _searchFocusNode = FocusNode();
 
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
@@ -631,6 +606,14 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 
   void _scrollToSelectedTab(int index) {
@@ -650,6 +633,17 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
     if (widget.state.status == SubcategoriesStates.loadingAds) {
       return const CustomLoadingSearchWidget();
+    }
+
+    // Search Ads
+    if (context.read<SubcategoriesCubit>().isSearchAdsOpen) {
+      return AdsSearchView(
+        mainCategoryNameAr: widget.state.mainCategory?.name ?? '',
+        mainCategoryNameEn: widget.state.mainCategory?.nameEn ?? '',
+        isFloatingButtonVisible: (bool isVisible) {
+          // Handle floating button visibility if needed
+        },
+      );
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
