@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -22,6 +23,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/ads_cubit.dart';
+import '../../../../subcategories/presentation/widgets/build_tag_ads_widget.dart';
 
 class MarriageAdsListViewItem extends StatelessWidget {
   const MarriageAdsListViewItem({
@@ -53,12 +55,24 @@ class MarriageAdsListViewItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // eye icon, views and premium
+            BuildTagAdsWidget(
+              // change status to premium
+              status: marriageAds.ownerSubscriptionStatus ?? '',
+              views: marriageAds.views ?? 0,
+            ),
+            Divider(
+              color: AppColors.getTextColor(context),
+              height: 0,
+            ),
+            // user image and title
             Padding(
               padding:
                   const EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // user image , title and favourite
                   Row(
                     children: [
                       ImageFromInternet(
@@ -99,9 +113,11 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(
                     height: 4,
                   ),
+                  // description
                   Label(
                     text: marriageAds.description,
                     style: Styles.mediumText(
@@ -114,6 +130,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
+                  // location
                   if (marriageAds.address?.cityEn != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -144,6 +161,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
               color: AppColors.getTextColor(context),
               height: 0,
             ),
+            // buttons
             Padding(
               padding:
                   const EdgeInsets.only(left: 18, right: 18, top: 4, bottom: 8),

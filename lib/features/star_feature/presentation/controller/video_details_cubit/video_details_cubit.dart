@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../routes/pages.dart';
 import '../../../domain/entity/comment_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/viewer_entity.dart';
 import '../../../domain/use_case/comment_use_cases.dart';
 import '../../../data/model/comment_model.dart';
 import '../../controller/star_cubit/star_cubit.dart';
+import '../../utils/video_utils.dart';
 
 part 'video_details_state.dart';
 
@@ -49,55 +54,147 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
   // Initialize the video and load data
   Future<void> initialize() async {
+    print('🚀 Starting VideoDetailsCubit initialization...');
     emit(VideoDetailsLoading());
 
     try {
-      await _initializeVideo();
+      // Initialize video with timeout
+      await _initializeVideo().timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception('Video loading timed out after 30 seconds');
+        },
+      );
+
       final viewers = _generateMockViewers();
+      print('✅ Video initialization completed, creating loaded state...');
 
-      // Load real comments from API
+      // Emit loaded state immediately after video initialization
+      emit(VideoDetailsLoaded(
+        videoController: _videoController,
+        isInitialized: true,
+        isPlaying: true,
+        isMuted: true,
+        viewers: viewers,
+        comments: [],
+        talent: talent,
+        isLoadingComments: true, // Start with loading comments
+        commentsError: null,
+      ));
+
+      // Load comments in background
       await _loadComments();
-
-      if (state is VideoDetailsLoaded) {
-        final currentState = state as VideoDetailsLoaded;
-        emit(currentState.copyWith(
-          videoController: _videoController,
-          isInitialized: true,
-          isPlaying: true,
-          isMuted: true,
-          viewers: viewers,
-          talent: talent,
-        ));
-      } else {
-        // First initialization
-        emit(VideoDetailsLoaded(
-          videoController: _videoController,
-          isInitialized: true,
-          isPlaying: true,
-          isMuted: true,
-          viewers: viewers,
-          comments: [],
-          talent: talent,
-          isLoadingComments: false,
-          commentsError: null,
-        ));
-
-        // Load comments after initial state
-        await _loadComments();
-      }
+      print('🎬 Full initialization completed');
     } catch (e) {
+      print('💥 Initialization failed: $e');
       emit(VideoDetailsError(message: 'Failed to initialize video: $e'));
     }
   }
 
   Future<void> _initializeVideo() async {
-    _videoController = VideoPlayerController.network(mediaUrl);
-    await _videoController.initialize();
-    _videoController.setVolume(0); // Start muted
-    _videoController.play();
+    print('🎥 Initializing video: $mediaUrl');
 
-    // Increment video view
-    starCubit.incrementVideoView(talent.id);
+    try {
+      // First attempt with HLS format hint and timeout
+      _videoController = VideoPlayerController.networkUrl(
+        Uri.parse(mediaUrl),
+        formatHint: VideoFormat.hls,
+      );
+
+      print('🔄 Starting video initialization with timeout...');
+      await _videoController.initialize().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          throw TimeoutException(
+              'Video initialization timeout', Duration(seconds: 15));
+        },
+      );
+
+      print('✅ Video initialized successfully');
+      _videoController.setVolume(0); // Start muted
+      _videoController.play();
+
+      // Increment video view
+      starCubit.incrementVideoView(talent.id);
+    } catch (e) {
+      print('❌ Video initialization error: $e');
+
+      // Check if it's a codec error
+      if (e.toString().contains('MediaCodec') ||
+          e.toString().contains('ExoPlaybackException') ||
+          e.toString().contains('codec')) {
+        print('🔧 Detected codec error, trying fallback strategies...');
+        await _handleVideoCodecError();
+      } else {
+        // Try alternative approach with different network settings
+        await _tryAlternativeVideoLoading();
+      }
+    }
+  }
+
+  Future<void> _handleVideoCodecError() async {
+    print(
+        '🔧 VideoDetailsCubit: Handling codec error with intelligent fallback strategies...');
+    print('📱 Device info: ${VideoUtils.getDeviceInfo()}');
+
+    final strategies = VideoUtils.getFallbackStrategies('codec error');
+
+    for (int i = 0; i < strategies.length; i++) {
+      final strategy = strategies[i];
+      print('🔄 VideoDetailsCubit: Trying strategy ${i + 1}: $strategy...');
+
+      try {
+        _videoController = await VideoInitializer.initializeWithStrategy(
+          mediaUrl,
+          strategy,
+        );
+
+        print('✅ VideoDetailsCubit: Video loaded with strategy $strategy');
+        _videoController.setVolume(0);
+        _videoController.play();
+        starCubit.incrementVideoView(talent.id);
+        return;
+      } catch (error) {
+        print('❌ VideoDetailsCubit: Strategy $strategy failed: $error');
+
+        // Dispose failed controller before trying next strategy
+        try {
+          _videoController.dispose();
+        } catch (e) {
+          // Ignore disposal errors
+        }
+
+        continue;
+      }
+    }
+
+    // All codec strategies failed
+    print('💥 VideoDetailsCubit: All codec fallback strategies failed');
+    final deviceInfo = VideoUtils.getDeviceInfo();
+    throw Exception(
+        'Video format not supported on ${deviceInfo['platform']} device');
+  }
+
+  Future<void> _tryAlternativeVideoLoading() async {
+    try {
+      print('🔄 Trying alternative video loading...');
+      _videoController = VideoPlayerController.networkUrl(
+        Uri.parse(mediaUrl),
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
+
+      await _videoController.initialize();
+      print('✅ Video loaded with alternative method');
+      _videoController.setVolume(0);
+      _videoController.play();
+      starCubit.incrementVideoView(talent.id);
+    } catch (secondaryError) {
+      print('❌ Secondary video loading failed: $secondaryError');
+      throw Exception('Failed to load video: $secondaryError');
+    }
   }
 
   // Load comments from API
@@ -117,6 +214,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           emit(currentState.copyWith(
             isLoadingComments: false,
             commentsError: failure.toString(),
@@ -221,6 +322,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           // Remove optimistic comment on failure
           final revertedComments = currentState.comments
               .where((comment) => comment.id != optimisticComment.id)
@@ -279,6 +384,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
         result.fold(
           (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
             // Remove optimistic reply on failure
             final revertedComments = currentState.comments
                 .where((comment) => comment.id != optimisticReply.id)
@@ -326,6 +435,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
         result.fold(
           (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
             // Revert optimistic update on failure
             final revertedComments =
                 List<CommentEntity>.from(currentState.comments);
@@ -373,6 +486,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
         result.fold(
           (failure) {
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
             // Revert optimistic update on failure
             final revertedComments =
                 List<CommentEntity>.from(currentState.comments);
@@ -399,6 +516,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         if (state is VideoDetailsLoaded) {
           final currentState = state as VideoDetailsLoaded;
           emit(currentState.copyWith(
@@ -429,6 +550,10 @@ class VideoDetailsCubit extends Cubit<VideoDetailsState> {
 
       result.fold(
         (failure) {
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
           // Reload comments on failure to restore state
           _loadComments(refresh: true);
           emit(currentState.copyWith(

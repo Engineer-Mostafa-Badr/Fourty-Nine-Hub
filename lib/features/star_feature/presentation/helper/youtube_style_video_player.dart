@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
@@ -18,10 +20,14 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../service_locator/service_locator.dart';
 import '../../data/model/comment_model.dart';
+import '../../data/model/tube_video_models.dart';
 import '../../domain/use_case/comment_use_cases.dart';
 import '../controller/comment_cubit/comment_cubit.dart';
 import '../controller/profile_cubit/profile_cubit.dart';
+import '../controller/playlist_cubit/playlist_cubit.dart';
+import '../utils/video_utils.dart';
 import '../widgets/common/options_bottom_sheet.dart';
+import '../widgets/common/add_to_playlist_dialog.dart';
 
 // YouTube Style Video Player
 class YouTubeStyleVideoPlayer extends StatefulWidget {
@@ -91,6 +97,120 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
       setState(() {
         _isPlaying = _controller.value.isPlaying;
       });
+    }
+  }
+
+  void _retryVideoInitialization() {
+    print('🔄 YouTubeStyleVideoPlayer: Retrying video initialization...');
+
+    try {
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
+
+      _controller.initialize().then((_) {
+        if (mounted) {
+          print('✅ YouTubeStyleVideoPlayer: Video loaded with retry method');
+          setState(() {
+            _isInitialized = true;
+            _isMuted = widget.startMuted;
+            _controller.setVolume(_isMuted ? 0 : 1);
+          });
+          _controller.addListener(_videoListener);
+
+          if (widget.autoPlay && _visibilityFraction > 0.5) {
+            _controller.play();
+            setState(() => _isPlaying = true);
+          }
+        }
+      }).catchError((secondError) {
+        print('❌ YouTubeStyleVideoPlayer: Retry failed: $secondError');
+
+        if (mounted) {
+          // Show error state in UI
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to load video. Please try again.'),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'Retry',
+                textColor: Colors.white,
+                onPressed: () => _initializeVideo(),
+              ),
+            ),
+          );
+        }
+      });
+    } catch (e) {
+      print('💥 YouTubeStyleVideoPlayer: Exception during retry: $e');
+    }
+  }
+
+  Future<void> _handleCodecError() async {
+    print(
+        '🔧 YouTubeStyleVideoPlayer: Handling codec error with intelligent fallback strategies...');
+    print('📱 Device info: ${VideoUtils.getDeviceInfo()}');
+
+    final strategies = VideoUtils.getFallbackStrategies('codec error');
+
+    for (int i = 0; i < strategies.length; i++) {
+      final strategy = strategies[i];
+      print(
+          '🔄 YouTubeStyleVideoPlayer: Trying strategy ${i + 1}: $strategy...');
+
+      try {
+        _controller = await VideoInitializer.initializeWithStrategy(
+          widget.videoUrl,
+          strategy,
+        );
+
+        if (mounted) {
+          print(
+              '✅ YouTubeStyleVideoPlayer: Video loaded with strategy $strategy');
+          setState(() {
+            _isInitialized = true;
+            _isMuted = widget.startMuted;
+            _controller.setVolume(_isMuted ? 0 : 1);
+          });
+          _controller.addListener(_videoListener);
+
+          if (widget.autoPlay && _visibilityFraction > 0.5) {
+            _controller.play();
+            setState(() => _isPlaying = true);
+          }
+          return;
+        }
+      } catch (error) {
+        print('❌ YouTubeStyleVideoPlayer: Strategy $strategy failed: $error');
+
+        // Dispose failed controller before trying next strategy
+        try {
+          await _controller.dispose();
+        } catch (e) {
+          print('⚠️ YouTubeStyleVideoPlayer: Error disposing controller: $e');
+        }
+
+        // If this is the last strategy and it failed, show error to user
+        if (i == strategies.length - 1) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Video format not supported on this device'),
+                backgroundColor: Colors.red,
+                action: SnackBarAction(
+                  label: 'Retry',
+                  textColor: Colors.white,
+                  onPressed: () => _initializeVideo(),
+                ),
+              ),
+            );
+          }
+        }
+      }
     }
   }
 
@@ -307,32 +427,34 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                           color: Colors.black.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: ValueListenableBuilder<VideoPlayerValue>(
-                          valueListenable: _controller,
-                          builder: (context, value, child) {
-                            if (!_isPlaying && !_isDragging) {
-                              return Text(
-                                _formatDuration(value.duration),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            } else {
-                              final remainingTime =
-                                  value.duration - value.position;
-                              return Text(
-                                _formatDuration(remainingTime),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            }
-                          },
-                        ),
+                        child: _controller != null
+                            ? ValueListenableBuilder<VideoPlayerValue>(
+                                valueListenable: _controller,
+                                builder: (context, value, child) {
+                                  if (!_isPlaying && !_isDragging) {
+                                    return Text(
+                                      _formatDuration(value.duration),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    );
+                                  } else {
+                                    final remainingTime =
+                                        value.duration - value.position;
+                                    return Text(
+                                      _formatDuration(remainingTime),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    );
+                                  }
+                                },
+                              )
+                            : SizedBox.shrink(),
                       ),
                     ),
 
@@ -382,54 +504,65 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                                 ),
                               ),
                               // Progress Bar Fill
-                              ValueListenableBuilder<VideoPlayerValue>(
-                                valueListenable: _controller,
-                                builder: (context, value, child) {
-                                  final progress =
-                                      value.duration.inMilliseconds > 0
-                                          ? value.position.inMilliseconds /
-                                              value.duration.inMilliseconds
-                                          : 0.0;
-                                  return Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      height: 4,
-                                      width: MediaQuery.of(context).size.width *
-                                          progress.clamp(0.0, 1.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              _controller != null
+                                  ? ValueListenableBuilder<VideoPlayerValue>(
+                                      valueListenable: _controller,
+                                      builder: (context, value, child) {
+                                        final progress = value
+                                                    .duration.inMilliseconds >
+                                                0
+                                            ? value.position.inMilliseconds /
+                                                value.duration.inMilliseconds
+                                            : 0.0;
+                                        return Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Container(
+                                            height: 4,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                progress.clamp(0.0, 1.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : SizedBox.shrink(),
                               // Progress Indicator Circle
-                              ValueListenableBuilder<VideoPlayerValue>(
-                                valueListenable: _controller,
-                                builder: (context, value, child) {
-                                  final progress =
-                                      value.duration.inMilliseconds > 0
-                                          ? value.position.inMilliseconds /
-                                              value.duration.inMilliseconds
-                                          : 0.0;
-                                  final clampedProgress =
-                                      progress.clamp(0.0, 1.0);
-                                  return Positioned(
-                                    left: (MediaQuery.of(context).size.width *
-                                            clampedProgress) -
-                                        5,
-                                    child: Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              _controller != null
+                                  ? ValueListenableBuilder<VideoPlayerValue>(
+                                      valueListenable: _controller,
+                                      builder: (context, value, child) {
+                                        final progress = value
+                                                    .duration.inMilliseconds >
+                                                0
+                                            ? value.position.inMilliseconds /
+                                                value.duration.inMilliseconds
+                                            : 0.0;
+                                        final clampedProgress =
+                                            progress.clamp(0.0, 1.0);
+                                        return Positioned(
+                                          left: (MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  clampedProgress) -
+                                              5,
+                                          child: Container(
+                                            width: 10,
+                                            height: 10,
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : SizedBox.shrink(),
                             ],
                           ),
                         ),
@@ -468,71 +601,51 @@ class TalentVideoPlayer extends StatefulWidget {
 
 class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     with WidgetsBindingObserver {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   bool _isInitialized = false;
   bool _isPlaying = true;
   bool _showControls = false;
   bool _showFullDescription = false;
-  bool _isLiked = false;
-  bool _isDisliked = false;
+  // Remove local state variables - will use API data instead
   bool _isSubscribed = false;
+
+  // Helper methods to get like/dislike states from updated video data
+  bool _isLiked(StarCubit starCubit) {
+    // Always ensure the video is in state before checking
+    starCubit.ensureVideoInState(widget.talent);
+
+    final updatedVideo = starCubit.getVideoById(widget.talent.id);
+    if (updatedVideo != null) {
+      return updatedVideo.isLike;
+    }
+    // Fallback to original data
+    if (widget.talent is TubeVideoModel) {
+      return (widget.talent as TubeVideoModel).isLike;
+    }
+    return false;
+  }
+
+  bool _isDisliked(StarCubit starCubit) {
+    // Always ensure the video is in state before checking
+    starCubit.ensureVideoInState(widget.talent);
+
+    final updatedVideo = starCubit.getVideoById(widget.talent.id);
+    if (updatedVideo != null) {
+      return updatedVideo.isDislike;
+    }
+    // Fallback to original data
+    if (widget.talent is TubeVideoModel) {
+      return (widget.talent as TubeVideoModel).isDislike;
+    }
+    return false;
+  }
+
   bool _isFullscreen = false;
   Timer? _hideControlsTimer;
   bool _isDragging = false;
   final TextEditingController _commentController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // Mock comments data
-  // List<Map<String, dynamic>> comments = [
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Heart Touching Nasheed',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  //   {
-  //     'username': '@Ahmed',
-  //     'profileImage': '',
-  //     'comment': 'Reminds me of...',
-  //     'timeAgo': '1 Months Ago',
-  //     'likes': 4,
-  //     'isLiked': false,
-  //   },
-  // ];
   late CommentCubit _commentCubit;
   late StarCubit _starCubit;
 
@@ -550,7 +663,11 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
           serviceLocator<DislikeCommentUseCase>(),
         );
     _starCubit = widget.starCubit ?? serviceLocator<StarCubit>();
+    _starCubit.ensureVideoInState(widget.talent);
+
+    // Initialize video controller in all cases, but only start playback if approved
     _initializeVideo();
+
     // Load comments for this video
     _commentCubit.getVideoComments(widget.talent.id, refresh: true);
     SystemChrome.setPreferredOrientations([
@@ -560,15 +677,168 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     WidgetsBinding.instance.addObserver(this);
   }
 
-  void _initializeVideo() {
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
+  void _initializeVideo() async {
+    print('🎥 TalentVideoPlayer: Initializing video: ${widget.videoUrl}');
+
+    // If video is not approved, create a basic controller to avoid null issues but don't initialize
+    if (!widget.talent.isApproved) {
+      _controller = VideoPlayerController.network('about:blank');
+      print(
+          '⚠️ TalentVideoPlayer: Video not approved, skipping initialization');
+      return;
+    }
+
+    try {
+      // First attempt - standard initialization with timeout
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        formatHint:
+            VideoFormat.hls, // Try HLS format first for better compatibility
+      );
+
+      await _controller!.initialize().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          throw TimeoutException(
+              'Video initialization timeout', Duration(seconds: 15));
+        },
+      );
+
+      if (mounted) {
+        print('✅ TalentVideoPlayer: Video initialized successfully');
         setState(() {
           _isInitialized = true;
         });
-        widget.onDurationLoaded?.call(_controller.value.duration);
-        _controller.play();
+        widget.onDurationLoaded?.call(_controller!.value.duration);
+        _controller!.play();
+      }
+    } catch (error) {
+      print('❌ TalentVideoPlayer: Video initialization error: $error');
+
+      // Check if it's a codec error
+      if (error.toString().contains('MediaCodec') ||
+          error.toString().contains('ExoPlaybackException') ||
+          error.toString().contains('codec')) {
+        print(
+            '🔧 TalentVideoPlayer: Detected codec error, trying fallback strategies...');
+        await _handleCodecError();
+      } else {
+        // Try standard retry for other errors
+        if (mounted) {
+          _retryVideoInitialization();
+        }
+      }
+    }
+  }
+
+  void _retryVideoInitialization() {
+    print('🔄 TalentVideoPlayer: Retrying video initialization...');
+
+    try {
+      _controller = VideoPlayerController.network(
+        widget.videoUrl,
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
+
+      _controller!.initialize().then((_) {
+        if (mounted) {
+          print('✅ TalentVideoPlayer: Video loaded with retry method');
+          setState(() {
+            _isInitialized = true;
+          });
+          widget.onDurationLoaded?.call(_controller!.value.duration);
+          _controller!.play();
+        }
+      }).catchError((secondError) {
+        print('❌ TalentVideoPlayer: Retry failed: $secondError');
+
+        if (mounted) {
+          // Show error state in UI
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to load video. Please try again.'),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'Retry',
+                textColor: Colors.white,
+                onPressed: () => _initializeVideo(),
+              ),
+            ),
+          );
+        }
       });
+    } catch (e) {
+      print('💥 TalentVideoPlayer: Exception during retry: $e');
+    }
+  }
+
+  Future<void> _handleCodecError() async {
+    print(
+        '🔧 TalentVideoPlayer: Handling codec error with intelligent fallback strategies...');
+    print('📱 Device info: ${VideoUtils.getDeviceInfo()}');
+
+    final strategies = [
+      VideoInitializationStrategy.noFormatHint,
+      VideoInitializationStrategy.dashFormat,
+      VideoInitializationStrategy.otherFormat,
+      VideoInitializationStrategy.alternativeOptions,
+    ];
+
+    for (int i = 0; i < strategies.length; i++) {
+      final strategy = strategies[i];
+      print('🔄 TalentVideoPlayer: Trying strategy ${i + 1}: $strategy...');
+
+      try {
+        _controller = await VideoInitializer.initializeWithStrategy(
+          widget.videoUrl,
+          strategy,
+        );
+
+        if (mounted) {
+          print('✅ TalentVideoPlayer: Video loaded with strategy $strategy');
+          setState(() {
+            _isInitialized = true;
+          });
+          widget.onDurationLoaded?.call(_controller!.value.duration);
+          _controller!.play();
+          return;
+        }
+      } catch (error) {
+        print('❌ TalentVideoPlayer: Strategy $strategy failed: $error');
+
+        // Dispose failed controller before trying next strategy
+        try {
+          _controller!.dispose();
+        } catch (e) {
+          // Ignore disposal errors
+        }
+
+        continue;
+      }
+    }
+
+    // All strategies failed - show error to user
+    if (mounted) {
+      print('💥 TalentVideoPlayer: All codec fallback strategies failed');
+      final deviceInfo = VideoUtils.getDeviceInfo();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Video format not supported on ${deviceInfo['platform']}. Please try another video.'),
+          backgroundColor: Colors.orange,
+          duration: Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Retry',
+            textColor: Colors.white,
+            onPressed: () => _initializeVideo(),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -584,19 +854,29 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     _hideControlsTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-    if (!FloatingVideoManager.isPlayerVisible) {
-      _controller.dispose();
+
+    // Always dispose controller if it exists, but avoid floating video issues
+    try {
+      if (_controller != null && !FloatingVideoManager.isPlayerVisible) {
+        _controller!.dispose();
+      }
+    } catch (e) {
+      print('⚠️ TalentVideoPlayer: Error disposing controller: $e');
     }
+
     _commentController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
   void _togglePlayPause() {
-    if (_controller.value.isPlaying) {
-      _controller.pause();
+    if (!widget.talent.isApproved || !_isInitialized || _controller == null)
+      return;
+
+    if (_controller!.value.isPlaying) {
+      _controller!.pause();
     } else {
-      _controller.play();
+      _controller!.play();
     }
     setState(() {
       _isPlaying = !_isPlaying;
@@ -615,13 +895,16 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   }
 
   void _seekToPosition(double localX, double maxWidth) {
-    if (_controller.value.duration.inMilliseconds > 0) {
+    if (!widget.talent.isApproved || !_isInitialized || _controller == null)
+      return;
+
+    if (_controller!.value.duration.inMilliseconds > 0) {
       final position = (localX / maxWidth).clamp(0.0, 1.0);
-      final duration = _controller.value.duration;
+      final duration = _controller!.value.duration;
       final newPosition = Duration(
         milliseconds: (position * duration.inMilliseconds).round(),
       );
-      _controller.seekTo(newPosition);
+      _controller!.seekTo(newPosition);
       _performHapticFeedback();
     }
   }
@@ -683,8 +966,13 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     final screenSize = MediaQuery.of(context).size;
     final videoHeight = _isFullscreen ? screenSize.height : 250.0;
 
+    // Check if video is not approved (not available yet)
+    final bool isVideoAvailable = widget.talent.isApproved;
+
     return GestureDetector(
       onTap: () {
+        if (!isVideoAvailable)
+          return; // Prevent interaction if video is not available
         setState(() => _showControls = !_showControls);
         if (_showControls) {
           _startHideControlsTimer();
@@ -692,7 +980,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
       },
       onPanUpdate: _isFullscreen
           ? (details) {
-              if (!_showControls) {
+              if (!_showControls && isVideoAvailable) {
                 setState(() => _showControls = true);
                 _startHideControlsTimer();
               }
@@ -704,20 +992,97 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
         color: Colors.black,
         child: Stack(
           children: [
-            if (_isInitialized)
+            // Video Unavailable Cover
+            if (!isVideoAvailable)
+              Container(
+                height: videoHeight,
+                width: double.infinity,
+                color: Colors.black.withOpacity(0.8),
+                child: Center(
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.95),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.videocam_off,
+                          size: 64,
+                          color: Colors.orange[700],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          context.isArabic
+                              ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                              : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[800],
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.orange[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.schedule,
+                                size: 20,
+                                color: Colors.orange[700],
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                context.isArabic
+                                    ? 'يتم المعالجة...'
+                                    : 'Processing...',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.orange[700],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            else if (_isInitialized && _controller != null)
               Center(
                 child: _isFullscreen
-                    ? VideoPlayer(_controller)
+                    ? VideoPlayer(_controller!)
                     : AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
+                        aspectRatio: _controller!.value.aspectRatio,
+                        child: VideoPlayer(_controller!),
                       ),
               )
             else
               const Center(
                 child: CircularProgressIndicator(color: Colors.white),
               ),
-            if (_showControls) ...[
+            if (_showControls && isVideoAvailable) ...[
               Positioned(
                 top: _isFullscreen ? 24 : 12,
                 left: 12,
@@ -819,7 +1184,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                               context: context,
                               videoUrl: widget.videoUrl,
                               title: widget.talent.title,
-                              controller: _controller,
+                              controller: _controller!,
                               isPlaying: _isPlaying,
                             );
                             Navigator.pop(context);
@@ -937,19 +1302,21 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           if (_isInitialized)
-                            ValueListenableBuilder<VideoPlayerValue>(
-                              valueListenable: _controller,
-                              builder: (context, value, child) {
-                                return Text(
-                                  '${formatDuration(value.position)} / ${formatDuration(value.duration)}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                );
-                              },
-                            ),
+                            _controller != null
+                                ? ValueListenableBuilder<VideoPlayerValue>(
+                                    valueListenable: _controller!,
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        '${formatDuration(value.position)} / ${formatDuration(value.duration)}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : SizedBox.shrink(),
                           GestureDetector(
                             onTap: () {
                               _performHapticFeedback();
@@ -970,96 +1337,105 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                       ),
                       const SizedBox(height: 12),
                       if (_isInitialized)
-                        ValueListenableBuilder<VideoPlayerValue>(
-                          valueListenable: _controller,
-                          builder: (context, value, child) {
-                            final progress = value.duration.inMilliseconds > 0
-                                ? value.position.inMilliseconds /
-                                    value.duration.inMilliseconds
-                                : 0.0;
+                        _controller != null
+                            ? ValueListenableBuilder<VideoPlayerValue>(
+                                valueListenable: _controller!,
+                                builder: (context, value, child) {
+                                  final progress =
+                                      value.duration.inMilliseconds > 0
+                                          ? value.position.inMilliseconds /
+                                              value.duration.inMilliseconds
+                                          : 0.0;
 
-                            return LayoutBuilder(
-                              builder: (context, constraints) {
-                                return GestureDetector(
-                                  onTapDown: (details) {
-                                    _performHapticFeedback();
-                                    _seekToPosition(details.localPosition.dx,
-                                        constraints.maxWidth);
-                                  },
-                                  onHorizontalDragStart: (details) {
-                                    setState(() => _isDragging = true);
-                                    _hideControlsTimer?.cancel();
-                                  },
-                                  onHorizontalDragUpdate: (details) {
-                                    _seekToPosition(details.localPosition.dx,
-                                        constraints.maxWidth);
-                                  },
-                                  onHorizontalDragEnd: (details) {
-                                    setState(() => _isDragging = false);
-                                    _startHideControlsTimer();
-                                  },
-                                  child: Container(
-                                    height: 24,
-                                    alignment: Alignment.center,
-                                    child: Stack(
-                                      clipBehavior: Clip.none,
-                                      alignment: Alignment.centerLeft,
-                                      children: [
-                                        Container(
-                                          height: 4,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Colors.white.withOpacity(0.3),
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 4,
-                                          width: constraints.maxWidth *
-                                              progress.clamp(0.0, 1.0),
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: (constraints.maxWidth *
-                                                      progress.clamp(0.0, 1.0) -
-                                                  8)
-                                              .clamp(0.0,
-                                                  constraints.maxWidth - 16),
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Colors.red,
-                                                width: 2,
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
+                                  return LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return GestureDetector(
+                                        onTapDown: (details) {
+                                          _performHapticFeedback();
+                                          _seekToPosition(
+                                              details.localPosition.dx,
+                                              constraints.maxWidth);
+                                        },
+                                        onHorizontalDragStart: (details) {
+                                          setState(() => _isDragging = true);
+                                          _hideControlsTimer?.cancel();
+                                        },
+                                        onHorizontalDragUpdate: (details) {
+                                          _seekToPosition(
+                                              details.localPosition.dx,
+                                              constraints.maxWidth);
+                                        },
+                                        onHorizontalDragEnd: (details) {
+                                          setState(() => _isDragging = false);
+                                          _startHideControlsTimer();
+                                        },
+                                        child: Container(
+                                          height: 24,
+                                          alignment: Alignment.center,
+                                          child: Stack(
+                                            clipBehavior: Clip.none,
+                                            alignment: Alignment.centerLeft,
+                                            children: [
+                                              Container(
+                                                height: 4,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white
                                                       .withOpacity(0.3),
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0, 2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                              Container(
+                                                height: 4,
+                                                width: constraints.maxWidth *
+                                                    progress.clamp(0.0, 1.0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                left: (constraints.maxWidth *
+                                                            progress.clamp(
+                                                                0.0, 1.0) -
+                                                        8)
+                                                    .clamp(
+                                                        0.0,
+                                                        constraints.maxWidth -
+                                                            16),
+                                                child: Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                      color: Colors.red,
+                                                      width: 2,
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(0.3),
+                                                        blurRadius: 4,
+                                                        offset:
+                                                            const Offset(0, 2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              )
+                            : SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -1129,7 +1505,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                     Row(
                       children: [
                         Text(
-                          '${_formatViewCount(widget.talent.totalViews)} ${context.isArabic ? 'مشاهدة' : 'views'}',
+                          '${_formatViewCount(widget.talent.totalViews).toArabicNumbers(context)} ${context.isArabic ? 'مشاهدة' : 'views'}',
                           style:
                               TextStyle(color: Colors.grey[600], fontSize: 14),
                         ),
@@ -1140,7 +1516,8 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                         ),
                         Text(
                           _formatTimeAgo(
-                              widget.talent.createdAt ?? DateTime.now()),
+                                  widget.talent.createdAt ?? DateTime.now())
+                              .toArabicNumbers(context),
                           style:
                               TextStyle(color: Colors.grey[600], fontSize: 14),
                         ),
@@ -1267,7 +1644,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                   ),
                                 ),
                                 Text(
-                                  '${_formatViewCount(widget.talent.user.viewNumber)} ${context.isArabic ? 'مشترك' : 'subscribers'}',
+                                  '${_formatViewCount(widget.talent.user.viewNumber).toArabicNumbers(context)} ${context.isArabic ? 'مشترك' : 'subscribers'}',
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 12,
@@ -1356,142 +1733,108 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
                     const SizedBox(height: 16),
 
-                    // Action buttons - اربطها بالـ APIs الحقيقية
+                    // Action buttons
                     Row(
                       children: [
-                        // Like button
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              // Like button
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        _isLiked
-                                            ? Icons.thumb_up
-                                            : Icons.thumb_up_outlined,
-                                        size: 20,
-                                        color: _isLiked
-                                            ? Colors.blue
-                                            : Colors.grey[700],
-                                      ),
-                                      onPressed: () {
-                                        // Toggle like state أولاً
-                                        setState(() {
-                                          if (_isLiked) {
-                                            // لو كان liked، شيل الـ like
-                                            _isLiked = false;
-                                          } else {
-                                            // لو مش liked، اعمل like وشيل الـ dislike لو موجود
-                                            _isLiked = true;
-                                            _isDisliked =
-                                                false; // شيل الـ dislike
-                                          }
-                                        });
+                        // Like/Dislike button container
+                        StreamBuilder<String>(
+                          stream: starCubit.videoUpdates,
+                          builder: (context, snapshot) {
+                            // Ensure video is in state first
+                            starCubit.ensureVideoInState(widget.talent);
 
-                                        // اعمل API call
-                                        starCubit
-                                            .likeTubeVideo(widget.talent.id);
-                                      },
-                                    ),
+                            // Get fresh data on stream update
+                            final video =
+                                starCubit.getVideoById(widget.talent.id);
+                            final isLiked =
+                                video?.isLike ?? _isLiked(starCubit);
+                            final isDisliked =
+                                video?.isDislike ?? _isDisliked(starCubit);
+                            final likes = video?.likes ?? widget.talent.likes;
+                            final dislikes =
+                                video?.dislikes ?? widget.talent.dislikes;
 
-                                    // عرض العدد الديناميكي
-                                    BlocBuilder<StarCubit, StarState>(
-                                      builder: (context, starState) {
-                                        // احسب الـ likes count بناءً على الحالة الحالية
-                                        int baseLikes =
-                                            widget.talent.totalViews ~/
-                                                100; // العدد الأساسي
-                                        int currentLikes = baseLikes;
-
-                                        // لو الفيديو liked، زود واحد
-                                        if (_isLiked) {
-                                          currentLikes = baseLikes + 1;
-                                        }
-
-                                        return Text(
-                                          '$currentLikes',
-                                          style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 14,
-                                          ),
-                                        );
-                                      },
-                                    ),
-
-                                    Container(
-                                      width: 1,
-                                      height: 24,
-                                      color: Colors.grey[400],
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                    ),
-
-                                    IconButton(
-                                      icon: Icon(
-                                        _isDisliked
-                                            ? Icons.thumb_down
-                                            : Icons.thumb_down_outlined,
-                                        size: 20,
-                                        color: _isDisliked
-                                            ? Colors.red
-                                            : Colors.grey[700],
-                                      ),
-                                      onPressed: () {
-                                        // Toggle dislike state
-                                        setState(() {
-                                          if (_isDisliked) {
-                                            // لو كان disliked، شيل الـ dislike
-                                            _isDisliked = false;
-                                          } else {
-                                            // لو مش disliked، اعمل dislike وشيل الـ like لو موجود
-                                            _isDisliked = true;
-                                            _isLiked = false; // شيل الـ like
-                                          }
-                                        });
-
-                                        // اعمل API call
-                                        starCubit
-                                            .dislikeTubeVideo(widget.talent.id);
-                                      },
-                                    ),
-                                  ],
-                                ),
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Like button
+                                  IconButton(
+                                    icon: Icon(
+                                      isLiked
+                                          ? Icons.thumb_up
+                                          : Icons.thumb_up_outlined,
+                                      size: 20,
+                                      color: isLiked
+                                          ? Colors.blue
+                                          : Colors.grey[700],
+                                    ),
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                      starCubit
+                                          .ensureVideoInState(widget.talent);
+                                      starCubit.likeTubeVideo(widget.talent.id);
+                                    },
+                                  ),
+
+                                  // Likes count
+                                  Text(
+                                    likes.toString().toArabicNumbers(context),
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+
+                                  // Divider
+                                  Container(
+                                    width: 1,
+                                    height: 24,
+                                    color: Colors.grey[400],
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                  ),
+
+                                  // Dislike button
+                                  IconButton(
+                                    icon: Icon(
+                                      isDisliked
+                                          ? Icons.thumb_down
+                                          : Icons.thumb_down_outlined,
+                                      size: 20,
+                                      color: isDisliked
+                                          ? Colors.red
+                                          : Colors.grey[700],
+                                    ),
+                                    onPressed: () {
+                                      ManageVibration.vibrate();
+                                      starCubit
+                                          .ensureVideoInState(widget.talent);
+                                      starCubit
+                                          .dislikeTubeVideo(widget.talent.id);
+                                    },
+                                  ),
+
+                                  // Dislikes count
+                                  Text(
+                                    dislikes
+                                        .toString()
+                                        .toArabicNumbers(context),
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-
-                        // const SizedBox(width: 12),
-
-                        // // Favorite button
-                        // Container(
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.grey[200],
-                        //     borderRadius: BorderRadius.circular(20),
-                        //   ),
-                        //   child: IconButton(
-                        //     icon: Icon(
-                        //       isFavorite ? Icons.favorite : Icons.favorite_border,
-                        //       size: 20,
-                        //       color: isFavorite ? Colors.red : Colors.grey[700],
-                        //     ),
-                        //     onPressed: () {
-                        //       starCubit.toggleFavorite(widget.talent.id);
-                        //     },
-                        //   ),
-                        // ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -1519,8 +1862,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                Text(
-                                  '${commentState.totalComments}',
+                                Label(
+                                  text: commentState.totalComments
+                                      .toString()
+                                      .toArabicNumbers(context),
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 14,
@@ -1729,8 +2074,8 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                 MaterialPageRoute(
                   builder: (context) => MultiBlocProvider(
                     providers: [
-                      BlocProvider<StarCubit>(
-                        create: (context) => serviceLocator<StarCubit>(),
+                      BlocProvider.value(
+                        value: context.read<StarCubit>(),
                       ),
                       BlocProvider<CommentCubit>(
                         create: (context) => serviceLocator<CommentCubit>(),
@@ -1980,9 +2325,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     OptionsBottomSheet.showOptions(context: context, options: [
       OptionItem(
         icon: Icons.playlist_add,
-        title: 'Add to playlist',
+        title: context.isArabic ? 'إضافة لقائمة التشغيل' : 'Add to playlist',
         onTap: () {
           Navigator.pop(context);
+          _showAddToPlaylistDialog(talent);
         },
       ),
       OptionItem(
@@ -2023,6 +2369,20 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
         },
       ),
     ]);
+  }
+
+  void _showAddToPlaylistDialog(StarEntity talent) {
+    final playlistCubit = serviceLocator<PlaylistCubit>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => BlocProvider<PlaylistCubit>(
+        create: (context) => playlistCubit..getMyPlaylists(refresh: true),
+        child: AddToPlaylistDialog(videoId: talent.id),
+      ),
+    );
   }
 
   @override
@@ -2125,8 +2485,9 @@ class _CommentsModalState extends State<CommentsModal> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Comments (${state.totalComments})', // تأكد إن العدد يظهر هنا
+                    Label(
+                      text:
+                          '${context.isArabic ? 'التعليقات' : 'Comments'} (${state.totalComments.toString().toArabicNumbers(context)})', // تأكد إن العدد يظهر هنا
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -2250,7 +2611,7 @@ class _CommentsModalState extends State<CommentsModal> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      comment.timeAgo,
+                      comment.timeAgo.toArabicNumbers(context),
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[500],
@@ -2282,8 +2643,10 @@ class _CommentsModalState extends State<CommentsModal> {
                                 : Colors.grey[600],
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            '${comment.likes}',
+                          Label(
+                            text: comment.likes
+                                .toString()
+                                .toArabicNumbers(context),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -2297,13 +2660,28 @@ class _CommentsModalState extends State<CommentsModal> {
                       onTap: () {
                         context.read<CommentCubit>().dislikeComment(comment.id);
                       },
-                      child: Icon(
-                        comment.isDisliked
-                            ? Icons.thumb_down
-                            : Icons.thumb_down_outlined,
-                        size: 16,
-                        color:
-                            comment.isDisliked ? Colors.red : Colors.grey[600],
+                      child: Row(
+                        children: [
+                          Icon(
+                            comment.isDisliked
+                                ? Icons.thumb_down
+                                : Icons.thumb_down_outlined,
+                            size: 16,
+                            color: comment.isDisliked
+                                ? Colors.red
+                                : Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Label(
+                            text: comment.dislikes
+                                .toString()
+                                .toArabicNumbers(context),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

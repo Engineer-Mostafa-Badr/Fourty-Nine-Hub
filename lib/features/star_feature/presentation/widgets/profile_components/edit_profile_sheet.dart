@@ -2,11 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../../../common/functions/global/upload_file.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
 import '../../utils/enums.dart';
@@ -81,16 +83,20 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
     setState(() => _isUploading = true);
 
     try {
-      // Mock upload - replace with actual implementation
-      final uploadedImageId = "66993df106144734b59b0a5c";
-
-      setState(() {
-        if (type == ImageType.cover) {
-          _channelCoverId = uploadedImageId;
-        } else {
-          _channelPictureId = uploadedImageId;
-        }
-      });
+      final uploadFile = UploadFile2();
+      await uploadFile.uploadImage(
+        file: imageFile,
+        subCategoryId: "66ed76a6749e82b1e7b7fd8a", // Star feature subcategory
+        onUploaded: (uploadEntity) {
+          setState(() {
+            if (type == ImageType.cover) {
+              _channelCoverId = uploadEntity.mediaId;
+            } else {
+              _channelPictureId = uploadEntity.mediaId;
+            }
+          });
+        },
+      );
     } catch (e) {
       _showErrorSnackBar('خطأ في رفع الصورة: $e');
     } finally {
@@ -99,12 +105,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
   }
 
   void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
+    showErrorMessage(context, message);
   }
 
   Future<void> _saveProfile() async {
@@ -122,17 +123,17 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
           channelPicture: _channelPictureId,
         );
 
-    if (success && mounted) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.isArabic
-              ? 'تم حفظ التغييرات بنجاح'
-              : 'Profile updated successfully'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
+    // if (success && mounted) {
+    //   Navigator.pop(context);
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(context.isArabic
+    //           ? 'تم حفظ التغييرات بنجاح'
+    //           : 'Profile updated successfully'),
+    //       backgroundColor: Colors.green,
+    //     ),
+    //   );
+    // }
   }
 
   @override

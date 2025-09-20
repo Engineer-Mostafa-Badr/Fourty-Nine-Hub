@@ -6,6 +6,8 @@ class TubeVideoModel extends StarEntity {
   final int duration;
   final String? videoUrl;
   final String? thumbnail;
+  final bool isLike;
+  final bool isDislike;
 
   TubeVideoModel({
     required super.id,
@@ -20,12 +22,15 @@ class TubeVideoModel extends StarEntity {
     required super.storyCount,
     required super.likes, // Pass to parent class
     required super.dislikes, // Pass to parent class
+    required super.isRate, // Pass to parent class
     super.createdAt,
     super.createAt,
     this.userId,
     required this.duration,
     this.videoUrl,
     this.thumbnail,
+    this.isLike = false,
+    this.isDislike = false,
   });
 
   factory TubeVideoModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +56,9 @@ class TubeVideoModel extends StarEntity {
       duration: json['duration'] ?? 0,
       videoUrl: json['videoUrl'],
       thumbnail: json['thumbnail'],
+      isLike: json['isLike'] ?? false,
+      isDislike: json['isDislike'] ?? false,
+      isRate: json['isRate'] ?? false, // Add isRate from API
       haveStories: false, // Not available in new API
       storyCount: 0, // Not available in new API
       createdAt:
@@ -72,12 +80,15 @@ class TubeVideoModel extends StarEntity {
     int? storyCount,
     int? likes,
     int? dislikes,
+    bool? isRate,
     DateTime? createdAt,
     String? createAt,
     String? userId,
     int? duration,
     String? videoUrl,
     String? thumbnail,
+    bool? isLike,
+    bool? isDislike,
   }) =>
       TubeVideoModel(
         id: id ?? this.id,
@@ -92,12 +103,15 @@ class TubeVideoModel extends StarEntity {
         storyCount: storyCount ?? this.storyCount,
         likes: likes ?? this.likes,
         dislikes: dislikes ?? this.dislikes,
+        isRate: isRate ?? this.isRate,
         createdAt: createdAt ?? this.createdAt,
         createAt: createAt ?? this.createAt,
         userId: userId ?? this.userId,
         duration: duration ?? this.duration,
         videoUrl: videoUrl ?? this.videoUrl,
         thumbnail: thumbnail ?? this.thumbnail,
+        isLike: isLike ?? this.isLike,
+        isDislike: isDislike ?? this.isDislike,
       );
 
   Map<String, dynamic> toJson() {
@@ -114,6 +128,8 @@ class TubeVideoModel extends StarEntity {
       'likes': likes,
       'dislikes': dislikes,
       'averageRating': averageRating,
+      'isLike': isLike,
+      'isDislike': isDislike,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': createdAt?.toIso8601String(),
     };
@@ -269,19 +285,18 @@ class TubeVideoPaginationModel {
 
   factory TubeVideoPaginationModel.fromJson(Map<String, dynamic> json) {
     try {
+      final page = _parseIntSafely(json['page'], 1);
+      final limit = _parseIntSafely(json['limit'], 10);
+      final total = _parseIntSafely(json['total'], 0);
+      final pages = _parseIntSafely(json['pages'], 0);
+
+      print("🔍 Pagination parsed - page: $page, limit: $limit, total: $total, pages: $pages");
+
       return TubeVideoPaginationModel(
-        page: (json['page'] ?? 1) is int
-            ? json['page']
-            : int.tryParse(json['page'].toString()) ?? 1,
-        limit: (json['limit'] ?? 10) is int
-            ? json['limit']
-            : int.tryParse(json['limit'].toString()) ?? 10,
-        total: (json['total'] ?? 0) is int
-            ? json['total']
-            : int.tryParse(json['total'].toString()) ?? 0,
-        pages: (json['pages'] ?? 0) is int
-            ? json['pages']
-            : int.tryParse(json['pages'].toString()) ?? 0,
+        page: page,
+        limit: limit,
+        total: total,
+        pages: pages,
       );
     } catch (e) {
       print("⚠️ Failed to parse pagination, using defaults: $e");
@@ -289,9 +304,20 @@ class TubeVideoPaginationModel {
         page: 1,
         limit: 10,
         total: 0,
-        pages: 0,
+        pages: 1, // Changed from 0 to 1 to ensure hasMore works correctly
       );
     }
+  }
+
+  static int _parseIntSafely(dynamic value, int defaultValue) {
+    if (value == null) return defaultValue;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) {
+      final parsed = int.tryParse(value);
+      if (parsed != null) return parsed;
+    }
+    return defaultValue;
   }
 
   @override

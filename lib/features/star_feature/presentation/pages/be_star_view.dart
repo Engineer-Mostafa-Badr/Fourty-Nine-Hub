@@ -8,6 +8,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/star_entity.dart';
 
@@ -54,6 +56,8 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   final ScrollController _myTalentController = ScrollController();
 
   bool _isSyncing = false;
+  Timer? _autoRefreshTimer;
+  bool _isManualRefreshing = false;
 
   @override
   void initState() {
@@ -70,12 +74,25 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
     // Add debugging
     _debugInitialization();
+
+    // Start auto-refresh for Available tab
+    _startAutoRefresh();
   }
 
   void _debugInitialization() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("🎯 BeStarView initialized");
       context.read<StarCubit>().debugMyTalentsFlow();
+    });
+  }
+
+  void _startAutoRefresh() {
+    _autoRefreshTimer = Timer.periodic(Duration(seconds: 30), (timer) {
+      if (mounted && _selectedTabIndex == 0 && !_isSearching) {
+        // Only refresh Available tab when it's active and not searching
+        print("🔄 Auto-refreshing Available tab");
+        _cubit.loadTalents(TalentCategory.available, refresh: true);
+      }
     });
   }
 
@@ -191,12 +208,17 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     // إلغاء الـ timer السابق
     _searchDebounce?.cancel();
 
-    // إنشاء timer جديد للتأخير
-    _searchDebounce = Timer(Duration(milliseconds: 500), () {
-      if (_searchController.text.isNotEmpty) {
-        _cubit.searchTubeVideos(_searchController.text);
-      } else {
-        _cubit.searchTubeVideos(''); // مسح النتائج
+    // إنشاء timer جديد للتأخير مع وقت أطول لتقليل الضغط
+    _searchDebounce = Timer(Duration(milliseconds: 800), () {
+      if (mounted) {
+        // Check if widget is still mounted
+        final query = _searchController.text.trim();
+        if (query.isNotEmpty && query.length >= 2) {
+          // بحث فقط إذا كان النص أكثر من حرفين
+          _cubit.searchTubeVideos(query);
+        } else {
+          _cubit.searchTubeVideos(''); // مسح النتائج
+        }
       }
     });
   }
@@ -269,7 +291,26 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
         isLoggedIn: context.watch<UserCubit>().isLoggedIn,
         showButton: _showFloatingButton,
       ),
-      body: BlocBuilder<StarCubit, StarState>(
+      body: BlocConsumer<StarCubit, StarState>(
+        listener: (context, state) {
+          if (state.status == StarStates.ratingSuccess &&
+              state.successMessage != null) {
+            final rating = int.tryParse(state.successMessage!) ?? 0;
+            final arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥'];
+
+            final message = context.isArabic
+                ? 'تم تقييم الفيديو بـ ${arabicNumbers[rating]} ${rating == 1 ? 'نجمة' : 'نجوم'}'
+                : 'Video rated with $rating ${rating == 1 ? 'star' : 'stars'}';
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: Theme.of(context).primaryColor,
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        },
         builder: (BuildContext context, state) {
           if (state.status == StarStates.loading &&
               state.availableTalents.isEmpty) {
@@ -278,19 +319,62 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
           return RefreshIndicator(
             onRefresh: () async {
-              if (_isSearching) {
-                if (_isSearchingProfiles) {
-                  _cubit.searchProfiles(_searchController.text);
+              print(
+                  "🔄 RefreshIndicator triggered for tab: $_selectedTabIndex");
+
+              // Prevent multiple simultaneous refreshes
+              if (_isManualRefreshing) {
+                print("⚠️ Refresh already in progress, ignoring");
+                return;
+              }
+
+              setState(() {
+                _isManualRefreshing = true;
+              });
+
+              try {
+                if (_isSearching) {
+                  if (_isSearchingProfiles) {
+                    print(
+                        "🔍 Refreshing profile search: ${_searchController.text}");
+                    _cubit.searchProfiles(_searchController.text);
+                  } else {
+                    print(
+                        "🔍 Refreshing talent search: ${_searchController.text}");
+                    _cubit.searchTalents(_searchController.text);
+                  }
+                  // Add a small delay for search to complete
+                  await Future.delayed(Duration(milliseconds: 500));
                 } else {
-                  _cubit.searchTalents(_searchController.text);
+                  final category = _getTabCategory(_selectedTabIndex);
+                  if (category != null) {
+                    print("📱 Refreshing category: $category");
+                    await _cubit.loadTalents(category, refresh: true);
+
+                    // Add a small delay to ensure refresh completes
+                    await Future.delayed(Duration(milliseconds: 300));
+                  } else {
+                    print(
+                        "⚠️ No category found for tab index: $_selectedTabIndex");
+                  }
                 }
-              } else {
-                final category = _getTabCategory(_selectedTabIndex);
-                if (category != null) {
-                  await _cubit.loadTalents(category, refresh: true);
+                print("✅ Refresh completed successfully");
+              } catch (e) {
+                print("❌ Refresh failed: $e");
+                rethrow;
+              } finally {
+                if (mounted) {
+                  setState(() {
+                    _isManualRefreshing = false;
+                  });
                 }
               }
             },
+            displacement: 40.0, // Move indicator down a bit
+            strokeWidth: 2.5,
+            backgroundColor:
+                context.isDarkMode ? Colors.grey[800] : Colors.white,
+            color: context.isDarkMode ? Colors.white : Colors.black,
             child: NotificationListener<ScrollNotification>(
               onNotification: (scrollInfo) {
                 _onScrollNotification(scrollInfo);
@@ -298,6 +382,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
               },
               child: NestedScrollView(
                 controller: _mainScrollController,
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return [
@@ -310,8 +397,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       surfaceTintColor: Colors.transparent,
                       backgroundColor:
                           context.isDarkMode ? Colors.black : Colors.white,
-                      toolbarHeight: 38,
-                      titleSpacing: 0,
+                      toolbarHeight: 50,
                       leading: BackButton(
                         onPressed: () {
                           ManageVibration.vibrate();
@@ -320,8 +406,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                         color: context.isDarkMode ? Colors.white : Colors.black,
                       ),
                       centerTitle: false,
-                      title: Text(
-                        context.isArabic ? 'تيوب' : 'Tube',
+                      titleSpacing: 0,
+                      title: Label(
+                        text: context.isArabic ? 'تيوب' : 'Tube',
                         style: TextStyle(
                           color:
                               context.isDarkMode ? Colors.white : Colors.black,
@@ -336,28 +423,27 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                '(15/3700)',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                context.isArabic ? '(١٥/٣٧٠٠)' : '(15/3700)',
+                                style: Styles.smallText(),
+                              ),
+                              SizedBox(width: 4),
+                              GestureDetector(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                },
+                                child: Text(
+                                  context.isArabic ? 'الفائزون' : 'Winners',
+                                  style: Styles.headerText(
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 28,
+                                  ),
                                 ),
                               ),
                               SizedBox(width: 4),
-                              Text(
-                                context.isArabic ? 'الفائزون' : 'Winners',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(width: 4),
-                              Image.asset(Assets.cupImage,width: 24,height: 24),
+                              Image.asset(Assets.cupImage,
+                                  width: 24, height: 24),
                             ],
                           ),
                         ),
@@ -371,15 +457,15 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       ),
 
                     // Sticky Tabs
-                    // Sticky Tabs with Search
                     if (!_isSearching)
                       SliverPersistentHeader(
                         pinned: true,
+                        floating: false,
                         delegate: StickyTabBarDelegate(
                           tabController: _tabController,
                           context: context,
                           onSearchTap: _toggleSearch,
-                          showSearchField: false, // مش هنظهره هنا
+                          showSearchField: false,
                         ),
                       ),
 
@@ -387,14 +473,14 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                     if (_isSearching)
                       SliverPersistentHeader(
                         pinned: true,
+                        floating: false,
                         delegate: StickyTabBarDelegate(
                           tabController: _tabController,
                           context: context,
                           onSearchTap: _toggleSearch,
-                          showSearchField: true, // هنظهره هنا
+                          showSearchField: true,
                           searchController: _searchController,
                           onSearchChanged: (value) {
-                            // Real-time search كل ما المستخدم يكتب
                             _onSearchChanged();
                           },
                         ),
@@ -405,6 +491,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                   builder: (context) {
                     if (_isSearching && _isSearchingProfiles) {
                       return CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
                         slivers: [
                           ProfileSearchResults(
                             profiles: state.searchProfileResults,
@@ -429,6 +518,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
   Widget _buildSynchronizedTabContent(StarState state) {
     return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
       slivers: [
         // Your existing tab content as slivers
         _getTabContentSliver(state),
@@ -523,15 +615,24 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
       );
     }
 
-    return ListView.builder(
-      itemCount: state.searchResults.length,
-      itemBuilder: (context, index) {
-        final talent = state.searchResults[index];
-        return TalentCard(
-          talent: talent,
-          cubit: _cubit,
-        );
-      },
+    return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final talent = state.searchResults[index];
+              return TalentCard(
+                talent: talent,
+                cubit: _cubit,
+              );
+            },
+            childCount: state.searchResults.length,
+          ),
+        ),
+      ],
     );
   }
 
@@ -574,6 +675,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
     // Then dispose controllers
     _searchDebounce?.cancel();
+    _autoRefreshTimer?.cancel();
     _tabController.dispose();
     _searchController.dispose();
     _mainScrollController.dispose();

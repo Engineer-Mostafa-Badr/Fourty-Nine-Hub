@@ -64,6 +64,7 @@ class VideoUploadEntity {
   final String description;
   final String videoMediaId;
   final String thumbnailMediaId;
+  final String category; // إضافة category
   final int duration; // إضافة duration
 
   VideoUploadEntity({
@@ -71,6 +72,7 @@ class VideoUploadEntity {
     required this.description,
     required this.videoMediaId,
     required this.thumbnailMediaId,
+    required this.category, // إضافة category
     required this.duration, // إضافة duration
   });
 
@@ -80,6 +82,7 @@ class VideoUploadEntity {
       'description': description,
       'video': videoMediaId,
       'thumbnail': thumbnailMediaId,
+      'category': category, // إضافة category للـ JSON
       'duration': duration, // إضافة duration للـ JSON
     };
   }
@@ -494,6 +497,8 @@ class BunnyVideoUploader {
     required File videoFile,
     required File thumbnailFile,
     required String subCategoryId,
+    required String categoryId, // إضافة categoryId
+    int? videoDuration, // إضافة videoDuration كمعامل اختياري
     Function(String)? onStatusUpdate,
     Function(double)? onProgress,
   }) async {
@@ -506,19 +511,29 @@ class BunnyVideoUploader {
 
         // Step 1: Get video duration
         onStatusUpdate?.call('Getting video information...');
-        final videoPickerHelper = VideoPickerHelper();
-        final duration = await videoPickerHelper.getVideoDuration(videoFile);
+        int finalDuration;
 
-        if (duration == null) {
-          if (retryCount < maxRetries - 1) {
-            retryCount++;
-            await Future.delayed(Duration(seconds: 2));
-            continue;
+        if (videoDuration != null) {
+          // استخدم المدة المرسلة من المستدعي
+          finalDuration = videoDuration;
+          print("📹 Using provided duration: ${finalDuration}s");
+        } else {
+          // جرب الحصول على المدة تلقائياً
+          final videoPickerHelper = VideoPickerHelper();
+          final duration = await videoPickerHelper.getVideoDuration(videoFile);
+
+          if (duration == null) {
+            if (retryCount < maxRetries - 1) {
+              retryCount++;
+              await Future.delayed(Duration(seconds: 2));
+              continue;
+            }
+            return Left(UnknownFailure('Failed to get video duration'));
           }
-          return Left(UnknownFailure('Failed to get video duration'));
+          finalDuration = duration;
         }
 
-        print("📹 Video duration: ${duration}s");
+        print("📹 Final video duration: ${finalDuration}s");
 
         // Step 2: Create video on backend
         onStatusUpdate?.call('Creating video entry...');
@@ -575,7 +590,8 @@ class BunnyVideoUploader {
               description: description,
               videoMediaId: bunnyData.mediaId,
               thumbnailMediaId: thumbnailMediaId!,
-              duration: duration, // إضافة duration هنا
+              category: categoryId, // إضافة categoryId هنا
+              duration: finalDuration, // استخدام finalDuration المحسوبة
             ),
           );
 

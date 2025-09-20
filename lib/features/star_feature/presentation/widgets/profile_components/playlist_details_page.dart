@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
@@ -16,6 +17,10 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/user_star_entity.dart';
+import '../../controller/comment_cubit/comment_cubit.dart';
+import '../../helper/youtube_style_video_player.dart';
+import 'playlist_playback_manager.dart';
+import 'playlist_video_player_page.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
   final PlaylistEntity playlist;
@@ -33,14 +38,14 @@ class PlaylistDetailsPage extends StatefulWidget {
 
 class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   late PlaylistCubit _playlistCubit;
-  int _currentVideoIndex = 0;
-  bool _isShuffleEnabled = false;
-  bool _isRepeatEnabled = false;
+  late PlaylistPlaybackManager _playbackManager;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _playlistCubit = context.read<PlaylistCubit>();
+    _playbackManager = PlaylistPlaybackManager.getInstance(widget.playlist.id);
     _loadPlaylistDetails();
   }
 
@@ -48,6 +53,62 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     print('🎵 Loading playlist details for: ${widget.playlist.id}');
     // Use the NEW method to get playlist with videos
     _playlistCubit.getPlaylistWithVideos(widget.playlist.id);
+  }
+
+  Future<void> _initializePlaybackManager(List<StarEntity> videos) async {
+    if (!_isInitialized && videos.isNotEmpty) {
+      await _playbackManager.initializePlaylist(videos);
+      _isInitialized = true;
+
+      // Auto-start first video if needed
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _playbackManager.autoStartIfNeeded();
+        }
+      });
+    }
+  }
+
+  void _onVideoTap(StarEntity video) {
+    if (_playbackManager.isCurrentVideo(video.id)) {
+      // Navigate to full video player if it's the current video
+      _navigateToVideoPlayer(video);
+    } else {
+      // Play this video
+      _playbackManager.playVideo(video.id);
+    }
+  }
+
+  void _navigateToVideoPlayer(StarEntity video) {
+    final starCubit = context.read<StarCubit>();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StarCubit>.value(
+              value: starCubit,
+            ),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: PlaylistVideoPlayerPage(
+            playlist: widget.playlist,
+            initialVideo: video,
+            playbackManager: _playbackManager,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _getVideoUrl(StarEntity video) {
+    if (video.mediaUrl.isNotEmpty) {
+      return video.mediaUrl.first.mediaKey;
+    }
+    return '';
   }
 
   @override
@@ -83,6 +144,11 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
             final realVideos =
                 playlist.videos; // These are now REAL videos from API
 
+            // Initialize playback manager when videos are loaded
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _initializePlaybackManager(realVideos);
+            });
+
             print('🎵 Displaying playlist: ${playlist.name}');
             print('📹 Real videos count: ${realVideos.length}');
 
@@ -96,13 +162,23 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   child: _buildPlaylistHeader(playlist),
                 ),
 
+                // Playback controls header
+                SliverToBoxAdapter(
+                  child: _buildPlaybackControls(),
+                ),
+
                 // Control Buttons
                 SliverToBoxAdapter(
                   child: _buildControlButtons(playlist, realVideos),
                 ),
 
-                // Videos List - NOW USING REAL DATA
-                _buildVideosList(playlist, realVideos),
+                // Videos List - NOW USING REAL DATA with playback manager
+                AnimatedBuilder(
+                  animation: _playbackManager,
+                  builder: (context, child) {
+                    return _buildVideosList(playlist, realVideos);
+                  },
+                ),
               ],
             );
           },
@@ -233,7 +309,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        '${playlist.videos.length}', // REAL count
+                        playlist.videos.length
+                            .toString()
+                            .toArabicNumbers(context), // REAL count
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -268,7 +346,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
                 Text(
                   context.isArabic
-                      ? '${playlist.videos.length} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}'
+                      ? '${playlist.videos.length.toString().toArabicNumbers(context)} فيديو • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode).toArabicNumbers(context)}'
                       : '${playlist.videos.length} videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
                   style: TextStyle(
                     fontSize: 14,
@@ -441,6 +519,125 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     );
   }
 
+  Widget _buildPlaybackControls() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: context.isDarkMode ? Colors.grey[900] : Colors.grey[100],
+        border: Border(
+          bottom: BorderSide(
+            color: context.isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+            width: 1,
+          ),
+        ),
+      ),
+      child: AnimatedBuilder(
+        animation: _playbackManager,
+        builder: (context, child) {
+          return Row(
+            children: [
+              // Shuffle/Sequential toggle
+              Container(
+                decoration: BoxDecoration(
+                  color: _playbackManager.playbackMode == PlaybackMode.shuffle
+                      ? Colors.blue.withOpacity(0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: _playbackManager.playbackMode == PlaybackMode.shuffle
+                        ? Colors.blue
+                        : Colors.grey[400]!,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    _playbackManager.togglePlaybackMode();
+                  },
+                  icon: Icon(
+                    _playbackManager.playbackMode == PlaybackMode.shuffle
+                        ? Icons.shuffle
+                        : Icons.repeat,
+                    color: _playbackManager.playbackMode == PlaybackMode.shuffle
+                        ? Colors.blue
+                        : Colors.grey[600],
+                  ),
+                  tooltip: _playbackManager.playbackMode == PlaybackMode.shuffle
+                      ? (context.isArabic ? 'تشغيل عشوائي' : 'Shuffle')
+                      : (context.isArabic ? 'تشغيل متسلسل' : 'Sequential'),
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              // Current video info
+              Expanded(
+                child: _playbackManager.currentVideo != null
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.isArabic ? 'قيد التشغيل:' : 'Now Playing:',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            _playbackManager.currentVideo!.title,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      )
+                    : Text(
+                        context.isArabic
+                            ? 'لا يوجد فيديو قيد التشغيل'
+                            : 'No video playing',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+              ),
+
+              // Playback mode indicator
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _playbackManager.playbackMode == PlaybackMode.shuffle
+                      ? Colors.orange.withOpacity(0.1)
+                      : Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  _playbackManager.playbackMode == PlaybackMode.shuffle
+                      ? (context.isArabic ? 'عشوائي' : 'SHUFFLE')
+                      : (context.isArabic ? 'متسلسل' : 'SEQUENTIAL'),
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: _playbackManager.playbackMode == PlaybackMode.shuffle
+                        ? Colors.orange[700]
+                        : Colors.blue[700],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildControlButtons(
       PlaylistEntity playlist, List<StarEntity> videos) {
     return Container(
@@ -465,42 +662,6 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   borderRadius: BorderRadius.circular(25),
                 ),
               ),
-            ),
-          ),
-
-          SizedBox(width: 12),
-
-          // Shuffle button
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey[300]!),
-            ),
-            child: IconButton(
-              onPressed: videos.isNotEmpty ? _toggleShuffle : null,
-              icon: Icon(
-                Icons.shuffle,
-                color: _isShuffleEnabled ? Colors.blue[600] : Colors.grey[600],
-              ),
-              tooltip: context.isArabic ? 'خلط' : 'Shuffle',
-            ),
-          ),
-
-          SizedBox(width: 8),
-
-          // Repeat button
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey[300]!),
-            ),
-            child: IconButton(
-              onPressed: videos.isNotEmpty ? _toggleRepeat : null,
-              icon: Icon(
-                Icons.repeat,
-                color: _isRepeatEnabled ? Colors.blue[600] : Colors.grey[600],
-              ),
-              tooltip: context.isArabic ? 'تكرار' : 'Repeat',
             ),
           ),
         ],
@@ -573,7 +734,8 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   }
 
   Widget _buildVideoItem(StarEntity video, int index, PlaylistEntity playlist) {
-    final isCurrentVideo = index == _currentVideoIndex;
+    final isCurrentVideo = _playbackManager.isCurrentVideo(video.id);
+    final isPlaying = _playbackManager.isVideoPlaying(video.id);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -585,7 +747,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
-          onTap: () => _playVideoAt(index, video, playlist),
+          onTap: () => _onVideoTap(video),
           child: Padding(
             padding: EdgeInsets.all(12),
             child: Row(
@@ -609,7 +771,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                           ),
                           child: Center(
                             child: Icon(
-                              Icons.equalizer,
+                              isPlaying ? Icons.pause : Icons.play_arrow,
                               color: Colors.white,
                               size: 24,
                             ),
@@ -748,69 +910,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     ManageVibration.vibrate();
     if (playlist.videos.isEmpty) return;
 
-    setState(() {
-      _currentVideoIndex = 0;
-    });
-    _playVideoAt(0, playlist.videos.first, playlist);
+    _playbackManager.playVideo(playlist.videos.first.id);
   }
 
-  void _playVideoAt(int index, StarEntity video, PlaylistEntity playlist) {
-    ManageVibration.vibrate();
-    setState(() {
-      _currentVideoIndex = index;
-    });
-
-    // Navigate to video player with playlist context
-    Navigator.pushNamed(
-      context,
-      '/video-player',
-      arguments: {
-        'video': video,
-        'mediaUrl':
-            video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '',
-        'playlist': playlist,
-        'currentIndex': index,
-        'isShuffleEnabled': _isShuffleEnabled,
-        'isRepeatEnabled': _isRepeatEnabled,
-      },
-    );
-  }
-
-  void _toggleShuffle() {
-    ManageVibration.vibrate();
-    setState(() {
-      _isShuffleEnabled = !_isShuffleEnabled;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          _isShuffleEnabled
-              ? (context.isArabic ? 'تم تفعيل الخلط' : 'Shuffle enabled')
-              : (context.isArabic ? 'تم إيقاف الخلط' : 'Shuffle disabled'),
-        ),
-        duration: Duration(seconds: 1),
-      ),
-    );
-  }
-
-  void _toggleRepeat() {
-    ManageVibration.vibrate();
-    setState(() {
-      _isRepeatEnabled = !_isRepeatEnabled;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          _isRepeatEnabled
-              ? (context.isArabic ? 'تم تفعيل التكرار' : 'Repeat enabled')
-              : (context.isArabic ? 'تم إيقاف التكرار' : 'Repeat disabled'),
-        ),
-        duration: Duration(seconds: 1),
-      ),
-    );
-  }
 
   void _showVideoOptions(StarEntity video, int index, PlaylistEntity playlist) {
     OptionsBottomSheet.showOptions(
@@ -821,7 +923,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           title: context.isArabic ? 'تشغيل الآن' : 'Play now',
           onTap: () {
             Navigator.pop(context);
-            _playVideoAt(index, video, playlist);
+            _onVideoTap(video);
           },
         ),
         OptionItem(
@@ -859,51 +961,82 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   void _removeVideoFromPlaylist(StarEntity video, PlaylistEntity playlist) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'إزالة الفيديو' : 'Remove Video',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          context.isArabic
-              ? 'هل تريد إزالة هذا الفيديو من قائمة التشغيل؟'
-              : 'Remove this video from the playlist?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
+      builder: (context) => BlocProvider(
+        create: (context) => serviceLocator<PlaylistCubit>(),
+        child: AlertDialog(
+          title: Text(
+            context.isArabic ? 'إزالة الفيديو' : 'Remove Video',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            context.isArabic
+                ? 'هل تريد إزالة هذا الفيديو من قائمة التشغيل؟'
+                : 'Remove this video from the playlist?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                context.isArabic ? 'إلغاء' : 'Cancel',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-
-              final success = await _playlistCubit.removeVideoFromPlaylist(
-                playlist.id,
-                video.id,
-              );
-
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم إزالة الفيديو من قائمة التشغيل'
-                          : 'Video removed from playlist',
+            BlocConsumer<PlaylistCubit, PlaylistState>(
+              listener: (context, state) {
+                if (state.isSuccess) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.isArabic
+                            ? 'تم إزالة الفيديو من قائمة التشغيل'
+                            : 'Video removed from playlist',
+                      ),
+                      backgroundColor: Colors.green,
                     ),
-                    backgroundColor: Colors.green,
-                  ),
+                  );
+                  // Refresh the main playlist
+                  _loadPlaylistDetails();
+                } else if (state.isError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        state.failure?.toString() ??
+                            (context.isArabic
+                                ? 'فشل في إزالة الفيديو'
+                                : 'Failed to remove video'),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return TextButton(
+                  onPressed: state.isLoading
+                      ? null
+                      : () async {
+                          await context.read<PlaylistCubit>().removeVideoFromPlaylist(
+                            playlist.id,
+                            video.id,
+                          );
+                        },
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: state.isLoading
+                      ? SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.red,
+                          ),
+                        )
+                      : Text(context.isArabic ? 'إزالة' : 'Remove'),
                 );
-                // The cubit will automatically refresh the playlist
-              }
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(context.isArabic ? 'إزالة' : 'Remove'),
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1058,5 +1191,11 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // Don't dispose the playback manager as it's per playlist and may be used elsewhere
+    super.dispose();
   }
 }

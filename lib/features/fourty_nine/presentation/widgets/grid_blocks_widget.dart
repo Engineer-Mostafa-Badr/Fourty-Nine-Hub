@@ -267,7 +267,12 @@ class GridBlocksWidget extends StatelessWidget {
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
-          context.push(Routes.MARRIAGESUBCATEGORIES);
+          // context.push(Routes.MARRIAGESUBCATEGORIES);
+          context.push(
+            context.read<UserCubit>().isLoggedIn
+                ? Routes.MARRIAGESUBCATEGORIES
+                : Routes.FirstLoginScreen,
+          );
         },
         shadowColor: const Color(0xffFFC0CB).withValues(alpha: 0.9),
         image: Assets.marriage,

@@ -11,4 +11,5 @@ abstract class ConversationsRepo {
   void listenToStartTyping(Function(String) params);
   Future<Either<Failure, bool>> stopTyping({required String conversationId});
   void listenToStopTyping(Function(String) params);
+  Future<Either<Failure, void>> toggleArchivedConversation({required String conversationId});
 }

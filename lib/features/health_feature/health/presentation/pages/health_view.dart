@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/booking_history_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/current_booking_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/most_booking_card.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/my_booking_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/current_history_booking.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_mode_banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
@@ -143,11 +144,11 @@ class _HealthViewState extends State<HealthView> {
                         isSelected: _showMyBookings,
                         onTap: () {
                           ManageVibration.vibrate();
-                          // if (!context.read<UserCubit>().isLoggedIn) {
-                          //   return pleaseLoginDialog(context);
-                          // } else {
-                          //   // _toggleView('current');
-                          // }
+                          if (!context.read<UserCubit>().isLoggedIn) {
+                            return pleaseLoginDialog(context);
+                          } else {
+                            _toggleView('myBookings');
+                          }
                         },
                       ),
                       const SizedBox(
@@ -159,7 +160,7 @@ class _HealthViewState extends State<HealthView> {
                 Sizer(height: 20),
 
                 // Default view when none are selected
-                if (!_showMost && !_showHistory && !_showCurrent) ...[
+                if (!_showMost && !_showHistory && !_showCurrent&& !_showMyBookings) ...[
                   Column(
                     children: [
                       const HealthBookingTypesWidgt(),
@@ -231,7 +232,8 @@ class _HealthViewState extends State<HealthView> {
                       const Sizer(height: 8),
                       if (!_showFavoriteAds &&
                           !_showRequestLog &&
-                          !_showMyAds) ...[
+                          !_showMyAds&&
+                          !_showMyBookings) ...[
                         const HealthMedicalServices(),
                         const Sizer(),
                         const HealthBookings(),
@@ -286,6 +288,15 @@ class _HealthViewState extends State<HealthView> {
                         serviceLocator<HealthCubit>()..loadInitialMostBooking(),
                     child: MostBookingScreen(
                       onClose: () => setState(() => _showMost = false),
+                    ),
+                  ),
+                if (_showMyBookings)
+                  BlocProvider(
+                    key: const ValueKey('MyBookingScreen'),
+                    create: (context) =>
+                        serviceLocator<HealthCubit>()..loadInitialMyBookings(),
+                    child: MyBookingScreen(
+                      onClose: () => setState(() => _showMyBookings = false),
                     ),
                   ),
               ],
@@ -359,12 +370,14 @@ class _HealthViewState extends State<HealthView> {
         if (_showMost) {
           _showHistory = false;
           _showCurrent = false;
+          _showMyBookings = false;
         }
       } else if (viewType == 'history') {
         _showHistory = !_showHistory;
         if (_showHistory) {
           _showMost = false;
           _showCurrent = false;
+          _showMyBookings = false;
           cubit.switchBookingType('history');
         }
       } else if (viewType == 'current') {
@@ -372,7 +385,17 @@ class _HealthViewState extends State<HealthView> {
         if (_showCurrent) {
           _showMost = false;
           _showHistory = false;
+          _showMyBookings = false;
           cubit.switchBookingType('current');
+        }
+      }
+      else if (viewType == 'myBookings') {
+        _showMyBookings = !_showMyBookings;
+        if (_showCurrent) {
+          _showMost = false;
+          _showHistory = false;
+          _showCurrent = false;
+          cubit.switchBookingType('myBookings');
         }
       }
     });

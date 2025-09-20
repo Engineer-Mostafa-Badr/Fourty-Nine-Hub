@@ -25,6 +25,145 @@ import '../profile_components/playlist_bottom_sheet.dart';
 import 'talent_card_info_section.dart';
 import 'talent_card_overlay_controls.dart';
 import '../common/options_bottom_sheet.dart';
+import '../../../../../core/messages/messages.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
+
+// class VideoPlayerManager {
+//   static VideoPlayerManager? _instance;
+//   static VideoPlayerManager get instance {
+//     _instance ??= VideoPlayerManager._();
+//     return _instance!;
+//   }
+
+//   VideoPlayerManager._();
+
+//   // Track all active controllers
+//   final Map<String, VideoPlayerController> _controllers = {};
+//   final int _maxConcurrentVideos = 2; // Limit concurrent videos
+
+//   // Get or create controller with resource management
+//   Future<VideoPlayerController?> getController(
+//       String videoUrl, String videoId) async {
+//     // Clean up excess controllers if needed
+//     if (_controllers.length >= _maxConcurrentVideos) {
+//       await _cleanupOldestController();
+//     }
+
+//     // Return existing controller if available
+//     if (_controllers.containsKey(videoId)) {
+//       return _controllers[videoId];
+//     }
+
+//     try {
+//       final controller = VideoPlayerController.network(videoUrl);
+//       await controller.initialize();
+//       _controllers[videoId] = controller;
+//       return controller;
+//     } catch (e) {
+//       print('Failed to create video controller: $e');
+//       return null;
+//     }
+//   }
+
+//   // Clean up oldest controller
+//   Future<void> _cleanupOldestController() async {
+//     if (_controllers.isEmpty) return;
+
+//     final oldestKey = _controllers.keys.first;
+//     final controller = _controllers[oldestKey];
+
+//     if (controller != null) {
+//       await controller.dispose();
+//       _controllers.remove(oldestKey);
+//     }
+//   }
+
+//   // Dispose specific controller
+//   Future<void> disposeController(String videoId) async {
+//     final controller = _controllers[videoId];
+//     if (controller != null) {
+//       await controller.dispose();
+//       _controllers.remove(videoId);
+//     }
+//   }
+
+//   // Dispose all controllers
+//   Future<void> disposeAll() async {
+//     for (final controller in _controllers.values) {
+//       await controller.dispose();
+//     }
+//     _controllers.clear();
+//   }
+// }
+
+class VideoPlayerManager {
+  static VideoPlayerManager? _instance;
+  static VideoPlayerManager get instance {
+    _instance ??= VideoPlayerManager._();
+    return _instance!;
+  }
+
+  VideoPlayerManager._();
+
+  // Track all active controllers
+  final Map<String, VideoPlayerController> _controllers = {};
+  final int _maxConcurrentVideos = 2; // Limit concurrent videos
+
+  // Get or create controller with resource management
+  Future<VideoPlayerController?> getController(
+      String videoUrl, String videoId) async {
+    // Clean up excess controllers if needed
+    if (_controllers.length >= _maxConcurrentVideos) {
+      await _cleanupOldestController();
+    }
+
+    // Return existing controller if available
+    if (_controllers.containsKey(videoId)) {
+      return _controllers[videoId];
+    }
+
+    try {
+      final controller = VideoPlayerController.network(videoUrl);
+      await controller.initialize();
+      _controllers[videoId] = controller;
+      return controller;
+    } catch (e) {
+      print('Failed to create video controller: $e');
+      return null;
+    }
+  }
+
+  // Clean up oldest controller
+  Future<void> _cleanupOldestController() async {
+    if (_controllers.isEmpty) return;
+
+    final oldestKey = _controllers.keys.first;
+    final controller = _controllers[oldestKey];
+
+    if (controller != null) {
+      await controller.dispose();
+      _controllers.remove(oldestKey);
+    }
+  }
+
+  // Dispose specific controller
+  Future<void> disposeController(String videoId) async {
+    final controller = _controllers[videoId];
+    if (controller != null) {
+      await controller.dispose();
+      _controllers.remove(videoId);
+    }
+  }
+
+  // Dispose all controllers
+  Future<void> disposeAll() async {
+    for (final controller in _controllers.values) {
+      await controller.dispose();
+    }
+    _controllers.clear();
+  }
+}
 
 class TalentCard extends StatefulWidget {
   final StarEntity talent;
@@ -47,65 +186,72 @@ class TalentCard extends StatefulWidget {
 class _TalentCardState extends State<TalentCard> {
   bool _hasIncrementedView = false;
 
+  // Use widget.cubit consistently throughout the widget
+  StarCubit get cubit => widget.cubit;
+
   @override
   Widget build(BuildContext context) {
     final mediaUrl = _getVideoUrl();
     final thumbnailUrl = _getThumbnailUrl();
     final isVideo = _isVideoUrl(mediaUrl);
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      color: context.isDarkMode ? Colors.black : Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Video/Image Section with Favorite Overlay
-          GestureDetector(
-            onTap: () {
-              ManageVibration.vibrate();
-              if (isVideo) {
-                _incrementViewIfNeeded();
-                _navigateToVideoPlayer(context, mediaUrl, widget.talent);
-              } else {
-                _navigateToProfile(context, widget.talent);
-              }
-            },
-            child: Stack(
-              children: [
-                // Video or Image Container
-                isVideo
-                    ? TalentVideoPlayerWidget(
-                        videoUrl: mediaUrl,
-                        title: widget.talent.title,
-                        autoPlay: true,
-                        startMuted: true,
-                        thumbnailUrl: thumbnailUrl,
+    return BlocBuilder<StarCubit, StarState>(
+      builder: (context, starState) {
+        return Container(
+          margin: EdgeInsets.only(bottom: 16),
+          color: context.isDarkMode ? Colors.black : Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Video/Image Section with Favorite Overlay
+              GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  if (isVideo) {
+                    _incrementViewIfNeeded();
+                    _navigateToVideoPlayer(context, mediaUrl, widget.talent);
+                  } else {
+                    _navigateToProfile(context, widget.talent);
+                  }
+                },
+                child: Stack(
+                  children: [
+                    // Video or Image Container
+                    isVideo
+                        ? TalentVideoPlayerWidget(
+                            videoUrl: mediaUrl,
+                            title: widget.talent.title,
+                            autoPlay: true,
+                            startMuted: true,
+                            thumbnailUrl: thumbnailUrl,
+                            talent: widget.talent,
+                            cubit: widget.cubit,
+                            onTap: () => _navigateToVideoPlayer(
+                                context, mediaUrl, widget.talent),
+                            onVideoStarted: () => _incrementViewIfNeeded(),
+                          )
+                        : _buildImageContainer(mediaUrl),
+
+                    // Favorite Overlay (only for non-video content)
+                    if (!isVideo)
+                      TalentCardOverlayControls(
                         talent: widget.talent,
                         cubit: widget.cubit,
-                        onTap: () => _navigateToVideoPlayer(
-                            context, mediaUrl, widget.talent),
-                        onVideoStarted: () => _incrementViewIfNeeded(),
-                      )
-                    : _buildImageContainer(mediaUrl),
+                        isPlaying: false,
+                      ),
+                  ],
+                ),
+              ),
 
-                // Favorite Overlay (only for non-video content)
-                if (!isVideo)
-                  TalentCardOverlayControls(
-                    talent: widget.talent,
-                    cubit: widget.cubit,
-                    isPlaying: false,
-                  ),
-              ],
-            ),
+              // Video Info Section with enhanced tube video info
+              _buildVideoInfoSection(),
+
+              // Delete Button for My Talents
+              if (widget.isMyTalent) _buildDeleteButton(context, widget.talent),
+            ],
           ),
-
-          // Video Info Section with enhanced tube video info
-          _buildVideoInfoSection(),
-
-          // Delete Button for My Talents
-          if (widget.isMyTalent) _buildDeleteButton(context, widget.talent),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -116,7 +262,10 @@ class _TalentCardState extends State<TalentCard> {
           talent: widget.talent,
           cubit: widget.cubit,
           onProfileTap: () => _navigateToProfile(context, widget.talent),
-          onMoreOptionsTap: () => _showTubeVideoOptions(context, widget.talent),
+          onMoreOptionsTap: () {
+            ManageVibration.vibrate();
+            _showTubeVideoOptions(context, widget.talent);
+          },
         ),
       ],
     );
@@ -207,12 +356,12 @@ class _TalentCardState extends State<TalentCard> {
   }
 
   // Navigation methods
-  static void _navigateToVideoPlayer(
+  void _navigateToVideoPlayer(
     BuildContext context,
     String mediaUrl,
     StarEntity talent,
   ) {
-    final starCubit = context.read<StarCubit>();
+    final starCubit = widget.cubit;
 
     Navigator.push(
       context,
@@ -300,7 +449,7 @@ class _TalentCardState extends State<TalentCard> {
       title: LocaleKeys.alert.localize,
       subTitle: LocaleKeys.remove.localize,
       action: () {
-        context.read<StarCubit>().deleteMyTubeVideo(talent.id);
+        cubit.deleteMyTubeVideo(talent.id);
         Navigator.pop(context);
       },
     );
@@ -360,7 +509,7 @@ class _TalentCardState extends State<TalentCard> {
   // }
 
   void _showTubeVideoOptions(BuildContext context, StarEntity talent) {
-    final cubit = context.read<StarCubit>();
+    // Use the widget's cubit parameter
 
     OptionsBottomSheet.showOptions(
       context: context,
@@ -399,24 +548,23 @@ class _TalentCardState extends State<TalentCard> {
               _shareVideo(context, talent);
             },
           ),
-          OptionItem(
-            icon: Icons.download,
-            title: context.isArabic ? 'تحميل' : 'Download',
-            onTap: () {
-              ManageVibration.vibrate();
-              Navigator.pop(context);
-              _downloadVideo(context, talent);
-            },
-          ),
-          OptionItem(
-            icon: Icons.watch_later_outlined,
-            title: context.isArabic ? 'مشاهدة لاحقاً' : 'Watch later',
-            onTap: () {
-              ManageVibration.vibrate();
-              Navigator.pop(context);
-              _addToWatchLater(context, talent);
-            },
-          ),
+          (() {
+            final isWatchLater = cubit.isWatchLater(talent.id);
+            return OptionItem(
+              icon:
+                  isWatchLater ? Icons.watch_later : Icons.watch_later_outlined,
+              title: context.isArabic
+                  ? (isWatchLater
+                      ? 'إزالة من المشاهدة لاحقاً'
+                      : 'مشاهدة لاحقاً')
+                  : (isWatchLater ? 'Remove from Watch Later' : 'Watch Later'),
+              onTap: () {
+                ManageVibration.vibrate();
+                Navigator.pop(context);
+                _addToWatchLater(context, talent);
+              },
+            );
+          })(),
         ],
         OptionItem(
           icon: Icons.flag,
@@ -449,90 +597,41 @@ class _TalentCardState extends State<TalentCard> {
 // Helper methods for other options
   void _shareVideo(BuildContext context, StarEntity talent) {
     // Implement share functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared',
-        ),
-        backgroundColor: Colors.green,
-      ),
+    showSuccessMessage(
+      context,
+      context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared',
     );
   }
 
   void _downloadVideo(BuildContext context, StarEntity talent) {
     // Implement download functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic ? 'بدء تحميل الفيديو' : 'Download started',
-        ),
-        backgroundColor: Colors.blue,
-      ),
+    showSuccessMessage(
+      context,
+      context.isArabic ? 'بدء تحميل الفيديو' : 'Download started',
+      color: Colors.blue,
+      icon: Icons.download,
     );
   }
 
   void _addToWatchLater(BuildContext context, StarEntity talent) {
-    // Implement watch later functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic
-              ? 'تم إضافة الفيديو للمشاهدة لاحقاً'
-              : 'Added to Watch Later',
-        ),
-        backgroundColor: Colors.orange,
-      ),
-    );
+    print("🎬 Adding video to watch later: ${talent.id}");
+    print("🎬 Cubit instance: ${cubit.runtimeType}");
+
+    // Call the cubit to toggle watch later
+    cubit.toggleWatchLater(talent.id);
   }
 
   void _reportVideo(BuildContext context, StarEntity talent) {
-    showDialog(
+    bottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'الإبلاغ عن الفيديو' : 'Report Video',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          context.isArabic
-              ? 'هل تريد الإبلاغ عن هذا الفيديو لانتهاكه قواعد المجتمع؟'
-              : 'Do you want to report this video for violating community guidelines?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic
-                        ? 'تم الإبلاغ عن الفيديو'
-                        : 'Video reported',
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            child: Text(context.isArabic ? 'إبلاغ' : 'Report'),
-          ),
-        ],
+      widget: ReportView(
+        id: talent.id,
+        categoryId: talent.user.id, // Using user id as category id
       ),
     );
   }
 
-
-  static bool _isVideoUrl(String url) {
+  bool _isVideoUrl(String url) {
     return url.toLowerCase().contains('.mp4') ||
         url.toLowerCase().contains('.mov') ||
         url.toLowerCase().contains('.avi') ||
@@ -571,46 +670,106 @@ class TalentVideoPlayerWidget extends StatefulWidget {
 }
 
 class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   bool _isInitialized = false;
+  bool _isInitializing = false;
   bool _isPlaying = false;
   bool _isMuted = false;
   bool _showControls = true;
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
+  bool _isDisposed = false;
 
   Timer? _playDelayTimer;
-  Timer? _pauseDelayTimer;
+  Timer? _initTimer;
+
+  String get videoId => '${widget.talent?.id ?? widget.videoUrl.hashCode}';
 
   @override
   void initState() {
     super.initState();
-    _initializeVideo();
+    _isMuted = widget.startMuted;
+    // Don't initialize immediately, wait for visibility
   }
 
-  void _initializeVideo() {
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
-        if (mounted) {
-          setState(() {
-            _isInitialized = true;
-            _isMuted = widget.startMuted;
-            _controller.setVolume(_isMuted ? 0 : 1);
-          });
-        }
-      });
+  Future<void> _initializeVideo() async {
+    if (_isInitializing || _isDisposed || _controller != null) return;
 
-    _controller.addListener(_videoListener);
+    setState(() {
+      _isInitializing = true;
+    });
+
+    try {
+      final controller = await VideoPlayerManager.instance.getController(
+        widget.videoUrl,
+        videoId,
+      );
+
+      if (controller != null && mounted && !_isDisposed) {
+        _controller = controller;
+        _controller!.setVolume(_isMuted ? 0 : 1);
+        _controller!.setLooping(false);
+        _controller!.addListener(_videoListener);
+
+        setState(() {
+          _isInitialized = true;
+          _isInitializing = false;
+        });
+
+        // Auto-play immediately after initialization if widget.autoPlay is true
+        if (widget.autoPlay && _visibilityFraction > 0.3) {
+          await Future.delayed(Duration(milliseconds: 100));
+          if (mounted &&
+              !_isDisposed &&
+              _controller != null &&
+              _controller!.value.isInitialized &&
+              !_controller!.value.isPlaying) {
+            _controller!.play();
+            setState(() => _isPlaying = true);
+            _trackVideoStart();
+          }
+        }
+      }
+    } catch (error) {
+      print('Video initialization error: $error');
+      if (mounted && !_isDisposed) {
+        setState(() {
+          _isInitialized = false;
+          _isInitializing = false;
+        });
+      }
+    }
   }
 
   void _videoListener() {
-    if (_controller.value.isPlaying != _isPlaying) {
-      setState(() {
-        _isPlaying = _controller.value.isPlaying;
-      });
+    if (!mounted || _isDisposed || _controller == null) return;
 
-      if (_controller.value.isPlaying && !_hasTrackedView) {
-        _trackVideoStart();
+    try {
+      final isPlaying = _controller!.value.isPlaying;
+      if (isPlaying != _isPlaying) {
+        if (mounted && !_isDisposed) {
+          setState(() {
+            _isPlaying = isPlaying;
+          });
+
+          if (isPlaying && !_hasTrackedView) {
+            _trackVideoStart();
+          }
+        }
+      }
+
+      // Check if video has ended and handle auto-next
+      if (_controller!.value.position >= _controller!.value.duration &&
+          _controller!.value.duration.inMilliseconds > 0) {
+        _handleVideoEnd();
+      }
+    } catch (e) {
+      // Handle any errors gracefully
+      print('Error in video listener: $e');
+      if (mounted && !_isDisposed) {
+        setState(() {
+          _isPlaying = false;
+        });
       }
     }
   }
@@ -622,24 +781,38 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
     }
   }
 
-  void _togglePlayPause() {
-    if (_controller.value.isPlaying) {
-      _controller.pause();
-    } else {
-      _controller.play();
-      if (!_hasTrackedView) {
-        _trackVideoStart();
-      }
+  void _handleVideoEnd() {
+    // Video ended - just reset to beginning for now
+    if (_controller != null && _controller!.value.isInitialized) {
+      _controller!.seekTo(Duration.zero);
+      _controller!.pause();
+      setState(() => _isPlaying = false);
     }
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
+  }
+
+  void _togglePlayPause() {
+    if (_controller == null || !_isInitialized || _isDisposed || !mounted)
+      return;
+    if (!_controller!.value.isInitialized) return;
+
+    try {
+      if (_controller!.value.isPlaying) {
+        _controller!.pause();
+      } else {
+        _controller!.play();
+        if (!_hasTrackedView) {
+          _trackVideoStart();
+        }
+      }
+    } catch (e) {
+      print('Error toggling play/pause: $e');
+    }
   }
 
   void _toggleMute() {
     setState(() {
       _isMuted = !_isMuted;
-      _controller.setVolume(_isMuted ? 0 : 1);
+      _controller?.setVolume(_isMuted ? 0 : 1);
     });
   }
 
@@ -650,30 +823,73 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
   }
 
   void _handleVisibilityChanged(VisibilityInfo info) {
+    if (_isDisposed) return;
+
     _visibilityFraction = info.visibleFraction;
 
-    if (!_isInitialized) return;
-
+    // Cancel timers
     _playDelayTimer?.cancel();
-    _pauseDelayTimer?.cancel();
+    _initTimer?.cancel();
 
-    if (info.visibleFraction > 0.5) {
-      if (!_controller.value.isPlaying && widget.autoPlay) {
-        _playDelayTimer = Timer(Duration(milliseconds: 600), () {
+    if (info.visibleFraction > 0.3) {
+      // Lower threshold for better UX
+      // Visible - initialize if needed
+      if (!_isInitialized && !_isInitializing) {
+        _initTimer = Timer(Duration(milliseconds: 200), () {
+          if (mounted && !_isDisposed && _visibilityFraction > 0.3) {
+            _initializeVideo();
+          }
+        });
+      } else if (_isInitialized && widget.autoPlay && !_isPlaying) {
+        // Auto-play if initialized with shorter delay
+        _playDelayTimer = Timer(Duration(milliseconds: 300), () {
           if (mounted &&
-              !_controller.value.isPlaying &&
-              _visibilityFraction > 0.5 &&
-              widget.autoPlay) {
-            _controller.play();
+              !_isDisposed &&
+              _controller != null &&
+              _controller!.value.isInitialized &&
+              !_controller!.value.isPlaying &&
+              _visibilityFraction > 0.3) {
+            _controller!.play();
             setState(() => _isPlaying = true);
             _trackVideoStart();
           }
         });
       }
-    } else {
-      if (_controller.value.isPlaying) {
-        _controller.pause();
+    } else if (info.visibleFraction < 0.2) {
+      // Adjusted threshold
+      // Not visible - pause and potentially dispose
+      if (_controller != null &&
+          _controller!.value.isInitialized &&
+          _controller!.value.isPlaying) {
+        _controller!.pause();
         setState(() => _isPlaying = false);
+      }
+
+      // Dispose if completely out of view
+      if (info.visibleFraction == 0) {
+        _disposeController();
+      }
+    }
+  }
+
+  Future<void> _disposeController() async {
+    if (_controller != null && !_isDisposed) {
+      try {
+        _controller!.removeListener(_videoListener);
+      } catch (e) {
+        // Ignore errors if already disposed
+        print('Error removing video listener: $e');
+      }
+
+      // Don't dispose from manager yet, let it handle resource management
+      // Just remove our reference
+      _controller = null;
+
+      if (mounted && !_isDisposed) {
+        setState(() {
+          _isInitialized = false;
+          _isPlaying = false;
+        });
       }
     }
   }
@@ -688,26 +904,21 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
         height: double.infinity,
         placeholder: (context, url) => Container(
           color: Colors.grey[300],
-          child: Icon(
-            Icons.video_library,
-            size: 48,
-            color: Colors.grey[600],
-          ),
+          child: Icon(Icons.video_library, size: 48, color: Colors.grey[600]),
         ),
-        errorWidget: (context, url, error) => Image.asset(
-          'assets/images/testforvideo.jpg',
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        errorWidget: (context, url, error) => _buildFallbackThumbnail(),
       );
     }
+    return _buildFallbackThumbnail();
+  }
 
-    return Image.asset(
-      widget.thumbnailUrl ?? 'assets/images/testforvideo.jpg',
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
+  Widget _buildFallbackThumbnail() {
+    return Container(
+      color: Colors.grey[300],
+      child: Center(
+        child:
+            Icon(Icons.play_circle_outline, size: 64, color: Colors.grey[600]),
+      ),
     );
   }
 
@@ -718,67 +929,74 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
         : false;
 
     return VisibilityDetector(
-      key: Key('video-${widget.videoUrl}'),
+      key: Key('video-$videoId'),
       onVisibilityChanged: _handleVisibilityChanged,
       child: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
-          setState(() => _showControls = !_showControls);
+          if (_isInitialized) {
+            setState(() => _showControls = !_showControls);
+          }
           widget.onTap?.call();
         },
         child: Container(
-          height: MediaQuery.sizeOf(context).height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.3,
           width: double.infinity,
           color: Colors.black,
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Background Thumbnail
-              if (widget.thumbnailUrl != null && !_isPlaying)
-                Positioned.fill(
-                  child: _buildThumbnail(),
-                ),
+              // Thumbnail (always show when not playing)
+              if (!_isPlaying) Positioned.fill(child: _buildThumbnail()),
 
-              // Video Player
-              if (_isInitialized)
+              // Video Player (only when initialized)
+              if (_isInitialized &&
+                  _controller != null &&
+                  !_isDisposed &&
+                  mounted)
                 AnimatedOpacity(
                   opacity: _isPlaying ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 300),
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                  child: Center(
+                    child: _controller != null &&
+                            _controller!.value.isInitialized &&
+                            !_isDisposed
+                        ? AspectRatio(
+                            aspectRatio: _controller!.value.aspectRatio,
+                            child: VideoPlayer(_controller!),
+                          )
+                        : Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.black,
+                          ),
                   ),
                 ),
 
-              // Loading Indicator
-              if (!_isInitialized)
-                const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
+              // Loading Indicator (only when initializing)
+              if (_isInitializing)
+                Container(
+                  color: Colors.black54,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
                   ),
                 ),
 
-              // Play button overlay when paused
-              // if (_isInitialized && !_isPlaying)
+              // Play button overlay (only when initialized but not playing)
+              // if (_isInitialized && !_isPlaying && !_isInitializing)
               //   Center(
-              //     child: GestureDetector(
-              //       onTap: _togglePlayPause,
-              //       child: Container(
-              //         padding: EdgeInsets.all(16),
-              //         decoration: BoxDecoration(
-              //           color: Colors.black.withOpacity(0.7),
-              //           shape: BoxShape.circle,
-              //         ),
-              //         child: Icon(
-              //           Icons.play_arrow,
-              //           color: Colors.white,
-              //           size: 32,
-              //         ),
+              //     child: Container(
+              //       padding: EdgeInsets.all(16),
+              //       decoration: BoxDecoration(
+              //         color: Colors.black.withOpacity(0.6),
+              //         shape: BoxShape.circle,
               //       ),
+              //       child:
+              //           Icon(Icons.play_arrow, color: Colors.white, size: 40),
               //     ),
               //   ),
 
-              // Top Left Controls (Favorite)
+              // Favorite button
               Positioned(
                 top: 8,
                 left: 8,
@@ -789,9 +1007,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
                   ),
                   child: IconButton(
                     icon: Icon(
-                      isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border_rounded,
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: Color(0xffFF0000),
                       size: 20,
                     ),
@@ -802,7 +1018,7 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
                 ),
               ),
 
-              // Top Right Controls (Mute) - only when playing
+              // Mute button (only when playing)
               if (_isInitialized && _isPlaying)
                 Positioned(
                   top: 8,
@@ -833,10 +1049,17 @@ class _TalentVideoPlayerWidgetState extends State<TalentVideoPlayerWidget> {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _playDelayTimer?.cancel();
-    _pauseDelayTimer?.cancel();
-    _controller.removeListener(_videoListener);
-    _controller.dispose();
+    _initTimer?.cancel();
+
+    // Cancel any pending async operations
+    try {
+      _disposeController();
+    } catch (e) {
+      print('Error during controller disposal: $e');
+    }
+
     super.dispose();
   }
 }
