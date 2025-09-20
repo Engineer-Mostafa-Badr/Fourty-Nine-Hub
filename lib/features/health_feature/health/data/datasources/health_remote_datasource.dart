@@ -207,7 +207,7 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
     return response.fold(
       (l) => Left(l),
       (data) {
-        final restaurantList = (data['data']["data"] as List)
+        final restaurantList = (data['data']["bookings"] as List)
             .map((e) => BookedUserAppointmentModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(restaurantList);
