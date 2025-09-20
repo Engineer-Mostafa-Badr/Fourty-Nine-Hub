@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/helper/bunny_video_uploader.dart';
@@ -196,15 +197,49 @@ class VideoPickerHelper {
   Future<int?> getVideoDuration(File videoFile) async {
     try {
       final controller = VideoPlayerController.file(videoFile);
-      await controller.initialize();
+
+      // إضافة timeout للتهيئة
+      await controller.initialize().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          throw TimeoutException('Video initialization timeout');
+        },
+      );
 
       final duration = controller.value.duration.inSeconds;
       await controller.dispose();
 
       return duration;
     } catch (e) {
-      print('Error getting video duration: $e');
-      return null;
+      print('Error getting video duration with VideoPlayer: $e');
+
+      // Fallback: استخدام MediaMetadataRetriever كbackup
+      return await _getVideoDurationFallback(videoFile);
+    }
+  }
+
+  // Fallback method للحصول على مدة الفيديو
+  Future<int?> _getVideoDurationFallback(File videoFile) async {
+    try {
+      // طريقة بديلة: تقدير المدة من حجم الملف
+      final fileSizeInBytes = await videoFile.length();
+      final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+      // تقدير تقريبي: 1MB = ~30 ثانية للفيديوهات عادية الجودة
+      // هذا تقدير تقريبي فقط
+      final estimatedDuration = (fileSizeInMB * 30).round();
+
+      print(
+          'Using estimated duration: ${estimatedDuration}s for ${fileSizeInMB.toStringAsFixed(1)}MB file');
+
+      // الحد الأدنى 1 ثانية، الحد الأقصى 10 دقائق
+      return estimatedDuration.clamp(1, 600);
+    } catch (e) {
+      print('Fallback duration calculation failed: $e');
+
+      // آخر fallback: ارجع مدة افتراضية
+      print('Using default duration: 30s');
+      return 30; // مدة افتراضية 30 ثانية
     }
   }
 }

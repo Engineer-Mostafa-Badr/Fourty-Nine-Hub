@@ -11,6 +11,7 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/constants/constants.dart';
+import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'playlist_details_page.dart';
 import 'playlist_bottom_sheet_constants.dart';
@@ -34,7 +35,7 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
   final TextEditingController _newPlaylistController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final ImagePicker _imagePicker = ImagePicker();
-  
+
   bool _isCreatingPlaylist = false;
   File? _selectedThumbnail;
   bool _isUploadingThumbnail = false;
@@ -45,7 +46,8 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _uniqueId = 'playlist_${DateTime.now().millisecondsSinceEpoch}_${widget.video.id}';
+    _uniqueId =
+        'playlist_${DateTime.now().millisecondsSinceEpoch}_${widget.video.id}';
     context.read<PlaylistCubit>().getMyPlaylists(refresh: true);
   }
 
@@ -60,7 +62,8 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       key: ValueKey('playlist_bottom_sheet_$_uniqueId'),
-      height: MediaQuery.of(context).size.height * PlaylistBottomSheetConstants.sheetHeight,
+      height: MediaQuery.of(context).size.height *
+          PlaylistBottomSheetConstants.sheetHeight,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -101,7 +104,8 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
               ManageVibration.vibrate();
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.close, size: PlaylistBottomSheetConstants.iconSize),
+            icon: const Icon(Icons.close,
+                size: PlaylistBottomSheetConstants.iconSize),
             padding: EdgeInsets.zero,
           ),
           Expanded(
@@ -163,7 +167,9 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                context.isArabic ? 'إنشاء قائمة تشغيل جديدة' : 'Create new playlist',
+                context.isArabic
+                    ? 'إنشاء قائمة تشغيل جديدة'
+                    : 'Create new playlist',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -211,18 +217,23 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
   void _handlePlaylistCreation(BuildContext context, PlaylistState state) {
     if (state.isSuccess && !state.isCreating) {
       Navigator.pop(context);
-      _showSnackBar(
-        context.isArabic ? 'تم إنشاء قائمة التشغيل وإضافة الفيديو' : 'Playlist created and video added',
-        Colors.green,
+      showSuccessMessage(
+        context,
+        context.isArabic
+            ? 'تم إنشاء قائمة التشغيل وإضافة الفيديو'
+            : 'Playlist created and video added',
+        // Colors.green,
       );
     } else if (state.isError) {
-      _showSnackBar(
-        state.failure?.toString() ?? (context.isArabic ? 'خطأ في إنشاء القائمة' : 'Failed to create playlist'),
-        Colors.red,
+      showErrorMessage(
+        context,
+        state.failure?.toString() ??
+            (context.isArabic
+                ? 'خطأ في إنشاء القائمة'
+                : 'Failed to create playlist'),
       );
     }
   }
-
 
   Widget _buildPlaylistsList() {
     return BlocBuilder<PlaylistCubit, PlaylistState>(
@@ -269,7 +280,9 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
           ),
           const SizedBox(height: 8),
           Text(
-            context.isArabic ? 'أنشئ قائمة تشغيل جديدة أعلاه' : 'Create a new playlist above',
+            context.isArabic
+                ? 'أنشئ قائمة تشغيل جديدة أعلاه'
+                : 'Create a new playlist above',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[500],
@@ -279,7 +292,6 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
       ),
     );
   }
-
 
   Future<void> _pickImage(ImageSource source) async {
     try {
@@ -335,9 +347,11 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
           setState(() {
             _thumbnailMediaId = mediaId;
           });
-          
+
           _showSnackBar(
-            context.isArabic ? 'تم رفع الصورة بنجاح' : 'Image uploaded successfully',
+            context.isArabic
+                ? 'تم رفع الصورة بنجاح'
+                : 'Image uploaded successfully',
             Colors.green,
           );
         }
@@ -349,7 +363,7 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
         'Error uploading thumbnail: $e',
         context.isArabic ? 'خطأ في رفع الصورة' : 'Error uploading image',
       );
-      
+
       if (mounted) {
         setState(() {
           _selectedThumbnail = null;
@@ -368,10 +382,10 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
 
     try {
       final success = await context.read<PlaylistCubit>().createPlaylist(
-        name: _newPlaylistController.text.trim(),
-        description: _descriptionController.text.trim(),
-        thumbnailMediaId: _thumbnailMediaId!,
-      );
+            name: _newPlaylistController.text.trim(),
+            description: _descriptionController.text.trim(),
+            thumbnailMediaId: _thumbnailMediaId!,
+          );
 
       if (success) {
         await context.read<PlaylistCubit>().getMyPlaylists(refresh: true);
@@ -384,14 +398,16 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
     } catch (e) {
       _handleError(
         'Error creating playlist: $e',
-        context.isArabic ? 'فشل في إنشاء قائمة التشغيل' : 'Failed to create playlist',
+        context.isArabic
+            ? 'فشل في إنشاء قائمة التشغيل'
+            : 'Failed to create playlist',
       );
     }
   }
 
   String? _validatePlaylistForm() {
     if (_newPlaylistController.text.trim().isEmpty) {
-      return context.isArabic 
+      return context.isArabic
           ? 'يرجى إدخال اسم قائمة التشغيل'
           : 'Please enter playlist name';
     }
@@ -411,14 +427,15 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
     return null;
   }
 
-  Future<void> _addVideoToPlaylist(PlaylistEntity playlist, {bool showSuccessMessage = true}) async {
+  Future<void> _addVideoToPlaylist(PlaylistEntity playlist,
+      {bool showSuccessMessage = true}) async {
     ManageVibration.vibrate();
 
     try {
       final success = await context.read<PlaylistCubit>().addVideoToPlaylist(
-        playlist.id,
-        widget.video.id,
-      );
+            playlist.id,
+            widget.video.id,
+          );
 
       if (success) {
         if (mounted) {
@@ -443,14 +460,18 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
         }
       } else {
         _showSnackBar(
-          context.isArabic ? 'فشل في إضافة الفيديو' : 'Failed to add video to playlist',
+          context.isArabic
+              ? 'فشل في إضافة الفيديو'
+              : 'Failed to add video to playlist',
           Colors.red,
         );
       }
     } catch (e) {
       _handleError(
         'Error adding video to playlist: $e',
-        context.isArabic ? 'فشل في إضافة الفيديو' : 'Failed to add video to playlist',
+        context.isArabic
+            ? 'فشل في إضافة الفيديو'
+            : 'Failed to add video to playlist',
       );
     }
   }

@@ -1,6 +1,8 @@
 // lib/features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import '../../../../../routes/pages.dart';
 import '../../../data/model/comment_model.dart';
 import '../../../domain/use_case/comment_use_cases.dart';
 
@@ -40,20 +42,28 @@ class CommentCubit extends Cubit<CommentState> {
     ));
 
     response.fold(
-      (failure) => emit(state.copyWith(
-        isLoading: false,
-        error: failure.toString(),
-      )),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+
+        emit(state.copyWith(
+          isLoading: false,
+          error: failure.toString(),
+        ));
+      },
       (commentsResponse) {
-        final newComments = refresh 
+        final newComments = refresh
             ? commentsResponse.comments
             : [...state.comments, ...commentsResponse.comments];
-        
+
         emit(state.copyWith(
           isLoading: false,
           comments: newComments,
           currentPage: state.currentPage + 1,
-          hasMore: commentsResponse.pagination.page < commentsResponse.pagination.pages,
+          hasMore: commentsResponse.pagination.page <
+              commentsResponse.pagination.pages,
           totalComments: commentsResponse.pagination.total,
           error: null,
         ));
@@ -76,10 +86,16 @@ class CommentCubit extends Cubit<CommentState> {
     ));
 
     response.fold(
-      (failure) => emit(state.copyWith(
-        isCreatingComment: false,
-        error: failure.toString(),
-      )),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+          isCreatingComment: false,
+          error: failure.toString(),
+        ));
+      },
       (success) {
         emit(state.copyWith(
           isCreatingComment: false,
@@ -94,21 +110,29 @@ class CommentCubit extends Cubit<CommentState> {
   // Like a comment
   Future<void> likeComment(String commentId) async {
     // Optimistic update
-    _updateCommentLocally(commentId, (comment) => comment.copyWith(
-      likes: comment.likes + 1,
-      isLiked: true,
-      isDisliked: false,
-    ));
+    _updateCommentLocally(
+        commentId,
+        (comment) => comment.copyWith(
+              likes: comment.likes + 1,
+              isLiked: true,
+              isDisliked: false,
+            ));
 
     final response = await _likeCommentUseCase(commentId);
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         // Revert optimistic update
-        _updateCommentLocally(commentId, (comment) => comment.copyWith(
-          likes: comment.likes - 1,
-          isLiked: false,
-        ));
+        _updateCommentLocally(
+            commentId,
+            (comment) => comment.copyWith(
+                  likes: comment.likes - 1,
+                  isLiked: false,
+                ));
         emit(state.copyWith(error: failure.toString()));
       },
       (success) {
@@ -120,21 +144,29 @@ class CommentCubit extends Cubit<CommentState> {
   // Dislike a comment
   Future<void> dislikeComment(String commentId) async {
     // Optimistic update
-    _updateCommentLocally(commentId, (comment) => comment.copyWith(
-      dislikes: comment.dislikes + 1,
-      isDisliked: true,
-      isLiked: false,
-    ));
+    _updateCommentLocally(
+        commentId,
+        (comment) => comment.copyWith(
+              dislikes: comment.dislikes + 1,
+              isDisliked: true,
+              isLiked: false,
+            ));
 
     final response = await _dislikeCommentUseCase(commentId);
 
     response.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         // Revert optimistic update
-        _updateCommentLocally(commentId, (comment) => comment.copyWith(
-          dislikes: comment.dislikes - 1,
-          isDisliked: false,
-        ));
+        _updateCommentLocally(
+            commentId,
+            (comment) => comment.copyWith(
+                  dislikes: comment.dislikes - 1,
+                  isDisliked: false,
+                ));
         emit(state.copyWith(error: failure.toString()));
       },
       (success) {
@@ -148,12 +180,17 @@ class CommentCubit extends Cubit<CommentState> {
     final response = await _deleteCommentUseCase(commentId);
 
     response.fold(
-      (failure) => emit(state.copyWith(error: failure.toString())),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(error: failure.toString()));
+      },
       (success) {
-        final updatedComments = state.comments
-            .where((comment) => comment.id != commentId)
-            .toList();
-        
+        final updatedComments =
+            state.comments.where((comment) => comment.id != commentId).toList();
+
         emit(state.copyWith(
           comments: updatedComments,
           totalComments: state.totalComments - 1,
@@ -170,17 +207,26 @@ class CommentCubit extends Cubit<CommentState> {
     ));
 
     response.fold(
-      (failure) => emit(state.copyWith(error: failure.toString())),
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(error: failure.toString()));
+      },
       (success) {
-        _updateCommentLocally(commentId, (comment) => comment.copyWith(
-          content: newContent,
-        ));
+        _updateCommentLocally(
+            commentId,
+            (comment) => comment.copyWith(
+                  content: newContent,
+                ));
       },
     );
   }
 
   // Helper method to update a comment locally
-  void _updateCommentLocally(String commentId, CommentModel Function(CommentModel) updater) {
+  void _updateCommentLocally(
+      String commentId, CommentModel Function(CommentModel) updater) {
     final updatedComments = state.comments.map((comment) {
       if (comment.id == commentId) {
         return updater(comment);

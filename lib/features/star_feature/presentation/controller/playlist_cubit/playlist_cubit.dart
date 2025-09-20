@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
+import '../../../../../core/messages/messages.dart';
+import '../../../../../routes/pages.dart';
 import '../../../domain/entity/playlist_entity.dart';
 import '../../../domain/repository/playlist_repository.dart';
 import '../../../domain/use_case/playlist_use_cases.dart';
@@ -69,6 +71,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     result.fold(
       (failure) {
         print('❌ Failed to load playlists: $failure');
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -94,7 +100,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
   // Get current user's playlists
   Future<void> getMyPlaylists({bool refresh = false}) async {
     final currentUserId = _currentUserId;
-    
+
     if (currentUserId == null || currentUserId.isEmpty) {
       print('❌ Cannot load playlists: No current user ID available');
       emit(state.copyWith(
@@ -115,7 +121,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     String? thumbnailMediaId,
   }) async {
     final currentUserId = _currentUserId;
-    
+
     if (currentUserId == null || currentUserId.isEmpty) {
       print('❌ Cannot create playlist: No current user ID available');
       emit(state.copyWith(
@@ -141,6 +147,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     return result.fold(
       (failure) {
         print('❌ Failed to create playlist: $failure');
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -173,6 +183,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
     result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -206,6 +220,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     result.fold(
       (failure) {
         print('❌ Failed to load playlist with videos: $failure');
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -251,6 +269,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     return result.fold(
       (failure) {
         print('❌ Failed to add video to playlist: $failure');
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure));
         return false;
       },
@@ -258,19 +280,21 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         print('✅ Video added to playlist successfully');
         // Update local state
         _updatePlaylistAfterVideoAction(playlistId, videoId, true);
-        
+
         // If we have the selected playlist loaded with videos, refresh it
-        if (state.selectedPlaylist != null && state.selectedPlaylist!.id == playlistId) {
+        if (state.selectedPlaylist != null &&
+            state.selectedPlaylist!.id == playlistId) {
           getPlaylistWithVideos(playlistId);
         }
-        
+
         return true;
       },
     );
   }
 
   // Remove video from playlist
-  Future<bool> removeVideoFromPlaylist(String playlistId, String videoId) async {
+  Future<bool> removeVideoFromPlaylist(
+      String playlistId, String videoId) async {
     // Validate IDs
     if (playlistId.isEmpty || playlistId.length != 24) {
       emit(state.copyWith(
@@ -298,6 +322,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
     return result.fold(
       (failure) {
         print('❌ Failed to remove video from playlist: $failure');
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure));
         return false;
       },
@@ -305,12 +333,13 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         print('✅ Video removed from playlist successfully');
         // Update local state
         _updatePlaylistAfterVideoAction(playlistId, videoId, false);
-        
+
         // If we have the selected playlist loaded with videos, refresh it
-        if (state.selectedPlaylist != null && state.selectedPlaylist!.id == playlistId) {
+        if (state.selectedPlaylist != null &&
+            state.selectedPlaylist!.id == playlistId) {
           getPlaylistWithVideos(playlistId);
         }
-        
+
         return true;
       },
     );
@@ -332,6 +361,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
     return result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -347,8 +380,8 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         emit(state.copyWith(
           status: PlaylistStatus.success,
           playlists: updatedPlaylists,
-          selectedPlaylist: state.selectedPlaylist?.id == playlistId 
-              ? null 
+          selectedPlaylist: state.selectedPlaylist?.id == playlistId
+              ? null
               : state.selectedPlaylist,
           failure: null,
         ));
@@ -385,6 +418,10 @@ class PlaylistCubit extends Cubit<PlaylistState> {
 
     return result.fold(
       (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
           status: PlaylistStatus.error,
           failure: failure,
@@ -395,19 +432,20 @@ class PlaylistCubit extends Cubit<PlaylistState> {
         emit(state.copyWith(status: PlaylistStatus.success));
         // Refresh to get updated data
         getMyPlaylists(refresh: true);
-        
+
         // If this is the selected playlist, refresh it too
         if (state.selectedPlaylist?.id == playlistId) {
           getPlaylistWithVideos(playlistId);
         }
-        
+
         return true;
       },
     );
   }
 
   // Helper method to update playlist after video action
-  void _updatePlaylistAfterVideoAction(String playlistId, String videoId, bool isAdding) {
+  void _updatePlaylistAfterVideoAction(
+      String playlistId, String videoId, bool isAdding) {
     final updatedPlaylists = state.playlists.map((playlist) {
       if (playlist.id == playlistId) {
         final newVideosCount = isAdding

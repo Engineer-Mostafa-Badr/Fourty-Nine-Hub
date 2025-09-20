@@ -26,16 +26,16 @@ class TenPercentViewBody extends StatefulWidget {
 }
 
 class _TenPercentViewBodyState extends State<TenPercentViewBody> {
-  final FocusNode trafficFocusNode = FocusNode();
+  // final FocusNode trafficFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   bool _showButton = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      trafficFocusNode.requestFocus();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   trafficFocusNode.requestFocus();
+    // });
 
     _scrollController.addListener(() {
       bool shouldShow = _scrollController.offset > 200;
@@ -49,7 +49,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
 
   @override
   void dispose() {
-    trafficFocusNode.dispose();
+    // trafficFocusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -162,7 +162,7 @@ class _TenPercentViewBodyState extends State<TenPercentViewBody> {
                           }
                           return null;
                         },
-                        currentFocusNode: trafficFocusNode,
+                        // currentFocusNode: trafficFocusNode,
                       ),
                       const SizedBox(
                         height: 16,

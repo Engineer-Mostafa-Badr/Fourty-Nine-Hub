@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/widgets/common/error_widget.dart';
@@ -58,13 +59,18 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   void _initializeControllers() {
-    _tabController = TabController(length: 3, vsync: this);
+    // Set tab length based on user type: 4 for current user, 3 for others
+    final tabLength = widget.isCurrentUser ? 4 : 3;
+    _tabController = TabController(length: tabLength, vsync: this);
     _profileCubit = context.read<ProfileCubit>();
     _starCubit = context.read<StarCubit>();
     _scrollController = ScrollController();
 
     // Listen to scroll to handle app bar animation
     _scrollController.addListener(_handleScroll);
+
+    print(
+        '🔧 TabController initialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
   }
 
   void _loadProfileAndVideos() async {
@@ -175,6 +181,20 @@ class _ProfilePageViewState extends State<ProfilePageView>
   }
 
   @override
+  void didUpdateWidget(ProfilePageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if isCurrentUser changed and reinitialize TabController if needed
+    if (oldWidget.isCurrentUser != widget.isCurrentUser) {
+      _tabController.dispose();
+      final tabLength = widget.isCurrentUser ? 4 : 3;
+      _tabController = TabController(length: tabLength, vsync: this);
+      print(
+          '🔄 TabController reinitialized with length: $tabLength for isCurrentUser: ${widget.isCurrentUser}');
+    }
+  }
+
+  @override
   void dispose() {
     _tabController.dispose();
     _scrollController.dispose();
@@ -189,7 +209,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
       backgroundColor: Colors.white,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
-          return _buildContent(profileState, widget.isCurrentUser);
+          return SafeArea(
+              child: _buildContent(profileState, widget.isCurrentUser));
         },
       ),
     );
@@ -201,6 +222,19 @@ class _ProfilePageViewState extends State<ProfilePageView>
       return UserCubit.to.state.data?.id;
     } catch (e) {
       return null;
+    }
+  }
+
+  // Function to get app bar title based on profile type
+  String _getAppBarTitle(bool isCurrentUser) {
+    if (isCurrentUser) {
+      return context.isArabic ? 'ملف شخصي' : 'My Profile';
+    } else {
+      // For other users, show their name
+      final userName = widget.user?.firstName ?? widget.user?.lastName ?? '';
+      return userName.isNotEmpty
+          ? userName
+          : (context.isArabic ? 'الملف الشخصي' : 'Profile');
     }
   }
 
@@ -233,65 +267,78 @@ class _ProfilePageViewState extends State<ProfilePageView>
       );
     }
 
-    return Column(
-      children: [
-        ProfileAppBar(
-          profileUser: widget.user,
-          currentUserId: _getCurrentUserId(),
-          onEditPressed: () {
-            ManageVibration.vibrate();
-            if (isCurrentUserFromProfile) {
-              _showEditProfileSheet();
-            }
-          },
-          onBackPressed: () {
-            ManageVibration.vibrate();
-            Navigator.pop(context);
-          },
-        ),
-        Expanded(
-          child: SafeArea(
-            top: false,
-            child: NestedScrollView(
-              controller: _scrollController,
-              physics: const ClampingScrollPhysics(),
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: ProfileHeader(
-                      profile: profileState.profile,
-                      user: widget.user,
-                      isCurrentUser: isCurrentUserFromProfile,
-                      videosCount: _getVideosCount(profileState),
-                    ),
-                  ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    floating: false,
-                    delegate: _SliverTabBarDelegate(
-                      ProfileTabBar(tabController: _tabController),
-                    ),
-                  ),
-                ];
+    return NestedScrollView(
+      controller: _scrollController,
+      physics: const BouncingScrollPhysics(),
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          // Add the app bar as a sliver so it can scroll with the content
+          SliverAppBar(
+            // expandedHeight: kToolbarHeight,
+            pinned: false,
+            floating: true,
+            snap: true,
+            toolbarHeight: 40,
+            // titleSpacing: 0,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                ManageVibration.vibrate();
+                Navigator.pop(context);
               },
-              body: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: BlocProvider.value(
-                  value: _starCubit,
-                  child: ProfileTabsContent(
-                    tabController: _tabController,
-                    extendedVideos: _userRealVideos,
-                    isCurrentUser: isCurrentUserFromProfile,
-                    userId: isCurrentUserFromProfile ? null : widget.user?.id,
-                    isLoadingUserVideos: _isLoadingUserVideos,
-                  ),
+            ),
+            actions: [
+              if (isCurrentUserFromProfile)
+                IconButton(
+                  icon: Icon(Icons.edit, color: Colors.black),
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    _showEditProfileSheet();
+                  },
                 ),
+            ],
+            title: Text(
+              _getAppBarTitle(isCurrentUserFromProfile),
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: ProfileHeader(
+              profile: profileState.profile,
+              user: widget.user,
+              isCurrentUser: isCurrentUserFromProfile,
+              videosCount: _getVideosCount(profileState),
+            ),
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            floating: true,
+            delegate: _SliverTabBarDelegate(
+              ProfileTabBar(
+                tabController: _tabController,
+                isCurrentUser: isCurrentUserFromProfile,
               ),
             ),
           ),
+        ];
+      },
+      body: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: BlocProvider.value(
+          value: _starCubit,
+          child: ProfileTabsContent(
+            tabController: _tabController,
+            extendedVideos: _userRealVideos,
+            isCurrentUser: isCurrentUserFromProfile,
+            userId: isCurrentUserFromProfile ? null : widget.user?.id,
+            isLoadingUserVideos: _isLoadingUserVideos,
+          ),
         ),
-      ],
+      ),
     );
   }
 

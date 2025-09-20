@@ -1,9 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../../../../../core/localization/locale_keys.g.dart';
 
 class VideoInfoSection extends StatelessWidget {
   final StarEntity talent;
@@ -82,8 +87,8 @@ class VideoInfoSection extends StatelessWidget {
         // Views and Date
         Text(
           context.isArabic
-              ? '${_formatDate(talent.createdAt)} • ${_formatViews(talent.totalViews.toInt())} views'
-              : '${_formatViews(talent.totalViews.toInt())} views • ${_formatDate(talent.createdAt)}',
+              ? '${_formatDate(talent.createdAt, context)} • ${_formatViews(talent.totalViews.toInt(), context)} ${LocaleKeys.views.localize}'
+              : '${_formatViews(talent.totalViews.toInt(), context)} views • ${_formatDate(talent.createdAt, context)}',
           style: TextStyle(
             fontSize: _getResponsiveFontSize(context, 12),
             color: Colors.grey[600],
@@ -116,18 +121,20 @@ class VideoInfoSection extends StatelessWidget {
     );
   }
 
-  String _formatViews(int views) {
+  String _formatViews(int views, BuildContext context) {
     if (views >= 1000000) {
       return '${(views / 1000000).toStringAsFixed(1)}M';
     } else if (views >= 1000) {
       return '${(views / 1000).toStringAsFixed(1)}K';
     }
-    return views.toString();
+    return views.toString().toArabicNumbers(context);
   }
 
-  String _formatDate(DateTime? date) {
+  String _formatDate(DateTime? date, BuildContext context) {
     if (date == null) return 'Unknown';
-    return timeago.format(date);
+    return timeago
+        .format(date, locale: context.locale.languageCode)
+        .toArabicNumbers(context);
   }
 
   double _getResponsiveFontSize(BuildContext context, double baseFontSize) {

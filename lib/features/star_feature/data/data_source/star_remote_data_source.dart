@@ -31,6 +31,11 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, String>> removeVideoFromFavorite(String videoId);
   Future<Either<Failure, List<TubeVideoModel>>> getFavoriteVideos();
 
+  // Watch Later methods
+  Future<Either<Failure, String>> addVideoToWatchLater(String videoId);
+  Future<Either<Failure, String>> removeVideoFromWatchLater(String videoId);
+  Future<Either<Failure, List<TubeVideoModel>>> getWatchLaterVideos();
+
   // New Tube Video methods
   Future<Either<Failure, TubeVideoListResponse>> fetchAllTubeVideos(
       StarPaginationParams params);
@@ -40,6 +45,7 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
+  Future<Either<Failure, bool>> rateTubeVideo(String videoId, double rate);
   Future<Either<Failure, bool>> deleteTubeVideo(String videoId);
 
   // New Comment methods
@@ -169,6 +175,77 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
           print("Parse Favorite Videos Error: $e");
           return Left(ServerFailure(
             message: 'Failed to parse favorite videos',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  // Watch Later implementations
+  @override
+  Future<Either<Failure, String>> addVideoToWatchLater(String videoId) async {
+    print("🌐 Calling addVideoToWatchLater API for videoId: $videoId");
+    print("🌐 Endpoint: ${EndPoints.addVideoToWatchLater(videoId)}");
+
+    final response = await _apiConsumer.post(
+      EndPoints.addVideoToWatchLater(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("🌐 Add Video to Watch Later Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("🌐 Add Video to Watch Later Success: ${response['message']}");
+        return Right(response['message'] ?? 'Video added to watch later successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> removeVideoFromWatchLater(String videoId) async {
+    print("🌐 Calling removeVideoFromWatchLater API for videoId: $videoId");
+    print("🌐 Endpoint: ${EndPoints.removeVideoFromWatchLater(videoId)}");
+
+    final response = await _apiConsumer.delete(
+      EndPoints.removeVideoFromWatchLater(videoId),
+    );
+
+    return response.fold(
+      (failure) {
+        print("🌐 Remove Video from Watch Later Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("🌐 Remove Video from Watch Later Success: ${response['message']}");
+        return Right(response['message'] ?? 'Video removed from watch later successfully');
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<TubeVideoModel>>> getWatchLaterVideos() async {
+    final response = await _apiConsumer.get(EndPoints.getWatchLaterVideos);
+
+    return response.fold(
+      (failure) {
+        print("Get Watch Later Videos Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get Watch Later Videos Success: ${response['data']}");
+        try {
+          final videosData = response['data'] as List;
+          final videos = videosData
+              .map((videoData) => TubeVideoModel.fromJson(videoData))
+              .toList();
+          return Right(videos);
+        } catch (e) {
+          print("Parse Watch Later Videos Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse watch later videos',
             name: 'Parse Error',
           ));
         }
@@ -406,6 +483,28 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       },
       (response) {
         print("Increment Tube Video View Success: ${response['message']}");
+        return Right(response['status'] == true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> rateTubeVideo(String videoId, double rate) async {
+    final response = await _apiConsumer.post(
+      EndPoints.rateTubeVideo,
+      data: {
+        'videoId': videoId,
+        'rate': rate,
+      },
+    );
+
+    return response.fold(
+      (failure) {
+        print("Rate Tube Video Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Rate Tube Video Success: ${response['message']}");
         return Right(response['status'] == true);
       },
     );

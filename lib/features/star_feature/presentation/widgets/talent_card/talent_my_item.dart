@@ -1,9 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../../../domain/entity/star_entity.dart';
 import '../../../data/model/tube_video_models.dart';
+import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../pages/my_video_details_view.dart';
 
@@ -54,11 +64,12 @@ class TalentMyItem extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.isDarkMode ? Colors.grey[900] : Colors.white,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: (context.isDarkMode ? Colors.black : Colors.grey)
+                  .withOpacity(0.1),
               blurRadius: 6,
               offset: Offset(0, 2),
             ),
@@ -73,7 +84,7 @@ class TalentMyItem extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Colors.grey[200],
+                color: context.isDarkMode ? Colors.grey[800] : Colors.grey[200],
               ),
               child: Stack(
                 children: [
@@ -142,7 +153,8 @@ class TalentMyItem extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          _formatDuration(tubeVideo.duration),
+                          _formatDuration(tubeVideo.duration)
+                              .toArabicNumbers(context),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -184,7 +196,9 @@ class TalentMyItem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : Colors.black87,
                           height: 1.2,
                         ),
                         maxLines: 2,
@@ -195,7 +209,9 @@ class TalentMyItem extends StatelessWidget {
                         "${talent.user.firstName} ${talent.user.lastName}",
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: context.isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[600],
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -207,7 +223,7 @@ class TalentMyItem extends StatelessWidget {
                               size: 14, color: Colors.grey[600]),
                           SizedBox(width: 4),
                           Text(
-                            "${_formatNumber(talent.totalViews)} views",
+                            "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize}",
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -217,7 +233,10 @@ class TalentMyItem extends StatelessWidget {
                           Text("•", style: TextStyle(color: Colors.grey[600])),
                           SizedBox(width: 8),
                           Text(
-                            _formatTimeAgo(createdAt),
+                            timeago
+                                .format(createdAt,
+                                    locale: context.locale.languageCode)
+                                .toArabicNumbers(context),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -252,7 +271,7 @@ class TalentMyItem extends StatelessWidget {
                     Icon(Icons.thumb_up_outlined, size: 16, color: Colors.blue),
                     SizedBox(width: 4),
                     Text(
-                      "${tubeVideo.likes}",
+                      tubeVideo.likes.toShortScale.toArabicNumbers(context),
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[700],
@@ -266,7 +285,7 @@ class TalentMyItem extends StatelessWidget {
                         size: 16, color: Colors.red),
                     SizedBox(width: 4),
                     Text(
-                      "${tubeVideo.dislikes}",
+                      tubeVideo.dislikes.toShortScale.toArabicNumbers(context),
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[700],
@@ -276,13 +295,24 @@ class TalentMyItem extends StatelessWidget {
                     SizedBox(width: 16),
                   ],
                   if (talent.averageRating > 0) ...[
-                    Icon(Icons.star, size: 16, color: Colors.amber),
+                    RatingBarIndicator(
+                      rating: talent.averageRating.toDouble(),
+                      itemBuilder: (context, index) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      itemCount: 5,
+                      itemSize: 14.0,
+                      direction: Axis.horizontal,
+                    ),
                     SizedBox(width: 4),
                     Text(
-                      "${talent.averageRating}",
+                      "${talent.averageRating}".toArabicNumbers(context),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[700],
+                        color: context.isDarkMode
+                            ? Colors.grey[300]
+                            : Colors.grey[700],
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -307,34 +337,10 @@ class TalentMyItem extends StatelessWidget {
     }
   }
 
-  String _formatNumber(num number) {
-    if (number >= 1000000) {
-      return "${(number / 1000000).toStringAsFixed(1)}M";
-    } else if (number >= 1000) {
-      return "${(number / 1000).toStringAsFixed(0)}K";
-    }
-    return number.toString();
-  }
-
-  String _formatTimeAgo(DateTime dateTime) {
-    final difference = DateTime.now().difference(dateTime);
-    if (difference.inDays > 365) {
-      return "${(difference.inDays / 365).floor()} ${(difference.inDays / 365).floor() > 1 ? 'years' : 'year'} ago";
-    } else if (difference.inDays > 30) {
-      final months = (difference.inDays / 30).floor();
-      return "$months ${months > 1 ? 'months' : 'month'} ago";
-    } else if (difference.inDays > 0) {
-      return "${difference.inDays} ${difference.inDays > 1 ? 'days' : 'day'} ago";
-    } else if (difference.inHours > 0) {
-      return "${difference.inHours} ${difference.inHours > 1 ? 'hours' : 'hour'} ago";
-    }
-    return 'Just now';
-  }
-
   void _showVideoOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: context.isDarkMode ? Colors.grey[900] : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -347,31 +353,37 @@ class TalentMyItem extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: context.isDarkMode ? Colors.grey[600] : Colors.grey[300],
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             SizedBox(height: 16),
+            // Only show delete option
             ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Edit'),
+              leading: Icon(
+                Icons.delete_outline,
+                color: Colors.red[600],
+                size: 24,
+              ),
+              title: Text(
+                context.isArabic ? 'حذف الفيديو' : 'Delete Video',
+                style: TextStyle(
+                  color: Colors.red[600],
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              subtitle: Text(
+                context.isArabic
+                    ? 'لا يمكن التراجع عن هذا الإجراء'
+                    : 'This action cannot be undone',
+                style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 12,
+                ),
+              ),
               onTap: () {
-                Navigator.pop(context);
-                // Add edit functionality
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.share),
-              title: Text('Share'),
-              onTap: () {
-                Navigator.pop(context);
-                // Add share functionality
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.delete, color: Colors.red),
-              title: Text('Delete', style: TextStyle(color: Colors.red)),
-              onTap: () {
+                ManageVibration.vibrate();
                 Navigator.pop(context);
                 _showDeleteDialog(context);
               },
@@ -383,26 +395,17 @@ class TalentMyItem extends StatelessWidget {
   }
 
   void _showDeleteDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Delete Video'),
-        content: Text(
-            'Are you sure you want to delete this video? This action cannot be undone.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              cubit.deleteMyTubeVideo(talent.id);
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text('Delete'),
-          ),
-        ],
+    showConfirmDialog(
+      context,
+      context.isArabic
+          ? 'هل أنت متأكد من حذف "${talent.title}"؟\n\nسيتم حذف الفيديو نهائياً ولا يمكن التراجع عن هذا الإجراء.'
+          : 'Are you sure you want to delete "${talent.title}"?\n\nThis video will be permanently deleted and this action cannot be undone.',
+      () => cubit.deleteMyTubeVideo(talent.id),
+      confirmText: context.isArabic ? 'حذف الفيديو' : 'Delete Video',
+      cancelText: LocaleKeys.cancel.localize,
+      confirmTextStyle: TextStyle(
+        color: Colors.red[600],
+        fontWeight: FontWeight.w600,
       ),
     );
   }
