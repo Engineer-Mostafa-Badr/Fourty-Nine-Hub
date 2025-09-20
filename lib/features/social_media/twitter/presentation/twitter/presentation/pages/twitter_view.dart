@@ -219,8 +219,7 @@ class _TwitterScaffoldState extends State<_TwitterScaffold> {
                                   },
                                   child: TwitterPostCard(
 
-                                    onRepost: () => cubit.onRepost(postId: post.id),   // 👈 Repost هنا
-
+                                    onRepost: () => cubit.onRepost(postId: post.id),
                                     isDetailed: false,
                                     post: post,
                                     shareSuccess: shareSuccess,
@@ -266,43 +265,25 @@ class _TwitterScaffoldState extends State<_TwitterScaffold> {
                                       bottomSheet(
                                         context: context,
                                         isScrollControlled: true,
-                                        widget: BlocProvider.value(
-                                          value: serviceLocator<TwitterCubit>()
-                                            ..loadComments(context, post.id),
+                                        widget: BlocProvider<TwitterCubit>(
+                                          create: (_) => serviceLocator<TwitterCubit>()..loadComments(context, post.id),
                                           child: TwitterPostComments(
                                             comments: const [],
                                             postId: post.id,
                                             user: user,
-                                            onAddComment:
-                                                (TwitterPostCommentParams
-                                                        params) =>
-                                                    cubit.onPostComment(
-                                                        params: params),
-                                            onAddReply:
-                                                (TwitterCommentReplyParams
-                                                        params) async =>
-                                                    cubit.onCommentReply(
-                                                        params: params),
-                                            onCommentReact:
-                                                (TwitterCommentReactParams
-                                                        params) =>
-                                                    cubit.onCommentReact(
-                                                        params: params),
-                                            onGetReplies: (String id,
-                                                TwitterPostCommentEntity
-                                                    comment) async {},
+                                            onAddComment: (TwitterPostCommentParams params) =>
+                                                cubit.onPostComment(params: params),
+                                            onAddReply: (TwitterCommentReplyParams params) async =>
+                                                cubit.onCommentReply(params: params),
+                                            onCommentReact: (TwitterCommentReactParams params) =>
+                                                cubit.onCommentReact(params: params),
+                                            onGetReplies: (String id, TwitterPostCommentEntity c) async {},
                                             newCommentId: '',
                                             state: cubit.state,
-                                            onReport:
-                                                (TwitterReportParams params) =>
-                                                    cubit.onReport(params),
-                                            onEditComment:
-                                                (TwitterPostCommentParams
-                                                        params) async =>
-                                                    cubit.editComment(
-                                                        params: params),
-                                            onDeleteComment: (id) async =>
-                                                cubit.deleteComment(
+                                            onReport: (TwitterReportParams params) => cubit.onReport(params),
+                                            onEditComment: (TwitterPostCommentParams params) async =>
+                                                cubit.editComment(params: params),
+                                            onDeleteComment: (id) async => cubit.deleteComment(
                                               context: context,
                                               commentId: id,
                                               postId: post.id,
@@ -315,7 +296,8 @@ class _TwitterScaffoldState extends State<_TwitterScaffold> {
                                     getPost: () {},
                                     onReport: (TwitterReportParams params) =>
                                         cubit.onReport(params),
-                                    deletePost: (String id) => cubit.deletePost(
+                                    deletePost: (String id) =>
+                                        cubit.deletePost(
                                         context: context, postId: id),
                                     hidePost: (String id) => cubit.hidePost(
                                         context: context, postId: id),
@@ -1114,6 +1096,37 @@ class _GalleryViewerState extends State<GalleryViewer> {
         itemCount: widget.images.length,
         itemBuilder: (_, i) => _buildPage(widget.images[i], i),
       ),
+    );
+  }
+}
+
+// create_thread_result.dart
+class CreateThreadResult {
+  final bool status;
+  final String message;
+  final String? threadId;
+  final String? postId;
+  final Map<String, dynamic>? postJson; // optional
+
+  const CreateThreadResult({
+    required this.status,
+    required this.message,
+    this.threadId,
+    this.postId,
+    this.postJson,
+  });
+
+  factory CreateThreadResult.fromJson(Map<String, dynamic> json) {
+    final data = (json['data'] as Map?)?.cast<String, dynamic>();
+    // Handle several common shapes
+    String? _readId(dynamic v) => v?.toString();
+
+    return CreateThreadResult(
+      status: json['status'] == true,
+      message: (json['message'] ?? '').toString(),
+      threadId: _readId(data?['threadId'] ?? data?['thread']?['id'] ?? json['threadId']),
+      postId: _readId(data?['postId'] ?? data?['post']?['id'] ?? json['postId']),
+      postJson: (data?['post'] is Map) ? (data!['post'] as Map).cast<String, dynamic>() : null,
     );
   }
 }

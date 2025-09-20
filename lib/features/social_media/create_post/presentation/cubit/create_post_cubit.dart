@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
@@ -261,7 +262,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   void createTwitterPost({
     required BuildContext context,
-  }) async {
+  }) async
+  {
     emit(state.copyWith(status: CreatePostStates.loadingCreatePost));
 
     if (postContentTextController.text.isNotEmpty ||
@@ -290,12 +292,22 @@ class CreatePostCubit extends Cubit<CreatePostState> {
               emit(state.copyWith(failure: l, status: CreatePostStates.error)),
           (r) async {
         emit(state.copyWith(status: CreatePostStates.success));
+        showSuccessMessage(
+          context,
+          context.isArabic
+              ? 'تم نشر المنشور بنجاح'
+              : 'Post published successfully',
+        );
+
+
         onDiscardPost();
+
         context.go(Routes.SOCIAL,
             extra: SocialParams(
                 userId: UserCubit.to.state.data?.id ?? '', index: 2));
       });
-      // }
+
+       // }
     }
   }
 
