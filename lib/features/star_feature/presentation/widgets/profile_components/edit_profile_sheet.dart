@@ -8,6 +8,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../../../common/functions/global/upload_file.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../controller/profile_cubit/profile_cubit.dart';
 import '../../utils/enums.dart';
@@ -82,17 +83,20 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
     setState(() => _isUploading = true);
 
     try {
-      // Mock upload - replace with actual implementation
-      //todo: upload image to server and get image id
-      final uploadedImageId = "66993df106144734b59b0a5c";
-
-      setState(() {
-        if (type == ImageType.cover) {
-          _channelCoverId = uploadedImageId;
-        } else {
-          _channelPictureId = uploadedImageId;
-        }
-      });
+      final uploadFile = UploadFile2();
+      await uploadFile.uploadImage(
+        file: imageFile,
+        subCategoryId: "66ed76a6749e82b1e7b7fd8a", // Star feature subcategory
+        onUploaded: (uploadEntity) {
+          setState(() {
+            if (type == ImageType.cover) {
+              _channelCoverId = uploadEntity.mediaId;
+            } else {
+              _channelPictureId = uploadEntity.mediaId;
+            }
+          });
+        },
+      );
     } catch (e) {
       _showErrorSnackBar('خطأ في رفع الصورة: $e');
     } finally {
