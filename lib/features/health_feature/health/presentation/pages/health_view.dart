@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
@@ -27,6 +28,8 @@ import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_v
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -48,6 +51,107 @@ class _HealthViewState extends State<HealthView> {
 
   bool _showRequestLog = false;
   bool _showMyAds = false;
+  
+  // Search functionality
+  bool _showSearchField = false;
+  final TextEditingController _searchController = TextEditingController();
+  bool _hasSearchText = false;
+  
+  // Second search functionality (for ads section)
+  bool _showAdsSearchField = false;
+  final TextEditingController _adsSearchController = TextEditingController();
+  bool _hasAdsSearchText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchTextChanged);
+    _adsSearchController.addListener(_onAdsSearchTextChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchTextChanged);
+    _searchController.dispose();
+    _adsSearchController.removeListener(_onAdsSearchTextChanged);
+    _adsSearchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchTextChanged() {
+    setState(() {
+      _hasSearchText = _searchController.text.isNotEmpty;
+    });
+  }
+
+  void _onAdsSearchTextChanged() {
+    setState(() {
+      _hasAdsSearchText = _adsSearchController.text.isNotEmpty;
+    });
+  }
+
+  void _performSearch(String query) {
+    if (query.trim().isEmpty) return;
+    
+    ManageVibration.vibrate();
+    
+    // Here you can implement your search logic
+    // For now, we'll just print the search query
+    print('Searching for: $query');
+    
+    // You can add search functionality here, such as:
+    // - Navigate to search results page
+    // - Filter current content
+    // - Call API for search results
+    // - Update the UI with search results
+    
+    // Example: Show a snackbar with the search query
+    context.push(Routes.VISITADOCTORLIST,
+        extra: DoctorsListParams(
+            fromHome: true, subCategoryId: '',name: query, fromSearch: true));
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text(
+    //       context.isArabic
+    //           ? 'البحث عن: $query'
+    //           : 'Searching for: $query',
+    //     ),
+    //     backgroundColor: AppColors.SECONDARY_COLOR,
+    //     duration: const Duration(seconds: 2),
+    //   ),
+    // );
+    // context.read<HealthCubit>().searchBookings(query);
+  }
+
+  void _performAdsSearch(String query) {
+    if (query.trim().isEmpty) return;
+    
+    ManageVibration.vibrate();
+    
+    // Here you can implement your ads search logic
+    // For now, we'll just print the search query
+    print('Searching ads for: $query');
+    
+    // You can add ads search functionality here, such as:
+    // - Filter favorite ads
+    // - Search in request log
+    // - Search in my ads
+    // - Call API for ads search results
+    
+    // Example: Show a snackbar with the search query
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          context.isArabic 
+              ? 'البحث في الإعلانات عن: $query'
+              : 'Searching ads for: $query',
+        ),
+        backgroundColor: AppColors.SECONDARY_COLOR,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
@@ -77,18 +181,69 @@ class _HealthViewState extends State<HealthView> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
-                        width: 16,
+                      const SizedBox(width: 16),
+                      
+                      // Search Icon
+                      GestureDetector(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          setState(() {
+                            _showSearchField = !_showSearchField;
+                            if (!_showSearchField) {
+                              _searchController.clear();
+                              _hasSearchText = false;
+                            }
+                          });
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: _showSearchField 
+                                ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.search,
+                            size: 24,
+                            color: _showSearchField 
+                                ? AppColors.SECONDARY_COLOR
+                                : null,
+                          ),
+                        ),
                       ),
-                      Icon(
-                        Icons.search,
-                        size: 50.sp,
-                      ),
-                      const Sizer(),
+                      const SizedBox(width: 8),
 
-                      /// Favourite Ads
+                      // Search Buttons (appear in row when typing)
+                      if (_showSearchField && _hasSearchText) ...[
+                        // Clear Button
+                        GestureDetector(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _searchController.clear();
+                            _hasSearchText = false;
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.clear,
+                              color: Colors.grey[600],
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+
+                      /// Most Booking
                       CurrentHistoryBooking(
                         title: LocaleKeys.mostBooking.localize,
                         isSelected: _showMost,
@@ -101,7 +256,7 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
-                      const Sizer(),
+                      const SizedBox(width: 8),
 
                       /// History
                       CurrentHistoryBooking(
@@ -117,7 +272,7 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
-                      const Sizer(),
+                      const SizedBox(width: 8),
 
                       /// Current Booking
                       CurrentHistoryBooking(
@@ -134,9 +289,9 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
-                      const Sizer(),
+                      const SizedBox(width: 8),
 
-                      /// Current Booking
+                      /// My Booking
                       CurrentHistoryBooking(
                         title: context.isArabic
                             ? 'حجوزاتي'
@@ -151,12 +306,90 @@ class _HealthViewState extends State<HealthView> {
                           }
                         },
                       ),
-                      const SizedBox(
-                        width: 16,
-                      ),
+                      const SizedBox(width: 16),
                     ],
                   ),
                 ),
+                
+                // Search Field
+                if (_showSearchField) ...[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16.h),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.getFillColor(context),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppColors.SECONDARY_COLOR.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              style: TextStyle(
+                                color: AppColors.getTextColor(context),
+                                fontSize: 16,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: context.isArabic 
+                                    ? 'ابحث عن الأطباء أو الخدمات...'
+                                    : 'Search doctors or services...',
+                                hintStyle: TextStyle(
+                                  color: AppColors.getTextColor(context).withOpacity(0.6),
+                                  fontSize: 16,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: AppColors.SECONDARY_COLOR,
+                                  size: 20,
+                                ),
+                              ),
+                              textInputAction: TextInputAction.search,
+                              onChanged: (value) => setState(() => _hasSearchText = value.isNotEmpty),
+                              onSubmitted: (value) {
+                                if (value.isNotEmpty) {
+                                  _performSearch(value);
+                                }
+                              },
+                            ),
+                          ),
+                          if (_hasSearchText)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8,left: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  _performSearch(_searchController.text);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.SECONDARY_COLOR,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Sizer(height: 16),
+                ],
+                
                 Sizer(height: 20),
 
                 // Default view when none are selected
@@ -175,11 +408,105 @@ class _HealthViewState extends State<HealthView> {
                             const SizedBox(
                               width: 16,
                             ),
-                            Icon(
-                              Icons.search,
-                              size: 50.sp,
+                            GestureDetector(
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                setState(() {
+                                  _showAdsSearchField = !_showAdsSearchField;
+                                  if (!_showAdsSearchField) {
+                                    _adsSearchController.clear();
+                                    _hasAdsSearchText = false;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  color: _showAdsSearchField 
+                                      ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.search,
+                                  size: 24,
+                                  color: _showAdsSearchField 
+                                      ? AppColors.SECONDARY_COLOR
+                                      : null,
+                                ),
+                              ),
                             ),
-                            const Sizer(),
+                            const SizedBox(width: 8),
+
+                            // Ads Search Buttons (appear in row when typing)
+                            if (_showAdsSearchField && _hasAdsSearchText) ...[
+                              // Clear Button
+                              GestureDetector(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  _adsSearchController.clear();
+                                  _hasAdsSearchText = false;
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Icons.clear,
+                                    color: Colors.grey[600],
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              
+                              // Search Submit Button
+                              GestureDetector(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  _performAdsSearch(_adsSearchController.text);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.SECONDARY_COLOR,
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.SECONDARY_COLOR.withOpacity(0.3),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        context.isArabic ? 'بحث' : 'Search',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
 
                             /// Favourite Ads
                             CurrentHistoryBooking(
@@ -193,7 +520,7 @@ class _HealthViewState extends State<HealthView> {
                                 }
                               },
                             ),
-                            const Sizer(),
+                            const SizedBox(width: 8),
 
                             /// Request Log
                             CurrentHistoryBooking(
@@ -208,7 +535,7 @@ class _HealthViewState extends State<HealthView> {
                                 }
                               },
                             ),
-                            const Sizer(),
+                            const SizedBox(width: 8),
 
                             /// My Ads
                             CurrentHistoryBooking(
@@ -223,12 +550,90 @@ class _HealthViewState extends State<HealthView> {
                                 }
                               },
                             ),
-                            const SizedBox(
-                              width: 16,
-                            ),
+                            const SizedBox(width: 16),
                           ],
                         ),
                       ),
+                      
+                      // Ads Search Field
+                      if (_showAdsSearchField) ...[
+                        Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.getFillColor(context),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AppColors.SECONDARY_COLOR.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _adsSearchController,
+                                    style: TextStyle(
+                                      color: AppColors.getTextColor(context),
+                                      fontSize: 16,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: context.isArabic 
+                                          ? 'ابحث في الإعلانات...'
+                                          : 'Search in ads...',
+                                      hintStyle: TextStyle(
+                                        color: AppColors.getTextColor(context).withOpacity(0.6),
+                                        fontSize: 16,
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 12,
+                                      ),
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                        color: AppColors.SECONDARY_COLOR,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    textInputAction: TextInputAction.search,
+                                    onChanged: (value) => setState(() => _hasAdsSearchText = value.isNotEmpty),
+                                    onSubmitted: (value) {
+                                      if (value.isNotEmpty) {
+                                        _performAdsSearch(value);
+                                      }
+                                    },
+                                  ),
+                                ),
+                                if (_hasAdsSearchText)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8, left: 8),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ManageVibration.vibrate();
+                                        _performAdsSearch(_adsSearchController.text);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.SECONDARY_COLOR,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Icon(
+                                          Icons.arrow_forward,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Sizer(height: 16),
+                      ],
+                      
                       const Sizer(height: 8),
                       if (!_showFavoriteAds &&
                           !_showRequestLog &&

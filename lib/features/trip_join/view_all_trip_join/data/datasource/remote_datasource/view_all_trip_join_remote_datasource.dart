@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_mo
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/trip_join_card_model.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import '../../../../../RideFeature/domain/entities/ride_brand_entity.dart';
 import '../../../../../RideFeature/domain/entities/ride_model_entity.dart';
 import '../../../../../ride/RideRequest/data/models/params/expected_price_params.dart';
@@ -50,12 +51,14 @@ abstract class ViewAllTripJoinRemoteDataSource {
   Future<Either<Failure, List<RideModelEntity>>> getRideModels(CarBrandParams params);
   Future<Either<Failure, ExpectedPriceTripEntity>> getExpectedPrice(ExpectedPriceTripParams params);
   Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailableTripJoin(CarBrandParams params);
+  Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailablePickMe(CarBrandParams params);
   Future<Either<Failure,  List<GetRequestTripJoinEntity>>> getRequestTripJoin(CarBrandParams params);
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsTripJoin(CarBrandParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> deleteMyTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyViewTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyReadRequestTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params);
   Future<Either<Failure, GetRequestCountEntity >> getRequestCountTripJoin();
 
 
@@ -206,23 +209,25 @@ class ViewAllTripJoinRemoteDataSourceImp
         return Right(tripsData);
       },
     );
-    // return response.fold(
-    //       (l) => Left(l),
-    //       (data) {
-    //     final expectedPriceData = data['data'];
-    //     final entity = TripJoinModel.fromJson(expectedPriceData);
-    //     return Right(entity);
-    //   },
-    // );
-    // return response.fold(
-    //       (l) => Left(l),
-    //       (data) {
-    //     final tripsData = (data['data']as List)
-    //         .map((e) => AvailableTripJoinModel.fromJson(e as Map<String, dynamic>))
-    //         .toList();
-    //     return Right(tripsData);
-    //   },
-    // );
+  }
+
+  @override
+  Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailablePickMe(CarBrandParams params) async{
+    final url =
+        "${EndPoints.getAvailableTripJoin}?page=${params.page}&limit=${params.limit}";
+
+    final response = await apiConsumer.get(url);
+
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripsData = (data['data']['availableTripOffers'] as List)
+            .map((e) => AvailableTripJoinModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(tripsData);
+      },
+    );
   }
 
   @override
@@ -318,6 +323,23 @@ class ViewAllTripJoinRemoteDataSourceImp
     final url = EndPoints.createTripJoinOffer;
 
     final body = params.toJson();  // Clean and clear
+
+    final response = await apiConsumer.post(url, data: body);  // Use POST
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final tripData = DeleteMyTripJoinModel.fromJson(data);
+        return Right(tripData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params) async{
+    final url = EndPoints.createPickMeOffer;
+
+    final body = params.toJson();
 
     final response = await apiConsumer.post(url, data: body);  // Use POST
 

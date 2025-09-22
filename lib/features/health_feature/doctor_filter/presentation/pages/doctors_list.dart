@@ -35,9 +35,11 @@ class DoctorsListParams {
   final bool fromHome;
   final String subCategoryId;
   final String? type;
+  final bool? fromSearch;
+  final String? name;
 
   DoctorsListParams(
-      {required this.fromHome, required this.subCategoryId, this.type = ''});
+      {required this.fromHome, required this.subCategoryId, this.type = '', this.name = '',this.fromSearch = false});
 }
 
 class DoctorsListView extends StatefulWidget {
@@ -52,10 +54,11 @@ class _DoctorsListViewState extends State<DoctorsListView> {
 
   @override
   void initState() {
+    print("widget.params.name ${widget.params.name}");
     _scrollController = ScrollController()..addListener(_onScroll);
     context
         .read<DoctorsListCubit>()
-        .loadInitialData(widget.params.subCategoryId);
+        .loadInitialData(widget.params.fromSearch==true?widget.params.name??'':widget.params.subCategoryId,widget.params.fromSearch??false);
     super.initState();
   }
 
@@ -63,9 +66,15 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       print("object");
-      context
+      if(widget.params.fromSearch==false) {
+        context
           .read<DoctorsListCubit>()
           .getDoctorsFromSubCategory(widget.params.subCategoryId);
+      }else{
+        context
+            .read<DoctorsListCubit>()
+            .getDoctorsFromSearch(widget.params.name??'');
+      }
       print("object");
     }
   }
@@ -430,9 +439,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                               const SizedBox(height: 4),
                               Text(
                                 context.isArabic
-                                    ? widget.data.subCategory?.first.nameAr ??
+                                    ? widget.data.subCategory?.nameAr ??
                                         "N/A"
-                                    : widget.data.subCategory?.first.nameEn ??
+                                    : widget.data.subCategory?.nameEn ??
                                         "N/A",
                                 style: Styles.mediumText(
                                     fontSize: 32,
@@ -1106,7 +1115,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
                               ManageVibration.vibrate();
                               if(item.isPremium==false){
                                 SubscriptionMethod().subscribe(
-                                  subscribeId: item.subCategory?.first.id ?? '',
+                                  subscribeId: item.subCategory?.id ?? '',
                                   title: item.firstName ?? '',
                                 );
                               }else{
@@ -1259,7 +1268,7 @@ class CallMessageReportButtons extends StatelessWidget {
                   }
                 : () {
                     SubscriptionMethod().subscribe(
-                      subscribeId: item.subCategory?.first.id ?? '',
+                      subscribeId: item.subCategory?.id ?? '',
                       title: item.firstName ?? '',
                     );
                   },
@@ -1286,7 +1295,7 @@ class CallMessageReportButtons extends StatelessWidget {
                   }
                 : () {
                     SubscriptionMethod().subscribe(
-                        subscribeId: item.subCategory?.first.id ?? '',
+                        subscribeId: item.subCategory?.id ?? '',
                         title: item.firstName ?? '');
                   },
           ),
@@ -1308,7 +1317,7 @@ class CallMessageReportButtons extends StatelessWidget {
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
                     child: ReportView(
                       id: item.id!,
-                      categoryId: item.subCategory?.first.id ?? '',
+                      categoryId: item.subCategory?.id ?? '',
                     ),
                   );
                 },

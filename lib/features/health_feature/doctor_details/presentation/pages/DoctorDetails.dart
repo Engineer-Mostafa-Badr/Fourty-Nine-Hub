@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/fees_card.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/header.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/reviews.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/loaders/default_loader.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -59,6 +60,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
         preferredSize: const Size.fromHeight(30),
         child:HomeAppbar(
           isWithBackArrow: true,
+          onBackPressed: ()=>context.pop(),
         ),
       ),
       body: Padding(

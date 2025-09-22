@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/us
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/get_emergency_requests_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -429,6 +430,8 @@ class EndPoints {
 
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
+  static searchDoctors(SearchDoctorsParams params) =>
+      '/health/doctors/search/doctor?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
 
@@ -967,6 +970,8 @@ class EndPoints {
   static String reactOnTwitterPost(String postId) {
     return '/twitter/posts/$postId/toggle-like';
   }
+
+  static String getVerification = '/user-verification-account/check-subscription';
 
   static String reactOnTwitterComment(String commentId) {
     return '/twitter/comment/react/$commentId?subCategory=${Constants.twitterSubCategory}';
@@ -1725,6 +1730,7 @@ class EndPoints {
   static String applyViewTripJoin = '/trip-join/offers/';
   static String applyReadRequestTripJoin = '/trip-join/requests/';
   static String createTripJoinOffer = '/trip-join/offers';
+  static String createPickMeOffer = '/pick-me/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
 
   static const updateDriverLoadingRatingNonSocket =

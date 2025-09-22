@@ -9,6 +9,7 @@ class ViewAllTripJoinState {
   final List<RideModelEntity>? rideModelEntity;
   final ExpectedPriceTripEntity? expectedPriceEntity;
   final List<AvailableTripJoinEntity >? availableTripJoinEntity;
+  final List<AvailableTripJoinEntity >? availablePickMeEntity;
   final List<GetRequestTripJoinEntity>? requestTripJoinEntity;
   // final GetRequestTripJoinEntity? fullRequestTripJoinData;
   final List<MyAdsTripDocEntity>? myAdsTripJoinData;
@@ -23,6 +24,7 @@ class ViewAllTripJoinState {
     this.rideModelEntity,
     this.expectedPriceEntity,
     this.availableTripJoinEntity,
+    this.availablePickMeEntity,
     this.requestTripJoinEntity,
     // this.fullRequestTripJoinData,
     this.myAdsTripJoinData,
@@ -39,6 +41,7 @@ class ViewAllTripJoinState {
     List<RideModelEntity>? rideModelEntity,
     ExpectedPriceTripEntity? expectedPriceEntity,
     List<AvailableTripJoinEntity>? availableTripJoinEntity,
+    List<AvailableTripJoinEntity>? availablePickMeEntity,
     List<GetRequestTripJoinEntity>? requestTripJoinEntity,
     // List<GetRequestTripJoinEntity>? fullRequestTripJoinData,
     List<MyAdsTripDocEntity>? myAdsTripJoinData,
@@ -54,6 +57,7 @@ class ViewAllTripJoinState {
       rideModelEntity: rideModelEntity ?? this.rideModelEntity,
       expectedPriceEntity: expectedPriceEntity ?? this.expectedPriceEntity,
       availableTripJoinEntity: availableTripJoinEntity ?? this.availableTripJoinEntity,
+      availablePickMeEntity: availablePickMeEntity ?? this.availablePickMeEntity,
       requestTripJoinEntity: requestTripJoinEntity ?? this.requestTripJoinEntity,
       // fullRequestTripJoinData: fullRequestTripJoinData ?? this.fullRequestTripJoinData,
       myAdsTripJoinData: myAdsTripJoinData ?? this.myAdsTripJoinData,

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/trip_join_card_entity.dart';
@@ -32,9 +33,11 @@ abstract class ViewAllTripJoinRepo {
   Future<Either<Failure, List<RideBrandEntity>>> getRideBrands(CarBrandParams params);
   Future<Either<Failure, List<RideModelEntity>>> getRideModels(CarBrandParams params);
   Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailableTripJoin(CarBrandParams params);
+  Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailablePickMe(CarBrandParams params);
   Future<Either<Failure, List<GetRequestTripJoinEntity>>> getRequestTripJoin(CarBrandParams params);
   Future<Either<Failure, ExpectedPriceTripEntity>> getExpectedPrice(ExpectedPriceTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params);
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsTripJoin(CarBrandParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> deleteMyTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyViewTripJoin(DeleteMyTripParams params);

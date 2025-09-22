@@ -4,7 +4,7 @@ class MostBookingEntity {
   final String? lastName;
   final String? userId;
   final AddressEntity? address;
-  final List<MostSubCategoryEntity>? subCategory;
+  final MostSubCategoryEntity? subCategory;
   final double? averageRating;
   final int? totalRatings;
   final String? ratingText;
