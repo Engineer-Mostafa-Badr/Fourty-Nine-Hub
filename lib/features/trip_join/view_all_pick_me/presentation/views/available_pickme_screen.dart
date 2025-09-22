@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class AvailablePickMeCard extends StatefulWidget {
@@ -19,6 +21,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
 
   @override
   void initState() {
+    context.read<ViewAllTripJoinCubit>().getTripJoin();
     _scrollController = ScrollController()..addListener(_onScroll);
     super.initState();
 

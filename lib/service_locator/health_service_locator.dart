@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_history_booking_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_booking_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 
 import '../features/health_feature/booking/data/datasources/book_doctor_appointment_remote_datasource.dart';
 import '../features/health_feature/booking/domain/usecases/all_appointment_use_case.dart';
@@ -263,6 +264,8 @@ class HealthServiceLocator {
         () => GetHistoryBookingUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetUserBookingUseCase>(
         () => GetUserBookingUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<SearchDoctorsUseCase>(
+        () => SearchDoctorsUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
@@ -273,6 +276,7 @@ class HealthServiceLocator {
         serviceLocator(),
         serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -290,6 +294,7 @@ class HealthServiceLocator {
               serviceLocator(),
             ));
     serviceLocator.registerFactory<HealthCubit>(() => HealthCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

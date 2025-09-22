@@ -45,6 +45,11 @@ class TwitterRepoImpl implements TwitterRepo {
   }
 
   @override
+  Future<Either<Failure, bool>> getVerification() {
+    return _remoteDataSource.getVerification();
+  }
+
+  @override
   Future<Either<Failure, bool>> reactOnComment(
       {required TwitterCommentReactParams params}) {
     return _remoteDataSource.reactOnComment(params: params);
