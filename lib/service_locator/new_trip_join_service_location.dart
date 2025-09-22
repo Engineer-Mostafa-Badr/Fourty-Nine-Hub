@@ -1,4 +1,5 @@
 
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart';
@@ -51,11 +52,14 @@ class NewTripJoinServiceLocation {
             () => CreateTripJoinOfferUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRequestCountTripJoinUseCase>(
             () => GetRequestCountTripJoinUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreatePickMeOfferUseCase>(
+            () => CreatePickMeOfferUseCase(serviceLocator()));
 
 
 
     serviceLocator.registerFactory<ViewAllTripJoinCubit>(() =>
         ViewAllTripJoinCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

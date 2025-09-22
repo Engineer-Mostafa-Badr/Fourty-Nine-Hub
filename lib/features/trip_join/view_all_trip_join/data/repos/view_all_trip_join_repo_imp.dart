@@ -1,4 +1,5 @@
 import "package:dartz/dartz.dart";
+import "package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart";
 import "../../../../../common/models/public/pagination_params.dart";
 import "../../../../../core/error/failure.dart";
 import "../../../../RideFeature/domain/entities/ride_brand_entity.dart";
@@ -69,6 +70,11 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   }
 
   @override
+  Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailablePickMe(CarBrandParams params) {
+    return viewripJoinRemoteDataSource.getAvailablePickMe(params);
+  }
+
+  @override
   Future<Either<Failure,  List<GetRequestTripJoinEntity>>> getRequestTripJoin(CarBrandParams params) {
     return viewripJoinRemoteDataSource.getRequestTripJoin(params);
   }
@@ -96,6 +102,11 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   @override
   Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params) {
     return viewripJoinRemoteDataSource.createTripJoinOffer(params);
+  }
+
+  @override
+  Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params) {
+    return viewripJoinRemoteDataSource.createPickMeOffer(params);
   }
 
   @override

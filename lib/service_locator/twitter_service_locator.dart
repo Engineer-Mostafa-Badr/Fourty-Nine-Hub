@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_verification_usecase.dart';
+
 import '../features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import '../features/social_media/twitter/data/datasources/twitter_remote_datasource.dart';
 import '../features/social_media/twitter/data/repositories/twitter_repo_impl.dart';
@@ -130,6 +132,10 @@ class TwitterServiceLocator {
         () => GetTwitterGlobalFeedUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetVerificationUseCase>(
+        () => GetVerificationUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerFactory(() => GetFollowersCountUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetFollowingCountUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => GetUserThreadsPageUseCase(serviceLocator()));
@@ -155,6 +161,7 @@ class TwitterServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+           serviceLocator(),
            serviceLocator(),
            serviceLocator(),
            serviceLocator(),

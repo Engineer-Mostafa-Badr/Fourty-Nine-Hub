@@ -371,9 +371,9 @@ class _MostBookingCardState extends State<MostBookingCard> {
                             const SizedBox(height: 4),
                             Text(
                               context.isArabic
-                                  ? widget.data.subCategory?.first.nameAr ??
+                                  ? widget.data.subCategory?.nameAr ??
                                       "N/A"
-                                  : widget.data.subCategory?.first.nameEn ??
+                                  : widget.data.subCategory?.nameEn ??
                                       "N/A",
                               style: Styles.mediumText(
                                   fontSize: 32,
@@ -644,7 +644,7 @@ class CallMessageReportButtons extends StatelessWidget {
                   }
                 : () {
                     SubscriptionMethod().subscribe(
-                        subscribeId: item.subCategory?.first.id ?? '',
+                        subscribeId: item.subCategory?.id ?? '',
                         title: item.firstName ?? '');
                   },
           ),
@@ -666,7 +666,7 @@ class CallMessageReportButtons extends StatelessWidget {
                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
                     child: ReportView(
                       id: item.id!,
-                      categoryId: item.subCategory?.first.id ?? '',
+                      categoryId: item.subCategory?.id ?? '',
                     ),
                   );
                 },

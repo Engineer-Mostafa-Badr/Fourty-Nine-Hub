@@ -57,6 +57,7 @@ class _DoctorDetailsAccountHeaderState
 
   bool isNonZeroTime(String timeString) {
     // Split the string into hours and minutes
+    if(timeString.isEmpty) return false;
     final parts = timeString.split(' ');
     final hourPart = parts[0].replaceAll('h', ''); // Remove the 'h'
     final minutePart = parts[1].replaceAll('m', ''); // Remove the 'm'

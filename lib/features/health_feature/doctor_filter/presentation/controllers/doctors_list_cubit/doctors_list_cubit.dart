@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -16,6 +17,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   final HealthSharedData _healthSharedData;
   final GetDoctorListUseCase _getDoctorListUseCase;
   final GetSubCategoryDoctorsListUseCase _getSubCategoryDoctorsListUseCase;
+  final SearchDoctorsUseCase _searchDoctorsUseCase;
 
   // void loadData() async {
   //   emit(state.copyWith(status: DoctorsListStates.loading));
@@ -75,6 +77,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     this._getDoctorListUseCase,
     this._healthSharedData,
     this._getSubCategoryDoctorsListUseCase,
+    this._searchDoctorsUseCase,
   ) : super(const DoctorsListState());
 
   getDoctorsFromSubCategory(String subCategory) async {
@@ -110,13 +113,46 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
       },
     );
   }
+  getDoctorsFromSearch(String name) async {
+    print("object");
+    if (!hasMoreData || isLoadingMore) return;
 
-  void loadInitialData(String subCategory) async {
+    isLoadingMore = true;
+
+    final response = await _searchDoctorsUseCase.call(SearchDoctorsParams(
+        name: name.trim(), page: currentPage, limit: pageSize));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: DoctorsListStates.error));
+      },
+      (data) {
+        doctorsList.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(
+            status: DoctorsListStates.success, doctorsList: data));
+      },
+    );
+  }
+
+  void loadInitialData(String subCategory,bool fromSearch) async {
     emit(state.copyWith(status: DoctorsListStates.loading));
     doctorsList.clear();
     currentPage = 1;
     hasMoreData = true;
-    await getDoctorsFromSubCategory(subCategory);
+    if(fromSearch) await getDoctorsFromSearch(subCategory);
+    if(!fromSearch)await getDoctorsFromSubCategory(subCategory);
   }
 }
 /*

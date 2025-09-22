@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
@@ -53,6 +54,7 @@ class HealthCubit extends Cubit<HealthState> {
   final GetHistoryBookingUseCase _getHistoryBookingUseCase;
   final GetMostBookingUseCase _getMostBookingUseCase;
   final GetUserBookingUseCase _getUserBookingUseCase;
+  final SearchDoctorsUseCase _searchDoctorsUseCase;
 
   final List<HealthBookingFilterModel> services = [
     HealthBookingFilterModel(
@@ -120,6 +122,7 @@ class HealthCubit extends Cubit<HealthState> {
       this._getBookingUseCase,
       this._getHistoryBookingUseCase,
       this._getUserBookingUseCase,
+      this._searchDoctorsUseCase,
       this._getMostBookingUseCase)
       : super(const HealthState());
 
@@ -326,8 +329,7 @@ class HealthCubit extends Cubit<HealthState> {
       // },
     );
   }
-  Future<void> getUserBookings(String type
-      ) async {
+  Future<void> getUserBookings(String type) async {
     final isCurrent = type == 'myBookings';
     print("objectIsCurrent $isCurrent");
     if (isLoading) return; // Prevent concurrent requests if needed
@@ -365,6 +367,29 @@ class HealthCubit extends Cubit<HealthState> {
         isLoadingMyBooking = false;
         emit(
             state.copyWith(myBookings: data, isLoadingMoreMostBooking: false));
+      },
+    );
+  }
+
+  Future<void> searchBookings(String name) async {
+    final response = await _searchDoctorsUseCase(
+      SearchDoctorsParams(page: myBookingPage, limit: 10, name: name),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+          failure: failure,
+          status: HealthStates.error,
+        ));
+      },
+      (data) {
+        emit(
+            state.copyWith(status: HealthStates.success));
       },
     );
   }
