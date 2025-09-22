@@ -12,7 +12,15 @@ import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chan
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_category.dart';
 
+import '../../domain/entity/chance_ad_entity.dart';
+import '../../domain/entity/chance_ads_pagination_entity.dart';
 import '../../domain/repository/chance_repository.dart';
+import '../../domain/use_case/create_chance_ad_use_case.dart';
+import '../../domain/use_case/get_all_chance_ads_use_case.dart';
+import '../../domain/use_case/get_chance_ad_details_use_case.dart';
+import '../../domain/use_case/join_chance_ad_use_case.dart';
+import '../../domain/use_case/search_chance_ads_use_case.dart';
+import '../../domain/use_case/toggle_chance_ad_favorite_use_case.dart';
 
 class ChanceRepositoryImpl extends ChanceRepository {
   final ChanceRemoteDataSource _chanceRemoteDataSource;
@@ -45,5 +53,45 @@ class ChanceRepositoryImpl extends ChanceRepository {
   Future<Either<Failure, List<SubCategoryDropEntity>>> fetchSubCategory(
       SubCategoryChanceParams params) {
     return _chanceRemoteDataSource.fetchSubCategory(params);
+  }
+
+  @override
+  Future<Either<Failure, ChanceAdEntity>> createChanceAd(CreateChanceAdParams params) {
+    return _chanceRemoteDataSource.createChanceAd(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> joinChanceAd(JoinChanceAdParams params) {
+    return _chanceRemoteDataSource.joinChanceAd(params);
+  }
+
+  @override
+  Future<Either<Failure, ChanceAdsPaginationEntity>> getAllChanceAds(GetAllChanceAdsParams params) {
+    return _chanceRemoteDataSource.getAllChanceAds(params);
+  }
+
+  @override
+  Future<Either<Failure, ChanceAdEntity>> getChanceAdDetails(GetChanceAdDetailsParams params) {
+    return _chanceRemoteDataSource.getChanceAdDetails(params);
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> searchChanceAds(SearchChanceAdsParams params) {
+    return _chanceRemoteDataSource.searchChanceAds(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleChanceAdFavorite(ToggleChanceAdFavoriteParams params) {
+    return _chanceRemoteDataSource.toggleChanceAdFavorite(params);
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> getFavoriteChanceAds() {
+    return _chanceRemoteDataSource.getFavoriteChanceAds();
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> getMyChanceAds() {
+    return _chanceRemoteDataSource.getMyChanceAds();
   }
 }

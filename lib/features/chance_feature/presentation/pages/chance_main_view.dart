@@ -7,19 +7,39 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'dart:ui';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../controller/cubit/chance_cubit.dart';
+import '../controller/cubit/chance_states.dart';
+import '../../domain/entity/chance_ad_entity.dart';
+import '../../../../service_locator/chance_service_locator.dart';
 
 import '../../../star_feature/presentation/widgets/talent_card/sticky_tab_bar_delegate.dart';
 import 'chance_detail_view.dart';
 
+enum ChanceStatus { available, winner, ended }
+
 // Main View
-class ChanceMainView extends StatefulWidget {
+class ChanceMainView extends StatelessWidget {
   const ChanceMainView({super.key});
 
   @override
-  State<ChanceMainView> createState() => _ChanceMainViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => serviceLocator<ChanceCubit>()..getAllChanceAds(),
+      child: const _ChanceMainViewBody(),
+    );
+  }
 }
 
-class _ChanceMainViewState extends State<ChanceMainView>
+class _ChanceMainViewBody extends StatefulWidget {
+  const _ChanceMainViewBody();
+
+  @override
+  State<_ChanceMainViewBody> createState() => _ChanceMainViewState();
+}
+
+class _ChanceMainViewState extends State<_ChanceMainViewBody>
     with TickerProviderStateMixin {
   late TabController _tabController;
   bool _isSearching = false;
@@ -43,12 +63,31 @@ class _ChanceMainViewState extends State<ChanceMainView>
       _isCategoriesVisible = false;
       _searchController.clear();
     });
+
+    // Load data based on selected tab
+    switch (_selectedTabIndex) {
+      case 1: // Favorite
+        context.read<ChanceCubit>().getFavoriteChanceAds();
+        break;
+      case 3: // My Talent
+        context.read<ChanceCubit>().getMyChanceAds();
+        break;
+      default:
+        // Available tab or History - data already loaded
+        break;
+    }
   }
 
   void _onSearchChanged() {
     setState(() {
       _isCategoriesVisible = _searchController.text.isNotEmpty;
     });
+
+    if (_searchController.text.isNotEmpty) {
+      context.read<ChanceCubit>().searchChanceAds(_searchController.text);
+    } else {
+      context.read<ChanceCubit>().getAllChanceAds();
+    }
   }
 
   void _toggleSearch() {
@@ -63,9 +102,11 @@ class _ChanceMainViewState extends State<ChanceMainView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: NestedScrollView(
+    return BlocBuilder<ChanceCubit, ChanceState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.grey[50],
+          body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             // Header AppBar
@@ -150,8 +191,10 @@ class _ChanceMainViewState extends State<ChanceMainView>
               ),
           ];
         },
-        body: _buildTabContent(),
+        body: _buildTabContent(state),
       ),
+        );
+      },
     );
   }
 
@@ -239,142 +282,171 @@ class _ChanceMainViewState extends State<ChanceMainView>
     );
   }
 
-  Widget _buildTabContent() {
+  Widget _buildTabContent(ChanceState state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.isFailure) {
+      return const Center(
+        child: Text(
+          'خطأ في تحميل البيانات',
+          style: TextStyle(fontSize: 16, color: Colors.red),
+        ),
+      );
+    }
+
     // Return content based on selected tab index (controlled by StickyTabBarDelegate)
     switch (_selectedTabIndex) {
       case 0: // Available
-        return _buildAvailableTab();
+        return _buildAvailableTab(state);
       case 1: // Favorite
-        return _buildFavoriteTab();
+        return _buildFavoriteTab(state);
       case 2: // History
-        return _buildHistoryTab();
+        return _buildHistoryTab(state);
       case 3: // My Talent
-        return _buildMyTalentTab();
+        return _buildMyTalentTab(state);
       default:
-        return _buildAvailableTab();
+        return _buildAvailableTab(state);
     }
   }
 
-  Widget _buildAvailableTab() {
+  Widget _buildAvailableTab(ChanceState state) {
+    final List<ChanceAdEntity> ads = _isSearching && _searchController.text.isNotEmpty
+        ? (state.searchResults ?? [])
+        : (state.chanceAds ?? []);
+
+    if (ads.isEmpty) {
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات متاحة',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (index == 0) {
-                return _buildChanceCard(
-                  title: 'Win a trip to the Maldives',
-                  price: 2000,
-                  endDate: 'Ending Soon',
-                  progress: 0.75,
-                  participants: 120,
-                  views: 507,
-                  images: [
-                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-                  ],
-                  status: ChanceStatus.available,
-                );
-              } else {
-                return _buildChanceCard(
-                  title: 'Win iPhone 16',
-                  price: 20000,
-                  endDate: 'Ended',
-                  progress: 1.0,
-                  participants: 200,
-                  views: 507,
-                  images: [
-                    'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop',
-                  ],
-                  status: ChanceStatus.winner,
-                  winnerName: 'Moaz Mohamed',
-                );
-              }
+              final ad = ads[index];
+              return _buildChanceCardFromEntity(ad);
             },
-            childCount: 2,
+            childCount: ads.length,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildFavoriteTab() {
+  Widget _buildFavoriteTab(ChanceState state) {
+    final List<ChanceAdEntity> favoriteAds = state.favoriteChanceAds ?? [];
+
+    if (favoriteAds.isEmpty) {
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات مفضلة',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return _buildChanceCard(
-                title: 'Win a trip to the Maldives',
-                price: 2000,
-                endDate: 'Ending Soon',
-                progress: 0.75,
-                participants: 120,
-                views: 507,
-                images: [
-                  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-                ],
-                status: ChanceStatus.available,
-                isFavorite: true,
-              );
+              final ad = favoriteAds[index];
+              return _buildChanceCardFromEntity(ad, isFavorite: true);
             },
-            childCount: 1,
+            childCount: favoriteAds.length,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildHistoryTab() {
+  Widget _buildHistoryTab(ChanceState state) {
+    // For now, show completed ads from main list
+    final List<ChanceAdEntity> historyAds = (state.chanceAds ?? [])
+        .where((ad) => ad.isComplete)
+        .toList();
+
+    if (historyAds.isEmpty) {
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات مكتملة',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return _buildChanceCard(
-                title: 'Win iPhone 16',
-                price: 20000,
-                endDate: 'Ended',
-                progress: 1.0,
-                participants: 200,
-                views: 507,
-                images: [
-                  'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop',
-                ],
-                status: ChanceStatus.winner,
-                winnerName: 'Moaz Mohamed',
-              );
+              final ad = historyAds[index];
+              return _buildChanceCardFromEntity(ad);
             },
-            childCount: 1,
+            childCount: historyAds.length,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildMyTalentTab() {
+  Widget _buildMyTalentTab(ChanceState state) {
+    final List<ChanceAdEntity> myAds = state.myChanceAds ?? [];
+
+    if (myAds.isEmpty) {
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات خاصة بك',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return _buildChanceCard(
-                title: 'Win a trip to the Maldives',
-                price: 2000,
-                endDate: 'Ending Soon',
-                progress: 0.75,
-                participants: 120,
-                views: 507,
-                images: [
-                  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-                ],
-                status: ChanceStatus.available,
-                isMyChance: true,
-              );
+              final ad = myAds[index];
+              return _buildChanceCardFromEntity(ad, isMyChance: true);
             },
-            childCount: 1,
+            childCount: myAds.length,
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildChanceCardFromEntity(
+    ChanceAdEntity ad, {
+    bool isFavorite = false,
+    bool isMyChance = false,
+  }) {
+    final List<String> imageUrls = ad.images.map((img) => img.photo).toList();
+    final double progress = ad.totalContributions / ad.price;
+    final ChanceStatus status = ad.isComplete
+        ? (ad.winnerId != null ? ChanceStatus.winner : ChanceStatus.ended)
+        : ChanceStatus.available;
+
+    return _buildChanceCard(
+      title: ad.title,
+      price: ad.price.toInt(),
+      endDate: ad.isComplete ? 'Ended' : 'Active',
+      progress: progress.clamp(0.0, 1.0),
+      participants: ad.contributors,
+      views: ad.views,
+      images: imageUrls.isNotEmpty ? imageUrls : ['https://via.placeholder.com/400x300'],
+      status: status,
+      isFavorite: isFavorite,
+      isMyChance: isMyChance,
+      adId: ad.id,
     );
   }
 
@@ -390,6 +462,7 @@ class _ChanceMainViewState extends State<ChanceMainView>
     String? winnerName,
     bool isFavorite = false,
     bool isMyChance = false,
+    String? adId,
   }) {
     return GestureDetector(
       onTap: () {
@@ -461,7 +534,9 @@ class _ChanceMainViewState extends State<ChanceMainView>
                   left: 12.w,
                   child: GestureDetector(
                     onTap: () {
-                      // Toggle favorite
+                      if (adId != null) {
+                        context.read<ChanceCubit>().toggleChanceAdFavorite(adId);
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.w),

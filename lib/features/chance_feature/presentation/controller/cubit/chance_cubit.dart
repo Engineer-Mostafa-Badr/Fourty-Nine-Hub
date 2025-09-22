@@ -8,23 +8,48 @@ import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_chan
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_category.dart';
 import '../../../domain/use_case/add_chance_data.dart';
+import '../../../domain/use_case/create_chance_ad_use_case.dart';
+import '../../../domain/use_case/get_all_chance_ads_use_case.dart';
+import '../../../domain/use_case/get_chance_ad_details_use_case.dart';
+import '../../../domain/use_case/join_chance_ad_use_case.dart';
+import '../../../domain/use_case/search_chance_ads_use_case.dart';
+import '../../../domain/use_case/toggle_chance_ad_favorite_use_case.dart';
+import '../../../domain/use_case/get_favorite_chance_ads_use_case.dart';
+import '../../../domain/use_case/get_my_chance_ads_use_case.dart';
 import 'chance_states.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+
 class ChanceCubit extends Cubit<ChanceState> {
   final FetchChanceUseCase _fetchChanceUseCase;
   final AddChanceUseCase _addChanceUseCase;
   final GetChanceRateUseCase _getChanceRateUseCase;
   final MainCategoryChanceUseCase _mainCategoryChanceUseCase;
-  final SubCategoryChanceUseCase _SubCategoryChanceUseCase;
+  final SubCategoryChanceUseCase _subCategoryChanceUseCase;
+  final CreateChanceAdUseCase _createChanceAdUseCase;
+  final JoinChanceAdUseCase _joinChanceAdUseCase;
+  final GetAllChanceAdsUseCase _getAllChanceAdsUseCase;
+  final GetChanceAdDetailsUseCase _getChanceAdDetailsUseCase;
+  final SearchChanceAdsUseCase _searchChanceAdsUseCase;
+  final ToggleChanceAdFavoriteUseCase _toggleChanceAdFavoriteUseCase;
+  final GetFavoriteChanceAdsUseCase _getFavoriteChanceAdsUseCase;
+  final GetMyChanceAdsUseCase _getMyChanceAdsUseCase;
 
   ChanceCubit(
     this._fetchChanceUseCase,
     this._addChanceUseCase,
     this._getChanceRateUseCase,
     this._mainCategoryChanceUseCase,
-    this._SubCategoryChanceUseCase,
+    this._subCategoryChanceUseCase,
+    this._createChanceAdUseCase,
+    this._joinChanceAdUseCase,
+    this._getAllChanceAdsUseCase,
+    this._getChanceAdDetailsUseCase,
+    this._searchChanceAdsUseCase,
+    this._toggleChanceAdFavoriteUseCase,
+    this._getFavoriteChanceAdsUseCase,
+    this._getMyChanceAdsUseCase,
   ) : super(const ChanceState());
 
   // Future<void> fetchChance() async {
@@ -66,9 +91,9 @@ class ChanceCubit extends Cubit<ChanceState> {
     return response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         print('Error');
         print(failure.toString());
         emit(state.copyWith(failure: failure, status: ChanceStates.error));
@@ -88,9 +113,8 @@ class ChanceCubit extends Cubit<ChanceState> {
     );
     response.fold((l) {
       var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
       emit(state.copyWith(rate: data, status: ChanceStates.success));
@@ -107,9 +131,8 @@ class ChanceCubit extends Cubit<ChanceState> {
     );
     response.fold((l) {
       var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
       category = data;
@@ -120,7 +143,7 @@ class ChanceCubit extends Cubit<ChanceState> {
   Future<List<SubCategoryDropEntity>> fetchSubCategoryChance(
       {required PaginationParams paginationParams, required String id}) async {
     List<SubCategoryDropEntity> category = [];
-    final response = await _SubCategoryChanceUseCase(
+    final response = await _subCategoryChanceUseCase(
       SubCategoryChanceParams(
         id: id,
         paginationParams: paginationParams,
@@ -128,13 +151,211 @@ class ChanceCubit extends Cubit<ChanceState> {
     );
     response.fold((l) {
       var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: ChanceStates.error));
     }, (data) {
       category = data;
     });
     return category;
+  }
+
+  // New Chance Ads Methods
+  Future<void> createChanceAd(CreateChanceAdParams params) async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _createChanceAdUseCase(params);
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (chanceAd) {
+        emit(state.copyWith(status: ChanceStates.createSuccess));
+        // Clear uploaded images after successful creation
+        emit(state.copyWith(uploadedImageIds: []));
+        // Refresh the chance ads list
+        getAllChanceAds();
+      },
+    );
+  }
+
+  Future<void> joinChanceAd(JoinChanceAdParams params) async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _joinChanceAdUseCase(params);
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (success) {
+        emit(state.copyWith(status: ChanceStates.joinSuccess));
+        // Refresh the chance ads list
+        getAllChanceAds();
+      },
+    );
+  }
+
+  Future<void> getAllChanceAds({int page = 1, int limit = 10}) async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _getAllChanceAdsUseCase(
+      GetAllChanceAdsParams(
+        paginationParams: PaginationParams(page: page, limit: limit),
+      ),
+    );
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (chanceAdsPagination) {
+        emit(state.copyWith(
+          chanceAdsPagination: chanceAdsPagination,
+          chanceAds: chanceAdsPagination.data,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> getChanceAdDetails(String adId) async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _getChanceAdDetailsUseCase(
+      GetChanceAdDetailsParams(adId: adId),
+    );
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (chanceAdDetails) {
+        emit(state.copyWith(
+          chanceAdDetails: chanceAdDetails,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> searchChanceAds(String keyword) async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _searchChanceAdsUseCase(
+      SearchChanceAdsParams(keyword: keyword),
+    );
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (searchResults) {
+        emit(state.copyWith(
+          searchResults: searchResults,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> toggleChanceAdFavorite(String adId) async {
+    final response = await _toggleChanceAdFavoriteUseCase(
+      ToggleChanceAdFavoriteParams(adId: adId),
+    );
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (isFavorite) {
+        // Update the specific ad in the lists
+        _updateAdFavoriteStatus(adId, isFavorite);
+      },
+    );
+  }
+
+  void _updateAdFavoriteStatus(String adId, bool isFavorite) {
+    // Update in chanceAds list if it exists
+    if (state.chanceAds != null) {
+      final updatedChanceAds = state.chanceAds!.map((ad) {
+        if (ad.id == adId) {
+          // Create a new instance with updated favorite status
+          // Note: You might need to add a copyWith method to ChanceAdEntity
+          return ad; // For now, return the same ad
+        }
+        return ad;
+      }).toList();
+      emit(state.copyWith(chanceAds: updatedChanceAds));
+    }
+  }
+
+  void addUploadedImageId(String imageId) {
+    final updatedIds = List<String>.from(state.uploadedImageIds)..add(imageId);
+    emit(state.copyWith(uploadedImageIds: updatedIds));
+  }
+
+  void removeUploadedImageId(String imageId) {
+    final updatedIds = List<String>.from(state.uploadedImageIds)
+      ..remove(imageId);
+    emit(state.copyWith(uploadedImageIds: updatedIds));
+  }
+
+  void clearUploadedImages() {
+    emit(state.copyWith(uploadedImageIds: []));
+  }
+
+  Future<void> getFavoriteChanceAds() async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _getFavoriteChanceAdsUseCase(const NoParams());
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (favoriteAds) {
+        emit(state.copyWith(
+          favoriteChanceAds: favoriteAds,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> getMyChanceAds() async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _getMyChanceAdsUseCase(const NoParams());
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (myAds) {
+        emit(state.copyWith(
+          myChanceAds: myAds,
+          status: ChanceStates.success,
+        ));
+      },
+    );
   }
 }
