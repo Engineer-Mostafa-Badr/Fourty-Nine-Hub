@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +23,7 @@ import '../../../../../../../routes/routes.dart';
 import '../../../../../../../service_locator/service_locator.dart';
 import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../custom_page/presentation/page/widget/edit_page.dart';
+import '../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../data/models/profile_model.dart';
 import '../../../../data/models/twitter_user_model.dart';
 import '../../../../domain/entities/twitter_post_comment_entity.dart';
@@ -174,150 +176,136 @@ class _TwitterScaffoldState extends State<_TwitterScaffold> {
         body: SafeArea(
           child: Stack(
             children: [
-              Column(
-                children: [
-                  const BuildTwitterDocumentCard(),
-                  Expanded(
-                    child: RefreshIndicator(
-                       onRefresh: () async =>
-                          cubit.globalPostsPagingController.refresh(),
-                      child: PagedListView<int, TwitterPostEntity>(
-                          padding: const EdgeInsets.only(top: 8, bottom: 24),
-                          pagingController: cubit.globalPostsPagingController,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          builderDelegate: PagedChildBuilderDelegate<
-                                  TwitterPostEntity>(
-                              noMoreItemsIndicatorBuilder: (context) =>
-                                  Container(),
-                              firstPageProgressIndicatorBuilder: (context) =>
-                                  Center(
-                                      child: CustomCircularProgressIndicator()),
-                              newPageProgressIndicatorBuilder: (context) =>
-                                  Center(
-                                      child: CustomCircularProgressIndicator()),
-                              noItemsFoundIndicatorBuilder: (context) {
-                                return Center(
-                                  child: Text(
-                                    LocaleKeys.noPosts.localize,
-                                    style: Styles.mediumText(),
+              RefreshIndicator(
+                onRefresh: () async => cubit.globalPostsPagingController.refresh(),
+                child: CustomScrollView(
+                  slivers: [
+                     SliverToBoxAdapter(
+                      child: const BuildTwitterDocumentCard(),
+                    ),
+
+                     const SliverToBoxAdapter(child: SizedBox(height: 8)),
+
+                     PagedSliverList<int, TwitterPostEntity>(
+                       shrinkWrapFirstPageIndicators: true,
+                      pagingController: cubit.globalPostsPagingController,
+                      builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
+                         firstPageProgressIndicatorBuilder: (_) =>
+                        const Center(child: CustomCircularProgressIndicator()),
+
+                        newPageProgressIndicatorBuilder: (_) =>
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CustomCircularProgressIndicator()),
+                        ),
+
+                        noItemsFoundIndicatorBuilder: (_) => Padding(
+                          padding: const EdgeInsets.only(top: 120),
+                          child: Center(
+                            child: Text(
+                              LocaleKeys.noPosts.localize,
+                              style: Styles.mediumText(),
+                            ),
+                          ),
+                        ),
+
+                         noMoreItemsIndicatorBuilder: (_) => const SizedBox.shrink(),
+
+                        itemBuilder: (context, post, index) {
+                          final user = context.read<UserCubit>().state.data;
+
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => TwitterPostDetails(postId: post.thread!.id),
+                                ),
+                              );
+                            },
+                            child: TwitterPostCard(
+                              onRepost: () => cubit.onRepost(postId: post.id),
+                              isDetailed: false,
+                              post: post,
+                              shareSuccess: shareSuccess,
+                              onReact: () async {
+                                final ok = await cubit.onReact(
+                                  params: TwitterPostReactParams(postId: post.id, react: 'love'),
+                                );
+                                if (ok == true) {
+                                  final list = cubit.globalPostsPagingController.itemList;
+                                  if (list != null && index < list.length) {
+                                    final p = list[index];
+                                    final wasLiked = p.isLiked ?? false;
+                                    p.isLiked = !wasLiked;
+                                    final current = p.loveCount ?? 0;
+                                    p.loveCount = wasLiked ? (current > 0 ? current - 1 : 0) : current + 1;
+                                    cubit.globalPostsPagingController.notifyListeners();
+                                  }
+                                }
+                              },
+                              onShare: () {
+                                final idToShare =
+                                (post.isShared == true && post.mainPost != null) ? post.mainPost!.id : post.id;
+                                cubit.onShare(postId: idToShare);
+                                if (cubit.state.shareSuccess == true) {
+                                  showSuccessMessage(
+                                    context,
+                                    LocaleKeys.postSharedSuccessfully.localize,
+                                  );
+                                }
+                              },
+                              showPostComments: (_) {
+                                bottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  widget: BlocProvider<TwitterCubit>(
+                                    create: (_) => serviceLocator<TwitterCubit>()..loadComments(context, post.id),
+                                    child: TwitterPostComments(
+                                      comments: const [],
+                                      postId: post.id,
+                                      user: user,
+                                      onAddComment: (params) => cubit.onPostComment(params: params),
+                                      onAddReply: (params) async => cubit.onCommentReply(params: params),
+                                      onCommentReact: (params) => cubit.onCommentReact(params: params),
+                                      onGetReplies: (id, c) async {},
+                                      newCommentId: '',
+                                      state: cubit.state,
+                                      onReport: (params) => cubit.onReport(params),
+                                      onEditComment: (params) async => cubit.editComment(params: params),
+                                      onDeleteComment: (id) async => cubit.deleteComment(
+                                        context: context,
+                                        commentId: id,
+                                        postId: post.id,
+                                        from: 'posts',
+                                      ),
+                                    ),
                                   ),
                                 );
                               },
-                              itemBuilder: (context, post, index) {
-                                final user =
-                                    context.read<UserCubit>().state.data;
-
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                TwitterPostDetails(
-                                                  postId: post.thread!.id,
-                                                )));
-                                  },
-                                  child: TwitterPostCard(
-
-                                    onRepost: () => cubit.onRepost(postId: post.id),
-                                    isDetailed: false,
-                                    post: post,
-                                    shareSuccess: shareSuccess,
-                                    onReact: () async {
-                                      final ok = await cubit.onReact(
-                                        params: TwitterPostReactParams(
-                                            postId: post.id, react: 'love'),
-                                      );
-                                      if (ok == true) {
-                                        final list = controller.itemList;
-                                        if (list != null &&
-                                            index < list.length) {
-                                          final p = list[index];
-
-                                           final wasLiked = p.isLiked ?? false;
-                                          p.isLiked = !wasLiked;
-
-                                           final current = p.loveCount ?? 0;
-                                          p.loveCount = wasLiked
-                                              ? (current > 0 ? current - 1 : 0)
-                                              : current + 1;
-
-                                          controller.notifyListeners();
-                                        }
-                                      }
-                                    },
-                                    onShare: () {
-                                      final idToShare =
-                                          (post.isShared == true &&
-                                                  post.mainPost != null)
-                                              ? post.mainPost!.id
-                                              : post.id;
-                                      cubit.onShare(postId: idToShare);
-                                      if (cubit.state.shareSuccess == true) {
-                                        showSuccessMessage(
-                                          context,
-                                          LocaleKeys
-                                              .postSharedSuccessfully.localize,
-                                        );
-                                      }
-                                    },
-                                    showPostComments: (String _) {
-                                      bottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        widget: BlocProvider<TwitterCubit>(
-                                          create: (_) => serviceLocator<TwitterCubit>()..loadComments(context, post.id),
-                                          child: TwitterPostComments(
-                                            comments: const [],
-                                            postId: post.id,
-                                            user: user,
-                                            onAddComment: (TwitterPostCommentParams params) =>
-                                                cubit.onPostComment(params: params),
-                                            onAddReply: (TwitterCommentReplyParams params) async =>
-                                                cubit.onCommentReply(params: params),
-                                            onCommentReact: (TwitterCommentReactParams params) =>
-                                                cubit.onCommentReact(params: params),
-                                            onGetReplies: (String id, TwitterPostCommentEntity c) async {},
-                                            newCommentId: '',
-                                            state: cubit.state,
-                                            onReport: (TwitterReportParams params) => cubit.onReport(params),
-                                            onEditComment: (TwitterPostCommentParams params) async =>
-                                                cubit.editComment(params: params),
-                                            onDeleteComment: (id) async => cubit.deleteComment(
-                                              context: context,
-                                              commentId: id,
-                                              postId: post.id,
-                                              from: 'posts',
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    getPost: () {},
-                                    onReport: (TwitterReportParams params) =>
-                                        cubit.onReport(params),
-                                    deletePost: (String id) =>
-                                        cubit.deletePost(
-                                        context: context, postId: id),
-                                    hidePost: (String id) => cubit.hidePost(
-                                        context: context, postId: id),
-                                    onDeleteComment: (String id) async =>
-                                        cubit.deleteComment(
-                                      context: context,
-                                      commentId: id,
-                                      postId: post.id,
-                                      from: 'details',
-                                    ),
-                                    onEditComment: (params) async =>
-                                        cubit.editComment(params: params),
-                                  ),
-                                );
-                              })),
+                              getPost: () {},
+                              onReport: (params) => cubit.onReport(params),
+                              deletePost: (id) => cubit.deletePost(context: context, postId: id),
+                              hidePost: (id) => cubit.hidePost(context: context, postId: id),
+                              onDeleteComment: (id) async => cubit.deleteComment(
+                                context: context,
+                                commentId: id,
+                                postId: post.id,
+                                from: 'details',
+                              ),
+                              onEditComment: (params) async => cubit.editComment(params: params),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              PositionedDirectional(
+
+                    // Optional bottom padding
+                    const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                  ],
+                ),
+              )
+,              PositionedDirectional(
                 bottom: 10,
                 end: 10,
                 child: CustomElevatedButton(
@@ -618,10 +606,9 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
     );
   }
 
-  Widget _accountRow(TwitterPostEntity entity, String date,
-      {bool sharedHeader = false})
-  {
+  Widget _accountRow(TwitterPostEntity entity, String date, {bool sharedHeader = false}) {
     final u = entity.user;
+
     String handle = '';
     String displayName = '';
     String? avatar;
@@ -633,18 +620,18 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
         avatar = u.avatarUrl;
       } else if (u is Map) {
         final first = (u['firstName'] ?? '').toString();
-        final last = (u['lastName'] ?? '').toString();
+        final last  = (u['lastName'] ?? '').toString();
         displayName = '$first $last'.trim();
+
         final userName = (u['userName'] ?? u['username'] ?? '').toString();
         if (userName.isNotEmpty) {
           handle = userName;
         } else {
           final email = (u['email'] ?? '').toString();
-          handle = email.contains('@')
-              ? email.split('@').first
-              : (u['_id'] ?? '').toString();
+          handle = email.contains('@') ? email.split('@').first : (u['_id'] ?? '').toString();
         }
-        final imageUrl = (u['image'] ?? '').toString();
+
+        final imageUrl = (u['image'] ?? u['profilePictureUrl'] ?? '').toString();
         if (imageUrl.isNotEmpty) {
           avatar = imageUrl;
         } else {
@@ -660,63 +647,65 @@ class _TwitterPostCardState extends State<TwitterPostCard> {
       }
     } catch (_) {}
 
+    // ✅ safe fallbacks
+    final safeAvatar = (avatar ?? '').trim();
+    final baseForLetter = displayName.isNotEmpty
+        ? displayName
+        : (handle.isNotEmpty ? handle : '?');
+    final String firstChar =
+    baseForLetter.trim().isNotEmpty ? baseForLetter.trim()[0].toUpperCase() : '?';
+
+    // If you want to auto-mark svg:
+    final bool isSvg = safeAvatar.toLowerCase().endsWith('.svg');
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InkWell(
-          onTap: () {
-            final snapshot = _profileFromAnyUser(entity.user);
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => BlocProvider<TwitterCubit>(
-                  create: (_) => serviceLocator<TwitterCubit>(),
-                  child: TwitterPersonalProfile(
-                     initialProfile: snapshot,
-                  ),
-                ),
-              ),
-            );
-          },
-          child: ClipOval(
-            child: SizedBox(
+        // 👇 use your widget here (no null-asserts)
+        ClipOval(
+          child: SizedBox(
+            width: 40,
+            height: 40,
+            child: ImageFromInternet(
+              image: safeAvatar.isEmpty ? 'about:blank' : safeAvatar, // invalid url triggers errorWidget
               width: 40,
               height: 40,
-              child: (avatar ?? '').isEmpty
-                  ? Image.asset(Assets.avatarRemovebackground,
-                      fit: BoxFit.cover)
-                  : Image.network(
-                      avatar!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          Image.asset(Assets.addImage, fit: BoxFit.cover),
-                    ),
+              isCircle: true,
+              fit: BoxFit.cover,
+              isSvg: isSvg,
+              // If the image fails, your widget shows gender icon + a small circle with this char
+              // (you can set isMale based on your user object if needed)
+              isMale: true,
+              firstChar: firstChar,
+              charPadding: 5,
             ),
           ),
         ),
+
         const SizedBox(width: 8),
+
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Row(
+            Row(
               children: [
                 Text(
                   displayName.isNotEmpty ? displayName : handle,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 15),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(width: 6),
-                if (isVerified(u))
-                  const Icon(Icons.verified, color: Colors.blue, size: 16),
+                if (isVerified(u)) const Icon(Icons.verified, color: Colors.blue, size: 16),
               ],
             ),
+            if (handle.isNotEmpty)
+              const SizedBox(height: 2),
             if (handle.isNotEmpty)
               Text('@$handle', style: const TextStyle(color: Colors.grey)),
           ],
         ),
-Spacer(),
+
+        const Spacer(),
 
         IconAppButton(
           icon: Icons.more_vert,
@@ -726,35 +715,158 @@ Spacer(),
             _showPostOptions(context, entity);
           },
         ),
-
       ],
     );
   }
 
+
+
   bool _isMine(TwitterPostEntity entity) {
+    String log(String msg) {
+      if (kDebugMode) debugPrint('[isMine] $msg');
+      return msg;
+    }
+
     try {
       final me = context.read<UserCubit>().state.data;
-      if (me == null) return false;
+      final myId = (me?.id ?? '').toString().trim();
+      log('--- CHECK START ---');
+      log('myId="$myId"  isShared=${entity.isShared}  post.id=${entity.id}');
 
-      final u = entity.user;
-      if (u is TwitterUserModel) {
-        return (u.id?.toString() ?? '') == (me.id?.toString() ?? '');
-      } else if (u is Map) {
-        final src = (u['originalPost']?['owner'] is Map)
-            ? u['originalPost']['owner'] as Map
-            : (u['owner'] is Map ? u['owner'] as Map : u);
-
-        final ownerId = (src['_id'] ?? src['id'] ?? '').toString();
-        final myId    = (me.id ?? '').toString();
-        return ownerId.isNotEmpty && ownerId == myId;
+      if (myId.isEmpty) {
+        log('⛔ myId empty -> return false');
+        return false;
       }
-    } catch (_) {}
-    return false;
+
+      String? pickId(Map m, {String label = 'map'}) {
+        final candidates = ['userId', '_id', 'id'];
+        for (final k in candidates) {
+          final v = m[k];
+          if (v != null && v.toString().trim().isNotEmpty) {
+            log('✔ pickId($label): found key "$k" -> ${v.toString().trim()}');
+            return v.toString().trim();
+          }
+        }
+        log('✖ pickId($label): no id key found in ${m.keys}');
+        return null;
+      }
+
+      String? idFromDynamicUser(dynamic u, {String label = 'user'}) {
+        if (u == null) {
+          log('idFromDynamicUser($label): null');
+          return null;
+        }
+
+        if (u is TwitterUserModel) {
+          final v = (u.id ?? '').toString().trim();
+          log('idFromDynamicUser($label): TwitterUserModel id="$v"');
+          return v.isNotEmpty ? v : null;
+        }
+
+        if (u is Map) {
+          log('idFromDynamicUser($label): Map keys=${u.keys}');
+          // 1) direct
+          final direct = pickId(u, label: '$label.direct');
+          if (direct != null) return direct;
+
+          // 2) owner
+          final owner = u['owner'];
+          if (owner is Map) {
+            log('idFromDynamicUser($label): has owner Map');
+            final v = pickId(owner, label: '$label.owner');
+            if (v != null) return v;
+          }
+
+          // 3) originalPost.owner
+          final originalPost = u['originalPost'];
+          if (originalPost is Map) {
+            log('idFromDynamicUser($label): has originalPost Map');
+            final o = originalPost['owner'];
+            if (o is Map) {
+              final v = pickId(o, label: '$label.originalPost.owner');
+              if (v != null) return v;
+            } else {
+              log('idFromDynamicUser($label): originalPost.owner not Map ($o)');
+            }
+          }
+        } else {
+          log('idFromDynamicUser($label): unsupported type ${u.runtimeType}');
+        }
+        return null;
+      }
+
+      // 1) if shared, prefer main/original post owner
+      if (entity.isShared == true) {
+        log('Shared post detected -> checking mainPost');
+        if (entity.mainPost is TwitterPostEntity) {
+          final mp = entity.mainPost as TwitterPostEntity;
+          final id = idFromDynamicUser(mp.user, label: 'mainPost.user');
+          log('mainPost.user ownerId="$id" vs myId="$myId"');
+          if (id != null) {
+            final eq = id == myId;
+            log(eq ? '✅ MATCH (mainPost.user)' : '❌ NOT MATCH (mainPost.user)');
+            return eq;
+          }
+        } else if (entity.mainPost is Map) {
+          final mp = entity.mainPost as Map;
+          log('mainPost is Map, keys=${mp.keys}');
+          final id = idFromDynamicUser(mp['user'] ?? mp['owner'] ?? mp, label: 'mainPost.map');
+          log('mainPost.map ownerId="$id" vs myId="$myId"');
+          if (id != null) {
+            final eq = id == myId;
+            log(eq ? '✅ MATCH (mainPost.map)' : '❌ NOT MATCH (mainPost.map)');
+            return eq;
+          }
+        } else {
+          log('mainPost type=${entity.mainPost.runtimeType}');
+        }
+      }
+
+      // 2) fallback to this post's user/owner
+      final id = idFromDynamicUser(entity.user, label: 'entity.user');
+      log('entity.user ownerId="$id" vs myId="$myId"');
+      if (id != null) {
+        final eq = id == myId;
+        log(eq ? '✅ MATCH (entity.user)' : '❌ NOT MATCH (entity.user)');
+        return eq;
+      }
+
+      // 3) last resort: try loose "owner" on the entity (if any dynamic backing)
+      try {
+        final dyn = entity as dynamic;
+        final owner = dyn.owner;
+        if (owner is Map) {
+          final v = pickId(owner, label: 'entity.owner');
+          log('entity.owner ownerId="$v" vs myId="$myId"');
+          if (v != null) {
+            final eq = v == myId;
+            log(eq ? '✅ MATCH (entity.owner)' : '❌ NOT MATCH (entity.owner)');
+            return eq;
+          }
+        } else {
+          log('entity.owner not Map (${owner.runtimeType})');
+        }
+      } catch (e) {
+        log('entity.owner access failed: $e');
+      }
+
+      log('➡️ result: false (no owner matched)');
+      return false;
+    } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('[isMine] EXCEPTION: $e');
+        debugPrint('[isMine] STACK    : $st');
+      }
+      return false;
+    } finally {
+      if (kDebugMode) debugPrint('[isMine] --- CHECK END ---');
+    }
   }
 
   void _showPostOptions(BuildContext context, TwitterPostEntity entity) async {
     final isMine = _isMine(entity);
-
+print("///////////////////////////");
+print(isMine);
     await showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -865,11 +977,26 @@ Spacer(),
     );
   }
 
+  String toArabicDigitsInt(int n) {
+    const eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    final s = n.toString();
+    final b = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      final code = s.codeUnitAt(i);
+      if (code >= 48 && code <= 57) { // '0'..'9'
+        b.write(eastern[code - 48]);
+      } else {
+        b.writeCharCode(code);
+      }
+    }
+    return b.toString();
+  }
   Widget _stats(TwitterPostEntity t) {
-    final replies = (t.commentsCount ?? 0);
-    final reposts = (t.repostCount ?? 0);
-    final likes   = (t.loveCount ?? t.love?.length ?? 0);
-    final shares  = (t.sharesCount ?? 0);
+    final replies = (t.commentsCount ?? 0).toInt();
+    final reposts = (t.repostCount ?? 0).toInt();
+    final likes   = ((t.loveCount ?? t.love?.length ?? 0) as num).toInt();
+    final shares  = (t.sharesCount ?? 0).toInt();
+
     final isReact = t.isLiked ?? false;
 
     return Padding(
@@ -879,7 +1006,7 @@ Spacer(),
           Expanded(
             child: _statItem(
               icon: Icons.mode_comment_outlined,
-              label: '$replies',
+              label: toArabicDigitsInt(replies),     // <<<<<< HERE
               onTap: () {
                 if (!canInteract) return;
                 widget.showPostComments(t.id);
@@ -890,7 +1017,7 @@ Spacer(),
             child: _statItem(
               icon: isReact ? Icons.favorite : Icons.favorite_outline,
               iconColor: isReact ? Colors.red : Colors.grey,
-              label: '$likes',
+              label: toArabicDigitsInt(likes),       // <<<<<< HERE
               onTap: () {
                 if (!canInteract) return;
                 widget.onReact();
@@ -900,8 +1027,8 @@ Spacer(),
           Expanded(
             child: _statItem(
               icon: FontAwesomeIcons.retweet,
-              iconColor: t.yourReposted == true ? Colors.green : Colors.grey,
-              label: '${reposts ?? 0}',
+              iconColor: t.yourReposted == true ? AppColors.PRIMARY_COLOR : Colors.grey,
+              label: toArabicDigitsInt(reposts),     // <<<<<< HERE
               onTap: () {
                 if (!canInteract) return;
                 widget.onRepost();
@@ -911,7 +1038,7 @@ Spacer(),
           Expanded(
             child: _statItem(
               icon: Icons.share_outlined,
-              label: '$shares',
+              label: toArabicDigitsInt(shares),      // <<<<<< HERE
               onTap: () {
                 if (!canInteract) return;
                 widget.onShare();
@@ -936,7 +1063,7 @@ Spacer(),
         children: [
           Icon(icon, size: 16, color: iconColor ?? Colors.grey),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(color: Colors.grey)),
+          Text(label, style:   TextStyle(color:iconColor ?? Colors.grey)),
         ],
       ),
     );

@@ -130,6 +130,11 @@ class _TwitterPostDetailsState extends State<TwitterPostDetails> {
         toolbarHeight: 100.h,
         title: Text(LocaleKeys.post.localize),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        leading:    IconButton(onPressed: (){
+          Navigator.pop(context);
+        }, icon:Icon(Icons.arrow_back)),
       ),
       body: BlocProvider.value(
         value: _cubit,
