@@ -94,4 +94,19 @@ class ChanceRepositoryImpl extends ChanceRepository {
   Future<Either<Failure, List<ChanceAdEntity>>> getMyChanceAds() {
     return _chanceRemoteDataSource.getMyChanceAds();
   }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> getExpiredChanceAds() {
+    return _chanceRemoteDataSource.getExpiredChanceAds();
+  }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getChanceAdWinners(String adId) {
+    return _chanceRemoteDataSource.getChanceAdWinners(adId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> incrementChanceAdView(String adId) {
+    return _chanceRemoteDataSource.incrementChanceAdView(adId);
+  }
 }

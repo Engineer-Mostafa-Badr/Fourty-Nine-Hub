@@ -16,6 +16,9 @@ import '../../../domain/use_case/search_chance_ads_use_case.dart';
 import '../../../domain/use_case/toggle_chance_ad_favorite_use_case.dart';
 import '../../../domain/use_case/get_favorite_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_my_chance_ads_use_case.dart';
+import '../../../domain/use_case/get_expired_chance_ads_use_case.dart';
+import '../../../domain/use_case/get_chance_ad_winners_use_case.dart';
+import '../../../domain/use_case/increment_chance_ad_view_use_case.dart';
 import 'chance_states.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -35,6 +38,9 @@ class ChanceCubit extends Cubit<ChanceState> {
   final ToggleChanceAdFavoriteUseCase _toggleChanceAdFavoriteUseCase;
   final GetFavoriteChanceAdsUseCase _getFavoriteChanceAdsUseCase;
   final GetMyChanceAdsUseCase _getMyChanceAdsUseCase;
+  final GetExpiredChanceAdsUseCase _getExpiredChanceAdsUseCase;
+  final GetChanceAdWinnersUseCase _getChanceAdWinnersUseCase;
+  final IncrementChanceAdViewUseCase _incrementChanceAdViewUseCase;
 
   ChanceCubit(
     this._fetchChanceUseCase,
@@ -50,6 +56,9 @@ class ChanceCubit extends Cubit<ChanceState> {
     this._toggleChanceAdFavoriteUseCase,
     this._getFavoriteChanceAdsUseCase,
     this._getMyChanceAdsUseCase,
+    this._getExpiredChanceAdsUseCase,
+    this._getChanceAdWinnersUseCase,
+    this._incrementChanceAdViewUseCase,
   ) : super(const ChanceState());
 
   // Future<void> fetchChance() async {
@@ -294,13 +303,29 @@ class ChanceCubit extends Cubit<ChanceState> {
     if (state.chanceAds != null) {
       final updatedChanceAds = state.chanceAds!.map((ad) {
         if (ad.id == adId) {
-          // Create a new instance with updated favorite status
-          // Note: You might need to add a copyWith method to ChanceAdEntity
-          return ad; // For now, return the same ad
+          return ad.copyWith(isFavorite: isFavorite);
         }
         return ad;
       }).toList();
       emit(state.copyWith(chanceAds: updatedChanceAds));
+    }
+
+    // Update in favoriteChanceAds list if it exists
+    if (state.favoriteChanceAds != null) {
+      final updatedFavoriteAds = state.favoriteChanceAds!.map((ad) {
+        if (ad.id == adId) {
+          return ad.copyWith(isFavorite: isFavorite);
+        }
+        return ad;
+      }).toList();
+      emit(state.copyWith(favoriteChanceAds: updatedFavoriteAds));
+    }
+
+    // Update in chanceAdDetails if it exists and matches the adId
+    if (state.chanceAdDetails != null && state.chanceAdDetails!.id == adId) {
+      final updatedDetails =
+          state.chanceAdDetails!.copyWith(isFavorite: isFavorite);
+      emit(state.copyWith(chanceAdDetails: updatedDetails));
     }
   }
 
@@ -357,5 +382,66 @@ class ChanceCubit extends Cubit<ChanceState> {
         ));
       },
     );
+  }
+
+  Future<void> getExpiredChanceAds() async {
+    emit(state.copyWith(status: ChanceStates.loading));
+    final response = await _getExpiredChanceAdsUseCase(const NoParams());
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (expiredAds) {
+        emit(state.copyWith(
+          expiredChanceAds: expiredAds,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>?> getWinnerData(String adId) async {
+    try {
+      final result = await _getChanceAdWinnersUseCase(adId);
+      return result.fold(
+        (failure) {
+          print('ERROR getting winner data: ${failure.toString()}');
+          return null;
+        },
+        (winners) {
+          if (winners.isNotEmpty) {
+            final winner = winners.first;
+            return {
+              'name':
+                  '${winner['userId']['firstName']} ${winner['userId']['lastName']}',
+              'profilePicture': winner['userId']['USER_PROFILE']
+                  ?['profilePictureKey']?['mediaKey'],
+              'amount': winner['amount'],
+            };
+          }
+          return null;
+        },
+      );
+    } catch (e) {
+      print('ERROR in getWinnerData: $e');
+      return null;
+    }
+  }
+
+  Future<void> incrementChanceAdView(String adId) async {
+    print('ChanceCubit: incrementChanceAdView called with adId: $adId');
+    try {
+      final result = await _incrementChanceAdViewUseCase(adId);
+      result.fold(
+        (failure) => print('ERROR incrementing view: ${failure.toString()}'),
+        (success) => print('SUCCESS: View count incremented'),
+      );
+    } catch (e) {
+      print('EXCEPTION in incrementChanceAdView: $e');
+    }
   }
 }

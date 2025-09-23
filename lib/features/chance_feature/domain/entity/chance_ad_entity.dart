@@ -23,6 +23,8 @@ class ChanceAdEntity {
   final String createdAt;
   final String updatedAt;
   final int? contributorsCount;
+  final bool isFavorite;
+  final double? userContribution;
 
   ChanceAdEntity({
     required this.id,
@@ -47,5 +49,61 @@ class ChanceAdEntity {
     required this.createdAt,
     required this.updatedAt,
     this.contributorsCount,
+    this.isFavorite = false,
+    this.userContribution,
   });
+
+  ChanceAdEntity copyWith({
+    String? id,
+    dynamic winnerId,
+    List<ImageChanceEntity>? images,
+    String? description,
+    String? title,
+    double? price,
+    bool? isActive,
+    bool? isRejected,
+    bool? isBlocked,
+    bool? isBanned,
+    dynamic subCategoryId,
+    dynamic mainCategoryId,
+    dynamic userId,
+    double? totalContributions,
+    int? contributors,
+    bool? isComplete,
+    int? cycleWinner,
+    double? adPercentage,
+    int? views,
+    String? createdAt,
+    String? updatedAt,
+    int? contributorsCount,
+    bool? isFavorite,
+    double? userContribution,
+  }) {
+    return ChanceAdEntity(
+      id: id ?? this.id,
+      winnerId: winnerId ?? this.winnerId,
+      images: images ?? this.images,
+      description: description ?? this.description,
+      title: title ?? this.title,
+      price: price ?? this.price,
+      isActive: isActive ?? this.isActive,
+      isRejected: isRejected ?? this.isRejected,
+      isBlocked: isBlocked ?? this.isBlocked,
+      isBanned: isBanned ?? this.isBanned,
+      subCategoryId: subCategoryId ?? this.subCategoryId,
+      mainCategoryId: mainCategoryId ?? this.mainCategoryId,
+      userId: userId ?? this.userId,
+      totalContributions: totalContributions ?? this.totalContributions,
+      contributors: contributors ?? this.contributors,
+      isComplete: isComplete ?? this.isComplete,
+      cycleWinner: cycleWinner ?? this.cycleWinner,
+      adPercentage: adPercentage ?? this.adPercentage,
+      views: views ?? this.views,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      contributorsCount: contributorsCount ?? this.contributorsCount,
+      isFavorite: isFavorite ?? this.isFavorite,
+      userContribution: userContribution ?? this.userContribution,
+    );
+  }
 }

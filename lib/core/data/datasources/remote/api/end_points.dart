@@ -1476,30 +1476,32 @@ class EndPoints {
   }
 
   // New Chance Ads Endpoints
-  static const createChanceAd = '/api/v1/chanceAds/create';
-  static const joinChanceAd = '/api/v1/chanceAds/join';
+  static const createChanceAd = '/chanceAds/create';
+  static const joinChanceAd = '/chanceAds/join';
 
   static String getAllChanceAds({int limit = 10, int page = 1}) =>
-      '/api/v1/chanceAds/?limit=$limit&page=$page';
+      '/chanceAds/?limit=$limit&page=$page';
 
-  static String getChanceAdDetails(String adId) =>
-      '/api/v1/chanceAds/$adId';
+  static String getChanceAdDetails(String adId) => '/chanceAds/$adId';
 
-  static String getChanceAdContributors(String adId, {int limit = 10, int page = 1}) =>
-      '/api/v1/chanceAds/$adId/Participants?limit=$limit&page=$page';
+  static String incrementChanceAdView(String adId) => '/chanceAds/$adId';
+
+  static String getChanceAdContributors(String adId,
+          {int limit = 10, int page = 1}) =>
+      '/chanceAds/$adId/Participants?limit=$limit&page=$page';
 
   static String getExpiredChanceAds({int limit = 10, int page = 1}) =>
-      '/api/v1/chanceAds/chance/expired?limit=$limit&page=$page';
+      '/chanceAds/chance/expired?limit=$limit&page=$page';
 
-  static const getMyChanceAds = '/api/v1/chanceAds/ads/user';
+  static const getMyChanceAds = '/chanceAds/ads/user';
 
   static String searchChanceAds(String keyword) =>
-      '/api/v1/chanceAds/ads/search?keyword=$keyword';
+      '/chanceAds/ads/search?keyword=$keyword';
 
   static String toggleChanceAdFavorite(String adId) =>
-      '/api/v1/chanceAds/favorite/$adId/toggle';
+      '/chanceAds/favorite/$adId/toggle';
 
-  static const getFavoriteChanceAds = '/api/v1/chanceAds/user/favorites';
+  static const getFavoriteChanceAds = '/chanceAds/user/favorites';
 
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';

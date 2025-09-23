@@ -22,12 +22,10 @@ class CreateChanceView extends StatelessWidget {
             label: LocaleKeys.CreateChance.localize,
           ),
         ),
-        body: BlocProvider<ChanceCubit>(
-            create: (BuildContext context) => serviceLocator(),
-            child: BlocBuilder<ChanceCubit, ChanceState>(
-              builder: (BuildContext context, state) {
-                return const CreateChanceViewBody();
-              },
-            )));
+        body: BlocBuilder<ChanceCubit, ChanceState>(
+          builder: (BuildContext context, state) {
+            return const CreateChanceViewBody();
+          },
+        ));
   }
 }

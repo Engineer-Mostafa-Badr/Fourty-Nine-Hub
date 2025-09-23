@@ -7,15 +7,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'dart:ui';
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
 import '../../domain/entity/chance_ad_entity.dart';
+import '../../domain/use_case/join_chance_ad_use_case.dart';
 import '../../../../service_locator/chance_service_locator.dart';
 
 import '../../../star_feature/presentation/widgets/talent_card/sticky_tab_bar_delegate.dart';
+import '../widgets/floating_action_button_widget.dart';
 import 'chance_detail_view.dart';
+import 'chance_ad_details_view.dart';
 
 enum ChanceStatus { available, winner, ended }
 
@@ -27,7 +31,9 @@ class ChanceMainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => serviceLocator<ChanceCubit>()..getAllChanceAds(),
-      child: const _ChanceMainViewBody(),
+      child: Builder(
+        builder: (context) => const _ChanceMainViewBody(),
+      ),
     );
   }
 }
@@ -46,6 +52,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   bool _isCategoriesVisible = false;
   final TextEditingController _searchController = TextEditingController();
   int _selectedTabIndex = 0;
+  Timer? _refreshTimer;
 
   @override
   void initState() {
@@ -53,6 +60,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_onTabChanged);
     _searchController.addListener(_onSearchChanged);
+
+    // Auto refresh data every 30 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted && !_isSearching) {
+        _refreshChanceAds();
+      }
+    });
   }
 
   void _onTabChanged() {
@@ -69,11 +83,14 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       case 1: // Favorite
         context.read<ChanceCubit>().getFavoriteChanceAds();
         break;
+      case 2: // Expire
+        context.read<ChanceCubit>().getExpiredChanceAds();
+        break;
       case 3: // My Talent
         context.read<ChanceCubit>().getMyChanceAds();
         break;
       default:
-        // Available tab or History - data already loaded
+        // Available tab - data already loaded
         break;
     }
   }
@@ -102,99 +119,132 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChanceCubit, ChanceState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.grey[50],
-          body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            // Header AppBar
-            SliverAppBar(
-              pinned: true,
-              floating: false,
-              snap: false,
-              elevation: 0,
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: Colors.white,
-              toolbarHeight: 30.h,
-              titleSpacing: 24.w,
-              leading: Icon(Icons.arrow_back_ios,
-                  size: 28.sp, color: Colors.black87),
-              centerTitle: false,
-              title: Text(
-                context.isArabic ? 'فرصة' : 'Chance',
-                style: TextStyle(
-                  fontSize: 30.sp,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black87,
-                ),
-              ),
-              actions: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '(22/1500) ${context.isArabic ? 'فائز' : 'Winner'}',
-                        style: TextStyle(
-                          fontSize: 22.sp,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.bold,
+    return BlocListener<ChanceCubit, ChanceState>(
+      listener: (context, state) {
+        if (state.status == ChanceStates.joinSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم الانضمام للفرصة بنجاح!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          _refreshChanceAds();
+        } else if (state.status == ChanceStates.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('فشل في الانضمام للفرصة، حاول مرة أخرى'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: BlocBuilder<ChanceCubit, ChanceState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: Colors.grey[50],
+            body: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  // Header AppBar
+                  SliverAppBar(
+                    pinned: true,
+                    floating: false,
+                    snap: false,
+                    elevation: 0,
+                    surfaceTintColor: Colors.transparent,
+                    backgroundColor: Colors.white,
+                    toolbarHeight: 30.h,
+                    titleSpacing: 24.w,
+                    leading: Icon(Icons.arrow_back_ios,
+                        size: 28.sp, color: Colors.black87),
+                    centerTitle: false,
+                    title: Text(
+                      context.isArabic ? 'فرصة' : 'Chance',
+                      style: TextStyle(
+                        fontSize: 30.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    actions: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              '(22/1500) ${context.isArabic ? 'فائز' : 'Winner'}',
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            Text('🏆', style: TextStyle(fontSize: 28.sp)),
+                          ],
                         ),
                       ),
-                      SizedBox(width: 8.w),
-                      Text('🏆', style: TextStyle(fontSize: 28.sp)),
                     ],
                   ),
-                ),
-              ],
+
+                  // Banner - يختفي مع الـ scroll عند البحث
+                  if (!_isSearching)
+                    SliverToBoxAdapter(
+                      child: _buildBanner(),
+                    ),
+
+                  // Categories Section (if visible during search)
+                  if (_isCategoriesVisible && _isSearching)
+                    SliverToBoxAdapter(
+                      child: _buildCategoriesSection(),
+                    ),
+
+                  // Sticky Tabs - Normal state
+                  if (!_isSearching)
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: StickyTabBarDelegate(
+                        tabController: _tabController,
+                        context: context,
+                        onSearchTap: _toggleSearch,
+                        showSearchField: false,
+                        tabTitles: [
+                          context.isArabic ? 'متاح' : 'Available',
+                          context.isArabic ? 'مفضلة' : 'Favorite',
+                          context.isArabic ? 'منتهي' : 'Expire',
+                          context.isArabic ? 'موهبتي' : 'My Talent',
+                        ],
+                      ),
+                    ),
+
+                  // Sticky Tabs - Search state
+                  if (_isSearching)
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: StickyTabBarDelegate(
+                        tabController: _tabController,
+                        context: context,
+                        onSearchTap: _toggleSearch,
+                        showSearchField: true,
+                        searchController: _searchController,
+                        tabTitles: [
+                          context.isArabic ? 'متاح' : 'Available',
+                          context.isArabic ? 'مفضلة' : 'Favorite',
+                          context.isArabic ? 'منتهي' : 'Expire',
+                          context.isArabic ? 'موهبتي' : 'My Talent',
+                        ],
+                        // onSearchChanged: _onSearchChanged,
+                      ),
+                    ),
+                ];
+              },
+              body: _buildTabContent(state),
             ),
-
-            // Banner - يختفي مع الـ scroll عند البحث
-            if (!_isSearching)
-              SliverToBoxAdapter(
-                child: _buildBanner(),
-              ),
-
-            // Categories Section (if visible during search)
-            if (_isCategoriesVisible && _isSearching)
-              SliverToBoxAdapter(
-                child: _buildCategoriesSection(),
-              ),
-
-            // Sticky Tabs - Normal state
-            if (!_isSearching)
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: StickyTabBarDelegate(
-                  tabController: _tabController,
-                  context: context,
-                  onSearchTap: _toggleSearch,
-                  showSearchField: false,
-                ),
-              ),
-
-            // Sticky Tabs - Search state
-            if (_isSearching)
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: StickyTabBarDelegate(
-                  tabController: _tabController,
-                  context: context,
-                  onSearchTap: _toggleSearch,
-                  showSearchField: true,
-                  searchController: _searchController,
-                  // onSearchChanged: _onSearchChanged,
-                ),
-              ),
-          ];
+            floatingActionButton: FloatingActionButtonWidget(),
+          );
         },
-        body: _buildTabContent(state),
       ),
-        );
-      },
     );
   }
 
@@ -302,8 +352,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
         return _buildAvailableTab(state);
       case 1: // Favorite
         return _buildFavoriteTab(state);
-      case 2: // History
-        return _buildHistoryTab(state);
+      case 2: // Expire
+        return _buildExpireTab(state);
       case 3: // My Talent
         return _buildMyTalentTab(state);
       default:
@@ -312,9 +362,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   }
 
   Widget _buildAvailableTab(ChanceState state) {
-    final List<ChanceAdEntity> ads = _isSearching && _searchController.text.isNotEmpty
-        ? (state.searchResults ?? [])
-        : (state.chanceAds ?? []);
+    final List<ChanceAdEntity> ads =
+        _isSearching && _searchController.text.isNotEmpty
+            ? (state.searchResults ?? [])
+            : (state.chanceAds ?? []);
 
     if (ads.isEmpty) {
       return const Center(
@@ -367,16 +418,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     );
   }
 
-  Widget _buildHistoryTab(ChanceState state) {
-    // For now, show completed ads from main list
-    final List<ChanceAdEntity> historyAds = (state.chanceAds ?? [])
-        .where((ad) => ad.isComplete)
-        .toList();
+  Widget _buildExpireTab(ChanceState state) {
+    final List<ChanceAdEntity> expiredAds = state.expiredChanceAds ?? [];
 
-    if (historyAds.isEmpty) {
+    if (expiredAds.isEmpty) {
       return const Center(
         child: Text(
-          'لا توجد إعلانات مكتملة',
+          'لا توجد إعلانات منتهية',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
@@ -387,10 +435,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              final ad = historyAds[index];
-              return _buildChanceCardFromEntity(ad);
+              final ad = expiredAds[index];
+              return _buildExpiredChanceCard(ad);
             },
-            childCount: historyAds.length,
+            childCount: expiredAds.length,
           ),
         ),
       ],
@@ -442,11 +490,49 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       progress: progress.clamp(0.0, 1.0),
       participants: ad.contributors,
       views: ad.views,
-      images: imageUrls.isNotEmpty ? imageUrls : ['https://via.placeholder.com/400x300'],
+      images: imageUrls.isNotEmpty
+          ? imageUrls
+          : ['https://via.placeholder.com/400x300'],
       status: status,
-      isFavorite: isFavorite,
+      isFavorite: ad.isFavorite, // Use actual favorite status from entity
       isMyChance: isMyChance,
       adId: ad.id,
+      chanceAd: ad,
+    );
+  }
+
+  Widget _buildExpiredChanceCard(ChanceAdEntity ad) {
+    final List<String> imageUrls = ad.images.map((img) => img.photo).toList();
+    final double progress = ad.totalContributions / ad.price;
+    final ChanceStatus status =
+        ad.winnerId != null ? ChanceStatus.winner : ChanceStatus.ended;
+
+    // Extract winner name if winnerId is an object
+    String? winnerName;
+    if (ad.winnerId != null && ad.winnerId is Map<String, dynamic>) {
+      final winnerData = ad.winnerId as Map<String, dynamic>;
+      final userData = winnerData['userId'] as Map<String, dynamic>?;
+      if (userData != null) {
+        winnerName = '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'.trim();
+      }
+    }
+
+    return _buildChanceCard(
+      title: ad.title,
+      price: ad.price.toInt(),
+      endDate: 'Ended',
+      progress: progress.clamp(0.0, 1.0),
+      participants: ad.contributors,
+      views: ad.views,
+      images: imageUrls.isNotEmpty
+          ? imageUrls
+          : ['https://via.placeholder.com/400x300'],
+      status: status,
+      isFavorite: ad.isFavorite,
+      isMyChance: false,
+      adId: ad.id,
+      chanceAd: ad,
+      winnerName: winnerName ?? (ad.winnerId != null ? 'Winner Selected' : null),
     );
   }
 
@@ -463,24 +549,35 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     bool isFavorite = false,
     bool isMyChance = false,
     String? adId,
+    ChanceAdEntity? chanceAd,
   }) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChanceDetailView(
-              title: title,
-              price: price,
-              images: images,
-              progress: progress,
-              participants: participants,
-              views: views,
-              description:
-                  'Win a trip to the Maldives Win a trip to the Maldives...',
+      onTap: () async {
+        // Navigate to chance ad details
+        if (adId != null) {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (context) => serviceLocator<ChanceCubit>(),
+                // child: ChanceAdDetailsView(chanceAdId: adId),
+                child: ChanceDetailView(
+                  title: title,
+                  price: price,
+                  images: images,
+                  progress: progress,
+                  participants: participants,
+                  views: views,
+                  description: "",
+                  chanceAd: chanceAd,
+                ),
+              ),
             ),
-          ),
-        );
+          );
+
+          // Refresh data when returning from detail view
+          _refreshChanceAds();
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 28.w, vertical: 16.h),
@@ -532,24 +629,48 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                 Positioned(
                   top: 12.h,
                   left: 12.w,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (adId != null) {
-                        context.read<ChanceCubit>().toggleChanceAdFavorite(adId);
+                  child: BlocBuilder<ChanceCubit, ChanceState>(
+                    builder: (context, state) {
+                      // Get updated favorite status from state
+                      bool currentFavoriteStatus = isFavorite;
+                      if (adId != null && state.chanceAds != null) {
+                        try {
+                          final updatedAd = state.chanceAds!.firstWhere(
+                            (ad) => ad.id == adId,
+                          );
+                          currentFavoriteStatus = updatedAd.isFavorite;
+                        } catch (e) {
+                          // Ad not found in state, keep original favorite status
+                          currentFavoriteStatus = isFavorite;
+                        }
                       }
+
+                      return GestureDetector(
+                        onTap: () {
+                          if (adId != null) {
+                            context
+                                .read<ChanceCubit>()
+                                .toggleChanceAdFavorite(adId);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            currentFavoriteStatus
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: currentFavoriteStatus
+                                ? Colors.red
+                                : Colors.grey,
+                            size: 30.sp,
+                          ),
+                        ),
+                      );
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(8.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: isFavorite ? Colors.red : Colors.grey,
-                        size: 30.sp,
-                      ),
-                    ),
                   ),
                 ),
                 // Carousel Indicators
@@ -666,7 +787,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                                     color: Colors.white, size: 12.sp),
                                 SizedBox(width: 4.w),
                                 Text(
-                                  '${views}K views',
+                                  '${_formatViews(views)} views',
                                   style: TextStyle(
                                     fontSize: 16.sp,
                                     color: Colors.white,
@@ -680,24 +801,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       // Action Button
                       GestureDetector(
                         onTap: () {
-                          if (status == ChanceStatus.winner) {
-                            _showWinnerDialog(winnerName ?? 'Unknown');
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChanceDetailView(
-                                  title: title,
-                                  price: price,
-                                  images: images,
-                                  progress: progress,
-                                  participants: participants,
-                                  views: views,
-                                  description:
-                                      'Win a trip to the Maldives Win a trip to the Maldives...',
-                                ),
-                              ),
-                            );
+                          if (status == ChanceStatus.winner && chanceAd != null) {
+                            _showWinnerDialogFromAd(chanceAd);
+                          } else if (adId != null && chanceAd != null) {
+                            final cubit = context.read<ChanceCubit>();
+                            _showJoinDialog(chanceAd, cubit);
                           }
                         },
                         child: Container(
@@ -732,7 +840,67 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     );
   }
 
-  void _showWinnerDialog(String winnerName) {
+  void _showWinnerDialogFromAd(ChanceAdEntity ad) {
+    String winnerName = 'Winner';
+    String? profilePicture;
+    String amount = '0';
+
+    if (ad.winnerId != null && ad.winnerId is Map<String, dynamic>) {
+      final winnerData = ad.winnerId as Map<String, dynamic>;
+      final userData = winnerData['userId'] as Map<String, dynamic>?;
+
+      if (userData != null) {
+        winnerName = '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'.trim();
+
+        // Get profile picture
+        final userProfile = userData['USER_PROFILE'] as Map<String, dynamic>?;
+        if (userProfile != null) {
+          final profilePictureKey = userProfile['profilePictureKey'] as Map<String, dynamic>?;
+          if (profilePictureKey != null) {
+            profilePicture = profilePictureKey['mediaKey'] as String?;
+          }
+        }
+      }
+
+      // Get amount
+      if (winnerData['amount'] != null) {
+        amount = winnerData['amount'].toString();
+      }
+    }
+
+    _showWinnerDialog(winnerName, profilePicture, amount);
+  }
+
+  void _showWinnerDialogWithData(String adId) async {
+    // Show loading first
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // Get winner data
+    final cubit = context.read<ChanceCubit>();
+    final winnerData = await cubit.getWinnerData(adId);
+
+    // Close loading dialog
+    Navigator.pop(context);
+
+    if (winnerData != null) {
+      _showWinnerDialog(
+        winnerData['name'] ?? 'Unknown',
+        winnerData['profilePicture'],
+        winnerData['amount']?.toString() ?? '0',
+      );
+    } else {
+      _showWinnerDialog('Winner', null, '0');
+    }
+  }
+
+  void _showWinnerDialog(String winnerName,
+      [String? profilePicture, String? amount]) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -770,7 +938,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                             ImageFromInternet(
                               width: 120.w,
                               height: 120.h,
-                              image:
+                              image: profilePicture ??
                                   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
                               isCircle: true,
                               firstChar: winnerName[0].toUpperCase(),
@@ -810,7 +978,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                               ),
                             ),
                             Text(
-                              '10000 EGP',
+                              '${amount ?? '10000'} EGP',
                               style: TextStyle(
                                 fontSize: 24.sp,
                                 color: Colors.white70,
@@ -858,12 +1026,337 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     );
   }
 
+  String _formatViews(int views) {
+    if (views >= 1000000) {
+      return '${(views / 1000000).toStringAsFixed(1)}M';
+    } else if (views >= 1000) {
+      return '${(views / 1000).toStringAsFixed(1)}K';
+    } else {
+      return views.toString();
+    }
+  }
+
+  void _refreshChanceAds() {
+    // Refresh data based on current tab
+    final cubit = context.read<ChanceCubit>();
+
+    switch (_tabController.index) {
+      case 0: // All Ads
+        cubit.getAllChanceAds();
+        break;
+      case 1: // Favorites
+        cubit.getFavoriteChanceAds();
+        break;
+      case 2: // Expire
+        cubit.getExpiredChanceAds();
+        break;
+      case 3: // My Ads
+        cubit.getMyChanceAds();
+        break;
+      default:
+        cubit.getAllChanceAds();
+    }
+  }
+
+  // void _showJoinDialog(ChanceAdEntity chanceAd) {
+  //   final TextEditingController amountController = TextEditingController();
+  //   final cubit = context.read<ChanceCubit>();
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: Colors.transparent,
+  //     isScrollControlled: true,
+  //     builder: (dialogContext) => BlocProvider.value(
+  //       value: cubit,
+  //       child: Container(
+  //         padding: EdgeInsets.only(
+  //           bottom: MediaQuery.of(dialogContext).viewInsets.bottom,
+  //         ),
+  //         decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+  //         ),
+  //         child: Padding(
+  //           padding: EdgeInsets.all(28.w),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               // Handle
+  //               Container(
+  //                 width: 40.w,
+  //                 height: 4.h,
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.grey[300],
+  //                   borderRadius: BorderRadius.circular(2.r),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 20.h),
+  //               // Header
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   Text(
+  //                     'انضم للفرصة',
+  //                     style: TextStyle(
+  //                       fontSize: 18.sp,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Colors.black87,
+  //                     ),
+  //                   ),
+  //                   GestureDetector(
+  //                     onTap: () => Navigator.pop(dialogContext),
+  //                     child: Icon(Icons.close,
+  //                         size: 24.sp, color: Colors.grey[600]),
+  //                   ),
+  //                 ],
+  //               ),
+  //               SizedBox(height: 20.h),
+  //               // Chance info
+  //               Text(
+  //                 chanceAd.title,
+  //                 style: TextStyle(
+  //                   fontSize: 16.sp,
+  //                   fontWeight: FontWeight.w500,
+  //                   color: Colors.black87,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //               SizedBox(height: 16.h),
+  //               // Amount Input
+  //               Container(
+  //                 width: double.infinity,
+  //                 padding: EdgeInsets.all(16.w),
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.grey[100],
+  //                   borderRadius: BorderRadius.circular(8.r),
+  //                 ),
+  //                 child: TextField(
+  //                   controller: amountController,
+  //                   keyboardType:
+  //                       const TextInputType.numberWithOptions(decimal: true),
+  //                   decoration: InputDecoration(
+  //                     hintText: 'أدخل المبلغ بالجنيه',
+  //                     border: InputBorder.none,
+  //                     hintStyle: TextStyle(
+  //                       fontSize: 16.sp,
+  //                       color: Colors.grey[500],
+  //                     ),
+  //                   ),
+  //                   style: TextStyle(
+  //                     fontSize: 16.sp,
+  //                     color: Colors.black87,
+  //                   ),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 20.h),
+  //               // Confirm Button
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 child: ElevatedButton(
+  //                   onPressed: () {
+  //                     final inputText = amountController.text.trim();
+  //                     final amount = double.tryParse(inputText);
+
+  //                     if (inputText.isEmpty) {
+  //                       ScaffoldMessenger.of(dialogContext).showSnackBar(
+  //                         const SnackBar(content: Text('من فضلك أدخل مبلغ')),
+  //                       );
+  //                     } else if (amount == null) {
+  //                       ScaffoldMessenger.of(dialogContext).showSnackBar(
+  //                         const SnackBar(
+  //                             content: Text('من فضلك أدخل رقم صحيح')),
+  //                       );
+  //                     } else if (amount < 1) {
+  //                       ScaffoldMessenger.of(dialogContext).showSnackBar(
+  //                         const SnackBar(
+  //                             content: Text('الحد الأدنى للمساهمة 1 جنيه')),
+  //                       );
+  //                     } else {
+  //                       Navigator.pop(dialogContext);
+  //                       dialogContext.read<ChanceCubit>().joinChanceAd(
+  //                             JoinChanceAdParams(
+  //                               adId: chanceAd.id,
+  //                               amount: amount,
+  //                             ),
+  //                           );
+  //                     }
+  //                   },
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: Colors.red,
+  //                     padding: EdgeInsets.symmetric(vertical: 16.h),
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(8.r),
+  //                     ),
+  //                   ),
+  //                   child: Text(
+  //                     'تأكيد الانضمام',
+  //                     style: TextStyle(
+  //                       fontSize: 16.sp,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  void _showJoinDialog(ChanceAdEntity chanceAd, ChanceCubit chanceCubit) {
+    final TextEditingController amountController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (bottomSheetContext) {
+        return Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(bottomSheetContext).viewInsets.bottom,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(28.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // نفس الـ UI
+                Container(
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'انضم للفرصة',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(bottomSheetContext),
+                      child: Icon(Icons.close,
+                          size: 24.sp, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                Text(
+                  chanceAd.title,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.h),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: TextField(
+                    controller: amountController,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(
+                      hintText: 'أدخل المبلغ بالجنيه',
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final inputText = amountController.text.trim();
+                      final amount = double.tryParse(inputText);
+
+                      if (inputText.isEmpty) {
+                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
+                          const SnackBar(content: Text('من فضلك أدخل مبلغ')),
+                        );
+                      } else if (amount == null) {
+                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
+                          const SnackBar(
+                              content: Text('من فضلك أدخل رقم صحيح')),
+                        );
+                      } else if (amount < 1) {
+                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
+                          const SnackBar(
+                              content: Text('الحد الأدنى للمساهمة 1 جنيه')),
+                        );
+                      } else {
+                        Navigator.pop(bottomSheetContext);
+
+                        // استخدم الـ cubit مباشرة
+                        chanceCubit.joinChanceAd(
+                          JoinChanceAdParams(
+                            adId: chanceAd.id,
+                            amount: amount,
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: Text(
+                      'تأكيد الانضمام',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _searchController.removeListener(_onSearchChanged);
     _tabController.dispose();
     _searchController.dispose();
+    _refreshTimer?.cancel();
     super.dispose();
   }
 }

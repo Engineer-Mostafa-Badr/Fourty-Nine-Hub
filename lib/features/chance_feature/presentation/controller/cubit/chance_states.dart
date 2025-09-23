@@ -20,6 +20,7 @@ class ChanceState extends Equatable {
   final ChanceAdEntity? chanceAdDetails;
   final List<ChanceAdEntity>? favoriteChanceAds;
   final List<ChanceAdEntity>? myChanceAds;
+  final List<ChanceAdEntity>? expiredChanceAds;
   final List<ChanceAdEntity>? searchResults;
   final List<String> uploadedImageIds;
 
@@ -34,6 +35,7 @@ class ChanceState extends Equatable {
     this.chanceAdDetails,
     this.favoriteChanceAds,
     this.myChanceAds,
+    this.expiredChanceAds,
     this.searchResults,
     this.uploadedImageIds = const [],
   });
@@ -49,6 +51,7 @@ class ChanceState extends Equatable {
     ChanceAdEntity? chanceAdDetails,
     List<ChanceAdEntity>? favoriteChanceAds,
     List<ChanceAdEntity>? myChanceAds,
+    List<ChanceAdEntity>? expiredChanceAds,
     List<ChanceAdEntity>? searchResults,
     List<String>? uploadedImageIds,
   }) {
@@ -63,6 +66,7 @@ class ChanceState extends Equatable {
       chanceAdDetails: chanceAdDetails ?? this.chanceAdDetails,
       favoriteChanceAds: favoriteChanceAds ?? this.favoriteChanceAds,
       myChanceAds: myChanceAds ?? this.myChanceAds,
+      expiredChanceAds: expiredChanceAds ?? this.expiredChanceAds,
       searchResults: searchResults ?? this.searchResults,
       uploadedImageIds: uploadedImageIds ?? this.uploadedImageIds,
     );
@@ -72,7 +76,7 @@ class ChanceState extends Equatable {
   List<Object?> get props => [
     status, failure, chance, rate, mainCategory, chanceAds,
     chanceAdsPagination, chanceAdDetails, favoriteChanceAds,
-    myChanceAds, searchResults, uploadedImageIds
+    myChanceAds, expiredChanceAds, searchResults, uploadedImageIds
   ];
 }
 

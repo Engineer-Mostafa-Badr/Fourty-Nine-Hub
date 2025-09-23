@@ -28,6 +28,8 @@ class ChanceAdModel extends ChanceAdEntity {
     required super.createdAt,
     required super.updatedAt,
     super.contributorsCount,
+    super.isFavorite,
+    super.userContribution,
   });
 
   factory ChanceAdModel.fromJson(Map<String, dynamic> json) {
@@ -63,6 +65,8 @@ class ChanceAdModel extends ChanceAdEntity {
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
       contributorsCount: json['contributorsCount'],
+      isFavorite: json['isFavorite'] ?? false,
+      userContribution: (json['userContribution'] as num?)?.toDouble(),
     );
   }
 
@@ -90,6 +94,8 @@ class ChanceAdModel extends ChanceAdEntity {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       if (contributorsCount != null) 'contributorsCount': contributorsCount,
+      'isFavorite': isFavorite,
+      if (userContribution != null) 'userContribution': userContribution,
     };
   }
 }

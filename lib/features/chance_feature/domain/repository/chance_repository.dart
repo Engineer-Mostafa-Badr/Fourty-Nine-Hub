@@ -42,4 +42,7 @@ abstract class ChanceRepository {
       ToggleChanceAdFavoriteParams params);
   Future<Either<Failure, List<ChanceAdEntity>>> getFavoriteChanceAds();
   Future<Either<Failure, List<ChanceAdEntity>>> getMyChanceAds();
+  Future<Either<Failure, List<ChanceAdEntity>>> getExpiredChanceAds();
+  Future<Either<Failure, List<dynamic>>> getChanceAdWinners(String adId);
+  Future<Either<Failure, bool>> incrementChanceAdView(String adId);
 }

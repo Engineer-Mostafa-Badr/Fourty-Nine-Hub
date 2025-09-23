@@ -14,6 +14,7 @@ import '../../domain/entity/chance_ad_entity.dart';
 import '../../domain/entity/chance_entity.dart';
 import '../../domain/entity/image_chance_entity.dart';
 import '../controller/cubit/chance_cubit.dart';
+import '../pages/chance_detail_view.dart';
 import 'join_chance_dialog.dart';
 import '../pages/chance_ad_details_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -27,10 +28,12 @@ class ChanceCardWidget extends StatefulWidget {
     this.mainCategoryEntity,
     this.chanceAd,
   }) : assert(
-         chanceAd != null ||
-         (chance != null && image != null && subCategoryEntity != null && mainCategoryEntity != null),
-         'Either chanceAd must be provided OR all of chance, image, subCategoryEntity, and mainCategoryEntity must be provided'
-       );
+            chanceAd != null ||
+                (chance != null &&
+                    image != null &&
+                    subCategoryEntity != null &&
+                    mainCategoryEntity != null),
+            'Either chanceAd must be provided OR all of chance, image, subCategoryEntity, and mainCategoryEntity must be provided');
 
   // Old properties (for backward compatibility)
   final ChanceEntity? chance;
@@ -49,45 +52,69 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
   // Determine which data to use (new or old API)
   bool get useNewApi => widget.chanceAd != null;
 
-  String get title => useNewApi ? widget.chanceAd!.title : (widget.chance?.title ?? '');
-  double get price => useNewApi ? widget.chanceAd!.price : (widget.chance != null ? widget.chance!.price.toDouble() : 0.0);
+  String get title =>
+      useNewApi ? widget.chanceAd!.title : (widget.chance?.title ?? '');
+  double get price => useNewApi
+      ? widget.chanceAd!.price
+      : (widget.chance != null ? widget.chance!.price.toDouble() : 0.0);
   String get imageUrl => useNewApi
-      ? (widget.chanceAd!.images.isNotEmpty ? widget.chanceAd!.images.first.photo : '')
+      ? (widget.chanceAd!.images.isNotEmpty
+          ? widget.chanceAd!.images.first.photo
+          : '')
       : (widget.image?.photo ?? '');
   String get id => useNewApi ? widget.chanceAd!.id : (widget.chance?.id ?? '');
-  double get progressPercentage => useNewApi ? widget.chanceAd!.adPercentage : 0.0;
+  double get progressPercentage =>
+      useNewApi ? widget.chanceAd!.adPercentage : 0.0;
   bool get isComplete => useNewApi ? widget.chanceAd!.isComplete : false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         ManageVibration.vibrate();
         if (useNewApi) {
           // Get chance ad details and navigate
           context.read<ChanceCubit>().getChanceAdDetails(widget.chanceAd!.id);
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider.value(
                 value: context.read<ChanceCubit>(),
-                child: ChanceAdDetailsView(chanceAdId: widget.chanceAd!.id),
+                // child: ChanceAdDetailsView(chanceAdId: widget.chanceAd!.id),
+                child: ChanceDetailView(
+                  title: title,
+                  price: price.toInt(),
+                  images: widget.chanceAd!.images.map((e) => e.photo).toList(),
+                  progress: progressPercentage,
+                  participants: widget.chanceAd!.contributors,
+                  views: widget.chanceAd!.views,
+                  description: widget.chanceAd!.description,
+                  chanceAd: widget.chanceAd,
+                ),
               ),
             ),
           );
+
+          // Refresh data when returning from detail view
+          if (context.mounted) {
+            context.read<ChanceCubit>().getAllChanceAds();
+          }
         } else if (widget.chance != null &&
-                   widget.image != null &&
-                   widget.subCategoryEntity != null &&
-                   widget.mainCategoryEntity != null) {
+            widget.image != null &&
+            widget.subCategoryEntity != null &&
+            widget.mainCategoryEntity != null) {
           // Use old navigation
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ChanceDetailsView(
-                        chance: widget.chance!,
-                        image: widget.image!,
-                        subCategoryEntity: widget.subCategoryEntity!.nameEn,
-                        mainCategoryEntity: widget.mainCategoryEntity!.nameEn,
+                  builder: (context) => ChanceDetailView(
+                        title: title,
+                        price: price.toInt(),
+                        images: [imageUrl],
+                        progress: progressPercentage,
+                        participants: widget.chance!.contributors,
+                        views: widget.chance!.views,
+                        description: widget.chance!.description,
                       )));
         }
       },
@@ -122,7 +149,9 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
                       if (useNewApi)
                         IconButton(
                           onPressed: () {
-                            context.read<ChanceCubit>().toggleChanceAdFavorite(widget.chanceAd!.id);
+                            context
+                                .read<ChanceCubit>()
+                                .toggleChanceAdFavorite(widget.chanceAd!.id);
                           },
                           icon: const Icon(Icons.favorite_border),
                           iconSize: 20,
@@ -185,7 +214,8 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
                               context: context,
                               builder: (context) => BlocProvider.value(
                                 value: context.read<ChanceCubit>(),
-                                child: JoinChanceDialog(chanceAd: widget.chanceAd!),
+                                child: JoinChanceDialog(
+                                    chanceAd: widget.chanceAd!),
                               ),
                             );
                           },
@@ -211,7 +241,9 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
                       value: progressPercentage / 100,
                       backgroundColor: AppColors.GREY_LIGHT_COLOR,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        progressPercentage >= 100 ? Colors.green : AppColors.SECONDARY_COLOR,
+                        progressPercentage >= 100
+                            ? Colors.green
+                            : AppColors.SECONDARY_COLOR,
                       ),
                     )
                   else

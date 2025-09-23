@@ -16,6 +16,9 @@ import '../features/chance_feature/domain/use_case/search_chance_ads_use_case.da
 import '../features/chance_feature/domain/use_case/toggle_chance_ad_favorite_use_case.dart';
 import '../features/chance_feature/domain/use_case/get_favorite_chance_ads_use_case.dart';
 import '../features/chance_feature/domain/use_case/get_my_chance_ads_use_case.dart';
+import '../features/chance_feature/domain/use_case/get_expired_chance_ads_use_case.dart';
+import '../features/chance_feature/domain/use_case/get_chance_ad_winners_use_case.dart';
+import '../features/chance_feature/domain/use_case/increment_chance_ad_view_use_case.dart';
 import '../features/chance_feature/presentation/controller/cubit/chance_cubit.dart';
 
 class ChanceServiceLocator {
@@ -74,7 +77,19 @@ class ChanceServiceLocator {
     serviceLocator.registerLazySingleton<GetMyChanceAdsUseCase>(
         () => GetMyChanceAdsUseCase(serviceLocator()));
 
+    serviceLocator.registerLazySingleton<GetExpiredChanceAdsUseCase>(
+        () => GetExpiredChanceAdsUseCase(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<GetChanceAdWinnersUseCase>(
+        () => GetChanceAdWinnersUseCase(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<IncrementChanceAdViewUseCase>(
+        () => IncrementChanceAdViewUseCase(serviceLocator()));
+
     serviceLocator.registerFactory<ChanceCubit>(() => ChanceCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
