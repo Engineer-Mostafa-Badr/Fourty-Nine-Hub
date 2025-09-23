@@ -396,10 +396,12 @@ class ChanceCubit extends Cubit<ChanceState> {
         emit(state.copyWith(failure: failure, status: ChanceStates.error));
       },
       (expiredAds) {
-        emit(state.copyWith(
-          expiredChanceAds: expiredAds,
-          status: ChanceStates.success,
-        ));
+        emit(
+          state.copyWith(
+            expiredChanceAds: expiredAds,
+            status: ChanceStates.success,
+          ),
+        );
       },
     );
   }

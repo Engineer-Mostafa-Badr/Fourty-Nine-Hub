@@ -186,13 +186,14 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                             items: isCategoryLoading
                                 ? [
                                     DropdownMenuItem(
-                                        value: null,
-                                        child: Label(
-                                          text: LocaleKeys
-                                              .selectCategory.localize,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ))
+                                      value: null,
+                                      child: Label(
+                                        text:
+                                            LocaleKeys.selectCategory.localize,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                    ),
                                   ]
                                 : categories.map((category) {
                                     return DropdownMenuItem<String>(
@@ -370,7 +371,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (_formKey.currentState!.validate()) {
                             if (selectedCategory != null &&
                                 selectedSubCategory != null) {
@@ -385,7 +386,11 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                                 title: titleController.text,
                                 price: double.parse(priceController.text),
                                 description: desController.text,
-                                mediaIds: mediaIds.isNotEmpty ? mediaIds : ['669262c894fa0441718b74c9'], // fallback to default image
+                                mediaIds: mediaIds.isNotEmpty
+                                    ? mediaIds
+                                    : [
+                                        '669262c894fa0441718b74c9'
+                                      ], // fallback to default image
                               ));
                             } else {
                               showErrorMessage(context,
@@ -400,11 +405,14 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                               horizontal: 40.w, vertical: 25.h),
                           backgroundColor: AppColors.PRIMARY_COLOR,
                         ),
-                        child: Text(LocaleKeys.CreateChance.localize,
-                            style: Styles.mediumText(
-                                color: Colors.white,
-                                fontSize: 55.sp,
-                                fontWeight: FontWeight.w400)),
+                        child: Text(
+                          LocaleKeys.CreateChance.localize,
+                          style: Styles.mediumText(
+                            color: Colors.white,
+                            fontSize: 55.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                     )
                   ],
