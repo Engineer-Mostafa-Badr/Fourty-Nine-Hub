@@ -20,6 +20,7 @@ class CreateChanceView extends StatelessWidget {
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
           label: LocaleKeys.CreateChance.localize,
+          
         ),
       ),
       body: BlocBuilder<ChanceCubit, ChanceState>(
