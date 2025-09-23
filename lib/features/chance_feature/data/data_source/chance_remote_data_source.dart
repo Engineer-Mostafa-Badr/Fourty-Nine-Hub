@@ -274,15 +274,20 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
 
   @override
   Future<Either<Failure, List<ChanceAdEntity>>> getMyChanceAds() async {
+    print('🔍 DEBUG: Calling getMyChanceAds API...');
     final response = await _apiConsumer.get(
       EndPoints.getMyChanceAds,
     );
     return response.fold(
-      (failure) => Left(failure),
+      (failure) {
+        print('❌ DEBUG: getMyChanceAds failed: ${failure.toString()}');
+        return Left(failure);
+      },
       (response) {
-        final list = (response['data'] as List? ?? [])
-            .map((e) => ChanceAdModel.fromJson(e))
-            .toList();
+        print('✅ DEBUG: getMyChanceAds response: ${response.toString()}');
+        final dataList = response['data'] as List? ?? [];
+        print('📊 DEBUG: Found ${dataList.length} chance ads for user');
+        final list = dataList.map((e) => ChanceAdModel.fromJson(e)).toList();
         return Right(list);
       },
     );

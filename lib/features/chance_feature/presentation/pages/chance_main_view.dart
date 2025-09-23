@@ -251,7 +251,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   Widget _buildBanner() {
     return Container(
       margin: EdgeInsets.all(24.w),
-      height: 300.h,
+      height: 200.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
@@ -513,7 +513,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       final winnerData = ad.winnerId as Map<String, dynamic>;
       final userData = winnerData['userId'] as Map<String, dynamic>?;
       if (userData != null) {
-        winnerName = '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'.trim();
+        winnerName =
+            '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'
+                .trim();
       }
     }
 
@@ -532,7 +534,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       isMyChance: false,
       adId: ad.id,
       chanceAd: ad,
-      winnerName: winnerName ?? (ad.winnerId != null ? 'Winner Selected' : null),
+      winnerName:
+          winnerName ?? (ad.winnerId != null ? 'Winner Selected' : null),
     );
   }
 
@@ -599,7 +602,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
             Stack(
               children: [
                 Container(
-                  height: 350.h,
+                  height: 250.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius:
@@ -610,7 +613,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         BorderRadius.vertical(top: Radius.circular(12.r)),
                     child: CarouselSlider(
                       options: CarouselOptions(
-                        height: 200.h,
+                        height: 250.h,
                         viewportFraction: 1.0,
                         enableInfiniteScroll: false,
                         autoPlay: true,
@@ -627,8 +630,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                 ),
                 // Favorite Icon
                 Positioned(
-                  top: 12.h,
-                  left: 12.w,
+                  top: 20.h,
+                  left: 20.w,
                   child: BlocBuilder<ChanceCubit, ChanceState>(
                     builder: (context, state) {
                       // Get updated favorite status from state
@@ -674,29 +677,29 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   ),
                 ),
                 // Carousel Indicators
-                if (images.length > 1)
-                  Positioned(
-                    bottom: 12.h,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: images.map((image) {
-                        int index = images.indexOf(image);
-                        return Container(
-                          width: 6.w,
-                          height: 6.h,
-                          margin: EdgeInsets.symmetric(horizontal: 2.w),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: index == 0
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.5),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                // if (images.length > 1)
+                //   Positioned(
+                //     bottom: 12.h,
+                //     left: 0,
+                //     right: 0,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: images.map((image) {
+                //         int index = images.indexOf(image);
+                //         return Container(
+                //           width: 6.w,
+                //           height: 6.h,
+                //           margin: EdgeInsets.symmetric(horizontal: 2.w),
+                //           decoration: BoxDecoration(
+                //             shape: BoxShape.circle,
+                //             color: index == 0
+                //                 ? Colors.white
+                //                 : Colors.white.withOpacity(0.5),
+                //           ),
+                //         );
+                //       }).toList(),
+                //     ),
+                //   ),
               ],
             ),
             // Content Section
@@ -801,7 +804,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       // Action Button
                       GestureDetector(
                         onTap: () {
-                          if (status == ChanceStatus.winner && chanceAd != null) {
+                          if (status == ChanceStatus.winner &&
+                              chanceAd != null) {
                             _showWinnerDialogFromAd(chanceAd);
                           } else if (adId != null && chanceAd != null) {
                             final cubit = context.read<ChanceCubit>();
@@ -850,12 +854,15 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       final userData = winnerData['userId'] as Map<String, dynamic>?;
 
       if (userData != null) {
-        winnerName = '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'.trim();
+        winnerName =
+            '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'
+                .trim();
 
         // Get profile picture
         final userProfile = userData['USER_PROFILE'] as Map<String, dynamic>?;
         if (userProfile != null) {
-          final profilePictureKey = userProfile['profilePictureKey'] as Map<String, dynamic>?;
+          final profilePictureKey =
+              userProfile['profilePictureKey'] as Map<String, dynamic>?;
           if (profilePictureKey != null) {
             profilePicture = profilePictureKey['mediaKey'] as String?;
           }
