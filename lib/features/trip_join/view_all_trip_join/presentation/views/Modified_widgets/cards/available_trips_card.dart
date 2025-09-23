@@ -99,11 +99,15 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                               ManageVibration.vibrate();
                               // context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
                               // print("Hi");
-                              _handleTap(data.id!);
+                              if(data.isView==true){return;}
+                              context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id??'');
+
+                              // _handleTap(data.id!);
                             },
                             child: Stack(
                               children: [
                                 CustomCard(
+                                  color: (data.isView==true?AppColors.whiteColor:AppColors.BG_GRAY_COLOR),
                                   radius: 20,
                                   children: [
                                     const Sizer(

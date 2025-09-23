@@ -525,14 +525,14 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                               }
                             },
                             onNormalPressed: () {
-                              if (phoneController.text.isEmpty ||
+                              if (widget.isFromPickMe!=true && (phoneController.text.isEmpty ||
                                   selectedBrand == null ||
                                   selectedModel == null ||
                                   selectedSeatNum == null ||
                                   currentLocation == null ||
                                   toLocation == null ||
                                   selectedBrandId == null ||
-                                  selectedModelId == null) {
+                                  selectedModelId == null))  {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -542,20 +542,37 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                 );
                                 return;
                               }
-                                      
+
+                              if (widget.isFromPickMe==true && (phoneController.text.isEmpty ||
+                                  selectedSeatNum == null ||
+                                  currentLocation == null ||
+                                  toLocation == null)
+                              ) {
+                                print("selectedSeatNum == null ${selectedSeatNum} currentLocation == null ${currentLocation}");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        LocaleKeys.pleaseFillAllFields.localize),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+
+
                               final params = CreateTripJoinParams(
                                 creatorPhoneNumber: phoneController.text,
                                 subcategoryId: "62c8ba9f8e28a58a3edf57ee",
                                 isPremium: false,
                                 isRepeat: isChecked,
-                                passengers: selectedSeatNum!,
-                                vehicleCarBrandId: selectedBrandId!,
-                                vehicleModelId: selectedModelId!,
+                                passengers: selectedSeatNum??0,
+                                vehicleCarBrandId: selectedBrandId??'',
+                                vehicleModelId: selectedModelId??'',
                                 startDate: _getTime(),
-                                startLongitude: currentLocation![0],
-                                startLatitude: currentLocation![1],
-                                targetLongitude: toLocation![0],
-                                targetLatitude: toLocation![1],
+                                startLongitude: currentLocation?[0]??0,
+                                startLatitude: currentLocation?[1]??0,
+                                targetLongitude: toLocation?[0]??0,
+                                targetLatitude: toLocation?[1]??0,
                               );
 
                               final pickMeParams = CreatePickMeParams(
