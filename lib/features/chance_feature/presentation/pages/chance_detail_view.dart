@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../res/assets/assets.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../domain/entity/chance_ad_entity.dart';
 import '../../domain/use_case/join_chance_ad_use_case.dart';
 import '../controller/cubit/chance_cubit.dart';
@@ -37,13 +44,21 @@ class ChanceDetailView extends StatefulWidget {
 class _ChanceDetailViewState extends State<ChanceDetailView>
     with TickerProviderStateMixin {
   late AnimationController _countdownController;
-  int days = 3;
-  int hours = 12;
-  int minutes = 30;
-  int seconds = 45;
+  int days = 0;
+  int hours = 0;
+  int minutes = 0;
+  int seconds = 0;
 
   // متغير محلي لتتبع عدد المشاهدات
   late int currentViews;
+  // متغير محلي لتتبع حالة الإعجاب
+  late bool isFavorite;
+  // وقت بداية الجلسة كبديل إذا لم يكن هناك تاريخ إنشاء
+  late DateTime sessionStart;
+  // متغير محلي لتتبع مساهمة المستخدم في هذا الإعلان
+  double userContribution = 0.0;
+  // متغير لتتبع آخر مساهمة تم إضافتها
+  double? pendingContribution;
 
   @override
   void initState() {
@@ -51,12 +66,18 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
     // تهيئة عدد المشاهدات من البيانات الأصلية
     currentViews = widget.chanceAd?.views ?? widget.views;
+    // تهيئة حالة الإعجاب من البيانات الأصلية
+    isFavorite = widget.chanceAd?.isFavorite ?? false;
+    // تهيئة وقت بداية الجلسة
+    sessionStart = DateTime.now();
+    // تهيئة مساهمة المستخدم من البيانات الأصلية
+    userContribution = widget.chanceAd?.userContribution ?? 0.0;
 
     _countdownController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     )..repeat();
-    _startCountdown();
+    _startElapsedTimer();
 
     // زيادة عدد المشاهدات فوراً وإرسال للباك إند
     print('ChanceDetailView initState - chanceAd: ${widget.chanceAd?.id}');
@@ -78,31 +99,54 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
     }
   }
 
-  void _startCountdown() {
+  void _startElapsedTimer() {
+    // حساب الوقت المنقضي منذ الإنشاء
+    _calculateElapsedTime();
+
+    // تحديث الوقت كل ثانية
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
       if (mounted) {
-        setState(() {
-          if (seconds > 0) {
-            seconds--;
-          } else if (minutes > 0) {
-            seconds = 59;
-            minutes--;
-          } else if (hours > 0) {
-            seconds = 59;
-            minutes = 59;
-            hours--;
-          } else if (days > 0) {
-            seconds = 59;
-            minutes = 59;
-            hours = 23;
-            days--;
-          }
-        });
-        return days > 0 || hours > 0 || minutes > 0 || seconds > 0;
+        _calculateElapsedTime();
+        return true; // استمر في العد
       }
       return false;
     });
+  }
+
+  void _calculateElapsedTime() {
+    if (widget.chanceAd?.createdAt != null) {
+      try {
+        final createdAt = DateTime.parse(widget.chanceAd!.createdAt);
+        final now = DateTime.now();
+        final elapsed = now.difference(createdAt);
+
+        setState(() {
+          days = elapsed.inDays;
+          hours = elapsed.inHours % 24;
+          minutes = elapsed.inMinutes % 60;
+          seconds = elapsed.inSeconds % 60;
+        });
+      } catch (e) {
+        // في حالة فشل تحليل التاريخ، استخدم وقت افتراضي
+        setState(() {
+          days = 0;
+          hours = 0;
+          minutes = 0;
+          seconds = 0;
+        });
+      }
+    } else {
+      // إذا لم يكن هناك تاريخ إنشاء، عد منذ بداية الجلسة
+      final elapsed = DateTime.now().difference(sessionStart);
+
+      setState(() {
+        days = elapsed.inDays;
+        hours = elapsed.inHours % 24;
+        minutes = elapsed.inMinutes % 60;
+        seconds = elapsed.inSeconds % 60;
+      });
+    }
   }
 
   @override
@@ -121,7 +165,11 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
               // تحديث فوري للواجهة
               setState(() {
-                // إعادة بناء الصفحة بالبيانات المحدثة
+                // إضافة المساهمة المعلقة إلى إجمالي مساهمات المستخدم
+                if (pendingContribution != null) {
+                  userContribution += pendingContribution!;
+                  pendingContribution = null; // إعادة تعيين المساهمة المعلقة
+                }
               });
 
               // طلب تحديث البيانات من الـ API
@@ -149,54 +197,61 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                 if (state.chanceAdDetails!.views > currentViews) {
                   currentViews = state.chanceAdDetails!.views;
                 }
+                // تحديث حالة الإعجاب
+                isFavorite = state.chanceAdDetails!.isFavorite;
               });
             }
           },
         ),
       ],
-      child: Scaffold(
-        backgroundColor: Colors.grey[50],
+      child: CustomScaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: context.isArabic ? " الفرصة" : "Chance",
+          ),
+        ),
         body: Column(
           children: [
-            // Header
-            Container(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top + 12.h,
-                left: 20.w,
-                right: 20.w,
-                bottom: 12.h,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.arrow_back_ios,
-                        size: 28.sp, color: Colors.black87),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'Chance',
-                    style: TextStyle(
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(width: 28.w), // Balance the layout
-                ],
-              ),
-            ),
+            // // Header
+            // Container(
+            //   padding: EdgeInsets.only(
+            //     top: MediaQuery.of(context).padding.top + 12.h,
+            //     left: 20.w,
+            //     right: 20.w,
+            //     bottom: 12.h,
+            //   ),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.black.withOpacity(0.05),
+            //         blurRadius: 4,
+            //         offset: const Offset(0, 2),
+            //       ),
+            //     ],
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       GestureDetector(
+            //         onTap: () => Navigator.pop(context),
+            //         child: Icon(Icons.arrow_back_ios,
+            //             size: 28.sp, color: Colors.black87),
+            //       ),
+            //       const Spacer(),
+            //       Text(
+            //         'Chance',
+            //         style: TextStyle(
+            //           fontSize: 26.sp,
+            //           fontWeight: FontWeight.w700,
+            //           color: Colors.black87,
+            //         ),
+            //       ),
+            //       const Spacer(),
+            //       Container(width: 28.w), // Balance the layout
+            //     ],
+            //   ),
+            // ),
             // Content
             Expanded(
               child: SingleChildScrollView(
@@ -210,6 +265,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           // Image Carousel
                           Container(
                             height: 300.h,
+                            width: 660.w,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
@@ -224,7 +280,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               borderRadius: BorderRadius.circular(16.r),
                               child: CarouselSlider(
                                 options: CarouselOptions(
-                                  height: 300.h,
+                                  height: 430.h,
                                   viewportFraction: 1.0,
                                   enableInfiniteScroll: false,
                                   autoPlay: true,
@@ -254,9 +310,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             top: 12.h,
                             left: 12.w,
                             child: GestureDetector(
-                              onTap: () {
-                                // Toggle favorite functionality
-                              },
+                              onTap: () => _toggleFavorite(),
                               child: Container(
                                 padding: EdgeInsets.all(8.w),
                                 decoration: BoxDecoration(
@@ -264,8 +318,12 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isFavorite
+                                      ? Colors.red
+                                      : Colors.grey[600],
                                   size: 30.sp,
                                 ),
                               ),
@@ -279,7 +337,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       margin: EdgeInsets.symmetric(horizontal: 20.w),
                       padding: EdgeInsets.all(24.w),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        // color: Colors.white,
                         borderRadius: BorderRadius.circular(12.r),
                         boxShadow: [
                           BoxShadow(
@@ -296,9 +354,10 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           Text(
                             widget.title,
                             style: TextStyle(
-                              fontSize: 24.sp,
+                              fontSize: 30.sp,
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
+                              fontFamily: "roboto",
                             ),
                           ),
                           SizedBox(height: 8.h),
@@ -306,8 +365,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           Text(
                             widget.description,
                             style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.grey[600],
+                              fontSize: 26.sp,
+                              color: Color(0xff0D141C),
+                              fontWeight: FontWeight.w400,
                               height: 1.4,
                             ),
                           ),
@@ -317,19 +377,21 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Collected',
+                                context.isArabic ? 'مجمع' : 'Collected',
                                 style: TextStyle(
-                                  fontSize: 18.sp,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 28.sp,
+                                  color: Color(0XFF0D141C),
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                               Text(
-                                '${_getCollectedAmount().toInt()} EGP',
+                                context.isArabic
+                                    ? '${_getCollectedAmount().toInt()} جنيه مصري'
+                                    : '${_getCollectedAmount().toInt()} EGP',
                                 style: TextStyle(
-                                  fontSize: 18.sp,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 28.sp,
+                                  color: Color(0XFF0D141C),
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -338,62 +400,68 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           // Progress Bar
                           LinearProgressIndicator(
                             value: _getProgressValue(),
-                            backgroundColor: Colors.grey[200],
+                            backgroundColor: Color(0xffCFDBE8),
                             valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.blue),
-                            minHeight: 6.h,
+                              AppColors.c0B1035,
+                            ),
+                            borderRadius: BorderRadius.circular(8.r),
+                            minHeight: 12.h,
                           ),
                           SizedBox(height: 8.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Target:',
+                                context.isArabic ? 'الهدف' : 'Target:',
                                 style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 28.sp,
+                                  color: Color(0xffF33D49),
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
-                                '${widget.price} EGP',
+                                context.isArabic
+                                    ? '${widget.price} جنيه مصري'
+                                    : '${widget.price} EGP',
                                 style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 28.sp,
+                                  color: Color(0xffF33D49),
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ],
                           ),
                           SizedBox(height: 20.h),
-                          // Countdown Timer
+                          // Elapsed Time Timer
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildTimeUnit(days.toString(), 'Days'),
-                              SizedBox(width: 12.w),
-                              _buildTimeUnit(
-                                  hours.toString().padLeft(2, '0'), 'Hours'),
-                              SizedBox(width: 12.w),
+                              _buildTimeUnit(days.toString(),
+                                  context.isArabic ? 'أيام' : 'Days'),
+                              _buildTimeUnit(hours.toString().padLeft(2, '0'),
+                                  context.isArabic ? 'ساعات' : 'Hours'),
                               _buildTimeUnit(minutes.toString().padLeft(2, '0'),
-                                  'Minutes'),
-                              SizedBox(width: 12.w),
+                                  context.isArabic ? 'دقائق' : 'Minutes'),
                               _buildTimeUnit(seconds.toString().padLeft(2, '0'),
-                                  'Seconds'),
+                                  context.isArabic ? 'ثواني' : 'Seconds'),
                             ],
                           ),
                           SizedBox(height: 20.h),
                           // Views - استخدام المتغير المحلي
                           Row(
                             children: [
-                              Icon(Icons.visibility,
-                                  size: 30.sp, color: Colors.grey[600]),
-                              SizedBox(width: 6.w),
-                              Text(
-                                '${_formatViews(currentViews)} views',
+                              SvgPicture.asset(
+                                Assets.eyeChance,
+                                height: 24.h,
+                                width: 24.w,
+                              ),
+                              SizedBox(width: 10.w),
+                              Label(
+                                text: '${_formatViews(currentViews)} views',
                                 style: TextStyle(
-                                  fontSize: 24.sp,
-                                  color: Colors.grey[600],
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xff0D141C),
                                 ),
                               ),
                             ],
@@ -420,18 +488,16 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       child: Column(
                         children: [
                           Text(
-                            'Your Shares',
+                            context.isArabic ? 'مشاركاتك' : 'Your Shares',
                             style: TextStyle(
-                              fontSize: 22.sp,
+                              fontSize: 28.sp,
                               fontWeight: FontWeight.w700,
-                              color: Colors.grey[700],
+                              color: Color(0xCC0B1035),
                             ),
                           ),
                           SizedBox(height: 8.h),
                           Text(
-                            widget.chanceAd?.userContribution != null
-                                ? '${widget.chanceAd!.userContribution!.toStringAsFixed(0)} EGP'
-                                : '0 EGP',
+                            _getTotalUserContributions(),
                             style: TextStyle(
                               fontSize: 28.sp,
                               fontWeight: FontWeight.w700,
@@ -441,7 +507,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         ],
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                     // Join Button
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 20.w),
@@ -494,26 +560,30 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
   Widget _buildTimeUnit(String value, String label) {
     return Container(
+      width: 155.w,
+      height: 105.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: Color(0xffe8edf5),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             value,
             style: TextStyle(
-              fontSize: 20.sp,
+              fontSize: 28.sp,
               fontWeight: FontWeight.w700,
-              color: Colors.black87,
+              color: Color(0xff0D141C),
             ),
           ),
           Text(
             label,
             style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey[600],
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w400,
+              color: Color(0xff0D141C),
             ),
           ),
         ],
@@ -536,6 +606,28 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
     if (widget.chanceAd != null) {
       context.read<ChanceCubit>().getChanceAdDetails(widget.chanceAd!.id);
     }
+  }
+
+  void _toggleFavorite() {
+    if (widget.chanceAd?.id != null) {
+      // تحديث فوري في الواجهة
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+
+      // إرسال التحديث للباك إند
+      context.read<ChanceCubit>().toggleChanceAdFavorite(widget.chanceAd!.id);
+    }
+  }
+
+  String _getTotalUserContributions() {
+    // استخدام التتبع المحلي للمساهمات مع أي مساهمة معلقة
+    double totalContributions = userContribution;
+    if (pendingContribution != null) {
+      totalContributions += pendingContribution!;
+    }
+
+    return '${totalContributions.toStringAsFixed(0)} EGP';
   }
 
   void _showParticipateBottomSheet() {
@@ -667,6 +759,8 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         );
                       } else {
                         Navigator.pop(bottomSheetContext);
+                        // تخزين المساهمة المعلقة
+                        pendingContribution = amount;
                         // استخدم الـ cubit مباشرة
                         cubit.joinChanceAd(
                           JoinChanceAdParams(

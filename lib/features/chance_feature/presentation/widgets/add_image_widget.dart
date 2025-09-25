@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/global/upload_image.dart';
+import 'package:fourtyninehub/features/auction/auction_helper.dart'
+    as auction_helper;
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controller/cubit/chance_cubit.dart';
@@ -21,41 +22,52 @@ class AddImageWidget extends StatefulWidget {
 }
 
 class _AddImageWidgetState extends State<AddImageWidget> {
-  List<XFile> selectedImages = [];
+  List<UploadFileEntity> selectedImages = [];
+  bool isUploading = false;
 
   void _addImage() async {
     ManageVibration.vibrate();
 
-    final uploadImage = UploadImage();
+    setState(() {
+      isUploading = true;
+    });
+
+    final uploadImage = auction_helper.UploadImage();
     await uploadImage.uploadImage(
-      context: context,
       isGallery: true,
-      onUploaded: (XFile file) {
+      onUploaded: (auction_helper.UploadFileEntity uploadedFile) {
+        final globalUploadFileEntity = UploadFileEntity(
+          mediaId: uploadedFile.mediaId,
+          file: uploadedFile.file,
+        );
+
         setState(() {
-          selectedImages.add(file);
+          selectedImages.add(globalUploadFileEntity);
+          isUploading = false;
         });
 
-        // Here you would typically upload the image to your server
-        // and get back an image ID, then add it to the cubit
-        // For now, we'll use a placeholder ID
-        final imageId = "uploaded_${DateTime.now().millisecondsSinceEpoch}";
-        context.read<ChanceCubit>().addUploadedImageId(imageId);
+        // Add the real media ID to the cubit
+        context.read<ChanceCubit>().addUploadedImageId(uploadedFile.mediaId);
 
-        Navigator.of(context).pop();
+        return uploadedFile; // Return something to match the expected return type
       },
     );
+
+    // Set uploading to false in case of error
+    setState(() {
+      isUploading = false;
+    });
   }
 
   void _removeImage(int index) {
+    final imageToRemove = selectedImages[index];
+
     setState(() {
       selectedImages.removeAt(index);
     });
 
-    // Remove from cubit as well
-    final cubit = context.read<ChanceCubit>();
-    if (index < cubit.state.uploadedImageIds.length) {
-      cubit.removeUploadedImageId(cubit.state.uploadedImageIds[index]);
-    }
+    // Remove from cubit as well using the actual media ID
+    context.read<ChanceCubit>().removeUploadedImageId(imageToRemove.mediaId);
   }
 
   @override
@@ -63,7 +75,7 @@ class _AddImageWidgetState extends State<AddImageWidget> {
     return Column(
       children: [
         GestureDetector(
-          onTap: _addImage,
+          onTap: isUploading ? null : _addImage,
           child: Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
@@ -72,22 +84,29 @@ class _AddImageWidgetState extends State<AddImageWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/image.png",
-                ),
+                if (isUploading)
+                  const CircularProgressIndicator()
+                else
+                  Image.asset(
+                    "assets/images/image.png",
+                  ),
                 const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
                   height: 40.h,
                   decoration: BoxDecoration(
-                    color: AppColors.SECONDARY_COLOR,
+                    color:
+                        isUploading ? Colors.grey : AppColors.SECONDARY_COLOR,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Center(
                     child: Text(
-                      LocaleKeys.addImages.localize,
+                      isUploading
+                          ? "Uploading..."
+                          : LocaleKeys.addImages.localize,
                       textAlign: TextAlign.center,
-                      style: Styles.smallText(color: Colors.white, fontSize: 50.sp),
+                      style: Styles.smallText(
+                          color: Colors.white, fontSize: 50.sp),
                     ),
                   ),
                 ),
@@ -112,7 +131,7 @@ class _AddImageWidgetState extends State<AddImageWidget> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.file(
-                          File(selectedImages[index].path),
+                          File(selectedImages[index].file.path),
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,

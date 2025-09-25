@@ -19,6 +19,7 @@ import '../../../domain/use_case/get_my_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_expired_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_chance_ad_winners_use_case.dart';
 import '../../../domain/use_case/increment_chance_ad_view_use_case.dart';
+import '../../../domain/entity/chance_ad_entity.dart';
 import 'chance_states.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -226,9 +227,30 @@ class ChanceCubit extends Cubit<ChanceState> {
         emit(state.copyWith(failure: failure, status: ChanceStates.error));
       },
       (chanceAdsPagination) {
+        // Check if we've reached the end or if there's no new data
+        if (page > chanceAdsPagination.pagination.pages ||
+            (page > 1 && chanceAdsPagination.data.isEmpty)) {
+          // No more data to load, keep current state
+          emit(state.copyWith(status: ChanceStates.success));
+          return;
+        }
+
+        List<ChanceAdEntity> allChanceAds;
+
+        if (page == 1) {
+          // First page - replace existing data
+          allChanceAds = chanceAdsPagination.data;
+        } else {
+          // Subsequent pages - append to existing data only if there's new data
+          allChanceAds = List.from(state.chanceAds ?? []);
+          if (chanceAdsPagination.data.isNotEmpty) {
+            allChanceAds.addAll(chanceAdsPagination.data);
+          }
+        }
+
         emit(state.copyWith(
           chanceAdsPagination: chanceAdsPagination,
-          chanceAds: chanceAdsPagination.data,
+          chanceAds: allChanceAds,
           status: ChanceStates.success,
         ));
       },
@@ -280,6 +302,12 @@ class ChanceCubit extends Cubit<ChanceState> {
   }
 
   Future<void> toggleChanceAdFavorite(String adId) async {
+    if (adId.isEmpty) {
+      print('Error: Cannot toggle favorite - adId is empty');
+      return;
+    }
+
+    print('ChanceCubit: Toggling favorite for adId: $adId');
     final response = await _toggleChanceAdFavoriteUseCase(
       ToggleChanceAdFavoriteParams(adId: adId),
     );

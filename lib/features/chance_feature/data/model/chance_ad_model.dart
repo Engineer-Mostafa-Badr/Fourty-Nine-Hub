@@ -34,10 +34,27 @@ class ChanceAdModel extends ChanceAdEntity {
 
   factory ChanceAdModel.fromJson(Map<String, dynamic> json) {
     return ChanceAdModel(
-      id: json['_id'] ?? '',
+      id: json['id'] ?? '',
       winnerId: json['winnerId'],
       images: (json['images'] as List? ?? [])
-          .map((image) => ImageChanceModel.fromJson(image))
+          .map((image) {
+            if (image is String) {
+              return ImageChanceModel(
+                id: '',
+                user: '',
+                subcategoryId: '',
+                photo: image,
+              );
+            } else if (image is Map<String, dynamic>) {
+              return ImageChanceModel.fromJson(image);
+            }
+            return ImageChanceModel(
+              id: '',
+              user: '',
+              subcategoryId: '',
+              photo: image.toString(),
+            );
+          })
           .toList(),
       description: json['description'] ?? '',
       title: json['title'] ?? '',
@@ -72,7 +89,7 @@ class ChanceAdModel extends ChanceAdEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
       'winnerId': winnerId,
       'images': images.map((image) => (image as ImageChanceModel).toJson()).toList(),
       'description': description,

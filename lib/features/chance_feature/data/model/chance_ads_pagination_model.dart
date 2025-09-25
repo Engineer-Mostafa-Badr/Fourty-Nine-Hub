@@ -8,8 +8,16 @@ class ChanceAdsPaginationModel extends ChanceAdsPaginationEntity {
   });
 
   factory ChanceAdsPaginationModel.fromJson(Map<String, dynamic> json) {
+    List<dynamic> dataList = [];
+
+    if (json['data'] is List) {
+      dataList = json['data'] as List;
+    } else if (json['data'] is Map && json['data']['data'] is List) {
+      dataList = json['data']['data'] as List;
+    }
+
     return ChanceAdsPaginationModel(
-      data: (json['data'] as List? ?? [])
+      data: dataList
           .map((ad) => ChanceAdModel.fromJson(ad))
           .toList(),
       pagination: PaginationInfoModel.fromJson(json['pagination'] ?? {}),

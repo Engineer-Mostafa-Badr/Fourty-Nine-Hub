@@ -7,8 +7,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'dart:ui';
-import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
@@ -20,6 +21,8 @@ import '../../../star_feature/presentation/widgets/talent_card/sticky_tab_bar_de
 import '../widgets/floating_action_button_widget.dart';
 import 'chance_detail_view.dart';
 import 'chance_ad_details_view.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
 
 enum ChanceStatus { available, winner, ended }
 
@@ -51,9 +54,19 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   bool _isSearching = false;
   bool _isCategoriesVisible = false;
   final TextEditingController _searchController = TextEditingController();
+  // Removed _paginationScrollController since we're using slivers now
   int _selectedTabIndex = 0;
-  Timer? _refreshTimer;
 
+  // Main scroll controller for the outer NestedScrollView
+  final ScrollController _mainScrollController = ScrollController();
+
+  // Individual controllers for each tab content
+  final ScrollController _availableController = ScrollController();
+  final ScrollController _favoriteController = ScrollController();
+  final ScrollController _expireController = ScrollController();
+  final ScrollController _myChanceController = ScrollController();
+
+  bool _isSyncing = false;
   @override
   void initState() {
     super.initState();
@@ -61,12 +74,72 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     _tabController.addListener(_onTabChanged);
     _searchController.addListener(_onSearchChanged);
 
-    // Auto refresh data every 30 seconds
-    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
-      if (mounted && !_isSearching) {
-        _refreshChanceAds();
+    // Setup scroll synchronization
+    _setupScrollSynchronization();
+  }
+
+  void _setupScrollSynchronization() {
+    // Sync main controller with active tab controller
+    _mainScrollController.addListener(() => _syncFromMain());
+
+    // Sync tab controllers with main controller
+    _availableController.addListener(() => _syncToMain(_availableController));
+    _favoriteController.addListener(() => _syncToMain(_favoriteController));
+    _expireController.addListener(() => _syncToMain(_expireController));
+    _myChanceController.addListener(() => _syncToMain(_myChanceController));
+  }
+
+  void _syncFromMain() {
+    if (_isSyncing || !mounted) return;
+    _isSyncing = true;
+
+    final activeController = _getActiveTabController();
+    if (activeController != null &&
+        activeController.hasClients &&
+        _mainScrollController.hasClients &&
+        mounted) {
+      activeController.jumpTo(_mainScrollController.offset.clamp(
+        activeController.position.minScrollExtent,
+        activeController.position.maxScrollExtent,
+      ));
+    }
+    _isSyncing = false;
+  }
+
+  void _syncToMain(ScrollController tabController) {
+    if (_isSyncing || !mounted) return;
+    if (tabController != _getActiveTabController()) return;
+    _isSyncing = true;
+
+    if (_mainScrollController.hasClients &&
+        tabController.hasClients &&
+        mounted) {
+      _mainScrollController.jumpTo(tabController.offset.clamp(
+        _mainScrollController.position.minScrollExtent,
+        _mainScrollController.position.maxScrollExtent,
+      ));
+    }
+    _isSyncing = false;
+  }
+
+  ScrollController? _getActiveTabController() {
+    try {
+      switch (_selectedTabIndex) {
+        case 0:
+          return _availableController.hasClients ? _availableController : null;
+        case 1:
+          return _favoriteController.hasClients ? _favoriteController : null;
+        case 2:
+          return _expireController.hasClients ? _expireController : null;
+        case 3:
+          return _myChanceController.hasClients ? _myChanceController : null;
+        default:
+          return null;
       }
-    });
+    } catch (e) {
+      debugPrint('Error getting active tab controller: $e');
+      return null;
+    }
   }
 
   void _onTabChanged() {
@@ -140,9 +213,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       },
       child: BlocBuilder<ChanceCubit, ChanceState>(
         builder: (context, state) {
-          return Scaffold(
+          return CustomScaffold(
             backgroundColor: Colors.grey[50],
             body: NestedScrollView(
+              controller: _mainScrollController,
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   // Header AppBar
@@ -154,7 +231,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     surfaceTintColor: Colors.transparent,
                     backgroundColor: Colors.white,
                     toolbarHeight: 30.h,
-                    titleSpacing: 24.w,
+                    titleSpacing: 0.w,
                     leading: Icon(Icons.arrow_back_ios,
                         size: 28.sp, color: Colors.black87),
                     centerTitle: false,
@@ -188,10 +265,21 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     ],
                   ),
 
-                  // Banner - يختفي مع الـ scroll عند البحث
+                  // Banner - يختفي مع الـ scroll
                   if (!_isSearching)
-                    SliverToBoxAdapter(
-                      child: _buildBanner(),
+                    SliverAppBar(
+                      pinned: false,
+                      floating: false,
+                      snap: false,
+                      expandedHeight: 250.h,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      surfaceTintColor: Colors.transparent,
+                      automaticallyImplyLeading: false,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: _buildBanner(),
+                        collapseMode: CollapseMode.parallax,
+                      ),
                     ),
 
                   // Categories Section (if visible during search)
@@ -204,6 +292,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   if (!_isSearching)
                     SliverPersistentHeader(
                       pinned: true,
+                      floating: false,
                       delegate: StickyTabBarDelegate(
                         tabController: _tabController,
                         context: context,
@@ -213,7 +302,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                           context.isArabic ? 'متاح' : 'Available',
                           context.isArabic ? 'مفضلة' : 'Favorite',
                           context.isArabic ? 'منتهي' : 'Expire',
-                          context.isArabic ? 'موهبتي' : 'My Talent',
+                          context.isArabic ? 'فرصي' : 'My Chance',
                         ],
                       ),
                     ),
@@ -222,6 +311,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   if (_isSearching)
                     SliverPersistentHeader(
                       pinned: true,
+                      floating: false,
                       delegate: StickyTabBarDelegate(
                         tabController: _tabController,
                         context: context,
@@ -232,14 +322,14 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                           context.isArabic ? 'متاح' : 'Available',
                           context.isArabic ? 'مفضلة' : 'Favorite',
                           context.isArabic ? 'منتهي' : 'Expire',
-                          context.isArabic ? 'موهبتي' : 'My Talent',
+                          context.isArabic ? 'فرصي' : 'My Chance',
                         ],
                         // onSearchChanged: _onSearchChanged,
                       ),
                     ),
                 ];
               },
-              body: _buildTabContent(state),
+              body: _buildSynchronizedTabContent(state),
             ),
             floatingActionButton: FloatingActionButtonWidget(),
           );
@@ -251,7 +341,6 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   Widget _buildBanner() {
     return Container(
       margin: EdgeInsets.all(24.w),
-      height: 200.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
@@ -265,7 +354,6 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
         child: Container(
-          height: 180.h,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: NetworkImage(
@@ -332,16 +420,31 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     );
   }
 
-  Widget _buildTabContent(ChanceState state) {
+  Widget _buildSynchronizedTabContent(ChanceState state) {
+    return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      slivers: [
+        _buildTabContentSliver(state),
+      ],
+    );
+  }
+
+  Widget _buildTabContentSliver(ChanceState state) {
     if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const SliverFillRemaining(
+        child: Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (state.isFailure) {
-      return const Center(
-        child: Text(
-          'خطأ في تحميل البيانات',
-          style: TextStyle(fontSize: 16, color: Colors.red),
+      return const SliverFillRemaining(
+        child: Center(
+          child: Text(
+            'خطأ في تحميل البيانات',
+            style: TextStyle(fontSize: 16, color: Colors.red),
+          ),
         ),
       );
     }
@@ -349,126 +452,123 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     // Return content based on selected tab index (controlled by StickyTabBarDelegate)
     switch (_selectedTabIndex) {
       case 0: // Available
-        return _buildAvailableTab(state);
+        return _buildAvailableTabSliver(state);
       case 1: // Favorite
-        return _buildFavoriteTab(state);
+        return _buildFavoriteTabSliver(state);
       case 2: // Expire
-        return _buildExpireTab(state);
+        return _buildExpireTabSliver(state);
       case 3: // My Talent
-        return _buildMyTalentTab(state);
+        return _buildMyTalentTabSliver(state);
       default:
-        return _buildAvailableTab(state);
+        return _buildAvailableTabSliver(state);
     }
   }
 
-  Widget _buildAvailableTab(ChanceState state) {
+  Widget _buildAvailableTabSliver(ChanceState state) {
     final List<ChanceAdEntity> ads =
         _isSearching && _searchController.text.isNotEmpty
             ? (state.searchResults ?? [])
             : (state.chanceAds ?? []);
 
     if (ads.isEmpty) {
-      return const Center(
-        child: Text(
-          'لا توجد إعلانات متاحة',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+      return const SliverFillRemaining(
+        child: Center(
+          child: Text(
+            'لا توجد إعلانات متاحة',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
         ),
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final ad = ads[index];
-              return _buildChanceCardFromEntity(ad);
-            },
-            childCount: ads.length,
-          ),
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * .7,
+        child: OlxPaginationWidget(
+          items: ads.map((ad) => _buildChanceCardFromEntity(ad)).toList(),
+          banners: bannersList,
+          loadPage: _loadChanceAdsPage,
+          scrollController:
+              _availableController, // Let it handle its own scrolling
+          itemsPerPage: 5,
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildFavoriteTab(ChanceState state) {
+  Widget _buildFavoriteTabSliver(ChanceState state) {
     final List<ChanceAdEntity> favoriteAds = state.favoriteChanceAds ?? [];
 
     if (favoriteAds.isEmpty) {
-      return const Center(
-        child: Text(
-          'لا توجد إعلانات مفضلة',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+      return const SliverFillRemaining(
+        child: Center(
+          child: Text(
+            'لا توجد إعلانات مفضلة',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
         ),
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final ad = favoriteAds[index];
-              return _buildChanceCardFromEntity(ad, isFavorite: true);
-            },
-            childCount: favoriteAds.length,
-          ),
-        ),
-      ],
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final ad = favoriteAds[index];
+          return _buildChanceCardFromEntity(ad, isFavorite: true);
+        },
+        childCount: favoriteAds.length,
+      ),
     );
   }
 
-  Widget _buildExpireTab(ChanceState state) {
+  Widget _buildExpireTabSliver(ChanceState state) {
     final List<ChanceAdEntity> expiredAds = state.expiredChanceAds ?? [];
 
     if (expiredAds.isEmpty) {
-      return const Center(
-        child: Text(
-          'لا توجد إعلانات منتهية',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+      return const SliverFillRemaining(
+        child: Center(
+          child: Text(
+            'لا توجد إعلانات منتهية',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
         ),
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final ad = expiredAds[index];
-              return _buildExpiredChanceCard(ad);
-            },
-            childCount: expiredAds.length,
-          ),
-        ),
-      ],
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final ad = expiredAds[index];
+          return _buildExpiredChanceCard(ad);
+        },
+        childCount: expiredAds.length,
+      ),
     );
   }
 
-  Widget _buildMyTalentTab(ChanceState state) {
+  Widget _buildMyTalentTabSliver(ChanceState state) {
     final List<ChanceAdEntity> myAds = state.myChanceAds ?? [];
 
     if (myAds.isEmpty) {
-      return const Center(
-        child: Text(
-          'لا توجد إعلانات خاصة بك',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+      return const SliverFillRemaining(
+        child: Center(
+          child: Text(
+            'لا توجد إعلانات خاصة بك',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
         ),
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final ad = myAds[index];
-              return _buildChanceCardFromEntity(ad, isMyChance: true);
-            },
-            childCount: myAds.length,
-          ),
-        ),
-      ],
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final ad = myAds[index];
+          return _buildChanceCardFromEntity(ad, isMyChance: true);
+        },
+        childCount: myAds.length,
+      ),
     );
   }
 
@@ -488,7 +588,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       price: ad.price.toInt(),
       endDate: ad.isComplete ? 'Ended' : 'Active',
       progress: progress.clamp(0.0, 1.0),
-      participants: ad.contributors,
+      participants: ad.contributorsCount ?? ad.contributors,
       views: ad.views,
       images: imageUrls.isNotEmpty
           ? imageUrls
@@ -496,6 +596,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       status: status,
       isFavorite: ad.isFavorite, // Use actual favorite status from entity
       isMyChance: isMyChance,
+      description: ad.description,
       adId: ad.id,
       chanceAd: ad,
     );
@@ -534,6 +635,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       isMyChance: false,
       adId: ad.id,
       chanceAd: ad,
+      description: ad.description,
       winnerName:
           winnerName ?? (ad.winnerId != null ? 'Winner Selected' : null),
     );
@@ -546,6 +648,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     required double progress,
     required int participants,
     required int views,
+    required String description,
     required List<String> images,
     required ChanceStatus status,
     String? winnerName,
@@ -571,7 +674,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   progress: progress,
                   participants: participants,
                   views: views,
-                  description: "",
+                  description: description,
                   chanceAd: chanceAd,
                 ),
               ),
@@ -589,8 +692,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
           borderRadius: BorderRadius.circular(24.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
+              color: Color(0x40000000),
+              blurRadius: 4,
               offset: const Offset(0, 4),
             ),
           ],
@@ -605,12 +708,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   height: 250.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(12.r)),
+                    borderRadius: BorderRadius.all(Radius.circular(24.r)),
                   ),
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(12.r)),
+                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
                     child: CarouselSlider(
                       options: CarouselOptions(
                         height: 250.h,
@@ -650,10 +751,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
 
                       return GestureDetector(
                         onTap: () {
-                          if (adId != null) {
+                          if (adId != null && adId.isNotEmpty) {
+                            print('Toggling favorite for adId: $adId');
                             context
                                 .read<ChanceCubit>()
                                 .toggleChanceAdFavorite(adId);
+                          } else {
+                            print('Error: adId is null or empty');
                           }
                         },
                         child: Container(
@@ -714,10 +818,20 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     style: TextStyle(
                       fontSize: 28.sp,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black87,
+                      color: Color(0xff0D141C),
                     ),
                   ),
                   SizedBox(height: 8.h),
+                  // // description
+                  // Text(
+                  //   description,
+                  // style: TextStyle(
+                  //   fontSize: 24.sp,
+                  //   fontWeight: FontWeight.w400,
+                  //   color: Color(0xff0B1035),
+                  // ),
+                  // ),
+                  // SizedBox(height: 8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -725,15 +839,15 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         '$price EGP',
                         style: TextStyle(
                           fontSize: 24.sp,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff0B1035),
                         ),
                       ),
                       Text(
                         endDate,
                         style: TextStyle(
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w400,
                           color: status == ChanceStatus.available
                               ? Colors.orange
                               : Colors.grey[600],
@@ -746,8 +860,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   Text(
                     '${(progress * 100).toInt()}% claimed',
                     style: TextStyle(
-                      fontSize: 22.sp,
-                      color: Colors.grey[600],
+                      fontSize: 24.sp,
+                      color: Color(0xff0D141C),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -756,9 +870,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     value: progress,
                     backgroundColor: Colors.grey[200],
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      status == ChanceStatus.winner
-                          ? Colors.green
-                          : Colors.orange,
+                      !chanceAd!.isComplete
+                          ? AppColors.c0B1035
+                          : Color(0xff1EAA61),
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -766,37 +880,29 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(
+                        '$participants participants',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.cF33D49,
+                        ),
+                      ),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '$participants participants',
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red,
-                            ),
+                          SvgPicture.asset(
+                            Assets.eyeChance,
+                            width: 24.w,
+                            height: 24.h,
                           ),
-                          SizedBox(width: 16.w),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 6.h),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1E3A8A),
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.visibility,
-                                    color: Colors.white, size: 12.sp),
-                                SizedBox(width: 4.w),
-                                Text(
-                                  '${_formatViews(views)} views',
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                          SizedBox(width: 4.w),
+                          Text(
+                            '${_formatViews(views)} views',
+                            style: TextStyle(
+                              fontSize: 22.sp,
+                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -804,10 +910,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       // Action Button
                       GestureDetector(
                         onTap: () {
-                          if (status == ChanceStatus.winner &&
-                              chanceAd != null) {
+                          if (status == ChanceStatus.winner) {
                             _showWinnerDialogFromAd(chanceAd);
-                          } else if (adId != null && chanceAd != null) {
+                          } else if (adId != null) {
                             final cubit = context.read<ChanceCubit>();
                             _showJoinDialog(chanceAd, cubit);
                           }
@@ -1063,6 +1168,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       default:
         cubit.getAllChanceAds();
     }
+  }
+
+  Future<void> _loadChanceAdsPage(int page) async {
+    final cubit = context.read<ChanceCubit>();
+    await cubit.getAllChanceAds(page: page, limit: 10);
   }
 
   // void _showJoinDialog(ChanceAdEntity chanceAd) {
@@ -1359,11 +1469,49 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
 
   @override
   void dispose() {
-    _tabController.removeListener(_onTabChanged);
-    _searchController.removeListener(_onSearchChanged);
+    try {
+      // Remove listeners first with proper checks
+      _tabController.removeListener(_onTabChanged);
+      _searchController.removeListener(_onSearchChanged);
+
+      // Remove scroll listeners with proper checks
+      if (_mainScrollController.hasClients &&
+          _mainScrollController.hasListeners) {
+        _mainScrollController.removeListener(() => _syncFromMain());
+      }
+
+      if (_availableController.hasClients &&
+          _availableController.hasListeners) {
+        _availableController
+            .removeListener(() => _syncToMain(_availableController));
+      }
+
+      if (_favoriteController.hasClients && _favoriteController.hasListeners) {
+        _favoriteController
+            .removeListener(() => _syncToMain(_favoriteController));
+      }
+
+      if (_expireController.hasClients && _expireController.hasListeners) {
+        _expireController.removeListener(() => _syncToMain(_expireController));
+      }
+
+      if (_myChanceController.hasClients && _myChanceController.hasListeners) {
+        _myChanceController
+            .removeListener(() => _syncToMain(_myChanceController));
+      }
+    } catch (e) {
+      print('Error during controller disposal: $e');
+    }
+
+    // Then dispose controllers
     _tabController.dispose();
     _searchController.dispose();
-    _refreshTimer?.cancel();
+    _mainScrollController.dispose();
+    _availableController.dispose();
+    _favoriteController.dispose();
+    _expireController.dispose();
+    _myChanceController.dispose();
+
     super.dispose();
   }
 }

@@ -105,17 +105,19 @@ class _ChanceCardWidgetState extends State<ChanceCardWidget> {
             widget.mainCategoryEntity != null) {
           // Use old navigation
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChanceDetailView(
-                        title: title,
-                        price: price.toInt(),
-                        images: [imageUrl],
-                        progress: progressPercentage,
-                        participants: widget.chance!.contributors,
-                        views: widget.chance!.views,
-                        description: widget.chance!.description,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChanceDetailView(
+                title: title,
+                price: price.toInt(),
+                images: [imageUrl],
+                progress: progressPercentage,
+                participants: widget.chance!.contributors,
+                views: widget.chance!.views,
+                description: widget.chance!.description,
+              ),
+            ),
+          );
         }
       },
       child: Container(
