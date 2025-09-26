@@ -15,8 +15,6 @@ import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'widgets/trip_join/my_trip_widget.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
-
-
 class TripJoinContent extends StatefulWidget {
   const TripJoinContent({super.key});
 

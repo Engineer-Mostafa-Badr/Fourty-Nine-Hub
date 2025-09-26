@@ -81,13 +81,28 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   }
 
   @override
+  Future<Either<Failure,  List<GetRequestTripJoinEntity>>> getRequestPickMe(CarBrandParams params) {
+    return viewripJoinRemoteDataSource.getRequestPickMe(params);
+  }
+
+  @override
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsTripJoin(CarBrandParams params) {
     return viewripJoinRemoteDataSource.getMyAdsTripJoin(params);
   }
 
   @override
+  Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsPickMe(CarBrandParams params) {
+    return viewripJoinRemoteDataSource.getMyAdsPickMe(params);
+  }
+
+  @override
   Future<Either<Failure, DeleteMyTripJoinEntity>> deleteMyTripJoin(DeleteMyTripParams params) {
     return viewripJoinRemoteDataSource.deleteMyTripJoin(params);
+  }
+
+  @override
+  Future<Either<Failure, DeleteMyTripJoinEntity>> deleteMyPickMe(String params) {
+    return viewripJoinRemoteDataSource.deleteMyPickMe(params);
   }
 
   @override
@@ -116,6 +131,11 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   }
 
   @override
+  Future<Either<Failure, DeleteMyTripJoinEntity>> applyReadRequestPickMe(DeleteMyTripParams params) {
+    return viewripJoinRemoteDataSource.applyReadRequestPickMe(params);
+  }
+
+  @override
   Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params) {
     return viewripJoinRemoteDataSource.createTripJoinOffer(params);
   }
@@ -128,5 +148,10 @@ class ViewAllTripJoinRepoImp implements ViewAllTripJoinRepo {
   @override
   Future<Either<Failure, GetRequestCountEntity>> getRequestCountTripJoin() {
     return viewripJoinRemoteDataSource.getRequestCountTripJoin();
+  }
+
+  @override
+  Future<Either<Failure, GetRequestCountEntity>> getRequestCountPickMe() {
+    return viewripJoinRemoteDataSource.getRequestCountPickMe();
   }
 }

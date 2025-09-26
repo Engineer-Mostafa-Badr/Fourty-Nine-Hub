@@ -14,7 +14,9 @@ class ViewAllTripJoinState {
   // final GetRequestTripJoinEntity? fullRequestTripJoinData;
   final List<MyAdsTripDocEntity>? myAdsTripJoinData;
   final DeleteMyTripJoinEntity? deleteMyTripJoinEntity;
+  final DeleteMyTripJoinEntity? deleteMyPickMeEntity;
   final GetRequestCountEntity? requestCountData;
+  final GetRequestCountEntity? pickMeRequestCountData;
   const ViewAllTripJoinState({
     this.status = ViewAllTripJoinStatus.initial,
     this.errorMessage,
@@ -29,7 +31,9 @@ class ViewAllTripJoinState {
     // this.fullRequestTripJoinData,
     this.myAdsTripJoinData,
     this.deleteMyTripJoinEntity,
+    this.deleteMyPickMeEntity,
     this.requestCountData,
+    this.pickMeRequestCountData,
   });
 
   ViewAllTripJoinState copyWith({
@@ -43,10 +47,13 @@ class ViewAllTripJoinState {
     List<AvailableTripJoinEntity>? availableTripJoinEntity,
     List<AvailableTripJoinEntity>? availablePickMeEntity,
     List<GetRequestTripJoinEntity>? requestTripJoinEntity,
+    List<GetRequestTripJoinEntity>? requestPickMeEntity,
     // List<GetRequestTripJoinEntity>? fullRequestTripJoinData,
     List<MyAdsTripDocEntity>? myAdsTripJoinData,
     DeleteMyTripJoinEntity? deleteMyTripJoinEntity,
+    DeleteMyTripJoinEntity? deleteMyPickMeEntity,
     GetRequestCountEntity? requestCountData,
+    GetRequestCountEntity? pickMeRequestCountData,
   }) {
     return ViewAllTripJoinState(
       status: status ?? this.status,
@@ -62,7 +69,9 @@ class ViewAllTripJoinState {
       // fullRequestTripJoinData: fullRequestTripJoinData ?? this.fullRequestTripJoinData,
       myAdsTripJoinData: myAdsTripJoinData ?? this.myAdsTripJoinData,
       deleteMyTripJoinEntity: deleteMyTripJoinEntity ?? this.deleteMyTripJoinEntity,
+      deleteMyPickMeEntity: deleteMyPickMeEntity ?? this.deleteMyPickMeEntity,
       requestCountData: requestCountData ?? this.requestCountData,
+      pickMeRequestCountData: pickMeRequestCountData ?? this.pickMeRequestCountData,
     );
   }
 }

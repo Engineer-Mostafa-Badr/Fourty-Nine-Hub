@@ -36,16 +36,21 @@ abstract class ViewAllTripJoinRepo {
   Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailableTripJoin(CarBrandParams params);
   Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailablePickMe(CarBrandParams params);
   Future<Either<Failure, List<GetRequestTripJoinEntity>>> getRequestTripJoin(CarBrandParams params);
+  Future<Either<Failure, List<GetRequestTripJoinEntity>>> getRequestPickMe(CarBrandParams params);
   Future<Either<Failure, ExpectedPriceTripEntity>> getExpectedPrice(ExpectedPriceTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity>> createTripJoinOffer(CreateTripJoinParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity>> createPickMeOffer(CreatePickMeParams params);
   Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsTripJoin(CarBrandParams params);
+  Future<Either<Failure, MyAdsTripJoinEntity>> getMyAdsPickMe(CarBrandParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> deleteMyTripJoin(DeleteMyTripParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity >> deleteMyPickMe(String params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyViewTripJoin(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyViewPickMe(DeleteMyTripParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> createPickMeRequest(CreateRequestParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> createTripJoinRequest(CreateRequestParams params);
   Future<Either<Failure, DeleteMyTripJoinEntity >> applyReadRequestTripJoin(DeleteMyTripParams params);
+  Future<Either<Failure, DeleteMyTripJoinEntity >> applyReadRequestPickMe(DeleteMyTripParams params);
   Future<Either<Failure, GetRequestCountEntity >> getRequestCountTripJoin();
+  Future<Either<Failure, GetRequestCountEntity >> getRequestCountPickMe();
 
 }

@@ -3,6 +3,7 @@ import '../../../domain/entities/available_trip_join_entity.dart';
 class AvailableTripJoinModel extends AvailableTripJoinEntity {
   AvailableTripJoinModel({
     super.id,
+    super.creatorId,
     super.pricePerSeat,
     super.status,
     super.viewerIds,
@@ -21,6 +22,7 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
   factory AvailableTripJoinModel.fromJson(Map<String, dynamic> json) {
     return AvailableTripJoinModel(
       id: json['id'] as String?,
+      creatorId: json['creatorId'] as String?,
       pricePerSeat: (json['pricePerSeat'] as num?)?.toDouble(),
       status: json['status'] as String?,
       viewerIds: (json['viewerIds'] as num?)?.toInt(),

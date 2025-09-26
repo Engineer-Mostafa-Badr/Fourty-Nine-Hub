@@ -188,12 +188,12 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.trip_origin, color: iconColor, size: 20),
+          Icon(Icons.trip_origin, color: iconColor, size: 14),
           const Sizer(width: 13),
           Flexible(
             child: Text(
               title,
-              style: Styles.headerText(fontSize: 32),
+              style: Styles.headerText(fontSize: 26),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
@@ -231,7 +231,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
                     children: [
                       InkWell(
                         onTap: () {
-                          if(data.isView==true){
+                          if(data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId)){
                             return;
                           }
                           ManageVibration.vibrate();
@@ -243,7 +243,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
                           children: [
                             CustomCard(
                               radius: 20,
-                              color: (data.isView==true?AppColors.whiteColor:AppColors.BG_GRAY_COLOR),
+                              color: ((data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId))?AppColors.whiteColor:AppColors.BG_GRAY_COLOR),
                               children: [
                                 const Sizer(
                                   height: 8,
@@ -360,7 +360,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
                                     child: Row(
                                       spacing: 15,
                                       children: [
-                                        Expanded(
+                                        if((UserCubit.to.state.data?.id??'')!=data.creatorId)Expanded(
                                           child: Padding(
                                             padding: EdgeInsets.only(
                                                 top: 8.h, bottom: 8.h),
@@ -571,13 +571,8 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> {
                                         Expanded(
                                           child: ContactsTripButtons(
                                             // isPremium: false,
-                                            isPremium: data.isPremium ==
-                                                true ||
-                                                data.isButtonEnabled!
-                                                    .state ==
-                                                    true
-                                                ? true
-                                                : false,
+                                            isPremium: data.isPremium,
+                                            isButtonEnabled: data.isButtonEnabled!.state,
                                             otherUserId: '2',
                                             subcategoryId:
                                             '62ea00e269ea29c91dfc390c',

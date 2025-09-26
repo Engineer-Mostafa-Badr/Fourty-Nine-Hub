@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/request_trip_join_entity.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -17,263 +27,45 @@ import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../../../../../../../routes/routes.dart';
-import '../../../../../../RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
-import '../../../../domain/entities/request_trip_join_entity.dart';
-import '../../../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
-import '../../Modified_widgets/cards/available_trips_card.dart';
-import '../../Modified_widgets/cards/trip_contacts_buttons.dart';
-import '../../Modified_widgets/trip_join_card.dart';
-import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
-import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
-import '../../Modified_widgets/trip_join_floating_action_button.dart';
 
-String convertToArabicNumerals(String input) {
-  const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-  for (int i = 0; i < english.length; i++) {
-    input = input.replaceAll(english[i], arabic[i]);
-  }
-  return input;
-}
-
-/*
-String formatTimestamp12(String timestamp, BuildContext context) {
-  try {
-    // Parse the ISO 8601 timestamp
-    DateTime dateTime = DateTime.parse(timestamp);
-
-    // Get current time
-    DateTime now = DateTime.now();
-
-    // Calculate the difference
-    Duration difference = now.difference(dateTime);
-
-    // Handle future dates (just in case)
-    if (difference.isNegative) {
-      return LocaleKeys.justNow.localize;
-    }
-
-    // Calculate time units
-    int seconds = difference.inSeconds;
-    int minutes = difference.inMinutes;
-    int hours = difference.inHours;
-    int days = difference.inDays;
-
-    // Return appropriate format
-    if (seconds < 60) {
-      return LocaleKeys.justNow.localize;
-    } else if (minutes < 60) {
-      return "$minutes ${LocaleKeys.minAgo.localize}";
-    } else if (hours < 24) {
-      return "${formatPrice(hours, context)} ${LocaleKeys.hour.localize}${hours == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
-    } else if (days < 7) {
-      return "${formatPrice(days, context)} ${LocaleKeys.day.localize}${days == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
-    } else {
-      int weeks = (days / 7).floor();
-      return "$weeks ${LocaleKeys.week.localize}${weeks == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
-    }
-  } catch (e) {
-    // Fallback in case of parsing error
-    return "Invalid date";
-  }
-}
-*/
-
-String formatTimestamp(dynamic time, BuildContext context) {
-  DateTime? date;
-
-  if (time is String) {
-    try {
-      date = DateTime.parse(time).toLocal();
-    } catch (e) {
-      return "-";
-    }
-  } else if (time is int) {
-    if (time.toString().length == 10) {
-      date = DateTime.fromMillisecondsSinceEpoch(time * 1000).toLocal();
-    } else if (time.toString().length == 13) {
-      date = DateTime.fromMillisecondsSinceEpoch(time).toLocal();
-    } else {
-      return "-";
-    }
-  } else {
-    return "-";
-  }
-
-  final hour =
-      date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
-  final ampm = date.hour >= 12 ? "PM" : "AM";
-
-  String formattedDate =
-      "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  String formattedTime =
-      "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
-
-  String result = "$formattedDate\n  $formattedTime";
-
-  if (context.locale.languageCode == 'ar') {
-    result = convertToArabicNumerals(result)
-        .replaceAll("AM", "ص")
-        .replaceAll("PM", "م");
-  }
-
-  return result;
-}
-
-String formatTimestamp1(dynamic time, BuildContext context) {
-  DateTime? date;
-
-  print("formatTimestamp received: $time of type ${time.runtimeType}");
-
-  if (time == null) return "-";
-
-  if (time is String) {
-    try {
-      date = DateTime.parse(time).toLocal();
-    } catch (e) {
-      print("Date parsing error: $e");
-      return "-";
-    }
-  } else if (time is int) {
-    try {
-      if (time.toString().length == 10) {
-        date = DateTime.fromMillisecondsSinceEpoch(time * 1000).toLocal();
-      } else if (time.toString().length == 13) {
-        date = DateTime.fromMillisecondsSinceEpoch(time).toLocal();
-      } else {
-        print("Unexpected int length: ${time.toString().length}");
-        return "-";
-      }
-    } catch (e) {
-      print("Int date parsing error: $e");
-      return "-";
-    }
-  } else {
-    print("Unsupported time type");
-    return "-";
-  }
-
-  final hour =
-      date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
-  final ampm = date.hour >= 12 ? "PM" : "AM";
-
-  String formattedDate =
-      "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  String formattedTime =
-      "${hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} $ampm";
-
-  String result = "$formattedDate\n  $formattedTime";
-
-  try {
-    if (context.locale.languageCode == 'ar') {
-      result = convertToArabicNumerals(result)
-          .replaceAll("AM", "ص")
-          .replaceAll("PM", "م");
-    }
-  } catch (e) {
-    print("Locale check failed: $e");
-  }
-
-  return result;
-}
-
-String formatTimestamp12(String timestamp, BuildContext context) {
-  try {
-    DateTime dateTime = DateTime.parse(timestamp);
-    DateTime now = DateTime.now();
-    Duration difference = now.difference(dateTime);
-
-    if (difference.isNegative) {
-      return LocaleKeys.justNow.localize;
-    }
-
-    int seconds = difference.inSeconds;
-    int minutes = difference.inMinutes;
-    int hours = difference.inHours;
-    int days = difference.inDays;
-    int weeks = (days / 7).floor();
-
-    if (seconds < 60) {
-      return LocaleKeys.justNow.localize;
-    } else if (minutes < 60) {
-      return _localizedTime(
-          context.isArabic, minutes, LocaleKeys.minute.localize, context);
-    } else if (hours < 24) {
-      return _localizedTime(
-          context.isArabic, hours, LocaleKeys.hour.localize, context);
-    } else if (days < 7) {
-      return _localizedTime(
-          context.isArabic, days, LocaleKeys.day.localize, context);
-    } else {
-      return _localizedTime(
-          context.isArabic, weeks, LocaleKeys.week.localize, context);
-    }
-  } catch (e) {
-    return "Invalid date";
-  }
-}
-
-String _localizedTime(
-    bool isArabic, int value, String unit, BuildContext context) {
-  if (isArabic) {
-    return "منذ ${formatPrice(value, context)} $unit";
-  } else {
-    return "${formatPrice(value, context)} $unit ago";
-  }
-}
-
-class RequestLogTripJoinWidget extends StatefulWidget {
+class PickMeRequestLogTripJoinWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  const RequestLogTripJoinWidget({
+  const PickMeRequestLogTripJoinWidget({
     super.key,
   });
 
   @override
-  State<RequestLogTripJoinWidget> createState() =>
-      _RequestLogTripJoinWidgetState();
+  State<PickMeRequestLogTripJoinWidget> createState() =>
+      _PickMeRequestLogTripJoinWidgetState();
+}
+extension OfferTypeFormatter on GetRequestTripJoinEntity {
+  String get formattedOfferType {
+    switch (requestType) {
+      case 'premium':
+        return LocaleKeys.premium2.tr();
+      case 'notSubscribed':
+        return LocaleKeys.notSubscribed.tr();
+      case 'regular':
+        return LocaleKeys.regular.tr(); // if you have one
+      default:
+        return requestType ?? '';
+    }
+  }
 }
 
-class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
+class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoinWidget> {
   late ScrollController _scrollController;
 
   bool _isVisible = true;
 
-  // String formatTimestamp(dynamic time) {
-  //   // Handle if time is String
-  //   int timestamp = 0;
-  //   if (time is String) {
-  //     timestamp = int.tryParse(time) ?? 0;
-  //   } else if (time is int) {
-  //     timestamp = time;
-  //   }
-  //
-  //   if (timestamp == 0) return "-";
-  //
-  //   DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-  //
-  //   // Format date to your preferred format (you can customize it)
-  //   String formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  //
-  //   return formattedDate;
-  // }
-
-  // String formatDateTime(DateTime? dateTime) {
-  //   if (dateTime == null) return 'No date';
-  //
-  //   String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
-  //   String formattedTime = DateFormat('h:mm a').format(dateTime);
-  //
-  //   return "$formattedDate\n$formattedTime";
-  // }
-
   @override
   Widget build(BuildContext context) {
+
     return Stack(
       children: [
         BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
-            if (context.read<ViewAllTripJoinCubit>().isLoadingRequestTripJoin ==
+            if (context.read<ViewAllTripJoinCubit>().isLoadingRequestPickMe ==
                 true) {
               return const Center(
                 child: CustomLoadingSearchWidget(),
@@ -282,7 +74,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 
             if (context
                 .read<ViewAllTripJoinCubit>()
-                .requestTripJoinData
+                .requestPickMeData
                 .isEmpty) {
               return Center(child: Text(LocaleKeys.noData.localize));
             }
@@ -294,7 +86,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                   itemBuilder: (context, i) {
                     GetRequestTripJoinEntity data = context
                         .read<ViewAllTripJoinCubit>()
-                        .requestTripJoinData[i];
+                        .requestPickMeData[i];
                     return Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 10.h,
@@ -309,17 +101,17 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                   ManageVibration.vibrate();
                                   context
                                       .read<ViewAllTripJoinCubit>()
-                                      .applyReadRequestTrip(data.id!);
+                                      .applyReadRequestPickMe(data.id!);
                                 },
                                 child: CustomCard(
                                   // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
                                   color: data.isRead == true
                                       ? (context.isDarkMode
-                                          ? Colors.transparent
-                                          : AppColors.whiteColor)
+                                      ? Colors.transparent
+                                      : AppColors.whiteColor)
                                       : (context.isDarkMode
-                                          ? AppColors.grey
-                                          : AppColors.grey.shade300),
+                                      ? AppColors.grey
+                                      : AppColors.grey.shade300),
 
                                   radius: 20,
                                   children: [
@@ -338,29 +130,31 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                                   color: context.isDarkMode
                                                       ? AppColors.whiteColor
                                                       : AppColors
-                                                          .DARK_GRAY_COLOR,
+                                                      .DARK_GRAY_COLOR,
                                                 ),
                                                 const Sizer(),
                                                 Label(
                                                   // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
                                                   text:
-                                                      '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                                  '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
                                                     color: context.isDarkMode
                                                         ? AppColors.whiteColor
                                                         : AppColors
-                                                            .DARK_GRAY_COLOR,
+                                                        .DARK_GRAY_COLOR,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          // Text(
-                                          //   "${data.status ?? ""}",
-                                          //   style: Styles.headerText(
-                                          //       color: AppColors.getRedColor(context), fontSize: 32),
-                                          // ),
+                                          Text(
+                                            data.formattedOfferType,
+                                            style: Styles.headerText(
+                                                color: AppColors.getRedColor(
+                                                    context),
+                                                fontSize: 32),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -374,18 +168,18 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                             ? Assets.maleUser
                                             : Assets.femaleUser,
                                         seats: LocaleKeys.eachSeat.localize,
-                                        isMale: data.gender == "male",
-                                        // icon:   Assets.maleUser,
-                                        //
-                                        // // : Assets.femaleUser,
-                                        // seats: "1"
-                                        ),
+                                      isMale: data.gender == "male",
+                                      // icon:   Assets.maleUser,
+                                      //
+                                      // // : Assets.femaleUser,
+                                      // seats: "1"
+                                    ),
                                     const Sizer(
                                       height: 30,
                                     ),
                                     _locationWidget(
                                         title:
-                                            data.location?.start?.address ?? "",
+                                        data.location?.start?.address ?? "",
                                         iconColor: AppColors.LIGHT_BLUE),
                                     const Sizer(),
                                     _locationWidget(
@@ -399,7 +193,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             formatTimestamp12(
@@ -438,8 +232,8 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                       child: ContactsTripButtons(
                                         // isPremium: false,
                                         isPremium: data.isPremium == true ||
-                                                data.isButtonEnabled!.state ==
-                                                    true
+                                            data.isButtonEnabled!.state ==
+                                                true
                                             ? true
                                             : false,
                                         otherUserId: '2',
@@ -462,20 +256,20 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                               ),
                             ],
                           ),
-                          data.isPremium == true ||
-                                  data.isButtonEnabled!.state == true
-                              ? SizedBox()
-                              : TripCardSubscribeText(),
+                          // data.isPremium == true ||
+                          //     data.isButtonEnabled?.state == true
+                          //     ? SizedBox()
+                          //     : TripCardSubscribeText(),
                         ],
                       ),
                     );
                   },
                   separatorBuilder: (context, i) => SizedBox(
-                        height: 10.h,
-                      ),
+                    height: 10.h,
+                  ),
                   itemCount: context
                       .read<ViewAllTripJoinCubit>()
-                      .requestTripJoinData
+                      .requestPickMeData
                       .length),
             );
           },
@@ -505,7 +299,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                               width: 48.h,
                               decoration: BoxDecoration(
                                   color:
-                                      AppColors.getButtonPrimaryColor(context),
+                                  AppColors.getButtonPrimaryColor(context),
                                   borderRadius: BorderRadius.circular(10)),
                               child: Icon(
                                 size: 19,
@@ -545,6 +339,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
   @override
   void initState() {
     super.initState();
+    context.read<ViewAllTripJoinCubit>().loadInitialRequestPickMe();
 
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
@@ -586,19 +381,19 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
             children: [
               RichText(
                   text: TextSpan(children: [
-                TextSpan(
-                    text: "$price  ",
-                    style: Styles.headerText(
-                        color: AppColors.getTextColor(context),
-                        fontWeight: FontWeight.bold)),
-                TextSpan(
-                  text: context.isArabic ? 'ج.م' : 'EGP',
-                  style: Styles.mediumText(
-                      fontSize: context.locale.languageCode == "ar" ? 35 : 28,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.getRedColor(context)),
-                )
-              ])),
+                    TextSpan(
+                        text: "$price  ",
+                        style: Styles.headerText(
+                            color: AppColors.getTextColor(context),
+                            fontWeight: FontWeight.bold)),
+                    TextSpan(
+                      text: context.isArabic ? 'ج.م' : 'EGP',
+                      style: Styles.mediumText(
+                          fontSize: context.locale.languageCode == "ar" ? 35 : 28,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.getRedColor(context)),
+                    )
+                  ])),
               Row(
                 spacing: 5,
                 children: [
@@ -616,8 +411,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
       ),
     );
   }
-
-  TripCardSubscribeText() {
+  TripCardSubscribeText() async {
     return Padding(
       padding: EdgeInsets.fromLTRB(20.h, 10.h, 20.h, 0),
       child: InkWell(
@@ -662,11 +456,10 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
       ),
     );
   }
-
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<ViewAllTripJoinCubit>().getRequestTripJoin();
+      context.read<ViewAllTripJoinCubit>().getRequestPickMe();
     }
   }
 

@@ -1,5 +1,6 @@
 class AvailableTripJoinEntity {
   final String? id;
+  final String? creatorId;
   final double? pricePerSeat;
   final String? status;
   num? viewerIds;
@@ -16,6 +17,7 @@ class AvailableTripJoinEntity {
 
   AvailableTripJoinEntity({
     this.id,
+    this.creatorId,
     this.pricePerSeat,
     this.status,
     this.viewerIds,

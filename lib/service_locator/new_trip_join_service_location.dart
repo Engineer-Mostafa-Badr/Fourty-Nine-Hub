@@ -1,9 +1,14 @@
 
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_read_request_pick_me_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_view_pick_me_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_request_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_trip_join_request_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/delete_my_pick_me_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_available_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_my_ads_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_request_count_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_request_pick_me_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/trip_join/view_all_trip_join/data/datasource/remote_datasource/view_all_trip_join_remote_datasource.dart';
@@ -66,11 +71,26 @@ class NewTripJoinServiceLocation {
             () => CreateTripJoinRequestUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CreatePickMeRequestUseCase>(
             () => CreatePickMeRequestUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetRequestCountPickMeUseCase>(
+            () => GetRequestCountPickMeUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetRequestPickMeUseCase>(
+            () => GetRequestPickMeUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetMyAdsPickMeUseCase>(
+            () => GetMyAdsPickMeUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<DeleteMyPickMeUseCase>(
+            () => DeleteMyPickMeUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ApplyReadRequestPickMeUseCase>(
+            () => ApplyReadRequestPickMeUseCase(serviceLocator()));
 
 
 
     serviceLocator.registerFactory<ViewAllTripJoinCubit>(() =>
         ViewAllTripJoinCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
