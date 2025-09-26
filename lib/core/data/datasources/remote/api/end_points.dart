@@ -1724,14 +1724,23 @@ class EndPoints {
   static String getAllCarModel = '/ride/cars/';
   static String getTripExpectedPrice = '/trip-join/offers/expected-price';
   static String getAvailableTripJoin = '/trip-join/offers/available';
+  static String getAvailablePickMe = '/pick-me/offers';
   static String getRequestTripJoin = '/trip-join/requests';
+  static String getRequestPickMe = '/pick-me/requests/offers';
   static String getMyAdsTripJoin = '/trip-join/offers/me';
+  static String getMyAdsPickMe = '/pick-me/offers/me';
   static String deleteMyAdsTripJoin = '/trip-join/offers/';
+  static String deleteMyAdsPickMe = '/pick-me/offers/';
   static String applyViewTripJoin = '/trip-join/offers/';
+  static String applyViewPickMe = '/pick-me/offers/';
+  static String createPickMeRequest = '/pick-me/requests';
+  static String createTripJoinRequest = '/trip-join/requests';
   static String applyReadRequestTripJoin = '/trip-join/requests/';
+  static String applyReadRequestPickMe = '/pick-me/requests/';
   static String createTripJoinOffer = '/trip-join/offers';
   static String createPickMeOffer = '/pick-me/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
+  static String getRequestCountPickMe = '/pick-me/requests/count/unread';
 
   static const updateDriverLoadingRatingNonSocket =
       '/loading/trip/rating/driver';

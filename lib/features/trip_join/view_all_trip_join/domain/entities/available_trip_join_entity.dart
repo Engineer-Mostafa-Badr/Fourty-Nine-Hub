@@ -1,9 +1,11 @@
 class AvailableTripJoinEntity {
   final String? id;
+  final String? creatorId;
   final double? pricePerSeat;
   final String? status;
-  final num? viewerIds;
+  num? viewerIds;
   final bool? isRepeat;
+  bool? isView;
   final int? passengers;
   final String? startDate;
   final String? offerType;
@@ -15,15 +17,17 @@ class AvailableTripJoinEntity {
 
   AvailableTripJoinEntity({
     this.id,
+    this.creatorId,
     this.pricePerSeat,
     this.status,
     this.viewerIds,
     this.isRepeat,
+    this.isView,
     this.passengers,
     this.startDate,
     this.offerType,
     this.isPremium,
-    this.phoneNumber, // ✅ Added
+    this.phoneNumber,
     this.isButtonEnabled,
     this.vehicleDetails,
     this.location,

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/my_pick_me_offers_widget.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/request_log_pick_me.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
@@ -39,90 +43,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
             height: 10.h,
           ),
           Expanded(child: _buildCardForCategory()),
-          // Expanded(
-          //   child: ListView.builder(
-          //       physics: const NeverScrollableScrollPhysics(),
-          //       shrinkWrap: true,
-          //       itemCount: 3,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         switch (_displayedCategory) {
-          //           case LocaleKeys.availableTrips:
-          //             return TripJoinCard(
-          //               subscribtionPlan: LocaleKeys.notSubscribed.localize,
-          //               title: context.isArabic
-          //                   ? index == 0
-          //                       ? 'Sara'
-          //                       : 'Ibrahim'
-          //                   : index == 0
-          //                       ? 'ساره'
-          //                       : 'ابراهيم',
-          //               buttonTitle: LocaleKeys.request.localize,
-          //               isMale: index == 0 ? false : true,
-          //               time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-          //               seats: 2,
-          //               status: context.isArabic ? 'مكرر' : 'Repeat',
-          //               isRequestButton: true,
-          //               isContactInfo: true,
-          //               iconCar: false,
-          //               onTab: () => JoinTripBottomSheet(context,
-          //                   topButtonColor: AppColors.getRedColor(context),
-          //                   topButtonTitle: LocaleKeys.premium_request.localize,
-          //                   bottomButtonColor:
-          //                       AppColors.getButtonPrimaryColor(context),
-          //                   bottomButtonTitle: LocaleKeys.request.localize,
-          //                   onTap: () => SubmitBottomSheet(
-          //                         context,
-          //                         buttonColor: AppColors.PRIMARY_COLOR,
-          //                         buttonTitle: LocaleKeys.submit.localize,
-          //                       ),
-          //                   topTextColor:
-          //                       context.isDarkMode ? Colors.black : Colors.white,
-          //                   bottomTextColor:
-          //                       context.isDarkMode ? Colors.black : Colors.white),
-          //             );
-          //           case LocaleKeys.requestLog:
-          //             return TripJoinCard(
-          //               subscribtionPlan: LocaleKeys.notSubscribed.localize,
-          //               title: context.isArabic ? 'محمد' : 'Mohamed',
-          //               isMale: true,
-          //               buttonTitle: LocaleKeys.request.localize,
-          //               time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-          //               seats: 2,
-          //               status: context.isArabic ? 'انتهت' : 'Expired',
-          //               isRequestButton: false,
-          //               isContactInfo: true,
-          //               iconCar: false,
-          //               onTab: () {},
-          //             );
-          //           case LocaleKeys.myAds:
-          //             return TripJoinCard(
-          //               subscribtionPlan: LocaleKeys.notSubscribed.localize,
-          //               title: context.isArabic
-          //                   ? index == 0
-          //                       ? 'Sara'
-          //                       : 'Ibrahim'
-          //                   : index == 0
-          //                       ? 'ساره'
-          //                       : 'ابراهيم',
-          //               isMale: index == 0 ? false : true,
-          //               buttonTitle: LocaleKeys.deleteAd.localize,
-          //               time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-          //               seats: 2,
-          //               status: context.isArabic ? 'مرة واحدة' : 'One Time',
-          //               isRequestButton: true,
-          //               isContactInfo: false,
-          //               iconCar: false,
-          //               onTab: () => showDialogTripJoin(
-          //                   context,
-          //                   DialogContent(
-          //                     subTitle: LocaleKeys.areDeleteThisAd.localize,
-          //                     leftButtonTitle: LocaleKeys.deleteAd.localize,
-          //                     rightButtonTitle: LocaleKeys.close.localize,
-          //                   )),
-          //             );
-          //         }
-          //       }),
-          // ),
         ]),
       ],
     );
@@ -131,6 +51,8 @@ class _AllPickMeViewState extends State<AllPickMeView>
   @override
   void initState() {
     super.initState();
+    context.read<ViewAllTripJoinCubit>().getPickMeRequestCount();
+
     tabController = TabController(length: 3, vsync: this);
     // tabController.addListener(() {
     //   setState(() {});
@@ -161,9 +83,9 @@ class _AllPickMeViewState extends State<AllPickMeView>
         // اياك تنسى 🙂🔪
         return AvailablePickMeCard();
       case LocaleKeys.requestLog:
-        return SizedBox();
+        return PickMeRequestLogTripJoinWidget();
       case LocaleKeys.myAds:
-        return SizedBox();
+        return MyPickMeOffersWidget();
 
       default:
         return const SizedBox.shrink();
@@ -243,18 +165,19 @@ class _AllPickMeViewState extends State<AllPickMeView>
             ),
           ),
           Visibility(
-            visible: title == LocaleKeys.requestLog,
+            visible: title == LocaleKeys.requestLog &&
+                (context.read<ViewAllTripJoinCubit>().state.pickMeRequestCountData?.countRequest ?? 0) > 0,
             child: Positioned(
               top: -3.h,
               right: 4.h,
               child: Container(
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.getRedColor(context)),
                 child: Center(
                   child: Text(
-                    '1k',
+                    formatCount(context.read<ViewAllTripJoinCubit>().state.pickMeRequestCountData?.countRequest ?? 0),
                     style: Styles.smallText(
                         color: context.isDarkMode
                             ? Colors.black
@@ -269,7 +192,15 @@ class _AllPickMeViewState extends State<AllPickMeView>
       ),
     );
   }
-
+  String formatCount(int number) {
+    if (number < 1000) {
+      return number.toString();
+    } else if (number < 1000000) {
+      return '${(number / 1000).floor()}K';
+    } else {
+      return '${(number / 1000000).floor()}M';
+    }
+  }
   _buildStatusCategories() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
