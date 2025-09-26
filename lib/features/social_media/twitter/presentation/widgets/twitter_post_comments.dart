@@ -19,6 +19,7 @@ import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 
+import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../data/models/twitter_post_comment_model.dart';
 import '../../data/models/twitter_user_model.dart';
 import '../../domain/entities/twitter_post_comment_entity.dart';
@@ -27,10 +28,10 @@ import '../../domain/usecases/comment_reply_usecase.dart';
 import '../../domain/usecases/post_comment_usecase.dart';
 import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
+import '../twitter/presentation/pages/create_reply_screen.dart';
 import 'twitter_comment_replied.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
-// =================== TwitterPostComments ===================
 
 class TwitterPostComments extends StatefulWidget {
   final List<TwitterPostCommentEntity> comments;
@@ -70,6 +71,94 @@ class TwitterPostComments extends StatefulWidget {
 
 class _TwitterPostCommentsState extends State<TwitterPostComments> {
   final commentTextController = TextEditingController();
+  void _openFullReplyComposer() {
+    final cubit = context.read<TwitterCubit>();
+    final paging = cubit.commentsPagingController;
+print("////////////////////////");
+print(widget.user);
+     String ownerName = '';
+    String ownerHandle = 'user';
+
+    String _nameFrom(dynamic u) {
+      if (u == null) return '';
+      try {
+        if (u is TwitterUserModel) {
+          final first = (u.firstName ?? '').trim();
+          final last  = (u.lastName ?? '').trim();
+          final name  = '$first $last'.trim();
+          if (name.isNotEmpty) return name;
+          return (u.userName ?? u.email ?? u.id ?? '').toString();
+        } else if (u is Map) {
+          final first = (u['firstName'] ?? '').toString().trim();
+          final last  = (u['lastName'] ?? '').toString().trim();
+          final name  = '$first $last'.trim();
+          if (name.isNotEmpty) return name;
+          return (u['userName'] ?? u['username'] ?? u['email'] ?? u['_id'] ?? u['id'] ?? '').toString();
+        }
+      } catch (_) {}
+      return '';
+    }
+
+    String _handleFrom(dynamic u) {
+      if (u == null) return 'user';
+      try {
+        if (u is TwitterUserModel) {
+          final h = (u.userName ?? '').trim();
+          if (h.isNotEmpty) return h;
+          final mail = (u.email ?? '').trim();
+          if (mail.contains('@')) return mail.split('@').first;
+          return (u.id ?? 'user').toString();
+        } else if (u is Map) {
+          final h = (u['userName'] ?? u['username'] ?? '').toString().trim();
+          if (h.isNotEmpty) return h;
+          final mail = (u['email'] ?? '').toString().trim();
+          if (mail.contains('@')) return mail.split('@').first;
+          return (u['_id'] ?? u['id'] ?? 'user').toString();
+        }
+      } catch (_) {}
+      return 'user';
+    }
+
+    // Prefer the post owner if your cubit keeps it
+    dynamic postOwner = widget.user; // <-- if you have it; else null
+    if (postOwner == null && (paging.itemList?.isNotEmpty ?? false)) {
+      // Fall back to the first comment's user to at least show something like the UI screenshot
+      postOwner = paging.itemList!.first.user;
+    }
+    if (postOwner == null) {
+      final me = context.read<UserCubit>().state.data;
+      postOwner = {
+        'firstName': me?.firstName ?? '',
+        'lastName' : me?.lastName ?? '',
+        'userName' : '',
+        'email'    : me?.email ?? '',
+        'id'       : me?.id ?? '',
+      };
+    }
+
+    ownerName   = _nameFrom(postOwner);
+    ownerHandle = _handleFrom(postOwner);
+print("/////////////" );
+print(ownerName );
+print(ownerHandle );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: context.read<TwitterCubit>(), // reuse same cubit
+          child: CreateReplyTwitter(
+            postId: widget.postId,
+            // If you want to reply to the POST (not a specific comment) pass null.
+            // If you want to reply to a particular comment, pass its id.
+             ownerName: ownerName,
+            ownerHandle: ownerHandle,
+            onReplied: (_) {
+             },
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +168,10 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
         final cubit = context.read<TwitterCubit>();
         final paging = cubit.commentsPagingController;
 
-        return CustomScaffold(
+        return
+          CustomScaffold(
           appBar: AppBar(
-            toolbarHeight: 120.h,
+            toolbarHeight: 100.h,
             elevation: 0,
             title: Text(
               '${paging.itemList?.length ?? 0} ${LocaleKeys.comments.localize}',
@@ -185,73 +275,110 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
               ),
 
               // ========== Composer ==========
-              Container(
-                height: kToolbarHeight,
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(
-                      top: BorderSide(color: Colors.grey.withOpacity(0.2))),
-                ),
-                child: Row(
-                  children: [
-                    // avatar
-                    _SmallAvatar(url: user?.profilePicture ?? ''),
-                    SizedBox(width: 10.w),
-                    // input
-                    Expanded(
-                      child: TextFormField(
-                        controller: commentTextController,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          hintText: '${LocaleKeys.typeYourComment.localize} …',
-                          border: InputBorder.none,
+              InkWell(
+                onTap: () {
+                  ManageVibration.vibrate();
+                   _openFullReplyComposer();
+                },                child: Container(
+                  height: kToolbarHeight,
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    border: Border(
+                        top: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                  ),
+                  child: Row(
+                    children: [
+                      // avatar
+                      SizedBox(
+                        width: 36,
+                        height: 36,
+                        child: ImageFromInternet(
+                          image: user?.profilePicture ?? '',
+                          isCircle: true,
+                          fit: BoxFit.cover,
+                          // nice fallbacks:
+                          defaultLogo: false,
+                          isMale: (user?.gender ?? '').toLowerCase() != 'female',
+                          firstChar: (user?.firstName ?? 'U').characters.first.toUpperCase(),
+                          charPadding: 5,
                         ),
-                        onChanged: (_) => setState(() {}),
                       ),
-                    ),
-                    if (commentTextController.text.trim().isNotEmpty)
-                      IconButton(
-                        icon: const Icon(Icons.send),
-                        onPressed: () async {
-                          ManageVibration.vibrate();
-                          final created = await widget.onAddComment(
-                            TwitterPostCommentParams(
-                              postId: widget.postId,
-                              content: commentTextController.text.trim(),
-                            ),
-                          );
-
-                          final u = context.read<UserCubit>().state.data;
-                          cubit.commentsPagingController.itemList?.insert(
-                            0,
-                            TwitterPostCommentModel(
-                              id: created.id,
-                              content: commentTextController.text.trim(),
-                              post: widget.postId,
-                              createdAt: created.createdAt,
-                              adminIgnore: created.adminIgnore,
-                              love: created.love,
-                              loveCount: created.loveCount,
-                              isReact: created.isReact,
-                              user: TwitterUserModel(
-                                id: u?.id ?? '',
-                                firstName: u?.firstName ?? '',
-                                lastName: u?.lastName ?? '',
-                                email: u?.email ?? '',
-                                image: u?.profilePicture ?? '',
-                                isDocumented: false,
-                                createdAt: DateTime.now(),
-                                hasStory: false,
+                      SizedBox(width: 10.w),
+                      // input
+                      Expanded(
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _openFullReplyComposer();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? const Color(0xFF1E1E1E)
+                                  : const Color(0xFFF5F6F8),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Theme.of(context).dividerColor.withOpacity(0.25),
+                                width: 1,
                               ),
                             ),
-                          );
-                          commentTextController.clear();
-                          FocusScope.of(context).unfocus();
-                          setState(() {});
-                        },
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '${LocaleKeys.typeYourComment.localize} …',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                  ],
+                      if (commentTextController.text.trim().isNotEmpty)
+                        IconButton(
+                          icon: const Icon(Icons.send),
+                          onPressed: () async {
+                            ManageVibration.vibrate();
+                            final created = await widget.onAddComment(
+                              TwitterPostCommentParams(
+                                postId: widget.postId,
+                                content: commentTextController.text.trim(),
+                              ),
+                            );
+
+                            final u = context.read<UserCubit>().state.data;
+                            cubit.commentsPagingController.itemList?.insert(
+                              0,
+                              TwitterPostCommentModel(
+                                id: created.id,
+                                content: commentTextController.text.trim(),
+                                post: widget.postId,
+                                createdAt: created.createdAt,
+                                adminIgnore: created.adminIgnore,
+                                love: created.love,
+                                loveCount: created.loveCount,
+                                isReact: created.isReact,
+                                user: TwitterUserModel(
+                                  id: u?.id ?? '',
+                                  firstName: u?.firstName ?? '',
+                                  lastName: u?.lastName ?? '',
+                                  email: u?.email ?? '',
+                                  image: u?.profilePicture ?? '',
+                                  isDocumented: false,
+                                  createdAt: DateTime.now(),
+                                  hasStory: false,
+                                 ), yourReposted: false,
+                              ),
+                            );
+                            commentTextController.clear();
+                            FocusScope.of(context).unfocus();
+                            setState(() {});
+                          },
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -413,6 +540,7 @@ class CommentCard extends StatelessWidget {
               Spacer(),
 
     PopupMenuButton<String>(
+      color: Colors.grey.shade200,
       icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
       onSelected: (v) async {
         // block edit/delete for non-owners
@@ -561,14 +689,7 @@ print(comment.post);
                 const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 2),
             child: Row(
               children: [
-                Expanded(
-                  child: _miniStatItem(
-                    icon: Icons.mode_comment_outlined,
-                    label: LocaleKeys.reply.localize,
-                    onTap: () {},
-                  ),
-                ),
-                Expanded(
+                 Expanded(
                   child: _miniStatItem(
                     icon: isReact ? Icons.favorite : Icons.favorite_outline,
                     label: '${loveCount}',
@@ -588,6 +709,7 @@ print(comment.post);
                     },
                   ),
                 ),
+/*
                 Expanded(
                   child: _miniStatItem(
                     icon: Icons.share_outlined,
@@ -605,6 +727,7 @@ print(comment.post);
                     },
                   ),
                 ),
+*/
               ],
             ),
           )

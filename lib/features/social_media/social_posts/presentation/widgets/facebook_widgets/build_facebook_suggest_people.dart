@@ -162,7 +162,8 @@ class _BuildFacebookSuggestPeopleState
                                           top: Radius.circular(
                                               12), // Rounded top corners
                                         ),
-                                        child: ImageFromInternet(
+                                        child:
+                                        ImageFromInternet(
                                             image: widget
                                                 .suggestedFriends[index]
                                                 .profilePicture,

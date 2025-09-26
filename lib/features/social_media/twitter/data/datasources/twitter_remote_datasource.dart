@@ -216,6 +216,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
           'repostsCount': t['repostsCount'] ?? 0,
           'createdAt'   : t['createdAt'],
           'youLiked'    : t['youLiked'] ?? false,
+          'yourReposted'    : t['yourReposted'] ?? false,
         };
 
         final hasOriginal = orig.isNotEmpty;
