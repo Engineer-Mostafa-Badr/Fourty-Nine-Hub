@@ -133,23 +133,23 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
             ManageVibration.vibrate();
 
             return pleaseLoginDialog(context);
-          }:isEnabled == false?()async {
+          }:isEnabled == true?()async {
             ManageVibration.vibrate();
-
-            ChatEntity? chat = await context
-                .read<UserCubit>()
-                .createNormalChat(
-              otherId: widget.otherUserId,
-              categoryId: widget.subcategoryId,
-            );
-            context.push(
-              Routes.CHAT,
-              extra: ChatsViewParams(
-                isFromStartChat: true,
-                initialTabIndex: 1,
-                selectedChat: chat,
-              ),
-            );
+            //
+            // ChatEntity? chat = await context
+            //     .read<UserCubit>()
+            //     .createNormalChat(
+            //   otherId: widget.otherUserId,
+            //   categoryId: widget.subcategoryId,
+            // );
+            // context.push(
+            //   Routes.CHAT,
+            //   extra: ChatsViewParams(
+            //     isFromStartChat: true,
+            //     initialTabIndex: 1,
+            //     selectedChat: chat,
+            //   ),
+            // );
           }:() {
             ManageVibration.vibrate();
 
