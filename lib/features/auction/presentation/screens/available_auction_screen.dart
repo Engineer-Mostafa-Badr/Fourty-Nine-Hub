@@ -17,7 +17,101 @@ import '../../../../routes/routes.dart';
 import '../../../RideFeature/presentation/pages/widgets/font_manager.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
+class AvailableAuctionScreen extends StatefulWidget {
+  const AvailableAuctionScreen({super.key});
 
+  @override
+  State<AvailableAuctionScreen> createState() => _AvailableAuctionScreenState();
+}
+
+class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
+  final ScrollController _auctionScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // 🔹 Trigger initial load when screen opens
+    context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction(context);
+  }
+
+  Future<void> _addAuction() async {
+    final result = await context.push(Routes.createAuctionScreen);
+    if (result == true) {
+      context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuctionCubit, AuctionState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
+      listener: (context, state) {
+        if (state.status == StateStatus.error) {
+          final errorMessage =
+              getFailureMessage(state.failure!, context) ??
+                  "Something went wrong";
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        final cubit = context.read<AuctionCubit>();
+        final auctions = cubit.availableAuctionNonSocketData;
+
+        Widget body;
+
+        if (cubit.isAuctionInitialLoading) {
+          body = const Center(child: CustomCircularProgressIndicator());
+        } else if (!cubit.isAuctionInitialLoading && auctions.isEmpty) {
+          body = Center(
+            child: Text(
+              context.isArabic ? 'لا يوجد مزادات متاحة' : 'No Available Auctions',
+              style: TextStyle(fontSize: FontSize.s18),
+            ),
+          );
+        } else if (auctions.isNotEmpty) {
+          body = OlxPaginationWidget(
+            itemsPerPage: cubit.auctionPageSize,
+            scrollController: _auctionScrollController,
+            banners: [], // 👉 add banner list if needed
+            loadPage: (page) {
+              return context.read<AuctionCubit>().getAvailableNonSocketAuction(context);
+            },
+            items: List.generate(
+              auctions.length,
+                  (index) {
+                final auction = auctions[index];
+                return AuctionCard(auction: auction);
+              },
+            ),
+          );
+        } else {
+          body = const Center(child: Text("Something went wrong"));
+        }
+
+        return Scaffold(
+          body: body,
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _addAuction,
+            backgroundColor: AppColors.PRIMARY_COLOR,
+            icon: const Icon(Icons.add, color: Colors.white),
+            label: Text(
+              "${LocaleKeys.addAuction.localize}",
+              style: Styles.mediumText(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/*
 class AvailableAuctionScreen extends StatefulWidget {
   const AvailableAuctionScreen({super.key});
 
@@ -107,3 +201,4 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
     );
   }
 }
+*/

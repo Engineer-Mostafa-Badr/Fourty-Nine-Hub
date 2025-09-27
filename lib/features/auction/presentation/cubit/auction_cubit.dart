@@ -353,7 +353,7 @@ class AuctionCubit extends Cubit<AuctionState> {
   bool isInitialLoadingParticipants = false;
 
   /// Initial load (reset participants and fetch page 1)
-  void loadInitialParticipants(String auctionId) async {
+  void loadInitialParticipants2(String auctionId) async {
     emit(state.copyWith(status: StateStatus.loading)); // show loader
     isInitialLoadingParticipants = true;
     participants.clear();
@@ -363,6 +363,112 @@ class AuctionCubit extends Cubit<AuctionState> {
     isInitialLoadingParticipants = false;
     emit(state.copyWith(status: StateStatus.success));
   }
+  /*
+  /// Initial load (reset participants and fetch page 1)
+  void loadInitialParticipants(String auctionId) async {
+    emit(state.copyWith(status: StateStatus.loading)); // show loader
+    isInitialLoadingParticipants = true;
+    participants.clear();
+    currentPageParticipants = 1;
+    hasMoreParticipants = true;
+
+    await getParticipants(auctionId);
+
+    isInitialLoadingParticipants = false;
+    // ❌ don't emit success here — getParticipants already does it
+  }
+
+
+  /// Fetch paginated participants
+  Future<void> getParticipants(String auctionId) async {
+    if (!hasMoreParticipants || isLoadingMoreParticipants) return;
+
+    isLoadingMoreParticipants = true;
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await getParticipantsAuctionUseCase(
+      PriceAuctionParams(
+        id: auctionId,
+        page: currentPageParticipants,
+        limit: 10,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        isLoadingMoreParticipants = false;
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
+      },
+          (data) {
+        participants.addAll(data);
+
+        if (data.length < 10) {
+          hasMoreParticipants = false;
+        } else {
+          currentPageParticipants++;
+        }
+
+        isLoadingMoreParticipants = false;
+        emit(state.copyWith(
+          auctionParticipants: List.from(participants),
+          status: StateStatus.success,
+        ));
+      },
+    );
+  }
+*/
+  void loadInitialParticipants(String auctionId) async {
+    emit(state.copyWith(participantsStatus: StateStatus.loading));
+    isInitialLoadingParticipants = true;
+    participants.clear();
+    currentPageParticipants = 1;
+    hasMoreParticipants = true;
+
+    await getParticipants(auctionId);
+
+    isInitialLoadingParticipants = false;
+  }
+
+  Future<void> getParticipants(String auctionId) async {
+    if (!hasMoreParticipants || isLoadingMoreParticipants) return;
+
+    isLoadingMoreParticipants = true;
+    emit(state.copyWith(participantsStatus: StateStatus.loading));
+
+    final response = await getParticipantsAuctionUseCase(
+      PriceAuctionParams(
+        id: auctionId,
+        page: currentPageParticipants,
+        limit: 10,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        isLoadingMoreParticipants = false;
+        emit(state.copyWith(
+          failure: failure,
+          participantsStatus: StateStatus.error,
+        ));
+      },
+          (data) {
+        participants.addAll(data);
+
+        if (data.length < 10) {
+          hasMoreParticipants = false;
+        } else {
+          currentPageParticipants++;
+        }
+
+        isLoadingMoreParticipants = false;
+        emit(state.copyWith(
+          auctionParticipants: List.from(participants),
+          participantsStatus: StateStatus.success,
+        ));
+      },
+    );
+  }
+
 /*
   void listenToNewBids() {
     CliLogger.info('🎧 Listening to new bids...');
@@ -412,44 +518,6 @@ class AuctionCubit extends Cubit<AuctionState> {
     return super.close();
   }
 
-
-  /// Fetch paginated participants
-  Future<void> getParticipants(String auctionId) async {
-    if (!hasMoreParticipants || isLoadingMoreParticipants) return;
-
-    isLoadingMoreParticipants = true;
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await getParticipantsAuctionUseCase(
-      PriceAuctionParams(
-        id: auctionId,
-        page: currentPageParticipants,
-        limit: 10,
-      ),
-    );
-
-    response.fold(
-          (failure) {
-        isLoadingMoreParticipants = false;
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-          (data) {
-        participants.addAll(data);
-
-        if (data.length < 10) {
-          hasMoreParticipants = false;
-        } else {
-          currentPageParticipants++;
-        }
-
-        isLoadingMoreParticipants = false;
-        emit(state.copyWith(
-          auctionParticipants: List.from(participants),
-          status: StateStatus.success,
-        ));
-      },
-    );
-  }
 
 
   void sendBid(String auctionId, int amount) async {

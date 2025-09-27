@@ -1,6 +1,7 @@
 part of 'auction_cubit.dart';
 class AuctionState {
   final StateStatus? status;
+  final StateStatus? participantsStatus;  // 👈 new
   final List<GetAvailableAuctionEntity>? getAvailableAuction;
   final List<GetAvailableAuctionEntity>? getExpiredAuction;
   final List<GetAvailableAuctionEntity>? getFavoriteAuction;
@@ -20,6 +21,7 @@ class AuctionState {
   final AuctionBannerEntity? auctionBanner;
   AuctionState({
     this.status,
+    this.participantsStatus, // 👈 add
     this.getAvailableAuction,
     this.failure,
     this.singleAuction,
@@ -41,6 +43,7 @@ class AuctionState {
 
   AuctionState copyWith({
     StateStatus? status,
+    StateStatus? participantsStatus, // 👈 add
     List<GetAvailableAuctionEntity>? getAvailableAuction,
     Failure? failure,
     GetAvailableAuctionEntity? singleAuction,
@@ -61,6 +64,7 @@ class AuctionState {
   }) {
     return AuctionState(
       status: status ?? this.status,
+      participantsStatus: participantsStatus ?? this.participantsStatus, // 👈
       getAvailableAuction: getAvailableAuction ?? this.getAvailableAuction,
       failure: failure ?? this.failure,
       singleAuction: singleAuction ?? this.singleAuction,

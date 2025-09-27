@@ -84,28 +84,28 @@ class _AuctionScreenState extends State<AuctionScreen>
     // Show loading while fetching data from API
 
     // Show error state with retry option
-    if (state.status == StateStatus.error) {
-      return Container(
-        height: 100,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, color: Colors.grey.shade600),
-            const SizedBox(height: 4),
-            Text(
-              "Failed to load banner",
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-            ),
-          ],
-        ),
-      );
-    }
+    // if (state.status == StateStatus.error) {
+    //   return Container(
+    //     height: 100,
+    //     width: double.infinity,
+    //     decoration: BoxDecoration(
+    //       color: Colors.grey.shade200,
+    //       borderRadius: BorderRadius.circular(12),
+    //     ),
+    //     alignment: Alignment.center,
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Icon(Icons.error_outline, color: Colors.grey.shade600),
+    //         const SizedBox(height: 4),
+    //         Text(
+    //           "Failed to load banner",
+    //           style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     // Show network image with loading and error handling
     if (state.auctionBanner?.data != null &&
