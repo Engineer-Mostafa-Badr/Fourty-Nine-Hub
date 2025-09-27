@@ -15,8 +15,6 @@ import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'widgets/trip_join/my_trip_widget.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
-
-
 class TripJoinContent extends StatefulWidget {
   const TripJoinContent({super.key});
 
@@ -36,7 +34,7 @@ class _TripJoinContentState extends State<TripJoinContent>
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     _scrollController = ScrollController()..addListener(_onScroll);
-    context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
+    context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
 
     tabController.addListener(() {
       setState(() {
@@ -211,7 +209,7 @@ class _TripJoinContentState extends State<TripJoinContent>
         ManageVibration.vibrate();
         tabController.animateTo(index);
         if(index==0){
-          context.read<ViewAllTripJoinCubit>().loadInitialTripJoin();
+          context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
         }
         if(index == 1){
           print("Second");

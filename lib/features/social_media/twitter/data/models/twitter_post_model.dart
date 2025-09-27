@@ -114,6 +114,7 @@ class TwitterPostModel extends TwitterPostEntity {
     super.shares,
     super.isShared,
     super.isReact,
+    super.yourReposted,
     super.photo,
     super.loveCount,
     super.repostCount,
@@ -160,6 +161,7 @@ class TwitterPostModel extends TwitterPostEntity {
       'love'      : const <String>[],
       'adminIgnore': false,
       'isReact'   : _asBool(post['youLiked']),
+      'yourReposted'   : _asBool(post['yourReposted']),
     };
     return TwitterPostCommentModel.fromJson(adapted);
   }
@@ -231,6 +233,7 @@ class TwitterPostModel extends TwitterPostEntity {
       content   : _asString(json['content'] ?? json['text'] ?? ''),
       createdAt : _asDate(json['createdAt']),
       isLiked   : _asBool(json['youLiked']),
+      yourReposted   : _asBool(json['yourReposted']),
       user      : userModel,
       mainPost  : mainPost,
       postShare : mainPost, // kept for back-compat
@@ -277,6 +280,7 @@ class TwitterPostModel extends TwitterPostEntity {
       '_id'        : post['id'] ?? post['_id'],
       'content'    : post['content'] ?? post['text'] ?? '',
       'youLiked'   : post['youLiked'] ?? false,
+      'yourReposted'   : post['yourReposted'] ?? false,
       'createdAt'  : post['createdAt'] ?? thread['createdAt'],
 
       'loveCount'      : post['likesCount'] ?? post['likes'] ?? 0,
@@ -318,6 +322,7 @@ class TwitterPostModel extends TwitterPostEntity {
       content   : _asString(original['content'] ?? ''),
       createdAt : _asDate(original['createdAt']),
       isLiked   : _asBool(original['youLiked']),
+      yourReposted   : _asBool(original['yourReposted']),
       user      : _userFromAny(owner),        // ORIGINAL owner
       mainPost  : null,
       comments  : const [],
@@ -347,6 +352,7 @@ class TwitterPostModel extends TwitterPostEntity {
       content   : _asString(stubPost['content'] ?? ''), // usually null
       createdAt : _asDate(stubPost['createdAt'] ?? thread['createdAt']),
       isLiked   : _asBool(stubPost['youLiked']),
+      yourReposted   : _asBool(stubPost['yourReposted']),
       user      : _userFromAny(reposter),               // REP O S T E R
       mainPost  : originalEntity,                       // show original inside the card
       comments  : const [],
@@ -397,6 +403,7 @@ class TwitterPostModel extends TwitterPostEntity {
         'repostsCount' : t['repostsCount'],
         'repliesCount': t['repliesCount'],
         'youLiked'   : t['youLiked'],
+        'yourReposted'   : t['yourReposted'],
         'createdAt'  : t['createdAt'],
       };
       final rebuilt = {
@@ -487,6 +494,7 @@ class TwitterPostModel extends TwitterPostEntity {
       likesCount  : _asInt(m['likesCount']),
       repliesCount: _asInt(m['repliesCount']),
       youLiked    : _asBool(m['youLiked']),
+      yourReposted    : _asBool(m['yourReposted']),
       owner       : owner,
     );
   }

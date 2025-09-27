@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/doc
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_setting_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/appointment_booking_entity.dart';
 import '../entities/most_booking_entity.dart';
@@ -24,10 +25,12 @@ abstract class HealthRepo {
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(
       String userId);
   Future<Either<Failure, DoctorSettingEntity>> isDoctor();
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(SearchDoctorsParams params);
   Future<Either<Failure, bool>> isDoctorApproval();
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
   Future<Either<Failure, bool>> cancelAppointment(String id);
   Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params});
   Future<Either<Failure, List<BookingEntity>>> getHistoryBooking({required GetBookingParams params});
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params});
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUserBooking({required GetMostBookingParams params});
 }

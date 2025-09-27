@@ -38,9 +38,9 @@ class LoginParams extends Equatable {
         'fcmToken': token,
         'deviceId': await getDeviceId(),
         'deviceName': await getDeviceName(),
-        'loginLng': await getLng(),
-        'loginLat' : await getLat(),
-        'loginAddress' : await getAddress(),
+        // 'loginLng': await getLng(),
+        // 'loginLat' : await getLat(),
+        // 'loginAddress' : await getAddress(),
         'platform' : Platform.operatingSystem,
       };
 

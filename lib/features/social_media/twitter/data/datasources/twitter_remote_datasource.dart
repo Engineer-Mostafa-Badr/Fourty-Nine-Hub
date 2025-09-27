@@ -53,6 +53,7 @@ abstract class TwitterRemoteDataSource {
 
   // REACTIONS / SHARE / REPORT
   Future<Either<Failure, bool>> reactOnPost({required TwitterPostReactParams params});
+  Future<Either<Failure, bool>> getVerification();
   Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params});
   Future<Either<Failure, bool>> sharePost({required String params}); // postId
   Future<Either<Failure, bool>> addReport({required TwitterReportParams params});
@@ -215,6 +216,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
           'repostsCount': t['repostsCount'] ?? 0,
           'createdAt'   : t['createdAt'],
           'youLiked'    : t['youLiked'] ?? false,
+          'yourReposted'    : t['yourReposted'] ?? false,
         };
 
         final hasOriginal = orig.isNotEmpty;
@@ -508,6 +510,14 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
         EndPoints.reactOnTwitterPost(params.postId),
         data: params.toJson());
     return response.fold((l) => Left(l), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, bool>> getVerification() async {
+    final response = await _apiConsumer.get(
+        EndPoints.getVerification,
+        );
+    return response.fold((l) => Left(l), (data) => Right(data['data']??false));
   }
 
   @override

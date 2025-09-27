@@ -100,13 +100,11 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
 }
 
 bool isBeforeNow(String dateTimeString) {
-  try {
-    DateTime dateTime = DateTime.parse(dateTimeString);
-    return dateTime.isBefore(DateTime.now().toUtc());
-  } catch (e) {
-    print("Invalid date string: $e");
+  final dateTime = _safeParseDateTime(dateTimeString);
+  if (dateTime == null) {
     return false;
   }
+  return dateTime.isBefore(DateTime.now().toUtc());
 }
 
 String extractTime(String input) {
@@ -117,11 +115,38 @@ String extractPeriod(String input) {
   return input.split(' ').last; // Extracts "PM"
 }
 
+/// Safely parses a date string with multiple format support
+DateTime? _safeParseDateTime(String dateTimeString) {
+  try {
+    // Handle ISO 8601 format with timezone (e.g., "2025-09-23T10:40:00.245Z")
+    if (dateTimeString.contains('T') && dateTimeString.contains('Z')) {
+      return DateTime.parse(dateTimeString);
+    }
+    
+    // Handle ISO 8601 format without timezone (e.g., "2025-09-23T10:40:00")
+    if (dateTimeString.contains('T')) {
+      return DateTime.parse(dateTimeString);
+    }
+    
+    // Handle regular date format (e.g., "2025-09-23")
+    return DateTime.parse(dateTimeString);
+  } catch (e) {
+    print("Failed to parse date: $dateTimeString");
+    print("Error: $e");
+    return null;
+  }
+}
+
 bool _isTimeOfDayAfter(String dateTimeString) {
-  final dateTime = DateTime.parse(dateTimeString);
+  final dateTime = _safeParseDateTime(dateTimeString);
+  if (dateTime == null) {
+    return false;
+  }
+  
   final now = DateTime.now().toUtc();
   TimeOfDay t1 = TimeOfDay.fromDateTime(dateTime);
   TimeOfDay t2 = TimeOfDay.now();
+  
   if (dateTime.day > now.day) {
     return true;
   } else if (dateTime.day == now.day) {

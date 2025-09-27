@@ -14,9 +14,11 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/can
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_history_booking_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_medical_services.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_booking_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_user_upcoming_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_approval_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/is_doctor_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
@@ -51,6 +53,8 @@ class HealthCubit extends Cubit<HealthState> {
   final GetBookingUseCase _getBookingUseCase;
   final GetHistoryBookingUseCase _getHistoryBookingUseCase;
   final GetMostBookingUseCase _getMostBookingUseCase;
+  final GetUserBookingUseCase _getUserBookingUseCase;
+  final SearchDoctorsUseCase _searchDoctorsUseCase;
 
   final List<HealthBookingFilterModel> services = [
     HealthBookingFilterModel(
@@ -91,12 +95,16 @@ class HealthCubit extends Cubit<HealthState> {
   String currentType = 'current'; // Track current active type
 
   List<MostBookingEntity> mostBooking = [];
+  List<BookedAppointmentEntity> myBooking = [];
 
   int mostBookingPage = 1;
+  int myBookingPage = 1;
 
   bool hasMoreMost = true;
+  bool hasMoreMyBooking = true;
 
   bool isLoadingMoreMost = true;
+  bool isLoadingMyBooking = true;
 
   HealthCubit(
       this._getUserUpcomingAppointmentsUseCase,
@@ -113,6 +121,8 @@ class HealthCubit extends Cubit<HealthState> {
       this._cancelAppointmentUseCase,
       this._getBookingUseCase,
       this._getHistoryBookingUseCase,
+      this._getUserBookingUseCase,
+      this._searchDoctorsUseCase,
       this._getMostBookingUseCase)
       : super(const HealthState());
 
@@ -319,19 +329,83 @@ class HealthCubit extends Cubit<HealthState> {
       // },
     );
   }
+  Future<void> getUserBookings(String type) async {
+    final isCurrent = type == 'myBookings';
+    print("objectIsCurrent $isCurrent");
+    if (isLoading) return; // Prevent concurrent requests if needed
+
+    isLoading = true;
+    emit(state.copyWith(isLoadingMoreMostBooking: true));
+
+    final response = await _getUserBookingUseCase(
+      GetMostBookingParams(page: myBookingPage, limit: 5),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoading = false;
+        emit(state.copyWith(
+          failure: failure,
+          isLoadingMoreMostBooking: false,
+          status: HealthStates.error,
+        ));
+      },
+      (data) {
+        myBooking.addAll(data);
+
+        if ((data.length ?? 0) < 5) {
+          hasMoreMyBooking = false;
+          emit(state.copyWith(isLoadingMoreMostBooking: false));
+        } else {
+          myBookingPage++;
+        }
+
+        isLoadingMyBooking = false;
+        emit(
+            state.copyWith(myBookings: data, isLoadingMoreMostBooking: false));
+      },
+    );
+  }
+
+  Future<void> searchBookings(String name) async {
+    final response = await _searchDoctorsUseCase(
+      SearchDoctorsParams(page: myBookingPage, limit: 10, name: name),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+          failure: failure,
+          status: HealthStates.error,
+        ));
+      },
+      (data) {
+        emit(
+            state.copyWith(status: HealthStates.success));
+      },
+    );
+  }
 
   Future<void> getMyBookings() async {
-    final response =
-        await _getUserUpcomingAppointmentsUseCase.call(userId ?? '');
-    response.fold((failure) {
-      var currentContext =
-          AppPages.router.configuration.navigatorKey.currentContext!;
-      showErrorMessage(
-          currentContext, getFailureMessage(failure, currentContext));
-      emit(state.copyWith(failure: failure, status: HealthStates.error));
-    },
-        (data) => emit(
-            state.copyWith(status: HealthStates.initState, myBookings: data)));
+    // final response =
+    //     await _getUserUpcomingAppointmentsUseCase.call(userId ?? '');
+    // response.fold((failure) {
+    //   var currentContext =
+    //       AppPages.router.configuration.navigatorKey.currentContext!;
+    //   showErrorMessage(
+    //       currentContext, getFailureMessage(failure, currentContext));
+    //   emit(state.copyWith(failure: failure, status: HealthStates.error));
+    // },
+    //     (data) => emit(
+    //         state.copyWith(status: HealthStates.initState, myBookings: data)));
   }
 
   Future<void> getServices() async {
@@ -392,8 +466,9 @@ class HealthCubit extends Cubit<HealthState> {
       hasMoreHistory = true;
     }
 
-    if(type != 'current') await getHistoryBookings(type);
+    if(type == 'history') await getHistoryBookings(type);
     if(type == 'current') await getBookings(type);
+    if(type == 'myBookings') await getUserBookings(type);
     emit(state.copyWith(status: HealthStates.success));
   }
 
@@ -404,6 +479,17 @@ class HealthCubit extends Cubit<HealthState> {
     mostBookingPage = 1;
     hasMoreMost = true;
     await getMostBookings();
+    emit(state.copyWith(status: HealthStates.success));
+  }
+
+
+  void loadInitialMyBookings() async {
+    emit(state.copyWith(status: HealthStates.loading));
+
+    myBooking.clear();
+    myBookingPage = 1;
+    hasMoreMyBooking = true;
+    await getUserBookings('myBookings');
     emit(state.copyWith(status: HealthStates.success));
   }
 

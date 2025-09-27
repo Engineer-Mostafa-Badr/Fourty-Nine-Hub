@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/us
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/emergency/domain/usecases/get_emergency_requests_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_quran_surah_use_case.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
@@ -429,6 +430,8 @@ class EndPoints {
 
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
+  static searchDoctors(SearchDoctorsParams params) =>
+      '/health/doctors/search/doctor?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
 
@@ -967,6 +970,8 @@ class EndPoints {
     return '/twitter/posts/$postId/toggle-like';
   }
 
+  static String getVerification = '/user-verification-account/check-subscription';
+
   static String reactOnTwitterComment(String commentId) {
     return '/twitter/comment/react/$commentId?subCategory=${Constants.twitterSubCategory}';
   }
@@ -1045,11 +1050,11 @@ class EndPoints {
   }
 
   static String deleteTwitterComment(String commentId) {
-    return '/twitter/comment/delete-comment/$commentId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$commentId';
   }
 
   static String editTwitterComment(String commentId) {
-    return '/twitter/comment/update-comment/$commentId?subCategory=${Constants.twitterSubCategory}';
+    return '/twitter/posts/$commentId';
   }
 
   static String friendRequest(String userId) {
@@ -1682,6 +1687,7 @@ class EndPoints {
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
   static const getMostBooking = '/health/doctors';
+  static const getUserBooking = '/health/my-booking';
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
@@ -1745,13 +1751,24 @@ class EndPoints {
   static String getAllCarModel = '/ride/cars/';
   static String getTripExpectedPrice = '/trip-join/offers/expected-price';
   static String getAvailableTripJoin = '/trip-join/offers/available';
+  static String searchAvailableTripJoin = '/trip-join/offers/search';
+  static String getAvailablePickMe = '/pick-me/offers';
   static String getRequestTripJoin = '/trip-join/requests';
+  static String getRequestPickMe = '/pick-me/requests/offers';
   static String getMyAdsTripJoin = '/trip-join/offers/me';
+  static String getMyAdsPickMe = '/pick-me/offers/me';
   static String deleteMyAdsTripJoin = '/trip-join/offers/';
+  static String deleteMyAdsPickMe = '/pick-me/offers/';
   static String applyViewTripJoin = '/trip-join/offers/';
+  static String applyViewPickMe = '/pick-me/offers/';
+  static String createPickMeRequest = '/pick-me/requests';
+  static String createTripJoinRequest = '/trip-join/requests';
   static String applyReadRequestTripJoin = '/trip-join/requests/';
+  static String applyReadRequestPickMe = '/pick-me/requests/';
   static String createTripJoinOffer = '/trip-join/offers';
+  static String createPickMeOffer = '/pick-me/offers';
   static String getRequestTripJoinCount = '/trip-join/requests/count/unread';
+  static String getRequestCountPickMe = '/pick-me/requests/count/unread';
 
   static const updateDriverLoadingRatingNonSocket =
       '/loading/trip/rating/driver';

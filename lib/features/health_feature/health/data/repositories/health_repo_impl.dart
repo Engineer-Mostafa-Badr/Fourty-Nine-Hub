@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/hea
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/most_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_booking_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_most_booking_use_case.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 
 import '../../domain/repositories/health_repo.dart';
 import '../datasources/health_remote_datasource.dart';
@@ -41,6 +42,11 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(
       String userId) {
     return _remoteDataSource.getMedicalServices(userId);
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(SearchDoctorsParams params) {
+    return _remoteDataSource.searchDoctors(params);
   }
 
   @override
@@ -82,5 +88,10 @@ class HealthRepoImpl implements HealthRepo {
   @override
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params}) {
     return _remoteDataSource.getMostBooking(params:params);
+  }
+
+  @override
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUserBooking({required GetMostBookingParams params}) {
+    return _remoteDataSource.getUserBooking(params:params);
   }
 }

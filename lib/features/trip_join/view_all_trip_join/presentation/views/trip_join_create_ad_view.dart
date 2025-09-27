@@ -5,13 +5,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../../domain/usecases/create_trip_join_offer_use_case.dart';
 import 'Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
@@ -61,7 +61,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   @override
   void initState() {
     super.initState();
-    if(widget.isFromPickMe==true)context.read<ViewAllTripJoinCubit>().loadInitialCarBrandLoading();
+    if(widget.isFromPickMe==false)context.read<ViewAllTripJoinCubit>().loadInitialCarBrandLoading();
   }
 
   String _formatDistance(double meters) {
@@ -145,7 +145,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: WelcomeTextWidget(
-                      title: widget.isFromPickMe==true?LocaleKeys.welcomeToTripjoin.localize:LocaleKeys.welcome_pick_me.localize,
+                      title: widget.isFromPickMe==false?LocaleKeys.welcomeToTripjoin.localize:LocaleKeys.welcome_pick_me.localize,
                       infoMessage: context.isArabic
                           ? " انشئ إعلان لرحلة بسيارتك ، انتظر المستخدمين للاتصال بك. شارك الرحلة واكسب المال!"
                           : "Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
@@ -313,7 +313,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           ),
                         ),
                         const Sizer(),
-                        if(widget.isFromPickMe==true)Padding(
+                        if(widget.isFromPickMe==false)Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.h),
                           child: BlocBuilder<ViewAllTripJoinCubit,
                               ViewAllTripJoinState>(
@@ -448,14 +448,30 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                               horizontal: 18.0.h, vertical: 8.h),
                           child: PremiumAndRequestTripWidget(
                             onPremiumPressed: () {
-                              if (phoneController.text.isEmpty ||
+                              print("widget.isFromPickMe ${widget.isFromPickMe}");
+                              if (widget.isFromPickMe!=true && (phoneController.text.isEmpty ||
                                   selectedBrand == null ||
                                   selectedModel == null ||
                                   selectedSeatNum == null ||
                                   currentLocation == null ||
                                   toLocation == null ||
                                   selectedBrandId == null ||
-                                  selectedModelId == null) {
+                                  selectedModelId == null)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        LocaleKeys.pleaseFillAllFields.localize),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+                              if (widget.isFromPickMe==true && (phoneController.text.isEmpty ||
+                                  selectedSeatNum == null ||
+                                  currentLocation == null ||
+                                  toLocation == null)
+                                  ) {
+                                print("selectedSeatNum == null ${selectedSeatNum} currentLocation == null ${currentLocation}");
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -468,67 +484,121 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                       
                               final params = CreateTripJoinParams(
                                 creatorPhoneNumber: phoneController.text,
-                                subcategoryId: "62c8ba9f8e28a58a3edf57ee",
+                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
                                 isPremium: true,
                                 isRepeat: isChecked,
                                 passengers: selectedSeatNum!,
-                                vehicleCarBrandId: selectedBrandId!,
-                                vehicleModelId: selectedModelId!,
+                                vehicleCarBrandId: selectedBrandId??'',
+                                vehicleModelId: selectedModelId??'',
                                 startDate: _getTime(),
-                                startLongitude: currentLocation![0],
-                                startLatitude: currentLocation![1],
-                                targetLongitude: toLocation![0],
-                                targetLatitude: toLocation![1],
+                                startLongitude: currentLocation?[1]??0,
+                                startLatitude: currentLocation?[0]??0,
+                                targetLongitude: toLocation?[1]??0,
+                                targetLatitude: toLocation?[0]??0,
                               );
-                                      
-                              if(widget.isFromPickMe==true)context
-                                  .read<ViewAllTripJoinCubit>()
-                                  .createTripJoinOffer(params, context)
-                                  .then((_) {
-                                Navigator.pop(context);
-                              });
-                            },
-                            onNormalPressed: () {
-                              if (phoneController.text.isEmpty ||
-                                  selectedBrand == null ||
-                                  selectedModel == null ||
-                                  selectedSeatNum == null ||
-                                  currentLocation == null ||
-                                  toLocation == null ||
-                                  selectedBrandId == null ||
-                                  selectedModelId == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        LocaleKeys.pleaseFillAllFields.localize),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-                                      
-                              final params = CreateTripJoinParams(
+
+                              final pickMeParams = CreatePickMeParams(
                                 creatorPhoneNumber: phoneController.text,
-                                subcategoryId: "62c8ba9f8e28a58a3edf57ee",
-                                isPremium: false,
+                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                                isPremium: true,
                                 isRepeat: isChecked,
-                                passengers: selectedSeatNum!,
-                                vehicleCarBrandId: selectedBrandId!,
-                                vehicleModelId: selectedModelId!,
+                                passengers: selectedSeatNum??0,
                                 startDate: _getTime(),
-                                startLongitude: currentLocation![0],
-                                startLatitude: currentLocation![1],
-                                targetLongitude: toLocation![0],
-                                targetLatitude: toLocation![1],
+                                startLongitude: currentLocation?[1]??0,
+                                startLatitude: currentLocation?[0]??0,
+                                targetLongitude: toLocation?[1]??0,
+                                targetLatitude: toLocation?[0]??0,
                               );
                                       
-                              if(widget.isFromPickMe==true) {
+                              if(widget.isFromPickMe==false) {
                                 context
                                   .read<ViewAllTripJoinCubit>()
                                   .createTripJoinOffer(params, context)
                                   .then((_) {
                                 Navigator.pop(context);
                               });
+                              }
+                              if(widget.isFromPickMe==true) {
+                                context
+                                    .read<ViewAllTripJoinCubit>()
+                                    .createPickMeOffer(pickMeParams, context);
+                              }
+                            },
+                            onNormalPressed: () {
+                              if (widget.isFromPickMe!=true && (phoneController.text.isEmpty ||
+                                  selectedBrand == null ||
+                                  selectedModel == null ||
+                                  selectedSeatNum == null ||
+                                  currentLocation == null ||
+                                  toLocation == null ||
+                                  selectedBrandId == null ||
+                                  selectedModelId == null))  {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        LocaleKeys.pleaseFillAllFields.localize),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (widget.isFromPickMe==true && (phoneController.text.isEmpty ||
+                                  selectedSeatNum == null ||
+                                  currentLocation == null ||
+                                  toLocation == null)
+                              ) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        LocaleKeys.pleaseFillAllFields.localize),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+
+
+                              final params = CreateTripJoinParams(
+                                creatorPhoneNumber: phoneController.text,
+                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                                isPremium: false,
+                                isRepeat: isChecked,
+                                passengers: selectedSeatNum??0,
+                                vehicleCarBrandId: selectedBrandId??'',
+                                vehicleModelId: selectedModelId??'',
+                                startDate: _getTime(),
+                                startLongitude: currentLocation?[1]??0,
+                                startLatitude: currentLocation?[0]??0,
+                                targetLongitude: toLocation?[1]??0,
+                                targetLatitude: toLocation?[0]??0,
+                              );
+
+                              final pickMeParams = CreatePickMeParams(
+                                creatorPhoneNumber: phoneController.text,
+                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                                isPremium: false,
+                                isRepeat: isChecked,
+                                passengers: selectedSeatNum!,
+                                startDate: _getTime(),
+                                startLongitude: currentLocation?[1]??0,
+                                startLatitude: currentLocation?[0]??0,
+                                targetLongitude: toLocation?[1]??0,
+                                targetLatitude: toLocation?[0]??0,
+                              );
+
+                              if(widget.isFromPickMe==false) {
+                                context
+                                  .read<ViewAllTripJoinCubit>()
+                                  .createTripJoinOffer(params, context)
+                                  .then((_) {
+                                Navigator.pop(context);
+                              });
+                              }
+                              if(widget.isFromPickMe==true) {
+                                context
+                                    .read<ViewAllTripJoinCubit>()
+                                    .createPickMeOffer(pickMeParams, context);
                               }
                             },
                           ),
