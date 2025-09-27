@@ -1724,6 +1724,7 @@ class EndPoints {
   static String getAllCarModel = '/ride/cars/';
   static String getTripExpectedPrice = '/trip-join/offers/expected-price';
   static String getAvailableTripJoin = '/trip-join/offers/available';
+  static String searchAvailableTripJoin = '/trip-join/offers/search';
   static String getAvailablePickMe = '/pick-me/offers';
   static String getRequestTripJoin = '/trip-join/requests';
   static String getRequestPickMe = '/pick-me/requests/offers';

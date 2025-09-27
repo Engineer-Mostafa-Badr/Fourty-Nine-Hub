@@ -268,11 +268,12 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   }
 
 
-  Future<void> createPickMeRequest(
+  Future<bool> createPickMeRequest(
     String tripId,
       bool isPremium,
       String phone
   ) async {
+    bool isSuccess=false;
     var currentContext =
     AppPages.router.configuration.navigatorKey.currentContext!;
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
@@ -282,6 +283,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     );
     response.fold(
       (failure) {
+        isSuccess=false;
+        currentContext.pop();
         currentContext.pop();
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
@@ -291,6 +294,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       (tripData) {
         currentContext.pop();
         currentContext.pop();
+        isSuccess=true;
         showSuccessMessage(currentContext, currentContext.isArabic?"تم ارسال طلبك بنجاح":"Your request has been sent successfully");
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
@@ -298,6 +302,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         ));
       },
     );
+    return isSuccess;
   }
 
   Future<void> createTripJoinRequest(
@@ -776,6 +781,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
   // pagination method
   Future<void> getTripJoin() async {
+    print("state.tripsFromSearch ${state.tripsFromSearch} state.tripsSearchText ${state.tripsSearchText}");
     if (!hasMoreTripJoin || isLoadingMoreTripJoin) return;
 
     isLoadingMoreTripJoin = true;
@@ -785,6 +791,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       CarBrandParams(
         page: currentPageTripJoin,
         limit: 15,
+          id: state.tripsFromSearch==true?state.tripsSearchText:""
       ),
     );
 
@@ -830,6 +837,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       CarBrandParams(
         page: currentPagePickMe,
         limit: 15,
+        id: state.offersFromSearch==true?state.searchText:""
       ),
     );
 
@@ -972,7 +980,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
 
-  Future<void> loadInitialTripJoin() async {
+  Future<void> loadInitialTripJoin(bool fromSearch,String searchText) async {
+    print("fromSearch $fromSearch searchText $searchText");
+    emit(state.copyWith(tripsFromSearch:fromSearch,tripsSearchText:searchText));
     isLoadingTripJoin = true;
     tripJoinData.clear();
     currentPageTripJoin = 1;
@@ -982,7 +992,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
 
-  Future<void> loadInitialPickMe() async {
+  Future<void> loadInitialPickMe(bool fromSearch,String searchText) async {
+    emit(state.copyWith(offersFromSearch:fromSearch,searchText:searchText));
     isLoadingPickMe = true;
     pickMeData.clear();
     currentPagePickMe = 1;

@@ -17,3 +17,10 @@ class GetAvailablePickMeUseCase
   }
 }
 
+class GetAvailablePickMeParams{
+  final int page;
+  final String? search;
+  final int limit;
+
+  GetAvailablePickMeParams({required this.page, required this.limit,this.search});
+}
