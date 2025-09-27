@@ -23,9 +23,65 @@ class AuctionCard extends StatelessWidget {
     required this.auction,
     this.isFavorite = false,
   });
+  String _formatTimeLeft(BuildContext context) {
+    final endAt = auction.endAt;
+    if (endAt == null) return '';
+
+    final nowUtc = DateTime.now().toUtc();
+    final endUtc = endAt.isUtc ? endAt : endAt.toUtc();
+
+    if (endUtc.isBefore(nowUtc)) {
+      return context.isArabic ? 'انتهى' : 'Ended';
+    }
+
+    final diff = endUtc.difference(nowUtc);
+
+    final days = diff.inDays;
+    final hours = diff.inHours % 24;
+    final minutes = diff.inMinutes % 60;
+    final seconds = diff.inSeconds % 60;
+
+    if (days > 0) {
+      if (hours > 0) {
+        return context.isArabic
+            ? '$days يوم $hours ساعة متبقية'
+            : '${days}d ${hours}h left';
+      }
+      return context.isArabic
+          ? '$days يوم متبقي'
+          : '${days}d left';
+    }
+
+    if (hours > 0) {
+      if (minutes > 0) {
+        return context.isArabic
+            ? '$hours ساعة $minutes دقيقة متبقية'
+            : '${hours}h ${minutes}m left';
+      }
+      return context.isArabic
+          ? '$hours ساعة متبقية'
+          : '${hours}h left';
+    }
+
+    if (minutes > 0) {
+      return context.isArabic
+          ? '$minutes دقيقة متبقية'
+          : '${minutes}m left';
+    }
+
+    if (seconds > 0) {
+      return context.isArabic
+          ? '$seconds ثانية متبقية'
+          : '${seconds}s left';
+    }
+
+    return context.isArabic
+        ? 'أقل من ثانية متبقية'
+        : 'Less than 1s left';
+  }
 
 
-  String _formatTimeLeft() {
+  String _formatTimeLeft1() {
     final endAt = auction.endAt;
     if (endAt == null) return '';
 
@@ -224,7 +280,15 @@ class AuctionCard extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          isEnded ? "${LocaleKeys.ended.localize}" : _formatTimeLeft(),
+                          isEnded ? "${LocaleKeys.ended.localize}" : _formatTimeLeft(context
+
+
+
+
+
+
+
+                          ),
                           style: Styles.mediumText(
                             color:context.isDarkMode ? Colors.white :  Colors.black,
                             fontWeight: FontWeight.w500,
