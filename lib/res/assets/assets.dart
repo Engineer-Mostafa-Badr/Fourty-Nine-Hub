@@ -39,6 +39,7 @@ abstract class Assets {
   // static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';
+  static String eyeChance = 'assets/icons/eye_chance.svg';
   // static String tubeCat = 'assets/images/tubeCat.jpg';
   static String captainShare = 'assets/images/captain_share.png';
   static String tripJoinNew = 'assets/images/trip_join.png';

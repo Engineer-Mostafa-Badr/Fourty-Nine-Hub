@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -64,6 +63,6 @@ class WinnersGiftView extends StatelessWidget {
     if (state.winnersGift?.totalWinners == 0 || state.winnersGift == null) {
       return '';
     }
-    return '${FormatNumbers().formatNumber(state.winnersGift?.totalWinners ?? 0, useArabicNumerals: context.isArabic)} $winners / ${FormatNumbers().formatNumber(state.winnersGift?.totalAmount ?? 0, useArabicNumerals: context.isArabic)} ${context.isArabic ? state.winnersGift?.currencyAr ?? '' : state.winnersGift?.currencyEn ?? ''}';
+    return '(${FormatNumbers().formatNumber(state.winnersGift?.totalWinners ?? 0, useArabicNumerals: context.isArabic)} $winners / ${FormatNumbers().formatNumber(state.winnersGift?.totalAmount ?? 0, useArabicNumerals: context.isArabic)} ${context.isArabic ? state.winnersGift?.currencyAr ?? '' : state.winnersGift?.currencyEn ?? ''})';
   }
 }

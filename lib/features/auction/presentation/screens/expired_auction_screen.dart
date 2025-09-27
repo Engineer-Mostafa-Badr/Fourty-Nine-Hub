@@ -12,7 +12,68 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
+class ExpiredAuctionScreen extends StatelessWidget {
+  const ExpiredAuctionScreen({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuctionCubit, AuctionState>(
+      builder: (context, state) {
+        final cubit = context.read<AuctionCubit>();
+        final auctions = cubit.expiredAuctionNonSocketData;
+
+        Widget body;
+
+        // if (state.status == StateStatus.error) {
+        //   body = const Center(
+        //     child: Text(
+        //       "Something went wrong",
+        //       style: TextStyle(color: Colors.red),
+        //     ),
+        //   );
+        // }
+         if (state.status == StateStatus.loading && auctions.isEmpty) {
+          body = const Center(child: CircularProgressIndicator());
+        } else if (auctions.isEmpty) {
+          body = const Center(child: Text("No auctions available"));
+        } else {
+          body = ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: auctions.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final auction = auctions[index];
+              return AuctionCard(auction: auction);
+            },
+          );
+        }
+
+        return Stack(
+          children: [
+            body,
+            PositionedDirectional(
+              end: 16,
+              bottom: 16, // 👈 better UX (bottom-right corner)
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  context.push(Routes.createAuctionScreen);
+                },
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                icon: const Icon(Icons.add, color: Colors.white),
+                label: Text(
+                  "${LocaleKeys.addAuction.localize}",
+                  style: Styles.mediumText(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/*
 class ExpiredAuctionScreen extends StatelessWidget {
   const ExpiredAuctionScreen({super.key});
 
@@ -97,3 +158,4 @@ class ExpiredAuctionScreen extends StatelessWidget {
     );
   }
 }
+*/

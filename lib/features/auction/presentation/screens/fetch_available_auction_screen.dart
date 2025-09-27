@@ -45,7 +45,7 @@ class _AuctionScreenState extends State<AuctionScreen>
         TabController(length: 5, vsync: this); // Changed to 5 tabs total
 
     // fetch for first tab initially
-    context.read<AuctionCubit>().getAvailableNonSocketAuction();
+    // context.read<AuctionCubit>().getAvailableNonSocketAuction(context);
 
     // listen to tab changes
     _tabController.addListener(() {
@@ -55,7 +55,7 @@ class _AuctionScreenState extends State<AuctionScreen>
 
         switch (_tabController.index) {
           case 0:
-            cubit.getAvailableNonSocketAuction();
+            cubit.getAvailableNonSocketAuction(context);
             break;
           case 1:
             cubit.getExpiredNonSocketAuction(); // implement in cubit
@@ -84,28 +84,28 @@ class _AuctionScreenState extends State<AuctionScreen>
     // Show loading while fetching data from API
 
     // Show error state with retry option
-    if (state.status == StateStatus.error) {
-      return Container(
-        height: 100,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, color: Colors.grey.shade600),
-            const SizedBox(height: 4),
-            Text(
-              "Failed to load banner",
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-            ),
-          ],
-        ),
-      );
-    }
+    // if (state.status == StateStatus.error) {
+    //   return Container(
+    //     height: 100,
+    //     width: double.infinity,
+    //     decoration: BoxDecoration(
+    //       color: Colors.grey.shade200,
+    //       borderRadius: BorderRadius.circular(12),
+    //     ),
+    //     alignment: Alignment.center,
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Icon(Icons.error_outline, color: Colors.grey.shade600),
+    //         const SizedBox(height: 4),
+    //         Text(
+    //           "Failed to load banner",
+    //           style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     // Show network image with loading and error handling
     if (state.auctionBanner?.data != null &&
@@ -339,8 +339,12 @@ class _AuctionScreenState extends State<AuctionScreen>
                 child: Column(
                   children: [
                     Row(
-                      children: const [
-                        Icon(Icons.arrow_back_ios, size: 20),
+                      children:  [
+                        GestureDetector(
+                          onTap: (){
+                            context.pop();
+                          },
+                            child: Icon(Icons.arrow_back_ios, size: 20)),
                         SizedBox(width: 8),
                         Text("Auction",
                             style: TextStyle(
@@ -412,7 +416,7 @@ class _AuctionScreenState extends State<AuctionScreen>
                                 switch (index) {
                                   case 0:
                                     cubit
-                                        .loadInitialAvailableNonSocketAuction();
+                                        .loadInitialAvailableNonSocketAuction(context);
                                     break;
                                   case 1:
                                     cubit.loadInitialExpiredNonSocketAuction();
@@ -539,222 +543,3 @@ class _AuctionScreenState extends State<AuctionScreen>
   }
 }
 
-/*
-class AuctionScreen extends StatefulWidget {
-  const AuctionScreen({super.key});
-
-  @override
-  State<AuctionScreen> createState() => _AuctionScreenState();
-}
-
-class _AuctionScreenState extends State<AuctionScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-
-    // fetch for first tab initially
-    context.read<AuctionCubit>().getAvailableNonSocketAuction();
-
-    // listen to tab changes
-    _tabController.addListener(() {
-      if (!_tabController.indexIsChanging) {
-        // Only trigger when the tab change is complete, not during animation
-        final cubit = context.read<AuctionCubit>();
-
-        switch (_tabController.index) {
-          case 0:
-            cubit.getAvailableNonSocketAuction();
-            break;
-          case 1:
-          cubit.getExpiredNonSocketAuction(); // implement in cubit
-            break;
-          case 2:
-          // cubit.getFavoriteAuctions(); // implement in cubit
-            break;
-          case 3:
-          // cubit.getRequestLogs(); // implement in cubit
-            break;
-        }
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Colors.grey[100],
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ===== TOP CONTAINER =====
-          Container(
-            padding:
-            const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
-            color: context.isDarkMode ? Colors.black : Colors.white,
-            child: Column(
-              children: [
-                Row(
-                  children: const [
-                    Icon(Icons.arrow_back_ios, size: 20),
-                    SizedBox(width: 8),
-                    Text("Auction",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
-                    Spacer(),
-                    Text("(22/1500) Winners",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14)),
-                    SizedBox(width: 6),
-                    Icon(Icons.emoji_events, color: Colors.amber, size: 20),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    "https://picsum.photos/400/120",
-                    height: 100,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          Row(
-            // spacing: 10,
-            children: [
-              SizedBox(
-                width: 15,
-              ),
-              SvgPicture.asset(
-                Assets.searchIcon,
-                color: context.isDarkMode ? Colors.white : Colors.black,
-              ),
-              Expanded(
-                child: Container(
-                  color: context.isDarkMode ? Colors.black : Colors.white,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                  child: TabBar(
-                    tabAlignment: TabAlignment.start,
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicator: const BoxDecoration(color: Colors.transparent),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    dividerColor: Colors.transparent,
-                    labelPadding: EdgeInsets.zero,
-                    // Remove default TabBar padding
-                    onTap: (index) {
-                      print("👆 TAB TAP: User tapped on tab $index");
-                      // This will also trigger the listener, but it's good to have both
-                      // for immediate response and consistency
-                      final cubit = context.read<AuctionCubit>();
-                      switch (index) {
-                        case 0:
-                          print("🔥 ONTAP: Calling loadInitialAvailableNonSocketAuction for tab 0");
-                          cubit.loadInitialAvailableNonSocketAuction();
-                          break;
-                        case 1:
-                          print("⚠️ ONTAP: Tab 1 (Expired) - Method commented out");
-                          cubit.loadInitialExpiredNonSocketAuction();
-                          break;
-                        case 2:
-                          print("⚠️ ONTAP: Tab 2 (Favorite) - Method commented out");
-                          cubit.loadInitialFavoriteNonSocketAuction();
-                          break;
-                        case 3:
-                          print("⚠️ ONTAP: Tab 3 (Request Log) - Method commented out");
-                          // cubit.getRequestLogs();
-                          break;
-                      }
-                    },
-                    tabs: List.generate(4, (index) {
-                      final labels = [
-                        LocaleKeys.available.localize,
-                        LocaleKeys.expired.localize,
-                        LocaleKeys.favorite.localize,
-                        LocaleKeys.myBidders.localize
-                      ];
-                      return AnimatedBuilder(
-                        animation: _tabController,
-                        builder: (context, _) {
-                          final isSelected = _tabController.index == index;
-                          return Container(
-                            margin: const EdgeInsets.only(right: 4),
-                            // Only 4px space between tabs
-                            height: 32,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? (context.isDarkMode
-                                  ? AppColors.PRIMARY_COLOR_DARK
-                                  : AppColors.PRIMARY_COLOR)
-                                  : Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              labels[index],
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                color: isSelected ? Colors.white : Colors.black,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          // ===== BUTTON under tabs =====
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: AppButton(
-              onPressed: () {
-                context.push(Routes.myAuctionScreen);
-              },
-              width: double.infinity,
-              backColor: AppColors.cE0E0E0,
-              label: LocaleKeys.myAuction.localize,
-              style: Styles.mediumText(color: AppColors.black),
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: const [
-                AvailableAuctionScreen(),
-                ExpiredAuctionScreen(),
-                FavoriteAuctionScreen(),
-                // Center(child: Text("Expired Auctions")),
-                // Center(child: Text("Favorite Auctions")),
-                Center(child: Text("Request Log")),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-*/

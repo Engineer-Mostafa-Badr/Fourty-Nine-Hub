@@ -49,7 +49,7 @@ class MyBiddersScreen extends StatelessWidget {
           );
         }
 
-        if (state.status == StateStatus.loading && auctions.isEmpty) {
+        if (state.status == StateStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
 

@@ -66,6 +66,6 @@ class WinnersCashbackView extends StatelessWidget {
         state.winnersCashback == null) {
       return '';
     }
-    return '${FormatNumbers().formatNumber(state.winnersCashback?.totalWinners ?? 0, useArabicNumerals: context.isArabic)} $winners / ${FormatNumbers().formatNumber(state.winnersCashback?.totalAmount ?? 0, useArabicNumerals: context.isArabic)} ${context.isArabic ? state.winnersCashback?.currencyAr ?? '' : state.winnersCashback?.currencyEn ?? ''}';
+    return '(${FormatNumbers().formatNumber(state.winnersCashback?.totalWinners ?? 0, useArabicNumerals: context.isArabic)} $winners / ${FormatNumbers().formatNumber(state.winnersCashback?.totalAmount ?? 0, useArabicNumerals: context.isArabic)} ${context.isArabic ? state.winnersCashback?.currencyAr ?? '' : state.winnersCashback?.currencyEn ?? ''})';
   }
 }

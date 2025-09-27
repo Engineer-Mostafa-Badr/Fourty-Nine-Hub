@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/custom_show_dialog.dart';
+import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
 import '../../domain/entity/comment_entity.dart';
 import '../../domain/entity/viewer_entity.dart';
 import '../../domain/use_case/comment_use_cases.dart';
@@ -169,7 +176,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
   }
 
   Widget _buildLoadingState() {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
@@ -210,7 +217,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
   }
 
   Widget _buildErrorState(String message) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
@@ -330,53 +337,95 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     _showDeleteDialog();
   }
 
-  void _showDeleteDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Alert!'),
-          content: const Text('Are you sure about deleting the Talent'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                ManageVibration.vibrate();
-                Navigator.pop(context);
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.grey[200],
-                foregroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text('Close'),
+  Future<bool> _showDeleteDialog() async {
+    return await showAnimatedDialog(
+          context,
+          AlertDialog(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            titlePadding: const EdgeInsets.only(top: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            title: Text(
+              context.isArabic ? "تنبيه" : "Alert",
+              style: Styles.headerText(
+                  color: Colors.red, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
             ),
-            TextButton(
-              onPressed: () {
-                ManageVibration.vibrate();
-                Navigator.pop(context);
-                _handleBack();
-                // Use the provided cubit or get from service locator
-                final starCubit = widget.cubit ?? GetIt.instance<StarCubit>();
-                starCubit.deleteMyTubeVideo(widget.talent.id);
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Label(
+                  text: context.isArabic
+                      ? "هل تريد حذف الفيديو؟"
+                      : "Do you want to delete the video?",
+                  style: Styles.mediumText(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
-              ),
-              child: const Text('Delete'),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Expanded(
+                      child: buildButton(
+                        context,
+                        label: LocaleKeys.yes.localize,
+                        color: AppColors.SECONDARY_COLOR,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          Navigator.of(context).pop(true);
+                          _handleBack();
+                          // Use the provided cubit or get from service locator
+                          final starCubit =
+                              widget.cubit ?? GetIt.instance<StarCubit>();
+                          starCubit.deleteMyTubeVideo(widget.talent.id);
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: buildButton(
+                        context,
+                        label: LocaleKeys.no.localize,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        );
-      },
-    );
+          ),
+        ) ??
+        false;
   }
+}
+
+Widget buildButton(BuildContext context,
+    {required String label, required Function() onTap, Color? color}) {
+  return TextButton(
+    style: TextButton.styleFrom(
+      backgroundColor: color ??
+          (context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+      // foregroundColor: color == AppColors.SECONDARY_COLOR
+      //     ? Colors.white
+      //     : (context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white),
+      padding: const EdgeInsets.all(0),
+      minimumSize: const Size(70, 30),
+      maximumSize: const Size(200, 30),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    onPressed: () => onTap(),
+    child: Label(
+      text: label,
+      style: Styles.mediumText(
+        color: color != null
+            ? Colors.white
+            : (context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white),
+      ),
+    ),
+  );
 }

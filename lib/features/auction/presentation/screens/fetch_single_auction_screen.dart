@@ -300,10 +300,19 @@ class _ParticipantsListState extends State<_ParticipantsList> {
       builder: (context, state) {
         final participants = state.auctionParticipants ?? [];
 
-        if (participants.isEmpty && state.status == StateStatus.loading) {
+        // 🔹 Case 1: Still loading and no data yet
+        if (participants.isEmpty &&
+            state.participantsStatus == StateStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        // 🔹 Case 2: Failed to load and no data
+        if (participants.isEmpty &&
+            state.participantsStatus == StateStatus.error) {
+          return const Center(child: Text("Failed to load participants"));
+        }
+
+        // 🔹 Case 3: Success or already has data
         return ListView.builder(
           controller: _scrollController,
           itemCount: participants.length + 1,
@@ -340,6 +349,7 @@ class _ParticipantsListState extends State<_ParticipantsList> {
       },
     );
   }
+
 }
 
 class _WinnerDialog extends StatelessWidget {

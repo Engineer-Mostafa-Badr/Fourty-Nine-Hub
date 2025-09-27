@@ -12,7 +12,16 @@ class ImageChanceModel extends ImageChanceEntity {
       id: json['_id'] ?? '',
       user: json['user'] ?? '',
       subcategoryId: json['subcategoryId'] ?? '',
-      photo: json['photo'] ?? '',
+      photo: json['mediaKey'] ?? json['photo'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'user': user,
+      'subcategoryId': subcategoryId,
+      'mediaKey': photo,
+    };
   }
 }
