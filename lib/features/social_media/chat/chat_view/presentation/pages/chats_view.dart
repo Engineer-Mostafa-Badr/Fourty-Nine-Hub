@@ -796,48 +796,48 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    if (widget.chatsViewParams.isFromStartChat) {
-      chatsCubit = context.read<ChatsCubit>()..init();
-      chatsCubit.selectChat = widget.chatsViewParams.selectedChat!;
-      // print(
-      //     'widget.chatsViewParams.selectedChat! ${widget.chatsViewParams.selectedChat!}');
-      Future.microtask(() async {
-        await context
-            .read<ChatsCubit>()
-            .getOnlineOfflineStatus(chat: widget.chatsViewParams.selectedChat!);
-        context.push(Routes.CHATROOM, extra: chatsCubit);
-      });
-    } else {
-      chatsCubit = context.read<ChatsCubit>()..init();
-    }
-    tabController =
-        TabController(length: ChatCategories.values.length, vsync: this)
-          ..addListener(() {
-            if (tabController.previousIndex != tabController.index) {
-              chatsCubit.getChatsByCategory(
-                  ChatCategories.values[tabController.index]);
-            }
-          });
-
-    scrollController = ScrollController()
-      ..addListener(() {
-        if (lastOffset > scrollController.offset) {
-          // Scrolled down
-          if (!expandedOptions) {
-            setState(() {
-              expandedOptions = true;
-            });
-          }
-        } else if (lastOffset < scrollController.offset) {
-          // Scrolled up
-          if (expandedOptions) {
-            setState(() {
-              expandedOptions = false;
-            });
-          }
-        }
-        lastOffset = scrollController.offset;
-      });
+    // if (widget.chatsViewParams.isFromStartChat) {
+    //   chatsCubit = context.read<ChatsCubit>()..init();
+    //   chatsCubit.selectChat = widget.chatsViewParams.selectedChat!;
+    //   // print(
+    //   //     'widget.chatsViewParams.selectedChat! ${widget.chatsViewParams.selectedChat!}');
+    //   Future.microtask(() async {
+    //     await context
+    //         .read<ChatsCubit>()
+    //         .getOnlineOfflineStatus(chat: widget.chatsViewParams.selectedChat!);
+    //     context.push(Routes.CHATROOM, extra: chatsCubit);
+    //   });
+    // } else {
+    //   chatsCubit = context.read<ChatsCubit>()..init();
+    // }
+    // tabController =
+    //     TabController(length: ChatCategories.values.length, vsync: this)
+    //       ..addListener(() {
+    //         if (tabController.previousIndex != tabController.index) {
+    //           chatsCubit.getChatsByCategory(
+    //               ChatCategories.values[tabController.index]);
+    //         }
+    //       });
+    //
+    // scrollController = ScrollController()
+    //   ..addListener(() {
+    //     if (lastOffset > scrollController.offset) {
+    //       // Scrolled down
+    //       if (!expandedOptions) {
+    //         setState(() {
+    //           expandedOptions = true;
+    //         });
+    //       }
+    //     } else if (lastOffset < scrollController.offset) {
+    //       // Scrolled up
+    //       if (expandedOptions) {
+    //         setState(() {
+    //           expandedOptions = false;
+    //         });
+    //       }
+    //     }
+    //     lastOffset = scrollController.offset;
+    //   });
 
     super.initState();
   }

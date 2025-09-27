@@ -2,11 +2,12 @@ class GetRequestTripJoinEntity {
   final String? id;
   final String? userId;
   final String? firstName;
+  final String? requestType;
   final double? pricePerSeat;
   final String? startDate;
   final String? createdAt;
   final bool? isPremium;
-  final bool? isRead;
+  bool? isRead;
   final String? gender;
   final int? totalPassengers;
   final int? views;
@@ -17,6 +18,7 @@ class GetRequestTripJoinEntity {
   GetRequestTripJoinEntity({
     this.id,
     this.userId,
+    this.requestType,
     this.firstName,
     this.pricePerSeat,
     this.startDate,

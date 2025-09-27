@@ -14,6 +14,7 @@ class TwitterPostCommentEntity {
   bool showReplies;
   bool addReply;
   bool? isReact;
+  bool? yourReposted;
   bool? edit;
   final List<String> love;
   List<TwitterCommentReplyEntity>? replies;
@@ -38,6 +39,7 @@ class TwitterPostCommentEntity {
       this.showReplies = false,
       this.addReply = false,
       this.isReact = false,
+      this.yourReposted = false,
       this.edit = false,
       this.replies,
         this.ownerData,
@@ -58,6 +60,7 @@ class TwitterPostCommentEntity {
         'showReplies': showReplies,
         'addReply': addReply,
         'isReact': isReact,
+        'yourReposted': yourReposted,
         'edit': edit,
         'love': love,
         'replies': replies?.map((e) => e.toJson()).toList(),

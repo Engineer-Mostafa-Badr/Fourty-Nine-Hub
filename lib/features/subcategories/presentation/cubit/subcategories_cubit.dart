@@ -473,7 +473,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
             failure: failure, status: SubcategoriesStates.error));
       },
       (data) {
-        print("==> myFavouriteAds ${data.length} : ${data.first.isFavourite}");
         myFavouriteAds.addAll(data);
         if (data.length < pageSize) {
           hasMoreMyFavouriteAds = false;

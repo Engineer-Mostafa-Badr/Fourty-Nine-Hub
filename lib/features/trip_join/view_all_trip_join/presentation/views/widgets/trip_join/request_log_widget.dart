@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -372,7 +373,8 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                         icon: data.gender == "male"
                                             ? Assets.maleUser
                                             : Assets.femaleUser,
-                                        seats: LocaleKeys.eachSeat.localize
+                                        seats: LocaleKeys.eachSeat.localize,
+                                        isMale: data.gender == "male",
                                         // icon:   Assets.maleUser,
                                         //
                                         // // : Assets.femaleUser,
@@ -554,6 +556,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
     required String price,
     required String icon,
     required String seats,
+    required bool isMale,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -562,13 +565,15 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            icon,
+          ImageFromInternet(
+            image: icon,
+            height: 48.h,
             width: 48.h,
-            fit: BoxFit.cover,
-            color: context.isDarkMode && icon == Assets.tripJoinCarIcon
-                ? Colors.white
-                : null,
+            isCircle: true,
+            border: Border.all(color: AppColors.getButtonPrimaryColor(context)),
+            firstChar: title[0].toUpperCase(),
+            charPadding: 0,
+            isMale: isMale,
           ),
           const Sizer(),
           Text(
@@ -643,12 +648,12 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.trip_origin, color: iconColor, size: 20),
+          Icon(Icons.trip_origin, color: iconColor, size: 14),
           const Sizer(width: 13),
           Flexible(
             child: Text(
               title,
-              style: Styles.headerText(fontSize: 32),
+              style: Styles.headerText(fontSize: 26),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),

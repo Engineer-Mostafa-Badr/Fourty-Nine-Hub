@@ -36,9 +36,7 @@ class MostBookingModel extends MostBookingEntity {
       address: json['address'] != null
           ? AddressModel.fromJson(json['address'])
           : null,
-      subCategory: (json['subCategory'] as List<dynamic>?)
-          ?.map((e) => MostSubCategoryModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      subCategory:json['medicalSpecialization']!=null? MostSubCategoryModel.fromJson(json['medicalSpecialization']):null,
       averageRating: json['averageRating']?.toDouble(),
       totalRatings: json['totalRatings'],
       ratingText: json['ratingText'],
@@ -47,8 +45,8 @@ class MostBookingModel extends MostBookingEntity {
       profilePicture: json['profilePicture'],
       subscriptionType: json['subscriptionType'],
       subscriptionRank: json['subscriptionRank'],
-      waitingTimeAr: json['waitingTime']['ar']?.toString(),
-      waitingTimeEn: json['waitingTime']['en']?.toString(),
+      waitingTimeAr: json['waitingTime']!=null?json['waitingTime']['ar']?.toString():'',
+      waitingTimeEn: json['waitingTime']!=null?json['waitingTime']['en']?.toString():'',
       currencyAr: json['currencyAr']?.toString(),
       currencyEn: json['currencyEn']?.toString(),
       isPremium: json['isPremium'],

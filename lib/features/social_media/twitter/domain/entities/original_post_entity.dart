@@ -8,6 +8,7 @@ class TwitterOriginalPost {
   final int repliesCount;
   final int repostCount;
   final bool youLiked;
+  final bool yourReposted;
   final TwitterUserModel owner;
 
   const TwitterOriginalPost({
@@ -18,6 +19,7 @@ class TwitterOriginalPost {
     this.repliesCount = 0,
     this.repostCount = 0,
     this.youLiked = false,
+    this.yourReposted = false,
     required this.owner,
   });
 }

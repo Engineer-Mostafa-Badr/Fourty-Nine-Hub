@@ -16,16 +16,16 @@ class BookedUserAppointmentModel extends BookedAppointmentEntity {
 
   factory BookedUserAppointmentModel.fromJson(Map<String, dynamic> json) {
     return BookedUserAppointmentModel(
-      id: json['_id'],
-      bookedPremium: json['bookedPremium'],
+      id: json['id']??json['_id']??'',
+      bookedPremium: json['bookedPremium']??false,
       doctor: DoctorModel.fromJson(json['doctorId']),
-      userId: json['userId'],
+      userId: json['userId']??'',
       bookingType: (json['appointmentType'] as String).toBookingType,
-      day: json['day'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
-      bookingId: json['bookingId'],
-      expired: json['expired'],
+      day: json['day']??'',
+      startTime: json['startTime']??'',
+      endTime: json['endTime']??'',
+      bookingId: json['bookingId']??'',
+      expired: json['expired']??false,
     );
   }
 }

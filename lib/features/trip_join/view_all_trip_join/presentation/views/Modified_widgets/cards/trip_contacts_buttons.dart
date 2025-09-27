@@ -34,6 +34,7 @@ class ContactsTripButtons extends StatefulWidget {
   final String? senderImage;
   final bool? hasReport;
   final bool? isPremium;
+  final bool? isButtonEnabled;
   const ContactsTripButtons(
       {super.key,
       required this.otherUserId,
@@ -44,6 +45,7 @@ class ContactsTripButtons extends StatefulWidget {
       required this.id,
       this.hasReport = false,
       this.isPremium = false, // ✅ Add this
+      this.isButtonEnabled = false, // ✅ Add this
 
       this.clientId});
 
@@ -54,128 +56,137 @@ class ContactsTripButtons extends StatefulWidget {
 class _ContactsTripButtonsState extends State<ContactsTripButtons> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: ButtonAvailability().isShowButton(
-            clientId: widget.clientId,
-            otherUserId: widget.otherUserId,
-            subcategoryId: widget.subcategoryId),
-        builder: (context, snap) {
-          print(snap.data);
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                color:
-                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                        ? AppColors.PRIMARY_COLOR
-                        : AppColors.DARK_GRAY_COLOR,
-                icon: Icon(
-                  size: 20,
-                  Icons.call,
-                  color: widget.isPremium!
-                      ? Colors.red
-                      : (context.isDarkMode ? AppColors.grey : Colors.black),
-                ),
-                onPressed: widget.isPremium!
-                    ? () {
-                        ManageVibration.vibrate();
-                        JoinTripBottomSheet(
-                          phone: widget.phone,
-                          context,
-                          topButtonColor:
-                              AppColors.getButtonPrimaryColor(context),
-                          topButtonTitle: LocaleKeys.freeCall.localize,
-                          bottomButtonColor: context.isDarkMode
-                              ? AppColors.fill_Color_DARK
-                              : const Color(0xFFD9D9D9),
-                          bottomButtonTitle: LocaleKeys.regularCall.localize,
-                          onTap: () => Navigator.of(context).pop(),
-                          topTextColor:
-                              context.isDarkMode ? Colors.black : Colors.white,
-                          bottomTextColor: AppColors.getTextColor(context),
-                        );
-                      }
-                    : null,
-              ),
-              IconButton(
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                color:
-                    (snap.data == true && context.read<UserCubit>().isLoggedIn)
-                        ? AppColors.PRIMARY_COLOR
-                        : AppColors.DARK_GRAY_COLOR,
-                icon: SvgPicture.asset(
-                  Assets.mailRed,
-                  color: widget.isPremium!
-                      ? Colors.red
-                      : (context.isDarkMode ? AppColors.grey : Colors.black),
-                ),
-                onPressed: widget.isPremium!
-                    ? (!context.read<UserCubit>().isLoggedIn
-                        ? () {
-                            ManageVibration.vibrate();
+    bool isEnabled = (widget.isButtonEnabled==true)||(widget.isPremium==true);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          visualDensity:
+          const VisualDensity(horizontal: -4, vertical: -4),
+          color:
+          (isEnabled && context.read<UserCubit>().isLoggedIn)
+              ? AppColors.PRIMARY_COLOR
+              : AppColors.DARK_GRAY_COLOR,
+          icon: Icon(
+            size: 20,
+            Icons.call,
+            color: widget.isPremium!
+                ? Colors.red
+                : (context.isDarkMode ? (isEnabled && context.read<UserCubit>().isLoggedIn)
+                ? AppColors.grey
+                : AppColors.grey : (isEnabled && context.read<UserCubit>().isLoggedIn)
+                ? AppColors.PRIMARY_COLOR
+                : AppColors.DARK_GRAY_COLOR),
+          ),
+          onPressed: (isEnabled == true && context.read<UserCubit>().isLoggedIn)
+              ? () {
+            ManageVibration.vibrate();
+            JoinTripBottomSheet(
+              phone: widget.phone,
+              context,
+              topButtonColor:
+              AppColors.getButtonPrimaryColor(context),
+              topButtonTitle: LocaleKeys.freeCall.localize,
+              bottomButtonColor: context.isDarkMode
+                  ? AppColors.fill_Color_DARK
+                  : const Color(0xFFD9D9D9),
+              bottomButtonTitle: LocaleKeys.regularCall.localize,
+              onTap: () => Navigator.of(context).pop(),
+              topTextColor:
+              context.isDarkMode ? Colors.black : Colors.white,
+              bottomTextColor: AppColors.getTextColor(context),
+            );
+          }
+              :  (isEnabled == false && context.read<UserCubit>().isLoggedIn)?(){
+            ManageVibration.vibrate();
+            SubscriptionMethod().subscribe(
+              subscribeId: widget.subcategoryId,
+              title: LocaleKeys.ads.localize,
+              onSubscribe: (){
 
-                            return pleaseLoginDialog(context);
-                          }
-                        : (snap.data == true
-                            ? () async {
-                                ManageVibration.vibrate();
+              }
+            );
+          }:(){
+            ManageVibration.vibrate();
+            pleaseLoginDialog(context);
+          },
+        ),
+        IconButton(
+          visualDensity:
+          const VisualDensity(horizontal: -4, vertical: -4),
+          color:
+          (isEnabled == true && context.read<UserCubit>().isLoggedIn)
+              ? AppColors.PRIMARY_COLOR
+              : AppColors.DARK_GRAY_COLOR,
+          icon: SvgPicture.asset(
+            Assets.mailRed,
+            color: widget.isPremium!
+                ? Colors.red
+                : (context.isDarkMode ? (isEnabled && context.read<UserCubit>().isLoggedIn)
+                ? AppColors.grey
+                : AppColors.grey : (isEnabled && context.read<UserCubit>().isLoggedIn)
+                ? AppColors.PRIMARY_COLOR
+                : AppColors.DARK_GRAY_COLOR),
+          ),
+          onPressed: !context.read<UserCubit>().isLoggedIn?
+              () {
+            ManageVibration.vibrate();
 
-                                // ChatEntity? chat = await context
-                                //     .read<UserCubit>()
-                                //     .createNormalChat(
-                                //       otherId: widget.otherUserId,
-                                //       categoryId: widget.subcategoryId,
-                                //     );
-                                // context.push(
-                                //   Routes.CHAT,
-                                //   extra: ChatsViewParams(
-                                //     isFromStartChat: true,
-                                //     initialTabIndex: 1,
-                                //     selectedChat: chat,
-                                //   ),
-                                // );
-                              }
-                            : () {
-                                ManageVibration.vibrate();
+            return pleaseLoginDialog(context);
+          }:isEnabled == true?()async {
+            ManageVibration.vibrate();
+            //
+            // ChatEntity? chat = await context
+            //     .read<UserCubit>()
+            //     .createNormalChat(
+            //   otherId: widget.otherUserId,
+            //   categoryId: widget.subcategoryId,
+            // );
+            // context.push(
+            //   Routes.CHAT,
+            //   extra: ChatsViewParams(
+            //     isFromStartChat: true,
+            //     initialTabIndex: 1,
+            //     selectedChat: chat,
+            //   ),
+            // );
+          }:() {
+            ManageVibration.vibrate();
 
-                                SubscriptionMethod().subscribe(
-                                  subscribeId: widget.subcategoryId,
-                                  title: LocaleKeys.ads.localize,
-                                );
-                              }))
-                    : null,
-              ),
-              IconButton(
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                padding: EdgeInsets.zero,
-                color: AppColors.getRedColor(context),
-                icon: const Icon(
-                  Icons.report,
-                ),
-                onPressed: !context.read<UserCubit>().isLoggedIn
-                    ? () {
-                        ManageVibration.vibrate();
+            SubscriptionMethod().subscribe(
+              subscribeId: widget.subcategoryId,
+              title: LocaleKeys.ads.localize,
+              onSubscribe: (){},
+            );
+          },
+        ),
+        IconButton(
+          visualDensity:
+          const VisualDensity(horizontal: -4, vertical: -4),
+          padding: EdgeInsets.zero,
+          color: AppColors.getRedColor(context),
+          icon: const Icon(
+            Icons.report,
+          ),
+          onPressed: !context.read<UserCubit>().isLoggedIn
+              ? () {
+            ManageVibration.vibrate();
 
-                        return pleaseLoginDialog(context);
-                        // context.push(Routes.LOGIN);
-                      }
-                    : () {
-                        ManageVibration.vibrate();
+            return pleaseLoginDialog(context);
+            // context.push(Routes.LOGIN);
+          }
+              : () {
+            ManageVibration.vibrate();
 
-                        bottomSheet(
-                            context: context,
-                            widget: ReportView(
-                              id: widget.id,
-                              categoryId: widget.subcategoryId,
-                            ));
-                      },
-              ),
-            ],
-          );
-        });
+            bottomSheet(
+                context: context,
+                widget: ReportView(
+                  id: widget.id,
+                  categoryId: widget.subcategoryId,
+                ));
+          },
+        ),
+      ],
+    );
   }
 }

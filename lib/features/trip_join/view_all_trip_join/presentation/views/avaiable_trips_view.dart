@@ -122,7 +122,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
                         AvailableTripsFloatingActionButton(),
                       ],
                     ),
-                    AllPickMeView(),
+                      AllPickMeView(),
                   ],
                 ),
               )

@@ -34,6 +34,7 @@ class TwitterState {
   final bool shareSuccess;
   final bool? reportSuccess;
   final bool? reported;
+  final bool? isVerified;
 
   /// Temp uploads
   final UploadFileEntity? personalPhoto;
@@ -82,6 +83,7 @@ class TwitterState {
     this.frontId,
     this.backId,
     this.reportSuccess,
+    this.isVerified,
 
     this.repostStatus = StateStatus.loading,
     this.repostSuccess = false,
@@ -115,6 +117,7 @@ class TwitterState {
 
     bool? shareSuccess,
     bool? reported,
+    bool? isVerified,
 
     TwitterPostCommentEntity? newComment,
     TwitterCommentReplyEntity? newReply,
@@ -165,6 +168,7 @@ class TwitterState {
 
       repostStatus: repostStatus ?? this.repostStatus,
       repostSuccess: repostSuccess ?? this.repostSuccess,
+      isVerified: isVerified ?? this.isVerified,
 
     );
   }

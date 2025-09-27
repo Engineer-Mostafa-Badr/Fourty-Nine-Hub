@@ -4,11 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_read_request_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_view_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_request_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_trip_join_request_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/delete_my_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_available_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_my_ads_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_request_count_pick_me_use_case.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/get_request_pick_me_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../RideFeature/domain/entities/ride_brand_entity.dart';
 import '../../../../../RideFeature/domain/entities/ride_model_entity.dart';
@@ -38,115 +50,63 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   final GetCarModelUseCase getCarModelUseCase;
   final GetExpectedPriceTripUseCase getExpectedPriceUseCase;
   final GetAvailableTripJoinUseCase getAvailableTripJoinUseCase;
+  final GetAvailablePickMeUseCase getAvailablePickMeUseCase;
   final GetRequestTripJoinUseCase getRequestTripJoinUseCase;
+  final GetRequestPickMeUseCase getRequestPickMeUseCase;
   final GetMyAdsTripJoinUseCase getMyAdsTripJoinUseCase;
+  final GetMyAdsPickMeUseCase getMyAdsPickMeUseCase;
   final DeleteMyTripJoinUseCase deleteMyTripJoinUseCase;
+  final DeleteMyPickMeUseCase deleteMyPickMeUseCase;
   final ApplyViewTripJoinUseCase applyViewTripJoinUseCase;
+  final ApplyViewPickMeUseCase applyViewPickMeUseCase;
   final ApplyReadRequestTripJoinUseCase applyReadRequestTripJoinUseCase;
+  final ApplyReadRequestPickMeUseCase applyReadRequestPickMeUseCase;
   final CreateTripJoinOfferUseCase createTripJoinOfferUseCase;
+  final CreatePickMeOfferUseCase createPickMeOfferUseCase;
   final GetRequestCountTripJoinUseCase getRequestCountTripJoinUseCase;
-  // Future<void> deleteMyAdsTrip(String tripId,BuildContext context) async {
-  //   emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
-  //
-  //   final response = await deleteMyTripJoinUseCase(
-  //     DeleteMyTripParams(tripId: tripId),
-  //   );
-  //
-  //   response.fold(
-  //         (failure) {
-  //       emit(state.copyWith(failure: failure, status: ViewAllTripJoinStatus.failure));
-  //     },
-  //         (tripData) {
-  //       // ✅ Remove from list
-  //       myAdsData.removeWhere((trip) => trip.id == tripId);
-  //
-  //       emit(state.copyWith(
-  //         deleteMyTripJoinEntity: tripData,
-  //         myAdsTripJoinData: List.from(myAdsData), // emit new list
-  //         status: ViewAllTripJoinStatus.success,
-  //       ));
-  //       showSuccessMessage(context, tripData.message ?? "Success");
-  //     },
-  //   );
-  // }
+  final GetRequestCountPickMeUseCase getRequestCountPickMeUseCase;
+  final CreateTripJoinRequestUseCase createTripJoinRequestUseCase;
+  final CreatePickMeRequestUseCase createPickMeRequestUseCase;
 
   List<MyAdsTripDocEntity> myAdsData = [];
+  List<MyAdsTripDocEntity> myPickMeAdsData = [];
 
   bool hasMoreMyAds = true;
+  bool hasMorePickMeMyAds = true;
 
   int currentPageMyAds = 1;
+  int currentPagePickMeMyAds = 1;
 
   bool isLoadingMoreMyAds = false;
+  bool isLoadingMorePickMeMyAds = false;
 
   bool isLoadingMyAds = false;
+  bool isLoadingPickMeMyAds = false;
 
-  /*
-  List<TripJoinEntity> tripJoinData = [];
-  bool hasMoreClientPastTrips = true;
-  int currentPageClientPastTrips = 1;
-  bool isLoadingMoreClientPastTrips = false;
-
-  void loadInitialClientPastTrips() async {
-    tripJoinData.clear();
-    currentPageClientPastTrips = 1;
-    hasMoreClientPastTrips = true;
-    isLoadingMoreClientPastTrips = false;
-    await getClientPastTrips();
-    emit(state.copyWith(status: ViewAllTripJoinStatus.success));
-  }
-
-  Future<void> getClientPastTrips() async {
-    print("hasMoreClientPastTrips $hasMoreClientPastTrips");
-    print("isLoadingMoreClientPastTrips $isLoadingMoreClientPastTrips");
-
-    if (!hasMoreClientPastTrips || isLoadingMoreClientPastTrips) return;
-
-    isLoadingMoreClientPastTrips = true;
-    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
-
-    final response = await getAvailableTripJoinUseCase(
-      CarBrandParams(page: currentPageClientPastTrips, limit: 10),
-    );
-
-    response.fold(
-          (failure) {
-        isLoadingMoreClientPastTrips = false;
-        emit(state.copyWith(
-          failure: failure,
-          status: ViewAllTripJoinStatus.failure,
-        ));
-      },
-          (data) {
-        tripJoinData.addAll(data ?? []);
-
-        // Updated pagination logic
-        if ((data?.length ?? 0) < 10) {
-          hasMoreClientPastTrips = false;
-        } else {
-          currentPageClientPastTrips++;
-        }
-
-        isLoadingMoreClientPastTrips = false;
-        emit(state.copyWith(availableTripJoinEntity: data));
-      },
-    );
-  }
-
- */
 
   List<GetRequestTripJoinEntity> requestTripJoinData = [];
+  List<GetRequestTripJoinEntity> requestPickMeData = [];
   bool hasMoreRequestTripJoin = true;
+  bool hasMoreRequestPickMe = true;
   int currentPageRequestTripJoin = 1;
+  int currentPageRequestPickMe = 1;
   bool isLoadingMoreRequestTripJoin = false;
+  bool isLoadingMoreRequestPickMe = false;
   bool isLoadingRequestTripJoin = false;
+  bool isLoadingRequestPickMe = false;
   List<AvailableTripJoinEntity> tripJoinData = [];
+  List<AvailableTripJoinEntity> pickMeData = [];
 
   bool hasMoreTripJoin = true;
+  bool hasMorePickMe = true;
 
   int currentPageTripJoin = 1;
+  int currentPagePickMe = 1;
 
   bool isLoadingMoreTripJoin = false;
+  bool isLoadingMorePickMe = false;
   bool isLoadingTripJoin = false;
+  bool isLoadingPickMe = false;
   List<RideModelEntity> carModelData = [];
   bool hasMoreCarModelLoading = true;
   int currentPageCarModelLoading = 1;
@@ -173,12 +133,22 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       this.getCarModelUseCase,
       this.getExpectedPriceUseCase,
       this.getAvailableTripJoinUseCase,
+      this.getAvailablePickMeUseCase,
       this.getRequestTripJoinUseCase,
       this.getMyAdsTripJoinUseCase,
+      this.getMyAdsPickMeUseCase,
       this.deleteMyTripJoinUseCase,
+      this.deleteMyPickMeUseCase,
       this.applyViewTripJoinUseCase,
+      this.applyViewPickMeUseCase,
       this.applyReadRequestTripJoinUseCase,
+      this.applyReadRequestPickMeUseCase,
       this.createTripJoinOfferUseCase,
+      this.createPickMeOfferUseCase,
+      this.createTripJoinRequestUseCase,
+      this.createPickMeRequestUseCase,
+      this.getRequestCountPickMeUseCase,
+      this.getRequestPickMeUseCase,
       this.getRequestCountTripJoinUseCase)
       : super(ViewAllTripJoinState());
 
@@ -199,6 +169,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) async {
+        requestTripJoinData.firstWhere((e)=>e.id==tripId).isRead=true;
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -206,7 +177,36 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
         // ✅ Refresh the request trip join list after successful apply
         await getRequestCount();
-        await loadInitialRequestTripJoin();
+        // await loadInitialRequestTripJoin();
+      },
+    );
+  }
+  Future<void> applyReadRequestPickMe(String tripId) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await applyReadRequestPickMeUseCase(
+      DeleteMyTripParams(tripId: tripId),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) async {
+        requestPickMeData.firstWhere((e)=>e.id==tripId).isRead=true;
+        emit(state.copyWith(
+          deleteMyPickMeEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+
+        // ✅ Refresh the request trip join list after successful apply
+        await getRequestCount();
+        // await loadInitialRequestTripJoin();
       },
     );
   }
@@ -229,6 +229,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) {
+        tripJoinData.firstWhere((e)=>e.id==tripId).isView=true;
+        tripJoinData.firstWhere((e)=>e.id==tripId).viewerIds=(tripJoinData.firstWhere((e)=>e.id==tripId).viewerIds??0)+1;
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -236,6 +238,106 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
+  Future<void> applyPickMe(
+    String tripId,
+  ) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await applyViewPickMeUseCase(
+      DeleteMyTripParams(tripId: tripId),
+    );
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) {
+        pickMeData.firstWhere((e)=>e.id==tripId).isView=true;
+        pickMeData.firstWhere((e)=>e.id==tripId).viewerIds=(pickMeData.firstWhere((e)=>e.id==tripId).viewerIds??0)+1;
+        emit(state.copyWith(
+          deleteMyTripJoinEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+  }
+
+
+  Future<bool> createPickMeRequest(
+    String tripId,
+      bool isPremium,
+      String phone
+  ) async {
+    bool isSuccess=false;
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+    showLoadingDialog(currentContext);
+    final response = await createPickMeRequestUseCase(
+      CreateRequestParams(offerId: tripId,phoneNumber: phone,isPremium: isPremium),
+    );
+    response.fold(
+      (failure) {
+        isSuccess=false;
+        currentContext.pop();
+        currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) {
+        currentContext.pop();
+        currentContext.pop();
+        isSuccess=true;
+        showSuccessMessage(currentContext, currentContext.isArabic?"تم ارسال طلبك بنجاح":"Your request has been sent successfully");
+        emit(state.copyWith(
+          deleteMyTripJoinEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+    return isSuccess;
+  }
+
+  Future<void> createTripJoinRequest(
+    String tripId,
+      bool isPremium,
+      String phone
+
+  ) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+
+    final response = await createTripJoinRequestUseCase(
+      CreateRequestParams(offerId: tripId,phoneNumber: phone,isPremium: isPremium),
+    );
+    response.fold(
+      (failure) {
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) {
+        currentContext.pop();
+        showSuccessMessage(currentContext, currentContext.isArabic?"تم ارسال طلبك بنجاح":"Your request has been sent successfully");
+        emit(state.copyWith(
+          deleteMyTripJoinEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+  }
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController phoneController = TextEditingController();
 
   Future<void> createTripJoinOffer(
       CreateTripJoinParams params, BuildContext context) async {
@@ -257,6 +359,31 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
           status: ViewAllTripJoinStatus.success,
         ));
         showSuccessMessage(context, tripData.message ?? "Success");
+      },
+    );
+  }
+
+  Future<void> createPickMeOffer(
+      CreatePickMeParams params, BuildContext context) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+
+    final response = await createPickMeOfferUseCase(params);
+    response.fold(
+      (failure) {
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) {
+        emit(state.copyWith(
+          deleteMyTripJoinEntity: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+        showSuccessMessage(context, tripData.message ?? "Success");
+        currentContext.pop();
       },
     );
   }
@@ -284,6 +411,39 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           myAdsTripJoinData: List.from(myAdsData), // emit new list
+          status: ViewAllTripJoinStatus.success,
+        ));
+
+        // ✅ Check if context is still mounted before using it
+        if (context.mounted) {
+          showSuccessMessage(context, tripData.message ?? "Success");
+        }
+      },
+    );
+  }
+  Future<void> deleteMyAdsPickMe(String tripId, BuildContext context) async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await deleteMyPickMeUseCase(
+       tripId,
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) {
+        // ✅ Remove from list
+        myPickMeAdsData.removeWhere((trip) => trip.id == tripId);
+
+        emit(state.copyWith(
+          deleteMyPickMeEntity: tripData,
+          myAdsTripJoinData: List.from(myPickMeAdsData), // emit new list
           status: ViewAllTripJoinStatus.success,
         ));
 
@@ -437,6 +597,48 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+  Future<void> getPickMeMyAds() async {
+    if (!hasMorePickMeMyAds || isLoadingMorePickMeMyAds) return;
+
+    isLoadingMorePickMeMyAds = true;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await getMyAdsPickMeUseCase(
+      CarBrandParams(
+        page: currentPagePickMeMyAds,
+        limit: 15,
+      ),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMorePickMeMyAds = false;
+        emit(state.copyWith(
+          failure: failure,
+          status: ViewAllTripJoinStatus.failure,
+        ));
+      },
+      (data) {
+        final trips = data.offers ?? [];
+        myPickMeAdsData.addAll(trips);
+
+        if (trips.length < 15) {
+          hasMorePickMeMyAds = false;
+        } else {
+          currentPagePickMeMyAds++;
+        }
+
+        isLoadingMorePickMeMyAds = false;
+        emit(state.copyWith(
+          myAdsTripJoinData: myPickMeAdsData,
+        ));
+      },
+    );
+  }
 
   Future<void> getRequestCount() async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
@@ -455,6 +657,28 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       (tripData) async {
         emit(state.copyWith(
           requestCountData: tripData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+  }
+  Future<void> getPickMeRequestCount() async {
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await getRequestCountPickMeUseCase(NoParams());
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: ViewAllTripJoinStatus.failure));
+      },
+      (tripData) async {
+        emit(state.copyWith(
+          pickMeRequestCountData: tripData,
           status: ViewAllTripJoinStatus.success,
         ));
       },
@@ -507,9 +731,57 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+  Future<void> getRequestPickMe() async {
+    print("hasMoreRequestPickMe $hasMoreRequestPickMe");
+    print("isLoadingMoreRequestPickMe $isLoadingMoreRequestPickMe");
+    if (!hasMoreRequestPickMe || isLoadingMoreRequestPickMe) return;
+
+    isLoadingMoreRequestPickMe = true;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await getRequestPickMeUseCase(
+      CarBrandParams(
+        page: currentPageRequestPickMe,
+        limit: 15,
+      ),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMoreRequestPickMe = false;
+        emit(state.copyWith(
+          failure: failure,
+          status: ViewAllTripJoinStatus.failure,
+        ));
+      },
+      (data) {
+        // you will receive AvailableRequestPickMeEntity from usecase
+        final trips = data ?? [];
+        // final trips = data.requests.docs ?? [];
+        requestPickMeData.addAll(trips);
+
+        if (trips.length < 5) {
+          hasMoreRequestPickMe = false;
+          emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+        } else {
+          currentPageRequestPickMe++;
+        }
+
+        isLoadingMoreRequestPickMe = false;
+        emit(state.copyWith(
+          requestPickMeEntity: requestPickMeData,
+        ));
+      },
+    );
+  }
 
   // pagination method
   Future<void> getTripJoin() async {
+    print("state.tripsFromSearch ${state.tripsFromSearch} state.tripsSearchText ${state.tripsSearchText}");
     if (!hasMoreTripJoin || isLoadingMoreTripJoin) return;
 
     isLoadingMoreTripJoin = true;
@@ -519,6 +791,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       CarBrandParams(
         page: currentPageTripJoin,
         limit: 15,
+          id: state.tripsFromSearch==true?state.tripsSearchText:""
       ),
     );
 
@@ -547,6 +820,52 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         isLoadingMoreTripJoin = false;
         emit(state.copyWith(
           availableTripJoinEntity: tripJoinData,
+          status: ViewAllTripJoinStatus.success,
+        ));
+      },
+    );
+  }
+
+  // pagination method
+  Future<void> getPickMe() async {
+    if (!hasMorePickMe || isLoadingMorePickMe) return;
+
+    isLoadingMorePickMe = true;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+
+    final response = await getAvailablePickMeUseCase(
+      CarBrandParams(
+        page: currentPagePickMe,
+        limit: 15,
+        id: state.offersFromSearch==true?state.searchText:""
+      ),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMorePickMe = false;
+        emit(state.copyWith(
+          failure: failure,
+          status: ViewAllTripJoinStatus.failure,
+        ));
+      },
+      (data) {
+        final trips = data ?? [];
+        pickMeData.addAll(trips);
+
+        if (trips.length < 15) {
+          hasMorePickMe = false;
+        } else {
+          currentPagePickMe++;
+        }
+
+        isLoadingMorePickMe = false;
+        emit(state.copyWith(
+          availablePickMeEntity: pickMeData,
           status: ViewAllTripJoinStatus.success,
         ));
       },
@@ -629,6 +948,15 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     isLoadingMyAds = false;
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
+  Future<void> loadInitialPickMeMyAds() async {
+    isLoadingPickMeMyAds = true;
+    myPickMeAdsData.clear();
+    currentPagePickMeMyAds = 1;
+    hasMorePickMeMyAds = true;
+    await getPickMeMyAds();
+    isLoadingPickMeMyAds = false;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.success));
+  }
 
   Future<void> loadInitialRequestTripJoin() async {
     isLoadingRequestTripJoin = true;
@@ -640,13 +968,38 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
 
-  Future<void> loadInitialTripJoin() async {
+  Future<void> loadInitialRequestPickMe() async {
+    isLoadingRequestPickMe = true;
+    isLoadingMoreRequestPickMe = false;
+    requestPickMeData.clear();
+    currentPageRequestPickMe = 1;
+    hasMoreRequestPickMe = true;
+    await getRequestPickMe();
+    getPickMeRequestCount();
+    isLoadingRequestPickMe = false;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.success));
+  }
+
+  Future<void> loadInitialTripJoin(bool fromSearch,String searchText) async {
+    print("fromSearch $fromSearch searchText $searchText");
+    emit(state.copyWith(tripsFromSearch:fromSearch,tripsSearchText:searchText));
     isLoadingTripJoin = true;
     tripJoinData.clear();
     currentPageTripJoin = 1;
     hasMoreTripJoin = true;
     await getTripJoin();
     isLoadingTripJoin = false;
+    emit(state.copyWith(status: ViewAllTripJoinStatus.success));
+  }
+
+  Future<void> loadInitialPickMe(bool fromSearch,String searchText) async {
+    emit(state.copyWith(offersFromSearch:fromSearch,searchText:searchText));
+    isLoadingPickMe = true;
+    pickMeData.clear();
+    currentPagePickMe = 1;
+    hasMorePickMe = true;
+    await getPickMe();
+    isLoadingPickMe = false;
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
 
