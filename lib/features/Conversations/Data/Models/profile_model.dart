@@ -8,6 +8,8 @@ class ProfileModel extends ProfileEntity {
     required super.lastName,
     required super.gender,
     required super.lastSeenAt,
+    required super.isBirthday,
+    required super.isAccountVerified,
     required super.profilePictureUrl,
   });
 
@@ -18,6 +20,8 @@ class ProfileModel extends ProfileEntity {
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       gender: json['gender'] ?? 'male',
+      isBirthday: json['isBirthday'] ?? false,
+      isAccountVerified: json['isAccountVerified'] ?? false,
       lastSeenAt: json['lastSeenAt'] != null ? DateTime.parse(json['lastSeenAt']) : DateTime.now(),
       profilePictureUrl: json['profilePicUrl'],
     );

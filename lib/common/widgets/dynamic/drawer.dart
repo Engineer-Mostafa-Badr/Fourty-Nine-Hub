@@ -673,7 +673,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               return pleaseLoginDialog(context);
                             }
                             context.pop();
-                            context.push(Routes.CHAT, extra: ChatsViewParams());
+                            context.push(Routes.conversationsScreen);
                           },
                         ),
                         SizedBox(
