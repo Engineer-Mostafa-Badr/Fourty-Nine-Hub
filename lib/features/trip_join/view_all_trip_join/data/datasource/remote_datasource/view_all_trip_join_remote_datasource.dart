@@ -203,7 +203,9 @@ class ViewAllTripJoinRemoteDataSourceImp
 
   @override
   Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailableTripJoin(CarBrandParams params) async{
-    final url =
+    print("params.id ${params.id}");
+    final url =(params.id!=null&&params.id !='')?
+    "${EndPoints.searchAvailableTripJoin}?page=${params.page}&limit=${params.limit}&query=${params.id}":
         "${EndPoints.getAvailableTripJoin}?page=${params.page}&limit=${params.limit}";
 
     final response = await apiConsumer.get(url);
@@ -212,7 +214,9 @@ class ViewAllTripJoinRemoteDataSourceImp
     return response.fold(
           (l) => Left(l),
           (data) {
-        final tripsData = (data['data']['availableTripOffers'] as List)
+        final tripsData = data['data']['availableTripOffers'] !=null?(data['data']['availableTripOffers'] as List)
+            .map((e) => AvailableTripJoinModel.fromJson(e as Map<String, dynamic>))
+            .toList():(data['data']['offers'] as List)
             .map((e) => AvailableTripJoinModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(tripsData);
@@ -222,7 +226,8 @@ class ViewAllTripJoinRemoteDataSourceImp
 
   @override
   Future<Either<Failure, List<AvailableTripJoinEntity>>> getAvailablePickMe(CarBrandParams params) async{
-    final url =
+    final url =(params.id!=null&&params.id !='')?
+    "${EndPoints.getAvailablePickMe}/search?page=${params.page}&limit=${params.limit}&query=${params.id}":
         "${EndPoints.getAvailablePickMe}?page=${params.page}&limit=${params.limit}";
 
     final response = await apiConsumer.get(url);
@@ -231,7 +236,9 @@ class ViewAllTripJoinRemoteDataSourceImp
     return response.fold(
           (l) => Left(l),
           (data) {
-        final tripsData = (data['data']['availableTripOffers'] as List)
+        final tripsData =data['data']['availableTripOffers'] !=null? (data['data']['availableTripOffers'] as List)
+            .map((e) => AvailableTripJoinModel.fromJson(e as Map<String, dynamic>))
+            .toList():(data['data']['offers'] as List)
             .map((e) => AvailableTripJoinModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(tripsData);

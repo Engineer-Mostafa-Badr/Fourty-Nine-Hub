@@ -32,6 +32,11 @@ class _AllPickMeViewState extends State<AllPickMeView>
   // late Animation<double> _positionAnimation;
   late TabController tabController;
   int selectedIndex = 0; // Changed to 0 to match availableTrips as default
+  
+  // Search functionality variables
+  bool _isSearchVisible = false;
+  final TextEditingController _searchController = TextEditingController();
+  bool _hasSearchText = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +79,124 @@ class _AllPickMeViewState extends State<AllPickMeView>
         }
       });
     });
+    
+    // Add listener to search controller
+    _searchController.addListener(() {
+      setState(() {
+        _hasSearchText = _searchController.text.isNotEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    tabController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSearchHeader() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: GestureDetector(
+        onTap: () {
+          ManageVibration.vibrate();
+          setState(() {
+            _isSearchVisible = !_isSearchVisible;
+            if (!_isSearchVisible) {
+              _searchController.clear();
+              _hasSearchText = false;
+            }
+          });
+        },
+        child:Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: _isSearchVisible
+                ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.search,
+            size: 24,
+            color: _isSearchVisible
+                ? AppColors.SECONDARY_COLOR
+                : null,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchField() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _searchController,
+              style: TextStyle(
+                color: AppColors.getTextColor(context),
+                fontSize: 16,
+              ),
+              decoration: InputDecoration(
+                hintText: context.isArabic
+                    ? 'ابحث عن الأطباء أو الخدمات...'
+                    : 'Search doctors or services...',
+                hintStyle: TextStyle(
+                  color: AppColors.getTextColor(context).withOpacity(0.6),
+                  fontSize: 16,
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: AppColors.SECONDARY_COLOR,
+                  size: 20,
+                ),
+              ),
+              textInputAction: TextInputAction.search,
+              onChanged: (value) => setState(() => _hasSearchText = value.isNotEmpty),
+              onSubmitted: (value) {
+                if (value.isNotEmpty) {
+                  // _performSearch(value);
+                }
+              },
+            ),
+          ),
+          if (_hasSearchText) ...[
+            Sizer(width: 8.w),
+              Padding(
+                padding: const EdgeInsets.only(right: 8,left: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    // _performSearch(_searchController.text);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.SECONDARY_COLOR,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
   }
 
   Widget _buildCardForCategory() {

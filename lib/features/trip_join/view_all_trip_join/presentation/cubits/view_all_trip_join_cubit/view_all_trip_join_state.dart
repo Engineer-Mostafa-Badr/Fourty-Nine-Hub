@@ -3,6 +3,10 @@ part of 'view_all_trip_join_cubit.dart';
 class ViewAllTripJoinState {
   final ViewAllTripJoinStatus status;
   final String? errorMessage;
+  final String? searchText;
+  final String? tripsSearchText;
+  final bool? offersFromSearch;
+  final bool? tripsFromSearch;
   final List<TripJoinCardEntity>? allCards;
   final Failure? failure;
   final List<RideBrandEntity>? rideBrandEntity;
@@ -19,6 +23,10 @@ class ViewAllTripJoinState {
   final GetRequestCountEntity? pickMeRequestCountData;
   const ViewAllTripJoinState({
     this.status = ViewAllTripJoinStatus.initial,
+    this.offersFromSearch,
+    this.tripsSearchText,
+    this.tripsFromSearch,
+    this.searchText,
     this.errorMessage,
     this.allCards,
     this.failure,
@@ -39,6 +47,8 @@ class ViewAllTripJoinState {
   ViewAllTripJoinState copyWith({
     ViewAllTripJoinStatus? status,
     String? errorMessage,
+    String? searchText,
+    String? tripsSearchText,
     List<TripJoinCardEntity>? allCards,
     Failure? failure,
     List<RideBrandEntity>? rideBrandEntity,
@@ -54,9 +64,12 @@ class ViewAllTripJoinState {
     DeleteMyTripJoinEntity? deleteMyPickMeEntity,
     GetRequestCountEntity? requestCountData,
     GetRequestCountEntity? pickMeRequestCountData,
+    bool? offersFromSearch,
+    bool? tripsFromSearch
   }) {
     return ViewAllTripJoinState(
       status: status ?? this.status,
+      searchText: searchText ?? this.searchText,
       errorMessage: errorMessage ?? this.errorMessage,
       allCards: allCards ?? this.allCards,
       failure: failure ?? this.failure,
@@ -72,6 +85,9 @@ class ViewAllTripJoinState {
       deleteMyPickMeEntity: deleteMyPickMeEntity ?? this.deleteMyPickMeEntity,
       requestCountData: requestCountData ?? this.requestCountData,
       pickMeRequestCountData: pickMeRequestCountData ?? this.pickMeRequestCountData,
+      offersFromSearch: offersFromSearch ?? this.offersFromSearch,
+      tripsSearchText: tripsSearchText ?? this.tripsSearchText,
+      tripsFromSearch: tripsFromSearch ?? this.tripsFromSearch,
     );
   }
 }

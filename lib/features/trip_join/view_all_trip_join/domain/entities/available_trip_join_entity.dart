@@ -6,6 +6,8 @@ class AvailableTripJoinEntity {
   num? viewerIds;
   final bool? isRepeat;
   bool? isView;
+  bool? isNormalRequested;
+  bool? isPremiumRequested;
   final int? passengers;
   final String? startDate;
   final String? offerType;
@@ -19,6 +21,8 @@ class AvailableTripJoinEntity {
     this.id,
     this.creatorId,
     this.pricePerSeat,
+    this.isNormalRequested,
+    this.isPremiumRequested,
     this.status,
     this.viewerIds,
     this.isRepeat,
