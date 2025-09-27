@@ -12,6 +12,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final bool showSearchField; // إضافة جديدة
   final TextEditingController? searchController; // إضافة جديدة
   final Function(String)? onSearchChanged; // إضافة جديدة
+  final List<String>? tabTitles; // إضافة التابز كـ parameter
   late final ScrollController _scrollController;
 
   StickyTabBarDelegate({
@@ -21,6 +22,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
     this.showSearchField = false, // إضافة جديدة
     this.searchController, // إضافة جديدة
     this.onSearchChanged, // إضافة جديدة
+    this.tabTitles, // إضافة التابز كـ parameter
   }) {
     _scrollController = ScrollController();
   }
@@ -97,25 +99,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           textDirection: context.textDirection,
-                          children: [
-                            _buildTabPill(
-                                context.isArabic ? 'متاح' : 'Available',
-                                0,
-                                tabController.index == 0),
-                            SizedBox(width: size.width * 0.02),
-                            _buildTabPill(
-                                context.isArabic ? 'مفضلة' : 'Favorite',
-                                1,
-                                tabController.index == 1),
-                            SizedBox(width: size.width * 0.02),
-                            _buildTabPill(context.isArabic ? 'سجل' : 'History',
-                                2, tabController.index == 2),
-                            SizedBox(width: size.width * 0.02),
-                            _buildTabPill(
-                                context.isArabic ? 'موهبتي' : 'My Talent',
-                                3,
-                                tabController.index == 3),
-                          ],
+                          children: _buildTabPills(size),
                         ),
                       ),
                     ),
@@ -133,6 +117,28 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
         );
       },
     );
+  }
+
+  List<Widget> _buildTabPills(Size size) {
+    // Default tabs for star feature
+    final List<String> defaultTabs = [
+      context.isArabic ? 'متاح' : 'Available',
+      context.isArabic ? 'مفضلة' : 'Favorite',
+      context.isArabic ? 'سجل' : 'History',
+      context.isArabic ? 'موهبتي' : 'My Talent',
+    ];
+
+    final tabs = tabTitles ?? defaultTabs;
+    final List<Widget> tabWidgets = [];
+
+    for (int i = 0; i < tabs.length; i++) {
+      tabWidgets.add(_buildTabPill(tabs[i], i, tabController.index == i));
+      if (i < tabs.length - 1) {
+        tabWidgets.add(SizedBox(width: size.width * 0.02));
+      }
+    }
+
+    return tabWidgets;
   }
 
   Widget _buildTabPill(String text, int index, bool isSelected) {
@@ -165,8 +171,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
             color: isSelected
                 ? (context.isDarkMode ? Colors.black : Colors.white)
                 : (context.isDarkMode ? Colors.white : Colors.black),
-            fontSize:
-                context.isArabic ? size.width * 0.03 : size.width * 0.025,
+            fontSize: context.isArabic ? size.width * 0.03 : size.width * 0.025,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

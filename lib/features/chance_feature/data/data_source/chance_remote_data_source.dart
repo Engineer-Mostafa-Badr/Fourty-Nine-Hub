@@ -15,8 +15,18 @@ import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_sub_
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/utils/shared_pref.dart';
+import '../../domain/entity/chance_ad_entity.dart';
+import '../../domain/entity/chance_ads_pagination_entity.dart';
 import '../../domain/entity/chance_entity.dart';
 import '../../domain/use_case/add_chance_data.dart';
+import '../../domain/use_case/create_chance_ad_use_case.dart';
+import '../../domain/use_case/get_all_chance_ads_use_case.dart';
+import '../../domain/use_case/get_chance_ad_details_use_case.dart';
+import '../../domain/use_case/join_chance_ad_use_case.dart';
+import '../../domain/use_case/search_chance_ads_use_case.dart';
+import '../../domain/use_case/toggle_chance_ad_favorite_use_case.dart';
+import '../model/chance_ad_model.dart';
+import '../model/chance_ads_pagination_model.dart';
 
 abstract class ChanceRemoteDataSource {
   Future<List<ChanceEntity>> fetchChance();
@@ -30,6 +40,24 @@ abstract class ChanceRemoteDataSource {
       MainCategoryChanceParams params);
   Future<Either<Failure, List<SubCategoryDropEntity>>> fetchSubCategory(
       SubCategoryChanceParams params);
+
+  // New Chance Ads Methods
+  Future<Either<Failure, ChanceAdEntity>> createChanceAd(
+      CreateChanceAdParams params);
+  Future<Either<Failure, bool>> joinChanceAd(JoinChanceAdParams params);
+  Future<Either<Failure, ChanceAdsPaginationEntity>> getAllChanceAds(
+      GetAllChanceAdsParams params);
+  Future<Either<Failure, ChanceAdEntity>> getChanceAdDetails(
+      GetChanceAdDetailsParams params);
+  Future<Either<Failure, List<ChanceAdEntity>>> searchChanceAds(
+      SearchChanceAdsParams params);
+  Future<Either<Failure, bool>> toggleChanceAdFavorite(
+      ToggleChanceAdFavoriteParams params);
+  Future<Either<Failure, List<ChanceAdEntity>>> getFavoriteChanceAds();
+  Future<Either<Failure, List<ChanceAdEntity>>> getMyChanceAds();
+  Future<Either<Failure, List<ChanceAdEntity>>> getExpiredChanceAds();
+  Future<Either<Failure, List<dynamic>>> getChanceAdWinners(String adId);
+  Future<Either<Failure, bool>> incrementChanceAdView(String adId);
 }
 
 class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
@@ -143,6 +171,175 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
             .map((e) => SubCategoryDropModel.fromJson(e))
             .toList();
         return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, ChanceAdEntity>> createChanceAd(
+      CreateChanceAdParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.createChanceAd,
+      data: params.toModel().toJson(),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(ChanceAdModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> joinChanceAd(JoinChanceAdParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.joinChanceAd,
+      data: params.toModel().toJson(),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response['status'] ?? false),
+    );
+  }
+
+  @override
+  Future<Either<Failure, ChanceAdsPaginationEntity>> getAllChanceAds(
+      GetAllChanceAdsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getAllChanceAds(
+        limit: params.paginationParams.limit,
+        page: params.paginationParams.page,
+      ),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(ChanceAdsPaginationModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, ChanceAdEntity>> getChanceAdDetails(
+      GetChanceAdDetailsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getChanceAdDetails(params.adId),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(ChanceAdModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> searchChanceAds(
+      SearchChanceAdsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.searchChanceAds(params.keyword),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data'] as List? ?? [])
+            .map((e) => ChanceAdModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> toggleChanceAdFavorite(
+      ToggleChanceAdFavoriteParams params) async {
+    final response = await _apiConsumer.post(
+      EndPoints.toggleChanceAdFavorite(params.adId),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(response['data']['isFavorite'] ?? false),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> getFavoriteChanceAds() async {
+    final response = await _apiConsumer.get(
+      EndPoints.getFavoriteChanceAds,
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data'] as List? ?? [])
+            .map((e) => ChanceAdModel.fromJson(e['chanceAdId']))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> getMyChanceAds() async {
+    print('🔍 DEBUG: Calling getMyChanceAds API...');
+    final response = await _apiConsumer.get(
+      EndPoints.getMyChanceAds,
+    );
+    return response.fold(
+      (failure) {
+        print('❌ DEBUG: getMyChanceAds failed: ${failure.toString()}');
+        return Left(failure);
+      },
+      (response) {
+        print('✅ DEBUG: getMyChanceAds response: ${response.toString()}');
+        final dataList = response['data'] as List? ?? [];
+        print('📊 DEBUG: Found ${dataList.length} chance ads for user');
+        final list = dataList.map((e) => ChanceAdModel.fromJson(e)).toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<ChanceAdEntity>>> getExpiredChanceAds() async {
+    final response = await _apiConsumer.get(
+      EndPoints.getExpiredChanceAds(),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data']['data'] as List? ?? [])
+            .map((e) => ChanceAdModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getChanceAdWinners(String adId) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getChanceAdContributors(adId),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data']['data'] as List? ?? [])
+            .where((participant) => participant['isWinner'] == true)
+            .toList();
+        return Right(list);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> incrementChanceAdView(String adId) async {
+    final endpoint = EndPoints.incrementChanceAdView(adId);
+    print('DATA SOURCE: Calling GET $endpoint (to increment views)');
+
+    final response = await _apiConsumer.get(endpoint);
+
+    return response.fold(
+      (failure) {
+        print('API ERROR incrementing view: ${failure.toString()}');
+        return Left(failure);
+      },
+      (response) {
+        print('API SUCCESS incrementing view: $response');
+        return Right(response['status'] ?? true);
       },
     );
   }

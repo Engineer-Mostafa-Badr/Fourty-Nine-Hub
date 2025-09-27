@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
@@ -918,12 +919,11 @@ class StarCubit extends Cubit<StarState> {
           final currentContext =
               AppPages.router.configuration.navigatorKey.currentContext;
           if (currentContext != null) {
-            ScaffoldMessenger.of(currentContext).showSnackBar(
-              SnackBar(
-                content: Text('Video deleted successfully'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            showSuccessMessage(
+                currentContext,
+                currentContext.isArabic
+                    ? 'تم حذف الفيديو بنجاح'
+                    : 'Video deleted successfully');
           }
         }
         emit(state.copyWith(status: StarStates.success));
