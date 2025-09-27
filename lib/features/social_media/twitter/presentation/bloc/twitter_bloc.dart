@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_verification_usecase.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
@@ -75,6 +77,7 @@ class TwitterCubit extends Cubit<TwitterState> {
   final GetMyThreadsPageUseCase _getMyThreadsPageUseCase;
   final GetUserThreadsPageUseCase _getUserThreadsPageUseCase;
   final TwitterRepostUseCase _repostUseCase;
+  final GetVerificationUseCase _getVerificationUseCase;
   TwitterCubit(
     this._getFeedUseCase,
     this._twitterPostReactUseCase,
@@ -99,6 +102,7 @@ class TwitterCubit extends Cubit<TwitterState> {
       this._getFollowingCountUseCase,
       this._getMyThreadsPageUseCase,
       this._getUserThreadsPageUseCase,
+      this._getVerificationUseCase,
       this._repostUseCase,
       ) : super(const TwitterState());
 
@@ -197,6 +201,23 @@ class TwitterCubit extends Cubit<TwitterState> {
         emit(state.copyWith(posts: items, status: StateStatus.success));
       },
     );
+  }
+  Future<void> getVerification() async {
+    print("getVerification");
+    // bool verified = false;
+    final response = await _getVerificationUseCase(NoParams());
+    response.fold(
+          (l) {
+            // verified=true;
+        final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(ctx, getFailureMessage(l, ctx));
+        emit(state.copyWith(failure: l, status: StateStatus.error));
+      },
+          (data) {
+        emit(state.copyWith(isVerified:data,status: StateStatus.success));
+      },
+    );
+    // return verified;
   }
 
 
@@ -913,14 +934,13 @@ class TwitterCubit extends Cubit<TwitterState> {
     ));
   }
 
-// twitter_cubit.dart  (your onRepost)
 
   Future<void> onRepost({required String postId}) async {
     final result = await _repostUseCase(postId);
 
     result.fold((failure) {
       emit(state.copyWith(failure: failure, status: StateStatus.error));
-    }, (repostId) {
+     }, (repostId) {
       // 1) update lists held in state (feed, myPosts, userTweets)
       List<TwitterPostEntity> _bump(List<TwitterPostEntity> src) => src.map((p) {
         if (p.id != postId) return p;

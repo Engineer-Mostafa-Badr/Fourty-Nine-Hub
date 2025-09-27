@@ -51,12 +51,13 @@ class DoctorModel extends DoctorEntity {
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
     return DoctorModel(
-      id: json['_id'] ?? '',
+      id: json['id']??json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
+      description: json['description'] ?? '',
       timeToStart: json['timeToStart'] ?? '0h 0m',
       isAfterEnd: json['isAfterEnd'] ?? false,
       isBetweenStartAndEnd: json['isBetweenStartAndEnd'] ?? false,
-      firstName: json['firstName'] ?? '',
       meetingData: json['roomMeeting'] != null
           ? DoctorMeetingModel.fromJson(json['roomMeeting'])
           : null,
@@ -81,16 +82,15 @@ class DoctorModel extends DoctorEntity {
       visitHome: json['visitHome'] ?? false,
       currencyEn: json['currencyEn'] ?? '',
       currencyAr: json['currencyAr'] ?? '',
-      clinicPrice: json['clinicPrice'] ?? '',
+      clinicPrice: json['clinicPrice'].toString() ?? '',
       detectionPeriodClinic: json['detectionPeriodClinic'] ?? '',
       detectionPeriodCalls: json['detectionPeriodCalls'] ?? '',
       detectionPeriodvisitHome: json['detectionPeriodvisitHome'] ?? '',
-      callsPrice: json['callsPrice'] ?? '',
-      visitHomePrice: json['visitHomePrice'] ?? '',
-      waitingTime: json['waitingTime'] ?? '',
+      callsPrice: json['callsPrice'].toString() ?? '',
+      visitHomePrice: json['visitHomePrice'].toString() ?? '',
+      waitingTime: json['waitingTime'].toString() ?? '',
       isActive: json['isActive'] ?? false,
       isPremium: json['isPremium'] ?? false,
-      description: json['description'] ?? '',
       rating: json['rating'] ?? 1,
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',

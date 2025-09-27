@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/doc
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_setting_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 
 import '../../domain/entities/most_booking_entity.dart';
 import '../../domain/usecases/get_booking_use_case.dart';
@@ -29,6 +30,7 @@ abstract class HealthRemoteDataSource {
       String id);
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(
       String userId);
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(SearchDoctorsParams params);
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getFavoriteCategory();
 
@@ -44,6 +46,9 @@ abstract class HealthRemoteDataSource {
       {required GetBookingParams params});
 
   Future<Either<Failure, List<MostBookingEntity>>> getMostBooking(
+      {required GetMostBookingParams params});
+
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUserBooking(
       {required GetMostBookingParams params});
 }
 
@@ -94,6 +99,17 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
         (failure) => Left(failure),
         (data) => Right((data['data']['subcategories'] as List)
             .map((e) => HealthSubcategoryModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(SearchDoctorsParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.searchDoctors(params));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['result'] as List)
+            .map((e) => MostBookingModel.fromJson(e))
             .toList()));
   }
 
@@ -187,6 +203,25 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
       (data) {
         final restaurantList = (data['data']["doctors"] as List)
             .map((e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(restaurantList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<BookedAppointmentEntity>>> getUserBooking(
+      {required GetMostBookingParams params}) async {
+    final url =
+        "${EndPoints.getUserBooking}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+      (l) => Left(l),
+      (data) {
+        final restaurantList = (data['data']["bookings"] as List)
+            .map((e) => BookedUserAppointmentModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(restaurantList);
       },

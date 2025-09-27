@@ -4,6 +4,7 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
   GetRequestTripJoinModel({
     super.id,
     super.userId,
+    super.requestType,
     super.firstName,
     super.pricePerSeat,
     super.startDate,
@@ -22,6 +23,7 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
     return GetRequestTripJoinModel(
       id: json['id'] as String?,
       userId: json['userId'] as String?,
+      requestType: json['requestType'] as String?,
       firstName: json['firstName'] as String?,
       pricePerSeat: (json['pricePerSeat'] as num?)?.toDouble(),
       startDate: json['startDate'] as String?,
@@ -75,7 +77,7 @@ class AddressModel extends AddressEntity {
     return AddressModel(
       address: json['address'] as String?,
       coordinates: (json['coordinates'] as List<dynamic>?)
-          ?.map((coord) => (coord as num).toDouble())
+          ?.map((coord) => ((coord??0) as num).toDouble())
           .toList(),
     );
   }

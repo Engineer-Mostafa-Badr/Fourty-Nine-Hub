@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import '../../../social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../data/models/profile_model.dart';
 import '../../presentation/bloc/twitter_bloc.dart';
@@ -47,6 +48,7 @@ abstract class TwitterRepo {
       {required TwitterReportParams params});
   Future<Either<Failure, bool>> requestDocument(
       {required TwitterDocumentationParams params});
+  Future<Either<Failure, bool>> getVerification();
 
   Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getThreadPostsPage({
     required String threadId,

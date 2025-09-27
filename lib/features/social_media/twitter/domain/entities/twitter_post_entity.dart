@@ -25,6 +25,7 @@ class TwitterPostEntity {
   num? loveCount;
   num? repostCount;
   bool? isReact;
+  bool? yourReposted;
   String? photo;
   final DateTime createdAt;
   Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
@@ -41,6 +42,7 @@ class TwitterPostEntity {
     this.shares,
     this.love,
     this.isReact = false,
+    this.yourReposted = false,
     required this.user,
     this.commentPrivacy = 1,
     this.isShared = false,
