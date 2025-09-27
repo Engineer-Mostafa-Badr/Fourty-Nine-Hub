@@ -540,7 +540,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
-                                              cubit.fromCurrency,
+                                              _getCurrencyName(
+                                                  cubit.fromCurrency),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -736,7 +737,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
-                                              cubit.toCurrency,
+                                              _getCurrencyName(
+                                                  cubit.toCurrency),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -1141,6 +1143,60 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     return flagMap[code] ?? '💱';
   }
 
+  String _getCurrencyName(String code) {
+    final currencyNamesArabic = {
+      'USD': 'دولار',
+      'EUR': 'يورو',
+      'GBP': 'جنيه',
+      'JPY': 'ين',
+      'AUD': 'دولار',
+      'CAD': 'دولار',
+      'CHF': 'فرنك',
+      'CNY': 'يوان',
+      'SEK': 'كرونا',
+      'NZD': 'دولار',
+      'AED': 'درهم',
+      'SAR': 'ريال',
+      'QAR': 'ريال',
+      'KWD': 'دينار',
+      'BHD': 'دينار',
+      'OMR': 'ريال',
+      'EGP': 'جنيه',
+      'INR': 'روبية',
+      'BRL': 'ريال',
+      'RUB': 'روبل',
+    };
+
+    final currencyNamesEnglish = {
+      'USD': 'USD',
+      'EUR': 'EUR',
+      'GBP': 'GBP',
+      'JPY': 'JPY',
+      'AUD': 'AUD',
+      'CAD': 'CAD',
+      'CHF': 'CHF',
+      'CNY': 'CNY',
+      'SEK': 'SEK',
+      'NZD': 'NZD',
+      'AED': 'AED',
+      'SAR': 'SAR',
+      'QAR': 'QAR',
+      'KWD': 'KWD',
+      'BHD': 'BHD',
+      'OMR': 'OMR',
+      'EGP': 'EGP',
+      'INR': 'INR',
+      'BRL': 'BRL',
+      'RUB': 'RUB',
+    };
+
+    if (context.isArabic) {
+      return currencyNamesArabic[code] ?? code;
+    } else {
+      return currencyNamesEnglish[code] ?? code;
+    }
+  }
+
   void _showFromCurrencySelector(BuildContext context, CurrencyCubit cubit) {
     _showCurrencySelector(
       context,
@@ -1267,7 +1323,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                         ),
                       ),
                       title: Text(
-                        '${currency.code} - ${currency.name}',
+                        '${currency.code} - ${_getCurrencyName(currency.code)}',
                         style: TextStyle(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,
