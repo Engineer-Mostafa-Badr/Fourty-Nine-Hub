@@ -4,8 +4,10 @@ import 'package:fourtyninehub/features/chance_feature/domain/entity/chance_entit
 import 'package:fourtyninehub/features/chance_feature/domain/entity/main_category_drop_entity.dart';
 
 import '../../../../../../core/error/failure.dart';
+import '../../../domain/entity/chance_ad_entity.dart';
+import '../../../domain/entity/chance_ads_pagination_entity.dart';
 
-enum ChanceStates { loading, initial, error, success }
+enum ChanceStates { loading, initial, error, success, createSuccess, joinSuccess }
 
 class ChanceState extends Equatable {
   final ChanceStates status;
@@ -13,6 +15,14 @@ class ChanceState extends Equatable {
   final List<ChanceEntity>? chance;
   final ChanceRateEntity? rate;
   final List<MainCategoryDropEntity>? mainCategory;
+  final List<ChanceAdEntity>? chanceAds;
+  final ChanceAdsPaginationEntity? chanceAdsPagination;
+  final ChanceAdEntity? chanceAdDetails;
+  final List<ChanceAdEntity>? favoriteChanceAds;
+  final List<ChanceAdEntity>? myChanceAds;
+  final List<ChanceAdEntity>? expiredChanceAds;
+  final List<ChanceAdEntity>? searchResults;
+  final List<String> uploadedImageIds;
 
   const ChanceState({
     this.status = ChanceStates.loading,
@@ -20,6 +30,14 @@ class ChanceState extends Equatable {
     this.chance,
     this.rate,
     this.mainCategory,
+    this.chanceAds,
+    this.chanceAdsPagination,
+    this.chanceAdDetails,
+    this.favoriteChanceAds,
+    this.myChanceAds,
+    this.expiredChanceAds,
+    this.searchResults,
+    this.uploadedImageIds = const [],
   });
 
   ChanceState copyWith({
@@ -28,17 +46,38 @@ class ChanceState extends Equatable {
     List<ChanceEntity>? chance,
     ChanceRateEntity? rate,
     List<MainCategoryDropEntity>? mainCategory,
+    List<ChanceAdEntity>? chanceAds,
+    ChanceAdsPaginationEntity? chanceAdsPagination,
+    ChanceAdEntity? chanceAdDetails,
+    List<ChanceAdEntity>? favoriteChanceAds,
+    List<ChanceAdEntity>? myChanceAds,
+    List<ChanceAdEntity>? expiredChanceAds,
+    List<ChanceAdEntity>? searchResults,
+    List<String>? uploadedImageIds,
   }) {
     return ChanceState(
-        status: status ?? this.status,
-        failure: failure ?? this.failure,
-        chance: chance ?? this.chance,
-        rate: rate ?? this.rate,
-        mainCategory: mainCategory ?? this.mainCategory);
+      status: status ?? this.status,
+      failure: failure ?? this.failure,
+      chance: chance ?? this.chance,
+      rate: rate ?? this.rate,
+      mainCategory: mainCategory ?? this.mainCategory,
+      chanceAds: chanceAds ?? this.chanceAds,
+      chanceAdsPagination: chanceAdsPagination ?? this.chanceAdsPagination,
+      chanceAdDetails: chanceAdDetails ?? this.chanceAdDetails,
+      favoriteChanceAds: favoriteChanceAds ?? this.favoriteChanceAds,
+      myChanceAds: myChanceAds ?? this.myChanceAds,
+      expiredChanceAds: expiredChanceAds ?? this.expiredChanceAds,
+      searchResults: searchResults ?? this.searchResults,
+      uploadedImageIds: uploadedImageIds ?? this.uploadedImageIds,
+    );
   }
 
   @override
-  List<Object?> get props => [status, failure, chance, rate, mainCategory];
+  List<Object?> get props => [
+    status, failure, chance, rate, mainCategory, chanceAds,
+    chanceAdsPagination, chanceAdDetails, favoriteChanceAds,
+    myChanceAds, expiredChanceAds, searchResults, uploadedImageIds
+  ];
 }
 
 extension ChanceStateX on ChanceState {

@@ -754,8 +754,7 @@ class EndPoints {
   // social
 
   static const createFacebookPost = '/facebook/post';
-  static String createTwitterPost =
-      '/twitter/threads';
+  static String createTwitterPost = '/twitter/threads';
 
   // static const getFeedPosts = '/facebook/feed';
   static activities(PaginationParams params) =>
@@ -1015,11 +1014,11 @@ class EndPoints {
   }
 
   static String getPostComments(PostCommentsParams params) {
-    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-post-comments/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getPostCommentReplies(PostCommentsParams params) {
-    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id!=null&&(params.id?.isNotEmpty??false))?'&afterId=${params.id}':''}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/comment/get-comment-replies/${params.postId}?limit=${params.limit}${(params.id != null && (params.id?.isNotEmpty ?? false)) ? '&afterId=${params.id}' : ''}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getTwitterPostComments(PostCommentsParams params) {
@@ -1481,6 +1480,34 @@ class EndPoints {
     return '/categories/main/has-auction?page=${params.paginationParams.page}&limit=${params.paginationParams.limit}';
   }
 
+  // New Chance Ads Endpoints
+  static const createChanceAd = '/chanceAds/create';
+  static const joinChanceAd = '/chanceAds/join';
+
+  static String getAllChanceAds({int limit = 10, int page = 1}) =>
+      '/chanceAds/?limit=$limit&page=$page';
+
+  static String getChanceAdDetails(String adId) => '/chanceAds/$adId';
+
+  static String incrementChanceAdView(String adId) => '/chanceAds/$adId';
+
+  static String getChanceAdContributors(String adId,
+          {int limit = 10, int page = 1}) =>
+      '/chanceAds/$adId/Participants?limit=$limit&page=$page';
+
+  static String getExpiredChanceAds({int limit = 10, int page = 1}) =>
+      '/chanceAds/chance/expired?limit=$limit&page=$page';
+
+  static const getMyChanceAds = '/chanceAds/ads/user';
+
+  static String searchChanceAds(String keyword) =>
+      '/chanceAds/ads/search?keyword=$keyword';
+
+  static String toggleChanceAdFavorite(String adId) =>
+      '/chanceAds/favorite/$adId/toggle';
+
+  static const getFavoriteChanceAds = '/chanceAds/user/favorites';
+
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
 
@@ -1827,8 +1854,7 @@ class EndPoints {
   static String rateTubeVideo = '/tube-rate';
 
   // Tube Video with pagination
-  static String getAllTubeVideosWithPagination(
-          {int page = 1, int limit = 5}) =>
+  static String getAllTubeVideosWithPagination({int page = 1, int limit = 5}) =>
       '/tube-video?page=$page&limit=$limit';
 
   static String getMyTubeVideosWithPagination({int page = 1, int limit = 10}) =>
@@ -1923,6 +1949,7 @@ class EndPoints {
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String auctionBanner = '/auctions/banner';
 
-  static String getDriverRatings(String driverId) => '/ride/trip/ratings/driver/$driverId';
+  static String getDriverRatings(String driverId) =>
+      '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
 }

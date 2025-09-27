@@ -43,7 +43,7 @@ class WinnersCashbackViewBody extends StatelessWidget {
           return CustomFailureWidget(
             title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context.read<WinnersCashbackCubit>().getWinners(context);
             },
           );

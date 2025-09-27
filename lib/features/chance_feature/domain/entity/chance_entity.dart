@@ -12,6 +12,8 @@ class ChanceEntity {
   final SubCategoryEntity subCategoryId;
   final MainCategoryEntity mainCategoryId;
   final String title;
+  final int contributors;
+  final int views;
 
   ChanceEntity({
     required this.id,
@@ -22,5 +24,7 @@ class ChanceEntity {
     required this.subCategoryId,
     required this.mainCategoryId,
     required this.title,
+    this.contributors = 0,
+    this.views = 0,
   });
 }

@@ -12,12 +12,16 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../pages/my_video_details_view.dart';
 
-class TalentMyItem extends StatelessWidget {
+class TalentMyItem extends StatefulWidget {
   final StarEntity talent;
   final StarCubit cubit;
   final int index;
@@ -32,35 +36,96 @@ class TalentMyItem extends StatelessWidget {
   });
 
   @override
+  State<TalentMyItem> createState() => _TalentMyItemState();
+}
+
+class _TalentMyItemState extends State<TalentMyItem>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _slideAnimation = Tween<double>(
+      begin: 100.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _rotationAnimation = Tween<double>(
+      begin: 0.1,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaUrl =
-        talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
-    final createdAt = talent.createdAt ?? DateTime.now();
+        widget.talent.mediaUrl.isNotEmpty ? widget.talent.mediaUrl.first.mediaKey : '';
+    final createdAt = widget.talent.createdAt ?? DateTime.now();
 
     // Check if it's a TubeVideo to get additional info
     final tubeVideo =
-        talent is TubeVideoModel ? talent as TubeVideoModel : null;
+        widget.talent is TubeVideoModel ? widget.talent as TubeVideoModel : null;
     final thumbnailUrl = tubeVideo?.thumbnail;
 
-    return GestureDetector(
-      onTap: () {
-        ManageVibration.vibrate();
-        if (onVideoTap != null) {
-          onVideoTap!(talent, mediaUrl);
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => VideoDetailsView(
-                talent: talent,
-                mediaUrl: mediaUrl,
-                cubit: cubit,
-              ),
-            ),
-          );
-        }
-      },
-      child: Container(
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Transform(
+          transform: Matrix4.identity()
+            ..translate(0.0, _slideAnimation.value)
+            ..rotateZ(_rotationAnimation.value),
+          child: Opacity(
+            opacity: _opacityAnimation.value,
+            child: GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate();
+                if (widget.onVideoTap != null) {
+                  widget.onVideoTap!(widget.talent, mediaUrl);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoDetailsView(
+                        talent: widget.talent,
+                        mediaUrl: mediaUrl,
+                        cubit: widget.cubit,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Container(
         padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
@@ -177,10 +242,10 @@ class TalentMyItem extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.grey[300],
-                  backgroundImage: talent.user.image.isNotEmpty
-                      ? NetworkImage(talent.user.image)
+                  backgroundImage: widget.talent.user.image.isNotEmpty
+                      ? NetworkImage(widget.talent.user.image)
                       : null,
-                  child: talent.user.image.isEmpty
+                  child: widget.talent.user.image.isEmpty
                       ? Icon(Icons.person, size: 18, color: Colors.grey[600])
                       : null,
                 ),
@@ -192,7 +257,7 @@ class TalentMyItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        talent.title,
+                        widget.talent.title,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -206,7 +271,7 @@ class TalentMyItem extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        "${talent.user.firstName} ${talent.user.lastName}",
+                        "${widget.talent.user.firstName} ${widget.talent.user.lastName}",
                         style: TextStyle(
                           fontSize: 13,
                           color: context.isDarkMode
@@ -223,7 +288,7 @@ class TalentMyItem extends StatelessWidget {
                               size: 14, color: Colors.grey[600]),
                           SizedBox(width: 4),
                           Text(
-                            "${talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize}",
+                            "${widget.talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize}",
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -248,17 +313,17 @@ class TalentMyItem extends StatelessWidget {
                   ),
                 ),
 
-                // More options button
-                IconButton(
-                  onPressed: () => _showVideoOptions(context),
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: Colors.grey[600],
-                    size: 20,
-                  ),
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                ),
+                // // More options button
+                // IconButton(
+                //   onPressed: () => _showVideoOptions(context),
+                //   icon: Icon(
+                //     Icons.more_vert,
+                //     color: Colors.grey[600],
+                //     size: 20,
+                //   ),
+                //   padding: EdgeInsets.zero,
+                //   constraints: BoxConstraints(minWidth: 32, minHeight: 32),
+                // ),
               ],
             ),
 
@@ -294,9 +359,9 @@ class TalentMyItem extends StatelessWidget {
                     ),
                     SizedBox(width: 16),
                   ],
-                  if (talent.averageRating > 0) ...[
+                  if (widget.talent.averageRating > 0) ...[
                     RatingBarIndicator(
-                      rating: talent.averageRating.toDouble(),
+                      rating: widget.talent.averageRating.toDouble(),
                       itemBuilder: (context, index) => Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -307,7 +372,7 @@ class TalentMyItem extends StatelessWidget {
                     ),
                     SizedBox(width: 4),
                     Text(
-                      "${talent.averageRating}".toArabicNumbers(context),
+                      "${widget.talent.averageRating}".toArabicNumbers(context),
                       style: TextStyle(
                         fontSize: 12,
                         color: context.isDarkMode
@@ -323,6 +388,10 @@ class TalentMyItem extends StatelessWidget {
           ],
         ),
       ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -337,76 +406,119 @@ class TalentMyItem extends StatelessWidget {
     }
   }
 
-  void _showVideoOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: context.isDarkMode ? Colors.grey[900] : Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) => Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
+  // void _showVideoOptions(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: context.isDarkMode ? Colors.grey[900] : Colors.white,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+  //     ),
+  //     builder: (context) => Container(
+  //       padding: EdgeInsets.all(16),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Container(
+  //             width: 40,
+  //             height: 4,
+  //             decoration: BoxDecoration(
+  //               color: context.isDarkMode ? Colors.grey[600] : Colors.grey[300],
+  //               borderRadius: BorderRadius.circular(2),
+  //             ),
+  //           ),
+  //           SizedBox(height: 16),
+  //           // Only show delete option
+  //           ListTile(
+  //             leading: Icon(
+  //               Icons.delete_outline,
+  //               color: Colors.red[600],
+  //               size: 24,
+  //             ),
+  //             title: Text(
+  //               context.isArabic ? 'حذف الفيديو' : 'Delete Video',
+  //               style: TextStyle(
+  //                 color: Colors.red[600],
+  //                 fontSize: 16,
+  //                 fontWeight: FontWeight.w500,
+  //               ),
+  //             ),
+  //             subtitle: Text(
+  //               context.isArabic
+  //                   ? 'لا يمكن التراجع عن هذا الإجراء'
+  //                   : 'This action cannot be undone',
+  //               style: TextStyle(
+  //                 color: Colors.grey[500],
+  //                 fontSize: 12,
+  //               ),
+  //             ),
+  //             onTap: () {
+  //               ManageVibration.vibrate();
+  //               Navigator.pop(context);
+  //               // _showDeleteDialog(context);
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Future<bool> _showDeleteDialog() async {
+    return await showAnimatedDialog(
+      context,
+      AlertDialog(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        titlePadding: const EdgeInsets.only(top: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        title: Text(
+          context.isArabic ? "تنبيه" : "Alert",
+          style: Styles.headerText(
+              color: Colors.red, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+        ),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: context.isDarkMode ? Colors.grey[600] : Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
+            Label(
+              text: context.isArabic
+                  ? "هل تريد حذف الفيديو؟"
+                  : "Do you want to delete the video?",
+              style: Styles.mediumText(
+                color: context.isDarkMode ? Colors.white : Colors.black,
               ),
             ),
-            SizedBox(height: 16),
-            // Only show delete option
-            ListTile(
-              leading: Icon(
-                Icons.delete_outline,
-                color: Colors.red[600],
-                size: 24,
-              ),
-              title: Text(
-                context.isArabic ? 'حذف الفيديو' : 'Delete Video',
-                style: TextStyle(
-                  color: Colors.red[600],
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+            Row(
+              spacing: 8,
+              children: [
+                Expanded(
+                  child: buildButton(
+                    context,
+                    label: LocaleKeys.yes.localize,
+                    color: AppColors.SECONDARY_COLOR,
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      Navigator.of(context).pop(true);
+                      widget.cubit.deleteMyTubeVideo(widget.talent.id);
+                    },
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                context.isArabic
-                    ? 'لا يمكن التراجع عن هذا الإجراء'
-                    : 'This action cannot be undone',
-                style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 12,
+                Expanded(
+                  child: buildButton(
+                    context,
+                    label: LocaleKeys.no.localize,
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
                 ),
-              ),
-              onTap: () {
-                ManageVibration.vibrate();
-                Navigator.pop(context);
-                _showDeleteDialog(context);
-              },
+              ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void _showDeleteDialog(BuildContext context) {
-    showConfirmDialog(
-      context,
-      context.isArabic
-          ? 'هل أنت متأكد من حذف "${talent.title}"؟\n\nسيتم حذف الفيديو نهائياً ولا يمكن التراجع عن هذا الإجراء.'
-          : 'Are you sure you want to delete "${talent.title}"?\n\nThis video will be permanently deleted and this action cannot be undone.',
-      () => cubit.deleteMyTubeVideo(talent.id),
-      confirmText: context.isArabic ? 'حذف الفيديو' : 'Delete Video',
-      cancelText: LocaleKeys.cancel.localize,
-      confirmTextStyle: TextStyle(
-        color: Colors.red[600],
-        fontWeight: FontWeight.w600,
-      ),
-    );
+    ) ?? false;
   }
 }
