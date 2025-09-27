@@ -8,6 +8,8 @@ class ConversationModel extends ConversationEntity {
     required super.conversationId,
     required super.unreadMessagesCount,
     required super.isOnline,
+    required super.isPinned,
+    required super.isMuted,
     required super.profile,
     required super.lastMessage,
   });
@@ -17,6 +19,8 @@ class ConversationModel extends ConversationEntity {
       conversationId: json['conversationId'],
       unreadMessagesCount: json['unreadCount'] ?? 0,
       isOnline: json['isOnline'] ?? false,
+      isPinned: json['isPinned'] ?? false,
+      isMuted: json['isMuted'] ?? false,
       profile: json['profile'] == null ? null : ProfileModel.fromJson(json['profile']),
       lastMessage: json['lastMessage'] == null ? null : LastMessageModel.fromJson(json['lastMessage']),
     );

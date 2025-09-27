@@ -132,27 +132,27 @@ class BottomSheetHelper {
     required String otherUserId,
     required String categoryId,
   }) async {
-    final chat = await context.read<UserCubit>().createNormalChat(
-          otherId: otherUserId,
-          categoryId: categoryId,
-        );
-
-    if (chat != null) {
-      context.push(
-        Routes.CHAT,
-        extra: ChatsViewParams(
-          isFromStartChat: true,
-          initialTabIndex: 1,
-          selectedChat: chat,
-        ),
-      );
-    } else {
-      // Optional: handle null chat (e.g. show error/snackbar)
-      showErrorMessage(
-          context,
-          context.isArabic
-              ? 'حدث حطأ حاول مرة اخري.'
-              : 'Unable to start chat.');
-    }
+    // final chat = await context.read<UserCubit>().createNormalChat(
+    //       otherId: otherUserId,
+    //       categoryId: categoryId,
+    //     );
+    //
+    // if (chat != null) {
+    //   context.push(
+    //     Routes.CHAT,
+    //     extra: ChatsViewParams(
+    //       isFromStartChat: true,
+    //       initialTabIndex: 1,
+    //       selectedChat: chat,
+    //     ),
+    //   );
+    // } else {
+    //   // Optional: handle null chat (e.g. show error/snackbar)
+    //   showErrorMessage(
+    //       context,
+    //       context.isArabic
+    //           ? 'حدث حطأ حاول مرة اخري.'
+    //           : 'Unable to start chat.');
+    // }
   }
 }

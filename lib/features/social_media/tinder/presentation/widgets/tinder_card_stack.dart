@@ -589,20 +589,20 @@ class ChatBottomSheet extends StatelessWidget {
                       onTap: () async {
                         ManageVibration.vibrate();
                         if (context.read<UserCubit>().isLoggedIn) {
-                          ChatEntity? chat = await context
-                              .read<UserCubit>()
-                              .createAnonymousChat(
-                                otherId: cardUser.id!,
-                              );
-                          context.pop();
-                          context.push(
-                            Routes.CHAT,
-                            extra: ChatsViewParams(
-                              isFromStartChat: true,
-                              initialTabIndex: 0,
-                              selectedChat: chat,
-                            ),
-                          );
+                          // ChatEntity? chat = await context
+                          //     .read<UserCubit>()
+                          //     .createAnonymousChat(
+                          //       otherId: cardUser.id!,
+                          //     );
+                          // context.pop();
+                          // context.push(
+                          //   Routes.CHAT,
+                          //   extra: ChatsViewParams(
+                          //     isFromStartChat: true,
+                          //     initialTabIndex: 0,
+                          //     selectedChat: chat,
+                          //   ),
+                          // );
                         } else {
                           return pleaseLoginDialog(context);
 
@@ -625,37 +625,37 @@ class ChatBottomSheet extends StatelessWidget {
                         if (context.read<UserCubit>().isLoggedIn) {
                           log("are friends : ${cardUser.areFriends}");
                           if (cardUser.areFriends == true) {
-                            ChatEntity? chat = await context
-                                .read<UserCubit>()
-                                .createNormalChat(
-                                  otherId: cardUser.id!,
-                                  categoryId: ChatCategoriesIds.social,
-                                );
-                            context.pop();
-                            context.push(
-                              Routes.CHAT,
-                              extra: ChatsViewParams(
-                                isFromStartChat: true,
-                                initialTabIndex: 0,
-                                selectedChat: chat,
-                              ),
-                            );
+                            // ChatEntity? chat = await context
+                            //     .read<UserCubit>()
+                            //     .createNormalChat(
+                            //       otherId: cardUser.id!,
+                            //       categoryId: ChatCategoriesIds.social,
+                            //     );
+                            // context.pop();
+                            // context.push(
+                            //   Routes.CHAT,
+                            //   extra: ChatsViewParams(
+                            //     isFromStartChat: true,
+                            //     initialTabIndex: 0,
+                            //     selectedChat: chat,
+                            //   ),
+                            // );
                           } else {
-                            ChatEntity? chat = await context
-                                .read<UserCubit>()
-                                .createNormalChat(
-                                  otherId: cardUser.id!,
-                                  categoryId: ChatCategoriesIds.greet,
-                                );
-                            context.pop();
-                            context.push(
-                              Routes.CHAT,
-                              extra: ChatsViewParams(
-                                isFromStartChat: true,
-                                initialTabIndex: 0,
-                                selectedChat: chat,
-                              ),
-                            );
+                            // ChatEntity? chat = await context
+                            //     .read<UserCubit>()
+                            //     .createNormalChat(
+                            //       otherId: cardUser.id!,
+                            //       categoryId: ChatCategoriesIds.greet,
+                            //     );
+                            // context.pop();
+                            // context.push(
+                            //   Routes.CHAT,
+                            //   extra: ChatsViewParams(
+                            //     isFromStartChat: true,
+                            //     initialTabIndex: 0,
+                            //     selectedChat: chat,
+                            //   ),
+                            // );
                           }
                         } else {
                           return pleaseLoginDialog(context);
@@ -878,20 +878,20 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                             ManageVibration.vibrate();
                             if (context.read<UserCubit>().isLoggedIn) {
                               log("Are Friends : ${cardUser.areFriends}");
-                              ChatEntity? chat = await context
-                                  .read<UserCubit>()
-                                  .createAnonymousChat(
-                                    otherId: cardUser.id!,
-                                  );
-                              context.pop();
-                              context.push(
-                                Routes.CHAT,
-                                extra: ChatsViewParams(
-                                  isFromStartChat: true,
-                                  initialTabIndex: 0,
-                                  selectedChat: chat,
-                                ),
-                              );
+                              // ChatEntity? chat = await context
+                              //     .read<UserCubit>()
+                              //     .createAnonymousChat(
+                              //       otherId: cardUser.id!,
+                              //     );
+                              // context.pop();
+                              // context.push(
+                              //   Routes.CHAT,
+                              //   extra: ChatsViewParams(
+                              //     isFromStartChat: true,
+                              //     initialTabIndex: 0,
+                              //     selectedChat: chat,
+                              //   ),
+                              // );
                             } else {
                               return pleaseLoginDialog(context);
 
@@ -910,37 +910,37 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
                             if (context.read<UserCubit>().isLoggedIn) {
                               log("Are Friends : ${cardUser.areFriends}");
                               if (cardUser.areFriends == true) {
-                                ChatEntity? chat = await context
-                                    .read<UserCubit>()
-                                    .createNormalChat(
-                                      otherId: cardUser.id!,
-                                      categoryId: ChatCategoriesIds.social,
-                                    );
-                                context.pop();
-                                context.push(
-                                  Routes.CHAT,
-                                  extra: ChatsViewParams(
-                                    isFromStartChat: true,
-                                    initialTabIndex: 0,
-                                    selectedChat: chat,
-                                  ),
-                                );
+                                // ChatEntity? chat = await context
+                                //     .read<UserCubit>()
+                                //     .createNormalChat(
+                                //       otherId: cardUser.id!,
+                                //       categoryId: ChatCategoriesIds.social,
+                                //     );
+                                // context.pop();
+                                // context.push(
+                                //   Routes.CHAT,
+                                //   extra: ChatsViewParams(
+                                //     isFromStartChat: true,
+                                //     initialTabIndex: 0,
+                                //     selectedChat: chat,
+                                //   ),
+                                // );
                               } else {
-                                ChatEntity? chat = await context
-                                    .read<UserCubit>()
-                                    .createNormalChat(
-                                      otherId: cardUser.id!,
-                                      categoryId: ChatCategoriesIds.greet,
-                                    );
-                                context.pop();
-                                context.push(
-                                  Routes.CHAT,
-                                  extra: ChatsViewParams(
-                                    isFromStartChat: true,
-                                    initialTabIndex: 0,
-                                    selectedChat: chat,
-                                  ),
-                                );
+                                // ChatEntity? chat = await context
+                                //     .read<UserCubit>()
+                                //     .createNormalChat(
+                                //       otherId: cardUser.id!,
+                                //       categoryId: ChatCategoriesIds.greet,
+                                //     );
+                                // context.pop();
+                                // context.push(
+                                //   Routes.CHAT,
+                                //   extra: ChatsViewParams(
+                                //     isFromStartChat: true,
+                                //     initialTabIndex: 0,
+                                //     selectedChat: chat,
+                                //   ),
+                                // );
                               }
                             } else {
                               return pleaseLoginDialog(context);

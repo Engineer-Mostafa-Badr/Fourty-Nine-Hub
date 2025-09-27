@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
+import 'package:fourtyninehub/features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -161,6 +162,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context.read<SecretsCubit>().getAllSecrets();
         context.read<CustomPageCubit>().fetchActivate();
         context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+        serviceLocator<ConversationsCubit>().getUnreadConversationsCount();
         context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
         context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
         context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
