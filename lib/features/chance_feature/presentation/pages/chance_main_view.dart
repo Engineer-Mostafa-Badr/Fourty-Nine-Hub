@@ -271,7 +271,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       pinned: false,
                       floating: false,
                       snap: false,
-                      expandedHeight: 250.h,
+                      expandedHeight: 200.h,
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       surfaceTintColor: Colors.transparent,
@@ -471,10 +471,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
             : (state.chanceAds ?? []);
 
     if (ads.isEmpty) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
         child: Center(
           child: Text(
-            'لا توجد إعلانات متاحة',
+            context.isArabic ? 'لا توجد إعلانات متاحة' : 'No available ads',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ),
