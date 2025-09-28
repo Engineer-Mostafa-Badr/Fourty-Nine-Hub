@@ -89,25 +89,38 @@ class _SplashScreenState extends State<SplashScreen> {
         context.go(nextRoute);
       }
       return;
-    }
-
-    if(isRefreshTokenExpired){
-      print("isRefreshTokenExpired");
-      await CacheManager.deleteAllTokens();
-      await Storage.setLoginValue(false);
-      if (!isShowOnboarding) {
-        nextRoute = Routes.ChooseLangScreen;
-      } else if (isActivate) {
-        nextRoute = Routes.HOME;
-      } else {
-        nextRoute = Routes.HOME;
-      }
-
-      if (mounted&&(currentLocation!=nextRoute)) {
-        context.go(nextRoute);
-      }
     }else{
-      if(isAccessTokenExpired){
+      var result = await serviceLocator<ApiConsumer>().get('/settings');
+      result.fold((failure){
+      }, (data) async {
+        print("data['data']['isLoggedIn'] $data");
+
+        if(data['data']['isLoggedIn']==true){
+          print("No Expiration");
+          context.read<UserCubit>().attachToken();
+          context.read<UserCubit>().getUser();
+          context.read<CreatePostCubit>().loadData();
+          context.read<SecretsCubit>().getAllSecrets();
+          context.read<CustomPageCubit>().fetchActivate();
+          context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+          context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+          context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+          context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+          context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+          if (!isShowOnboarding) {
+            nextRoute = Routes.ChooseLangScreen;
+          } else if (isActivate) {
+            nextRoute = Routes.HOME;
+          } else {
+            nextRoute = Routes.HOME;
+          }
+
+          print('Navigating to: $nextRoute');
+
+          if (mounted&&(currentLocation!=nextRoute)) {
+            context.go(nextRoute);
+          }
+        }else{
           print("isAccessTokenExpired");
           UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
           print("tokens !=null ${tokens !=null}");
@@ -137,6 +150,11 @@ class _SplashScreenState extends State<SplashScreen> {
               context.go(nextRoute);
             }
           }else{
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool("ISLOGIN", false);
+
+            await CacheManager.deleteAllTokens();
+            await Storage.setLoginValue(false);
             print("No Expiration");
             if (!isShowOnboarding) {
               nextRoute = Routes.ChooseLangScreen;
@@ -153,33 +171,11 @@ class _SplashScreenState extends State<SplashScreen> {
             }
           }
 
-      }else{
-        print("No Expiration");
-        context.read<UserCubit>().attachToken();
-        context.read<UserCubit>().getUser();
-        context.read<CreatePostCubit>().loadData();
-        context.read<SecretsCubit>().getAllSecrets();
-        context.read<CustomPageCubit>().fetchActivate();
-        context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-        context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-        context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-        context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-        context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
-        if (!isShowOnboarding) {
-          nextRoute = Routes.ChooseLangScreen;
-        } else if (isActivate) {
-          nextRoute = Routes.HOME;
-        } else {
-          nextRoute = Routes.HOME;
         }
-
-        print('Navigating to: $nextRoute');
-
-        if (mounted&&(currentLocation!=nextRoute)) {
-          context.go(nextRoute);
-        }
-      }
+      });
     }
+
+
   }
 
 
@@ -208,6 +204,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print("response.statusCode ${response.statusCode}");
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool("ISLOGIN", false);
+        return null;
       }
 
       if(response.statusCode == 200){

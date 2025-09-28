@@ -270,20 +270,20 @@ class _HealthContactsButtonsState extends State<HealthContactsButtons> {
                         }
                       : snap.data == true
                           ? () async {
-                              ChatEntity? chat = await context
-                                  .read<UserCubit>()
-                                  .createNormalChat(
-                                    otherId: widget.otherUserId,
-                                    categoryId: widget.subcategoryId,
-                                  );
-                              context.push(
-                                Routes.CHAT,
-                                extra: ChatsViewParams(
-                                  isFromStartChat: true,
-                                  initialTabIndex: 1,
-                                  selectedChat: chat,
-                                ),
-                              );
+                              // ChatEntity? chat = await context
+                              //     .read<UserCubit>()
+                              //     .createNormalChat(
+                              //       otherId: widget.otherUserId,
+                              //       categoryId: widget.subcategoryId,
+                              //     );
+                              // context.push(
+                              //   Routes.CHAT,
+                              //   extra: ChatsViewParams(
+                              //     isFromStartChat: true,
+                              //     initialTabIndex: 1,
+                              //     selectedChat: chat,
+                              //   ),
+                              // );
                             }
                           : () {
                               SubscriptionMethod().subscribe(

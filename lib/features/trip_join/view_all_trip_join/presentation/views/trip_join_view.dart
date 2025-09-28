@@ -213,49 +213,49 @@ class _TripJoinViewState extends State<TripJoinView>
             //     ),
             //   ),
             // ),
-            if (selectedIndex != 0 && selectedIndex != 1)
-              PositionedDirectional(
-                  bottom: 30.h,
-                  end: 10,
-                  start: 10,
-                  // textDirection:
-                  // context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          switch (selectedIndex) {
-                            case 0:
-                              context.push(Routes.captainShareInfoScreen);
-                            case 1:
-                              context.push(Routes.tripJoinInfoScreen);
-                            case 2:
-                              context.push(Routes.pickMeInfoScreen);
-
-                            default:
-                              () {};
-                          }
-                        },
-                        child: Container(
-                          height: 48.h,
-                          width: 48.h,
-                          decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            size: 19,
-                            Icons.question_mark,
-                            color: context.isDarkMode
-                                ? AppColors.black
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                      getFloatingActionButtonContent(selectedIndex),
-                    ],
-                  )),
+            // if (selectedIndex != 0 && selectedIndex != 1)
+            //   PositionedDirectional(
+            //       bottom: 30.h,
+            //       end: 10,
+            //       start: 10,
+            //       // textDirection:
+            //       // context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           GestureDetector(
+            //             onTap: () {
+            //               ManageVibration.vibrate();
+            //               switch (selectedIndex) {
+            //                 case 0:
+            //                   context.push(Routes.captainShareInfoScreen);
+            //                 case 1:
+            //                   context.push(Routes.tripJoinInfoScreen);
+            //                 case 2:
+            //                   context.push(Routes.pickMeInfoScreen);
+            //
+            //                 default:
+            //                   () {};
+            //               }
+            //             },
+            //             child: Container(
+            //               height: 48.h,
+            //               width: 48.h,
+            //               decoration: BoxDecoration(
+            //                   color: AppColors.getButtonPrimaryColor(context),
+            //                   borderRadius: BorderRadius.circular(10)),
+            //               child: Icon(
+            //                 size: 19,
+            //                 Icons.question_mark,
+            //                 color: context.isDarkMode
+            //                     ? AppColors.black
+            //                     : Colors.white,
+            //               ),
+            //             ),
+            //           ),
+            //           // getFloatingActionButtonContent(selectedIndex),
+            //         ],
+            //       )),
           ],
         ),
       ),
@@ -286,40 +286,40 @@ class _TripJoinViewState extends State<TripJoinView>
     }
   }
 
-  Widget getFloatingActionButtonContent(int? index) {
-    switch (index) {
-      case 0:
-        return TripJoinFloatingActionButton(
-          title: LocaleKeys.createRoute.localize,
-          onTap: () {
-            ManageVibration.vibrate();
-            context.push(Routes.newRouteScreen);
-          },
-        );
-      case 1:
-        return Container(
-          key: const ValueKey(1),
-          child: TripJoinFloatingActionButton(
-            title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
-            onTap: () {
-              ManageVibration.vibrate();
-              context.push(Routes.TRIP_JOIN);
-            },
-          ),
-        );
-      case 2:
-        return Container(
-          key: const ValueKey(2),
-          child: TripJoinFloatingActionButton(
-            title: context.isArabic ? "انشر رحلتك" : "Post your ride",
-            onTap: () {
-              ManageVibration.vibrate();
-              context.push(Routes.TRIP_JOIN, extra: true);
-            },
-          ),
-        );
-      default:
-        return const SizedBox.shrink(); // لما مفيش حاجة مختارة
-    }
-  }
+  // Widget getFloatingActionButtonContent(int? index) {
+  //   switch (index) {
+  //     case 0:
+  //       return TripJoinFloatingActionButton(
+  //         title: LocaleKeys.createRoute.localize,
+  //         onTap: () {
+  //           ManageVibration.vibrate();
+  //           context.push(Routes.newRouteScreen);
+  //         },
+  //       );
+  //     case 1:
+  //       return Container(
+  //         key: const ValueKey(1),
+  //         child: TripJoinFloatingActionButton(
+  //           title: context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
+  //           onTap: () {
+  //             ManageVibration.vibrate();
+  //             context.push(Routes.TRIP_JOIN);
+  //           },
+  //         ),
+  //       );
+  //     case 2:
+  //       return Container(
+  //         key: const ValueKey(2),
+  //         child: TripJoinFloatingActionButton(
+  //           title: context.isArabic ? "انشر رحلتك" : "Post your ride",
+  //           onTap: () {
+  //             ManageVibration.vibrate();
+  //             context.push(Routes.TRIP_JOIN, extra: true);
+  //           },
+  //         ),
+  //       );
+  //     default:
+  //       return const SizedBox.shrink(); // لما مفيش حاجة مختارة
+  //   }
+  // }
 }

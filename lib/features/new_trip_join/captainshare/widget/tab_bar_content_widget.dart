@@ -142,8 +142,6 @@ class AvailableTripsWidget extends StatefulWidget {
 
 class _AvailableTripsWidgetState extends State<AvailableTripsWidget> with TickerProviderStateMixin {
   late ScrollController _scrollController;
-  bool _isVisible = true;
-  final double _lastScrollOffset = 0;
   late AnimationController _animationController;
   late Animation<double> _slideAnimation;
   late Animation<double> _rotationAnimation;

@@ -15,12 +15,18 @@ import '../Models/conversation_model.dart';
 abstract class ConversationsRemoteDataSource {
   Future<Either<Failure, List<ConversationEntity>>> getSocialConversations(
       {required ConversationPagination pagination});
+  Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations(
+      {required ConversationPagination pagination});
   void listenToUpdateSocialList(Function(ConversationEntity) params);
   Future<Either<Failure, bool>> startTyping({required String conversationId});
   void listenToStartTyping(Function(String) params);
   Future<Either<Failure, bool>> stopTyping({required String conversationId});
   void listenToStopTyping(Function(String) params);
   Future<Either<Failure, void>> toggleArchivedConversation({required String conversationId});
+  Future<Either<Failure, void>> togglePinnedConversation({required String conversationId});
+  Future<Either<Failure, void>> toggleMuteConversation({required String conversationId});
+  Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds});
+  Future<Either<Failure, int>> getUnreadConversationsCount();
 }
 
 class ConversationsRemoteDataSourceImpl
@@ -33,6 +39,18 @@ class ConversationsRemoteDataSourceImpl
   Future<Either<Failure, List<ConversationEntity>>> getSocialConversations(
       {required ConversationPagination pagination}) async {
     final response = await _apiConsumer.get(EndPoints.getSocialConversations(
+        page: pagination.page, limit: pagination.limit));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['conversations'] as List)
+            .map((e) => ConversationModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations(
+      {required ConversationPagination pagination}) async {
+    final response = await _apiConsumer.get(EndPoints.getSocialArchivedConversations(
         page: pagination.page, limit: pagination.limit));
     return response.fold(
         (failure) => Left(failure),
@@ -143,5 +161,37 @@ class ConversationsRemoteDataSourceImpl
     return response.fold(
             (failure) => Left(failure),
             (data) => Right(null));
+  }
+
+  @override
+  Future<Either<Failure, void>> togglePinnedConversation({required String conversationId}) async {
+    final response = await _apiConsumer.put(EndPoints.togglePinnedConversation(conversationId: conversationId));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(null));
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleMuteConversation({required String conversationId}) async {
+    final response = await _apiConsumer.put(EndPoints.toggleMuteConversation(conversationId: conversationId));
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(null));
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds}) async {
+    final response = await _apiConsumer.delete(EndPoints.deleteConversations, data: {"conversationIds": conversationIds});
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(null));
+  }
+
+  @override
+  Future<Either<Failure, int>> getUnreadConversationsCount() async {
+    final response = await _apiConsumer.get(EndPoints.unreadCount);
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(data['data']?['unreadConversationsCount'] ?? 0));
   }
 }

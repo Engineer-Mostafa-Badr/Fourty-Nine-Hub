@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,12 +18,16 @@ import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/states/basic_state.dart';
+import '../../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../../core/utils/format_numbers.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../helpers/manage_vibration.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../../../../service_locator/service_locator.dart';
+import '../../../../../Conversations/Presentation/Controllers/cubits/conversation_states.dart';
+import '../../../../../Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import '../../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
@@ -37,11 +42,34 @@ import '../widgets/end_to_end_Encrypted_widget.dart';
 import '../widgets/new_chat_card.dart';
 import 'archived_chats_view.dart';
 
-_selectedChatAppBar(ChatsCubit chatsCubit) {
+Future<bool?> showDialogConfirmDeleted(BuildContext context) async {
+  return await showAnimatedDialog(context, CupertinoAlertDialog(
+    title:  Text(context.isArabic ? "حذف محادثات" : "Delete Chats", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+    content: Text( context.isArabic ? "هل تريد حذف هذه المحادثات؟" : "Do you want to delete these chats?", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey),),
+    actions: [
+      TextButton(
+          onPressed: () {
+            ManageVibration.vibrate();
+            context.pop();
+            },
+          child: Text(context.isArabic ? "لا" : "No", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey),)),
+      TextButton(
+          onPressed: () {
+            ManageVibration.vibrate();
+            context.pop();
+            serviceLocator<ConversationsCubit>().deleteConversations();
+          },
+          child: Text(context.isArabic ? "نعم" : "Yes", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.PRIMARY_COLOR_DARK),)),
+    ],
+  ),
+  );
+}
+
+selectedChatAppBar() {
   return SliverAppBar(
     automaticallyImplyLeading: false,
     floating: true,
-    flexibleSpace: BlocBuilder<ChatsCubit, ChatsState>(
+    flexibleSpace: BlocBuilder<ConversationsCubit, ConversationsState>(
       builder: (context, state) {
         return context.read<UserCubit>().isLoggedIn
             ? SizedBox(
@@ -50,19 +78,20 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    context.read<ChatsCubit>().selectedChats.isNotEmpty
+                    serviceLocator<ConversationsCubit>().selectedSocialConversation.isNotEmpty
                         ? IconButton(
                             onPressed: () {
                               ManageVibration.vibrate();
-                              context.read<ChatsCubit>().clearSelectedChats();
+                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
                             },
                             icon: const Icon(Icons.arrow_back))
                         : const SizedBox(),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(
-                        "${context.read<ChatsCubit>().selectedChats.length}",
+                        FormatNumbers().convertNumberToLocalizedString(context.read<ConversationsCubit>().selectedSocialConversation.length.toString(), isArabic: context.isArabic),
                         style: Styles.mediumText(
+                            fontSize: 40,
                             color: context.isDarkMode
                                 ? Colors.white
                                 : AppColors.PRIMARY_COLOR),
@@ -73,52 +102,17 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                       children: [
                         IconButton(
                           onPressed: () async {
+                            // await context.read<ConversationsCubit>().pinAndUnpinChat();
                             ManageVibration.vibrate();
-                            await context.read<ChatsCubit>().pinAndUnpinChat();
-                          },
-                          icon: const Icon(Icons.push_pin_outlined),
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            ManageVibration.vibrate();
-                            await context.read<ChatsCubit>().deleteChat();
-                          },
-                          icon: Icon(
-                            Icons.delete_forever_outlined,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : AppColors.PRIMARY_COLOR,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            ManageVibration.vibrate();
-                            await context.read<ChatsCubit>().changeMuteChat();
-                          },
-                          icon: Icon(
-                            Icons.notifications_off_outlined,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : AppColors.PRIMARY_COLOR,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            ManageVibration.vibrate();
-                            await context
-                                .read<ChatsCubit>()
-                                .changeArchiveChat(isArchivedTab: false);
+                            await serviceLocator<ConversationsCubit>().togglePinnedSocialConversations();
                             final archivedChatsCount =
-                                chatsCubit.selectedChats.length;
+                                serviceLocator<ConversationsCubit>().selectedSocialConversation.length;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: const Color(0xff1A1A1A),
                                 // Set background color to blue
                                 content: BlocProvider.value(
-                                  value: context.read<ChatsCubit>(),
+                                  value: context.read<ConversationsCubit>(),
                                   child: Builder(
                                     builder: (context) {
                                       return Text.rich(
@@ -126,8 +120,8 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                           children: [
                                             TextSpan(
                                               text: context.isArabic
-                                                  ? "تم أرشفة "
-                                                  : "Archived ",
+                                                  ? "تم تثبيت "
+                                                  : "Pinned ",
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16,
@@ -135,7 +129,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "$archivedChatsCount ",
+                                              text: "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
                                               // العدد
                                               style: const TextStyle(
                                                 color: Colors.white,
@@ -165,10 +159,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                                   // Set "Undo" text color to gray
                                   onPressed: () async {
                                     ManageVibration.vibrate();
-                                    await context
-                                        .read<ChatsCubit>()
-                                        .changeArchiveChat(
-                                            isArchivedTab: false);
+                                    await serviceLocator<ConversationsCubit>().togglePinnedSocialConversations();
                                   },
                                 ),
                                 duration: const Duration(seconds: 3),
@@ -176,14 +167,170 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                             );
 
                             Future.delayed(const Duration(seconds: 3), () {
-                              context.read<ChatsCubit>().clearSelectedChats();
+                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
+                            });
+                          },
+                          icon: const Icon(Icons.push_pin_outlined),
+                          color: context.isDarkMode ? Colors.white : AppColors.grey,
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            ManageVibration.vibrate();
+                            // await context.read<ConversationsCubit>().deleteChat();
+                            showDialogConfirmDeleted(context);
+                          },
+                          icon: Icon(
+                            Icons.delete_forever_outlined,
+                            color: context.isDarkMode ? Colors.white : AppColors.grey,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            // await context.read<ConversationsCubit>().changeMuteChat();
+                            ManageVibration.vibrate();
+                            await serviceLocator<ConversationsCubit>().toggleMuteSocialConversations();
+                            final archivedChatsCount =
+                                serviceLocator<ConversationsCubit>().selectedSocialConversation.length;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: const Color(0xff1A1A1A),
+                                // Set background color to blue
+                                content: BlocProvider.value(
+                                  value: context.read<ConversationsCubit>(),
+                                  child: Builder(
+                                    builder: (context) {
+                                      return Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: context.isArabic
+                                                  ? "تم كتم "
+                                                  : "Muted ",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
+                                              // العدد
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: context.isArabic
+                                                  ? "محادثة"
+                                                  : "chats",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                action: SnackBarAction(
+                                  label: context.isArabic ? "تراجع" : "UNDO",
+                                  textColor: AppColors.PRIMARY_COLOR_DARK,
+                                  // Set "Undo" text color to gray
+                                  onPressed: () async {
+                                    ManageVibration.vibrate();
+                                    await serviceLocator<ConversationsCubit>().toggleMuteSocialConversations();
+                                  },
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+
+                            Future.delayed(const Duration(seconds: 3), () {
+                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
+                            });
+                          },
+                          icon: Icon(
+                            Icons.notifications_off_outlined,
+                            color: context.isDarkMode ? Colors.white : AppColors.grey,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            ManageVibration.vibrate();
+                            await serviceLocator<ConversationsCubit>().archiveSocialConversations();
+                            final archivedChatsCount =
+                                serviceLocator<ConversationsCubit>().selectedSocialConversation.length;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: const Color(0xff1A1A1A),
+                                // Set background color to blue
+                                content: BlocProvider.value(
+                                  value: context.read<ConversationsCubit>(),
+                                  child: Builder(
+                                    builder: (context) {
+                                      return Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: context.isArabic
+                                                  ? "تم أرشفة "
+                                                  : "Archived ",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
+                                              // العدد
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: context.isArabic
+                                                  ? "محادثة"
+                                                  : "chats",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                action: SnackBarAction(
+                                  label: context.isArabic ? "تراجع" : "UNDO",
+                                  textColor: AppColors.PRIMARY_COLOR_DARK,
+                                  // Set "Undo" text color to gray
+                                  onPressed: () async {
+                                    ManageVibration.vibrate();
+                                    await serviceLocator<ConversationsCubit>().unArchiveSocialConversations();
+                                  },
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+
+                            Future.delayed(const Duration(seconds: 3), () {
+                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
                             });
                           },
                           icon: Icon(
                             Icons.archive_outlined,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode ? Colors.white : AppColors.grey,
                           ),
                         ),
                       ],
@@ -205,79 +352,79 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                       onSelected: (int value) async {
                         if (value == 3) {
                           // await context
-                          //     .read<ChatsCubit>()
+                          //     .read<ConversationsCubit>()
                           //     .lockChats(
                           //         isLockedTap: false);
-                          await context
-                              .read<ChatsCubit>()
-                              .lockChats(isLockedTap: false);
-                          final unlockedChatsCount =
-                              chatsCubit.selectedChats.length;
+                          // await context
+                          //     .read<ConversationsCubit>()
+                          //     .lockChats(isLockedTap: false);
+                          // final unlockedChatsCount =
+                          //     chatsCubit.selectedChats.length;
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: const Color(0xff1A1A1A),
-                              // Set background color
-                              content: BlocProvider.value(
-                                value: context.read<ChatsCubit>(),
-                                child: Builder(
-                                  builder: (context) {
-                                    return Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: context.isArabic
-                                                ? "تم قفل "
-                                                : "Locked ",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: "$unlockedChatsCount ",
-                                            // Count
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: context.isArabic
-                                                ? "محادثة"
-                                                : "chats",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              action: SnackBarAction(
-                                label: context.isArabic ? "تراجع" : "UNDO",
-                                textColor: AppColors.PRIMARY_COLOR_DARK,
-                                // Set "Undo" text color to gray
-                                onPressed: () async {
-                                  ManageVibration.vibrate();
-                                  await context
-                                      .read<ChatsCubit>()
-                                      .lockChats(isLockedTap: false);
-                                },
-                              ),
-                              duration: const Duration(seconds: 3),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     backgroundColor: const Color(0xff1A1A1A),
+                          //     // Set background color
+                          //     content: BlocProvider.value(
+                          //       value: context.read<ConversationsCubit>(),
+                          //       child: Builder(
+                          //         builder: (context) {
+                          //           return Text.rich(
+                          //             TextSpan(
+                          //               children: [
+                          //                 TextSpan(
+                          //                   text: context.isArabic
+                          //                       ? "تم قفل "
+                          //                       : "Locked ",
+                          //                   style: const TextStyle(
+                          //                     color: Colors.white,
+                          //                     fontSize: 16,
+                          //                     fontWeight: FontWeight.bold,
+                          //                   ),
+                          //                 ),
+                          //                 TextSpan(
+                          //                   text: "$unlockedChatsCount ",
+                          //                   // Count
+                          //                   style: const TextStyle(
+                          //                     color: Colors.white,
+                          //                     fontWeight: FontWeight.bold,
+                          //                     fontSize: 16,
+                          //                   ),
+                          //                 ),
+                          //                 TextSpan(
+                          //                   text: context.isArabic
+                          //                       ? "محادثة"
+                          //                       : "chats",
+                          //                   style: const TextStyle(
+                          //                     color: Colors.white,
+                          //                     fontSize: 16,
+                          //                     fontWeight: FontWeight.bold,
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           );
+                          //         },
+                          //       ),
+                          //     ),
+                          //     action: SnackBarAction(
+                          //       label: context.isArabic ? "تراجع" : "UNDO",
+                          //       textColor: AppColors.PRIMARY_COLOR_DARK,
+                          //       // Set "Undo" text color to gray
+                          //       onPressed: () async {
+                          //         ManageVibration.vibrate();
+                          //         await context
+                          //             .read<ConversationsCubit>()
+                          //             .lockChats(isLockedTap: false);
+                          //       },
+                          //     ),
+                          //     duration: const Duration(seconds: 3),
+                          //   ),
+                          // );
 
-                          Future.delayed(const Duration(seconds: 3), () {
-                            context.read<ChatsCubit>().clearSelectedChats();
-                          });
+                          // Future.delayed(const Duration(seconds: 3), () {
+                          //   context.read<ConversationsCubit>().clearSelectedChats();
+                          // });
                         }
                       },
                       itemBuilder: (context) {
@@ -415,7 +562,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatsCubit, ChatsState>(
       builder: (context, state) {
-        // final chatsCubit = context.read<ChatsCubit>();
+        // final chatsCubit = context.read<ConversationsCubit>();
         return CustomScaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(
@@ -469,8 +616,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                 scrollController:
                     scrollController, // Attach the ScrollController here
                 appBars: [
-                  if (context.read<ChatsCubit>().selectedChats.isNotEmpty)
-                    _selectedChatAppBar(chatsCubit),
+                  // if (context.read<ChatsCubit>().selectedChats.isNotEmpty)
+                  //   selectedChatAppBar(chatsCubit),
                   SliverAppBar(
                     expandedHeight: MediaQuery.of(context).size.height *
                         0.1, // Responsive height

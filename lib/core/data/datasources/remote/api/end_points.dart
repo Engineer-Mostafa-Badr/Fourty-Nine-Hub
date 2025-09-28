@@ -1813,9 +1813,15 @@ class EndPoints {
   // Chat Endpoints
   static getSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations?page=$page&limit=$limit';
+  static getSocialArchivedConversations({int page = 1, int limit = 10}) =>
+      '/conversations/archived?page=$page&limit=$limit';
 
-  static String toggleArchiveConversation({required String conversationId}) =>
-      "/conversations/$conversationId/toggle/archived";
+  static const String deleteConversations = "/conversations";
+  static const String unreadCount = "/conversations/unread";
+
+  static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";
+  static String togglePinnedConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/pinned";
+  static String toggleMuteConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/mute";
 
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>

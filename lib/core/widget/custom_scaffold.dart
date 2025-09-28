@@ -439,8 +439,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                                           .pushNamed(Routes.FirstLoginScreen);
                                     }
                                     if (context.read<UserCubit>().isLoggedIn) {
-                                      context.push(Routes.CHAT,
-                                          extra: ChatsViewParams());
+                                      context.push(Routes.conversationsScreen);
                                     }
                                   },
                                 ),
