@@ -786,8 +786,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
-                                              _getCountryName(cubit.toCurrency,
-                                                  useEnglish: false),
+                                              _getCurrencyName(
+                                                  cubit.toCurrency),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -1261,62 +1261,6 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
       return currencyNamesArabic[code] ?? code;
     } else {
       return currencyNamesEnglish[code] ?? code;
-    }
-  }
-
-  String _getCountryName(String code, {bool? useEnglish}) {
-    final countryNamesArabic = {
-      'USD': 'أمريكا',
-      'EUR': 'أوروبا',
-      'GBP': 'بريطانيا',
-      'JPY': 'اليابان',
-      'AUD': 'أستراليا',
-      'CAD': 'كندا',
-      'CHF': 'سويسرا',
-      'CNY': 'الصين',
-      'SEK': 'السويد',
-      'NZD': 'نيوزيلندا',
-      'AED': 'الإمارات',
-      'SAR': 'السعودية',
-      'QAR': 'قطر',
-      'KWD': 'الكويت',
-      'BHD': 'البحرين',
-      'OMR': 'عمان',
-      'EGP': 'مصر',
-      'INR': 'الهند',
-      'BRL': 'البرازيل',
-      'RUB': 'روسيا',
-    };
-
-    final countryNamesEnglish = {
-      'USD': 'United States',
-      'EUR': 'European Union',
-      'GBP': 'United Kingdom',
-      'JPY': 'Japan',
-      'AUD': 'Australia',
-      'CAD': 'Canada',
-      'CHF': 'Switzerland',
-      'CNY': 'China',
-      'SEK': 'Sweden',
-      'NZD': 'New Zealand',
-      'AED': 'United Arab Emirates',
-      'SAR': 'Saudi Arabia',
-      'QAR': 'Qatar',
-      'KWD': 'Kuwait',
-      'BHD': 'Bahrain',
-      'OMR': 'Oman',
-      'EGP': 'Egypt',
-      'INR': 'India',
-      'BRL': 'Brazil',
-      'RUB': 'Russia',
-    };
-
-    bool shouldUseEnglish = useEnglish ?? !context.isArabic;
-
-    if (shouldUseEnglish) {
-      return countryNamesEnglish[code] ?? code;
-    } else {
-      return countryNamesArabic[code] ?? code;
     }
   }
 
