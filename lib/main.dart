@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
@@ -35,6 +36,8 @@ import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_noti
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:fourtyninehub/helpers/logging_helper.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
@@ -58,8 +61,16 @@ import 'routes/pages.dart';
 
 // Global key for ToastificationWrapper to prevent recreation during network changes
 final GlobalKey _toastificationKey = GlobalKey();
+class DevHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 void main() async {
+  HttpOverrides.global = DevHttpOverrides();
 
   try {
     WidgetsFlutterBinding.ensureInitialized();
@@ -95,10 +106,27 @@ void main() async {
   // });
 
   try {
+    // Test logging helper
+    LoggingHelper.info('🚀 App starting up...', data: {
+      'timestamp': DateTime.now().toIso8601String(),
+      'version': '1.0.0',
+    });
+    
+    // Test all log levels
+    LoggingHelper.verbose('🔍 Verbose log test');
+    LoggingHelper.debug('🐛 Debug log test');
+    LoggingHelper.info('ℹ️ Info log test');
+    LoggingHelper.warning('⚠️ Warning log test');
+    LoggingHelper.error('❌ Error log test');
+    
+    // Test SSL certificate logging
+    AuthInterceptor.testSSLCertificateLogging();
+    
     await CacheServiceImpl.init();
     await DI.execute();
     serviceLocator<FcmNotificationHelper>().getFcmToken();
   } catch (e, stackTrace) {
+    LoggingHelper.error('❌ App startup failed', error: e, stackTrace: stackTrace);
     return; // Exit if service initialization fails
   }
   try {
