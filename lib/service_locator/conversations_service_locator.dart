@@ -10,11 +10,13 @@ import '../features/Conversations/Data/Repo/conversations_repo_impl.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/Conversations/Domain/Usecases/delete_conversations_use_case.dart';
+import '../features/Conversations/Domain/Usecases/get_deleted_social_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_social_archived_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_unreaded_conversations_count_use_case.dart';
 import '../features/Conversations/Domain/Usecases/listen_to_start_typing.dart';
 import '../features/Conversations/Domain/Usecases/listen_to_stop_typing_usecase.dart';
 import '../features/Conversations/Domain/Usecases/listen_to_update_social_list_usecase.dart';
+import '../features/Conversations/Domain/Usecases/restore_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/start_typing_usecase.dart';
 import '../features/Conversations/Domain/Usecases/stop_typing_usecase.dart';
 
@@ -51,14 +53,20 @@ class ConversationsServiceLocator {
             () =>  ToggleMuteConversationUseCase( conversationsRepository: serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteConversationsUseCase>(
             () =>  DeleteConversationsUseCase( conversationsRepository: serviceLocator()));
+    serviceLocator.registerLazySingleton<RestoreConversationsUseCase>(
+            () =>  RestoreConversationsUseCase( conversationsRepository: serviceLocator()));
     serviceLocator.registerLazySingleton<GetUnreadConversationsUseCase>(
             () =>  GetUnreadConversationsUseCase( conversationsRepository: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDeletedSocialConversationsUseCase>(
+            () =>  GetDeletedSocialConversationsUseCase(conversationsRepo: serviceLocator()));
 
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<ConversationsCubit>(
       () => ConversationsCubit(
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

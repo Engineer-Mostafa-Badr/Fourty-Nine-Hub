@@ -338,9 +338,7 @@ selectedChatAppBar() {
                     PopupMenuButton(
                       icon: Icon(
                         Icons.more_vert,
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode ? Colors.white : AppColors.grey,
                       ),
                       color: context.isDarkMode
                           ? AppColors.PRIMARY_COLOR

@@ -162,9 +162,47 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                       create: (context) => serviceLocator<StoryCubit>()
                         ..fetchStories()
                         ..getMutedStories(),
-                      child: const Directionality(
+                      child: Directionality(
                         textDirection: TextDirection.ltr,
-                        child: ChatStories(),
+                        child: Row(
+                          children: [
+                            Expanded(child: const ChatStories()),
+                            serviceLocator<ConversationsCubit>().selectedSocialConversation.isNotEmpty ? const SizedBox.shrink() :
+                            PopupMenuButton(
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: context.isDarkMode ? Colors.white : AppColors.grey,
+                              ),
+                              color: context.isDarkMode
+                                  ? AppColors.PRIMARY_COLOR
+                                  : AppColors.BACKGROUND_COLOR,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              offset: const Offset(0, 50),
+                              onSelected: (int value) async {
+                                if (value == 1) {
+                                  ManageVibration.vibrate();
+                                  context.push(Routes.socialDeletedScreen);
+                                }
+                              },
+                              itemBuilder: (context) {
+                                return [
+                                  PopupMenuItem<int>(
+                                    value: 1,
+                                    child: Text(
+                                      context.isArabic ? "استعادة الدردشات المحذوفة" : "Restore Deleted Chats",
+                                      style: Styles.mediumText(
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : AppColors.PRIMARY_COLOR),
+                                    ),
+                                  ),
+                                ];
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

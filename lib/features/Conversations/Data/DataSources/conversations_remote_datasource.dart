@@ -17,6 +17,8 @@ abstract class ConversationsRemoteDataSource {
       {required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations(
       {required ConversationPagination pagination});
+  Future<Either<Failure, List<ConversationEntity>>> getDeletedSocialConversations(
+      {required ConversationPagination pagination});
   void listenToUpdateSocialList(Function(ConversationEntity) params);
   Future<Either<Failure, bool>> startTyping({required String conversationId});
   void listenToStartTyping(Function(String) params);
@@ -26,6 +28,7 @@ abstract class ConversationsRemoteDataSource {
   Future<Either<Failure, void>> togglePinnedConversation({required String conversationId});
   Future<Either<Failure, void>> toggleMuteConversation({required String conversationId});
   Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds});
+  Future<Either<Failure, void>> restoreConversations({required List<String> conversationIds});
   Future<Either<Failure, int>> getUnreadConversationsCount();
 }
 
@@ -51,6 +54,18 @@ class ConversationsRemoteDataSourceImpl
   Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations(
       {required ConversationPagination pagination}) async {
     final response = await _apiConsumer.get(EndPoints.getSocialArchivedConversations(
+        page: pagination.page, limit: pagination.limit));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['conversations'] as List)
+            .map((e) => ConversationModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<ConversationEntity>>> getDeletedSocialConversations(
+      {required ConversationPagination pagination}) async {
+    final response = await _apiConsumer.get(EndPoints.getDeletedSocialConversations(
         page: pagination.page, limit: pagination.limit));
     return response.fold(
         (failure) => Left(failure),
@@ -182,6 +197,14 @@ class ConversationsRemoteDataSourceImpl
   @override
   Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds}) async {
     final response = await _apiConsumer.delete(EndPoints.deleteConversations, data: {"conversationIds": conversationIds});
+    return response.fold(
+            (failure) => Left(failure),
+            (data) => Right(null));
+  }
+
+  @override
+  Future<Either<Failure, void>> restoreConversations({required List<String> conversationIds}) async {
+    final response = await _apiConsumer.put(EndPoints.restoreConversations, data: {"conversationIds": conversationIds});
     return response.fold(
             (failure) => Left(failure),
             (data) => Right(null));

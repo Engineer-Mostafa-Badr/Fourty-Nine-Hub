@@ -22,6 +22,11 @@ class ConversationsRepoImpl extends ConversationsRepo {
   }
 
   @override
+  Future<Either<Failure, List<ConversationEntity>>> getDeletedSocialConversations({required ConversationPagination pagination}) async {
+    return await conversationsRemoteDataSource.getDeletedSocialConversations(pagination: pagination);
+  }
+
+  @override
   void listenToUpdateSocialList(Function(ConversationEntity) params) {
     return conversationsRemoteDataSource.listenToUpdateSocialList(params);
   }
@@ -64,6 +69,11 @@ class ConversationsRepoImpl extends ConversationsRepo {
   @override
   Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds}) {
     return conversationsRemoteDataSource.deleteConversations(conversationIds: conversationIds);
+  }
+
+  @override
+  Future<Either<Failure, void>> restoreConversations({required List<String> conversationIds}) {
+    return conversationsRemoteDataSource.restoreConversations(conversationIds: conversationIds);
   }
 
   @override

@@ -1815,8 +1815,11 @@ class EndPoints {
       '/conversations?page=$page&limit=$limit';
   static getSocialArchivedConversations({int page = 1, int limit = 10}) =>
       '/conversations/archived?page=$page&limit=$limit';
+  static getDeletedSocialConversations({int page = 1, int limit = 10}) =>
+      '/conversations/deleted?page=$page&limit=$limit';
 
   static const String deleteConversations = "/conversations";
+  static const String restoreConversations = "/conversations/restore";
   static const String unreadCount = "/conversations/unread";
 
   static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";

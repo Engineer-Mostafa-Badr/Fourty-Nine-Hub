@@ -15,10 +15,12 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../routes/pages.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../Domain/Usecases/delete_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_deleted_social_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_social_archived_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_unreaded_conversations_count_use_case.dart';
 import '../../../Domain/Usecases/listen_to_start_typing.dart';
 import '../../../Domain/Usecases/listen_to_update_social_list_usecase.dart';
+import '../../../Domain/Usecases/restore_conversations_use_case.dart';
 import '../../../Domain/Usecases/start_typing_usecase.dart';
 import '../../../Domain/Usecases/stop_typing_usecase.dart';
 import '../../../Domain/Usecases/toggle_archived_conversation_usecase.dart';
@@ -28,6 +30,7 @@ import '../../../Domain/Usecases/toggle_pinned_conversations_use_case.dart';
 class ConversationsCubit extends Cubit<ConversationsState> {
   final GetSocialConversations getSocialConversationsUseCase;
   final GetSocialArchivedConversations getSocialArchivedConversationsUseCase;
+  final GetDeletedSocialConversationsUseCase getDeletedSocialConversationsUseCase;
   final ListenToUpdateSocialListUseCase listenToUpdateSocialListUseCase;
   final StartTypingUseCase startTypingUseCase;
   final ListenToStartTypingUseCase listenToStartTypingUseCase;
@@ -37,6 +40,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   final TogglePinnedConversationUseCase togglePinnedConversationUseCase;
   final ToggleMuteConversationUseCase toggleMuteConversationUseCase;
   final DeleteConversationsUseCase deleteConversationsUseCase;
+  final RestoreConversationsUseCase restoreConversationsUseCase;
   final GetUnreadConversationsUseCase getUnreadConversationsUseCase;
 
   List<ConversationEntity> selectedSocialConversation = [];
@@ -46,6 +50,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   ConversationsCubit(
     this.getSocialConversationsUseCase,
     this.getSocialArchivedConversationsUseCase,
+    this.getDeletedSocialConversationsUseCase,
     this.listenToUpdateSocialListUseCase,
     this.startTypingUseCase,
     this.listenToStartTypingUseCase,
@@ -55,6 +60,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     this.togglePinnedConversationUseCase,
     this.toggleMuteConversationUseCase,
     this.deleteConversationsUseCase,
+    this.restoreConversationsUseCase,
     this.getUnreadConversationsUseCase,
   ) : super(ConversationsState()){
     try {
@@ -215,10 +221,14 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
   final int pageSize = 15;
   List<ConversationEntity> socialConversations = [];
+  List<ConversationEntity> socialDeletedConversations = [];
   List<ConversationEntity> socialArchivedConversations = [];
   bool isLoadingMoreSocialConversation = false;
   bool hasMoreDataSocialConversations = true;
   int currentPageSocialConversations = 1;
+  bool isLoadingMoreSocialDeletedConversation = false;
+  bool hasMoreDataSocialDeletedConversations = true;
+  int currentPageSocialDeletedConversations = 1;
   bool isLoadingMoreSocialArchivedConversation = false;
   bool hasMoreDataSocialArchivedConversations = true;
   int currentPageSocialArchivedConversations = 1;
@@ -229,6 +239,14 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     hasMoreDataSocialConversations = true;
     emit(state.copyWith(status: ConversationsStates.loading));
     await _fetchSocialConversations();
+  }
+
+  Future<void> loadInitialSocialDeletedConversations() async {
+    socialDeletedConversations.clear();
+    currentPageSocialDeletedConversations = 1;
+    hasMoreDataSocialDeletedConversations = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialDeletedConversations();
   }
 
   Future<void> loadInitialSocialArchivedConversations() async {
@@ -244,6 +262,13 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     isLoadingMoreSocialConversation = true;
     emit(state.copyWith(status: ConversationsStates.loading));
     await _fetchSocialConversations();
+  }
+
+  Future<void> getSocialDeletedConversations() async {
+    if (hasMoreDataSocialDeletedConversations || isLoadingMoreSocialDeletedConversation) return;
+    isLoadingMoreSocialDeletedConversation = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialDeletedConversations();
   }
 
   Future<void> getSocialArchivedConversations() async {
@@ -288,6 +313,44 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
     if (!exists) {
       socialConversations.add(conversation);
+    }
+  }
+
+  Future<void> _fetchSocialDeletedConversations() async {
+    final result = await getDeletedSocialConversationsUseCase(
+      pagination: ConversationPagination(
+        page: currentPageSocialDeletedConversations,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+      (l) {
+        isLoadingMoreSocialDeletedConversation = false; // Reset loading state on error
+        emit(state.copyWith(status: ConversationsStates.error, failure: l));
+      },
+      (data) {
+        for (ConversationEntity conversation in data) {
+          addUniqueSocialDeletedConversation(conversation);
+        }
+        if (data.length < pageSize) {
+          hasMoreDataSocialDeletedConversations = false;
+        } else {
+          currentPageSocialDeletedConversations++;
+        }
+        isLoadingMoreSocialDeletedConversation = false;
+        emit(state.copyWith(status: ConversationsStates.success));
+      },
+    );
+  }
+
+  void addUniqueSocialDeletedConversation(ConversationEntity conversation) {
+    final exists = socialDeletedConversations.any(
+          (c) => c.conversationId == conversation.conversationId,
+    );
+
+    if (!exists) {
+      socialDeletedConversations.add(conversation);
     }
   }
 
@@ -406,8 +469,45 @@ class ConversationsCubit extends Cubit<ConversationsState> {
         conversation.isSelected = false;
         socialConversations.removeWhere((element) => element.conversationId == conversation.conversationId);
       }
+      clearSelectedSocialConversations();
       showSuccessMessage(currentContext, currentContext.isArabic? "تم حذف المحادثات بنجاح":"Conversations deleted successfully");
       currentContext.pop();
+      emit(state.copyWith(status: ConversationsStates.success));
+    });
+  }
+
+  Future<void> restoreConversations(
+      {required String subCategoryId}
+      ) async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final result = await restoreConversationsUseCase(conversationIds: selectedSocialConversation.map((conversation) => conversation.conversationId).toList());
+    result.fold((l){
+      clearSelectedSocialConversations();
+      currentContext.pop();
+      String errorName =
+      getFailureName(l, AppPages.router.configuration.navigatorKey.currentContext!);
+      errorName == 'Insufficient Funds'
+          ? showDebtDialog(
+          AppPages.router.configuration.navigatorKey.currentContext!,
+          subCategoryId,
+          AppPages.router.configuration.navigatorKey.currentContext!.isArabic
+              ? "الرصيد غير كافي"
+              : "Insufficient funds")
+          : errorName == 'SubscribeError'
+          ? showSubscribeDialog(
+        title: AppPages.router.configuration.navigatorKey.currentContext!.isArabic?
+        "يرجى الاشتراك لاستعادة المحادثات" : "Please subscribe to restore conversations",
+          AppPages.router.configuration.navigatorKey.currentContext!, subCategoryId)
+          : showErrorMessage(AppPages.router.configuration.navigatorKey.currentContext!,
+          getFailureMessage(l, AppPages.router.configuration.navigatorKey.currentContext!));
+
+      emit(state.copyWith(status: ConversationsStates.error, failure: l));
+    }, (r) {
+      clearSelectedSocialConversations();
+      showSuccessMessage(currentContext, currentContext.isArabic? "تم استعادة المحادثات بنجاح":"Conversations restored successfully");
+      currentContext.pop();
+      loadInitialSocialConversations();
       emit(state.copyWith(status: ConversationsStates.success));
     });
   }
