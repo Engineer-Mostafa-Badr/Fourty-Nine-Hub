@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -47,7 +48,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   final TextEditingController _amountController = TextEditingController();
   bool _isExpanded = false;
-  bool _showSettings = false;
+  final bool _showSettings = false;
 
   late AnimationController _refreshAnimationController;
   late AnimationController _pulseAnimationController;
@@ -160,10 +161,10 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
       _updateControllerTextForLocale();
     });
 
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(30),
         child: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -189,77 +190,77 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               fontWeight: FontWeight.bold,
             ),
           ),
-          actions: [
-            // Settings toggle
-            BlocBuilder<CurrencyCubit, CurrencyState>(
-              builder: (context, state) {
-                return IconButton(
-                  icon: Icon(
-                    _showSettings ? Icons.close : Icons.settings,
-                    color: AppColors.PRIMARY_COLOR,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _showSettings = !_showSettings;
-                    });
-                    ManageVibration.vibrate();
-                  },
-                );
-              },
-            ),
+          // actions: [
+          //   // Settings toggle
+          //   BlocBuilder<CurrencyCubit, CurrencyState>(
+          //     builder: (context, state) {
+          //       return IconButton(
+          //         icon: Icon(
+          //           _showSettings ? Icons.close : Icons.settings,
+          //           color: AppColors.PRIMARY_COLOR,
+          //           size: 20,
+          //         ),
+          //         onPressed: () {
+          //           setState(() {
+          //             _showSettings = !_showSettings;
+          //           });
+          //           ManageVibration.vibrate();
+          //         },
+          //       );
+          //     },
+          //   ),
 
-            // Auto-refresh status indicator
-            BlocBuilder<CurrencyCubit, CurrencyState>(
-              builder: (context, state) {
-                final cubit = context.read<CurrencyCubit>();
+          //   // Auto-refresh status indicator
+          //   BlocBuilder<CurrencyCubit, CurrencyState>(
+          //     builder: (context, state) {
+          //       final cubit = context.read<CurrencyCubit>();
 
-                if (state is CurrencyRefreshing) {
-                  _startRefreshAnimation();
-                } else {
-                  _stopRefreshAnimation();
-                }
+          //       if (state is CurrencyRefreshing) {
+          //         _startRefreshAnimation();
+          //       } else {
+          //         _stopRefreshAnimation();
+          //       }
 
-                return AnimatedBuilder(
-                  animation: _rotationAnimation,
-                  builder: (context, child) {
-                    return Transform.rotate(
-                      angle: _rotationAnimation.value * 2 * 3.14159,
-                      child: AnimatedBuilder(
-                        animation: _pulseAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: cubit.autoRefreshEnabled
-                                ? _pulseAnimation.value
-                                : 1.0,
-                            child: IconButton(
-                              icon: Icon(
-                                cubit.autoRefreshEnabled
-                                    ? Icons.sync
-                                    : Icons.sync_disabled,
-                                color: cubit.autoRefreshEnabled
-                                    ? Colors.green
-                                    : Colors.grey,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                ManageVibration.vibrate();
-                                if (cubit.autoRefreshEnabled) {
-                                  cubit.disableAutoRefresh();
-                                } else {
-                                  cubit.enableAutoRefresh();
-                                }
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+          //       return AnimatedBuilder(
+          //         animation: _rotationAnimation,
+          //         builder: (context, child) {
+          //           return Transform.rotate(
+          //             angle: _rotationAnimation.value * 2 * 3.14159,
+          //             child: AnimatedBuilder(
+          //               animation: _pulseAnimation,
+          //               builder: (context, child) {
+          //                 return Transform.scale(
+          //                   scale: cubit.autoRefreshEnabled
+          //                       ? _pulseAnimation.value
+          //                       : 1.0,
+          //                   child: IconButton(
+          //                     icon: Icon(
+          //                       cubit.autoRefreshEnabled
+          //                           ? Icons.sync
+          //                           : Icons.sync_disabled,
+          //                       color: cubit.autoRefreshEnabled
+          //                           ? Colors.green
+          //                           : Colors.grey,
+          //                       size: 20,
+          //                     ),
+          //                     onPressed: () {
+          //                       ManageVibration.vibrate();
+          //                       if (cubit.autoRefreshEnabled) {
+          //                         cubit.disableAutoRefresh();
+          //                       } else {
+          //                         cubit.enableAutoRefresh();
+          //                       }
+          //                     },
+          //                   ),
+          //                 );
+          //               },
+          //             ),
+          //           );
+          //         },
+          //       );
+          //     },
+          //   ),
+          // ],
         ),
       ),
       body: BlocConsumer<CurrencyCubit, CurrencyState>(
@@ -479,7 +480,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               ? 'تبديل العملات'
                               : 'Currency Exchange',
                           style: TextStyle(
-                            color: AppColors.getReversedTextColor(context),
+                            color: context.isArabic
+                                ? Colors.white
+                                : AppColors.getReversedTextColor(context),
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -490,8 +493,10 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               ? 'تبديل العملات بشكل سريع وعرض السعر للعملة في الوقت الحالي'
                               : 'Exchange currencies instantly and view real-time rates',
                           style: TextStyle(
-                            color: AppColors.getReversedTextColor(context)
-                                .withOpacity(0.7),
+                            color: context.isArabic
+                                ? Colors.white
+                                : AppColors.getReversedTextColor(context)
+                                    .withOpacity(0.7),
                             fontSize: 14,
                           ),
                           textAlign: TextAlign.center,
@@ -520,12 +525,14 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               Text(
                                 context.isArabic ? 'المبلغ' : 'Amount',
                                 style: TextStyle(
-                                  color: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color
-                                          ?.withOpacity(0.7) ??
-                                      Colors.grey,
+                                  color: context.isArabic
+                                      ? Colors.white
+                                      : Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color
+                                              ?.withOpacity(0.7) ??
+                                          Colors.grey,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -731,12 +738,14 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                     ? 'المبلغ المحول'
                                     : 'Converted Amount',
                                 style: TextStyle(
-                                  color: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color
-                                          ?.withOpacity(0.7) ??
-                                      Colors.grey,
+                                  color: context.isArabic
+                                      ? Colors.white
+                                      : Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color
+                                              ?.withOpacity(0.7) ??
+                                          Colors.grey,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -903,16 +912,20 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 children: [
                                   Icon(
                                     Icons.calculate,
-                                    color:
-                                        AppColors.getReversedTextColor(context),
+                                    color: context.isArabic
+                                        ? Colors.white
+                                        : AppColors.getReversedTextColor(
+                                            context),
                                     size: 20,
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
                                     context.isArabic ? 'حساب' : 'Calculate',
                                     style: TextStyle(
-                                      color: AppColors.getReversedTextColor(
-                                          context),
+                                      color: context.isArabic
+                                          ? Colors.white
+                                          : AppColors.getReversedTextColor(
+                                              context),
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -1005,7 +1018,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             ),
                             child: Icon(
                               Icons.language,
-                              color: AppColors.getReversedTextColor(context),
+                              color: context.isArabic
+                                  ? Colors.white
+                                  : AppColors.getReversedTextColor(context),
                               size: 20,
                             ),
                           ),
@@ -1016,7 +1031,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   ? 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم'
                                   : 'Check exchange rates\nfor all world currencies',
                               style: TextStyle(
-                                color: AppColors.getReversedTextColor(context),
+                                color: context.isArabic
+                                    ? Colors.white
+                                    : AppColors.getReversedTextColor(context),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -1027,7 +1044,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             duration: const Duration(milliseconds: 300),
                             child: Icon(
                               Icons.keyboard_arrow_down,
-                              color: AppColors.getReversedTextColor(context),
+                              color: context.isArabic
+                                  ? Colors.white
+                                  : AppColors.getReversedTextColor(context),
                               size: 24,
                             ),
                           ),
@@ -1059,7 +1078,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(16),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Column(
                                 children: [
                                   CircularProgressIndicator(
@@ -1068,9 +1087,13 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   ),
                                   SizedBox(height: 16),
                                   Text(
-                                    'Loading exchange rates...',
+                                    context.isArabic
+                                        ? 'جاري تحميل سعر الصرف...'
+                                        : 'Loading exchange rates...',
                                     style: TextStyle(
-                                      color: Colors.grey,
+                                      color: context.isArabic
+                                          ? Colors.white
+                                          : Colors.grey,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -1280,7 +1303,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.85,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: AppColors.getFillColor(context),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
@@ -1371,9 +1394,11 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                         style: TextStyle(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,
-                          color: isSelected
-                              ? AppColors.PRIMARY_COLOR
-                              : AppColors.getTextColor(context),
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : isSelected
+                                  ? AppColors.PRIMARY_COLOR
+                                  : AppColors.getTextColor(context),
                         ),
                       ),
                       trailing: isSelected
