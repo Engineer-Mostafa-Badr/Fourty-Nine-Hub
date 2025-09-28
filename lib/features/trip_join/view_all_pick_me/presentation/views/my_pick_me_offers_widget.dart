@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/my_ads_trip_join_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
@@ -35,8 +37,12 @@ class MyPickMeOffersWidget extends StatefulWidget {
   State<MyPickMeOffersWidget> createState() => _MyPickMeOffersWidgetState();
 }
 
-class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> {
+class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with TickerProviderStateMixin{
   late ScrollController _scrollController;
+  late AnimationController _animationController;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _rotationAnimation;
+  late Animation<double> _opacityAnimation;
 
   bool _isVisible = true;
 
@@ -55,227 +61,226 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> {
             if (context.read<ViewAllTripJoinCubit>().myPickMeAdsData.isEmpty) {
               return Center(child: Text(LocaleKeys.noData.localize));
             }
+            return OlxPaginationWidget(
+              scrollController: _scrollController,
+              itemsPerPage: 3,
+              loadPage: (page) async {
+                context.read<ViewAllTripJoinCubit>().getPickMeMyAds();
+              },
+              banners: bannersList,
+              items: List.generate(
+                context.read<ViewAllTripJoinCubit>().myPickMeAdsData.length,
+                    (index) {
+                      MyAdsTripDocEntity data =
+                      context.read<ViewAllTripJoinCubit>().myPickMeAdsData[index];
 
-            return GlowingOverscrollIndicator(
-              color: AppColors.SECONDARY_COLOR,
-              axisDirection: AxisDirection.down,
-              child: ListView.separated(
-                shrinkWrap: true,
-                controller: _scrollController,
-                itemCount:
-                    context.read<ViewAllTripJoinCubit>().myPickMeAdsData.length,
-                separatorBuilder: (context, i) => SizedBox(
-                  height: 10.h,
-                ),
-                itemBuilder: (context, i) {
-                  MyAdsTripDocEntity data =
-                      context.read<ViewAllTripJoinCubit>().myPickMeAdsData[i];
-
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.h,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomCard(
-                              radius: 20,
+                            Stack(
                               children: [
-                                const Sizer(
-                                  height: 8,
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 32.0.h),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.remove_red_eye_sharp,
-                                              color: context.isDarkMode
-                                                  ? AppColors.whiteColor
-                                                  : AppColors.DARK_GRAY_COLOR,
-                                            ),
-                                            const Sizer(),
-                                            Label(
-                                              text:
-                                                  '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
-                                              style: Styles.mediumText(
-                                                fontSize: 24,
-                                                color: context.isDarkMode
-                                                    ? AppColors.whiteColor
-                                                    : AppColors.DARK_GRAY_COLOR,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Text(
-                                        data.formattedOfferType,
-                                        style: Styles.headerText(
-                                            color:
-                                                AppColors.getRedColor(context),
-                                            fontSize: 32),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(),
-                                const Sizer(),
-                                TripCardInfoWidget(
-                                    title: context.isArabic
-                                        ? data.vehicleDetails?.brandAr ?? ""
-                                        : data.vehicleDetails?.brandEn ?? "",
-                                    model: context.isArabic
-                                        ? data.vehicleDetails?.modelAr ?? ""
-                                        : data.vehicleDetails?.modelEn ?? "",
-                                    icon: Assets.tripJoinCarIcon,
-                                    price: formatPrice(
-                                        data.pricePerSeat?.round() ?? 1,
-                                        context),
-                                    seats: LocaleKeys.eachSeat.localize
-                                    // icon: widget.iconCar
-                                    //     ? Assets.tripJoinCarIcon
-                                    //     : widget.isMale
-                                    //     ? Assets.maleUser
-                                    //     : Assets.femaleUser,
+                                CustomCard(
+                                  radius: 20,
+                                  children: [
+                                    const Sizer(
+                                      height: 8,
                                     ),
-                                const Sizer(
-                                  height: 30,
-                                ),
-                                _locationWidget(
-                                    title: data.location?.start?.address ?? "",
-                                    iconColor: AppColors.LIGHT_BLUE),
-                                const Sizer(),
-                                _locationWidget(
-                                    title: data.location?.target?.address ?? "",
-                                    iconColor: AppColors.CHECK_MARK_COLOR),
-                                const Sizer(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 32.0.h,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
+                                    Padding(
+                                      padding:
+                                      EdgeInsets.symmetric(horizontal: 32.0.h),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.remove_red_eye_sharp,
+                                                  color: context.isDarkMode
+                                                      ? AppColors.whiteColor
+                                                      : AppColors.DARK_GRAY_COLOR,
+                                                ),
+                                                const Sizer(),
+                                                Label(
+                                                  text:
+                                                  '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
+                                                  style: Styles.mediumText(
+                                                    fontSize: 24,
+                                                    color: context.isDarkMode
+                                                        ? AppColors.whiteColor
+                                                        : AppColors.DARK_GRAY_COLOR,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Text(
+                                            data.formattedOfferType,
+                                            style: Styles.headerText(
+                                                color:
+                                                AppColors.getRedColor(context),
+                                                fontSize: 32),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(),
+                                    const Sizer(),
+                                    TripCardInfoWidget(
+                                        title: context.isArabic
+                                            ? data.vehicleDetails?.brandAr ?? ""
+                                            : data.vehicleDetails?.brandEn ?? "",
+                                        model: context.isArabic
+                                            ? data.vehicleDetails?.modelAr ?? ""
+                                            : data.vehicleDetails?.modelEn ?? "",
+                                        icon: Assets.tripJoinCarIcon,
+                                        price: formatPrice(
+                                            data.pricePerSeat?.round() ?? 1,
+                                            context),
+                                        seats: LocaleKeys.eachSeat.localize
+                                      // icon: widget.iconCar
+                                      //     ? Assets.tripJoinCarIcon
+                                      //     : widget.isMale
+                                      //     ? Assets.maleUser
+                                      //     : Assets.femaleUser,
+                                    ),
+                                    const Sizer(
+                                      height: 30,
+                                    ),
+                                    _locationWidget(
+                                        title: data.location?.start?.address ?? "",
+                                        iconColor: AppColors.LIGHT_BLUE),
+                                    const Sizer(),
+                                    _locationWidget(
+                                        title: data.location?.target?.address ?? "",
+                                        iconColor: AppColors.CHECK_MARK_COLOR),
+                                    const Sizer(),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 32.0.h,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        formatTimestamp(
-                                            data.startDate??'', context),
-                                        style: Styles.headerText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold),
+                                        children: [
+                                          Text(
+                                            formatTimestamp(
+                                                data.startDate??'', context),
+                                            style: Styles.headerText(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            // data.passengers == 1
+                                            //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
+                                            //     : ''
+                                            '${data.passengers} ${LocaleKeys.seat.localize}',
+                                            style: Styles.headerText(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            data.isRepeat == true
+                                                ? LocaleKeys.repeated.localize
+                                                : LocaleKeys.oneTime.localize,
+                                            style: Styles.headerText(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        // data.passengers == 1
-                                        //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
-                                        //     : ''
-                                        '${data.passengers} ${LocaleKeys.seat.localize}',
-                                        style: Styles.headerText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold),
+                                    ),
+                                    const Divider(),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 32.0.h,
                                       ),
-                                      Text(
-                                        data.isRepeat == true
-                                            ? LocaleKeys.repeated.localize
-                                            : LocaleKeys.oneTime.localize,
-                                        style: Styles.headerText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 32.0.h,
-                                  ),
-                                  child: AppButton(
-                                    backColor: AppColors.PRIMARY_COLOR_DARK,
-                                    color: AppColors.whiteColor,
-                                    onPressed: () {
-                                      ManageVibration.vibrate();
-                                      context
-                                          .read<ViewAllTripJoinCubit>()
-                                          .deleteMyAdsPickMe(
+                                      child: AppButton(
+                                        backColor: AppColors.PRIMARY_COLOR_DARK,
+                                        color: AppColors.whiteColor,
+                                        onPressed: () {
+                                          ManageVibration.vibrate();
+                                          context
+                                              .read<ViewAllTripJoinCubit>()
+                                              .deleteMyAdsPickMe(
                                               data.id ?? "", context);
-                                    },
-                                    label: LocaleKeys.deleteRequest.localize,
-                                  ),
+                                        },
+                                        label: LocaleKeys.deleteRequest.localize,
+                                      ),
+                                    ),
+                                    const Sizer(),
+                                  ],
                                 ),
-                                const Sizer(),
                               ],
                             ),
+                            data.isPremium == true ||
+                                data.isButtonEnabled!.state == true
+                                ? SizedBox()
+                                : TripCardSubscribeText(),
                           ],
                         ),
-                        data.isPremium == true ||
-                                data.isButtonEnabled!.state == true
-                            ? SizedBox()
-                            : TripCardSubscribeText(),
-                      ],
-                    ),
-                  );
+                      );
                 },
               ),
             );
-          },
+
+            },
         ),
         PositionedDirectional(
           bottom: 0.h,
           start: 0,
           end: 0,
-          child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isVisible ? Offset.zero : const Offset(0, 2),
-              child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: _isVisible ? 1 : 0,
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return Transform(
+                transform: Matrix4.identity()
+                  ..translate(0.0, _slideAnimation.value)
+                  ..rotateZ(_rotationAnimation.value),
+                child: Opacity(
+                  opacity: _opacityAnimation.value,
                   child: Padding(
-                      padding: EdgeInsets.only(bottom: 30.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              context.pop();
-                            },
-                            child: Container(
-                              height: 48.h,
-                              width: 48.h,
-                              decoration: BoxDecoration(
-                                  color:
-                                      AppColors.getButtonPrimaryColor(context),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Icon(
-                                size: 19,
-                                Icons.question_mark,
-                                color: context.isDarkMode
-                                    ? AppColors.black
-                                    : Colors.white,
-                              ),
+                    padding: EdgeInsets.only(bottom: 30.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context.push(Routes.pickMeInfoScreen);
+                          },
+                          child: Container(
+                            height: 48.h,
+                            width: 48.h,
+                            decoration: BoxDecoration(
+                                color: AppColors.getButtonPrimaryColor(context),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Icon(
+                              size: 19,
+                              Icons.question_mark,
+                              color: context.isDarkMode
+                                  ? AppColors.black
+                                  : Colors.white,
                             ),
                           ),
-                          Container(
-                            key: const ValueKey(1),
-                            child: TripJoinFloatingActionButton(
-                              title: context.isArabic
-                                  ? "أعلن عن سيارتك"
-                                  : "Advertise your car",
-                              onTap: () {
-                                ManageVibration.vibrate();
-                                context.push(Routes.TRIP_JOIN);
-                              },
-                            ),
-                          ),
-                        ],
-                      )))),
-        )
+                        ),
+                        TripJoinFloatingActionButton(
+                          title: context.isArabic ? "انشر رحلتك" : "Post your ride",
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            context.push(Routes.TRIP_JOIN, extra: true);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -283,8 +288,6 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> {
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
-    _scrollController.removeListener(_scrollListener);
-
     _scrollController.dispose();
     super.dispose();
   }
@@ -292,11 +295,43 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> {
   @override
   void initState() {
     context.read<ViewAllTripJoinCubit>().loadInitialPickMeMyAds();
-    super.initState();
-
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    _scrollController.addListener(_onScroll);
+    // Initialize animation controller with 600ms duration
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    // Initialize animations
+    _slideAnimation = Tween<double>(
+      begin: 100.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _rotationAnimation = Tween<double>(
+      begin: 0.3,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Start with visible state
+    _animationController.forward();
+    super.initState();
+
   }
 
   TripCardInfoWidget({
@@ -426,13 +461,6 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> {
         ],
       ),
     );
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ViewAllTripJoinCubit>().getPickMeMyAds();
-    }
   }
 
   void _scrollListener() {

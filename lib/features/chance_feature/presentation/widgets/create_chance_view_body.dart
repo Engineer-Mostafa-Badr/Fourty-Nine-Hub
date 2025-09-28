@@ -18,7 +18,7 @@ import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import '../../../account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import '../../domain/entity/main_category_drop_entity.dart';
-import '../../domain/use_case/add_chance_data.dart';
+import '../../domain/use_case/create_chance_ad_use_case.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CreateChanceViewBody extends StatefulWidget {
@@ -80,8 +80,18 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
       child: BlocConsumer<ChanceCubit, ChanceState>(
         listener: (BuildContext context, state) {
           print('Current state: $state');
-          if (state.status == ChanceStates.success) {
-            print('Status is success');
+          if (state.status == ChanceStates.createSuccess) {
+            print('Status is createSuccess');
+            showSuccessMessage(context, 'Create Chance Ad Successfully');
+            titleController.clear();
+            desController.clear();
+            priceController.clear();
+            setState(() {
+              selectedCategory = null;
+              selectedSubCategory = null;
+            });
+          } else if (state.status == ChanceStates.success) {
+            print('Status is success (old API)');
             showSuccessMessage(context, 'Create Chance Successfully');
             titleController.clear();
             desController.clear();
@@ -176,13 +186,14 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                             items: isCategoryLoading
                                 ? [
                                     DropdownMenuItem(
-                                        value: null,
-                                        child: Label(
-                                          text: LocaleKeys
-                                              .selectCategory.localize,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ))
+                                      value: null,
+                                      child: Label(
+                                        text:
+                                            LocaleKeys.selectCategory.localize,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                    ),
                                   ]
                                 : categories.map((category) {
                                     return DropdownMenuItem<String>(
@@ -360,21 +371,27 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           if (_formKey.currentState!.validate()) {
                             if (selectedCategory != null &&
                                 selectedSubCategory != null) {
-                              context
-                                  .read<ChanceCubit>()
-                                  .addChance(AddChanceParams(
-                                    title: titleController.text,
-                                    price: double.parse(priceController.text),
-                                    images: ['669262c894fa0441718b74c9'],
-                                    description: desController.text,
-                                    subCategoryId: selectedSubCategory!,
-                                    mainCategoryId: selectedCategory!,
-                                    props: [],
-                                  ));
+                              // Get uploaded image IDs from state
+                              final cubit = context.read<ChanceCubit>();
+                              final mediaIds = cubit.state.uploadedImageIds;
+
+                              // Use new API
+                              cubit.createChanceAd(CreateChanceAdParams(
+                                mainCategoryId: selectedCategory!,
+                                subCategoryId: selectedSubCategory!,
+                                title: titleController.text,
+                                price: double.parse(priceController.text),
+                                description: desController.text,
+                                mediaIds: mediaIds.isNotEmpty
+                                    ? mediaIds
+                                    : [
+                                        '669262c894fa0441718b74c9'
+                                      ], // fallback to default image
+                              ));
                             } else {
                               showErrorMessage(context,
                                   'Please Enter Main Category and Sub Category');
@@ -388,11 +405,14 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                               horizontal: 40.w, vertical: 25.h),
                           backgroundColor: AppColors.PRIMARY_COLOR,
                         ),
-                        child: Text(LocaleKeys.CreateChance.localize,
-                            style: Styles.mediumText(
-                                color: Colors.white,
-                                fontSize: 55.sp,
-                                fontWeight: FontWeight.w400)),
+                        child: Text(
+                          LocaleKeys.CreateChance.localize,
+                          style: Styles.mediumText(
+                            color: Colors.white,
+                            fontSize: 55.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                     )
                   ],

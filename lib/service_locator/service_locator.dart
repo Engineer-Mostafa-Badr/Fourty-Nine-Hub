@@ -73,6 +73,7 @@ import '../core/localization/localization_service.dart';
 import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import '../features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import '../firebase_options.dart';
+import '../helpers/logging_helper.dart';
 import 'account_service_locator.dart';
 import 'auction_service_locator.dart';
 import 'balance_service_locator.dart';
@@ -96,6 +97,7 @@ final serviceLocator = GetIt.instance;
 
 class DI {
   static Future<void> execute({String? token}) async {
+    LoggingHelper.info('🔧 Service Locator: Starting dependency injection...');
     print('executed');
 
     // Initialize SharedPreferences before registering it
@@ -395,6 +397,8 @@ class DI {
 
     //! Ten Percent
     TenPercentServiceLocator.execute(serviceLocator: serviceLocator);
+    
+    LoggingHelper.info('✅ Service Locator: Dependency injection completed successfully');
   }
 
   static Future<void> reset() async {
