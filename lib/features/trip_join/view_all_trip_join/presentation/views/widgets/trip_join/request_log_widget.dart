@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:go_router/go_router.dart';
 
@@ -239,34 +241,6 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 
   bool _isVisible = true;
 
-  // String formatTimestamp(dynamic time) {
-  //   // Handle if time is String
-  //   int timestamp = 0;
-  //   if (time is String) {
-  //     timestamp = int.tryParse(time) ?? 0;
-  //   } else if (time is int) {
-  //     timestamp = time;
-  //   }
-  //
-  //   if (timestamp == 0) return "-";
-  //
-  //   DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-  //
-  //   // Format date to your preferred format (you can customize it)
-  //   String formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-  //
-  //   return formattedDate;
-  // }
-
-  // String formatDateTime(DateTime? dateTime) {
-  //   if (dateTime == null) return 'No date';
-  //
-  //   String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
-  //   String formattedTime = DateFormat('h:mm a').format(dateTime);
-  //
-  //   return "$formattedDate\n$formattedTime";
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -286,86 +260,92 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                 .isEmpty) {
               return Center(child: Text(LocaleKeys.noData.localize));
             }
-            return GlowingOverscrollIndicator(
-              color: AppColors.SECONDARY_COLOR,
-              axisDirection: AxisDirection.down,
-              child: ListView.separated(
-                  controller: _scrollController,
-                  itemBuilder: (context, i) {
-                    GetRequestTripJoinEntity data = context
-                        .read<ViewAllTripJoinCubit>()
-                        .requestTripJoinData[i];
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10.h,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                  context
-                                      .read<ViewAllTripJoinCubit>()
-                                      .applyReadRequestTrip(data.id!);
-                                },
-                                child: CustomCard(
-                                  // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
-                                  color: data.isRead == true
-                                      ? (context.isDarkMode
-                                          ? Colors.transparent
-                                          : AppColors.whiteColor)
-                                      : (context.isDarkMode
-                                          ? AppColors.grey
-                                          : AppColors.grey.shade300),
+            return OlxPaginationWidget(
+              scrollController: _scrollController,
+              itemsPerPage: 3,
+              loadPage: (page) async {
+                context.read<ViewAllTripJoinCubit>().getRequestTripJoin();
+              },
+              banners: bannersList,
+              items: List.generate(
+                context
+                    .read<ViewAllTripJoinCubit>()
+                    .requestTripJoinData.length,
+                    (index) {
+                      GetRequestTripJoinEntity data = context
+                          .read<ViewAllTripJoinCubit>()
+                          .requestTripJoinData[index];
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Stack(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    context
+                                        .read<ViewAllTripJoinCubit>()
+                                        .applyReadRequestTrip(data.id!);
+                                  },
+                                  child: CustomCard(
+                                    // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
+                                    color: data.isRead == true
+                                        ? (context.isDarkMode
+                                        ? Colors.transparent
+                                        : AppColors.whiteColor)
+                                        : (context.isDarkMode
+                                        ? AppColors.grey
+                                        : AppColors.grey.shade300),
 
-                                  radius: 20,
-                                  children: [
-                                    // Text("${data.read}"),
-                                    const Sizer(),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 32.0.h),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.remove_red_eye_sharp,
-                                                  color: context.isDarkMode
-                                                      ? AppColors.whiteColor
-                                                      : AppColors
-                                                          .DARK_GRAY_COLOR,
-                                                ),
-                                                const Sizer(),
-                                                Label(
-                                                  // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
-                                                  text:
-                                                      '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
-                                                  style: Styles.mediumText(
-                                                    fontSize: 24,
+                                    radius: 20,
+                                    children: [
+                                      // Text("${data.read}"),
+                                      const Sizer(),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 32.0.h),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.remove_red_eye_sharp,
                                                     color: context.isDarkMode
                                                         ? AppColors.whiteColor
                                                         : AppColors
-                                                            .DARK_GRAY_COLOR,
+                                                        .DARK_GRAY_COLOR,
                                                   ),
-                                                ),
-                                              ],
+                                                  const Sizer(),
+                                                  Label(
+                                                    // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
+                                                    text:
+                                                    '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                                    style: Styles.mediumText(
+                                                      fontSize: 24,
+                                                      color: context.isDarkMode
+                                                          ? AppColors.whiteColor
+                                                          : AppColors
+                                                          .DARK_GRAY_COLOR,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          // Text(
-                                          //   "${data.status ?? ""}",
-                                          //   style: Styles.headerText(
-                                          //       color: AppColors.getRedColor(context), fontSize: 32),
-                                          // ),
-                                        ],
+                                            // Text(
+                                            //   "${data.status ?? ""}",
+                                            //   style: Styles.headerText(
+                                            //       color: AppColors.getRedColor(context), fontSize: 32),
+                                            // ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    const Divider(),
-                                    TripCardInfoWidget(
+                                      const Divider(),
+                                      TripCardInfoWidget(
                                         price: formatPrice(
                                             data.pricePerSeat?.round() ?? 10,
                                             context),
@@ -379,104 +359,98 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                         //
                                         // // : Assets.femaleUser,
                                         // seats: "1"
+                                      ),
+                                      const Sizer(
+                                        height: 30,
+                                      ),
+                                      _locationWidget(
+                                          title:
+                                          data.location?.start?.address ?? "",
+                                          iconColor: AppColors.LIGHT_BLUE),
+                                      const Sizer(),
+                                      _locationWidget(
+                                          title: data.location?.target?.address ??
+                                              "",
+                                          iconColor: AppColors.CHECK_MARK_COLOR),
+                                      const Sizer(),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 32.0.h,
                                         ),
-                                    const Sizer(
-                                      height: 30,
-                                    ),
-                                    _locationWidget(
-                                        title:
-                                            data.location?.start?.address ?? "",
-                                        iconColor: AppColors.LIGHT_BLUE),
-                                    const Sizer(),
-                                    _locationWidget(
-                                        title: data.location?.target?.address ??
-                                            "",
-                                        iconColor: AppColors.CHECK_MARK_COLOR),
-                                    const Sizer(),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 32.0.h,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            formatTimestamp12(
-                                                data.createdAt!, context),
-                                            style: Styles.headerText(
-                                                fontSize: 32,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            // data.trip.passengers == 1
-                                            //     ? '${data.trip.passengers} ${LocaleKeys.seat.localize}'
-                                            //     :
-                                            // '${data.passengers} ${LocaleKeys.seat.localize}',
-                                            "${formatPrice(data.totalPassengers ?? 1, context)}  ${LocaleKeys.seat.localize}",
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              formatTimestamp12(
+                                                  data.createdAt!, context),
+                                              style: Styles.headerText(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              // data.trip.passengers == 1
+                                              //     ? '${data.trip.passengers} ${LocaleKeys.seat.localize}'
+                                              //     :
+                                              // '${data.passengers} ${LocaleKeys.seat.localize}',
+                                              "${formatPrice(data.totalPassengers ?? 1, context)}  ${LocaleKeys.seat.localize}",
 
-                                            style: Styles.headerText(
-                                                fontSize: 32,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            // data.isRepeat ? LocaleKeys.repeated.localize :
-                                            LocaleKeys.oneTime.localize,
-                                            // widget.status,
-                                            style: Styles.headerText(
-                                                fontSize: 32,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
+                                              style: Styles.headerText(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              // data.isRepeat ? LocaleKeys.repeated.localize :
+                                              LocaleKeys.oneTime.localize,
+                                              // widget.status,
+                                              style: Styles.headerText(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    const Divider(),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 32.0.h,
+                                      const Divider(),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 32.0.h,
+                                        ),
+                                        child: ContactsTripButtons(
+                                          // isPremium: false,
+                                          isPremium: data.isPremium == true ||
+                                              data.isButtonEnabled!.state ==
+                                                  true
+                                              ? true
+                                              : false,
+                                          otherUserId: '2',
+                                          subcategoryId: '2',
+                                          phone: data.phoneNumber ?? "123",
+                                          id: '2',
+                                          hasReport: true,
+                                        ),
+                                        // TripJoinButtonsSection(
+                                        //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
+                                        //   isRequestButton: false,
+                                        //   buttonTitle:LocaleKeys.requests.localize,
+                                        //   // buttonTitle:" widget.buttonTitle",
+                                        //   onTap: (){},
+                                        // ),
                                       ),
-                                      child: ContactsTripButtons(
-                                        // isPremium: false,
-                                        isPremium: data.isPremium == true ||
-                                                data.isButtonEnabled!.state ==
-                                                    true
-                                            ? true
-                                            : false,
-                                        otherUserId: '2',
-                                        subcategoryId: '2',
-                                        phone: data.phoneNumber ?? "123",
-                                        id: '2',
-                                        hasReport: true,
-                                      ),
-                                      // TripJoinButtonsSection(
-                                      //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
-                                      //   isRequestButton: false,
-                                      //   buttonTitle:LocaleKeys.requests.localize,
-                                      //   // buttonTitle:" widget.buttonTitle",
-                                      //   onTap: (){},
-                                      // ),
-                                    ),
-                                    const Sizer(),
-                                  ],
+                                      const Sizer(),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          data.isPremium == true ||
-                                  data.isButtonEnabled!.state == true
-                              ? SizedBox()
-                              : TripCardSubscribeText(),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, i) => SizedBox(
-                        height: 10.h,
-                      ),
-                  itemCount: context
-                      .read<ViewAllTripJoinCubit>()
-                      .requestTripJoinData
-                      .length),
+                              ],
+                            ),
+                            data.isPremium == true ||
+                                data.isButtonEnabled!.state == true
+                                ? SizedBox()
+                                : TripCardSubscribeText(),
+                          ],
+                        ),
+                      );
+                },
+              ),
             );
           },
         ),
@@ -548,7 +522,6 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    _scrollController.addListener(_onScroll);
   }
 
   TripCardInfoWidget({
@@ -663,12 +636,6 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
     );
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ViewAllTripJoinCubit>().getRequestTripJoin();
-    }
-  }
 
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
