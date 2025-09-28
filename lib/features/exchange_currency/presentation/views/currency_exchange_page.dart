@@ -161,12 +161,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     });
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
           scrolledUnderElevation: 0,
-          backgroundColor: Colors.grey.shade50,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           automaticallyImplyLeading: false,
           titleSpacing: 0,
@@ -176,14 +176,15 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
             child: IconButton(
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+              icon: Icon(Icons.arrow_back,
+                  color: AppColors.getTextColor(context), size: 20),
               onPressed: () => Navigator.pop(context),
             ),
           ),
           title: Text(
             context.isArabic ? 'تبديل العملات' : 'Exchange',
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: AppColors.getTextColor(context),
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -270,7 +271,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                 backgroundColor: Colors.red,
                 action: SnackBarAction(
                   label: context.isArabic ? 'إعادة المحاولة' : 'Retry',
-                  textColor: Colors.white,
+                  textColor: AppColors.getReversedTextColor(context),
                   onPressed: () {
                     context.read<CurrencyCubit>().forceRefresh();
                   },
@@ -282,7 +283,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               SnackBar(
                 content: Row(
                   children: [
-                    const Icon(Icons.sync, color: Colors.white, size: 16),
+                    Icon(Icons.sync,
+                        color: AppColors.getReversedTextColor(context),
+                        size: 16),
                     const SizedBox(width: 8),
                     Text(context.isArabic
                         ? 'تم تحديث الأسعار تلقائياً'
@@ -298,7 +301,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               SnackBar(
                 content: Row(
                   children: [
-                    const Icon(Icons.update, color: Colors.white, size: 16),
+                    Icon(Icons.update,
+                        color: AppColors.getReversedTextColor(context),
+                        size: 16),
                     const SizedBox(width: 8),
                     Text(context.isArabic
                         ? 'تم تحديث قائمة الأسعار'
@@ -314,8 +319,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               SnackBar(
                 content: Row(
                   children: [
-                    const Icon(Icons.check_circle,
-                        color: Colors.white, size: 16),
+                    Icon(Icons.check_circle,
+                        color: AppColors.getReversedTextColor(context),
+                        size: 16),
                     const SizedBox(width: 8),
                     Text(context.isArabic
                         ? 'تم التحديث بنجاح'
@@ -362,15 +368,19 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   Colors.green.withOpacity(0.05)
                                 ]
                               : [
-                                  Colors.grey.withOpacity(0.1),
-                                  Colors.grey.withOpacity(0.05)
+                                  Theme.of(context)
+                                      .dividerColor
+                                      .withOpacity(0.1),
+                                  Theme.of(context)
+                                      .dividerColor
+                                      .withOpacity(0.05)
                                 ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: cubit.autoRefreshEnabled
                               ? Colors.green.withOpacity(0.3)
-                              : Colors.grey.withOpacity(0.3),
+                              : Theme.of(context).dividerColor.withOpacity(0.3),
                         ),
                       ),
                       child: Row(
@@ -404,7 +414,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 fontSize: 11,
                                 color: cubit.autoRefreshEnabled
                                     ? Colors.green.shade700
-                                    : Colors.grey.shade600,
+                                    : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color
+                                            ?.withOpacity(0.7) ??
+                                        Colors.grey,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -424,8 +439,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 ),
                                 child: Text(
                                   context.isArabic ? 'تحديث' : 'Refresh',
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                                  style: TextStyle(
+                                    color:
+                                        AppColors.getReversedTextColor(context),
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -449,7 +465,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Theme.of(context).shadowColor.withOpacity(0.1),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
@@ -462,8 +478,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                           context.isArabic
                               ? 'تبديل العملات'
                               : 'Currency Exchange',
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: AppColors.getReversedTextColor(context),
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -473,8 +489,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                           context.isArabic
                               ? 'تبديل العملات بشكل سريع وعرض السعر للعملة في الوقت الحالي'
                               : 'Exchange currencies instantly and view real-time rates',
-                          style: const TextStyle(
-                            color: Colors.white70,
+                          style: TextStyle(
+                            color: AppColors.getReversedTextColor(context)
+                                .withOpacity(0.7),
                             fontSize: 14,
                           ),
                           textAlign: TextAlign.center,
@@ -485,11 +502,13 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Theme.of(context)
+                                    .shadowColor
+                                    .withOpacity(0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),
@@ -501,7 +520,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               Text(
                                 context.isArabic ? 'المبلغ' : 'Amount',
                                 style: TextStyle(
-                                  color: Colors.grey.shade600,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withOpacity(0.7) ??
+                                      Colors.grey,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -522,10 +546,10 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 12),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade50,
+                                        color: AppColors.getFillColor(context),
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
-                                          color: Colors.grey.shade200,
+                                          color: Theme.of(context).dividerColor,
                                         ),
                                       ),
                                       child: Row(
@@ -553,7 +577,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           Icon(
                                             Icons.keyboard_arrow_down,
                                             size: 16,
-                                            color: Colors.grey.shade600,
+                                            color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.color
+                                                    ?.withOpacity(0.7) ??
+                                                Colors.grey,
                                           ),
                                         ],
                                       ),
@@ -584,14 +613,16 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                                   horizontal: 16, vertical: 12),
                                           border: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Colors.grey.shade200),
+                                                color: Theme.of(context)
+                                                    .dividerColor),
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(12)),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Colors.grey.shade200),
+                                                color: Theme.of(context)
+                                                    .dividerColor),
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(12)),
@@ -607,10 +638,11 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                               ? '٠.٠٠'
                                               : '0.00',
                                           hintStyle: TextStyle(
-                                            color: Colors.grey.shade400,
+                                            color: Theme.of(context).hintColor,
                                           ),
                                           filled: true,
-                                          fillColor: Colors.grey.shade50,
+                                          fillColor:
+                                              AppColors.getFillColor(context),
                                         ),
                                         onChanged: (value) {
                                           // Convert Arabic numerals back to English for parsing
@@ -642,7 +674,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 children: [
                                   Expanded(
                                     child: Divider(
-                                      color: Colors.grey.shade300,
+                                      color: Theme.of(context).dividerColor,
                                       thickness: 1,
                                     ),
                                   ),
@@ -686,7 +718,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Divider(
-                                      color: Colors.grey.shade300,
+                                      color: Theme.of(context).dividerColor,
                                       thickness: 1,
                                     ),
                                   ),
@@ -699,7 +731,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                     ? 'المبلغ المحول'
                                     : 'Converted Amount',
                                 style: TextStyle(
-                                  color: Colors.grey.shade600,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withOpacity(0.7) ??
+                                      Colors.grey,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -720,10 +757,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 12),
                                       decoration: BoxDecoration(
-                                        color: Colors.red.shade50,
+                                        color: AppColors.getRedColor(context)
+                                            .withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
-                                          color: Colors.red.shade200,
+                                          color: AppColors.getRedColor(context)
+                                              .withOpacity(0.3),
                                         ),
                                       ),
                                       child: Row(
@@ -751,7 +790,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           Icon(
                                             Icons.keyboard_arrow_down,
                                             size: 16,
-                                            color: Colors.red.shade600,
+                                            color:
+                                                AppColors.getRedColor(context),
                                           ),
                                         ],
                                       ),
@@ -775,7 +815,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                         ),
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
-                                          color: Colors.green.shade200,
+                                          color: Colors.green.withOpacity(0.3),
                                         ),
                                       ),
                                       child: Center(
@@ -861,16 +901,18 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.calculate,
-                                    color: Colors.white,
+                                    color:
+                                        AppColors.getReversedTextColor(context),
                                     size: 20,
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
                                     context.isArabic ? 'حساب' : 'Calculate',
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                                    style: TextStyle(
+                                      color: AppColors.getReversedTextColor(
+                                          context),
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -957,12 +999,13 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: AppColors.getReversedTextColor(context)
+                                  .withOpacity(0.2),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.language,
-                              color: Colors.white,
+                              color: AppColors.getReversedTextColor(context),
                               size: 20,
                             ),
                           ),
@@ -972,8 +1015,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               context.isArabic
                                   ? 'يمكنك مراجعة سعر الصرف\nفي جميع دول العالم'
                                   : 'Check exchange rates\nfor all world currencies',
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: AppColors.getReversedTextColor(context),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -982,9 +1025,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                           AnimatedRotation(
                             turns: _isExpanded ? 0.5 : 0,
                             duration: const Duration(milliseconds: 300),
-                            child: const Icon(
+                            child: Icon(
                               Icons.keyboard_arrow_down,
-                              color: Colors.white,
+                              color: AppColors.getReversedTextColor(context),
                               size: 24,
                             ),
                           ),
@@ -1013,7 +1056,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             margin: const EdgeInsets.symmetric(horizontal: 16),
                             padding: const EdgeInsets.all(32),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: const Center(
@@ -1236,9 +1279,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.85,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
           children: [
@@ -1248,7 +1291,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               height: 4,
               margin: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Theme.of(context).dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -1257,9 +1300,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey.shade50,
+                color: AppColors.getFillColor(context),
                 border: Border(
-                  bottom: BorderSide(color: Colors.grey.shade200),
+                  bottom: BorderSide(color: Theme.of(context).dividerColor),
                 ),
               ),
               child: Row(
@@ -1267,9 +1310,10 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                   Expanded(
                     child: Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.getTextColor(context),
                       ),
                     ),
                   ),
@@ -1312,7 +1356,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: AppColors.getFillColor(context),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
@@ -1329,7 +1373,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               isSelected ? FontWeight.bold : FontWeight.w500,
                           color: isSelected
                               ? AppColors.PRIMARY_COLOR
-                              : Colors.black87,
+                              : AppColors.getTextColor(context),
                         ),
                       ),
                       trailing: isSelected
