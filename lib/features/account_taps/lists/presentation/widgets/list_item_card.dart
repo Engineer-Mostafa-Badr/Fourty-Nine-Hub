@@ -104,7 +104,9 @@ class ListItemCard extends StatelessWidget {
         ),
         if (type != ListTypes.blocked)
           ListTile(
-            onTap: () => context.push(Routes.CHATROOM),
+            onTap: () {
+
+            },
             leading: const Icon(Icons.chat),
             title: Label(
                 text: '${LocaleKeys.chatWith.localize} ${user.firstName}'),

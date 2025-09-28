@@ -9,17 +9,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
+import '../../../features/Conversations/Presentation/Controllers/cubits/conversation_states.dart';
 import '../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
+import '../../../service_locator/service_locator.dart';
 import '../dialogs/please_login_dialog.dart';
 import '../stateless/labels/label.dart';
 import 'bottom_painter.dart';
@@ -101,6 +105,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       index: 3,
       route: Routes.conversationsScreen,
       height: 18,
+      hasBadge: true,
     ),
     BottomItemModel(
       icon: FontAwesomeIcons.car,
@@ -404,23 +409,50 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                                         widget.items[index]
                                                                 .index ==
                                                             1)
-                                                    ? Image.asset(
-                                                        widget.items[index]
-                                                            .image!,
-                                                        height: widget
-                                                                .items[index]
-                                                                .height -
-                                                            1,
-                                                        width: widget
-                                                                .items[index]
-                                                                .height -
-                                                            1,
-                                                        color: context
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : AppColors
-                                                                .PRIMARY_COLOR,
-                                                      )
+                                                    ? Stack(
+                                                      clipBehavior: Clip.none,
+                                                      children: [
+                                                        Image.asset(
+                                                            widget.items[index]
+                                                                .image!,
+                                                            height: widget
+                                                                    .items[index]
+                                                                    .height -
+                                                                1,
+                                                            width: widget
+                                                                    .items[index]
+                                                                    .height -
+                                                                1,
+                                                            color: context
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : AppColors
+                                                                    .PRIMARY_COLOR,
+                                                          ),
+                                                        Positioned(
+                                                          top: -8,
+                                                          right: -5,
+                                                          child:
+                                                        BlocProvider.value(
+                                                          value: serviceLocator<ConversationsCubit>(),
+                                                          child: Builder(
+                                                            builder: (context) {
+                                                              return BlocBuilder<ConversationsCubit, ConversationsState>(
+                                                                builder: (context, state) {
+                                                                  return Badge(
+                                                                    alignment: Alignment.topRight,
+                                                                    backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                                                                    isLabelVisible: widget.items[index].hasBadge && serviceLocator<ConversationsCubit>().unreadConversationsCount > 0,
+                                                                    label: Text(FormatNumbers().convertNumberToLocalizedString(serviceLocator<ConversationsCubit>().unreadConversationsCount.toString(), isArabic: context.isArabic), style: Styles.smallText(color: Colors.white),),
+                                                                  );
+                                                                }
+                                                              );
+                                                            }
+                                                          ),
+                                                        )
+                                                        ,)
+                                                      ],
+                                                    )
                                                     : SvgPicture.asset(
                                                         widget.items[index]
                                                             .image!,
@@ -478,6 +510,7 @@ class BottomItemModel {
   final String? cacheKey;
   final String route;
   final double height;
+  final bool hasBadge;
 
   BottomItemModel({
     required this.icon,
@@ -487,6 +520,7 @@ class BottomItemModel {
     this.cacheKey,
     required this.route,
     this.height = 20,
+    this.hasBadge = false,
   });
 
   void action(BuildContext context) {

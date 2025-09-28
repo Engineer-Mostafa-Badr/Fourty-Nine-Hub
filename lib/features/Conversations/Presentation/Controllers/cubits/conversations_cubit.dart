@@ -1,35 +1,61 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Entities/conversation_entity.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Entities/conversations_pagination.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Usecases/get_socail_conversations.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Usecases/listen_to_stop_typing_usecase.dart';
 import 'package:fourtyninehub/features/Conversations/Presentation/Controllers/cubits/conversation_states.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
+import '../../../../../core/error/failure.dart';
+import '../../../../../routes/pages.dart';
 import '../../../../../shared_web_socket.dart';
+import '../../../Domain/Usecases/delete_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_social_archived_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_unreaded_conversations_count_use_case.dart';
 import '../../../Domain/Usecases/listen_to_start_typing.dart';
 import '../../../Domain/Usecases/listen_to_update_social_list_usecase.dart';
 import '../../../Domain/Usecases/start_typing_usecase.dart';
 import '../../../Domain/Usecases/stop_typing_usecase.dart';
+import '../../../Domain/Usecases/toggle_archived_conversation_usecase.dart';
+import '../../../Domain/Usecases/toggle_mute_conversations_use_case.dart';
+import '../../../Domain/Usecases/toggle_pinned_conversations_use_case.dart';
 
 class ConversationsCubit extends Cubit<ConversationsState> {
   final GetSocialConversations getSocialConversationsUseCase;
+  final GetSocialArchivedConversations getSocialArchivedConversationsUseCase;
   final ListenToUpdateSocialListUseCase listenToUpdateSocialListUseCase;
   final StartTypingUseCase startTypingUseCase;
   final ListenToStartTypingUseCase listenToStartTypingUseCase;
   final StopTypingUseCase stopTypingUseCase;
   final ListenToStopTypingUseCase listenToStopTypingUseCase;
+  final ToggleArchivedConversationUseCase toggleArchivedConversationUseCase;
+  final TogglePinnedConversationUseCase togglePinnedConversationUseCase;
+  final ToggleMuteConversationUseCase toggleMuteConversationUseCase;
+  final DeleteConversationsUseCase deleteConversationsUseCase;
+  final GetUnreadConversationsUseCase getUnreadConversationsUseCase;
+
+  List<ConversationEntity> selectedSocialConversation = [];
+  int unreadConversationsCount = 0;
 
 
   ConversationsCubit(
     this.getSocialConversationsUseCase,
+    this.getSocialArchivedConversationsUseCase,
     this.listenToUpdateSocialListUseCase,
     this.startTypingUseCase,
     this.listenToStartTypingUseCase,
     this.stopTypingUseCase,
     this.listenToStopTypingUseCase,
+    this.toggleArchivedConversationUseCase,
+    this.togglePinnedConversationUseCase,
+    this.toggleMuteConversationUseCase,
+    this.deleteConversationsUseCase,
+    this.getUnreadConversationsUseCase,
   ) : super(ConversationsState()){
     try {
       // Participant Joined
@@ -189,9 +215,13 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
   final int pageSize = 15;
   List<ConversationEntity> socialConversations = [];
+  List<ConversationEntity> socialArchivedConversations = [];
   bool isLoadingMoreSocialConversation = false;
   bool hasMoreDataSocialConversations = true;
   int currentPageSocialConversations = 1;
+  bool isLoadingMoreSocialArchivedConversation = false;
+  bool hasMoreDataSocialArchivedConversations = true;
+  int currentPageSocialArchivedConversations = 1;
 
   Future<void> loadInitialSocialConversations() async {
     socialConversations.clear();
@@ -201,11 +231,26 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     await _fetchSocialConversations();
   }
 
+  Future<void> loadInitialSocialArchivedConversations() async {
+    socialArchivedConversations.clear();
+    currentPageSocialArchivedConversations = 1;
+    hasMoreDataSocialArchivedConversations = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialArchivedConversations();
+  }
+
   Future<void> getSocialConversations() async {
     if (hasMoreDataSocialConversations || isLoadingMoreSocialConversation) return;
     isLoadingMoreSocialConversation = true;
     emit(state.copyWith(status: ConversationsStates.loading));
     await _fetchSocialConversations();
+  }
+
+  Future<void> getSocialArchivedConversations() async {
+    if (hasMoreDataSocialArchivedConversations || isLoadingMoreSocialArchivedConversation) return;
+    isLoadingMoreSocialArchivedConversation = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialArchivedConversations();
   }
 
   Future<void> _fetchSocialConversations() async {
@@ -222,8 +267,9 @@ class ConversationsCubit extends Cubit<ConversationsState> {
         emit(state.copyWith(status: ConversationsStates.error, failure: l));
       },
       (data) {
-        socialConversations.addAll(data);
-
+        for (ConversationEntity conversation in data) {
+          addUniqueSocialConversation(conversation);
+        }
         if (data.length < pageSize) {
           hasMoreDataSocialConversations = false;
         } else {
@@ -233,5 +279,144 @@ class ConversationsCubit extends Cubit<ConversationsState> {
         emit(state.copyWith(status: ConversationsStates.success));
       },
     );
+  }
+
+  void addUniqueSocialConversation(ConversationEntity conversation) {
+    final exists = socialConversations.any(
+          (c) => c.conversationId == conversation.conversationId,
+    );
+
+    if (!exists) {
+      socialConversations.add(conversation);
+    }
+  }
+
+
+  Future<void> _fetchSocialArchivedConversations() async {
+    final result = await getSocialArchivedConversationsUseCase(
+      pagination: ConversationPagination(
+        page: currentPageSocialArchivedConversations,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+      (l) {
+        isLoadingMoreSocialArchivedConversation = false; // Reset loading state on error
+        emit(state.copyWith(status: ConversationsStates.error, failure: l));
+      },
+      (data) {
+        for (ConversationEntity conversation in data) {
+          addUniqueSocialArchivedConversation(conversation);
+        }
+
+        if (data.length < pageSize) {
+          hasMoreDataSocialArchivedConversations = false;
+        } else {
+          currentPageSocialArchivedConversations++;
+        }
+        isLoadingMoreSocialArchivedConversation = false;
+        emit(state.copyWith(status: ConversationsStates.success));
+      },
+    );
+  }
+
+  void addUniqueSocialArchivedConversation(ConversationEntity conversation) {
+    final exists = socialArchivedConversations.any(
+          (c) => c.conversationId == conversation.conversationId,
+    );
+
+    if (!exists) {
+      socialArchivedConversations.add(conversation);
+    }
+  }
+
+  void addConversationToSelectedSocialConversations({required ConversationEntity conversation}) {
+    conversation.isSelected = true;
+    selectedSocialConversation.add(conversation);
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+  void removeConversationFromSelectedSocialConversations({required ConversationEntity conversation}) {
+    conversation.isSelected = false;
+    selectedSocialConversation.remove(conversation);
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+  void clearSelectedSocialConversations() {
+    for (ConversationEntity conversation in selectedSocialConversation) {
+      conversation.isSelected = false;
+    }
+    selectedSocialConversation.clear();
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+  Future<void> archiveSocialConversations() async {
+    for (ConversationEntity conversation in selectedSocialConversation) {
+      final result = await toggleArchivedConversationUseCase(conversationId: conversation.conversationId);
+      result.fold((l) => null, (r) => null);
+      conversation.isSelected = false;
+      socialConversations.removeWhere((element) => element.conversationId == conversation.conversationId);
+      addUniqueSocialArchivedConversation(conversation);
+    }
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+
+  Future<void> unArchiveSocialConversations() async {
+    for (ConversationEntity conversation in selectedSocialConversation) {
+      final result = await toggleArchivedConversationUseCase(conversationId: conversation.conversationId);
+      result.fold((l) => null, (r) => null);
+      conversation.isSelected = false;
+      addUniqueSocialConversation(conversation);
+      socialArchivedConversations.removeWhere((element) => element.conversationId == conversation.conversationId);
+    }
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+  Future<void> togglePinnedSocialConversations() async {
+    for (ConversationEntity conversation in selectedSocialConversation) {
+      conversation.isPinned = !conversation.isPinned;
+      await togglePinnedConversationUseCase(conversationId: conversation.conversationId);
+    }
+    await loadInitialSocialConversations();
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+  Future<void> toggleMuteSocialConversations() async {
+    for (ConversationEntity conversation in selectedSocialConversation) {
+      conversation.isMuted = !conversation.isMuted;
+      await toggleMuteConversationUseCase(conversationId: conversation.conversationId);
+    }
+    await loadInitialSocialConversations();
+    emit(state.copyWith(status: ConversationsStates.success));
+  }
+
+  Future<void> deleteConversations() async {
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final result = await deleteConversationsUseCase(conversationIds: selectedSocialConversation.map((conversation) => conversation.conversationId).toList());
+    result.fold((l){
+      clearSelectedSocialConversations();
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      currentContext.pop();
+      emit(state.copyWith(status: ConversationsStates.error, failure: l));
+    }, (r) {
+      for (ConversationEntity conversation in selectedSocialConversation) {
+        conversation.isSelected = false;
+        socialConversations.removeWhere((element) => element.conversationId == conversation.conversationId);
+      }
+      showSuccessMessage(currentContext, currentContext.isArabic? "تم حذف المحادثات بنجاح":"Conversations deleted successfully");
+      currentContext.pop();
+      emit(state.copyWith(status: ConversationsStates.success));
+    });
+  }
+
+  Future<void> getUnreadConversationsCount() async {
+    final result = await getUnreadConversationsUseCase();
+    result.fold((l) => null, (r) {
+      unreadConversationsCount = r;
+      emit(state.copyWith(status: ConversationsStates.success));
+    });
   }
 }

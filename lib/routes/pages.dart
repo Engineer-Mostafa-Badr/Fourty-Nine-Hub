@@ -325,6 +325,7 @@ import 'package:go_router/go_router.dart';
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
+import '../features/Conversations/Presentation/Pages/social_archived_conversations_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
@@ -2387,6 +2388,16 @@ class AppPages {
                     value: serviceLocator<ConversationsCubit>(),
                     child: const ConversationsScreen(),
                   ),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.socialArchivedScreen,
+                name: Routes.socialArchivedScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  SocialArchivedConversationsScreen(),
                 ),
               ),
 

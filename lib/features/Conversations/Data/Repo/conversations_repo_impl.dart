@@ -17,6 +17,11 @@ class ConversationsRepoImpl extends ConversationsRepo {
   }
 
   @override
+  Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations({required ConversationPagination pagination}) async {
+    return await conversationsRemoteDataSource.getSocialArchivedConversations(pagination: pagination);
+  }
+
+  @override
   void listenToUpdateSocialList(Function(ConversationEntity) params) {
     return conversationsRemoteDataSource.listenToUpdateSocialList(params);
   }
@@ -44,5 +49,25 @@ class ConversationsRepoImpl extends ConversationsRepo {
   @override
   Future<Either<Failure, void>> toggleArchivedConversation({required String conversationId}) {
     return conversationsRemoteDataSource.toggleArchivedConversation(conversationId: conversationId);
+  }
+
+  @override
+  Future<Either<Failure, void>> togglePinnedConversation({required String conversationId}) {
+    return conversationsRemoteDataSource.togglePinnedConversation(conversationId: conversationId);
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleMuteConversation({required String conversationId}) {
+    return conversationsRemoteDataSource.toggleMuteConversation(conversationId: conversationId);
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds}) {
+    return conversationsRemoteDataSource.deleteConversations(conversationIds: conversationIds);
+  }
+
+  @override
+  Future<Either<Failure, int>> getUnreadConversationsCount() {
+    return conversationsRemoteDataSource.getUnreadConversationsCount();
   }
 }

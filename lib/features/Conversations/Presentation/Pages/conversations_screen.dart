@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/Conversations/Presentation/Pages/Widgets/chat_card.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
@@ -14,9 +15,12 @@ import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
 import '../../../../service_locator/service_locator.dart';
+import '../../../social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/calling_card.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../social_media/chat/chat_view/presentation/widgets/end_to_end_Encrypted_widget.dart';
@@ -90,130 +94,135 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(
-          // context.read<ChatsCubit>().selectedChats.isEmpty ? 40 : 0,
-            40
-        ),
-        child: Builder(
-          builder: (context) {
-            // if (context.read<ChatsCubit>().selectedChats.isEmpty) {
-              return HomeAppbar(
-                isHaveLeading: false,
-                isWithBackArrow: true,
-                inChat: PopupMenuButton(
-                  icon: Icon(
-                    Icons.more_vert,
+    return BlocBuilder<ConversationsCubit, ConversationsState>(
+      builder: (context, state) {
+        return CustomScaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(
+              serviceLocator<ConversationsCubit>().selectedSocialConversation.isEmpty ? 40 : 0,
+                // 40
+            ),
+            child: Builder(
+              builder: (context) {
+                if (serviceLocator<ConversationsCubit>().selectedSocialConversation.isEmpty) {
+                  return HomeAppbar(
+                    isHaveLeading: false,
+                    isWithBackArrow: true,
+                    inChat: PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      color: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : AppColors.BACKGROUND_COLOR,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      offset: const Offset(0, 50),
+                      onSelected: (int value) async {
+                        if (value == 2) {
+                          // context.push(Routes.CHATPROFILEVIEW);
+                        }
+                        if (value == 1) {
+                          // await context
+                          //     .read<ChatsCubit>()
+                          //     .recoverDeletedChats();
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return _mainMenuBuilder();
+                      },
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ),
+          body: SafeArea(
+            child: DefaultTabController(
+              length: 4,
+              initialIndex: 0,
+              child: NestedAppbar(
+                scrollController:
+                scrollController, // Attach the ScrollController here
+                appBars: [
+                  if (serviceLocator<ConversationsCubit>().selectedSocialConversation.isNotEmpty)
+                    selectedChatAppBar(),
+                  SliverAppBar(
+                    expandedHeight: MediaQuery.of(context).size.height *
+                        0.1, // Responsive height
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    flexibleSpace: BlocProvider(
+                      create: (context) => serviceLocator<StoryCubit>()
+                        ..fetchStories()
+                        ..getMutedStories(),
+                      child: const Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: ChatStories(),
+                      ),
+                    ),
+                  ),
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    floating: true,
+                    pinned: true,
+                    titleSpacing: 0,
+                    title: _buildCategoriesLabels(),
+                  )
+                ],
+                // body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                //   builder: (context, state) {
+                //     return _buildCategoriesViews();
+                //   },
+                // ),
+                body: context.isUserLoggedIn
+                  ? _buildCategoriesViews()
+                  : Center(
+            child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      return pleaseLoginDialog(context);
+                      // context.push(Routes.LOGIN);
+                    },
+                    child: Label(
+                      text: LocaleKeys.login.localize,
+                      style: const TextStyle(
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        decoration: TextDecoration.underline,
+                        decorationColor:
+                        AppColors.PRIMARY_COLOR_DARK,
+                      ),
+                    )),
+                Label(
+                  text: LocaleKeys
+                      .continueUsingChatServices.localize,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: context.isDarkMode
                         ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
-                  ),
-                  color: context.isDarkMode
-                      ? AppColors.QUANTITY_COLOR
-                      : AppColors.BACKGROUND_COLOR,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  offset: const Offset(0, 50),
-                  onSelected: (int value) async {
-                    if (value == 2) {
-                      // context.push(Routes.CHATPROFILEVIEW);
-                    }
-                    if (value == 1) {
-                      // await context
-                      //     .read<ChatsCubit>()
-                      //     .recoverDeletedChats();
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return _mainMenuBuilder();
-                  },
-                ),
-              );
-            // } else {
-            //   return Container();
-            // }
-          },
-        ),
-      ),
-      body: SafeArea(
-        child: DefaultTabController(
-          length: 4,
-          initialIndex: 0,
-          child: NestedAppbar(
-            scrollController:
-            scrollController, // Attach the ScrollController here
-            appBars: [
-              // if (context.read<ChatsCubit>().selectedChats.isNotEmpty)
-              //   _selectedChatAppBar(chatsCubit),
-              SliverAppBar(
-                expandedHeight: MediaQuery.of(context).size.height *
-                    0.1, // Responsive height
-                automaticallyImplyLeading: false,
-                floating: true,
-                flexibleSpace: BlocProvider(
-                  create: (context) => serviceLocator<StoryCubit>()
-                    ..fetchStories()
-                    ..getMutedStories(),
-                  child: const Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: ChatStories(),
+                        : Colors.black,
+                    fontSize: 16,
                   ),
                 ),
-              ),
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                floating: true,
-                pinned: true,
-                titleSpacing: 0,
-                title: _buildCategoriesLabels(),
-              )
-            ],
-            // body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-            //   builder: (context, state) {
-            //     return _buildCategoriesViews();
-            //   },
-            // ),
-            body: context.isUserLoggedIn
-              ? _buildCategoriesViews()
-              : Center(
-        child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-                onTap: () {
-                  return pleaseLoginDialog(context);
-                  // context.push(Routes.LOGIN);
-                },
-                child: Label(
-                  text: LocaleKeys.login.localize,
-                  style: const TextStyle(
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    decoration: TextDecoration.underline,
-                    decorationColor:
-                    AppColors.PRIMARY_COLOR_DARK,
-                  ),
-                )),
-            Label(
-              text: LocaleKeys
-                  .continueUsingChatServices.localize,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: context.isDarkMode
-                    ? Colors.white
-                    : Colors.black,
-                fontSize: 16,
+              ],
+            ),
+          ),
               ),
             ),
-          ],
-        ),
-      ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 
@@ -402,6 +411,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
             children: [
               InkWell(
                 onTap: () {
+                  ManageVibration.vibrate();
                   setState(() {
                     expandedOptions = !expandedOptions;
                   });
@@ -434,6 +444,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   //   await chatsCubit.getChatsByCategory(ChatCategories.social);
                   //   setState(() {});
                   // }
+                  ManageVibration.vibrate();
+                  context.push(Routes.socialArchivedScreen);
                 },
               ),
               // const Divider(),
@@ -470,6 +482,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   //   }
                   // },
                   onTap: () async {
+                    ManageVibration.vibrate();
                     // await lockedChatsOnTap();
                   },
                 )
@@ -489,6 +502,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   icon: Icons.person_off_outlined,
                   text: LocaleKeys.anonymous.localize,
                   onTap: () async {
+                    ManageVibration.vibrate();
                     // final result = await context.push(Routes.ARCHIVEDCHATS,
                     //     extra: OptionsChatsViewParams(
                     //       category: ChatCategoriesIds.anonymous,
@@ -521,6 +535,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   icon: Icons.emoji_people,
                   text: LocaleKeys.greet.localize,
                   onTap: () async {
+                    ManageVibration.vibrate();
                     // final result = await context.push(Routes.ARCHIVEDCHATS,
                     //     extra: OptionsChatsViewParams(
                     //       category: ChatCategoriesIds.greet,
@@ -551,6 +566,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
           children: [
             InkWell(
               onTap: () {
+                ManageVibration.vibrate();
                 setState(() {
                   expandedOptions = !expandedOptions;
                 });
@@ -570,6 +586,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
               icon: Icons.archive_outlined,
               text: context.isArabic ? "مؤرشفة" : "Archived",
               onTap: () async {
+                ManageVibration.vibrate();
                 // final result = await context.push(Routes.ARCHIVEDCHATS,
                 //     extra: OptionsChatsViewParams(
                 //       category: 'Archive',
@@ -618,6 +635,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                 //   }
                 // },
                 onTap: () async {
+                  ManageVibration.vibrate();
                   // await lockedChatsOnTap();
                 },
               )
