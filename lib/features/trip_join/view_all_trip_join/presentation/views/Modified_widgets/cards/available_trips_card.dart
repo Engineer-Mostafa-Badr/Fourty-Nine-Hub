@@ -345,7 +345,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                               child: Row(
                                                 spacing: 15,
                                                 children: [
-                                                  Expanded(
+                                                  if((data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId)))Expanded(
                                                     child: Padding(
                                                       padding: EdgeInsets.only(
                                                           top: 8.h, bottom: 8.h),
