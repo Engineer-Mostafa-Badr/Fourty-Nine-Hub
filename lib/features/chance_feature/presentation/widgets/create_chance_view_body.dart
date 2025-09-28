@@ -358,7 +358,7 @@ class _CreateChanceViewBodyState extends State<CreateChanceViewBody> {
                       },
                       controller: priceController,
                       decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.attach_money),
+                        // prefixIcon: const Icon(Icons.attach_money),
                         hintText: LocaleKeys.enterPrice.localize,
                         border: const OutlineInputBorder(),
                       ),
