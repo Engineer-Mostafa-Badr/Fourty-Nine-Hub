@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/phone_number_text_field.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -132,6 +134,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                   setState(() {
                     _hasSearchText=false;
                   });
+                  context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
                   // _performSearch(_searchController.text);
                 },
                 child: Container(
@@ -183,422 +186,418 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
       children: [
         BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
-            if (context.read<ViewAllTripJoinCubit>().isLoadingTripJoin ==
-                true) {
-              return const Center(
-                child: CustomLoadingSearchWidget(),
-              );
-            }
-            if (context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty) {
-              return Center(child: Text(LocaleKeys.noData.localize));
-            }
-            return GlowingOverscrollIndicator(
-              color: AppColors.SECONDARY_COLOR,
-              axisDirection: AxisDirection.down,
-              child: Column(
-                children: [
-                  _buildSearchField(),
-                  Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        controller: _scrollController,
-                        itemCount:
-                            context.read<ViewAllTripJoinCubit>().tripJoinData.length,
-                        itemBuilder: (context, index) {
+            return Column(
+              children: [
+                _buildSearchField(),
+                Expanded(child:context.read<ViewAllTripJoinCubit>().isLoadingTripJoin ==
+                    true?Center(
+                  child: CustomLoadingSearchWidget(),
+                ):context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty? Center(child: Text(LocaleKeys.noData.localize)):OlxPaginationWidget(
+                  scrollController: _scrollController,
+                  itemsPerPage: 3,
+                  loadPage: (page) async {
+                    context.read<ViewAllTripJoinCubit>().getTripJoin();
+                  },
+                  banners: bannersList,
+                  items: List.generate(
+                    context
+                        .read<ViewAllTripJoinCubit>()
+                        .tripJoinData.length,
+                        (index) {
                           var data = context
                               .read<ViewAllTripJoinCubit>()
                               .tripJoinData[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.h,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    // context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
-                                    // print("Hi");
-                                    if(data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId)){return;}
-                                    context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id??'');
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                // context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id!);
+                                // print("Hi");
+                                if(data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId)){return;}
+                                context.read<ViewAllTripJoinCubit>().applyViewTrip(data.id??'');
 
-                                    // _handleTap(data.id!);
-                                  },
-                                  child: Stack(
+                                // _handleTap(data.id!);
+                              },
+                              child: Stack(
+                                children: [
+                                  CustomCard(
+                                    color: ((data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId))?AppColors.whiteColor:AppColors.BG_GRAY_COLOR),
+                                    radius: 20,
                                     children: [
-                                      CustomCard(
-                                        color: ((data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId))?AppColors.whiteColor:AppColors.BG_GRAY_COLOR),
-                                        radius: 20,
-                                        children: [
-                                          const Sizer(height: 8,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 32.0.h),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.remove_red_eye_sharp,
-                                                        color: context.isDarkMode
-                                                            ? AppColors.whiteColor
-                                                            : AppColors
-                                                                .DARK_GRAY_COLOR,
-                                                      ),
-                                                      const Sizer(),
-                                                      Label(
-                                                        text:
-                                                            '${formatPrice(formatViews(data.viewerIds ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
-                                                        style: Styles.mediumText(
-                                                          fontSize: 24,
-                                                          color: context.isDarkMode
-                                                              ? AppColors.whiteColor
-                                                              : AppColors
-                                                                  .DARK_GRAY_COLOR,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text(
-                                                  data.formattedOfferType,
-                                                  style: Styles.headerText(
-                                                      color: AppColors.getRedColor(
-                                                          context),
-                                                      fontSize: 32),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Divider(),
-                                          const Sizer(),
-                                          TripCardInfoWidget(
-                                              title: context.isArabic
-                                                  ? data.vehicleDetails?.brandAr ?? ""
-                                                  : data.vehicleDetails?.brandEn ??
-                                                      "",
-                                              model: context.isArabic
-                                                  ? data.vehicleDetails?.modelAr ?? ""
-                                                  : data.vehicleDetails?.modelEn ??
-                                                      "",
-                                              icon: Assets.tripJoinCarIcon,
-                                              price: formatPrice(
-                                                  data.pricePerSeat?.round() ?? 0,
-                                                  context),
-                                              seats: LocaleKeys.eachSeat.localize),
-                                          const Sizer(
-                                            height: 30,
-                                          ),
-                                          _locationWidget(
-                                              title:
-                                                  data.location?.start?.address ?? "",
-                                              iconColor: AppColors.LIGHT_BLUE),
-                                          const Sizer(),
-                                          _locationWidget(
-                                              title: data.location?.target?.address ??
-                                                  "",
-                                              iconColor: AppColors.CHECK_MARK_COLOR),
-                                          const Sizer(),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 32.0.h,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  formatTimestamp(
-                                                      data.startDate!, context),
-                                                  style: Styles.headerText(
-                                                      fontSize: 32,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  // data.passengers == 1
-                                                  //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
-                                                  //     : ''
-                                                  '${formatPrice(data.passengers ?? 1, context)} ${LocaleKeys.seat.localize}',
-                                                  style: Styles.headerText(
-                                                      fontSize: 32,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  data.isRepeat == true
-                                                      ? LocaleKeys.repeated.localize
-                                                      : LocaleKeys.oneTime.localize,
-                                                  style: Styles.headerText(
-                                                      fontSize: 32,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const Divider(),
-                                          Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 32.0.h,
-                                              ),
+                                      const Sizer(height: 8,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 32.0.h),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
                                               child: Row(
-                                                spacing: 15,
                                                 children: [
-                                                  if((data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId)))Expanded(
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 8.h, bottom: 8.h),
-                                                      child: TripJoinCardButton(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 15,
-                                                            vertical: 5),
-                                                        title: LocaleKeys
-                                                            .request.localize,
-                                                        color: AppColors.getRedColor(
-                                                            context),
-                                                        onTap: () {
-                                                          ManageVibration.vibrate();
-                                                          showModalBottomSheet(
-                                                            backgroundColor: Colors.white,
-                                                            context: context,
-                                                            shape: const RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(32.0),
-                                                                topRight: Radius.circular(32.0),
-                                                              ),
-                                                            ),
-                                                            isDismissible: true,
-                                                            isScrollControlled: true,
-                                                            builder: (BuildContext context) {
-                                                              return BlocProvider.value(
-                                                                value: serviceLocator<ViewAllTripJoinCubit>(),
-                                                                child: BlocBuilder<ViewAllTripJoinCubit,ViewAllTripJoinState>(
-                                                                    builder: (context,state) {
-                                                                      return AnimatedPadding(
-                                                                        padding:
-                                                                        MediaQuery.of(context).viewInsets,
-                                                                        duration:
-                                                                        const Duration(milliseconds: 50),
-                                                                        child: Container(
-                                                                          height: 400.h,
-                                                                          padding: EdgeInsets.symmetric(
-                                                                            vertical: 10.h,
-                                                                            horizontal: 10,
-                                                                          ),
-                                                                          child: Form(
-                                                                            key: formKey,
-                                                                            child: Column(
-                                                                              children: [
-                                                                                Label(
-                                                                                  text: context.isArabic
-                                                                                      ? "ادخل رقم هاتفك"
-                                                                                      : "Enter your phone number",
-                                                                                  style: Styles.headerText(),
-                                                                                ),
-                                                                                Sizer(
-                                                                                  height: 30.h,
-                                                                                ),
-                                                                                CustomPhoneTextFormField(
-                                                                                  currentFocusNode: FocusNode(),
-                                                                                  nextFocusNode: FocusNode(),
-                                                                                  currentController:
-                                                                                  phoneController,
-                                                                                  onInputChanged: (value) =>
-                                                                                      formKey.currentState!
-                                                                                          .validate(),
-                                                                                  inputFormatters: [
-                                                                                    FilteringTextInputFormatter
-                                                                                        .digitsOnly,
-                                                                                    LengthLimitingTextInputFormatter(
-                                                                                        11),
-                                                                                  ],
-                                                                                  validator: (value) {
-                                                                                    final input =
-                                                                                        value?.trim() ?? '';
-
-                                                                                    if (input.isEmpty) {
-                                                                                      return LocaleKeys
-                                                                                          .required.localize;
-                                                                                    }
-
-                                                                                    final numericValue =
-                                                                                    convertDigits(input,
-                                                                                        toArabic: false)
-                                                                                        .replaceAll(
-                                                                                        RegExp(r'[^0-9]'),
-                                                                                        '');
-
-                                                                                    if (numericValue.length !=
-                                                                                        11) {
-                                                                                      return context.isArabic
-                                                                                          ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                                                          : 'Phone number must be exactly 11 digits.';
-                                                                                    }
-
-                                                                                    if (![
-                                                                                      '010',
-                                                                                      '011',
-                                                                                      '012',
-                                                                                      '015'
-                                                                                    ].any(numericValue
-                                                                                        .startsWith)) {
-                                                                                      return context.isArabic
-                                                                                          ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                                                          : 'Phone number must start with 010, 011, 012, or 015.';
-                                                                                    }
-
-                                                                                    return null;
-                                                                                  },
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Row(
-                                                                                    children: [
-                                                                                      Expanded(
-                                                                                        child: InkWell(
-                                                                                          onTap: () async {
-                                                                                            if (formKey
-                                                                                                .currentState!
-                                                                                                .validate()) {
-                                                                                              context.read<ViewAllTripJoinCubit>().createTripJoinRequest(
-                                                                                                  data.id??'',
-                                                                                                  false,
-                                                                                                  phoneController.text
-                                                                                              );
-                                                                                            }
-                                                                                          },
-                                                                                          child: Container(
-                                                                                            width: 100,
-                                                                                            height: 80.h,
-                                                                                            padding:
-                                                                                            const EdgeInsets
-                                                                                                .all(5),
-                                                                                            decoration: BoxDecoration(
-                                                                                                color: AppColors
-                                                                                                    .PRIMARY_COLOR,
-                                                                                                borderRadius:
-                                                                                                BorderRadius
-                                                                                                    .circular(
-                                                                                                    15)),
-                                                                                            alignment:
-                                                                                            Alignment.center,
-                                                                                            child: Label(
-                                                                                              text: LocaleKeys
-                                                                                                  .request.localize,
-                                                                                              style: Styles
-                                                                                                  .headerText(
-                                                                                                  color: Colors
-                                                                                                      .white),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Sizer(),
-                                                                                      Expanded(
-                                                                                        child: InkWell(
-                                                                                          onTap: () async {
-                                                                                            if (formKey
-                                                                                                .currentState!
-                                                                                                .validate()) {
-                                                                                              context.read<ViewAllTripJoinCubit>().createTripJoinRequest(
-                                                                                                  data.id??'',
-                                                                                                  true,
-                                                                                                  phoneController.text
-                                                                                              );
-                                                                                              // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
-                                                                                            }
-                                                                                          },
-                                                                                          child: Container(
-                                                                                            width: 100,
-                                                                                            height: 80.h,
-                                                                                            padding:
-                                                                                            const EdgeInsets
-                                                                                                .all(5),
-                                                                                            decoration: BoxDecoration(
-                                                                                                color: AppColors
-                                                                                                    .SECONDARY_COLOR,
-                                                                                                borderRadius:
-                                                                                                BorderRadius
-                                                                                                    .circular(
-                                                                                                    15)),
-                                                                                            alignment:
-                                                                                            Alignment.center,
-                                                                                            child: Label(
-                                                                                              text: LocaleKeys
-                                                                                                  .premium_request.localize,
-                                                                                              style: Styles
-                                                                                                  .headerText(
-                                                                                                  color: Colors
-                                                                                                      .white),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    }
-                                                                ),
-                                                              );
-                                                            },
-                                                          );
-                                                        },
-                                                        radius: 15,
-                                                      ),
-                                                    ),
+                                                  Icon(
+                                                    Icons.remove_red_eye_sharp,
+                                                    color: context.isDarkMode
+                                                        ? AppColors.whiteColor
+                                                        : AppColors
+                                                        .DARK_GRAY_COLOR,
                                                   ),
-                                                  Expanded(
-                                                    child: ContactsTripButtons(
-                                                      // isPremium: false,
-                                                      isPremium: data.isPremium,
-                                                      isButtonEnabled: data.isButtonEnabled!.state,
-                                                      otherUserId: '2',
-                                                      subcategoryId:
-                                                          '62ea00e269ea29c91dfc390c',
-                                                      phone:
-                                                          data.phoneNumber ?? "1234",
-                                                      id: context
-                                                          .read<UserCubit>()
-                                                          .state
-                                                          .data!
-                                                          .id,
-                                                      hasReport: true,
+                                                  const Sizer(),
+                                                  Label(
+                                                    text:
+                                                    '${formatPrice(formatViews(data.viewerIds ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                                    style: Styles.mediumText(
+                                                      fontSize: 24,
+                                                      color: context.isDarkMode
+                                                          ? AppColors.whiteColor
+                                                          : AppColors
+                                                          .DARK_GRAY_COLOR,
                                                     ),
                                                   ),
                                                 ],
-                                              )
-
-                                              // TripJoinButtonsSection(
-                                              //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
-                                              //   isRequestButton: true,
-                                              //   buttonTitle:LocaleKeys.requests.localize,
-                                              //   // buttonTitle:" buttonTitle",
-                                              //   onTap: (){},
-                                              // ),
                                               ),
-                                          const Sizer(),
-                                        ],
+                                            ),
+                                            Text(
+                                              data.formattedOfferType,
+                                              style: Styles.headerText(
+                                                  color: AppColors.getRedColor(
+                                                      context),
+                                                  fontSize: 32),
+                                            ),
+                                          ],
+                                        ),
                                       ),
+                                      const Divider(),
+                                      const Sizer(),
+                                      TripCardInfoWidget(
+                                          title: context.isArabic
+                                              ? data.vehicleDetails?.brandAr ?? ""
+                                              : data.vehicleDetails?.brandEn ??
+                                              "",
+                                          model: context.isArabic
+                                              ? data.vehicleDetails?.modelAr ?? ""
+                                              : data.vehicleDetails?.modelEn ??
+                                              "",
+                                          icon: Assets.tripJoinCarIcon,
+                                          price: formatPrice(
+                                              data.pricePerSeat?.round() ?? 0,
+                                              context),
+                                          seats: LocaleKeys.eachSeat.localize),
+                                      const Sizer(
+                                        height: 30,
+                                      ),
+                                      _locationWidget(
+                                          title:
+                                          data.location?.start?.address ?? "",
+                                          iconColor: AppColors.LIGHT_BLUE),
+                                      const Sizer(),
+                                      _locationWidget(
+                                          title: data.location?.target?.address ??
+                                              "",
+                                          iconColor: AppColors.CHECK_MARK_COLOR),
+                                      const Sizer(),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 32.0.h,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              formatTimestamp(
+                                                  data.startDate!, context),
+                                              style: Styles.headerText(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              // data.passengers == 1
+                                              //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
+                                              //     : ''
+                                              '${formatPrice(data.passengers ?? 1, context)} ${LocaleKeys.seat.localize}',
+                                              style: Styles.headerText(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              data.isRepeat == true
+                                                  ? LocaleKeys.repeated.localize
+                                                  : LocaleKeys.oneTime.localize,
+                                              style: Styles.headerText(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 32.0.h,
+                                          ),
+                                          child: Row(
+                                            spacing: 15,
+                                            children: [
+                                              if((data.isView==true||((UserCubit.to.state.data?.id??'')==data.creatorId)))Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 8.h, bottom: 8.h),
+                                                  child: TripJoinCardButton(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 15,
+                                                        vertical: 5),
+                                                    title: LocaleKeys
+                                                        .request.localize,
+                                                    color: AppColors.getRedColor(
+                                                        context),
+                                                    onTap: () {
+                                                      ManageVibration.vibrate();
+                                                      showModalBottomSheet(
+                                                        backgroundColor: Colors.white,
+                                                        context: context,
+                                                        shape: const RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(32.0),
+                                                            topRight: Radius.circular(32.0),
+                                                          ),
+                                                        ),
+                                                        isDismissible: true,
+                                                        isScrollControlled: true,
+                                                        builder: (BuildContext context) {
+                                                          return BlocProvider.value(
+                                                            value: serviceLocator<ViewAllTripJoinCubit>(),
+                                                            child: BlocBuilder<ViewAllTripJoinCubit,ViewAllTripJoinState>(
+                                                                builder: (context,state) {
+                                                                  return AnimatedPadding(
+                                                                    padding:
+                                                                    MediaQuery.of(context).viewInsets,
+                                                                    duration:
+                                                                    const Duration(milliseconds: 50),
+                                                                    child: Container(
+                                                                      height: 400.h,
+                                                                      padding: EdgeInsets.symmetric(
+                                                                        vertical: 10.h,
+                                                                        horizontal: 10,
+                                                                      ),
+                                                                      child: Form(
+                                                                        key: formKey,
+                                                                        child: Column(
+                                                                          children: [
+                                                                            Label(
+                                                                              text: context.isArabic
+                                                                                  ? "ادخل رقم هاتفك"
+                                                                                  : "Enter your phone number",
+                                                                              style: Styles.headerText(),
+                                                                            ),
+                                                                            Sizer(
+                                                                              height: 30.h,
+                                                                            ),
+                                                                            CustomPhoneTextFormField(
+                                                                              currentFocusNode: FocusNode(),
+                                                                              nextFocusNode: FocusNode(),
+                                                                              currentController:
+                                                                              phoneController,
+                                                                              onInputChanged: (value) =>
+                                                                                  formKey.currentState!
+                                                                                      .validate(),
+                                                                              inputFormatters: [
+                                                                                FilteringTextInputFormatter
+                                                                                    .digitsOnly,
+                                                                                LengthLimitingTextInputFormatter(
+                                                                                    11),
+                                                                              ],
+                                                                              validator: (value) {
+                                                                                final input =
+                                                                                    value?.trim() ?? '';
+
+                                                                                if (input.isEmpty) {
+                                                                                  return LocaleKeys
+                                                                                      .required.localize;
+                                                                                }
+
+                                                                                final numericValue =
+                                                                                convertDigits(input,
+                                                                                    toArabic: false)
+                                                                                    .replaceAll(
+                                                                                    RegExp(r'[^0-9]'),
+                                                                                    '');
+
+                                                                                if (numericValue.length !=
+                                                                                    11) {
+                                                                                  return context.isArabic
+                                                                                      ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
+                                                                                      : 'Phone number must be exactly 11 digits.';
+                                                                                }
+
+                                                                                if (![
+                                                                                  '010',
+                                                                                  '011',
+                                                                                  '012',
+                                                                                  '015'
+                                                                                ].any(numericValue
+                                                                                    .startsWith)) {
+                                                                                  return context.isArabic
+                                                                                      ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
+                                                                                      : 'Phone number must start with 010, 011, 012, or 015.';
+                                                                                }
+
+                                                                                return null;
+                                                                              },
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        if (formKey
+                                                                                            .currentState!
+                                                                                            .validate()) {
+                                                                                          context.read<ViewAllTripJoinCubit>().createTripJoinRequest(
+                                                                                              data.id??'',
+                                                                                              false,
+                                                                                              phoneController.text
+                                                                                          );
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 100,
+                                                                                        height: 80.h,
+                                                                                        padding:
+                                                                                        const EdgeInsets
+                                                                                            .all(5),
+                                                                                        decoration: BoxDecoration(
+                                                                                            color: AppColors
+                                                                                                .PRIMARY_COLOR,
+                                                                                            borderRadius:
+                                                                                            BorderRadius
+                                                                                                .circular(
+                                                                                                15)),
+                                                                                        alignment:
+                                                                                        Alignment.center,
+                                                                                        child: Label(
+                                                                                          text: LocaleKeys
+                                                                                              .request.localize,
+                                                                                          style: Styles
+                                                                                              .headerText(
+                                                                                              color: Colors
+                                                                                                  .white),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Sizer(),
+                                                                                  Expanded(
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        if (formKey
+                                                                                            .currentState!
+                                                                                            .validate()) {
+                                                                                          context.read<ViewAllTripJoinCubit>().createTripJoinRequest(
+                                                                                              data.id??'',
+                                                                                              true,
+                                                                                              phoneController.text
+                                                                                          );
+                                                                                          // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 100,
+                                                                                        height: 80.h,
+                                                                                        padding:
+                                                                                        const EdgeInsets
+                                                                                            .all(5),
+                                                                                        decoration: BoxDecoration(
+                                                                                            color: AppColors
+                                                                                                .SECONDARY_COLOR,
+                                                                                            borderRadius:
+                                                                                            BorderRadius
+                                                                                                .circular(
+                                                                                                15)),
+                                                                                        alignment:
+                                                                                        Alignment.center,
+                                                                                        child: Label(
+                                                                                          text: LocaleKeys
+                                                                                              .premium_request.localize,
+                                                                                          style: Styles
+                                                                                              .headerText(
+                                                                                              color: Colors
+                                                                                                  .white),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    radius: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: ContactsTripButtons(
+                                                  // isPremium: false,
+                                                  isPremium: data.isPremium,
+                                                  isButtonEnabled: data.isButtonEnabled!.state,
+                                                  otherUserId: '2',
+                                                  subcategoryId:
+                                                  '62ea00e269ea29c91dfc390c',
+                                                  phone:
+                                                  data.phoneNumber ?? "1234",
+                                                  id: context
+                                                      .read<UserCubit>()
+                                                      .state
+                                                      .data!
+                                                      .id,
+                                                  hasReport: true,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+
+                                        // TripJoinButtonsSection(
+                                        //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
+                                        //   isRequestButton: true,
+                                        //   buttonTitle:LocaleKeys.requests.localize,
+                                        //   // buttonTitle:" buttonTitle",
+                                        //   onTap: (){},
+                                        // ),
+                                      ),
+                                      const Sizer(),
                                     ],
                                   ),
-                                ),
-                                data.isPremium == true ||
-                                        data.isButtonEnabled!.state == true
-                                    ? SizedBox()
-                                    : TripCardSubscribeText(),
-                              ],
+                                ],
+                              ),
                             ),
-                          );
-                        }),
+                            data.isPremium == true ||
+                                data.isButtonEnabled!.state == true
+                                ? SizedBox()
+                                : TripCardSubscribeText(),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                )),
+              ],
             );
           },
         ),
@@ -659,7 +658,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
+    // _scrollController.removeListener(_onScroll);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -669,7 +668,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
+    // _scrollController.addListener(_onScroll);
     _scrollController.addListener(_scrollListener);
   }
 
@@ -816,12 +815,12 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
     );
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<ViewAllTripJoinCubit>().getTripJoin();
-    }
-  }
+  // void _onScroll() {
+  //   if (_scrollController.position.pixels >=
+  //       _scrollController.position.maxScrollExtent - 200) {
+  //     context.read<ViewAllTripJoinCubit>().getTripJoin();
+  //   }
+  // }
 
   void _scrollListener() {
     if (_scrollController.position.userScrollDirection ==
