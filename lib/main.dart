@@ -58,29 +58,20 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'routes/pages.dart';
-import 'package:crypto/crypto.dart';
 
 // Global key for ToastificationWrapper to prevent recreation during network changes
 final GlobalKey _toastificationKey = GlobalKey();
-class PinnedHttpOverrides extends HttpOverrides {
-  final String allowedSha256; // the hash of your server's cert
-
-  PinnedHttpOverrides(this.allowedSha256);
-
+class DevHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
-        // convert certificate to sha256
-        final certSha256 = sha256.convert(cert.der).toString();
-        return certSha256 == allowedSha256;
-        };
-    }
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 void main() async {
-  const pinnedCertHash = "ab12cd34ef567890...";
-  HttpOverrides.global = PinnedHttpOverrides(pinnedCertHash);
+  HttpOverrides.global = DevHttpOverrides();
+
   try {
     WidgetsFlutterBinding.ensureInitialized();
 
