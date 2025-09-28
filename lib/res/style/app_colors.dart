@@ -74,6 +74,7 @@ abstract class AppColors {
   static const c5A5A5A = Color(0xFF5A5A5A);
   static const cE1E1E1 = Color(0xFFE1E1E1);
   static const cFFAC3F = Color(0xFFFFAC3F);
+  static const cE8EDF5 = Color(0xFFE8EDF5);
 
   // static const SECONDARY_COLOR = Color(0xffff3308);
 

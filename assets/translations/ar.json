@@ -1660,7 +1660,12 @@
   "ended": "انتهى",
   "winnerAuction": "فائز",
   "wonTheAuction": "فاز بالمزاد على",
-  "forAuction": "مقابل"
+  "forAuction": "مقابل",
+  "startAuctionFrom": "المزاد يبدأ من",
+  "liveAuction": "مزاد مباشر",
+  "placeBid": "تقديم عرض",
+  "enterYourBid": "أدخل عرضك",
+  "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد"
 
 
 }
