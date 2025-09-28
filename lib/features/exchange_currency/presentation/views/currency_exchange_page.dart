@@ -354,104 +354,104 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                   ),
 
                   // Auto-refresh status indicator (compact)
-                  if (!_showSettings && cubit.lastUpdateTime != null)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: cubit.autoRefreshEnabled
-                              ? [
-                                  Colors.green.withOpacity(0.1),
-                                  Colors.green.withOpacity(0.05)
-                                ]
-                              : [
-                                  Theme.of(context)
-                                      .dividerColor
-                                      .withOpacity(0.1),
-                                  Theme.of(context)
-                                      .dividerColor
-                                      .withOpacity(0.05)
-                                ],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: cubit.autoRefreshEnabled
-                              ? Colors.green.withOpacity(0.3)
-                              : Theme.of(context).dividerColor.withOpacity(0.3),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          AnimatedBuilder(
-                            animation: _pulseAnimation,
-                            builder: (context, child) {
-                              return Transform.scale(
-                                scale: cubit.autoRefreshEnabled
-                                    ? _pulseAnimation.value
-                                    : 1.0,
-                                child: Icon(
-                                  cubit.autoRefreshEnabled
-                                      ? Icons.sync
-                                      : Icons.sync_disabled,
-                                  size: 16,
-                                  color: cubit.autoRefreshEnabled
-                                      ? Colors.green
-                                      : Colors.grey,
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              context.isArabic
-                                  ? 'آخر تحديث: ${cubit.getTimeSinceLastUpdate()}'
-                                  : 'Last update: ${cubit.getTimeSinceLastUpdate()}',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: cubit.autoRefreshEnabled
-                                    ? Colors.green.shade700
-                                    : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.color
-                                            ?.withOpacity(0.7) ??
-                                        Colors.grey,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          if (cubit.autoRefreshEnabled)
-                            GestureDetector(
-                              onTap: () {
-                                ManageVibration.vibrate();
-                                cubit.forceRefresh();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  context.isArabic ? 'تحديث' : 'Refresh',
-                                  style: TextStyle(
-                                    color:
-                                        AppColors.getReversedTextColor(context),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                  // if (!_showSettings && cubit.lastUpdateTime != null)
+                  //   Container(
+                  //     width: double.infinity,
+                  //     padding: const EdgeInsets.symmetric(
+                  //         horizontal: 16, vertical: 8),
+                  //     margin: const EdgeInsets.symmetric(
+                  //         horizontal: 16, vertical: 8),
+                  //     decoration: BoxDecoration(
+                  //       gradient: LinearGradient(
+                  //         colors: cubit.autoRefreshEnabled
+                  //             ? [
+                  //                 Colors.green.withOpacity(0.1),
+                  //                 Colors.green.withOpacity(0.05)
+                  //               ]
+                  //             : [
+                  //                 Theme.of(context)
+                  //                     .dividerColor
+                  //                     .withOpacity(0.1),
+                  //                 Theme.of(context)
+                  //                     .dividerColor
+                  //                     .withOpacity(0.05)
+                  //               ],
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       border: Border.all(
+                  //         color: cubit.autoRefreshEnabled
+                  //             ? Colors.green.withOpacity(0.3)
+                  //             : Theme.of(context).dividerColor.withOpacity(0.3),
+                  //       ),
+                  //     ),
+                  //     child: Row(
+                  //       children: [
+                  //         AnimatedBuilder(
+                  //           animation: _pulseAnimation,
+                  //           builder: (context, child) {
+                  //             return Transform.scale(
+                  //               scale: cubit.autoRefreshEnabled
+                  //                   ? _pulseAnimation.value
+                  //                   : 1.0,
+                  //               child: Icon(
+                  //                 cubit.autoRefreshEnabled
+                  //                     ? Icons.sync
+                  //                     : Icons.sync_disabled,
+                  //                 size: 16,
+                  //                 color: cubit.autoRefreshEnabled
+                  //                     ? Colors.green
+                  //                     : Colors.grey,
+                  //               ),
+                  //             );
+                  //           },
+                  //         ),
+                  //         const SizedBox(width: 8),
+                  //         Expanded(
+                  //           child: Text(
+                  //             context.isArabic
+                  //                 ? 'آخر تحديث: ${cubit.getTimeSinceLastUpdate()}'
+                  //                 : 'Last update: ${cubit.getTimeSinceLastUpdate()}',
+                  //             style: TextStyle(
+                  //               fontSize: 11,
+                  //               color: cubit.autoRefreshEnabled
+                  //                   ? Colors.green.shade700
+                  //                   : Theme.of(context)
+                  //                           .textTheme
+                  //                           .bodyMedium
+                  //                           ?.color
+                  //                           ?.withOpacity(0.7) ??
+                  //                       Colors.grey,
+                  //               fontWeight: FontWeight.w500,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         if (cubit.autoRefreshEnabled)
+                  //           GestureDetector(
+                  //             onTap: () {
+                  //               ManageVibration.vibrate();
+                  //               cubit.forceRefresh();
+                  //             },
+                  //             child: Container(
+                  //               padding: const EdgeInsets.symmetric(
+                  //                   horizontal: 8, vertical: 4),
+                  //               decoration: BoxDecoration(
+                  //                 color: Colors.green,
+                  //                 borderRadius: BorderRadius.circular(12),
+                  //               ),
+                  //               child: Text(
+                  //                 context.isArabic ? 'تحديث' : 'Refresh',
+                  //                 style: TextStyle(
+                  //                   color:
+                  //                       AppColors.getReversedTextColor(context),
+                  //                   fontSize: 10,
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //       ],
+                  //     ),
+                  //   ),
 
                   // Main conversion card
                   Container(
@@ -571,8 +571,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
-                                              _getCurrencyName(
-                                                  cubit.fromCurrency),
+                                              _getCountryName(
+                                                  cubit.fromCurrency,
+                                                  useEnglish: false),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -785,8 +786,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
-                                              _getCurrencyName(
-                                                  cubit.toCurrency),
+                                              _getCountryName(cubit.toCurrency,
+                                                  useEnglish: false),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -1263,6 +1264,62 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     }
   }
 
+  String _getCountryName(String code, {bool? useEnglish}) {
+    final countryNamesArabic = {
+      'USD': 'أمريكا',
+      'EUR': 'أوروبا',
+      'GBP': 'بريطانيا',
+      'JPY': 'اليابان',
+      'AUD': 'أستراليا',
+      'CAD': 'كندا',
+      'CHF': 'سويسرا',
+      'CNY': 'الصين',
+      'SEK': 'السويد',
+      'NZD': 'نيوزيلندا',
+      'AED': 'الإمارات',
+      'SAR': 'السعودية',
+      'QAR': 'قطر',
+      'KWD': 'الكويت',
+      'BHD': 'البحرين',
+      'OMR': 'عمان',
+      'EGP': 'مصر',
+      'INR': 'الهند',
+      'BRL': 'البرازيل',
+      'RUB': 'روسيا',
+    };
+
+    final countryNamesEnglish = {
+      'USD': 'United States',
+      'EUR': 'European Union',
+      'GBP': 'United Kingdom',
+      'JPY': 'Japan',
+      'AUD': 'Australia',
+      'CAD': 'Canada',
+      'CHF': 'Switzerland',
+      'CNY': 'China',
+      'SEK': 'Sweden',
+      'NZD': 'New Zealand',
+      'AED': 'United Arab Emirates',
+      'SAR': 'Saudi Arabia',
+      'QAR': 'Qatar',
+      'KWD': 'Kuwait',
+      'BHD': 'Bahrain',
+      'OMR': 'Oman',
+      'EGP': 'Egypt',
+      'INR': 'India',
+      'BRL': 'Brazil',
+      'RUB': 'Russia',
+    };
+
+    bool shouldUseEnglish = useEnglish ?? !context.isArabic;
+
+    if (shouldUseEnglish) {
+      return countryNamesEnglish[code] ?? code;
+    } else {
+      return countryNamesArabic[code] ?? code;
+    }
+  }
+
   void _showFromCurrencySelector(BuildContext context, CurrencyCubit cubit) {
     _showCurrencySelector(
       context,
@@ -1404,7 +1461,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                       trailing: isSelected
                           ? Icon(
                               Icons.check_circle,
-                              color: AppColors.PRIMARY_COLOR,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR,
                               size: 24,
                             )
                           : null,
