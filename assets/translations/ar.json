@@ -1637,10 +1637,6 @@
   "selectCarModel": "اختر طراز السيارة",
   "checkInternetConnection": "يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى",
   "retry": "إعادة المحاولة",
-  "reportClient": "تقرير العميل",
-  "uploadingImage": "جاري تحميل الصورة...",
-  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
-  "watch": "مشاهدة",
   "favorite": "المفضلة",
   "myAuction": "مزاداتي",
   "uploadVideo": "رفع الفيديو",
@@ -1660,7 +1656,12 @@
   "ended": "انتهى",
   "winnerAuction": "فائز",
   "wonTheAuction": "فاز بالمزاد على",
-  "forAuction": "مقابل"
+  "forAuction": "مقابل",
+  "startAuctionFrom": "المزاد يبدأ من",
+  "liveAuction": "مزاد مباشر",
+  "placeBid": "تقديم عرض",
+  "enterYourBid": "أدخل عرضك",
+  "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد"
 
 
 }

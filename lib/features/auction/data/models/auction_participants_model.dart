@@ -14,7 +14,7 @@ class AuctionParticipantsModel extends AuctionParticipantsEntity {
       userId: json['userId'] as String?,
       username: json['username'] as String?,
       newPrice: json['newPrice'] as int?,
-      profilePicture: json['profilePicture'] as String?,
+      profilePicture: json['profilePictureKey'] as String?,
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'])
           : null,

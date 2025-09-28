@@ -9,6 +9,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/star_entity.dart';
@@ -396,7 +397,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       elevation: 0,
                       surfaceTintColor: Colors.transparent,
                       backgroundColor:
-                          context.isDarkMode ? Colors.black : Colors.white,
+                          context.isDarkMode ? Colors.black : AppColors.PRIMARY_COLOR,
                       toolbarHeight: 50,
                       leading: BackButton(
                         onPressed: () {
