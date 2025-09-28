@@ -571,9 +571,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           const SizedBox(width: 6),
                                           Flexible(
                                             child: Text(
-                                              _getCountryName(
-                                                  cubit.fromCurrency,
-                                                  useEnglish: false),
+                                              _getCurrencyName(
+                                                  cubit.fromCurrency),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
