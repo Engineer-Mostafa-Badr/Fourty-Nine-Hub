@@ -23,9 +23,65 @@ class AuctionCard extends StatelessWidget {
     required this.auction,
     this.isFavorite = false,
   });
+  String _formatTimeLeft(BuildContext context) {
+    final endAt = auction.endAt;
+    if (endAt == null) return '';
+
+    final nowUtc = DateTime.now().toUtc();
+    final endUtc = endAt.isUtc ? endAt : endAt.toUtc();
+
+    if (endUtc.isBefore(nowUtc)) {
+      return context.isArabic ? 'انتهى' : 'Ended';
+    }
+
+    final diff = endUtc.difference(nowUtc);
+
+    final days = diff.inDays;
+    final hours = diff.inHours % 24;
+    final minutes = diff.inMinutes % 60;
+    final seconds = diff.inSeconds % 60;
+
+    if (days > 0) {
+      if (hours > 0) {
+        return context.isArabic
+            ? '$days يوم $hours ساعة متبقية'
+            : '${days}d ${hours}h left';
+      }
+      return context.isArabic
+          ? '$days يوم متبقي'
+          : '${days}d left';
+    }
+
+    if (hours > 0) {
+      if (minutes > 0) {
+        return context.isArabic
+            ? '$hours ساعة $minutes دقيقة متبقية'
+            : '${hours}h ${minutes}m left';
+      }
+      return context.isArabic
+          ? '$hours ساعة متبقية'
+          : '${hours}h left';
+    }
+
+    if (minutes > 0) {
+      return context.isArabic
+          ? '$minutes دقيقة متبقية'
+          : '${minutes}m left';
+    }
+
+    if (seconds > 0) {
+      return context.isArabic
+          ? '$seconds ثانية متبقية'
+          : '${seconds}s left';
+    }
+
+    return context.isArabic
+        ? 'أقل من ثانية متبقية'
+        : 'Less than 1s left';
+  }
 
 
-  String _formatTimeLeft() {
+  String _formatTimeLeft1() {
     final endAt = auction.endAt;
     if (endAt == null) return '';
 
@@ -66,9 +122,11 @@ class AuctionCard extends StatelessWidget {
     final count = auction.views ?? 0;
     return NumberFormat.compact().format(count); // e.g. 0, 1, 1K, 50.7K
   }
-  String _formatNumber(num? number) {
+  String _formatNumber(BuildContext context, num? number) {
     if (number == null) return "0";
-    return NumberFormat.decimalPattern().format(number);
+
+    final locale = context.isArabic ? 'ar' : 'en';
+    return NumberFormat.decimalPattern(locale).format(number);
   }
 
 
@@ -165,7 +223,7 @@ class AuctionCard extends StatelessWidget {
                             children: [
                                TextSpan(text:LocaleKeys.priceNow.localize),
                               TextSpan(
-                                text: "${_formatNumber(auction.lastPrice ?? 0)} ",
+                                text: "${_formatNumber(context,auction.lastPrice ?? 0,)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
@@ -203,7 +261,7 @@ class AuctionCard extends StatelessWidget {
                             children: [
                                TextSpan(text: LocaleKeys.startFrom.localize),
                               TextSpan(
-                                text: "${_formatNumber(auction.price ?? 0)} ",
+                                text: "${_formatNumber(context,auction.price ?? 0)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
@@ -224,7 +282,8 @@ class AuctionCard extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          isEnded ? "${LocaleKeys.ended.localize}" : _formatTimeLeft(),
+                          isEnded ? "${LocaleKeys.ended.localize}" : _formatTimeLeft(context
+                          ),
                           style: Styles.mediumText(
                             color:context.isDarkMode ? Colors.white :  Colors.black,
                             fontWeight: FontWeight.w500,

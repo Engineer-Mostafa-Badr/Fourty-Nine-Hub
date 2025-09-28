@@ -1676,7 +1676,12 @@
   "ended": "Ended",
   "winnerAuction": "Winner",
   "wonTheAuction": "Won the Auction of the",
-  "forAuction": "For"
+  "forAuction": "For",
+  "startAuctionFrom": "Start Auction from",
+  "liveAuction": "Live Auction",
+  "placeBid": "Place Bid",
+  "enterYourBid": "Enter your bid",
+  "timeLeftForAuctionEnd": "Time left for auction to end"
 
 
 
