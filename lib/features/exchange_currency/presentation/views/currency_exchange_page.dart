@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -1263,6 +1264,62 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     }
   }
 
+  String _getCountryName(String code, {bool? useEnglish}) {
+    final countryNamesArabic = {
+      'USD': 'أمريكا',
+      'EUR': 'أوروبا',
+      'GBP': 'بريطانيا',
+      'JPY': 'اليابان',
+      'AUD': 'أستراليا',
+      'CAD': 'كندا',
+      'CHF': 'سويسرا',
+      'CNY': 'الصين',
+      'SEK': 'السويد',
+      'NZD': 'نيوزيلندا',
+      'AED': 'الإمارات',
+      'SAR': 'السعودية',
+      'QAR': 'قطر',
+      'KWD': 'الكويت',
+      'BHD': 'البحرين',
+      'OMR': 'عمان',
+      'EGP': 'مصر',
+      'INR': 'الهند',
+      'BRL': 'البرازيل',
+      'RUB': 'روسيا',
+    };
+
+    final countryNamesEnglish = {
+      'USD': 'United States',
+      'EUR': 'European Union',
+      'GBP': 'United Kingdom',
+      'JPY': 'Japan',
+      'AUD': 'Australia',
+      'CAD': 'Canada',
+      'CHF': 'Switzerland',
+      'CNY': 'China',
+      'SEK': 'Sweden',
+      'NZD': 'New Zealand',
+      'AED': 'United Arab Emirates',
+      'SAR': 'Saudi Arabia',
+      'QAR': 'Qatar',
+      'KWD': 'Kuwait',
+      'BHD': 'Bahrain',
+      'OMR': 'Oman',
+      'EGP': 'Egypt',
+      'INR': 'India',
+      'BRL': 'Brazil',
+      'RUB': 'Russia',
+    };
+
+    bool shouldUseEnglish = useEnglish ?? !context.isArabic;
+
+    if (shouldUseEnglish) {
+      return countryNamesEnglish[code] ?? code;
+    } else {
+      return countryNamesArabic[code] ?? code;
+    }
+  }
+
   void _showFromCurrencySelector(BuildContext context, CurrencyCubit cubit) {
     _showCurrencySelector(
       context,
@@ -1310,8 +1367,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
           children: [
             // Handle bar
             Container(
-              width: 40,
-              height: 4,
+              width: 70.w,
+              height: 4.h,
               margin: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: Theme.of(context).dividerColor,
@@ -1390,7 +1447,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                         ),
                       ),
                       title: Text(
-                        '${currency.code} - ${_getCurrencyName(currency.code)}',
+                        '${_getCountryName(currency.code, useEnglish: false)} - ${_getCurrencyName(currency.code)}',
                         style: TextStyle(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,
