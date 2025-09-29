@@ -87,7 +87,8 @@ class _SplashScreenState extends State<SplashScreen> {
         context.go(nextRoute);
       }
       return;
-    }else{
+    }else
+    {
       var result = await serviceLocator<ApiConsumer>().get('/settings');
       result.fold((failure){
       }, (data) async {

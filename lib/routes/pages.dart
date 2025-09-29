@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/service/time_sync_service.dart';
 import 'package:fourtyninehub/core/widget/before_splash.dart';
 import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
@@ -480,12 +481,29 @@ import '../core/widget/incorrect_time_screen.dart';
 class AppPages {
   AppPages._();
 
-  static late final GoRouter router;
+  static late GoRouter router;
 
   static initializeRouter(String initialRoute) {
+    final hasTimeService = serviceLocator.isRegistered<TimeSyncService>();
+    final timeIncorrectListenable = hasTimeService
+        ? serviceLocator<TimeSyncService>().isTimeIncorrect
+        : null;
     router = GoRouter(
         navigatorKey: navigatorKey,
         initialLocation: initialRoute,
+        refreshListenable: timeIncorrectListenable,
+        redirect: (context, state) {
+          if (timeIncorrectListenable == null) return null;
+          final isIncorrect = timeIncorrectListenable.value;
+          final atIncorrect = state.matchedLocation == '/IncorrectTime';
+          if (isIncorrect && !atIncorrect) {
+            return '/IncorrectTime';
+          }
+          if (!isIncorrect && atIncorrect) {
+            return '/';
+          }
+          return null;
+        },
         routes: <RouteBase>[
           GoRoute(
             path: Paths.splash,
