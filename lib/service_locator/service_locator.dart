@@ -67,6 +67,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sqflite/sqflite.dart';
+import '../core/service/time_sync_service.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
@@ -297,6 +298,14 @@ class DI {
     serviceLocator.registerLazySingleton<ApiConsumer>(
       () => BaseApiConsumer(
         serviceLocator(),
+      ),
+    );
+
+    // Time sync (poll frequently to react to manual time changes)
+    serviceLocator.registerSingleton<TimeSyncService>(
+      TimeSyncService(
+        checkInterval: const Duration(seconds: 15),
+        allowedDrift: const Duration(minutes: 2),
       ),
     );
 

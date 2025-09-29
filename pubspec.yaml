@@ -170,6 +170,8 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.16.22
   zego_uikit_signaling_plugin: ^2.8.8
   better_player_plus: 1.0.8
+  ntp: ^2.0.0
+  app_settings: ^5.1.1
 
 dependency_overrides:
   camera_android_camerax: 0.6.10+1
