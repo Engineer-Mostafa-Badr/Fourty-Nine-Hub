@@ -16,8 +16,7 @@ class SubscribeButtonWidget extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

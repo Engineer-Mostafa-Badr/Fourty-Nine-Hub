@@ -48,6 +48,7 @@ class WinnersGridViewItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(
             height: 24,
@@ -75,42 +76,50 @@ class WinnersGridViewItem extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Label(
-              text: winner.name,
-              style: Styles.headerText(
-                fontSize: 24,
-                color:
-                    context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Label(
+                text: winner.name,
+                style: Styles.headerText(
+                  fontSize: 24,
+                  color:
+                      context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+                ),
               ),
             ),
           ),
           const SizedBox(height: 3),
           if (winner.title != null)
-            Label(
-              text: winner.title!,
+            Flexible(
+              child: Label(
+                text: winner.title!,
+                style: Styles.mediumText(
+                  fontSize: 20,
+                  color:
+                      context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+                ),
+              ),
+            ),
+          Flexible(
+            child: Label(
+              text: formatDateInWinners(winner.date, context),
               style: Styles.mediumText(
                 fontSize: 20,
                 color:
                     context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
               ),
             ),
-          Label(
-            text: formatDateInWinners(winner.date, context),
-            style: Styles.mediumText(
-              fontSize: 20,
-              color:
-                  context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
-            ),
           ),
-          Label(
-            text:
-                '${FormatNumbers().formatNumberByComma(winner.price, isArabic: context.isArabic)} ${context.isArabic ? winner.currencyAr : winner.currencyEn}',
-            style: Styles.mediumText(
-              fontSize: 20,
-              color:
-                  context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+          Flexible(
+            child: Label(
+              text:
+                  '${FormatNumbers().formatNumberByComma(winner.price, isArabic: context.isArabic)} ${context.isArabic ? winner.currencyAr : winner.currencyEn}',
+              style: Styles.mediumText(
+                fontSize: 20,
+                color:
+                    context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+              ),
             ),
           ),
         ],

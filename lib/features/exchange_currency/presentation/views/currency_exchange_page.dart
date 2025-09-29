@@ -167,7 +167,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     return CustomScaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
+        preferredSize: const Size.fromHeight(40),
         child: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: AppColors.PRIMARY_COLOR,
@@ -582,7 +582,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          Sizer(width: 12),
+                                          Sizer(width: 24.w),
                                           Icon(
                                             Icons.keyboard_arrow_down,
                                             size: 40.sp,
@@ -808,7 +808,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                     ),
                                   ),
 
-                                  Sizer(width: 12.w),
+                                  Sizer(width: 24.w),
 
                                   // Converted amount display
                                   Expanded(

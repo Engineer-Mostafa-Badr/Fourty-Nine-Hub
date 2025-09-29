@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../star_feature/presentation/controller/star_cubit/star_cubit.dart';
@@ -234,11 +236,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: GestureDetector(
                       onTap: () {
+                        ManageVibration.vibrate();
+                        final chanceCubit = context.read<ChanceCubit>();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BlocProvider.value(
-                              value: context.read<ChanceCubit>(),
+                              value: chanceCubit,
                               child: const ChanceWinnersView(),
                             ),
                           ),
@@ -273,7 +277,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                '($displayTotalWinners/$displayTotalAds) $winnerText',
+                                '$winnerText ($displayTotalWinners/$displayTotalAds)',
                                 style: TextStyle(
                                   fontSize: 24.sp,
                                   color: !context.isDarkMode
@@ -447,6 +451,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
               ),
             ),
             onTap: () {
+              ManageVibration.vibrate();
               setState(() {
                 _isCategoriesVisible = false;
                 _isSearching = false;
@@ -524,13 +529,17 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       hasScrollBody: false,
       child: SizedBox(
         height: MediaQuery.of(context).size.height * .7,
-        child: OlxPaginationWidget(
-          items: ads.map((ad) => _buildChanceCardFromEntity(ad)).toList(),
-          banners: bannersList,
-          loadPage: _loadChanceAdsPage,
-          scrollController:
-              _availableController, // Let it handle its own scrolling
-          itemsPerPage: 5,
+        child: GlowingOverscrollIndicator(
+          axisDirection: AxisDirection.down,
+          color: AppColors.PRIMARY_COLOR_DARK,
+          child: OlxPaginationWidget(
+            items: ads.map((ad) => _buildChanceCardFromEntity(ad)).toList(),
+            banners: bannersList,
+            loadPage: _loadChanceAdsPage,
+            scrollController:
+                _availableController, // Let it handle its own scrolling
+            itemsPerPage: 5,
+          ),
         ),
       ),
     );
@@ -550,13 +559,19 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       );
     }
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final ad = favoriteAds[index];
-          return _buildChanceCardFromEntity(ad, isFavorite: true);
-        },
-        childCount: favoriteAds.length,
+    return SliverToBoxAdapter(
+      child: GlowingOverscrollIndicator(
+        axisDirection: AxisDirection.down,
+        color: AppColors.PRIMARY_COLOR_DARK,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: favoriteAds.length,
+          itemBuilder: (context, index) {
+            final ad = favoriteAds[index];
+            return _buildChanceCardFromEntity(ad, isFavorite: true);
+          },
+        ),
       ),
     );
   }
@@ -575,13 +590,19 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       );
     }
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final ad = expiredAds[index];
-          return _buildExpiredChanceCard(ad);
-        },
-        childCount: expiredAds.length,
+    return SliverToBoxAdapter(
+      child: GlowingOverscrollIndicator(
+        axisDirection: AxisDirection.down,
+        color: AppColors.PRIMARY_COLOR_DARK,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: expiredAds.length,
+          itemBuilder: (context, index) {
+            final ad = expiredAds[index];
+            return _buildExpiredChanceCard(ad);
+          },
+        ),
       ),
     );
   }
@@ -600,13 +621,19 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       );
     }
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final ad = myAds[index];
-          return _buildChanceCardFromEntity(ad, isMyChance: true);
-        },
-        childCount: myAds.length,
+    return SliverToBoxAdapter(
+      child: GlowingOverscrollIndicator(
+        axisDirection: AxisDirection.down,
+        color: AppColors.PRIMARY_COLOR_DARK,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: myAds.length,
+          itemBuilder: (context, index) {
+            final ad = myAds[index];
+            return _buildChanceCardFromEntity(ad, isMyChance: true);
+          },
+        ),
       ),
     );
   }
@@ -698,6 +725,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   }) {
     return GestureDetector(
       onTap: () async {
+        ManageVibration.vibrate();
         // Navigate to chance ad details
         if (adId != null) {
           await Navigator.push(
@@ -776,20 +804,65 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     builder: (context, state) {
                       // Get updated favorite status from state
                       bool currentFavoriteStatus = isFavorite;
-                      if (adId != null && state.chanceAds != null) {
+
+                      // في تبويب المفضلة، القلب دائماً أحمر
+                      if (isFavorite) {
+                        currentFavoriteStatus = true;
+                      } else if (adId != null) {
                         try {
-                          final updatedAd = state.chanceAds!.firstWhere(
-                            (ad) => ad.id == adId,
-                          );
-                          currentFavoriteStatus = updatedAd.isFavorite;
+                          ChanceAdEntity? updatedAd;
+
+                          // Search in all lists
+                          if (state.chanceAds != null) {
+                            try {
+                              updatedAd = state.chanceAds!
+                                  .firstWhere((ad) => ad.id == adId);
+                            } catch (e) {
+                              // Continue searching in other lists
+                            }
+                          }
+
+                          if (updatedAd == null &&
+                              state.favoriteChanceAds != null) {
+                            try {
+                              updatedAd = state.favoriteChanceAds!
+                                  .firstWhere((ad) => ad.id == adId);
+                            } catch (e) {
+                              // Continue searching in other lists
+                            }
+                          }
+
+                          if (updatedAd == null &&
+                              state.expiredChanceAds != null) {
+                            try {
+                              updatedAd = state.expiredChanceAds!
+                                  .firstWhere((ad) => ad.id == adId);
+                            } catch (e) {
+                              // Continue searching in other lists
+                            }
+                          }
+
+                          if (updatedAd == null && state.myChanceAds != null) {
+                            try {
+                              updatedAd = state.myChanceAds!
+                                  .firstWhere((ad) => ad.id == adId);
+                            } catch (e) {
+                              // Ad not found anywhere
+                            }
+                          }
+
+                          if (updatedAd != null) {
+                            currentFavoriteStatus = updatedAd.isFavorite;
+                          }
                         } catch (e) {
-                          // Ad not found in state, keep original favorite status
+                          // Keep original favorite status
                           currentFavoriteStatus = isFavorite;
                         }
                       }
 
                       return GestureDetector(
                         onTap: () {
+                          ManageVibration.vibrate();
                           if (adId != null && adId.isNotEmpty) {
                             print('Toggling favorite for adId: $adId');
                             context
@@ -872,16 +945,29 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   // ),
                   // SizedBox(height: 8.h),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${context.isArabic ? FormatNumbers().convertToArabicNumerals(price.toString()) : price.toString()} EGP',
+                        context.isArabic
+                            ? FormatNumbers()
+                                .convertToArabicNumerals(price.toString())
+                            : price.toString(),
+                        style: TextStyle(
+                          fontSize: 48.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff0B1035),
+                        ),
+                      ),
+                      Sizer(width: 8.w),
+                      Text(
+                        context.isArabic ? 'جنيه مصري' : 'EGP',
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w400,
                           color: Color(0xff0B1035),
                         ),
                       ),
+                      Spacer(),
                       Text(
                         endDate,
                         style: TextStyle(
@@ -897,7 +983,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   SizedBox(height: 12.h),
                   // Progress Bar
                   Text(
-                    '${context.isArabic ? FormatNumbers().convertToArabicNumerals((progress * 100).toInt().toString()) : (progress * 100).toInt().toString()}% claimed',
+                    '${context.isArabic ? FormatNumbers().convertToArabicNumerals((progress * 100).toInt().toString()) : (progress * 100).toInt().toString()}% ${context.isArabic ? 'مكتمل' : 'Completed'}',
                     style: TextStyle(
                       fontSize: 24.sp,
                       color: Color(0xff0D141C),
@@ -920,9 +1006,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${context.isArabic ? FormatNumbers().convertToArabicNumerals(participants.toString()) : participants.toString()} participants',
+                        '${context.isArabic ? FormatNumbers().convertToArabicNumerals(participants.toString()) : participants.toString()} ${context.isArabic ? 'مشارك' : 'Participant'}',
                         style: TextStyle(
-                          fontSize: 20.sp,
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.cF33D49,
                         ),
@@ -933,14 +1019,14 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         children: [
                           SvgPicture.asset(
                             Assets.eyeChance,
-                            width: 24.w,
-                            height: 24.h,
+                            width: 20.w,
+                            height: 20.h,
                           ),
-                          SizedBox(width: 4.w),
+                          SizedBox(width: 6.w),
                           Text(
-                            '${context.isArabic ? FormatNumbers().convertToArabicNumerals(_formatViews(views)) : _formatViews(views)} views',
+                            '${context.isArabic ? FormatNumbers().convertToArabicNumerals(_formatViews(views)) : _formatViews(views)} ${context.isArabic ? 'مشاهدة' : 'Views'}',
                             style: TextStyle(
-                              fontSize: 22.sp,
+                              fontSize: 32.sp,
                               color: Colors.black,
                             ),
                           ),
@@ -949,6 +1035,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       // Action Button
                       GestureDetector(
                         onTap: () {
+                          ManageVibration.vibrate();
                           if (status == ChanceStatus.winner) {
                             _showWinnerDialogFromAd(chanceAd);
                           } else if (adId != null) {
@@ -967,10 +1054,14 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                           ),
                           child: Text(
                             status == ChanceStatus.winner
-                                ? 'Winner'
-                                : 'Join Now',
+                                ? context.isArabic
+                                    ? 'الفائز'
+                                    : 'Winner'
+                                : context.isArabic
+                                    ? 'انضم الآن'
+                                    : 'Join Now',
                             style: TextStyle(
-                              fontSize: 18.sp,
+                              fontSize: 24.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
@@ -1152,7 +1243,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     top: 12.h,
                     right: 12.w,
                     child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        ManageVibration.vibrate();
+
+                        Navigator.pop(context);
+                      },
                       child: Container(
                         width: 30.w,
                         height: 30.h,
@@ -1399,15 +1494,18 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     Text(
                       'انضم للفرصة',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 36.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pop(bottomSheetContext),
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        Navigator.pop(bottomSheetContext);
+                      },
                       child: Icon(Icons.close,
-                          size: 24.sp, color: Colors.grey[600]),
+                          size: 36.sp, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -1415,7 +1513,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                 Text(
                   chanceAd.title,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 32.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.black87,
                   ),
@@ -1437,12 +1535,12 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       hintText: 'أدخل المبلغ بالجنيه',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 32.sp,
                         color: Colors.grey[500],
                       ),
                     ),
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 32.sp,
                       color: Colors.black87,
                     ),
                   ),
@@ -1452,6 +1550,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      ManageVibration.vibrate();
                       final inputText = amountController.text.trim();
                       final amount = double.tryParse(inputText);
 
@@ -1491,7 +1590,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     child: Text(
                       'تأكيد الانضمام',
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),

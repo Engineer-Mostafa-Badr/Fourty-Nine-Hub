@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../account_taps/wallet/presentation/widgets/winners_grid_view.dart';
 import '../../../account_taps/wallet/presentation/widgets/winner.dart';
 import '../controller/cubit/chance_cubit.dart';
@@ -34,10 +35,7 @@ class _ChanceWinnersViewState extends State<ChanceWinnersView> {
         child: BackAppBar(
           labelSize: 32,
           enableCustomAppBar: true,
-          label: context.isArabic ? 'فائزين الفرص' : 'Chance Winners',
-          // backgroundColor: context.isDarkMode
-          //     ? AppColors.Floating_Button_COLOR_DARK
-          //     : AppColors.PRIMARY_COLOR,
+          label: context.isArabic ? 'الفائزون' : 'Winners',
         ),
       ),
       body: BlocBuilder<ChanceCubit, ChanceState>(
@@ -71,6 +69,7 @@ class _ChanceWinnersViewState extends State<ChanceWinnersView> {
                   SizedBox(height: 16.h),
                   ElevatedButton(
                     onPressed: () {
+                      ManageVibration.vibrate();
                       // context.read<ChanceCubit>().getChanceWinners();
                     },
                     child: Text(
@@ -112,12 +111,14 @@ class _ChanceWinnersViewState extends State<ChanceWinnersView> {
 
           return WinnersGridView(
             winners: winners,
+            
             hasReachedMax: true, // For now, we'll assume no pagination
             paginationOnpressed: () {
+              ManageVibration.vibrate();
               // Add pagination logic here if needed
               // context.read<ChanceCubit>().getChanceWinners();
             },
-            mainAxisExtent: 260.h,
+            mainAxisExtent: 280.h,
           );
         },
       ),

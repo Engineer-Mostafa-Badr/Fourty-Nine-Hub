@@ -18,6 +18,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomElevatedButton(
       onPressed: () {
+        ManageVibration.vibrate();
         Navigator.push(
           context,
           MaterialPageRoute(

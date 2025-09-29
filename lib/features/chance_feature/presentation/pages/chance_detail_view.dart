@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../domain/entity/chance_ad_entity.dart';
@@ -14,6 +15,7 @@ import '../../domain/use_case/join_chance_ad_use_case.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
 import '../../../../core/messages/messages.dart';
+import '../../../../core/utils/format_numbers.dart';
 
 class ChanceDetailView extends StatefulWidget {
   final String title;
@@ -205,10 +207,15 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
         ),
       ],
       child: CustomScaffold(
+        enableCustomAppBar: true,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(30),
           child: BackAppBar(
             label: context.isArabic ? " الفرصة" : "Chance",
+            enableCustomAppBar: true,
+            textColor: context.isDarkMode
+                ? AppColors.getReversedTextColor(context)
+                : Colors.white,
           ),
         ),
         body: Column(
@@ -310,7 +317,10 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             top: 12.h,
                             left: 12.w,
                             child: GestureDetector(
-                              onTap: () => _toggleFavorite(),
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                _toggleFavorite();
+                              },
                               child: Container(
                                 padding: EdgeInsets.all(8.w),
                                 decoration: BoxDecoration(
@@ -379,17 +389,17 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               Text(
                                 context.isArabic ? 'مجمع' : 'Collected',
                                 style: TextStyle(
-                                  fontSize: 28.sp,
+                                  fontSize: 30.sp,
                                   color: Color(0XFF0D141C),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               Text(
                                 context.isArabic
-                                    ? '${_getCollectedAmount().toInt()} جنيه مصري'
+                                    ? '${FormatNumbers().convertToArabicNumerals(_getCollectedAmount().toInt().toString())} جنيه مصري'
                                     : '${_getCollectedAmount().toInt()} EGP',
                                 style: TextStyle(
-                                  fontSize: 28.sp,
+                                  fontSize: 32.sp,
                                   color: Color(0XFF0D141C),
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -404,7 +414,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               AppColors.c0B1035,
                             ),
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: BorderRadius.circular(16.r),
                             minHeight: 12.h,
                           ),
                           SizedBox(height: 8.h),
@@ -414,17 +424,17 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               Text(
                                 context.isArabic ? 'الهدف' : 'Target:',
                                 style: TextStyle(
-                                  fontSize: 28.sp,
+                                  fontSize: 30.sp,
                                   color: Color(0xffF33D49),
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
                                 context.isArabic
-                                    ? '${widget.price} جنيه مصري'
+                                    ? '${FormatNumbers().convertToArabicNumerals(widget.price.toString())} جنيه مصري'
                                     : '${widget.price} EGP',
                                 style: TextStyle(
-                                  fontSize: 28.sp,
+                                  fontSize: 32.sp,
                                   color: Color(0xffF33D49),
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -457,7 +467,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               ),
                               SizedBox(width: 10.w),
                               Label(
-                                text: '${_formatViews(currentViews)} views',
+                                text: context.isArabic
+                                    ? '${FormatNumbers().convertToArabicNumerals(_formatViews(currentViews).toString())} مشاهد'
+                                    : '${_formatViews(currentViews)} views',
                                 style: TextStyle(
                                   fontSize: 28.sp,
                                   fontWeight: FontWeight.w400,
@@ -507,13 +519,16 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                         ],
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.15),
                     // Join Button
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 20.w),
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => _showParticipateBottomSheet(),
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                          _showParticipateBottomSheet();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -522,7 +537,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           ),
                         ),
                         child: Text(
-                          'Join',
+                          context.isArabic ? 'انضم' : 'Join',
                           style: TextStyle(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w700,
@@ -571,7 +586,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            value,
+            context.isArabic
+                ? FormatNumbers().convertToArabicNumerals(value)
+                : value,
             style: TextStyle(
               fontSize: 28.sp,
               fontWeight: FontWeight.w700,
@@ -592,13 +609,18 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
   }
 
   String _formatViews(int views) {
+    String formattedViews;
     if (views >= 1000000) {
-      return '${(views / 1000000).toStringAsFixed(1)}M';
+      formattedViews = '${(views / 1000000).toStringAsFixed(1)}M';
     } else if (views >= 1000) {
-      return '${(views / 1000).toStringAsFixed(1)}K';
+      formattedViews = '${(views / 1000).toStringAsFixed(1)}K';
     } else {
-      return views.toString();
+      formattedViews = views.toString();
     }
+
+    return context.isArabic
+        ? FormatNumbers().convertToArabicNumerals(formattedViews)
+        : formattedViews;
   }
 
   void _refreshLocalData() {
@@ -627,7 +649,10 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
       totalContributions += pendingContribution!;
     }
 
-    return '${totalContributions.toStringAsFixed(0)} EGP';
+    final amount = totalContributions.toStringAsFixed(0);
+    return context.isArabic
+        ? '${FormatNumbers().convertToArabicNumerals(amount)} جنيه مصري'
+        : '$amount EGP';
   }
 
   void _showParticipateBottomSheet() {
@@ -668,17 +693,20 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Participate',
+                      context.isArabic ? 'شارك' : 'Participate',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 36.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pop(bottomSheetContext),
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        Navigator.pop(bottomSheetContext);
+                      },
                       child: Icon(Icons.close,
-                          size: 24.sp, color: Colors.grey[600]),
+                          size: 36.sp, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -686,9 +714,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
                 // Question
                 Text(
-                  'One or more shares?',
+                  context.isArabic ? 'هل تريد مشاركة?' : 'One or more shares?',
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 32.sp,
                     color: Colors.black87,
                   ),
                 ),
@@ -710,7 +738,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       hintText: 'أدخل المبلغ بالجنيه',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 32.sp,
                         color: Colors.grey[500],
                       ),
                     ),
@@ -727,6 +755,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      ManageVibration.vibrate();
                       final inputText = amountController.text.trim();
                       final amount = double.tryParse(inputText);
 
@@ -778,9 +807,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       ),
                     ),
                     child: Text(
-                      'Confirm',
+                      context.isArabic ? 'تأكيد' : 'Confirm',
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),

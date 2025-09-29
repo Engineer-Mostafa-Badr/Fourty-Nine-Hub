@@ -330,34 +330,68 @@ class ChanceCubit extends Cubit<ChanceState> {
   }
 
   void _updateAdFavoriteStatus(String adId, bool isFavorite) {
+    List<ChanceAdEntity>? updatedChanceAds;
+    List<ChanceAdEntity>? updatedFavoriteAds;
+    List<ChanceAdEntity>? updatedMyAds;
+    List<ChanceAdEntity>? updatedExpiredAds;
+    ChanceAdEntity? updatedDetails;
+
     // Update in chanceAds list if it exists
     if (state.chanceAds != null) {
-      final updatedChanceAds = state.chanceAds!.map((ad) {
+      updatedChanceAds = state.chanceAds!.map((ad) {
         if (ad.id == adId) {
           return ad.copyWith(isFavorite: isFavorite);
         }
         return ad;
       }).toList();
-      emit(state.copyWith(chanceAds: updatedChanceAds));
     }
 
     // Update in favoriteChanceAds list if it exists
     if (state.favoriteChanceAds != null) {
-      final updatedFavoriteAds = state.favoriteChanceAds!.map((ad) {
+      updatedFavoriteAds = state.favoriteChanceAds!.map((ad) {
         if (ad.id == adId) {
           return ad.copyWith(isFavorite: isFavorite);
         }
         return ad;
       }).toList();
-      emit(state.copyWith(favoriteChanceAds: updatedFavoriteAds));
+    }
+
+    // Update in myChanceAds list if it exists
+    if (state.myChanceAds != null) {
+      updatedMyAds = state.myChanceAds!.map((ad) {
+        if (ad.id == adId) {
+          return ad.copyWith(isFavorite: isFavorite);
+        }
+        return ad;
+      }).toList();
+    }
+
+    // Update in expiredChanceAds list if it exists
+    if (state.expiredChanceAds != null) {
+      updatedExpiredAds = state.expiredChanceAds!.map((ad) {
+        if (ad.id == adId) {
+          return ad.copyWith(isFavorite: isFavorite);
+        }
+        return ad;
+      }).toList();
     }
 
     // Update in chanceAdDetails if it exists and matches the adId
     if (state.chanceAdDetails != null && state.chanceAdDetails!.id == adId) {
-      final updatedDetails =
-          state.chanceAdDetails!.copyWith(isFavorite: isFavorite);
-      emit(state.copyWith(chanceAdDetails: updatedDetails));
+      updatedDetails = state.chanceAdDetails!.copyWith(isFavorite: isFavorite);
     }
+
+    // Emit once with all updates
+    emit(state.copyWith(
+      chanceAds: updatedChanceAds,
+      favoriteChanceAds: updatedFavoriteAds,
+      myChanceAds: updatedMyAds,
+      expiredChanceAds: updatedExpiredAds,
+      chanceAdDetails: updatedDetails,
+      status: ChanceStates.success,
+    ));
+
+    print('ChanceCubit: Updated favorite status for adId: $adId to: $isFavorite');
   }
 
   void addUploadedImageId(String imageId) {

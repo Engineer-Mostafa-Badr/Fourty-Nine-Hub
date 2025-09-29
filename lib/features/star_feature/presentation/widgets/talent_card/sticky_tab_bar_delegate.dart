@@ -56,11 +56,9 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
           child: Container(
             width: double.infinity,
             height: maxExtent,
-            padding: EdgeInsets.only(
-              left: size.width * 0.04,
-              right: size.width * 0.04,
-              top: 0,
-              bottom: size.height * 0.01,
+            padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.04,
+              vertical: size.height * 0.01,
             ),
             child: Column(
               children: [
