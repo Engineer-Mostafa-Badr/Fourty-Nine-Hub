@@ -12,6 +12,7 @@ import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../core/utils/format_numbers.dart';
+import '../../../../core/utils/arabic_pluralization.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/star_entity.dart';
 
@@ -410,7 +411,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                           ManageVibration.vibrate();
                           Navigator.pop(context);
                         },
-                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        color: context.isDarkMode ? Colors.black : Colors.white,
                       ),
                       centerTitle: false,
                       titleSpacing: 0,
@@ -418,7 +419,7 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                         text: context.isArabic ? 'تيوب' : 'Tube',
                         style: TextStyle(
                           color:
-                              context.isDarkMode ? Colors.white : Colors.black,
+                              context.isDarkMode ? Colors.black : Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
@@ -432,44 +433,66 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                               int totalVideos = 0;
 
                               if (state.tubeWinnerStatistics != null) {
-                                totalWinners = state.tubeWinnerStatistics!.totalWinner;
-                                totalVideos = state.tubeWinnerStatistics!.totalVideos;
+                                totalWinners =
+                                    state.tubeWinnerStatistics!.totalWinner;
+                                totalVideos =
+                                    state.tubeWinnerStatistics!.totalVideos;
                               }
 
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    context.isArabic
-                                        ? '(${FormatNumbers().convertToArabicNumerals(totalWinners.toString())}/${FormatNumbers().convertToArabicNumerals(totalVideos.toString())})'
-                                        : '($totalWinners/$totalVideos)',
-                                    style: Styles.smallText(),
-                                  ),
-                                  SizedBox(width: 4),
-                                  GestureDetector(
-                                    onTap: () {
-                                      ManageVibration.vibrate();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AllWinnerView(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      context.isArabic ? 'الفائزون' : 'Winners',
+                              // Get formatted numbers
+                              final formatNumbers = FormatNumbers();
+                              final displayTotalWinners = context.isArabic
+                                  ? formatNumbers.convertToArabicNumerals(
+                                      totalWinners.toString())
+                                  : totalWinners.toString();
+                              final displayTotalVideos = context.isArabic
+                                  ? formatNumbers.convertToArabicNumerals(
+                                      totalVideos.toString())
+                                  : totalVideos.toString();
+
+                              // Get correct Arabic pluralization for "فائز"
+                              final winnerText =
+                                  ArabicPluralization.getWinnerText(
+                                totalWinners,
+                                context.isArabic,
+                              );
+
+                              return GestureDetector(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AllWinnerView(),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      winnerText,
                                       style: Styles.headerText(
                                         color: context.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
+                                            ? Colors.black
+                                            : Colors.white,
                                         fontSize: 28,
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Image.asset(Assets.cupImage,
-                                      width: 24, height: 24),
-                                ],
+                                    SizedBox(width: 4),
+                                    Text(
+                                      '($displayTotalWinners/$displayTotalVideos)',
+                                      style: Styles.smallText(
+                                        color: context.isDarkMode
+                                            ? Colors.black
+                                            : Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4),
+                                    Image.asset(Assets.cupImage,
+                                        width: 24, height: 24),
+                                  ],
+                                ),
                               );
                             },
                           ),

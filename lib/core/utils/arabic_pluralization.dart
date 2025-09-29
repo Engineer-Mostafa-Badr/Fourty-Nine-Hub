@@ -13,7 +13,7 @@ class ArabicPluralization {
     } else if (count == 2) {
       return 'فائزان'; // Two winners (dual form)
     } else if (count >= 3 && count <= 10) {
-      return 'فائزون'; // 3-10 winners (plural form)
+      return 'الفائزون'; // 3-10 winners (plural form)
     } else {
       return 'فائز'; // 11+ winners (uses singular form in Arabic)
     }
