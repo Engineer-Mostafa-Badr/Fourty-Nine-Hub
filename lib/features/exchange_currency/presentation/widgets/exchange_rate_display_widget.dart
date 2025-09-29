@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'dart:math';
 
@@ -16,7 +17,8 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
     required this.baseCurrency,
   });
 
-  String _formatNumberForLocale(BuildContext context, double number, {int decimalPlaces = 4}) {
+  String _formatNumberForLocale(BuildContext context, double number,
+      {int decimalPlaces = 4}) {
     final formattedNumber = number.toStringAsFixed(decimalPlaces);
     if (context.isArabic) {
       // Convert English numerals to Arabic numerals
@@ -139,10 +141,10 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const Icon(
-                Icons.keyboard_arrow_up,
-                color: Colors.white,
-              ),
+              // const Icon(
+              //   Icons.keyboard_arrow_up,
+              //   color: Colors.white,
+              // ),
             ],
           ),
           const SizedBox(height: 16),
@@ -178,11 +180,11 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              entry.key,
-                              style: const TextStyle(
+                              _getCurrencyShortName(context, entry.key),
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                                fontSize: 24.sp,
                               ),
                             ),
                           ],
@@ -233,10 +235,10 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                           children: [
                             Text(
                               _formatNumberForLocale(context, entry.value),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                                fontSize: 24.sp,
                               ),
                             ),
                             // عرض النسبة المئوية للتغيير
@@ -245,7 +247,7 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
                                 _getPercentageChange(context, chartPoints),
                                 style: TextStyle(
                                   color: chartColor,
-                                  fontSize: 10,
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -338,5 +340,38 @@ class ExchangeRateDisplayWidget extends StatelessWidget {
       'OMR': '🇴🇲'
     };
     return flagMap[code] ?? '💱';
+  }
+
+  String _getCurrencyShortName(BuildContext context, String code) {
+    final currencyShortNames = {
+      'USD': context.isArabic ? 'دولار' : 'Dollar',
+      'EUR': context.isArabic ? 'يورو' : 'Euro',
+      'GBP': context.isArabic ? 'جنيه' : 'Pound',
+      'JPY': context.isArabic ? 'ين' : 'Yen',
+      'AUD': context.isArabic ? 'دولار' : 'Dollar',
+      'CAD': context.isArabic ? 'دولار' : 'Dollar',
+      'CHF': context.isArabic ? 'فرنك' : 'Franc',
+      'CNY': context.isArabic ? 'يوان' : 'Yuan',
+      'SEK': context.isArabic ? 'كرونا' : 'Krona',
+      'NZD': context.isArabic ? 'دولار' : 'Dollar',
+      'MXN': context.isArabic ? 'بيزو' : 'Peso',
+      'SGD': context.isArabic ? 'دولار' : 'Dollar',
+      'HKD': context.isArabic ? 'دولار' : 'Dollar',
+      'NOK': context.isArabic ? 'كرونا' : 'Krone',
+      'KRW': context.isArabic ? 'وون' : 'Won',
+      'TRY': context.isArabic ? 'ليرة' : 'Lira',
+      'RUB': context.isArabic ? 'روبل' : 'Ruble',
+      'INR': context.isArabic ? 'روبية' : 'Rupee',
+      'BRL': context.isArabic ? 'ريال' : 'Real',
+      'EGP': context.isArabic ? 'جنيه' : 'Pound',
+      'AED': context.isArabic ? 'درهم' : 'Dirham',
+      'SAR': context.isArabic ? 'ريال' : 'Riyal',
+      'QAR': context.isArabic ? 'ريال' : 'Riyal',
+      'KWD': context.isArabic ? 'دينار' : 'Dinar',
+      'BHD': context.isArabic ? 'دينار' : 'Dinar',
+      'OMR': context.isArabic ? 'ريال' : 'Rial',
+    };
+
+    return currencyShortNames[code] ?? code;
   }
 }
