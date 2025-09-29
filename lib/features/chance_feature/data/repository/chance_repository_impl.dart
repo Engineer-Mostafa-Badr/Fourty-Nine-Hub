@@ -21,6 +21,7 @@ import '../../domain/use_case/get_chance_ad_details_use_case.dart';
 import '../../domain/use_case/join_chance_ad_use_case.dart';
 import '../../domain/use_case/search_chance_ads_use_case.dart';
 import '../../domain/use_case/toggle_chance_ad_favorite_use_case.dart';
+import '../../domain/entity/winner_statistics_entity.dart';
 
 class ChanceRepositoryImpl extends ChanceRepository {
   final ChanceRemoteDataSource _chanceRemoteDataSource;
@@ -108,5 +109,10 @@ class ChanceRepositoryImpl extends ChanceRepository {
   @override
   Future<Either<Failure, bool>> incrementChanceAdView(String adId) {
     return _chanceRemoteDataSource.incrementChanceAdView(adId);
+  }
+
+  @override
+  Future<Either<Failure, WinnerStatisticsEntity>> getWinnerStatistics() {
+    return _chanceRemoteDataSource.getWinnerStatistics();
   }
 }

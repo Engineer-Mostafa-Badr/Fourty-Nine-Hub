@@ -170,7 +170,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
         preferredSize: const Size.fromHeight(30),
         child: AppBar(
           scrolledUnderElevation: 0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: AppColors.PRIMARY_COLOR,
           elevation: 0,
           automaticallyImplyLeading: false,
           titleSpacing: 0,
@@ -181,14 +181,14 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               icon: Icon(Icons.arrow_back_ios,
-                  color: AppColors.getTextColor(context), size: 20),
+                  color: AppColors.whiteColor, size: 20),
               onPressed: () => Navigator.pop(context),
             ),
           ),
           title: Text(
             context.isArabic ? 'تبديل العملات' : 'Exchange',
             style: TextStyle(
-              color: AppColors.getTextColor(context),
+              color: AppColors.whiteColor,
               fontSize: 32.sp,
               fontWeight: FontWeight.bold,
             ),

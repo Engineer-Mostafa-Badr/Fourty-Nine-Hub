@@ -13,6 +13,7 @@ import '../../../domain/entity/banner_talent_entity.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/star_winner_entity.dart';
+import '../../../domain/entity/tube_winner_statistics_entity.dart';
 import '../../../domain/use_case/delete_my_star_use_case.dart';
 import '../../../domain/use_case/delete_tube_video_use_case.dart';
 import '../../../domain/use_case/fetch_all_star_use_case.dart';
@@ -21,6 +22,7 @@ import '../../../domain/use_case/fetch_myl_star_use_case.dart';
 import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/search_tube_videos_use_case.dart';
+import '../../../domain/use_case/get_tube_winner_statistics_use_case.dart';
 import '../../../domain/use_case/tube_favorite_use_cases.dart';
 import '../../../domain/use_case/tube_watch_later_use_cases.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
@@ -65,6 +67,7 @@ class StarCubit extends Cubit<StarState> {
   final IncrementTubeVideoViewUseCase _incrementTubeVideoViewUseCase;
   final RateTubeVideoUseCase _rateTubeVideoUseCase;
   final DeleteTubeVideoUseCase _deleteTubeVideoUseCase;
+  final GetTubeWinnerStatisticsUseCase _getTubeWinnerStatisticsUseCase;
 
   final _videoUpdatesController = StreamController<String>.broadcast();
   Stream<String> get videoUpdates => _videoUpdatesController.stream;
@@ -94,6 +97,7 @@ class StarCubit extends Cubit<StarState> {
     this._incrementTubeVideoViewUseCase,
     this._rateTubeVideoUseCase,
     this._deleteTubeVideoUseCase,
+    this._getTubeWinnerStatisticsUseCase,
   ) : super(StarState());
 
   // Configuration flag to choose between old Star API and new Tube Video API
@@ -1685,6 +1689,36 @@ class StarCubit extends Cubit<StarState> {
       return talent.title.toLowerCase().contains(query.toLowerCase()) ||
           talent.description.toLowerCase().contains(query.toLowerCase());
     }).toList();
+  }
+
+  // Get tube winner statistics
+  Future<void> getTubeWinnerStatistics() async {
+    try {
+      final result = await _getTubeWinnerStatisticsUseCase(NoParams());
+
+      result.fold(
+        (failure) {
+          print('Failed to get tube winner statistics: ${failure.toString()}');
+          emit(state.copyWith(
+            status: StarStates.error,
+            failure: failure,
+          ));
+        },
+        (statistics) {
+          print('Tube winner statistics loaded: ${statistics.totalWinner}/${statistics.totalVideos}');
+          emit(state.copyWith(
+            status: StarStates.success,
+            tubeWinnerStatistics: statistics,
+          ));
+        },
+      );
+    } catch (e) {
+      print('Exception while getting tube winner statistics: $e');
+      emit(state.copyWith(
+        status: StarStates.error,
+        failure: ServerFailure(message: 'Failed to load statistics: $e', name: 'Statistics Error'),
+      ));
+    }
   }
 
   // Helper methods for backward compatibility

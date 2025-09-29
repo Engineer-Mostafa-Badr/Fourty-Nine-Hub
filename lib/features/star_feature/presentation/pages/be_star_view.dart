@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../../core/utils/format_numbers.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/star_entity.dart';
 
@@ -23,6 +24,7 @@ import '../widgets/talent_card/profile_search_results.dart';
 import '../widgets/talent_card/sticky_tab_bar_delegate.dart';
 import '../widgets/talent_card/talent_card.dart';
 import '../widgets/talent_card/talent_card_builders.dart';
+import 'all_winner_view.dart';
 import 'my_video_details_view.dart';
 
 class BeStarView extends StatefulWidget {
@@ -69,6 +71,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
     _searchController.addListener(_onSearchChanged);
     // Initialize all data
     _cubit.initializeAllData();
+
+    // Load tube winner statistics
+    _cubit.getTubeWinnerStatistics();
 
     // Setup scroll synchronization
     _setupScrollSynchronization();
@@ -396,8 +401,9 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       snap: false,
                       elevation: 0,
                       surfaceTintColor: Colors.transparent,
-                      backgroundColor:
-                          context.isDarkMode ? Colors.black : AppColors.PRIMARY_COLOR,
+                      backgroundColor: context.isDarkMode
+                          ? Colors.black
+                          : AppColors.PRIMARY_COLOR,
                       toolbarHeight: 50,
                       leading: BackButton(
                         onPressed: () {
@@ -420,32 +426,52 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
                       actions: [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                context.isArabic ? '(١٥/٣٧٠٠)' : '(15/3700)',
-                                style: Styles.smallText(),
-                              ),
-                              SizedBox(width: 4),
-                              GestureDetector(
-                                onTap: () {
-                                  ManageVibration.vibrate();
-                                },
-                                child: Text(
-                                  context.isArabic ? 'الفائزون' : 'Winners',
-                                  style: Styles.headerText(
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontSize: 28,
+                          child: BlocBuilder<StarCubit, StarState>(
+                            builder: (context, state) {
+                              int totalWinners = 0;
+                              int totalVideos = 0;
+
+                              if (state.tubeWinnerStatistics != null) {
+                                totalWinners = state.tubeWinnerStatistics!.totalWinner;
+                                totalVideos = state.tubeWinnerStatistics!.totalVideos;
+                              }
+
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    context.isArabic
+                                        ? '(${FormatNumbers().convertToArabicNumerals(totalWinners.toString())}/${FormatNumbers().convertToArabicNumerals(totalVideos.toString())})'
+                                        : '($totalWinners/$totalVideos)',
+                                    style: Styles.smallText(),
                                   ),
-                                ),
-                              ),
-                              SizedBox(width: 4),
-                              Image.asset(Assets.cupImage,
-                                  width: 24, height: 24),
-                            ],
+                                  SizedBox(width: 4),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AllWinnerView(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      context.isArabic ? 'الفائزون' : 'Winners',
+                                      style: Styles.headerText(
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 28,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Image.asset(Assets.cupImage,
+                                      width: 24, height: 24),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ],

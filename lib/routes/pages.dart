@@ -401,7 +401,7 @@ import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
-import '../features/chance_feature/presentation/pages/chance_main_view.dart';
+import '../features/chance_feature/presentation/pages/chance_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
 import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';

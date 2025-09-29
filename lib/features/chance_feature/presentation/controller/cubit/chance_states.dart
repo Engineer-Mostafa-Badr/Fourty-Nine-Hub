@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/chance_feature/domain/entity/main_categor
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entity/chance_ad_entity.dart';
 import '../../../domain/entity/chance_ads_pagination_entity.dart';
+import '../../../domain/entity/winner_statistics_entity.dart';
 
 enum ChanceStates { loading, initial, error, success, createSuccess, joinSuccess }
 
@@ -23,6 +24,7 @@ class ChanceState extends Equatable {
   final List<ChanceAdEntity>? expiredChanceAds;
   final List<ChanceAdEntity>? searchResults;
   final List<String> uploadedImageIds;
+  final WinnerStatisticsEntity? winnerStatistics;
 
   const ChanceState({
     this.status = ChanceStates.loading,
@@ -38,6 +40,7 @@ class ChanceState extends Equatable {
     this.expiredChanceAds,
     this.searchResults,
     this.uploadedImageIds = const [],
+    this.winnerStatistics,
   });
 
   ChanceState copyWith({
@@ -54,6 +57,7 @@ class ChanceState extends Equatable {
     List<ChanceAdEntity>? expiredChanceAds,
     List<ChanceAdEntity>? searchResults,
     List<String>? uploadedImageIds,
+    WinnerStatisticsEntity? winnerStatistics,
   }) {
     return ChanceState(
       status: status ?? this.status,
@@ -69,6 +73,7 @@ class ChanceState extends Equatable {
       expiredChanceAds: expiredChanceAds ?? this.expiredChanceAds,
       searchResults: searchResults ?? this.searchResults,
       uploadedImageIds: uploadedImageIds ?? this.uploadedImageIds,
+      winnerStatistics: winnerStatistics ?? this.winnerStatistics,
     );
   }
 
@@ -76,7 +81,8 @@ class ChanceState extends Equatable {
   List<Object?> get props => [
     status, failure, chance, rate, mainCategory, chanceAds,
     chanceAdsPagination, chanceAdDetails, favoriteChanceAds,
-    myChanceAds, expiredChanceAds, searchResults, uploadedImageIds
+    myChanceAds, expiredChanceAds, searchResults, uploadedImageIds,
+    winnerStatistics
   ];
 }
 

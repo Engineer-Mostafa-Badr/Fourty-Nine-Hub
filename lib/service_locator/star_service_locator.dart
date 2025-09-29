@@ -16,6 +16,7 @@ import '../features/star_feature/domain/use_case/search_profiles_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_watch_later_use_cases.dart';
 import '../features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import '../features/star_feature/domain/use_case/get_active_categories_use_case.dart';
+import '../features/star_feature/domain/use_case/get_tube_winner_statistics_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
 import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
@@ -128,6 +129,11 @@ class StarServiceLocator {
     // Register GetActiveCategoriesUseCase
     serviceLocator.registerLazySingleton<GetActiveCategoriesUseCase>(
       () => GetActiveCategoriesUseCase(serviceLocator()),
+    );
+
+    // Register GetTubeWinnerStatisticsUseCase
+    serviceLocator.registerLazySingleton<GetTubeWinnerStatisticsUseCase>(
+      () => GetTubeWinnerStatisticsUseCase(serviceLocator()),
     );
 
     // Register Profile Use Cases
@@ -325,6 +331,7 @@ class StarServiceLocator {
           serviceLocator<IncrementTubeVideoViewUseCase>(),
           serviceLocator<RateTubeVideoUseCase>(),
           serviceLocator<DeleteTubeVideoUseCase>(),
+          serviceLocator<GetTubeWinnerStatisticsUseCase>(),
         ));
 
     serviceLocator.registerFactory<TenPercentCubit>(() => TenPercentCubit(

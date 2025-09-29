@@ -9,6 +9,7 @@ import '../model/star_model.dart';
 import '../model/star_winner_model.dart';
 import '../model/tube_video_models.dart'; // New import
 import '../model/active_category_model.dart';
+import '../model/tube_winner_statistics_model.dart';
 import '../../domain/entity/banner_talent_entity.dart';
 import '../../domain/entity/star_entity.dart';
 import '../../domain/entity/star_winner_entity.dart';
@@ -59,6 +60,9 @@ abstract class StarRemoteDataSource {
 
   // Get active categories
   Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories();
+
+  // Get tube winner statistics
+  Future<Either<Failure, TubeWinnerStatisticsModel>> getTubeWinnerStatistics();
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -677,6 +681,31 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
           ));
         }
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, TubeWinnerStatisticsModel>> getTubeWinnerStatistics() async {
+    return await _apiConsumer.get(EndPoints.getTubeWinnerStatistics).then(
+      (response) => response.fold(
+        (failure) {
+          print("Get Tube Winner Statistics Error: $failure");
+          return Left(failure);
+        },
+        (response) {
+          print("Get Tube Winner Statistics Success: ${response['data']}");
+          try {
+            final statisticsModel = TubeWinnerStatisticsModel.fromJson(response['data']);
+            return Right(statisticsModel);
+          } catch (e) {
+            print("Parse Tube Winner Statistics Error: $e");
+            return Left(ServerFailure(
+              message: 'Failed to parse tube winner statistics data: $e',
+              name: 'Parse Error',
+            ));
+          }
+        },
+      ),
     );
   }
 }

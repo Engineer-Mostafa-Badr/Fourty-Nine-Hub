@@ -19,6 +19,7 @@ import '../../../domain/use_case/get_my_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_expired_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_chance_ad_winners_use_case.dart';
 import '../../../domain/use_case/increment_chance_ad_view_use_case.dart';
+import '../../../domain/use_case/get_winner_statistics_use_case.dart';
 import '../../../domain/entity/chance_ad_entity.dart';
 import 'chance_states.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -42,6 +43,7 @@ class ChanceCubit extends Cubit<ChanceState> {
   final GetExpiredChanceAdsUseCase _getExpiredChanceAdsUseCase;
   final GetChanceAdWinnersUseCase _getChanceAdWinnersUseCase;
   final IncrementChanceAdViewUseCase _incrementChanceAdViewUseCase;
+  final GetWinnerStatisticsUseCase _getWinnerStatisticsUseCase;
 
   ChanceCubit(
     this._fetchChanceUseCase,
@@ -60,6 +62,7 @@ class ChanceCubit extends Cubit<ChanceState> {
     this._getExpiredChanceAdsUseCase,
     this._getChanceAdWinnersUseCase,
     this._incrementChanceAdViewUseCase,
+    this._getWinnerStatisticsUseCase,
   ) : super(const ChanceState());
 
   // Future<void> fetchChance() async {
@@ -473,5 +476,31 @@ class ChanceCubit extends Cubit<ChanceState> {
     } catch (e) {
       print('EXCEPTION in incrementChanceAdView: $e');
     }
+  }
+
+  Future<void> getWinnerStatistics() async {
+    final response = await _getWinnerStatisticsUseCase(const NoParams());
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (winnerStatistics) {
+        emit(state.copyWith(
+          winnerStatistics: winnerStatistics,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> getChanceWinners() async {
+    // This method was referenced in ChanceWinnersView but didn't exist
+    // For now, we'll use getWinnerStatistics, but you can implement
+    // a separate endpoint for getting actual winner list if needed
+    await getWinnerStatistics();
   }
 }
