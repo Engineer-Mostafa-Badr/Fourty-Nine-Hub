@@ -475,6 +475,7 @@ import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
+import '../core/widget/incorrect_time_screen.dart';
 
 class AppPages {
   AppPages._();
@@ -492,9 +493,20 @@ class AppPages {
             pageBuilder: (context, state) => customTransition(
               context,
               state,
-              const BeforeSplash(),
+              BeforeSplash(
+                hasNavigated: (state.extra is bool) ? state.extra as bool : false,
+              ),
             ),
             routes: [
+              GoRoute(
+                path: Paths.incorrectTime,
+                name: Routes.incorrectTime,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  const IncorrectTimeScreen(),
+                ),
+              ),
               GoRoute(
                 path: Paths.splashScreen,
                 name: Routes.splashScreen,

@@ -235,16 +235,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
       return newToken;
     } catch (e) {
-      context.read<UserCubit>().attachToken();
-      context.read<UserCubit>().getUser();
-      context.read<CreatePostCubit>().loadData();
-      context.read<SecretsCubit>().getAllSecrets();
-      context.read<CustomPageCubit>().fetchActivate();
-      context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-      context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-      context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-      context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-      context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+      // context.read<UserCubit>().attachToken();
+      // context.read<UserCubit>().getUser();
+      // context.read<CreatePostCubit>().loadData();
+      // context.read<SecretsCubit>().getAllSecrets();
+      // context.read<CustomPageCubit>().fetchActivate();
+      // context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+      // context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+      // context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+      // context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+      // context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
       var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
       currentContext.push(Routes.LOGIN);
       print('❌ AuthInterceptor: Refresh token API failed: $e');
