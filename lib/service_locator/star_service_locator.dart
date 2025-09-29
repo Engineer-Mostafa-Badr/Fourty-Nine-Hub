@@ -60,11 +60,6 @@ class StarServiceLocator {
         () => PlaylistRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<TenPercentRemoteDataSource>(
-        () => TenPercentRemoteDataSourceImpl(
-              serviceLocator(),
-            ));
-
     serviceLocator
         .registerLazySingleton<StarRepository>(() => StarRepositoryImpl(
               serviceLocator(),
@@ -77,11 +72,6 @@ class StarServiceLocator {
 
     serviceLocator
         .registerLazySingleton<PlaylistRepository>(() => PlaylistRepositoryImpl(
-              serviceLocator(),
-            ));
-
-    serviceLocator
-        .registerLazySingleton<TenPercentRepo>(() => TenPercentRepoImpl(
               serviceLocator(),
             ));
 
@@ -103,15 +93,6 @@ class StarServiceLocator {
             ));
     serviceLocator.registerLazySingleton<FetchWinnerStarUseCase>(
         () => FetchWinnerStarUseCase(
-              serviceLocator(),
-            ));
-
-    serviceLocator.registerLazySingleton<SentBillRequestUseCase>(
-        () => SentBillRequestUseCase(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<GetWinnersTenPercentUseCase>(
-        () => GetWinnersTenPercentUseCase(
               serviceLocator(),
             ));
 
@@ -326,14 +307,5 @@ class StarServiceLocator {
           serviceLocator<RateTubeVideoUseCase>(),
           serviceLocator<DeleteTubeVideoUseCase>(),
         ));
-
-    serviceLocator.registerFactory<TenPercentCubit>(() => TenPercentCubit(
-          serviceLocator(),
-        ));
-
-    serviceLocator
-        .registerFactory<WinnersTenPercentCubit>(() => WinnersTenPercentCubit(
-              serviceLocator(),
-            ));
   }
 }

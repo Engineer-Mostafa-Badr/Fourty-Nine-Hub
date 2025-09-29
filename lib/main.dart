@@ -15,6 +15,7 @@ import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/core/utils/handle_navigation.dart';
 import 'package:fourtyninehub/core/utils/location_service_listener.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
@@ -144,13 +145,9 @@ void main() async {
     await serviceLocator<TimeSyncService>().start();
     runApp(
     LocalizationService.rootWidget(
-      child: const MyApp(), // Test without Phoenix and DevicePreview
-      // child: Phoenix(
-      //   child: DevicePreview(
-      //     enabled: false,
-      //     builder: (context) => const MyApp(),
-      //   ),
-      // ),
+      child: Phoenix(
+        child: const MyApp(),
+      ),
     ),
   );
   } catch (e, stackTrace) {
@@ -199,14 +196,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     // Navigate to incorrect time screen when detected; back to splash when corrected
-    serviceLocator<TimeSyncService>().isTimeIncorrect.addListener(() {
+    serviceLocator<TimeSyncService>().isTimeIncorrect.addListener(() async {
       final isIncorrect = serviceLocator<TimeSyncService>().isTimeIncorrect.value;
-      final router = AppPages.router;
       if (isIncorrect) {
-        router.go(Routes.incorrectTime);
+        AppPages.router.go(Routes.incorrectTime);
       } else {
-        // Restart flow to splash
-        router.go(Routes.splash,extra: false);
+        await DI.reset();
+        await DI.execute();
+        await serviceLocator<TimeSyncService>().start();
+        HandleNavigation.navigateToNextScreen(context);
+        // AppPages.initializeRouter(Routes.splash);
+        // Phoenix.rebirth(context);
       }
     });
   }
@@ -278,7 +278,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               serviceLocator<PreloadBloc>(), //..getVideosFromApi()
         ),
         // BlocProvider(
-        //   create: (BuildContext context) => serviceLocator<RideCubit>(),
+        //   create: (context) => serviceLocator<RideCubit>(),
         // ),
         BlocProvider(
           create: (context) => ThemeCubit()..getMode(),
