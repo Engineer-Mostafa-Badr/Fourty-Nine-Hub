@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/available_trip_join_model.dart';
+
 import '../../../domain/entities/my_ads_trip_join_entity.dart';
 
 class MyAdsTripJoinModel extends MyAdsTripJoinEntity {
@@ -32,6 +34,7 @@ class MyAdsTripDocModel extends MyAdsTripDocEntity {
     super.isPremium,
     super.phoneNumber,
     super.createdAt,
+    super.lastViewers,
     super.isButtonEnabled,
     super.vehicleDetails,
     super.location,
@@ -59,6 +62,9 @@ class MyAdsTripDocModel extends MyAdsTripDocEntity {
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,
+      lastViewers:  (json['lastViewers'] as List<dynamic>?)
+          ?.map((e) => ViewerModel.fromJson(e))
+          .toList(),
     );
   }
 }

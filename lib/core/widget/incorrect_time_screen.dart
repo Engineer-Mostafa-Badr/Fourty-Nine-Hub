@@ -1,5 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class IncorrectTimeScreen extends StatelessWidget {
   const IncorrectTimeScreen({super.key});
@@ -11,17 +13,18 @@ class IncorrectTimeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: SizedBox(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 50),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // العنوان
-                const Text(
-                  'تاريخ / وقت غير صحيح',
+              Text(
+                  context.isArabic?"تاريخ / وقت غير صحيح":"Date / Time is incorrect",
                   style: TextStyle(
-                    color: Colors.green,
+                    color: AppColors.PRIMARY_COLOR,
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
@@ -29,29 +32,33 @@ class IncorrectTimeScreen extends StatelessWidget {
                 const SizedBox(height: 40),
 
                 // الأيقونة
-                CircleAvatar(
-                  radius: 48,
-                  backgroundColor: Colors.green.shade100,
-                  child: const Icon(
-                    Icons.access_time,
-                    size: 48,
-                    color: Colors.green,
-                  ),
-                ),
-                const SizedBox(height: 40),
-
-                // النص التوضيحي
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    'تاريخ ووقت جهازك غير مضبوط.\nمن فضلك قم بتصحيحه من الإعدادات.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16,
-                      height: 1.5,
+                Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 48,
+                      backgroundColor: AppColors.PRIMARY_COLOR.withValues(alpha: 0.1),
+                      child: const Icon(
+                        Icons.access_time,
+                        size: 48,
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 40),
+
+                    // النص التوضيحي
+                                Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                       context.isArabic?"تاريخ ووقت جهازك غير مضبوط.\nمن فضلك قم بتصحيحه من الإعدادات.":"Your device date/time is incorrect.\nPlease update it in system settings.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppColors.PRIMARY_COLOR,
+                          fontSize: 16,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 40),
 
@@ -63,7 +70,7 @@ class IncorrectTimeScreen extends StatelessWidget {
                     ); // Opens general app settings
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: AppColors.SECONDARY_COLOR,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 48,
@@ -73,8 +80,8 @@ class IncorrectTimeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                     ),
                   ),
-                  child: const Text(
-                    'ضبط الوقت',
+                  child: Text(
+                    context.isArabic?"ضبط الوقت":"Update Time",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

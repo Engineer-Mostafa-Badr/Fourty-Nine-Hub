@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -311,29 +312,87 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                         child: Row(
                                           children: [
                                             Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.remove_red_eye_sharp,
-                                                    color: context.isDarkMode
-                                                        ? AppColors.whiteColor
-                                                        : AppColors
-                                                        .DARK_GRAY_COLOR,
-                                                  ),
-                                                  const Sizer(),
-                                                  Label(
-                                                    // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
-                                                    text:
-                                                    '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
-                                                    style: Styles.mediumText(
-                                                      fontSize: 24,
+                                              child: ClickableWidget(
+                                                onTap: () {
+                                                  if((data.lastViewers?.length??0)>0) {
+                                                    ManageVibration.vibrate();
+                                                    showModalBottomSheet(
+                                                      backgroundColor: context.isDarkMode
+                                                          ? AppColors.DARK_BLUE_COLOR
+                                                          .withOpacity(0.95)
+                                                          : AppColors.LIGHT_COLOR,
+                                                      constraints: BoxConstraints(
+                                                        maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                                      ),
+                                                      context: context,
+                                                      shape: const RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(32.0),
+                                                          topRight: Radius.circular(32.0),
+                                                        ),
+                                                      ),
+                                                      isDismissible: true,
+                                                      // isScrollControlled: true,
+                                                      builder: (BuildContext context) {
+                                                        return Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Column(
+                                                            children: [
+                                                              Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                              Expanded(
+                                                                child: ListView(
+                                                                  shrinkWrap: true,
+                                                                  children: List.generate(data.lastViewers?.length??0, (i)=>Container(
+                                                                    padding: EdgeInsets.only(bottom: 10),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        ImageFromInternet(
+                                                                            image: '',
+                                                                            isCircle: true,
+                                                                            defaultLogo: false,
+                                                                            isMale: data.lastViewers?[i].gender=='male',
+                                                                            width: 40,
+                                                                            height: 40,
+                                                                            firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
+                                                                            charPadding: 0),
+                                                                        const Sizer(),
+                                                                        Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                                      ],
+                                                                    ),
+                                                                  )),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  }
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.remove_red_eye_sharp,
                                                       color: context.isDarkMode
                                                           ? AppColors.whiteColor
                                                           : AppColors
                                                           .DARK_GRAY_COLOR,
                                                     ),
-                                                  ),
-                                                ],
+                                                    const Sizer(),
+                                                    Label(
+                                                      // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
+                                                      text:
+                                                      '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                                      style: Styles.mediumText(
+                                                        fontSize: 24,
+                                                        color: context.isDarkMode
+                                                            ? AppColors.whiteColor
+                                                            : AppColors
+                                                            .DARK_GRAY_COLOR,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                             // Text(

@@ -304,7 +304,7 @@ class DI {
     // Time sync (poll frequently to react to manual time changes)
     serviceLocator.registerSingleton<TimeSyncService>(
       TimeSyncService(
-        checkInterval: const Duration(seconds: 15),
+        checkInterval: const Duration(seconds: 2),
         allowedDrift: const Duration(minutes: 2),
       ),
     );
