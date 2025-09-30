@@ -35,8 +35,6 @@ import '../trip_join_dialog/dialog_content.dart';
 import '../trip_join_dialog/show_dialog_trip_join.dart';
 import '../trip_join_floating_action_button.dart';
 import 'trip_contacts_buttons.dart';
-import 'package:popover/popover.dart';
-import 'package:pull_down_button/pull_down_button.dart';
 
 String formatViews(num views, BuildContext context) {
   if (views < 1000) {

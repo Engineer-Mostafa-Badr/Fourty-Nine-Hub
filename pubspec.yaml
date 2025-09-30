@@ -172,9 +172,6 @@ dependencies:
   better_player_plus: 1.0.8
   ntp: ^2.0.0
   app_settings: ^5.1.1
-  popover: ^0.3.1
-  pull_down_button: ^0.10.2
-  super_context_menu: ^0.9.1
 
 dependency_overrides:
   camera_android_camerax: 0.6.10+1
