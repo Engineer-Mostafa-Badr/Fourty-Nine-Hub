@@ -129,7 +129,7 @@ class StarCubit extends Cubit<StarState> {
     try {
       // Test direct API call
       final response = await _fetchMyTubeVideosUseCase(
-        StarPaginationParams(page: 1, limit: 10),
+        StarPaginationParams(page: 1, limit: 5),
       );
 
       response.fold(

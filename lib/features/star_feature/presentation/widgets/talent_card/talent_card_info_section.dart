@@ -169,7 +169,7 @@ class TalentCardInfoSection extends StatelessWidget {
       height: 50,
       color: Colors.grey[300],
       child: Image.asset(
-        Assets.logo,
+        Assets.manIcon,
         fit: BoxFit.contain,
       ),
     );

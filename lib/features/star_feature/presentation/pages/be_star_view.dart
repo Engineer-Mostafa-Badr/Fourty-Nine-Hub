@@ -60,7 +60,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
   final ScrollController _myTalentController = ScrollController();
 
   bool _isSyncing = false;
-  Timer? _autoRefreshTimer;
   bool _isManualRefreshing = false;
 
   @override
@@ -81,25 +80,12 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
     // Add debugging
     _debugInitialization();
-
-    // Start auto-refresh for Available tab
-    _startAutoRefresh();
   }
 
   void _debugInitialization() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("🎯 BeStarView initialized");
       context.read<StarCubit>().debugMyTalentsFlow();
-    });
-  }
-
-  void _startAutoRefresh() {
-    _autoRefreshTimer = Timer.periodic(Duration(seconds: 30), (timer) {
-      if (mounted && _selectedTabIndex == 0 && !_isSearching) {
-        // Only refresh Available tab when it's active and not searching
-        print("🔄 Auto-refreshing Available tab");
-        _cubit.loadTalents(TalentCategory.available, refresh: true);
-      }
     });
   }
 
@@ -725,7 +711,6 @@ class _BeStarViewState extends State<BeStarView> with TickerProviderStateMixin {
 
     // Then dispose controllers
     _searchDebounce?.cancel();
-    _autoRefreshTimer?.cancel();
     _tabController.dispose();
     _searchController.dispose();
     _mainScrollController.dispose();
