@@ -1,4 +1,5 @@
 // AVAILABLE TAB
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,6 +89,7 @@ class MyBiddersScreen extends StatelessWidget {
                       ),
                     ),
                     child: _buildHeader(
+                      context: context,
                       status: auction.subscriptionType,
                       views: auction.views ?? 0,
                     ),
@@ -144,33 +146,6 @@ class MyBiddersScreen extends StatelessWidget {
                             height: 1.40,
                           ),
                         ),
-                        // Align(
-                        //   alignment: AlignmentDirectional.centerStart,
-                        //   child: Label(
-                        //     text: auction.auctionTitle ?? "No title",
-                        //     style: Styles.mediumText(
-                        //       color: context.isDarkMode
-                        //           ? AppColors.whiteColor
-                        //           : AppColors.black,
-                        //       fontSize: 24,
-                        //       height: 1.40,
-                        //     ),
-                        //   ),
-                        // ),
-                        // Align(
-                        //   alignment: AlignmentDirectional.centerEnd,
-                        //   child: Text(
-                        //     auction.subscriptionType ?? "N/A",
-                        //     style: Styles.mediumText(
-                        //       color: context.isDarkMode
-                        //           ? AppColors.whiteColor
-                        //           : AppColors.black,
-                        //       fontWeight: FontWeight.w600,
-                        //       fontSize: 24,
-                        //       height: 1.60,
-                        //     ),
-                        //   ),
-                        // )
                       ],
                     ),
                   ),
@@ -200,8 +175,11 @@ class MyBiddersScreen extends StatelessWidget {
       },
     );
   }
-  Widget _buildHeader({required num views,
+
+  Widget _buildHeader({
+    required num views,
     required String? status,
+    required BuildContext context,
   }) {
     String label;
     Color color;
@@ -209,7 +187,7 @@ class MyBiddersScreen extends StatelessWidget {
     switch (status) {
       case "Premium":
         label = LocaleKeys.premium2.localize;
-        color = AppColors.SECONDARY_COLOR; // ده ممكن تغيره للون اللي تحبه
+        color = AppColors.SECONDARY_COLOR;
         break;
       case "Regular":
         label = LocaleKeys.regular.localize;
@@ -222,79 +200,28 @@ class MyBiddersScreen extends StatelessWidget {
         break;
     }
 
+    // ✅ Use helper here
+    final formattedViews = _formatNumber(context, views);
+
     return Container(
-      // width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      // color: status == SubscriptionStatus.premium.status
-      //     ? Colors.amber
-      //     : Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // if (status != SubscriptionStatus.notSubscribed.status) ...[
-          //   Icon(
-          //     Icons.workspace_premium_outlined,
-          //     size: 55.w,
-          //     color: status == SubscriptionStatus.premium.status
-          //         ? AppColors.SECONDARY_COLOR
-          //         : status == SubscriptionStatus.regular.status
-          //             ? AppColors.PRIMARY_COLOR
-          //             : null,
-          //   ),
-          //   const Sizer(width: 5)
-          // ],
-          SvgPicture.asset(
-            Assets.adsEyeIcon,
-          ),
+          SvgPicture.asset(Assets.adsEyeIcon),
           const SizedBox(width: 6),
-          if (views == 0) ...[
-            Label(
-              text: LocaleKeys.noViews.localize,
-              style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
-                fontSize: 24,
-                height: 1.60,
-              ),
+
+          Label(
+            text: "$formattedViews ${LocaleKeys.views.localize}",
+            style: Styles.mediumText(
+              color: const Color(0xFF6C6C6C),
+              fontSize: 24,
+              height: 1.60,
             ),
-          ] else if (views == 1) ...[
-            Label(
-              text: LocaleKeys.oneView.localize,
-              style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
-                fontSize: 24,
-                height: 1.60,
-              ),
-            ),
-          ] else if (views == 2) ...[
-            Label(
-              text: LocaleKeys.twoViews.localize,
-              style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
-                fontSize: 24,
-                height: 1.60,
-              ),
-            ),
-          ] else if (views >= 3 && views <= 10) ...[
-            Label(
-              text: '$views ${LocaleKeys.views.localize}',
-              style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
-                fontSize: 24,
-                height: 1.60,
-              ),
-            ),
-          ] else ...[
-            Label(
-              text:
-              '${FormatNumbers().formatNumber(views)} ${LocaleKeys.view.localize}',
-              style: Styles.mediumText(
-                color: const Color(0xFF6C6C6C),
-                fontSize: 24,
-                height: 1.60,
-              ),
-            ),
-          ],
+          ),
+
           const Spacer(),
+
           Label(
             text: label,
             style: Styles.mediumText(
@@ -305,289 +232,124 @@ class MyBiddersScreen extends StatelessWidget {
             ),
             maxLines: 1,
           ),
-          // Label(
-          //   text: status
-          //       ? LocaleKeys.premium2.localize
-          //       : LocaleKeys.regular.localize,
-          //   style: Styles.mediumText(
-          //     color: const Color(0xFFF33D49),
-          //     fontSize: 32,
-          //     fontWeight: FontWeight.w700,
-          //     height: 1.60,
-          //   ),
-          //   maxLines: 1,
-          // ),
         ],
       ),
     );
   }
-}
 
-/*
-class MyBiddersScreen extends StatelessWidget {
-  const ExpiredAuctionScreen({super.key});
+  // Widget _buildHeader({required num views,
+  //   required String? status,
+  // }) {
+  //   String label;
+  //   Color color;
+  //
+  //   switch (status) {
+  //     case "Premium":
+  //       label = LocaleKeys.premium2.localize;
+  //       color = AppColors.SECONDARY_COLOR;
+  //       break;
+  //     case "Regular":
+  //       label = LocaleKeys.regular.localize;
+  //       color = AppColors.PRIMARY_COLOR;
+  //       break;
+  //     case "Not subscribe":
+  //     default:
+  //       label = LocaleKeys.notSubscribed.localize;
+  //       color = Colors.grey;
+  //       break;
+  //   }
+  //
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 16),
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         SvgPicture.asset(
+  //           Assets.adsEyeIcon,
+  //         ),
+  //         const SizedBox(width: 6),
+  //         if (views == 0) ...[
+  //           Label(
+  //             text: LocaleKeys.noViews.localize,
+  //             style: Styles.mediumText(
+  //               color: const Color(0xFF6C6C6C),
+  //               fontSize: 24,
+  //               height: 1.60,
+  //             ),
+  //           ),
+  //         ] else if (views == 1) ...[
+  //           Label(
+  //             text: LocaleKeys.oneView.localize,
+  //             style: Styles.mediumText(
+  //               color: const Color(0xFF6C6C6C),
+  //               fontSize: 24,
+  //               height: 1.60,
+  //             ),
+  //           ),
+  //         ] else if (views == 2) ...[
+  //           Label(
+  //             text: LocaleKeys.twoViews.localize,
+  //             style: Styles.mediumText(
+  //               color: const Color(0xFF6C6C6C),
+  //               fontSize: 24,
+  //               height: 1.60,
+  //             ),
+  //           ),
+  //         ] else if (views >= 3 && views <= 10) ...[
+  //           Label(
+  //             text: '$views ${LocaleKeys.views.localize}',
+  //             style: Styles.mediumText(
+  //               color: const Color(0xFF6C6C6C),
+  //               fontSize: 24,
+  //               height: 1.60,
+  //             ),
+  //           ),
+  //         ] else ...[
+  //           Label(
+  //             text:
+  //             '${FormatNumbers().formatNumber(views)} ${LocaleKeys.view.localize}',
+  //             style: Styles.mediumText(
+  //               color: const Color(0xFF6C6C6C),
+  //               fontSize: 24,
+  //               height: 1.60,
+  //             ),
+  //           ),
+  //         ],
+  //         const Spacer(),
+  //         Label(
+  //           text: label,
+  //           style: Styles.mediumText(
+  //             color: color,
+  //             fontSize: 32,
+  //             fontWeight: FontWeight.w700,
+  //             height: 1.60,
+  //           ),
+  //           maxLines: 1,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  String _formatNumber(BuildContext context, num? number) {
+    if (number == null) return "0";
 
-  @override
-  Widget build(BuildContext context) {
-    print("🏗️ ExpiredAuctionScreen: Building widget");
+    final locale = context.isArabic ? 'ar' : 'en';
+    final formatter = NumberFormat.decimalPattern(locale);
+    String formatted = formatter.format(number);
 
-    return BlocBuilder<AuctionCubit, AuctionState>(
-      builder: (context, state) {
-        print("🔄 BlocBuilder: State changed - Status: ${state.status}");
+    // Ensure Arabic-Indic digits when app is Arabic
+    if (context.isArabic) {
+      const english = ['0','1','2','3','4','5','6','7','8','9'];
+      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
 
-        final cubit = context.read<AuctionCubit>();
-        final auctions = cubit.myBiddersData;
+      for (int i = 0; i < english.length; i++) {
+        formatted = formatted.replaceAll(english[i], arabic[i]);
+      }
+    }
 
-        print("📋 Current auctions list:");
-        print("   - Length: ${auctions.length}");
-        print("   - Is Empty: ${auctions.isEmpty}");
-        print("   - State Status: ${state.status}");
-
-        // Show error if state is error
-        if (state.status == StateStatus.error) {
-          print("❌ Showing error state");
-          return const Center(
-            child: Text(
-              "Something went wrong",
-              style: TextStyle(color: Colors.red),
-            ),
-          );
-        }
-
-        // Show loading only if state is loading AND auctions list is not yet fetched (null or empty initially)
-        if (state.status == StateStatus.loading && auctions.isEmpty) {
-          print("⏳ Showing loading indicator");
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (auctions.isEmpty) {
-          print("📭 Showing 'No auctions available' message");
-          return const Center(child: Text("No auctions available"));
-        }
-
-        // If the list is empty, show "No auctions available"
-        if (auctions.isEmpty) {
-          print("📭 Showing 'No auctions available' message (duplicate check)");
-          return const Center(child: Text("No auctions available"));
-        }
-
-        // Otherwise, show the auction list
-        print("📊 Rendering auction list with ${auctions.length} items");
-        return  ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount: auctions.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 16),
-          itemBuilder: (context, index) {
-            final auction = auctions[index];
-            print("🎯 Rendering auction at index $index: ${auction.toString()}");
-            return   Container(
-              margin: EdgeInsets.all(32.w),
-              decoration: BoxDecoration(
-                color: AppColors.getFillColor(context),
-                border: Border.all(
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : const Color(0xB20B1035),
-                    width: 1),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                children: [
-                  // Container(
-                  //   margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 4.h),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       Expanded(
-                  //           child: Row(
-                  //         children: [
-                  //           SvgPicture.asset(
-                  //             Assets.viewsIcon,
-                  //             color: context.isDarkMode ? AppColors.LIGHT_COLOR : null,
-                  //           ),
-                  //           SizedBox(
-                  //             width: 10.w,
-                  //           ),
-                  //           Text(
-                  //             '437K views',
-                  //             style: TextStyle(
-                  //                 color: context.isDarkMode
-                  //                     ? AppColors.LIGHT_COLOR
-                  //                     : AppColors.black,
-                  //                 fontSize: FontSize.s12,
-                  //                 fontWeight: FontWeight.w400),
-                  //           ),
-                  //         ],
-                  //       )),
-                  //       SizedBox(
-                  //         width: 10.w,
-                  //       ),
-                  //       const Label(
-                  //         text: 'Premium',
-                  //         style: TextStyle(
-                  //             color: AppColors.SECONDARY_COLOR,
-                  //             fontSize: FontSize.s16,
-                  //             fontWeight: FontWeight.w700),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xfff2f1f7),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
-                    ),
-                    child: _buildHeader(
-                      status: true,
-                      views: 10,
-                    ),
-                  ),
-                  Divider(
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : const Color(0xB20B1035),
-                    thickness: 1,
-                    height: 0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 15.w, vertical: 10.h),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child: Image.asset(
-                                auctions.gender == 'male'
-                                    ? Assets.maleImagePlaceholder
-                                    : Assets.femaleImagePlacehlder,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 16.w,
-                            ),
-                            Label(
-                              text: "name",
-                              style: Styles.headerText(
-                                color: context.isDarkMode
-                                    ? AppColors.whiteColor
-                                    : AppColors.black,
-                                fontSize: 36,
-                                height: 1.60,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Label(
-                            text: "title",
-                            style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.black,
-                              fontSize: 24,
-                              height: 1.40,
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional.centerEnd,
-                          child: Text(
-                            "category",
-                            style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 24,
-                              height: 1.60,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: context.isDarkMode
-                        ? AppColors.LIGHT_COLOR
-                        : AppColors.black.withValues(alpha: 0.7),
-                    thickness: 1,
-                    height: 0,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 24),
-                    child: MarriageCallMessageButtons(
-                      otherUserId: "widget.requestLog.userId",
-                      subcategoryId: "widget.requestLog.subCategoryId",
-                      phone: "widget.requestLog.phone",
-                      id: "UserCubit.to.state.data?.id ?? ''",
-                      hasReport: true,
-                    ),
-                  ),
-                  /*CallMessageButtons(
-            otherUserId: widget.requestLog.userId,
-            subcategoryId: widget.requestLog.subCategoryId,
-            phone: widget.requestLog.phone,
-            id: UserCubit.to.state.data?.id ?? '',
-            hasReport: true,
-            flex: 1,
-          )*/
-                ],
-              ),
-            );
-          },
-        );
-
-
-        //   Stack(
-        //   children: [
-        //     ListView.separated(
-        //       padding: const EdgeInsets.all(16),
-        //       itemCount: auctions.length,
-        //       separatorBuilder: (_, __) => const SizedBox(height: 16),
-        //       itemBuilder: (context, index) {
-        //         final auction = auctions[index];
-        //         print("🎯 Rendering auction at index $index: ${auction.toString()}");
-        //         return AuctionCard(auction: auction);
-        //       },
-        //     ),
-        //     PositionedDirectional(
-        //       end: 16,
-        //       top: MediaQuery.of(context).size.height * 0.50,
-        //       child: FloatingActionButton.extended(
-        //         onPressed: () {
-        //           context.push(Routes.createAuctionScreen);
-        //         },
-        //         backgroundColor: AppColors.PRIMARY_COLOR,
-        //         icon: const Icon(Icons.add, color: Colors.white),
-        //         label:  Text(
-        //           "${LocaleKeys.addAuction.localize}",
-        //           style:Styles.mediumText(
-        //               color: Colors.white
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // );
-      },
-    );
+    return formatted;
   }
+
+
 }
-*/
+

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/add_favorite_auction_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_all_winner_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_banner_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_main_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/auction/domain/usecases/add_favorite_auct
 import 'package:fourtyninehub/features/auction/domain/usecases/create_auction_use_case.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_available_auction_use_case.dart';
 import 'package:fourtyninehub/features/auction/domain/usecases/fetch_sub_category_auction_use_case.dart';
+import 'package:fourtyninehub/features/auction/domain/usecases/search_auction_use_case.dart';
 
 import '../../domain/repositories/auction_repo.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
@@ -117,6 +119,16 @@ class AuctionRepoImpl implements AuctionRepository {
   @override
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction() {
     return _remoteDataSource.bannerAuction();
+  }
+
+  @override
+  Future<Either<Failure, AuctionWinnerDataEntity>> getAllWinnerAuction() {
+    return _remoteDataSource.getAllWinnerAuction();
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> searchAuction({required SearchAuctionParams params}) {
+    return _remoteDataSource.searchAuction(params: params);
   }
 
 

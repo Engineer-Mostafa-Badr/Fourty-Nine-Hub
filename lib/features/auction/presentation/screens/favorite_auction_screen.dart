@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -14,7 +16,8 @@ import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 
 class FavoriteAuctionScreen extends StatelessWidget {
-  const FavoriteAuctionScreen({super.key});
+   FavoriteAuctionScreen({super.key});
+  final ScrollController _auctionScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +54,45 @@ class FavoriteAuctionScreen extends StatelessWidget {
 
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message");
-          return const Center(child: Text("No auctions available"));
+          return  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
         }
 
-        // If the list is empty, show "No auctions available"
+        // If the list is empty, show LocaleKeys.noAuctionAvailable.localize
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message (duplicate check)");
-          return const Center(child: Text("No auctions available"));
+          return  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
         }
 
         // Otherwise, show the auction list
         print("📊 Rendering auction list with ${auctions.length} items");
         return Stack(
           children: [
-            ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: auctions.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final auction = auctions[index];
-                print("🎯 Rendering auction at index $index: ${auction.toString()}");
-                return AuctionCard(auction: auction,isFavorite: true,);
-              },
-            ),
+           OlxPaginationWidget(
+          itemsPerPage: 3,
+          scrollController: _auctionScrollController,
+          banners: bannersList, // 👉 add banner list if needed
+          loadPage: (page) {
+            return context.read<AuctionCubit>().getFavoriteNonSocketAuction();
+          },
+
+          items: List.generate(
+            auctions.length,
+                (index) {
+              final auction = auctions[index];
+              return AuctionCard(auction: auction,isFavorite: true,);
+            },
+          ),
+        ),
+            // ListView.separated(
+            //   padding: const EdgeInsets.all(16),
+            //   itemCount: auctions.length,
+            //   separatorBuilder: (_, __) => const SizedBox(height: 16),
+            //   itemBuilder: (context, index) {
+            //     final auction = auctions[index];
+            //     print("🎯 Rendering auction at index $index: ${auction.toString()}");
+            //     return AuctionCard(auction: auction,isFavorite: true,);
+            //   },
+            // ),
             PositionedDirectional(
               end: 16,
               top: MediaQuery.of(context).size.height * 0.50,

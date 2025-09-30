@@ -83,102 +83,98 @@ class FormTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      SizedBox(
-        height: height ?? 40,
+      TextFormField(
+        readOnly: readOnly ?? false,
+        style:
+            textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+        textAlignVertical: textAlignVertical,
+        maxLines: maxLines ?? 1,
+        maxLength: maxLength,
+        focusNode: currentFocusNode,
+        onFieldSubmitted: (v) {
+          if (onConfirm != null) {
+            onConfirm!(v);
+          }
+        },
+        validator: validator ??
+            (value) {
+              validate = true;
+              final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
-        child: TextFormField(
-          readOnly: readOnly ?? false,
-          style:
-              textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
-          textAlignVertical: textAlignVertical,
-          maxLines: maxLines ?? 1,
-          maxLength: maxLength,
-          focusNode: currentFocusNode,
-          onFieldSubmitted: (v) {
-            if (onConfirm != null) {
-              onConfirm!(v);
-            }
-          },
-          validator: validator ??
-              (value) {
-                validate = true;
-                final RegExp emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-
-                //   setState(() {});
-                if ((value == null || value.isEmpty) && (required ?? true)) {
-                  return LocaleKeys.required.localize;
-                } else if (extraValidation ?? false) {
-                  return extraValidationMessage ?? '';
-                } else if (!emailRegExp.hasMatch(value!.trim()) &&
-                    (isEmail ?? false)) {
-                  return LocaleKeys.emailFormat.localize;
-                } else {
-                  validate = false;
-                  // setState(() {});
-                  return null;
-                }
-              },
-          onTap: () {
-      ManageVibration.vibrate();
-            if (onTap != null) {
-              onTap!();
-            }
-          },
-          enabled: enabled ?? true,
-          controller: controller,
-          autofillHints: autofill,
-          keyboardType: type,
-          initialValue: initialValue,
-          obscureText: obsecure ?? false,
-          onChanged: action,
-          inputFormatters: inputFormatters, // ✅ added here
-          decoration: InputDecoration(
-            errorStyle: const TextStyle(height: 0.1),
-            constraints: constraints,
-            hintText: hint,
-            filled: true,
-            fillColor: fillColor ?? AppColors.GREYFIELD,
-            labelText: label,
-            hintStyle: style ??
-                Styles.mediumText(
-                    fontSize: 25, color: AppColors.GREY_DARK_COLOR),
-            // labelStyle: style ??
-            //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-            prefixIcon: prefix,
-            suffixIcon: suffix,
-            enabledBorder: noBorder
-                ? InputBorder.none
-                : OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: borderSide ?? AppColors.GREYFIELD,
-                    ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(5),
+              //   setState(() {});
+              if ((value == null || value.isEmpty) && (required ?? true)) {
+                return LocaleKeys.required.localize;
+              } else if (extraValidation ?? false) {
+                return extraValidationMessage ?? '';
+              } else if (!emailRegExp.hasMatch(value!.trim()) &&
+                  (isEmail ?? false)) {
+                return LocaleKeys.emailFormat.localize;
+              } else {
+                validate = false;
+                // setState(() {});
+                return null;
+              }
+            },
+        onTap: () {
+            ManageVibration.vibrate();
+          if (onTap != null) {
+            onTap!();
+          }
+        },
+        enabled: enabled ?? true,
+        controller: controller,
+        autofillHints: autofill,
+        keyboardType: type,
+        initialValue: initialValue,
+        obscureText: obsecure ?? false,
+        onChanged: action,
+        inputFormatters: inputFormatters, // ✅ added here
+        decoration: InputDecoration(
+          errorStyle: const TextStyle(height: 0.1),
+          constraints: constraints,
+          hintText: hint,
+          filled: true,
+          fillColor: fillColor ?? AppColors.GREYFIELD,
+          labelText: label,
+          hintStyle: style ??
+              Styles.mediumText(
+                  fontSize: 25, color: AppColors.GREY_DARK_COLOR),
+          // labelStyle: style ??
+          //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+          prefixIcon: prefix,
+          suffixIcon: suffix,
+          enabledBorder: noBorder
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: borderSide ?? AppColors.GREYFIELD,
                   ),
-            focusedBorder: noBorder
-                ? InputBorder.none
-                : OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: borderColor ?? AppColors.GREYFIELD,
-                    ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(5),
+                  borderRadius: borderRadius ?? BorderRadius.circular(5),
+                ),
+          focusedBorder: noBorder
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: borderColor ?? AppColors.GREYFIELD,
                   ),
-            errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.red,
-              ),
-              borderRadius: borderRadius ?? BorderRadius.circular(5),
+                  borderRadius: borderRadius ?? BorderRadius.circular(5),
+                ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.red,
             ),
-            focusedErrorBorder: noBorder
-                ? InputBorder.none
-                : OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.red,
-                    ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(5),
-                  ),
+            borderRadius: borderRadius ?? BorderRadius.circular(5),
           ),
-          cursorColor: Colors.grey,
+          focusedErrorBorder: noBorder
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                  ),
+                  borderRadius: borderRadius ?? BorderRadius.circular(5),
+                ),
         ),
+        cursorColor: Colors.grey,
       ),
       if (info != null)
         Container(

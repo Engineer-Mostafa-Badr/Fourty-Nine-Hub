@@ -7,13 +7,16 @@ import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auct
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
+import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 class ExpiredAuctionScreen extends StatelessWidget {
-  const ExpiredAuctionScreen({super.key});
+   ExpiredAuctionScreen({super.key});
+  final ScrollController _auctionExpiredScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +38,33 @@ class ExpiredAuctionScreen extends StatelessWidget {
          if (state.status == StateStatus.loading && auctions.isEmpty) {
           body = const Center(child: CircularProgressIndicator());
         } else if (auctions.isEmpty) {
-          body = const Center(child: Text("No auctions available"));
+          body =  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
         } else {
-          body = ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: auctions.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
-            itemBuilder: (context, index) {
-              final auction = auctions[index];
-              return AuctionCard(auction: auction);
-            },
-          );
+           body = OlxPaginationWidget(
+             itemsPerPage: 3,
+             scrollController: _auctionExpiredScrollController,
+             banners: bannersList, // 👉 add banner list if needed
+             loadPage: (page) {
+               return context.read<AuctionCubit>().getExpiredNonSocketAuction();
+             },
+
+             items: List.generate(
+               auctions.length,
+                   (index) {
+                 final auction = auctions[index];
+                 return AuctionCard(auction: auction);
+               },
+             ),
+           );
+          // body = ListView.separated(
+          //   padding: const EdgeInsets.all(16),
+          //   itemCount: auctions.length,
+          //   separatorBuilder: (_, __) => const SizedBox(height: 16),
+          //   itemBuilder: (context, index) {
+          //     final auction = auctions[index];
+          //     return AuctionCard(auction: auction);
+          //   },
+          // );
         }
 
         return Stack(
@@ -112,13 +131,13 @@ class ExpiredAuctionScreen extends StatelessWidget {
 
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message");
-          return const Center(child: Text("No auctions available"));
+          return const Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
         }
 
-        // If the list is empty, show "No auctions available"
+        // If the list is empty, show LocaleKeys.noAuctionAvailable.localize
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message (duplicate check)");
-          return const Center(child: Text("No auctions available"));
+          return const Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
         }
 
         // Otherwise, show the auction list

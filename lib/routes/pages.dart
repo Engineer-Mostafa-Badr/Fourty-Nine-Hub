@@ -4874,7 +4874,7 @@ class AppPages {
                 builder: (context, state) {
                   return BlocProvider(
                     create: (_) =>
-                        serviceLocator<AuctionCubit>()..fetchAuctionBanner(),
+                        serviceLocator<AuctionCubit>()..fetchAuctionBanner()..fetchAuctionAllWinner(),
                         // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
                     child: AuctionScreen(),
                   );

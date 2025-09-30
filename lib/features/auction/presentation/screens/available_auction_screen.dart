@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
+import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -30,7 +31,20 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
   @override
   void initState() {
     super.initState();
-    // 🔹 Trigger initial load when screen opens
+
+    // _auctionScrollController.addListener(() {
+    //   final cubit = context.read<AuctionCubit>();
+    //
+    //   if (_auctionScrollController.position.pixels >=
+    //       _auctionScrollController.position.maxScrollExtent - 200 &&
+    //       cubit.hasMoreAvailableNonSocketAuction &&
+    //       !cubit.isAuctionMoreAvailableNonSocketAuction) {
+    //     print("📢 Triggering available auction pagination");
+    //     cubit.getAvailableNonSocketAuction(context);
+    //   }
+    // });
+
+    // Trigger initial load
     context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction(context);
   }
 
@@ -75,13 +89,35 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
             ),
           );
         } else if (auctions.isNotEmpty) {
+          // body = ListView.separated(
+          //   controller: _auctionScrollController,
+          //   padding: const EdgeInsets.all(16),
+          //   itemCount: auctions.length + (cubit.hasMoreAvailableNonSocketAuction ? 1 : 0),
+          //   separatorBuilder: (_, __) => const SizedBox(height: 16),
+          //   itemBuilder: (context, index) {
+          //     if (index < auctions.length) {
+          //       final auction = auctions[index];
+          //       return AuctionCard(auction: auction);
+          //     } else {
+          //       // Loader at bottom while fetching more
+          //       return const Center(
+          //         child: Padding(
+          //           padding: EdgeInsets.all(16),
+          //           child: CircularProgressIndicator(),
+          //         ),
+          //       );
+          //     }
+          //   },
+          // );
+
           body = OlxPaginationWidget(
-            itemsPerPage: cubit.auctionPageSize,
+            itemsPerPage: 3,
             scrollController: _auctionScrollController,
-            banners: [], // 👉 add banner list if needed
+            banners: bannersList, // 👉 add banner list if needed
             loadPage: (page) {
               return context.read<AuctionCubit>().getAvailableNonSocketAuction(context);
             },
+
             items: List.generate(
               auctions.length,
                   (index) {
