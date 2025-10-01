@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/widgets/cards/sticky_tab_bar_delegate.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,9 +17,7 @@ import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
-import '../../../star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import '../../../star_feature/presentation/pages/all_winner_view.dart';
-import '../../../account_taps/wallet/presentation/widgets/winner.dart';
+
 import 'chance_winners_view.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
@@ -27,7 +26,6 @@ import '../../../../core/utils/format_numbers.dart';
 import '../../domain/entity/chance_ad_entity.dart';
 import '../../domain/use_case/join_chance_ad_use_case.dart';
 
-import '../../../star_feature/presentation/widgets/talent_card/sticky_tab_bar_delegate.dart';
 import '../widgets/floating_action_button_widget.dart';
 import 'chance_detail_view.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';

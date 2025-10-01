@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/profile_cubit/profile_cubit.dart';
 
 import '../features/star_feature/data/data_source/playlist_remote_data_source.dart';
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
@@ -41,8 +40,8 @@ import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dar
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
 // NEW: Comment use cases imports
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import '../features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
+import '../features/star_feature/presentation/presentation_exports.dart';
 
 class TubeServiceLocator {
   static void execute({required GetIt serviceLocator}) {

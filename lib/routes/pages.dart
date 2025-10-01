@@ -282,8 +282,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/pages/tube_feed_page.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
@@ -465,7 +464,7 @@ import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import '../features/star_feature/presentation/pages/my_talent.dart';
+import '../features/star_feature/presentation/presentation_exports.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/trip_join/view_all_trip_join/presentation/views/trip_join_view.dart';
@@ -2107,9 +2106,7 @@ class AppPages {
                       path: Paths.CREATEPOST,
                       name: Routes.CREATEPOST,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const CreatePostView(
-
-                      )),
+                          context, state, const CreatePostView()),
                     ),
                     GoRoute(
                       path: Paths.CREATEPOSTTWITTER,
@@ -2325,22 +2322,22 @@ class AppPages {
               //           ),
               //         ),
               //       ),
-                    // CreateAuctionView
-                  //   GoRoute(
-                  //     path: Paths.CREATEAUCTION,
-                  //     name: Routes.CREATEAUCTION,
-                  //     pageBuilder: (context, state) => customTransition(
-                  //         context,
-                  //         state,
-                  //         BlocProvider.value(
-                  //           value: serviceLocator<CreateAuctionCubit>(),
-                  //           child: CreateAuctionView(
-                  //             adId: state.extra as String,
-                  //           ),
-                  //         )),
-                  //   ),
-                  //   // OtherAccountView
-                  // ]),
+              // CreateAuctionView
+              //   GoRoute(
+              //     path: Paths.CREATEAUCTION,
+              //     name: Routes.CREATEAUCTION,
+              //     pageBuilder: (context, state) => customTransition(
+              //         context,
+              //         state,
+              //         BlocProvider.value(
+              //           value: serviceLocator<CreateAuctionCubit>(),
+              //           child: CreateAuctionView(
+              //             adId: state.extra as String,
+              //           ),
+              //         )),
+              //   ),
+              //   // OtherAccountView
+              // ]),
 
               // ChatView
               GoRoute(
@@ -3660,11 +3657,13 @@ class AppPages {
                     name: Routes.BE_STAR_DETAILS,
                     pageBuilder: (context, state) {
                       return customTransition(
-                          context,
-                          state,
-                          BlocProvider<StarCubit>(
-                              create: (_) => serviceLocator(),
-                              child: const AllWinnerView()));
+                        context,
+                        state,
+                        BlocProvider<StarCubit>(
+                          create: (_) => serviceLocator(),
+                          child: const AllWinnerView(),
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -3682,7 +3681,7 @@ class AppPages {
                           create: (_) => serviceLocator(),
                         ),
                       ],
-                      child: const BeStarView(),
+                      child: const TubeFeedView(),
                     ),
                   );
                 },
@@ -4875,7 +4874,7 @@ class AppPages {
                   return BlocProvider(
                     create: (_) =>
                         serviceLocator<AuctionCubit>()..fetchAuctionBanner(),
-                        // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
+                    // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
                     child: AuctionScreen(),
                   );
                 },
@@ -4885,8 +4884,7 @@ class AppPages {
                 name: Routes.createAuctionScreen,
                 builder: (context, state) {
                   return BlocProvider(
-                    create: (_) =>
-                        serviceLocator<AuctionCubit>(),
+                    create: (_) => serviceLocator<AuctionCubit>(),
                     child: CreateAuctionScreen(),
                   );
                 },

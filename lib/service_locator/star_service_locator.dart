@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/star_feature/presentation/playlist/cubit/playlist_cubit.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/profile/cubit/profile_cubit.dart';
+
 import '../features/star_feature/data/data_source/star_remote_data_source.dart';
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
 import '../features/star_feature/data/data_source/playlist_remote_data_source.dart';
@@ -34,10 +37,16 @@ import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/comment_use_cases.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
+// New refactored use cases
+import '../features/star_feature/domain/use_case/video/toggle_favorite_video_use_case.dart';
+import '../features/star_feature/domain/use_case/video/toggle_watch_later_use_case.dart';
+import '../features/star_feature/domain/use_case/video/rate_video_use_case.dart';
+import '../features/star_feature/domain/use_case/video/share_video_use_case.dart';
+import '../features/star_feature/domain/use_case/feed/load_favorite_videos_use_case.dart';
+import '../features/star_feature/domain/use_case/feed/load_watch_later_videos_use_case.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import '../features/star_feature/presentation/controller/profile_cubit/profile_cubit.dart';
-import '../features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
+
 import '../features/ten_percent/data/datasources/ten_percent_remote_data_source.dart';
 import '../features/ten_percent/data/repositories/ten_percent_repo_impl.dart';
 import '../features/ten_percent/domain/repositories/ten_percent_repo.dart';
@@ -275,6 +284,31 @@ class StarServiceLocator {
 
     serviceLocator.registerLazySingleton<UpdatePlaylistUseCase>(
       () => UpdatePlaylistUseCase(serviceLocator()),
+    );
+
+    // Register NEW Refactored Use Cases
+    serviceLocator.registerLazySingleton<ToggleFavoriteVideoUseCase>(
+      () => ToggleFavoriteVideoUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<ToggleWatchLaterUseCase>(
+      () => ToggleWatchLaterUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<RateVideoUseCase>(
+      () => RateVideoUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<ShareVideoUseCase>(
+      () => ShareVideoUseCase(),
+    );
+
+    serviceLocator.registerLazySingleton<LoadFavoriteVideosUseCase>(
+      () => LoadFavoriteVideosUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<LoadWatchLaterVideosUseCase>(
+      () => LoadWatchLaterVideosUseCase(serviceLocator()),
     );
 
     // Register Cubits
