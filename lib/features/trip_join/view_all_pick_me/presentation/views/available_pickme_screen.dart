@@ -13,12 +13,14 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/widgets/available_pick_me_body.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
@@ -410,357 +412,245 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              if (data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)) {
-                                return;
-                              }
-                              ManageVibration.vibrate();
-                              context.read<ViewAllTripJoinCubit>().applyPickMe(data.id!);
-                            },
-                            child: Stack(
-                              children: [
-                                CustomCard(
-                                  radius: 20,
-                                  color: ((data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)) ? AppColors.whiteColor : AppColors.BG_GRAY_COLOR),
-                                  children: [
-                                    const Sizer(
-                                      height: 8,
+                          Stack(
+                            children: [
+                              GlobalCard(
+                                subcategoryId: '62ea00e269ea29c91dfc390c',
+                                phone: data.phoneNumber ?? "1234",
+                                reportId: context.read<UserCubit>().state.data?.id??'',
+                                otherUserId: '',
+                                onTap: (){
+                                  if (data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)) {
+                                    return;
+                                  }
+                                  ManageVibration.vibrate();
+                                  context.read<ViewAllTripJoinCubit>().applyPickMe(data.id!);
+                                },
+                                isButtonEnabled: data.isButtonEnabled?.state??false,
+                                isPremium: data.isPremium,
+                                hasReport: true,
+                                hasTopSide: true,
+                                hasBottomSide: true,
+                                isView: data.isView,
+                                subscriptionType: data.formattedOfferType,
+                                views: data.viewerIds??0,
+                                onRequest: (){
+                                  if (!context.read<UserCubit>().isLoggedIn) {
+                                    ManageVibration.vibrate();
+                                    pleaseLoginDialog(context);
+                                    return;
+                                  }
+                                  ManageVibration.vibrate();
+                                  showModalBottomSheet(
+                                    backgroundColor: Colors.white,
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(32.0),
+                                        topRight: Radius.circular(32.0),
+                                      ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 32.0.h),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: ClickableWidget(
-                                              onTap: () {
-                                                if((data.lastViewers?.length??0)>0) {
-                                                  ManageVibration.vibrate();
-                                                  showModalBottomSheet(
-                                                    backgroundColor: context.isDarkMode
-                                                        ? AppColors.DARK_BLUE_COLOR
-                                                        .withOpacity(0.95)
-                                                        : AppColors.LIGHT_COLOR,
-                                                    constraints: BoxConstraints(
-                                                      maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                    isDismissible: true,
+                                    isScrollControlled: true,
+                                    builder: (BuildContext context) {
+                                      return BlocProvider.value(
+                                        value: serviceLocator<ViewAllTripJoinCubit>(),
+                                        child: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(builder: (context, state) {
+                                          return AnimatedPadding(
+                                            padding: MediaQuery.of(context).viewInsets,
+                                            duration: const Duration(milliseconds: 50),
+                                            child: Container(
+                                              height: 400.h,
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 10.h,
+                                                horizontal: 10,
+                                              ),
+                                              child: Form(
+                                                key: formKey,
+                                                child: Column(
+                                                  children: [
+                                                    Label(
+                                                      text: context.isArabic ? "ادخل رقم هاتفك" : "Enter your phone number",
+                                                      style: Styles.headerText(),
                                                     ),
-                                                    context: context,
-                                                    shape: const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(32.0),
-                                                        topRight: Radius.circular(32.0),
-                                                      ),
+                                                    Sizer(
+                                                      height: 30.h,
                                                     ),
-                                                    isDismissible: true,
-                                                    // isScrollControlled: true,
-                                                    builder: (BuildContext context) {
-                                                      return Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                            Expanded(
-                                                              child: ListView(
-                                                                shrinkWrap: true,
-                                                                children: List.generate(data.lastViewers?.length??0, (i)=>Container(
-                                                                  padding: EdgeInsets.only(bottom: 10),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      ImageFromInternet(
-                                                                          image: '',
-                                                                          isCircle: true,
-                                                                          defaultLogo: false,
-                                                                          isMale: data.lastViewers?[i].gender=='male',
-                                                                          width: 40,
-                                                                          height: 40,
-                                                                          firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
-                                                                          charPadding: 0),
-                                                                      const Sizer(),
-                                                                      Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                                    ],
-                                                                  ),
-                                                                )),
+                                                    CustomPhoneTextFormField(
+                                                      currentFocusNode: FocusNode(),
+                                                      nextFocusNode: FocusNode(),
+                                                      currentController: phoneController,
+                                                      onInputChanged: (value) => formKey.currentState!.validate(),
+                                                      inputFormatters: [
+                                                        FilteringTextInputFormatter.digitsOnly,
+                                                        LengthLimitingTextInputFormatter(11),
+                                                      ],
+                                                      validator: (value) {
+                                                        final input = value?.trim() ?? '';
+
+                                                        if (input.isEmpty) {
+                                                          return LocaleKeys.required.localize;
+                                                        }
+
+                                                        final numericValue = convertDigits(input, toArabic: false).replaceAll(RegExp(r'[^0-9]'), '');
+
+                                                        if (numericValue.length != 11) {
+                                                          return context.isArabic
+                                                              ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
+                                                              : 'Phone number must be exactly 11 digits.';
+                                                        }
+
+                                                        if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
+                                                          return context.isArabic
+                                                              ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
+                                                              : 'Phone number must start with 010, 011, 012, or 015.';
+                                                        }
+
+                                                        return null;
+                                                      },
+                                                    ),
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: InkWell(
+                                                              onTap: () async {
+                                                                if (data.isNormalRequested == true) {
+                                                                  context.pop();
+                                                                  showErrorMessage(context,
+                                                                      context.isArabic ? 'لقد تم ارسال الطلب من قبل' : 'This trip has already been requested');
+                                                                  return;
+                                                                }
+                                                                if (formKey.currentState!.validate()) {
+                                                                  bool result = await context
+                                                                      .read<ViewAllTripJoinCubit>()
+                                                                      .createPickMeRequest(data.id ?? '', false, phoneController.text);
+                                                                  if (result == true) {
+                                                                    data.isNormalRequested = true;
+                                                                  }
+                                                                }
+                                                              },
+                                                              child: Container(
+                                                                width: 100,
+                                                                height: 80.h,
+                                                                padding: const EdgeInsets.all(5),
+                                                                decoration: BoxDecoration(
+                                                                    color: data.isNormalRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.PRIMARY_COLOR,
+                                                                    borderRadius: BorderRadius.circular(15)),
+                                                                alignment: Alignment.center,
+                                                                child: Label(
+                                                                  text: LocaleKeys.request.localize,
+                                                                  style: Styles.headerText(color: Colors.white),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                  );
-                                                }
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.remove_red_eye_sharp,
-                                                    color: context.isDarkMode ? AppColors.whiteColor : AppColors.DARK_GRAY_COLOR,
-                                                  ),
-                                                  const Sizer(),
-                                                  Label(
-                                                    text: '${formatPrice(formatViews(data.viewerIds ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
-                                                    style: Styles.mediumText(
-                                                      fontSize: 24,
-                                                      color: context.isDarkMode ? AppColors.whiteColor : AppColors.DARK_GRAY_COLOR,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            data.formattedOfferType,
-                                            style: Styles.headerText(color: AppColors.getRedColor(context), fontSize: 32),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    const Sizer(),
-                                    TripCardInfoWidget(
-                                        title: context.isArabic ? data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
-                                        model: context.isArabic ? data.vehicleDetails?.modelAr ?? "" : data.vehicleDetails?.modelEn ?? "",
-                                        icon: Assets.tripJoinCarIcon,
-                                        price: formatPrice(data.pricePerSeat?.round() ?? 0, context),
-                                        seats: LocaleKeys.eachSeat.localize),
-                                    const Sizer(
-                                      height: 30,
-                                    ),
-                                    _locationWidget(title: data.location?.start?.address ?? "", iconColor: AppColors.LIGHT_BLUE),
-                                    const Sizer(),
-                                    _locationWidget(title: data.location?.target?.address ?? "", iconColor: AppColors.CHECK_MARK_COLOR),
-                                    const Sizer(),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 32.0.h,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            formatTimestamp(data.startDate ?? '', context),
-                                            style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            // data.passengers == 1
-                                            //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
-                                            //     : ''
-                                            '${formatPrice(data.passengers ?? 1, context)} ${LocaleKeys.seat.localize}',
-                                            style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            data.isRepeat == true ? LocaleKeys.repeated.localize : LocaleKeys.oneTime.localize,
-                                            style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 32.0.h,
-                                        ),
-                                        child: Row(
-                                          spacing: 15,
-                                          children: [
-                                            if ((UserCubit.to.state.data?.id ?? '') != data.creatorId)
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(top: 8.h, bottom: 8.h),
-                                                  child: TripJoinCardButton(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                                    title: LocaleKeys.request.localize,
-                                                    color: AppColors.getRedColor(context),
-                                                    onTap: () {
-                                                      if (!context.read<UserCubit>().isLoggedIn) {
-                                                        ManageVibration.vibrate();
-                                                        pleaseLoginDialog(context);
-                                                        return;
-                                                      }
-                                                      ManageVibration.vibrate();
-                                                      showModalBottomSheet(
-                                                        backgroundColor: Colors.white,
-                                                        context: context,
-                                                        shape: const RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(32.0),
-                                                            topRight: Radius.circular(32.0),
                                                           ),
-                                                        ),
-                                                        isDismissible: true,
-                                                        isScrollControlled: true,
-                                                        builder: (BuildContext context) {
-                                                          return BlocProvider.value(
-                                                            value: serviceLocator<ViewAllTripJoinCubit>(),
-                                                            child: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(builder: (context, state) {
-                                                              return AnimatedPadding(
-                                                                padding: MediaQuery.of(context).viewInsets,
-                                                                duration: const Duration(milliseconds: 50),
-                                                                child: Container(
-                                                                  height: 400.h,
-                                                                  padding: EdgeInsets.symmetric(
-                                                                    vertical: 10.h,
-                                                                    horizontal: 10,
-                                                                  ),
-                                                                  child: Form(
-                                                                    key: formKey,
-                                                                    child: Column(
-                                                                      children: [
-                                                                        Label(
-                                                                          text: context.isArabic ? "ادخل رقم هاتفك" : "Enter your phone number",
-                                                                          style: Styles.headerText(),
-                                                                        ),
-                                                                        Sizer(
-                                                                          height: 30.h,
-                                                                        ),
-                                                                        CustomPhoneTextFormField(
-                                                                          currentFocusNode: FocusNode(),
-                                                                          nextFocusNode: FocusNode(),
-                                                                          currentController: phoneController,
-                                                                          onInputChanged: (value) => formKey.currentState!.validate(),
-                                                                          inputFormatters: [
-                                                                            FilteringTextInputFormatter.digitsOnly,
-                                                                            LengthLimitingTextInputFormatter(11),
-                                                                          ],
-                                                                          validator: (value) {
-                                                                            final input = value?.trim() ?? '';
-
-                                                                            if (input.isEmpty) {
-                                                                              return LocaleKeys.required.localize;
-                                                                            }
-
-                                                                            final numericValue = convertDigits(input, toArabic: false).replaceAll(RegExp(r'[^0-9]'), '');
-
-                                                                            if (numericValue.length != 11) {
-                                                                              return context.isArabic
-                                                                                  ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                                                  : 'Phone number must be exactly 11 digits.';
-                                                                            }
-
-                                                                            if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
-                                                                              return context.isArabic
-                                                                                  ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                                                  : 'Phone number must start with 010, 011, 012, or 015.';
-                                                                            }
-
-                                                                            return null;
-                                                                          },
-                                                                        ),
-                                                                        Expanded(
-                                                                          child: Row(
-                                                                            children: [
-                                                                              Expanded(
-                                                                                child: InkWell(
-                                                                                  onTap: () async {
-                                                                                    if (data.isNormalRequested == true) {
-                                                                                      context.pop();
-                                                                                      showErrorMessage(context,
-                                                                                          context.isArabic ? 'لقد تم ارسال الطلب من قبل' : 'This trip has already been requested');
-                                                                                      return;
-                                                                                    }
-                                                                                    if (formKey.currentState!.validate()) {
-                                                                                      bool result = await context
-                                                                                          .read<ViewAllTripJoinCubit>()
-                                                                                          .createPickMeRequest(data.id ?? '', false, phoneController.text);
-                                                                                      if (result == true) {
-                                                                                        data.isNormalRequested = true;
-                                                                                      }
-                                                                                    }
-                                                                                  },
-                                                                                  child: Container(
-                                                                                    width: 100,
-                                                                                    height: 80.h,
-                                                                                    padding: const EdgeInsets.all(5),
-                                                                                    decoration: BoxDecoration(
-                                                                                        color: data.isNormalRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.PRIMARY_COLOR,
-                                                                                        borderRadius: BorderRadius.circular(15)),
-                                                                                    alignment: Alignment.center,
-                                                                                    child: Label(
-                                                                                      text: LocaleKeys.request.localize,
-                                                                                      style: Styles.headerText(color: Colors.white),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Sizer(),
-                                                                              Expanded(
-                                                                                child: InkWell(
-                                                                                  onTap: () async {
-                                                                                    if (data.isPremiumRequested == true) {
-                                                                                      return;
-                                                                                    }
-                                                                                    if (formKey.currentState!.validate()) {
-                                                                                      bool result = await context
-                                                                                          .read<ViewAllTripJoinCubit>()
-                                                                                          .createPickMeRequest(data.id ?? '', true, phoneController.text);
-                                                                                      if (result == true) {
-                                                                                        data.isPremiumRequested = true;
-                                                                                      }
-                                                                                      // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
-                                                                                    }
-                                                                                  },
-                                                                                  child: Container(
-                                                                                    width: 100,
-                                                                                    height: 80.h,
-                                                                                    padding: const EdgeInsets.all(5),
-                                                                                    decoration: BoxDecoration(
-                                                                                        color:
-                                                                                            data.isPremiumRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.SECONDARY_COLOR,
-                                                                                        borderRadius: BorderRadius.circular(15)),
-                                                                                    alignment: Alignment.center,
-                                                                                    child: Label(
-                                                                                      text: LocaleKeys.premium_request.localize,
-                                                                                      style: Styles.headerText(color: Colors.white),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
+                                                          Sizer(),
+                                                          Expanded(
+                                                            child: InkWell(
+                                                              onTap: () async {
+                                                                if (data.isPremiumRequested == true) {
+                                                                  return;
+                                                                }
+                                                                if (formKey.currentState!.validate()) {
+                                                                  bool result = await context
+                                                                      .read<ViewAllTripJoinCubit>()
+                                                                      .createPickMeRequest(data.id ?? '', true, phoneController.text);
+                                                                  if (result == true) {
+                                                                    data.isPremiumRequested = true;
+                                                                  }
+                                                                  // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
+                                                                }
+                                                              },
+                                                              child: Container(
+                                                                width: 100,
+                                                                height: 80.h,
+                                                                padding: const EdgeInsets.all(5),
+                                                                decoration: BoxDecoration(
+                                                                    color:
+                                                                    data.isPremiumRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.SECONDARY_COLOR,
+                                                                    borderRadius: BorderRadius.circular(15)),
+                                                                alignment: Alignment.center,
+                                                                child: Label(
+                                                                  text: LocaleKeys.premium_request.localize,
+                                                                  style: Styles.headerText(color: Colors.white),
                                                                 ),
-                                                              );
-                                                            }),
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                    radius: 15,
-                                                  ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            Expanded(
-                                              child: ContactsTripButtons(
-                                                // isPremium: false,
-                                                isPremium: data.isPremium,
-                                                isButtonEnabled: data.isButtonEnabled!.state,
-                                                otherUserId: '2',
-                                                subcategoryId: '62ea00e269ea29c91dfc390c',
-                                                phone: data.phoneNumber ?? "1234",
-                                                id: context.read<UserCubit>().state.data!.id,
-                                                hasReport: true,
-                                              ),
                                             ),
-                                          ],
-                                        )
-
-                                        // TripJoinButtonsSection(
-                                        //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
-                                        //   isRequestButton: true,
-                                        //   buttonTitle:LocaleKeys.requests.localize,
-                                        //   // buttonTitle:" buttonTitle",
-                                        //   onTap: (){},
-                                        // ),
+                                          );
+                                        }),
+                                      );
+                                    },
+                                  );
+                                },
+                                onShowViewers: (){
+                                  if((data.lastViewers?.length??0)>0) {
+                                    ManageVibration.vibrate();
+                                    showModalBottomSheet(
+                                      backgroundColor: context.isDarkMode
+                                          ? AppColors.DARK_BLUE_COLOR
+                                          .withOpacity(0.95)
+                                          : AppColors.LIGHT_COLOR,
+                                      constraints: BoxConstraints(
+                                        maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                      ),
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(32.0),
+                                          topRight: Radius.circular(32.0),
                                         ),
-                                    const Sizer(),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                      ),
+                                      isDismissible: true,
+                                      // isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                              Expanded(
+                                                child: ListView(
+                                                  shrinkWrap: true,
+                                                  children: List.generate(data.lastViewers?.length??0, (i)=>Container(
+                                                    padding: EdgeInsets.only(bottom: 10),
+                                                    child: Row(
+                                                      children: [
+                                                        ImageFromInternet(
+                                                            image: '',
+                                                            isCircle: true,
+                                                            defaultLogo: false,
+                                                            isMale: data.lastViewers?[i].gender=='male',
+                                                            width: 40,
+                                                            height: 40,
+                                                            firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
+                                                            charPadding: 0),
+                                                        const Sizer(),
+                                                        Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                      ],
+                                                    ),
+                                                  )),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                body:AvailablePickMeBody(data:data),
+                              ),
+                            ],
                           ),
-                          data.isPremium == true || data.isButtonEnabled!.state == true ? SizedBox() : TripCardSubscribeText(),
                         ],
                       ),
                     );

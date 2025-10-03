@@ -10,6 +10,7 @@ import '../../../../../../../helpers/manage_vibration.dart';
 class DialogContent extends StatelessWidget {
   const DialogContent({
     super.key,
+    this.onRightButtonPressed,
     required this.subTitle,
     required this.rightButtonTitle,
     required this.leftButtonTitle,
@@ -18,6 +19,7 @@ class DialogContent extends StatelessWidget {
   final String subTitle;
   final String rightButtonTitle;
   final String leftButtonTitle;
+  final VoidCallback? onRightButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,8 @@ class DialogContent extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: (){
       ManageVibration.vibrate();
-                     Navigator.of(context).pop();},
+                     Navigator.of(context).pop();
+                     },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:context.isDarkMode?AppColors.red_Color_DARK:  AppColors.SECONDARY_COLOR,
                     foregroundColor: Colors.white,
@@ -77,7 +80,8 @@ class DialogContent extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: (){
       ManageVibration.vibrate();
-                     Navigator.of(context).pop();},
+      onRightButtonPressed?? Navigator.of(context).pop();
+                     },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:context.isDarkMode?AppColors.Floating_Button_COLOR_DARK: AppColors.buttonDialog,
                     foregroundColor: Colors.white,
