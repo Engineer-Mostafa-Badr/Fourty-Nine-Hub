@@ -50,7 +50,6 @@ class _ChatCardState extends State<ChatCard> {
             if (serviceLocator<ConversationsCubit>().selectedSocialConversation.isEmpty) {
               // context.read<ChatsCubit>().selectChat = widget.chat!;
               // context.push(Routes.CHATROOM, extra: widget.chatsCubit);
-              serviceLocator<ConversationsCubit>().joinConversation(conversationId: widget.chat?.conversationId ?? '');
             } else {
               setState(() {
                 if (!widget.chat!.isSelected) {
@@ -146,6 +145,7 @@ class _ChatCardState extends State<ChatCard> {
       child: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
+          serviceLocator<ConversationsCubit>().joinConversation(conversationId: widget.chat?.conversationId ?? '');
           // if (widget.chat!.hasStory) {}
           // if (widget.chat!.isAdmin != "admin") {
           //   if (context.isUserLoggedIn) {
@@ -591,21 +591,27 @@ class _ChatCardState extends State<ChatCard> {
   _unreadMessagesCount() {
     if (widget.chat?.unreadMessagesCount == 0) return const SizedBox();
 
-    return Container(
-      margin: const EdgeInsetsDirectional.only(end: 8),
-      decoration: const BoxDecoration(
-        color: AppColors.SECONDARY_COLOR,
-        shape: BoxShape.circle,
-      ),
-      height: 16,
-      width: 16,
-      child: Center(
-        child: Label(
-          text: FormatNumbers().convertNumberToLocalizedString(
-              (widget.chat?.unreadMessagesCount.toString() ?? '0'),
-              isArabic: context.isArabic) ,
-          style: Styles.smallText(
-            color: Colors.white,
+    return GestureDetector(
+      onTap: () {
+        ManageVibration.vibrate();
+        serviceLocator<ConversationsCubit>().leaveConversation(conversationId: widget.chat?.conversationId ?? '');
+      },
+      child: Container(
+        margin: const EdgeInsetsDirectional.only(end: 8),
+        decoration: const BoxDecoration(
+          color: AppColors.SECONDARY_COLOR,
+          shape: BoxShape.circle,
+        ),
+        height: 16,
+        width: 16,
+        child: Center(
+          child: Label(
+            text: FormatNumbers().convertNumberToLocalizedString(
+                (widget.chat?.unreadMessagesCount.toString() ?? '0'),
+                isArabic: context.isArabic) ,
+            style: Styles.smallText(
+              color: Colors.white,
+            ),
           ),
         ),
       ),
