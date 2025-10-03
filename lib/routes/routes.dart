@@ -316,11 +316,13 @@ abstract class Routes {
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
   static const conversationsScreen = '/ConversationsScreen';
   static const socialArchivedScreen = '/SocialArchivedScreen';
+  static const socialGreetScreen = '/SocialGreetScreen';
+  static const socialLockedScreen = '/SocialLockedScreen';
+  static const socialDeletedScreen = '/SocialDeletedScreen';
   static const tubeProfile =  '/BeAStar/TubeProfile';
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
   static const createAuctionScreen =  '/CreateAuctionScreen';
   static const myAuctionScreen =  '/MyAuctionScreen';
-
 }
 
 abstract class Paths {
@@ -621,6 +623,9 @@ abstract class Paths {
   static const allClientRatingScreen = 'allClientRatingScreen';
   static const conversationsScreen = 'ConversationsScreen';
   static const socialArchivedScreen = 'SocialArchivedScreen';
+  static const socialGreetScreen = 'SocialGreetScreen';
+  static const socialLockedScreen = 'SocialLockedScreen';
+  static const socialDeletedScreen = 'SocialDeletedScreen';
 
   static const tubeProfile = 'TubeProfile';
 

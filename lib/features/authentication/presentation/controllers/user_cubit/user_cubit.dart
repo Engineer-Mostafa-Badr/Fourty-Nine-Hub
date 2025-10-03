@@ -533,6 +533,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 
     final result = await _getAllSessionsUseCase();
     result.fold((l){
+      log( "Session error$l");
       AppPages.router.configuration.navigatorKey.currentContext!.pop();
       showErrorMessage( AppPages.router.configuration.navigatorKey.currentContext!, getFailureMessage(l, AppPages.router.configuration.navigatorKey.currentContext!));
       emit(state.copyWith(status: StateStatus.error));
@@ -551,6 +552,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       }
 
       AppPages.router.configuration.navigatorKey.currentContext!.pop();
+      log("Sessions ${sessions.length}");
+
       emit(state.copyWith(status: StateStatus.success));
     });
   }
