@@ -48,7 +48,7 @@ class SubscribeRemoteDataSourceImpl implements SubscribeRemoteDataSource {
     final response =
         await _apiConsumer.post(EndPoints.subscribe, data: data.toJson());
     return response.fold(
-        (l) => Left(l), (data) => Right(data['success'] as bool));
+        (l) => Left(l), (data) => Right(data['status'] as bool));
   }
 
   @override

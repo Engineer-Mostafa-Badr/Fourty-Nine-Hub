@@ -22,6 +22,7 @@ class ImageAdsWidget extends StatefulWidget {
     required this.isFavourite,
     required this.onPressedFavorite,
     required this.isVerified,
+    required this.isMyAd,
   });
 
   // final MyAdCard myAdCard;
@@ -29,6 +30,7 @@ class ImageAdsWidget extends StatefulWidget {
   final Function() onPressedFavorite;
   final bool isFavourite;
   final bool isVerified;
+  final bool isMyAd;
 
   @override
   State<ImageAdsWidget> createState() => _ImageAdsWidgetState();
@@ -317,7 +319,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 ),
 
               //! Favourite
-              PositionedDirectional(
+              if(!widget.isMyAd)PositionedDirectional(
                 end: 16,
                 top: 16,
                 child: Container(

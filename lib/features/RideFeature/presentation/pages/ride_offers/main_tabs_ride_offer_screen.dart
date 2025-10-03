@@ -7,10 +7,13 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/styles.dart';
 import 'accept_ride_offer_screen.dart';
@@ -77,6 +80,10 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer>
         //   preferredSize: const Size.fromHeight(40),
         //   child: ,
         // ),
+        leading: ClickableWidget(
+          onTap: ()=>context.go(Routes.RIDE_HOME),
+          child: Icon(Icons.arrow_back, color: context.isDarkMode?Colors.white:Colors.black),
+        ),
       ),
       body: Column(
         children: [

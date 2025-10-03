@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -282,7 +283,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                                     ),
                                     builder: (context) {
-                                      SessionEntity currentSession = context.read<UserCubit>().sessions.firstWhere((s) => s.deviceId == deviceId);
+                                      SessionEntity? currentSession = context.read<UserCubit>().sessions.firstWhereOrNull((s) => s.deviceId == deviceId);
                                       return Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SingleChildScrollView(
@@ -311,13 +312,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               const SizedBox(height: 8),
 
                                               ListTile(
-                                                leading: Icon(currentSession.platform == "ios" ? Icons.apple : Icons.android, color: Colors.green),
+                                                leading: Icon(currentSession?.platform == "ios" ? Icons.apple : Icons.android, color: Colors.green),
 
-                                                title:  Text(currentSession.deviceName ?? "", style: TextStyle(fontSize: 16)),
+                                                title:  Text(currentSession?.deviceName ?? "", style: TextStyle(fontSize: 16)),
                                                 subtitle:  Text(
-                                                  "${currentSession.loginAddress ?? ''} | "
-                                                      "${DateFormat("hh:mm").format(currentSession.createdAt!)} "
-                                                      "${context.isArabic ? (currentSession.createdAt!.hour < 12 ? "ص" : "م") : (currentSession.createdAt!.hour < 12 ? "AM" : "PM")}",
+                                                  "${currentSession?.loginAddress ?? ''} | "
+                                                      "${DateFormat("hh:mm").format(currentSession?.createdAt ?? DateTime.now())} "
+                                                      "${context.isArabic ? ((currentSession?.createdAt?.hour??0) < 12 ? "ص" : "م") : ((currentSession?.createdAt?.hour??0) < 12 ? "AM" : "PM")}",
                                                 ),
                                                 // subtitle: ,
                                                 trailing:  Text(context.isArabic ? "متصل" : "Connected", style: TextStyle(color: Colors.green)),

@@ -148,16 +148,17 @@ class ClientPendingWidget extends StatelessWidget {
                               children: [
                                 Image.asset(
                                   Assets.rideFrom,
-                                  width: 24,
-                                  height: 24,
+                                  width: 16,
+                                  height: 16,
                                 ),
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Label(
+                                    maxLines: 2,
                                     text: offers?.tripDetails?.location
                                             ?.fromTitle ??
                                         'Cairo International Airport',
-                                    style: Styles.headerText(),
+                                    style: Styles.headerText(fontSize: 24),
                                   ),
                                 ),
                               ],
@@ -166,16 +167,17 @@ class ClientPendingWidget extends StatelessWidget {
                               children: [
                                 Image.asset(
                                   Assets.rideTo,
-                                  width: 24,
-                                  height: 24,
+                                  width: 16,
+                                  height: 16,
                                 ),
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Label(
+                                    maxLines: 2,
                                     text: offers
                                             ?.tripDetails?.location?.toTitle ??
                                         'Cairo International Airport',
-                                    style: Styles.mediumText(
+                                    style: Styles.mediumText(fontSize: 24,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),

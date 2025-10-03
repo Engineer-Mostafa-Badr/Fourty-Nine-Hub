@@ -32,6 +32,7 @@ class UserAdsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
       print('userType $userType');
+      print('userType ${context.read<AdvertisementCubit>().ads.length}');
       final controller = context.read<AdvertisementCubit>();
       return Column(children: [
         const Sizer(),

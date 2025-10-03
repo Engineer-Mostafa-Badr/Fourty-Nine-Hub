@@ -242,6 +242,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
 
   Future<void> getAds(
       {required String subCategoryId, required String filter}) async {
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+    print("Hiii Ads");
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print(hasMoreAdsData);
     print(isLoadingAdsMore);
@@ -255,8 +258,17 @@ class AdvertisementCubit extends Cubit<AdsState> {
         limit: 3,
         userId: userId));
     response
-        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+        .fold((l) {
+          print("Hiii Ads1");
+          print("Hiii Ads1 ${getFailureMessage(l, currentContext)}");
+          showErrorMessage(
+            currentContext,
+            getFailureMessage(l, currentContext),
+          );
+          emit(state.copyWith(failure: l, status: AdsStates.error));
+        },
             (data) async {
+              print("Hiii Ads2");
       ads.addAll(data);
       if (data.length < 3) {
         hasMoreAdsData = false;

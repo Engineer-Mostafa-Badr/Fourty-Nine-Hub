@@ -300,10 +300,6 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
 
     response.fold(
       (failure) {
-        var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
-        showErrorMessage(
-            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
       },
       (trip) {
@@ -320,7 +316,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         ));
 
         // ✅ Always navigate to the loading request screen
-        context.go(Routes.rideOffer, extra: 'ride');
+        context.pushReplacement(Routes.rideOffer, extra: 'ride');
       },
     );
   }
@@ -354,7 +350,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
         ));
 
         // ✅ Always navigate to the loading request screen
-        context.go(Routes.rideOffer, extra: 'shipping');
+        context.pushReplacement(Routes.rideOffer, extra: 'shipping');
       },
     );
   }

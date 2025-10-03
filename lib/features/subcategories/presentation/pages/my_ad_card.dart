@@ -105,6 +105,7 @@ class _MyAdCardState extends State<MyAdCard> {
                 // Fixed height for image
                 ImageAdsWidget(
                   // images: widget.item.images,
+                  isMyAd:widget.item.user?.id == userId,
                   images: widget.item.images.isNotEmpty ? widget.item.images : [Assets.logo],
                   isFavourite: widget.item.isFavourite ?? false,
                   onPressedFavorite: () async {
