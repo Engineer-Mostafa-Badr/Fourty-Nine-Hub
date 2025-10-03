@@ -131,7 +131,7 @@ class TalentCardBuilders {
                   ? Future.value()
                   : cubit.loadTalents(TalentCategory.available),
               scrollController: controller,
-              itemsPerPage: 1,
+              itemsPerPage: 3,
             ),
           ),
         );

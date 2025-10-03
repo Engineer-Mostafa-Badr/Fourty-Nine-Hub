@@ -510,13 +510,13 @@ class AuctionCubit extends Cubit<AuctionState> {
     });
   }
 
-  @override
-  Future<void> close() {
-    CliLogger.info("🛑 Closing AuctionCubit, removing socket listeners...");
-    SharedWebSocket.socket?.off("auction:new-amount-bid");
-    SharedWebSocket.socket?.off("auction:bid-error");
-    return super.close();
-  }
+  // @override
+  // Future<void> close() {
+  //   CliLogger.info("🛑 Closing AuctionCubit, removing socket listeners...");
+  //   SharedWebSocket.socket?.off("auction:new-amount-bid");
+  //   SharedWebSocket.socket?.off("auction:bid-error");
+  //   return super.close();
+  // }
 
 
 
