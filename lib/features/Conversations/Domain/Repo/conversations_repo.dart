@@ -3,10 +3,13 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../Entities/conversation_entity.dart';
 import '../Entities/conversations_pagination.dart';
+import '../Usecases/get_conversation_logs_use_case.dart';
 
 abstract class ConversationsRepo {
   Future<Either<Failure, List<ConversationEntity>>> getSocialConversations({required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations({required ConversationPagination pagination});
+  Future<Either<Failure, List<ConversationEntity>>> getSocialGreetConversations({required ConversationPagination pagination});
+  Future<Either<Failure, List<ConversationEntity>>> getSocialLockedConversations({required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getDeletedSocialConversations({required ConversationPagination pagination});
   void listenToUpdateSocialList(Function(ConversationEntity) params);
   Future<Either<Failure, bool>> startTyping({required String conversationId});
@@ -18,5 +21,8 @@ abstract class ConversationsRepo {
   Future<Either<Failure, void>> toggleMuteConversation({required String conversationId});
   Future<Either<Failure, void>> deleteConversations({required List<String> conversationIds});
   Future<Either<Failure, void>> restoreConversations({required List<String> conversationIds});
+  Future<Either<Failure, void>> socialLockConversations({required List<String> conversationIds});
+  Future<Either<Failure, void>> socialUnLockConversations({required List<String> conversationIds});
   Future<Either<Failure, int>> getUnreadConversationsCount();
+  Future<Either<Failure, List<DateTime>>> getConversationLogs({required ConversationLogsPagination pagination});
 }

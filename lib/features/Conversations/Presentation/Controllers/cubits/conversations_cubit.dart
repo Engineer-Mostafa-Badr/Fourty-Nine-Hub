@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,11 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../routes/pages.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../Domain/Usecases/delete_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_conversation_logs_use_case.dart';
 import '../../../Domain/Usecases/get_deleted_social_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_socail_greet_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_social_archived_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_social_locked_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_unreaded_conversations_count_use_case.dart';
 import '../../../Domain/Usecases/listen_to_start_typing.dart';
 import '../../../Domain/Usecases/listen_to_update_social_list_usecase.dart';
@@ -30,7 +34,10 @@ import '../../../Domain/Usecases/toggle_pinned_conversations_use_case.dart';
 class ConversationsCubit extends Cubit<ConversationsState> {
   final GetSocialConversations getSocialConversationsUseCase;
   final GetSocialArchivedConversations getSocialArchivedConversationsUseCase;
+  final GetSocialGreetConversations getSocialGreetConversationsUseCase;
+  final GetSocialLockedConversations getSocialLockedConversationsUseCase;
   final GetDeletedSocialConversationsUseCase getDeletedSocialConversationsUseCase;
+  final GetConversationLogsUseCase getConversationLogsUseCase;
   final ListenToUpdateSocialListUseCase listenToUpdateSocialListUseCase;
   final StartTypingUseCase startTypingUseCase;
   final ListenToStartTypingUseCase listenToStartTypingUseCase;
@@ -50,7 +57,10 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   ConversationsCubit(
     this.getSocialConversationsUseCase,
     this.getSocialArchivedConversationsUseCase,
+    this.getSocialGreetConversationsUseCase,
     this.getDeletedSocialConversationsUseCase,
+    this.getSocialLockedConversationsUseCase,
+    this.getConversationLogsUseCase,
     this.listenToUpdateSocialListUseCase,
     this.startTypingUseCase,
     this.listenToStartTypingUseCase,
@@ -62,7 +72,23 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     this.deleteConversationsUseCase,
     this.restoreConversationsUseCase,
     this.getUnreadConversationsUseCase,
-  ) : super(ConversationsState()){
+  ) : super(ConversationsState());
+
+  void initSockets(){
+    participantJoined();
+    participantLeft();
+    onlineOfflineSocket();
+    participantStartRecording();
+    participantStopRecording();
+    // Conversation Update List
+    _listenToUpdateSocialList();
+    // Conversation Start Typing
+    _listenToStartTyping();
+    // Conversation Stop Typing
+    _listenToStopTyping();
+  }
+
+  void participantJoined(){
     try {
       // Participant Joined
       SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
@@ -83,7 +109,9 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     } catch (e) {
       CliLogger.error("conversation:participant-joined Error :  $e");
     }
+  }
 
+  void participantLeft(){
     // Participant Left
     try {
 
@@ -97,7 +125,6 @@ class ConversationsCubit extends Cubit<ConversationsState> {
           socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
           emit(state.copyWith(
               status: ConversationsStates.success));
-
         } catch (e) {
           CliLogger.error("conversation:participant-left Error :  $e");
         }
@@ -105,7 +132,9 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     } catch (e) {
       CliLogger.error("conversation:participant-left Error :  $e");
     }
+  }
 
+  void onlineOfflineSocket(){
     // friend:status (online or offline)
     try {
       SharedWebSocket.socket?.on('friend:status', (data) {
@@ -126,7 +155,9 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     } catch (e) {
       CliLogger.error("friend:status Error :  $e");
     }
+  }
 
+  void participantStartRecording(){
     // Participant Start Recording
     try {
 
@@ -147,7 +178,9 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     } catch (e) {
       CliLogger.error("conversation:participant-started-recording Error :  $e");
     }
+  }
 
+  void participantStopRecording(){
     // Participant Stop Recording
     try {
 
@@ -168,17 +201,36 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     } catch (e) {
       CliLogger.error("conversation:participant-stop-recording Error :  $e");
     }
+  }
 
-    // Conversation Update List
-    _listenToUpdateSocialList();
-    // Conversation Start Typing
-    _listenToStartTyping();
-    // Conversation Stop Typing
-    _listenToStopTyping();
+  Future<void> joinConversation({required String conversationId}) async {
+    try {
+      log("you joining conversation :  $conversationId");
+      SharedWebSocket.socket?.emit(
+          "join:conversation",
+          conversationId);
+      log("you joined conversation :  $conversationId");
+    } catch (e) {
+      log("can't join conversation $e");
+    }
+  }
+
+  Future<void> leaveConversation({required String conversationId}) async {
+    try {
+      log("you leaving conversation :  $conversationId");
+      SharedWebSocket.socket?.emit(
+          "leave:conversation",
+          conversationId);
+      log("you left conversation :  $conversationId");
+    } catch (e) {
+      log("can't leave conversation $e");
+    }
   }
 
   _listenToUpdateSocialList() {
+    log("listenToUpdateSocialList");
     listenToUpdateSocialListUseCase((conversation) {
+      log("conversation updated :  $conversation");
       if(socialConversations.any((element) => element.conversationId == conversation.conversationId)){
         // update conversation
         socialConversations[socialConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
@@ -223,6 +275,12 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   List<ConversationEntity> socialConversations = [];
   List<ConversationEntity> socialDeletedConversations = [];
   List<ConversationEntity> socialArchivedConversations = [];
+  List<ConversationEntity> socialGreetConversations = [];
+  List<ConversationEntity> socialLockedConversations = [];
+  List<DateTime> conversationLogs = [];
+  bool isLoadingMoreConversationLogs = false;
+  bool hasMoreDataConversationLogs = true;
+  int currentPageConversationLogs = 1;
   bool isLoadingMoreSocialConversation = false;
   bool hasMoreDataSocialConversations = true;
   int currentPageSocialConversations = 1;
@@ -232,6 +290,20 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   bool isLoadingMoreSocialArchivedConversation = false;
   bool hasMoreDataSocialArchivedConversations = true;
   int currentPageSocialArchivedConversations = 1;
+  bool isLoadingMoreSocialGreetConversation = false;
+  bool hasMoreDataSocialGreetConversations = true;
+  int currentPageSocialGreetConversations = 1;
+  bool isLoadingMoreSocialLockedConversation = false;
+  bool hasMoreDataSocialLockedConversations = true;
+  int currentPageSocialLockedConversations = 1;
+
+  Future<void> loadInitialConversationLogs({required String conversationId}) async {
+    conversationLogs.clear();
+    currentPageConversationLogs = 1;
+    hasMoreDataConversationLogs = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchConversationLogs(conversationId: conversationId);
+  }
 
   Future<void> loadInitialSocialConversations() async {
     socialConversations.clear();
@@ -257,6 +329,29 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     await _fetchSocialArchivedConversations();
   }
 
+  Future<void> loadInitialSocialGreetConversations() async {
+    socialGreetConversations.clear();
+    currentPageSocialGreetConversations = 1;
+    hasMoreDataSocialGreetConversations = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialGreetConversations();
+  }
+
+  Future<void> loadInitialSocialLockedConversations() async {
+    socialLockedConversations.clear();
+    currentPageSocialLockedConversations = 1;
+    hasMoreDataSocialLockedConversations = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialLockedConversations();
+  }
+
+  Future<void> getConversationLogs({required String conversationId}) async {
+    if (hasMoreDataConversationLogs || isLoadingMoreConversationLogs) return;
+    isLoadingMoreConversationLogs = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchConversationLogs(conversationId: conversationId);
+  }
+
   Future<void> getSocialConversations() async {
     if (hasMoreDataSocialConversations || isLoadingMoreSocialConversation) return;
     isLoadingMoreSocialConversation = true;
@@ -276,6 +371,47 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     isLoadingMoreSocialArchivedConversation = true;
     emit(state.copyWith(status: ConversationsStates.loading));
     await _fetchSocialArchivedConversations();
+  }
+
+  Future<void> getSocialGreetConversations() async {
+    if (hasMoreDataSocialGreetConversations || isLoadingMoreSocialGreetConversation) return;
+    isLoadingMoreSocialGreetConversation = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialGreetConversations();
+  }
+
+  Future<void> getSocialLockedConversations() async {
+    if (hasMoreDataSocialLockedConversations || isLoadingMoreSocialLockedConversation) return;
+    isLoadingMoreSocialLockedConversation = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialLockedConversations();
+  }
+
+  Future<void> _fetchConversationLogs({required String conversationId}) async {
+    final result = await getConversationLogsUseCase(
+      pagination: ConversationLogsPagination(
+        page: currentPageConversationLogs,
+        limit: pageSize,
+        conversationId: conversationId,
+      ),
+    );
+
+    result.fold(
+      (l) {
+        isLoadingMoreConversationLogs = false; // Reset loading state on error
+        emit(state.copyWith(status: ConversationsStates.error, failure: l));
+      },
+      (data) {
+        conversationLogs.addAll(data);
+        if (data.length < pageSize) {
+          hasMoreDataConversationLogs = false;
+        } else {
+          currentPageConversationLogs++;
+        }
+        isLoadingMoreConversationLogs = false;
+        emit(state.copyWith(status: ConversationsStates.success));
+      },
+    );
   }
 
   Future<void> _fetchSocialConversations() async {
@@ -391,6 +527,84 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
     if (!exists) {
       socialArchivedConversations.add(conversation);
+    }
+  }
+
+  Future<void> _fetchSocialGreetConversations() async {
+    final result = await getSocialGreetConversationsUseCase(
+      pagination: ConversationPagination(
+        page: currentPageSocialGreetConversations,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+      (l) {
+        isLoadingMoreSocialGreetConversation = false; // Reset loading state on error
+        emit(state.copyWith(status: ConversationsStates.error, failure: l));
+      },
+      (data) {
+        for (ConversationEntity conversation in data) {
+          addUniqueSocialGreetConversation(conversation);
+        }
+
+        if (data.length < pageSize) {
+          hasMoreDataSocialGreetConversations = false;
+        } else {
+          currentPageSocialGreetConversations++;
+        }
+        isLoadingMoreSocialGreetConversation = false;
+        emit(state.copyWith(status: ConversationsStates.success));
+      },
+    );
+  }
+
+  void addUniqueSocialGreetConversation(ConversationEntity conversation) {
+    final exists = socialGreetConversations.any(
+          (c) => c.conversationId == conversation.conversationId,
+    );
+
+    if (!exists) {
+      socialGreetConversations.add(conversation);
+    }
+  }
+
+  Future<void> _fetchSocialLockedConversations() async {
+    final result = await getSocialLockedConversationsUseCase(
+      pagination: ConversationPagination(
+        page: currentPageSocialLockedConversations,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+      (l) {
+        isLoadingMoreSocialLockedConversation = false; // Reset loading state on error
+        emit(state.copyWith(status: ConversationsStates.error, failure: l));
+      },
+      (data) {
+        for (ConversationEntity conversation in data) {
+          addUniqueSocialLockedConversation(conversation);
+        }
+
+        if (data.length < pageSize) {
+          hasMoreDataSocialLockedConversations = false;
+        } else {
+          currentPageSocialLockedConversations++;
+        }
+        isLoadingMoreSocialLockedConversation = false;
+        emit(state.copyWith(status: ConversationsStates.success));
+      },
+    );
+  }
+
+  void addUniqueSocialLockedConversation(ConversationEntity conversation) {
+    final exists = socialLockedConversations.any(
+          (c) => c.conversationId == conversation.conversationId,
+    );
+
+    if (!exists) {
+      socialLockedConversations.add(conversation);
     }
   }
 

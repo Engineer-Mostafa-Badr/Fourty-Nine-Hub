@@ -282,7 +282,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                                     ),
                                     builder: (context) {
-                                      SessionEntity currentSession = context.read<UserCubit>().sessions.firstWhere((s) => s.deviceId == deviceId);
+                                      SessionEntity currentSession = context.read<UserCubit>().sessions.firstWhere((s) => s.deviceId == deviceId, orElse: () => context.read<UserCubit>().sessions.isNotEmpty? context.read<UserCubit>().sessions.first : SessionEntity());
                                       return Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SingleChildScrollView(

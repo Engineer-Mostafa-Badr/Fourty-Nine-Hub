@@ -4,6 +4,7 @@ import '../../../../core/error/failure.dart';
 import '../../Domain/Entities/conversation_entity.dart';
 import '../../Domain/Entities/conversations_pagination.dart';
 import '../../Domain/Repo/conversations_repo.dart';
+import '../../Domain/Usecases/get_conversation_logs_use_case.dart';
 import '../DataSources/conversations_remote_datasource.dart';
 
 class ConversationsRepoImpl extends ConversationsRepo {
@@ -19,6 +20,16 @@ class ConversationsRepoImpl extends ConversationsRepo {
   @override
   Future<Either<Failure, List<ConversationEntity>>> getSocialArchivedConversations({required ConversationPagination pagination}) async {
     return await conversationsRemoteDataSource.getSocialArchivedConversations(pagination: pagination);
+  }
+
+  @override
+  Future<Either<Failure, List<ConversationEntity>>> getSocialGreetConversations({required ConversationPagination pagination}) async {
+    return await conversationsRemoteDataSource.getSocialGreetConversations(pagination: pagination);
+  }
+
+  @override
+  Future<Either<Failure, List<ConversationEntity>>> getSocialLockedConversations({required ConversationPagination pagination}) async {
+    return await conversationsRemoteDataSource.getSocialLockedConversations(pagination: pagination);
   }
 
   @override
@@ -77,7 +88,22 @@ class ConversationsRepoImpl extends ConversationsRepo {
   }
 
   @override
+  Future<Either<Failure, void>> socialLockConversations({required List<String> conversationIds}) {
+    return conversationsRemoteDataSource.socialLockConversations(conversationIds: conversationIds);
+  }
+
+  @override
+  Future<Either<Failure, void>> socialUnLockConversations({required List<String> conversationIds}) {
+    return conversationsRemoteDataSource.socialUnLockConversations(conversationIds: conversationIds);
+  }
+
+  @override
   Future<Either<Failure, int>> getUnreadConversationsCount() {
     return conversationsRemoteDataSource.getUnreadConversationsCount();
+  }
+
+  @override
+  Future<Either<Failure, List<DateTime>>> getConversationLogs({required ConversationLogsPagination pagination}) {
+    return conversationsRemoteDataSource.getConversationLogs(pagination: pagination);();
   }
 }
