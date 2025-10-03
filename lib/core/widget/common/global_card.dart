@@ -13,15 +13,19 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 
 class GlobalCard extends StatelessWidget {
-  const GlobalCard({super.key, this.views,this.hasBottomSide, this.isView, this.subscriptionType, this.body, this.hasTopSide, this.onTap, this.onShowViewers, this.onRequest, this.clientId, required this.subcategoryId, required this.phone, required this.reportId, this.senderName, this.senderImage, this.hasReport, this.isPremium, this.isButtonEnabled, required this.otherUserId});
+  const GlobalCard({super.key, this.views,this.onSubscribe,this.hasBottomSide, this.isView, this.subscriptionType, this.body, this.hasTopSide, this.onTap, this.onShowViewers, this.onRequest, this.clientId, required this.subcategoryId, required this.phone, required this.reportId, this.senderName, this.senderImage, this.hasReport, this.isPremium, this.isButtonEnabled, required this.otherUserId, this.subscriptionTitle});
   final num? views;
   final bool? isView;
   final String? subscriptionType;
+  final String? subscriptionTitle;
   final Widget? body;
+  final Function? onSubscribe;
   final bool? hasTopSide;
   final bool? hasBottomSide;
   final GestureTapCallback? onTap;
@@ -48,7 +52,7 @@ class GlobalCard extends StatelessWidget {
           onTap: onTap,
           child: CustomCard(
             radius: 20,
-            color: ((isView == null||isView==true)  ? AppColors.whiteColor : AppColors.BG_GRAY_COLOR),
+            color: ((isView == null||isView==true)  ? (context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.whiteColor) : (context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.BG_GRAY_COLOR)),
             children: [
               if(hasTopSide==true)...[
                 const Sizer(
@@ -86,10 +90,20 @@ class GlobalCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider()],
-              const Sizer(),
+                Container(
+                  height: 1.h,
+                  width: double.infinity,
+                  color: AppColors.GRAY_LIGHT_COLOR3,
+                )
+              ],
               body??SizedBox.shrink(),
-              if(hasBottomSide==true)...[const Divider(),
+              if(hasBottomSide==true)...[
+                Container(
+                height: 1.h,
+                width: double.infinity,
+                color: Colors.grey,
+              ),
+                const Sizer(height: 8,),
               Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 32.0.h,
@@ -112,6 +126,8 @@ class GlobalCard extends StatelessWidget {
                         ),
                       Expanded(
                         child: ContactsTripButtons(
+                          subscriptionTitle:subscriptionTitle??LocaleKeys.ads.localize,
+                          onSubscribe: onSubscribe,
                           // isPremium: false,
                           isPremium: isPremium,
                           isButtonEnabled: isButtonEnabled,
@@ -134,7 +150,7 @@ class GlobalCard extends StatelessWidget {
                 // ),
               ),
               ],
-              const Sizer(),
+              const Sizer(height: 8,),
             ],
           ),
         ),
@@ -154,7 +170,11 @@ class GlobalCard extends StatelessWidget {
               leftButtonTitle: LocaleKeys.close.localize,
               rightButtonTitle: LocaleKeys.subscribe.localize,
                 onRightButtonPressed:(){
-
+                  SubscriptionMethod().subscribe(
+                    subscribeId: subcategoryId,
+                    title: subscriptionTitle??LocaleKeys.ads.localize,
+                    onSubscribe: onSubscribe!=null?onSubscribe!():()=>context.pop(),
+                  );
                 }
             )),
         child: Text(

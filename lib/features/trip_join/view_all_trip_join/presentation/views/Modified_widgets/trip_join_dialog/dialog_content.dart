@@ -80,7 +80,7 @@ class DialogContent extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: (){
       ManageVibration.vibrate();
-      onRightButtonPressed?? Navigator.of(context).pop();
+      if(onRightButtonPressed!=null)onRightButtonPressed!();
                      },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:context.isDarkMode?AppColors.Floating_Button_COLOR_DARK: AppColors.buttonDialog,

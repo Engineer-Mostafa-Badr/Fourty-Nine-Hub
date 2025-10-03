@@ -476,6 +476,7 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
                                         ),
                                         child: ContactsTripButtons(
                                           // isPremium: false,
+                                          subscriptionTitle:LocaleKeys.tripJoin.localize,
                                           isPremium: data.isPremium == true ||
                                               data.isButtonEnabled!.state ==
                                                   true

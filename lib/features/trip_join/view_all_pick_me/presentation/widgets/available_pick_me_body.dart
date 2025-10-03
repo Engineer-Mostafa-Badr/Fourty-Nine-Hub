@@ -21,6 +21,7 @@ class AvailablePickMeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const Sizer(),
         TripCardInfoWidget(
             title: context.isArabic ? data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
             model: context.isArabic ? data.vehicleDetails?.modelAr ?? "" : data.vehicleDetails?.modelEn ?? "",

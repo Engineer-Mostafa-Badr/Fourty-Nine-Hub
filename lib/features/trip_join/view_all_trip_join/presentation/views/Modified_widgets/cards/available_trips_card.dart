@@ -523,6 +523,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                                             Expanded(
                                                               child: ContactsTripButtons(
                                                                 // isPremium: false,
+                                                                subscriptionTitle:LocaleKeys.tripJoin.localize,
                                                                 isPremium: data.isPremium,
                                                                 isButtonEnabled: data.isButtonEnabled!.state,
                                                                 otherUserId: '2',

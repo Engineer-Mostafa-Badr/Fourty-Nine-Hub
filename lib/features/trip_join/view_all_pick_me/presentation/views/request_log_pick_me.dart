@@ -258,6 +258,7 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                                     ),
                                     child: ContactsTripButtons(
                                       // isPremium: false,
+                                      subscriptionTitle:LocaleKeys.pickMe.localize,
                                       isPremium: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
                                       otherUserId: '2',
                                       subcategoryId: '2',
