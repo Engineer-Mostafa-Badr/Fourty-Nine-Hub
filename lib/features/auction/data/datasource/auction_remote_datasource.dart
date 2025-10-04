@@ -170,13 +170,14 @@ class AuctionRemoteDataSourceImpl
       CliLogger.info("❌ Error while sending bid: $e");
     }
   }
+
   @override
   void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
     try {
       CliLogger.info("🔔 Listening to new bids...");
 
       // remove any old listeners to avoid duplicates
-      SharedWebSocket.socket?.off("auction:new-amount-bid");
+      // SharedWebSocket.socket?.off("auction:new-amount-bid");
 
       SharedWebSocket.socket?.on("auction:new-amount-bid", (data) {
         CliLogger.info("📩 New bid received: $data");

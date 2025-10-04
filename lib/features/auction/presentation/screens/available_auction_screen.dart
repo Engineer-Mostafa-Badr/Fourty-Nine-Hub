@@ -1,6 +1,8 @@
 // AVAILABLE TAB
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -12,10 +14,12 @@ import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../RideFeature/presentation/pages/widgets/font_manager.dart';
+import '../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 class AvailableAuctionScreen extends StatefulWidget {
@@ -26,12 +30,12 @@ class AvailableAuctionScreen extends StatefulWidget {
 }
 
 class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
-  final ScrollController _auctionScrollController = ScrollController();
+  late ScrollController _auctionScrollController;
 
   @override
   void initState() {
     super.initState();
-
+    _auctionScrollController = ScrollController()..addListener(_scrollListener);
     // _auctionScrollController.addListener(() {
     //   final cubit = context.read<AuctionCubit>();
     //
@@ -46,6 +50,19 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
 
     // Trigger initial load
     context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction(context);
+
+  }
+
+  bool isFloatingButtonVisible = true;
+  void _scrollListener() {
+
+    if (_auctionScrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      isFloatingButtonVisible = false;
+    } else {
+      isFloatingButtonVisible = true;
+    }
+    setState(() {});
   }
 
   Future<void> _addAuction() async {
@@ -89,27 +106,6 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
             ),
           );
         } else if (auctions.isNotEmpty) {
-          // body = ListView.separated(
-          //   controller: _auctionScrollController,
-          //   padding: const EdgeInsets.all(16),
-          //   itemCount: auctions.length + (cubit.hasMoreAvailableNonSocketAuction ? 1 : 0),
-          //   separatorBuilder: (_, __) => const SizedBox(height: 16),
-          //   itemBuilder: (context, index) {
-          //     if (index < auctions.length) {
-          //       final auction = auctions[index];
-          //       return AuctionCard(auction: auction);
-          //     } else {
-          //       // Loader at bottom while fetching more
-          //       return const Center(
-          //         child: Padding(
-          //           padding: EdgeInsets.all(16),
-          //           child: CircularProgressIndicator(),
-          //         ),
-          //       );
-          //     }
-          //   },
-          // );
-
           body = OlxPaginationWidget(
             itemsPerPage: 3,
             scrollController: _auctionScrollController,
@@ -131,16 +127,13 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
         }
 
         return Scaffold(
-          body: body,
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: _addAuction,
-            backgroundColor: AppColors.PRIMARY_COLOR,
-            icon: const Icon(Icons.add, color: Colors.white),
-            label: Text(
-              "${LocaleKeys.addAuction.localize}",
-              style: Styles.mediumText(color: Colors.white),
-            ),
+          body: Stack(
+            children: [
+              body,
+
+            ],
           ),
+
         );
       },
     );
