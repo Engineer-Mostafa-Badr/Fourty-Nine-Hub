@@ -31,8 +31,6 @@ class UserAdsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
-      print('userType $userType');
-      print('userType ${context.read<AdvertisementCubit>().ads.length}');
       final controller = context.read<AdvertisementCubit>();
       return Column(children: [
         const Sizer(),
@@ -105,17 +103,6 @@ class UserAdsView extends StatelessWidget {
                 ))),
         Expanded(
             child:
-                //  controller.ads.isEmpty
-                //     ? Center(
-                //         child: Label(
-                //           text: LocaleKeys.noAds.localize,
-                //           style: Styles.mediumText(
-                //               color: context.isDarkMode
-                //                   ? AppColors.whiteColor
-                //                   : AppColors.PRIMARY_COLOR),
-                //         ),
-                //       )
-                //     :
                 UserAds(
           params: params,
           userType: userType,

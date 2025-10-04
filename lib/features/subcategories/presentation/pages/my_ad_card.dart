@@ -107,7 +107,77 @@ class _MyAdCardState extends State<MyAdCard> {
           : LocaleKeys.notSubscribed.localize,
       views: widget.item.views,
       onRequest: (){
-
+        ManageVibration.vibrate();
+        if (!context.read<UserCubit>().isLoggedIn) {
+          return pleaseLoginDialog(context);
+          // context.push(Routes.LOGIN);
+        } else {
+          bottomSheet(
+            context: context,
+            backColor: Theme.of(context).scaffoldBackgroundColor,
+            widget: BlocProvider(
+              create: (context) => serviceLocator<AdvertisementCubit>(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: IconButton(
+                      iconSize: 20,
+                      padding: EdgeInsets.zero,
+                      style: IconButton.styleFrom(
+                        backgroundColor: const Color(0xffD9D9D9),
+                      ),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  PremiumRequestButton(
+                    adId: widget.item.id,
+                    subCategoryId: widget.item.subCategoryId??'',
+                    subscriptionStatus:
+                    widget.item.userSubscriptionStatus ?? '',
+                    dontPop: true,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  RequestButton(
+                    adId: widget.item.id,
+                    subscriptionStatus:
+                    widget.item.userSubscriptionStatus ?? '',
+                    dontPop: true,
+                    successRequest: () {
+                      context.pop();
+                      showSuccessMessage(
+                          context,
+                          context.isArabic
+                              ? 'تم ارسال طلب التواصل'
+                              : 'Request Sent Successfully');
+                      context.read<AdvertisementCubit>().resetRequest();
+                    },
+                    errorRequest: (failure) {
+                      context.pop();
+                      context.pop();
+                      showErrorMessage(
+                          context,
+                          getFailureMessage(
+                              failure ?? UnknownFailure(''), context));
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
       },
       onShowViewers: (){
       },

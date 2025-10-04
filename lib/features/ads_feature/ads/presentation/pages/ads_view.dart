@@ -96,17 +96,17 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     } else if (_tabController.index == 1 &&
         widget.params.subCategory.hasAuction == true) {
       userType = 'rent';
-      print('provider');
+      debugPrint('provider');
     } else if (_tabController.index == 0 &&
         widget.params.subCategory.hasAuction == false) {
       userType = 'provider';
-      print('provider');
+      debugPrint('provider');
     } else {
       userType = 'user';
-      print('user');
+      debugPrint('user');
     }
-    print('userType index ${_tabController.index}');
-    print('userType hasAuction ${widget.params.subCategory.hasAuction}');
+    debugPrint('userType index ${_tabController.index}');
+    debugPrint('userType hasAuction ${widget.params.subCategory.hasAuction}');
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
@@ -119,11 +119,11 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       body: BlocConsumer<AdvertisementCubit, AdsState>(
           listener: (context, state) {
         if (state.status == AdsStates.loading) {
-          print("state.status${state.status}");
+          debugPrint("state.status${state.status}");
         } else if (state.status == AdsStates.error) {
-          print("state.status${state.status}");
+          debugPrint("state.status${state.status}");
         } else if (state.status == AdsStates.success) {
-          print("state.status${state.status}");
+          debugPrint("state.status${state.status}");
         }
       }, builder: (context, state) {
         final controller = context.read<AdvertisementCubit>();
@@ -386,7 +386,7 @@ extension CategoriesExtension on Categories {
       case Categories.craft:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.technology:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.smooking:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.projects:
@@ -426,9 +426,9 @@ extension CategoriesExtension on Categories {
       case Categories.animals:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.computersCameras:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.mobilesTablets:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.musicalInstruments:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.fitness:
@@ -448,13 +448,13 @@ extension CategoriesExtension on Categories {
       case Categories.marketingSales:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.accountantJob:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.doctorJob:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.engineerJob:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.otherJob:
-        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.events:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.health:

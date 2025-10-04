@@ -24,6 +24,7 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
+      onBackPressed: () => context.pop(),
       floatingActionButton: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
