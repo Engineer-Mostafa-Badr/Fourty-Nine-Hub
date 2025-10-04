@@ -11,8 +11,6 @@ import '../core/video_player_controller_wrapper.dart';
 import '../core/video_player_manager.dart';
 import '../controls/video_thumbnail.dart';
 
-/// Feed video player variant - optimized for feed scrolling
-/// Replaces TalentVideoPlayerWidget with cleaner architecture
 class FeedVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final String? thumbnailUrl;
