@@ -39,6 +39,8 @@ abstract class StarRepository {
       StarPaginationParams params);
   Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(
       String videoId); // Todo: Get video by ID
+  Future<Either<Failure, List<TubeVideoModel>>> getRecommendedVideos(
+      String videoId, int page, int limit);
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);

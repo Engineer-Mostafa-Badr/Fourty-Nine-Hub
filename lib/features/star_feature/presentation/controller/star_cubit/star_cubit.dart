@@ -23,6 +23,7 @@ import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/search_tube_videos_use_case.dart';
 import '../../../domain/use_case/get_tube_winner_statistics_use_case.dart';
+import '../../../domain/use_case/get_recommended_videos_use_case.dart';
 import '../../../domain/use_case/tube_favorite_use_cases.dart';
 import '../../../domain/use_case/tube_watch_later_use_cases.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
@@ -68,6 +69,7 @@ class StarCubit extends Cubit<StarState> {
   final RateTubeVideoUseCase _rateTubeVideoUseCase;
   final DeleteTubeVideoUseCase _deleteTubeVideoUseCase;
   final GetTubeWinnerStatisticsUseCase _getTubeWinnerStatisticsUseCase;
+  final GetRecommendedVideosUseCase _getRecommendedVideosUseCase;
 
   final _videoUpdatesController = StreamController<String>.broadcast();
   Stream<String> get videoUpdates => _videoUpdatesController.stream;
@@ -98,6 +100,7 @@ class StarCubit extends Cubit<StarState> {
     this._rateTubeVideoUseCase,
     this._deleteTubeVideoUseCase,
     this._getTubeWinnerStatisticsUseCase,
+    this._getRecommendedVideosUseCase,
   ) : super(StarState());
 
   // Configuration flag to choose between old Star API and new Tube Video API
@@ -1719,6 +1722,34 @@ class StarCubit extends Cubit<StarState> {
         failure: ServerFailure(message: 'Failed to load statistics: $e', name: 'Statistics Error'),
       ));
     }
+  }
+
+  // Get recommended videos for a specific video
+  Future<List<TubeVideoModel>> getRecommendedVideos(
+    String videoId, {
+    int page = 1,
+    int limit = 10,
+  }) async {
+    print("🎬 Getting recommended videos for: $videoId");
+
+    final response = await _getRecommendedVideosUseCase(
+      GetRecommendedVideosParams(
+        videoId: videoId,
+        page: page,
+        limit: limit,
+      ),
+    );
+
+    return response.fold(
+      (failure) {
+        print("❌ Get recommended videos failed: $failure");
+        return [];
+      },
+      (videos) {
+        print("✅ Got ${videos.length} recommended videos");
+        return videos;
+      },
+    );
   }
 
   // Helper methods for backward compatibility

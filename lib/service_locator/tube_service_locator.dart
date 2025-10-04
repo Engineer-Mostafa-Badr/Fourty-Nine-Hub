@@ -14,6 +14,7 @@ import '../features/star_feature/domain/use_case/get_tube_winner_statistics_use_
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
 import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
+import '../features/star_feature/domain/use_case/get_recommended_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/subscribe_to_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
 import '../features/star_feature/domain/use_case/tube_watch_later_use_cases.dart';
@@ -71,6 +72,12 @@ class TubeServiceLocator {
     if (!serviceLocator.isRegistered<SearchTubeVideosUseCase>()) {
       serviceLocator.registerLazySingleton<SearchTubeVideosUseCase>(
         () => SearchTubeVideosUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetRecommendedVideosUseCase>()) {
+      serviceLocator.registerLazySingleton<GetRecommendedVideosUseCase>(
+        () => GetRecommendedVideosUseCase(serviceLocator()),
       );
     }
 
@@ -322,7 +329,8 @@ class TubeServiceLocator {
           serviceLocator<IncrementTubeVideoViewUseCase>(),
           serviceLocator<RateTubeVideoUseCase>(),
           serviceLocator<DeleteTubeVideoUseCase>(),
-          serviceLocator<GetTubeWinnerStatisticsUseCase>()),
+          serviceLocator<GetTubeWinnerStatisticsUseCase>(),
+          serviceLocator<GetRecommendedVideosUseCase>()),
     );
 
     //! NEW: Comment Cubit Registration

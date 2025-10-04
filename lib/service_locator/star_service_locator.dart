@@ -26,6 +26,7 @@ import '../features/star_feature/domain/use_case/update_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/subscribe_to_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/unsubscribe_from_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
+import '../features/star_feature/domain/use_case/get_recommended_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
 import '../features/star_feature/domain/use_case/fetch_all_tube_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/fetch_my_tube_videos_use_case.dart';
@@ -70,10 +71,9 @@ class StarServiceLocator {
         () => PlaylistRemoteDataSourceImpl(
               serviceLocator(),
             ));
-    serviceLocator.registerLazySingleton<TenPercentRemoteDataSource>(
-        () => TenPercentRemoteDataSourceImpl(
-              serviceLocator(),
-            ));
+
+    // TenPercentRemoteDataSource is registered in TenPercentServiceLocator
+    // Removed duplicate registration to avoid GetIt error
 
     serviceLocator
         .registerLazySingleton<StarRepository>(() => StarRepositoryImpl(
@@ -143,6 +143,10 @@ class StarServiceLocator {
     // Register GetTubeWinnerStatisticsUseCase
     serviceLocator.registerLazySingleton<GetTubeWinnerStatisticsUseCase>(
       () => GetTubeWinnerStatisticsUseCase(serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<GetRecommendedVideosUseCase>(
+      () => GetRecommendedVideosUseCase(serviceLocator()),
     );
 
     // Register Profile Use Cases
@@ -366,6 +370,7 @@ class StarServiceLocator {
           serviceLocator<RateTubeVideoUseCase>(),
           serviceLocator<DeleteTubeVideoUseCase>(),
           serviceLocator<GetTubeWinnerStatisticsUseCase>(),
+          serviceLocator<GetRecommendedVideosUseCase>(),
         ));
 
     serviceLocator.registerFactory<TenPercentCubit>(() => TenPercentCubit(

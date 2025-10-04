@@ -91,7 +91,7 @@ class _TubeFeedViewState extends State<TubeFeedView>
 
   void _setupScrollSynchronization() {
     // Sync main controller with active tab controller
-    _mainScrollController.addListener(() => _syncFromMain());
+    _mainScrollController.addListener(_syncFromMain);
 
     // Sync tab controllers with main controller
     _availableController.addListener(() => _syncToMain(_availableController));
@@ -102,35 +102,58 @@ class _TubeFeedViewState extends State<TubeFeedView>
 
   void _syncFromMain() {
     if (_isSyncing || !mounted) return;
-    _isSyncing = true;
 
-    final activeController = _getActiveTabController();
-    if (activeController != null &&
-        activeController.hasClients &&
-        _mainScrollController.hasClients &&
-        mounted) {
-      activeController.jumpTo(_mainScrollController.offset.clamp(
-        activeController.position.minScrollExtent,
-        activeController.position.maxScrollExtent,
-      ));
-    }
-    _isSyncing = false;
+    // Use SchedulerBinding to defer sync to next frame (avoid race conditions)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _isSyncing) return;
+
+      _isSyncing = true;
+      try {
+        final activeController = _getActiveTabController();
+        if (activeController != null &&
+            activeController.hasClients &&
+            _mainScrollController.hasClients) {
+          final targetOffset = _mainScrollController.offset.clamp(
+            activeController.position.minScrollExtent,
+            activeController.position.maxScrollExtent,
+          );
+
+          // Only sync if difference is significant (reduce unnecessary updates)
+          if ((activeController.offset - targetOffset).abs() > 1.0) {
+            activeController.jumpTo(targetOffset);
+          }
+        }
+      } finally {
+        _isSyncing = false;
+      }
+    });
   }
 
   void _syncToMain(ScrollController tabController) {
     if (_isSyncing || !mounted) return;
     if (tabController != _getActiveTabController()) return;
-    _isSyncing = true;
 
-    if (_mainScrollController.hasClients &&
-        tabController.hasClients &&
-        mounted) {
-      _mainScrollController.jumpTo(tabController.offset.clamp(
-        _mainScrollController.position.minScrollExtent,
-        _mainScrollController.position.maxScrollExtent,
-      ));
-    }
-    _isSyncing = false;
+    // Use SchedulerBinding to defer sync to next frame (avoid race conditions)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _isSyncing) return;
+
+      _isSyncing = true;
+      try {
+        if (_mainScrollController.hasClients && tabController.hasClients) {
+          final targetOffset = tabController.offset.clamp(
+            _mainScrollController.position.minScrollExtent,
+            _mainScrollController.position.maxScrollExtent,
+          );
+
+          // Only sync if difference is significant (reduce unnecessary updates)
+          if ((_mainScrollController.offset - targetOffset).abs() > 1.0) {
+            _mainScrollController.jumpTo(targetOffset);
+          }
+        }
+      } finally {
+        _isSyncing = false;
+      }
+    });
   }
 
   ScrollController? _getActiveTabController() {
@@ -679,38 +702,39 @@ class _TubeFeedViewState extends State<TubeFeedView>
       _tabController.removeListener(_onTabChanged);
       _searchController.removeListener(_onSearchChanged);
 
-      // Remove scroll listeners with proper checks
-      if (_mainScrollController.hasClients &&
-          _mainScrollController.hasListeners) {
-        _mainScrollController.removeListener(() => _syncFromMain());
+      // Remove scroll listeners with proper checks (use exact function references)
+      if (_mainScrollController.hasListeners) {
+        _mainScrollController.removeListener(_syncFromMain);
       }
 
-      if (_availableController.hasClients &&
-          _availableController.hasListeners) {
+      // For lambda listeners, we need to store references
+      if (_availableController.hasListeners) {
         _availableController
             .removeListener(() => _syncToMain(_availableController));
       }
 
-      if (_favoriteController.hasClients && _favoriteController.hasListeners) {
+      if (_favoriteController.hasListeners) {
         _favoriteController
             .removeListener(() => _syncToMain(_favoriteController));
       }
 
-      if (_historyController.hasClients && _historyController.hasListeners) {
+      if (_historyController.hasListeners) {
         _historyController
             .removeListener(() => _syncToMain(_historyController));
       }
 
-      if (_myTalentController.hasClients && _myTalentController.hasListeners) {
+      if (_myTalentController.hasListeners) {
         _myTalentController
             .removeListener(() => _syncToMain(_myTalentController));
       }
     } catch (e) {
-      print('Error during controller disposal: $e');
+      print('⚠️ Error during controller disposal: $e');
     }
 
-    // Then dispose controllers
+    // Cancel timers
     _searchDebounce?.cancel();
+
+    // Dispose controllers
     _tabController.dispose();
     _searchController.dispose();
     _mainScrollController.dispose();

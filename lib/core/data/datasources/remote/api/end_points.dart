@@ -1852,6 +1852,8 @@ class EndPoints {
 
   static String getTubeVideoDetails(String videoId) =>
       '/tube-video/details/$videoId';
+  static String getRecommendedVideos(String videoId, {int page = 1, int limit = 10}) =>
+      '/tube-video/recommended/$videoId/?page=$page&limit=$limit';
   static String likeTubeVideo(String videoId) => '/tube-video/$videoId/like';
   static String dislikeTubeVideo(String videoId) =>
       '/tube-video/$videoId/dislike';

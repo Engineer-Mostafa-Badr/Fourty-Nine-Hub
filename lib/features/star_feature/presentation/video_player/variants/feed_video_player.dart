@@ -51,9 +51,11 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
   bool _isDisposed = false;
+  bool _hasCompletedOnce = false; // Track if video completed once
 
   Timer? _playDelayTimer;
   Timer? _initTimer;
+  Timer? _controlsTimer;
   StreamSubscription? _stateSubscription;
 
   String get videoId => '${widget.talent?.id ?? widget.videoUrl.hashCode}';
@@ -136,9 +138,20 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   }
 
   void _handleVideoEnd() {
-    if (_wrapper != null && _wrapper!.isInitialized) {
-      _wrapper!.seekTo(Duration.zero);
+    if (_wrapper == null || !_wrapper!.isInitialized || _isDisposed) return;
+
+    _hasCompletedOnce = true;
+
+    // CRITICAL FIX: Don't seekTo(Duration.zero) - this causes MediaCodec FLUSH
+    // Instead, just pause at the end to avoid flush/resume cycles
+    if (mounted && !_isDisposed) {
       _wrapper!.pause();
+      VideoPlayerManager.instance.markInactive(videoId);
+
+      // Show thumbnail overlay when ended
+      setState(() {
+        _isPlaying = false;
+      });
     }
   }
 
@@ -148,12 +161,18 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     try {
       if (_isPlaying) {
         _wrapper!.pause();
+        VideoPlayerManager.instance.markInactive(videoId);
       } else {
+        // If video ended, seek to start (only when user explicitly restarts)
+        if (_hasCompletedOnce && _wrapper!.controller.value.position >= _wrapper!.controller.value.duration) {
+          _wrapper!.seekTo(Duration.zero);
+        }
         _wrapper!.play();
+        VideoPlayerManager.instance.markActive(videoId);
         _trackVideoStart();
       }
     } catch (e) {
-      debugPrint('Error toggling play/pause: $e');
+      debugPrint('⚠️ Error toggling play/pause: $e');
     }
   }
 
@@ -181,32 +200,39 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     _playDelayTimer?.cancel();
     _initTimer?.cancel();
 
-    if (info.visibleFraction > 0.3) {
-      // Visible - initialize if needed
+    if (info.visibleFraction > 0.5) {
+      // Highly visible - initialize if needed
       if (!_isInitialized && !_isInitializing) {
-        _initTimer = Timer(const Duration(milliseconds: 200), () {
-          if (mounted && !_isDisposed && _visibilityFraction > 0.3) {
+        _initTimer = Timer(const Duration(milliseconds: 300), () {
+          if (mounted && !_isDisposed && _visibilityFraction > 0.5) {
             _initializeVideo();
           }
         });
-      } else if (_isInitialized && widget.autoPlay && !_isPlaying) {
-        // Auto-play with delay
-        _playDelayTimer = Timer(const Duration(milliseconds: 300), () {
+      } else if (_isInitialized && widget.autoPlay && !_isPlaying && !_hasCompletedOnce) {
+        // Auto-play with delay (only if video hasn't completed yet)
+        _playDelayTimer = Timer(const Duration(milliseconds: 400), () {
           if (mounted && !_isDisposed && _wrapper != null && !_isPlaying) {
             _wrapper!.play();
+            VideoPlayerManager.instance.markActive(videoId);
             _trackVideoStart();
           }
         });
       }
-    } else if (info.visibleFraction < 0.2) {
-      // Not visible - pause
+    } else if (info.visibleFraction < 0.3) {
+      // Less visible - pause to save resources
       if (_wrapper != null && _isPlaying) {
         _wrapper!.pause();
+        VideoPlayerManager.instance.markInactive(videoId);
       }
 
-      // Dispose if completely out of view
-      if (info.visibleFraction == 0) {
-        _disposeController();
+      // Dispose if mostly out of view (changed from == 0 to < 0.1)
+      if (info.visibleFraction < 0.1) {
+        // Delay disposal to avoid rapid dispose/recreate during fast scrolling
+        _playDelayTimer = Timer(const Duration(milliseconds: 500), () {
+          if (mounted && !_isDisposed && _visibilityFraction < 0.1) {
+            _disposeController();
+          }
+        });
       }
     }
   }
@@ -241,7 +267,14 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
         onTap: () {
           ManageVibration.vibrate();
           if (_isInitialized) {
-            setState(() => _showControls = !_showControls);
+            // Auto-hide controls after 3 seconds
+            _controlsTimer?.cancel();
+            setState(() => _showControls = true);
+            _controlsTimer = Timer(const Duration(seconds: 3), () {
+              if (mounted && _isPlaying) {
+                setState(() => _showControls = false);
+              }
+            });
           }
           widget.onTap?.call();
         },
@@ -341,14 +374,22 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   void dispose() {
     _isDisposed = true;
 
+    // Cancel all timers to prevent memory leaks
     _playDelayTimer?.cancel();
     _playDelayTimer = null;
     _initTimer?.cancel();
     _initTimer = null;
+    _controlsTimer?.cancel();
+    _controlsTimer = null;
 
+    // Cancel subscription
     _stateSubscription?.cancel();
     _stateSubscription = null;
 
+    // Mark as inactive before disposing
+    if (_wrapper != null) {
+      VideoPlayerManager.instance.markInactive(videoId);
+    }
     _wrapper = null;
 
     super.dispose();

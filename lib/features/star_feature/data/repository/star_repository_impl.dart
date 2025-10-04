@@ -106,6 +106,12 @@ class StarRepositoryImpl extends StarRepository {
   }
 
   @override
+  Future<Either<Failure, List<TubeVideoModel>>> getRecommendedVideos(
+      String videoId, int page, int limit) {
+    return _remoteDataSource.getRecommendedVideos(videoId, page, limit);
+  }
+
+  @override
   Future<Either<Failure, bool>> likeTubeVideo(String videoId) {
     return _remoteDataSource.likeTubeVideo(videoId);
   }
