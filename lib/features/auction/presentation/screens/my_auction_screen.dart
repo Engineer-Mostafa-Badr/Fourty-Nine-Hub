@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
@@ -12,9 +13,11 @@ import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../subcategories/presentation/widgets/floating_add_button.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 class MyAuctionScreen extends StatefulWidget {
@@ -79,15 +82,26 @@ class _MyAuctionScreenState extends State<MyAuctionScreen> {
         final auctions = cubit.myAuctionNonSocketData;
 
         if (state.status == StateStatus.loading && auctions.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         if (auctions.isEmpty) {
-          return const Center(child: Text("No auctions my"));
+          return Center(
+            child: Text(
+              context.isArabic ? 'لا توجد مزادات خاصة بي' : 'No auctions my',
+            ),
+          );
+
         }
 
         return Scaffold(
-          body:     OlxPaginationWidget(
+          floatingActionButton: isFloatingButtonVisible
+              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+            ManageVibration.vibrate();
+            _addAuction();
+          })
+              : null,
+          body:  OlxPaginationWidget(
             itemsPerPage: 3,
             scrollController: _scrollController,
             banners: bannersList, // 👉 add banner list if needed

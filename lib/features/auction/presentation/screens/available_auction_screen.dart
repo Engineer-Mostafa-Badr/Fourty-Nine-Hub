@@ -104,7 +104,7 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
           body = Center(
             child: Text(
               context.isArabic ? 'لا يوجد مزادات متاحة' : 'No Available Auctions',
-              style: TextStyle(fontSize: FontSize.s18),
+              style: Styles.mediumText(),
             ),
           );
         } else if (auctions.isNotEmpty) {
@@ -125,7 +125,7 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
             ),
           );
         } else {
-          body = const Center(child: Text("Something went wrong"));
+          body =  Center(child: Text("${LocaleKeys.somethingWentWrong.localize}"));
         }
 
         return Scaffold(

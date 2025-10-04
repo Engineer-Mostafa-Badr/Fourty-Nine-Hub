@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/utils/format_numbers.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -42,20 +43,25 @@ class MyBiddersScreen extends StatelessWidget {
         print("   - State Status: ${state.status}");
 
         if (state.status == StateStatus.error) {
-          return const Center(
+          return  Center(
             child: Text(
-              "Something went wrong",
+                "${LocaleKeys.somethingWentWrong.localize}",
               style: TextStyle(color: Colors.red),
             ),
           );
         }
 
         if (state.status == StateStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         if (auctions.isEmpty) {
-          return const Center(child: Text("No Bidders available"));
+          return Center(
+            child: Text(
+              context.isArabic ? 'لا يوجد مزايدون متاحون' : 'No Bidders available',
+            ),
+          );
+
         }
 
         return ListView.separated(
@@ -123,7 +129,7 @@ class MyBiddersScreen extends StatelessWidget {
                             ),
                             SizedBox(width: 16.w),
                             Label(
-                              text: auction.username ?? "Unknown",
+                              text: auction.username ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
                               style: Styles.headerText(
                                 color: context.isDarkMode
                                     ? AppColors.whiteColor
@@ -137,7 +143,7 @@ class MyBiddersScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         Label(
                           text: "${LocaleKeys.wonTheAuction.localize}"
-                              " ${auction.auctionTitle ?? "No title"} ${LocaleKeys.forAuction.localize} ${auction.price} ${LocaleKeys.EGP.localize}",
+                              " ${auction.auctionTitle ?? "${context.isArabic ? 'لا يوجد عنوان' : 'No title'}"} ${LocaleKeys.forAuction.localize} ${auction.price} ${LocaleKeys.EGP.localize}",
                           style: Styles.mediumText(
                             color: context.isDarkMode
                                 ? AppColors.whiteColor
@@ -237,99 +243,7 @@ class MyBiddersScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildHeader({required num views,
-  //   required String? status,
-  // }) {
-  //   String label;
-  //   Color color;
-  //
-  //   switch (status) {
-  //     case "Premium":
-  //       label = LocaleKeys.premium2.localize;
-  //       color = AppColors.SECONDARY_COLOR;
-  //       break;
-  //     case "Regular":
-  //       label = LocaleKeys.regular.localize;
-  //       color = AppColors.PRIMARY_COLOR;
-  //       break;
-  //     case "Not subscribe":
-  //     default:
-  //       label = LocaleKeys.notSubscribed.localize;
-  //       color = Colors.grey;
-  //       break;
-  //   }
-  //
-  //   return Container(
-  //     padding: const EdgeInsets.symmetric(horizontal: 16),
-  //     child: Row(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: [
-  //         SvgPicture.asset(
-  //           Assets.adsEyeIcon,
-  //         ),
-  //         const SizedBox(width: 6),
-  //         if (views == 0) ...[
-  //           Label(
-  //             text: LocaleKeys.noViews.localize,
-  //             style: Styles.mediumText(
-  //               color: const Color(0xFF6C6C6C),
-  //               fontSize: 24,
-  //               height: 1.60,
-  //             ),
-  //           ),
-  //         ] else if (views == 1) ...[
-  //           Label(
-  //             text: LocaleKeys.oneView.localize,
-  //             style: Styles.mediumText(
-  //               color: const Color(0xFF6C6C6C),
-  //               fontSize: 24,
-  //               height: 1.60,
-  //             ),
-  //           ),
-  //         ] else if (views == 2) ...[
-  //           Label(
-  //             text: LocaleKeys.twoViews.localize,
-  //             style: Styles.mediumText(
-  //               color: const Color(0xFF6C6C6C),
-  //               fontSize: 24,
-  //               height: 1.60,
-  //             ),
-  //           ),
-  //         ] else if (views >= 3 && views <= 10) ...[
-  //           Label(
-  //             text: '$views ${LocaleKeys.views.localize}',
-  //             style: Styles.mediumText(
-  //               color: const Color(0xFF6C6C6C),
-  //               fontSize: 24,
-  //               height: 1.60,
-  //             ),
-  //           ),
-  //         ] else ...[
-  //           Label(
-  //             text:
-  //             '${FormatNumbers().formatNumber(views)} ${LocaleKeys.view.localize}',
-  //             style: Styles.mediumText(
-  //               color: const Color(0xFF6C6C6C),
-  //               fontSize: 24,
-  //               height: 1.60,
-  //             ),
-  //           ),
-  //         ],
-  //         const Spacer(),
-  //         Label(
-  //           text: label,
-  //           style: Styles.mediumText(
-  //             color: color,
-  //             fontSize: 32,
-  //             fontWeight: FontWeight.w700,
-  //             height: 1.60,
-  //           ),
-  //           maxLines: 1,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+
   String _formatNumber(BuildContext context, num? number) {
     if (number == null) return "0";
 

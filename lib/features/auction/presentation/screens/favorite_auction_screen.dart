@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../helpers/manage_vibration.dart';
@@ -65,9 +66,9 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
         // Show error if state is error
         if (state.status == StateStatus.error) {
           print("❌ Showing error state");
-          return const Center(
+          return  Center(
             child: Text(
-              "Something went wrong",
+                "${LocaleKeys.somethingWentWrong.localize}",
               style: TextStyle(color: Colors.red),
             ),
           );
@@ -76,7 +77,7 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
         // Show loading only if state is loading AND auctions list is not yet fetched (null or empty initially)
         if (state.status == StateStatus.loading && auctions.isEmpty) {
           print("⏳ Showing loading indicator");
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CustomCircularProgressIndicator());
         }
 
         if (auctions.isEmpty) {
