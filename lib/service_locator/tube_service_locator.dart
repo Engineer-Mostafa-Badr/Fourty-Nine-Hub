@@ -11,6 +11,7 @@ import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
 import '../features/star_feature/domain/use_case/get_tube_winner_statistics_use_case.dart';
+import '../features/star_feature/domain/use_case/get_active_categories_use_case.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
 import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
@@ -39,10 +40,11 @@ import '../features/star_feature/domain/use_case/fetch_tube_video_details_by_idu
 import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
-// NEW: Comment use cases imports
+// Presentation Layer - Cubits
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import '../features/star_feature/presentation/presentation_exports.dart';
+import '../features/star_feature/presentation/playlist/cubit/playlist_cubit.dart';
+import '../features/star_feature/presentation/profile/cubit/profile_cubit.dart';
 
 class TubeServiceLocator {
   static void execute({required GetIt serviceLocator}) {
@@ -194,6 +196,24 @@ class TubeServiceLocator {
     if (!serviceLocator.isRegistered<DeleteTubeVideoUseCase>()) {
       serviceLocator.registerLazySingleton<DeleteTubeVideoUseCase>(
         () => DeleteTubeVideoUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<RateTubeVideoUseCase>()) {
+      serviceLocator.registerLazySingleton<RateTubeVideoUseCase>(
+        () => RateTubeVideoUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetActiveCategoriesUseCase>()) {
+      serviceLocator.registerLazySingleton<GetActiveCategoriesUseCase>(
+        () => GetActiveCategoriesUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetTubeWinnerStatisticsUseCase>()) {
+      serviceLocator.registerLazySingleton<GetTubeWinnerStatisticsUseCase>(
+        () => GetTubeWinnerStatisticsUseCase(serviceLocator()),
       );
     }
 

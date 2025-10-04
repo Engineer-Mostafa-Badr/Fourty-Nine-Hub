@@ -3693,7 +3693,7 @@ class AppPages {
                         context,
                         state,
                         BlocProvider<StarCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator<StarCubit>(),
                           child: const AllWinnerView(),
                         ),
                       );
@@ -3707,11 +3707,11 @@ class AppPages {
                     MultiBlocProvider(
                       providers: [
                         BlocProvider<StarCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator<StarCubit>(),
                         ),
                         // أضف هذا السطر
                         BlocProvider<CommentCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator<CommentCubit>(),
                         ),
                       ],
                       child: const TubeFeedView(),

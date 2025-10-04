@@ -55,7 +55,7 @@ import 'secrets_service_locator.dart';
 import 'setting_service_locator.dart';
 import 'share_app_service_locator.dart';
 import 'shipping_service_locatior.dart';
-import 'star_service_locator.dart';
+import 'tube_service_locator.dart';
 import 'stories_service_locator.dart';
 import 'subcategories_service_locator.dart';
 import 'tinder_service_locator.dart';
@@ -382,7 +382,7 @@ class DI {
     EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
-    StarServiceLocator.execute(serviceLocator: serviceLocator);
+    TubeServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);

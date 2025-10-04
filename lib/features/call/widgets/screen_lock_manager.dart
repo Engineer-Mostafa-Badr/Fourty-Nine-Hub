@@ -1,4 +1,5 @@
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:flutter/services.dart';
 
 class ScreenWakeLockManager {
   // Enable wakelock to keep screen on
@@ -6,9 +7,14 @@ class ScreenWakeLockManager {
     try {
       // This prevents screen from turning off
       await WakelockPlus.enable();
-    } catch (e) {
-      // Ignore errors when no foreground activity (e.g., during app initialization)
-      print('⚠️ WakeLock: Could not enable - $e');
+    } on PlatformException catch (e) {
+      // Handle NoActivityException gracefully
+      if (e.code == 'NoActivityException') {
+        // Activity not ready yet, ignore silently
+        return;
+      }
+      // Re-throw other platform exceptions
+      rethrow;
     }
   }
 
@@ -16,8 +22,14 @@ class ScreenWakeLockManager {
   static Future<void> allowScreenOff() async {
     try {
       await WakelockPlus.disable();
-    } catch (e) {
-      print('⚠️ WakeLock: Could not disable - $e');
+    } on PlatformException catch (e) {
+      // Handle NoActivityException gracefully
+      if (e.code == 'NoActivityException') {
+        // Activity not ready yet, ignore silently
+        return;
+      }
+      // Re-throw other platform exceptions
+      rethrow;
     }
   }
 
