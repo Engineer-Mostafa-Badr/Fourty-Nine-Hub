@@ -75,7 +75,12 @@ class _AddImageWidgetState extends State<AddImageWidget> {
     return Column(
       children: [
         GestureDetector(
-          onTap: isUploading ? null : _addImage,
+          onTap: isUploading
+              ? null
+              : () {
+                  ManageVibration.vibrate();
+                  _addImage();
+                },
           child: Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
@@ -141,7 +146,10 @@ class _AddImageWidgetState extends State<AddImageWidget> {
                         top: 4,
                         right: 4,
                         child: GestureDetector(
-                          onTap: () => _removeImage(index),
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            _removeImage(index);
+                          },
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(

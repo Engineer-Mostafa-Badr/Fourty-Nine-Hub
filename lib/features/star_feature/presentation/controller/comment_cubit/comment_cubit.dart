@@ -1,4 +1,3 @@
-// lib/features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';

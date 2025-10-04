@@ -323,12 +323,15 @@ abstract class Routes {
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
   static const createAuctionScreen =  '/CreateAuctionScreen';
   static const myAuctionScreen =  '/MyAuctionScreen';
+  static const incorrectTime = '/IncorrectTime';
+
 }
 
 abstract class Paths {
   Paths._();
   static const splash = '/';
   static const splashScreen = 'splashScreen';
+  static const incorrectTime = 'IncorrectTime';
   static const HOME = 'Home';
   static const RIDEHOME = 'RideHome';
   static const RunningMapDetails = 'RunningMapDetails';

@@ -55,7 +55,7 @@ import 'secrets_service_locator.dart';
 import 'setting_service_locator.dart';
 import 'share_app_service_locator.dart';
 import 'shipping_service_locatior.dart';
-import 'star_service_locator.dart';
+import 'tube_service_locator.dart';
 import 'stories_service_locator.dart';
 import 'subcategories_service_locator.dart';
 import 'tinder_service_locator.dart';
@@ -67,6 +67,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sqflite/sqflite.dart';
+import '../core/service/time_sync_service.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
@@ -300,6 +301,14 @@ class DI {
       ),
     );
 
+    // Time sync (poll frequently to react to manual time changes)
+    serviceLocator.registerSingleton<TimeSyncService>(
+      TimeSyncService(
+        checkInterval: const Duration(seconds: 2),
+        allowedDrift: const Duration(minutes: 2),
+      ),
+    );
+
     // serviceLocator.registerLazySingleton<ApiClientHelper>(
     //   () => ApiClientHelperImp(),
     // );
@@ -382,7 +391,7 @@ class DI {
     EditFoodServiceLocator.execute(serviceLocator: serviceLocator);
     JoinTripCarpoolServiceLocator.execute(serviceLocator: serviceLocator);
     ReelsServiceLocator.execute(serviceLocator: serviceLocator);
-    StarServiceLocator.execute(serviceLocator: serviceLocator);
+    TubeServiceLocator.execute(serviceLocator: serviceLocator);
     QuranServiceLocator.execute(serviceLocator: serviceLocator);
     StoriesServiceLocator.execute(serviceLocator: serviceLocator);
     ShareAppServiceLocator.execute(serviceLocator: serviceLocator);

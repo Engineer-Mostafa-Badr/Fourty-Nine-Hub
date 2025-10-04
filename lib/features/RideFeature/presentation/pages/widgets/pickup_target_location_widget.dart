@@ -89,6 +89,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
   }
 
   Future<String?> _showLocationMethodDialog(BuildContext context) async {
+    FocusScope.of(context).requestFocus(FocusNode());
     return await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
@@ -332,7 +333,7 @@ class _PickUpLocationCardState extends State<PickUpLocationCard> {
             height: 48,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F5),
+              color: context.isDarkMode?AppColors.GREY_DARK_COLOR: const Color(0xFFF5F5F5),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(

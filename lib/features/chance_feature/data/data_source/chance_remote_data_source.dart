@@ -27,6 +27,8 @@ import '../../domain/use_case/search_chance_ads_use_case.dart';
 import '../../domain/use_case/toggle_chance_ad_favorite_use_case.dart';
 import '../model/chance_ad_model.dart';
 import '../model/chance_ads_pagination_model.dart';
+import '../model/winner_statistics_model.dart';
+import '../../domain/entity/winner_statistics_entity.dart';
 
 abstract class ChanceRemoteDataSource {
   Future<List<ChanceEntity>> fetchChance();
@@ -58,6 +60,7 @@ abstract class ChanceRemoteDataSource {
   Future<Either<Failure, List<ChanceAdEntity>>> getExpiredChanceAds();
   Future<Either<Failure, List<dynamic>>> getChanceAdWinners(String adId);
   Future<Either<Failure, bool>> incrementChanceAdView(String adId);
+  Future<Either<Failure, WinnerStatisticsEntity>> getWinnerStatistics();
 }
 
 class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
@@ -340,6 +343,26 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
       (response) {
         print('API SUCCESS incrementing view: $response');
         return Right(response['status'] ?? true);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, WinnerStatisticsEntity>> getWinnerStatistics() async {
+    const endpoint = EndPoints.getWinnerStatistics;
+    print('DATA SOURCE: Calling GET $endpoint');
+
+    final response = await _apiConsumer.get(endpoint);
+
+    return response.fold(
+      (failure) {
+        print('API ERROR getting winner statistics: ${failure.toString()}');
+        return Left(failure);
+      },
+      (response) {
+        print('API SUCCESS getting winner statistics: $response');
+        final winnerStats = WinnerStatisticsModel.fromJson(response['data']);
+        return Right(winnerStats);
       },
     );
   }

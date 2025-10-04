@@ -19,6 +19,7 @@ import '../../../domain/use_case/get_my_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_expired_chance_ads_use_case.dart';
 import '../../../domain/use_case/get_chance_ad_winners_use_case.dart';
 import '../../../domain/use_case/increment_chance_ad_view_use_case.dart';
+import '../../../domain/use_case/get_winner_statistics_use_case.dart';
 import '../../../domain/entity/chance_ad_entity.dart';
 import 'chance_states.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -42,6 +43,7 @@ class ChanceCubit extends Cubit<ChanceState> {
   final GetExpiredChanceAdsUseCase _getExpiredChanceAdsUseCase;
   final GetChanceAdWinnersUseCase _getChanceAdWinnersUseCase;
   final IncrementChanceAdViewUseCase _incrementChanceAdViewUseCase;
+  final GetWinnerStatisticsUseCase _getWinnerStatisticsUseCase;
 
   ChanceCubit(
     this._fetchChanceUseCase,
@@ -60,6 +62,7 @@ class ChanceCubit extends Cubit<ChanceState> {
     this._getExpiredChanceAdsUseCase,
     this._getChanceAdWinnersUseCase,
     this._incrementChanceAdViewUseCase,
+    this._getWinnerStatisticsUseCase,
   ) : super(const ChanceState());
 
   // Future<void> fetchChance() async {
@@ -327,34 +330,68 @@ class ChanceCubit extends Cubit<ChanceState> {
   }
 
   void _updateAdFavoriteStatus(String adId, bool isFavorite) {
+    List<ChanceAdEntity>? updatedChanceAds;
+    List<ChanceAdEntity>? updatedFavoriteAds;
+    List<ChanceAdEntity>? updatedMyAds;
+    List<ChanceAdEntity>? updatedExpiredAds;
+    ChanceAdEntity? updatedDetails;
+
     // Update in chanceAds list if it exists
     if (state.chanceAds != null) {
-      final updatedChanceAds = state.chanceAds!.map((ad) {
+      updatedChanceAds = state.chanceAds!.map((ad) {
         if (ad.id == adId) {
           return ad.copyWith(isFavorite: isFavorite);
         }
         return ad;
       }).toList();
-      emit(state.copyWith(chanceAds: updatedChanceAds));
     }
 
     // Update in favoriteChanceAds list if it exists
     if (state.favoriteChanceAds != null) {
-      final updatedFavoriteAds = state.favoriteChanceAds!.map((ad) {
+      updatedFavoriteAds = state.favoriteChanceAds!.map((ad) {
         if (ad.id == adId) {
           return ad.copyWith(isFavorite: isFavorite);
         }
         return ad;
       }).toList();
-      emit(state.copyWith(favoriteChanceAds: updatedFavoriteAds));
+    }
+
+    // Update in myChanceAds list if it exists
+    if (state.myChanceAds != null) {
+      updatedMyAds = state.myChanceAds!.map((ad) {
+        if (ad.id == adId) {
+          return ad.copyWith(isFavorite: isFavorite);
+        }
+        return ad;
+      }).toList();
+    }
+
+    // Update in expiredChanceAds list if it exists
+    if (state.expiredChanceAds != null) {
+      updatedExpiredAds = state.expiredChanceAds!.map((ad) {
+        if (ad.id == adId) {
+          return ad.copyWith(isFavorite: isFavorite);
+        }
+        return ad;
+      }).toList();
     }
 
     // Update in chanceAdDetails if it exists and matches the adId
     if (state.chanceAdDetails != null && state.chanceAdDetails!.id == adId) {
-      final updatedDetails =
-          state.chanceAdDetails!.copyWith(isFavorite: isFavorite);
-      emit(state.copyWith(chanceAdDetails: updatedDetails));
+      updatedDetails = state.chanceAdDetails!.copyWith(isFavorite: isFavorite);
     }
+
+    // Emit once with all updates
+    emit(state.copyWith(
+      chanceAds: updatedChanceAds,
+      favoriteChanceAds: updatedFavoriteAds,
+      myChanceAds: updatedMyAds,
+      expiredChanceAds: updatedExpiredAds,
+      chanceAdDetails: updatedDetails,
+      status: ChanceStates.success,
+    ));
+
+    print('ChanceCubit: Updated favorite status for adId: $adId to: $isFavorite');
   }
 
   void addUploadedImageId(String imageId) {
@@ -473,5 +510,31 @@ class ChanceCubit extends Cubit<ChanceState> {
     } catch (e) {
       print('EXCEPTION in incrementChanceAdView: $e');
     }
+  }
+
+  Future<void> getWinnerStatistics() async {
+    final response = await _getWinnerStatisticsUseCase(const NoParams());
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ChanceStates.error));
+      },
+      (winnerStatistics) {
+        emit(state.copyWith(
+          winnerStatistics: winnerStatistics,
+          status: ChanceStates.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> getChanceWinners() async {
+    // This method was referenced in ChanceWinnersView but didn't exist
+    // For now, we'll use getWinnerStatistics, but you can implement
+    // a separate endpoint for getting actual winner list if needed
+    await getWinnerStatistics();
   }
 }

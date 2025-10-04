@@ -65,7 +65,7 @@ class AuthInterceptor extends Interceptor {
     });
     
     // Check for SSL certificate errors first
-    _logSSLCertificateError(err);
+    // _logSSLCertificateError(err);
     
     // Handle date change scenarios that cause unknown errors
     if (err.type == DioExceptionType.unknown && _token != null) {
@@ -261,168 +261,168 @@ class AuthInterceptor extends Interceptor {
       return null;
     }
   }
-
-  /// Log SSL certificate errors from DioException
-  void _logSSLCertificateError(DioException err) {
-    final url = err.requestOptions.uri;
-    final host = url.host;
-    final port = url.port;
-    
-    // Debug: Log all error details to help identify SSL errors
-    LoggingHelper.debug('🔍 SSL Debug: Checking error for SSL indicators', data: {
-      'host': host,
-      'port': port,
-      'url': url.toString(),
-      'errorType': err.type.toString(),
-      'errorMessage': err.message,
-      'error': err.toString(),
-    });
-    
-    // Check if this is an SSL/TLS related error
-    if (_isSSLError(err)) {
-      LoggingHelper.error('🔒 SSL Certificate Error Detected', data: {
-        'host': host,
-        'port': port,
-        'url': url.toString(),
-        'errorType': err.type.toString(),
-        'errorMessage': err.message,
-      });
-      
-      // Log detailed SSL certificate information
-      SSLCertificateHelper.logCertificateValidationFailure(
-        host: host,
-        port: port,
-        subject: 'Unknown',
-        issuer: 'Unknown',
-        validFrom: DateTime.now(),
-        validTo: DateTime.now(),
-        reason: _getSSLErrorReason(err),
-      );
-      
-      // Log development mode bypass if applicable
-      SSLCertificateHelper.logDevelopmentModeBypass(
-        host: host,
-        port: port,
-      );
-    } else {
-      LoggingHelper.debug('🔍 SSL Debug: Not an SSL error', data: {
-        'reason': 'No SSL keywords found in error message',
-        'errorMessage': err.message,
-      });
-    }
-  }
-  
-  /// Check if the error is SSL/TLS related
-  bool _isSSLError(DioException err) {
-    final message = err.message?.toLowerCase() ?? '';
-    final errorType = err.type;
-    final errorString = err.toString().toLowerCase();
-    
-    // Check for SSL/TLS related error messages
-    final sslKeywords = [
-      'certificate',
-      'ssl',
-      'tls',
-      'handshake',
-      'cert',
-      'x509',
-      'pem',
-      'cipher',
-      'protocol',
-      'secure',
-      'trust',
-      'chain',
-      'verification',
-      'validation',
-      'expired',
-      'invalid',
-      'self-signed',
-      'untrusted',
-      'hostname',
-      'mismatch',
-      'connection',
-      'timeout',
-      'network',
-      'socket',
-      'io',
-      'platform',
-      'exception',
-    ];
-    
-    // Check both error message and full error string
-    final hasSSLKeyword = sslKeywords.any((keyword) => 
-      message.contains(keyword) || errorString.contains(keyword));
-    
-    // Check for SSL-related error types
-    final isSSLRelatedType = errorType == DioExceptionType.unknown ||
-                           errorType == DioExceptionType.connectionError ||
-                           errorType == DioExceptionType.connectionTimeout ||
-                           errorType == DioExceptionType.receiveTimeout ||
-                           errorType == DioExceptionType.sendTimeout;
-    
-    // Log the decision process
-    LoggingHelper.debug('🔍 SSL Detection Debug', data: {
-      'hasSSLKeyword': hasSSLKeyword,
-      'isSSLRelatedType': isSSLRelatedType,
-      'errorType': errorType.toString(),
-      'message': message,
-      'errorString': errorString,
-      'finalDecision': hasSSLKeyword || isSSLRelatedType,
-    });
-    
-    return hasSSLKeyword || isSSLRelatedType;
-  }
-  
-  /// Get a human-readable reason for SSL errors
-  String _getSSLErrorReason(DioException err) {
-    final message = err.message?.toLowerCase() ?? '';
-    
-    if (message.contains('expired')) {
-      return 'Certificate expired';
-    } else if (message.contains('invalid')) {
-      return 'Invalid certificate';
-    } else if (message.contains('self-signed')) {
-      return 'Self-signed certificate';
-    } else if (message.contains('untrusted')) {
-      return 'Untrusted certificate';
-    } else if (message.contains('hostname') || message.contains('mismatch')) {
-      return 'Hostname mismatch';
-    } else if (message.contains('handshake')) {
-      return 'TLS handshake failed';
-    } else if (message.contains('cipher')) {
-      return 'Cipher suite error';
-    } else if (message.contains('protocol')) {
-      return 'Protocol error';
-    } else if (message.contains('chain')) {
-      return 'Certificate chain error';
-    } else if (message.contains('verification') || message.contains('validation')) {
-      return 'Certificate verification failed';
-    } else {
-      return 'SSL/TLS error: ${err.message}';
-    }
-  }
-  
-  /// Test method to verify SSL certificate logging is working
-  static void testSSLCertificateLogging() {
-    LoggingHelper.info('🧪 Testing SSL Certificate Logging...');
-    
-    // Test SSL certificate validation failure
-    SSLCertificateHelper.logCertificateValidationFailure(
-      host: '49backend.com',
-      port: 443,
-      subject: '/CN=49backend.com',
-      issuer: '/C=US/O=Let\'s Encrypt/CN=E6',
-      validFrom: DateTime.parse('2025-08-11T18:43:30.000Z'),
-      validTo: DateTime.parse('2025-11-09T18:43:29.000Z'),
-      reason: 'Certificate expired due to date change',
-    );
-    
-    // Test development mode bypass
-    SSLCertificateHelper.logDevelopmentModeBypass(
-      host: '49backend.com',
-      port: 443,
-    );
-    
-    LoggingHelper.info('✅ SSL Certificate Logging Test Completed');
-  }
+  //
+  // /// Log SSL certificate errors from DioException
+  // void _logSSLCertificateError(DioException err) {
+  //   final url = err.requestOptions.uri;
+  //   final host = url.host;
+  //   final port = url.port;
+  //
+  //   // Debug: Log all error details to help identify SSL errors
+  //   LoggingHelper.debug('🔍 SSL Debug: Checking error for SSL indicators', data: {
+  //     'host': host,
+  //     'port': port,
+  //     'url': url.toString(),
+  //     'errorType': err.type.toString(),
+  //     'errorMessage': err.message,
+  //     'error': err.toString(),
+  //   });
+  //
+  //   // Check if this is an SSL/TLS related error
+  //   if (_isSSLError(err)) {
+  //     LoggingHelper.error('🔒 SSL Certificate Error Detected', data: {
+  //       'host': host,
+  //       'port': port,
+  //       'url': url.toString(),
+  //       'errorType': err.type.toString(),
+  //       'errorMessage': err.message,
+  //     });
+  //
+  //     // // Log detailed SSL certificate information
+  //     // SSLCertificateHelper.logCertificateValidationFailure(
+  //     //   host: host,
+  //     //   port: port,
+  //     //   subject: 'Unknown',
+  //     //   issuer: 'Unknown',
+  //     //   validFrom: DateTime.now(),
+  //     //   validTo: DateTime.now(),
+  //     //   reason: _getSSLErrorReason(err),
+  //     // );
+  //     //
+  //     // Log development mode bypass if applicable
+  //     // SSLCertificateHelper.logDevelopmentModeBypass(
+  //     //   host: host,
+  //     //   port: port,
+  //     // );
+  //   } else {
+  //     LoggingHelper.debug('🔍 SSL Debug: Not an SSL error', data: {
+  //       'reason': 'No SSL keywords found in error message',
+  //       'errorMessage': err.message,
+  //     });
+  //   }
+  // }
+  //
+  // /// Check if the error is SSL/TLS related
+  // bool _isSSLError(DioException err) {
+  //   final message = err.message?.toLowerCase() ?? '';
+  //   final errorType = err.type;
+  //   final errorString = err.toString().toLowerCase();
+  //
+  //   // Check for SSL/TLS related error messages
+  //   final sslKeywords = [
+  //     'certificate',
+  //     'ssl',
+  //     'tls',
+  //     'handshake',
+  //     'cert',
+  //     'x509',
+  //     'pem',
+  //     'cipher',
+  //     'protocol',
+  //     'secure',
+  //     'trust',
+  //     'chain',
+  //     'verification',
+  //     'validation',
+  //     'expired',
+  //     'invalid',
+  //     'self-signed',
+  //     'untrusted',
+  //     'hostname',
+  //     'mismatch',
+  //     'connection',
+  //     'timeout',
+  //     'network',
+  //     'socket',
+  //     'io',
+  //     'platform',
+  //     'exception',
+  //   ];
+  //
+  //   // Check both error message and full error string
+  //   final hasSSLKeyword = sslKeywords.any((keyword) =>
+  //     message.contains(keyword) || errorString.contains(keyword));
+  //
+  //   // Check for SSL-related error types
+  //   final isSSLRelatedType = errorType == DioExceptionType.unknown ||
+  //                          errorType == DioExceptionType.connectionError ||
+  //                          errorType == DioExceptionType.connectionTimeout ||
+  //                          errorType == DioExceptionType.receiveTimeout ||
+  //                          errorType == DioExceptionType.sendTimeout;
+  //
+  //   // Log the decision process
+  //   LoggingHelper.debug('🔍 SSL Detection Debug', data: {
+  //     'hasSSLKeyword': hasSSLKeyword,
+  //     'isSSLRelatedType': isSSLRelatedType,
+  //     'errorType': errorType.toString(),
+  //     'message': message,
+  //     'errorString': errorString,
+  //     'finalDecision': hasSSLKeyword || isSSLRelatedType,
+  //   });
+  //
+  //   return hasSSLKeyword || isSSLRelatedType;
+  // }
+  //
+  // /// Get a human-readable reason for SSL errors
+  // String _getSSLErrorReason(DioException err) {
+  //   final message = err.message?.toLowerCase() ?? '';
+  //
+  //   if (message.contains('expired')) {
+  //     return 'Certificate expired';
+  //   } else if (message.contains('invalid')) {
+  //     return 'Invalid certificate';
+  //   } else if (message.contains('self-signed')) {
+  //     return 'Self-signed certificate';
+  //   } else if (message.contains('untrusted')) {
+  //     return 'Untrusted certificate';
+  //   } else if (message.contains('hostname') || message.contains('mismatch')) {
+  //     return 'Hostname mismatch';
+  //   } else if (message.contains('handshake')) {
+  //     return 'TLS handshake failed';
+  //   } else if (message.contains('cipher')) {
+  //     return 'Cipher suite error';
+  //   } else if (message.contains('protocol')) {
+  //     return 'Protocol error';
+  //   } else if (message.contains('chain')) {
+  //     return 'Certificate chain error';
+  //   } else if (message.contains('verification') || message.contains('validation')) {
+  //     return 'Certificate verification failed';
+  //   } else {
+  //     return 'SSL/TLS error: ${err.message}';
+  //   }
+  // }
+  //
+  // /// Test method to verify SSL certificate logging is working
+  // static void testSSLCertificateLogging() {
+  //   LoggingHelper.info('🧪 Testing SSL Certificate Logging...');
+  //
+  //   // Test SSL certificate validation failure
+  //   SSLCertificateHelper.logCertificateValidationFailure(
+  //     host: '49backend.com',
+  //     port: 443,
+  //     subject: '/CN=49backend.com',
+  //     issuer: '/C=US/O=Let\'s Encrypt/CN=E6',
+  //     validFrom: DateTime.parse('2025-08-11T18:43:30.000Z'),
+  //     validTo: DateTime.parse('2025-11-09T18:43:29.000Z'),
+  //     reason: 'Certificate expired due to date change',
+  //   );
+  //
+  //   // Test development mode bypass
+  //   SSLCertificateHelper.logDevelopmentModeBypass(
+  //     host: '49backend.com',
+  //     port: 443,
+  //   );
+  //
+  //   LoggingHelper.info('✅ SSL Certificate Logging Test Completed');
+  // }
 }

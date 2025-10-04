@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winner.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/loading/custom_loading.dart';
 import '../../../../../core/widget/custom_failure_widget.dart';
@@ -42,7 +43,7 @@ class WinnersTenPercentViewBody extends StatelessWidget {
           return CustomFailureWidget(
             title: getFailureMessage(state.failure!, context),
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               context
                   .read<WinnersTenPercentCubit>()
                   .getWinners(isRefresh: true);

@@ -72,6 +72,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<RideRegisterCubit, RideRegisterState>(
         builder: (context, state) {
+          print("state.newModel ${state.newModel?.id}");
+          print("state.selectedModel ${state.selectedModel?.id}");
       var cubit = context.read<RideRegisterCubit>();
       final DateTime now = DateTime.now();
       final DateTime earliestDate = DateTime(now.year - 65, now.month, now.day);

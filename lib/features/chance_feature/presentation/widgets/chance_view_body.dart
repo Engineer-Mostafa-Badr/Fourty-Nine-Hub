@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/LIst_view_card.dart';
 
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../controller/cubit/chance_cubit.dart';
 
@@ -102,7 +103,10 @@ class _ChanceViewBodyState extends State<ChanceViewBody> {
                   ),
                   if (_isSearching)
                     IconButton(
-                      onPressed: _clearSearch,
+                      onPressed: () {
+                        ManageVibration.vibrate();
+                        _clearSearch();
+                      },
                       icon: const Icon(Icons.clear, color: AppColors.GREY_NORMAL_COLOR),
                     ),
                 ],

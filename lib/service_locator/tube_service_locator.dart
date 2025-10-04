@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/profile_cubit/profile_cubit.dart';
 
 import '../features/star_feature/data/data_source/playlist_remote_data_source.dart';
 import '../features/star_feature/data/data_source/profile_remote_data_source.dart';
@@ -11,9 +10,12 @@ import '../features/star_feature/domain/use_case/comment_use_cases.dart';
 import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/get_my_profile_use_case.dart';
 import '../features/star_feature/domain/use_case/get_profile_by_id_use_case.dart';
+import '../features/star_feature/domain/use_case/get_tube_winner_statistics_use_case.dart';
+import '../features/star_feature/domain/use_case/get_active_categories_use_case.dart';
 import '../features/star_feature/domain/use_case/playlist_use_cases.dart';
 import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/search_tube_videos_use_case.dart';
+import '../features/star_feature/domain/use_case/get_recommended_videos_use_case.dart';
 import '../features/star_feature/domain/use_case/subscribe_to_channel_use_case.dart';
 import '../features/star_feature/domain/use_case/tube_favorite_use_cases.dart';
 import '../features/star_feature/domain/use_case/tube_watch_later_use_cases.dart';
@@ -38,10 +40,11 @@ import '../features/star_feature/domain/use_case/fetch_tube_video_details_by_idu
 import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
-// NEW: Comment use cases imports
+// Presentation Layer - Cubits
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import '../features/star_feature/presentation/controller/playlist_cubit/playlist_cubit.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
+import '../features/star_feature/presentation/playlist/cubit/playlist_cubit.dart';
+import '../features/star_feature/presentation/profile/cubit/profile_cubit.dart';
 
 class TubeServiceLocator {
   static void execute({required GetIt serviceLocator}) {
@@ -71,6 +74,12 @@ class TubeServiceLocator {
     if (!serviceLocator.isRegistered<SearchTubeVideosUseCase>()) {
       serviceLocator.registerLazySingleton<SearchTubeVideosUseCase>(
         () => SearchTubeVideosUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetRecommendedVideosUseCase>()) {
+      serviceLocator.registerLazySingleton<GetRecommendedVideosUseCase>(
+        () => GetRecommendedVideosUseCase(serviceLocator()),
       );
     }
 
@@ -190,6 +199,24 @@ class TubeServiceLocator {
       );
     }
 
+    if (!serviceLocator.isRegistered<RateTubeVideoUseCase>()) {
+      serviceLocator.registerLazySingleton<RateTubeVideoUseCase>(
+        () => RateTubeVideoUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetActiveCategoriesUseCase>()) {
+      serviceLocator.registerLazySingleton<GetActiveCategoriesUseCase>(
+        () => GetActiveCategoriesUseCase(serviceLocator()),
+      );
+    }
+
+    if (!serviceLocator.isRegistered<GetTubeWinnerStatisticsUseCase>()) {
+      serviceLocator.registerLazySingleton<GetTubeWinnerStatisticsUseCase>(
+        () => GetTubeWinnerStatisticsUseCase(serviceLocator()),
+      );
+    }
+
     //! NEW: Comment Use Cases Registration
     if (!serviceLocator.isRegistered<CreateCommentUseCase>()) {
       serviceLocator.registerLazySingleton<CreateCommentUseCase>(
@@ -291,37 +318,39 @@ class TubeServiceLocator {
         () => UpdatePlaylistUseCase(serviceLocator()),
       );
     }
+    
 
     //! Star Cubit with all dependencies
     // استخدم registerFactory بدلاً من registerLazySingleton للـ Cubit
     serviceLocator.registerFactory<StarCubit>(
       () => StarCubit(
-        // Original Star dependencies
-        serviceLocator<FetchAllStarUseCase>(),
-        serviceLocator<FetchMylStarUseCase>(),
-        serviceLocator<UploadMyStarUseCase>(),
-        serviceLocator<DeleteMyStarUseCase>(),
-        serviceLocator<FetchWinnerStarUseCase>(),
-        serviceLocator<FetchBannerUseCase>(),
-        serviceLocator<SearchProfilesUseCase>(),
-        serviceLocator<SearchTubeVideosUseCase>(),
-        serviceLocator<AddVideoToFavoriteUseCase>(),
-        serviceLocator<RemoveVideoFromFavoriteUseCase>(),
-        serviceLocator<GetFavoriteVideosUseCase>(),
-        // Watch Later dependencies
-        serviceLocator<AddVideoToWatchLaterUseCase>(),
-        serviceLocator<RemoveVideoFromWatchLaterUseCase>(),
-        serviceLocator<GetWatchLaterVideosUseCase>(),
-        // New Tube Video dependencies
-        serviceLocator<FetchAllTubeVideosUseCase>(),
-        serviceLocator<FetchMyTubeVideosUseCase>(),
-        serviceLocator<FetchTubeVideoDetailsByIdUseCase>(),
-        serviceLocator<LikeTubeVideoUseCase>(),
-        serviceLocator<DislikeTubeVideoUseCase>(),
-        serviceLocator<IncrementTubeVideoViewUseCase>(),
-        serviceLocator<RateTubeVideoUseCase>(),
-        serviceLocator<DeleteTubeVideoUseCase>(),
-      ),
+          // Original Star dependencies
+          serviceLocator<FetchAllStarUseCase>(),
+          serviceLocator<FetchMylStarUseCase>(),
+          serviceLocator<UploadMyStarUseCase>(),
+          serviceLocator<DeleteMyStarUseCase>(),
+          serviceLocator<FetchWinnerStarUseCase>(),
+          serviceLocator<FetchBannerUseCase>(),
+          serviceLocator<SearchProfilesUseCase>(),
+          serviceLocator<SearchTubeVideosUseCase>(),
+          serviceLocator<AddVideoToFavoriteUseCase>(),
+          serviceLocator<RemoveVideoFromFavoriteUseCase>(),
+          serviceLocator<GetFavoriteVideosUseCase>(),
+          // Watch Later dependencies
+          serviceLocator<AddVideoToWatchLaterUseCase>(),
+          serviceLocator<RemoveVideoFromWatchLaterUseCase>(),
+          serviceLocator<GetWatchLaterVideosUseCase>(),
+          // New Tube Video dependencies
+          serviceLocator<FetchAllTubeVideosUseCase>(),
+          serviceLocator<FetchMyTubeVideosUseCase>(),
+          serviceLocator<FetchTubeVideoDetailsByIdUseCase>(),
+          serviceLocator<LikeTubeVideoUseCase>(),
+          serviceLocator<DislikeTubeVideoUseCase>(),
+          serviceLocator<IncrementTubeVideoViewUseCase>(),
+          serviceLocator<RateTubeVideoUseCase>(),
+          serviceLocator<DeleteTubeVideoUseCase>(),
+          serviceLocator<GetTubeWinnerStatisticsUseCase>(),
+          serviceLocator<GetRecommendedVideosUseCase>()),
     );
 
     //! NEW: Comment Cubit Registration

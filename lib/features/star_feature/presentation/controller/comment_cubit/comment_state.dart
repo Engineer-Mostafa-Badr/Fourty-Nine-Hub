@@ -1,4 +1,3 @@
-// lib/features/star_feature/presentation/controller/comment_cubit/comment_state.dart
 part of 'comment_cubit.dart';
 
 class CommentState {

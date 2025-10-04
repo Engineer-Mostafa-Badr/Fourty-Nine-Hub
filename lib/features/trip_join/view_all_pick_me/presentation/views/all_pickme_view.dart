@@ -130,74 +130,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
     );
   }
 
-  Widget _buildSearchField() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _searchController,
-              style: TextStyle(
-                color: AppColors.getTextColor(context),
-                fontSize: 16,
-              ),
-              decoration: InputDecoration(
-                hintText: context.isArabic
-                    ? 'ابحث عن الأطباء أو الخدمات...'
-                    : 'Search doctors or services...',
-                hintStyle: TextStyle(
-                  color: AppColors.getTextColor(context).withOpacity(0.6),
-                  fontSize: 16,
-                ),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: AppColors.SECONDARY_COLOR,
-                  size: 20,
-                ),
-              ),
-              textInputAction: TextInputAction.search,
-              onChanged: (value) => setState(() => _hasSearchText = value.isNotEmpty),
-              onSubmitted: (value) {
-                if (value.isNotEmpty) {
-                  // _performSearch(value);
-                }
-              },
-            ),
-          ),
-          if (_hasSearchText) ...[
-            Sizer(width: 8.w),
-              Padding(
-                padding: const EdgeInsets.only(right: 8,left: 8),
-                child: GestureDetector(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    // _performSearch(_searchController.text);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.SECONDARY_COLOR,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ],
-      ),
-    );
-  }
 
   Widget _buildCardForCategory() {
     switch (_displayedCategory) {
@@ -270,9 +202,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
                     ? AppColors.getButtonPrimaryColor(context)
                     : AppColors.getFillColor(context),
                 border: Border.all(
-                    color: selected
-                        ? AppColors.getRedColor(context)
-                        : AppColors.getButtonPrimaryColor(context),
+                    color: AppColors.getButtonPrimaryColor(context),
                     width: 2)),
             child: Center(
               child: Text(

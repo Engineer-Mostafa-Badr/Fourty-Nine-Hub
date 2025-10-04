@@ -807,9 +807,10 @@ class _NewRouteBodyState extends State<NewRouteBody> {
 class _NewRouteScreenState extends State<NewRouteScreen> {
   @override
   Widget build(BuildContext context) {
-    return const SharedScaffold(
+    return SharedScaffold(
       mainCategoryId: 1,
       isWithBackArrow: true,
+      onBackPressed: ()=>context.pop(),
       body: NewRouteBody(),
     );
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../res/style/app_colors.dart';
 
@@ -15,7 +18,20 @@ class TripJoinFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Padding(
+    return CustomElevatedButton(
+        onPressed: () {
+          ManageVibration.vibrate();
+          onTap.call();
+        },
+        backgoundColor: AppColors.getButtonPrimaryColor(context),
+        child: Label(
+          text:'$title +',
+          style: Styles.mediumText(
+            fontWeight: FontWeight.bold,
+            color: AppColors.getReversedTextColor(context),
+          ),
+        ));
+        return Padding(
       padding: EdgeInsets.only(bottom: 0.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
