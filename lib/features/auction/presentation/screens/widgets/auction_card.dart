@@ -41,38 +41,40 @@ class AuctionCard extends StatelessWidget {
     final minutes = diff.inMinutes % 60;
     final seconds = diff.inSeconds % 60;
 
+    String format(num number) => _formatNumber(context, number);
+
     if (days > 0) {
       if (hours > 0) {
         return context.isArabic
-            ? '$days يوم $hours ساعة متبقية'
-            : '${days}d ${hours}h left';
+            ? '${format(days)} يوم ${format(hours)} ساعة متبقية'
+            : '${format(days)}d ${format(hours)}h left';
       }
       return context.isArabic
-          ? '$days يوم متبقي'
-          : '${days}d left';
+          ? '${format(days)} يوم متبقي'
+          : '${format(days)}d left';
     }
 
     if (hours > 0) {
       if (minutes > 0) {
         return context.isArabic
-            ? '$hours ساعة $minutes دقيقة متبقية'
-            : '${hours}h ${minutes}m left';
+            ? '${format(hours)} ساعة ${format(minutes)} دقيقة متبقية'
+            : '${format(hours)}h ${format(minutes)}m left';
       }
       return context.isArabic
-          ? '$hours ساعة متبقية'
-          : '${hours}h left';
+          ? '${format(hours)} ساعة متبقية'
+          : '${format(hours)}h left';
     }
 
     if (minutes > 0) {
       return context.isArabic
-          ? '$minutes دقيقة متبقية'
-          : '${minutes}m left';
+          ? '${format(minutes)} دقيقة متبقية'
+          : '${format(minutes)}m left';
     }
 
     if (seconds > 0) {
       return context.isArabic
-          ? '$seconds ثانية متبقية'
-          : '${seconds}s left';
+          ? '${format(seconds)} ثانية متبقية'
+          : '${format(seconds)}s left';
     }
 
     return context.isArabic
@@ -81,54 +83,25 @@ class AuctionCard extends StatelessWidget {
   }
 
 
-  String _formatTimeLeft1() {
-    final endAt = auction.endAt;
-    if (endAt == null) return '';
 
-    final nowUtc = DateTime.now().toUtc();
-    final endUtc = endAt.isUtc ? endAt : endAt.toUtc();
-
-    if (endUtc.isBefore(nowUtc)) return 'Ended';
-
-    final diff = endUtc.difference(nowUtc);
-
-    final days = diff.inDays;
-    final hours = diff.inHours % 24;
-    final minutes = diff.inMinutes % 60;
-    final seconds = diff.inSeconds % 60;
-
-    if (days > 0) {
-      if (hours > 0) return '${days}d ${hours}h left';
-      return '${days}d left';
-    }
-
-    if (hours > 0) {
-      if (minutes > 0) return '${hours}h ${minutes}m left';
-      return '${hours}h left';
-    }
-
-    if (minutes > 0) return '${minutes}m left';
-    if (seconds > 0) return '${seconds}s left';
-
-    return 'Less than 1s left';
-  }
-
-  String _getParticipantCount() {
-    final count = auction.numberOfParticipants ?? 0;
-    return NumberFormat.compact().format(count); // e.g. 1K, 2.5K
-  }
-
-  String _getViewCount() {
-    final count = auction.views ?? 0;
-    return NumberFormat.compact().format(count); // e.g. 0, 1, 1K, 50.7K
-  }
   String _formatNumber(BuildContext context, num? number) {
     if (number == null) return "0";
 
     final locale = context.isArabic ? 'ar' : 'en';
-    return NumberFormat.decimalPattern(locale).format(number);
-  }
+    final formatter = NumberFormat.decimalPattern(locale);
+    String formatted = formatter.format(number);
 
+    if (context.isArabic) {
+      const english = ['0','1','2','3','4','5','6','7','8','9'];
+      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+
+      for (int i = 0; i < english.length; i++) {
+        formatted = formatted.replaceAll(english[i], arabic[i]);
+      }
+    }
+
+    return formatted;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +128,7 @@ class AuctionCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AuctionImageCarousel(
-                    images: auction.media!,
+                    images: auction.media ?? [], // ✅ use empty list if null
                     // images: auction.media ?? [],
                   ),
                 ),
@@ -223,13 +196,12 @@ class AuctionCard extends StatelessWidget {
                             children: [
                                TextSpan(text:LocaleKeys.priceNow.localize),
                               TextSpan(
-                                text: "${_formatNumber(context,auction.lastPrice ?? 0,)} ",
+                                text: " ${_formatNumber(context,auction.lastPrice ?? 0,)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
-
                               TextSpan(
                                 text: LocaleKeys.EGP.localize,
                                 style: Styles.mediumText(
@@ -261,7 +233,7 @@ class AuctionCard extends StatelessWidget {
                             children: [
                                TextSpan(text: LocaleKeys.startFrom.localize),
                               TextSpan(
-                                text: "${_formatNumber(context,auction.price ?? 0)} ",
+                                text: " ${_formatNumber(context,auction.price ?? 0)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.w400,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
@@ -304,7 +276,7 @@ class AuctionCard extends StatelessWidget {
                             // participants
                             Flexible(
                               child: Text(
-                                "${_getParticipantCount()} ${LocaleKeys.participants.localize}",
+                                "${_formatNumber(context, auction.numberOfParticipants ?? 0)} ${LocaleKeys.participants.localize}",
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 13,
@@ -323,7 +295,7 @@ class AuctionCard extends StatelessWidget {
                                   const SizedBox(width: 4),
                                   Flexible(
                                     child: Text(
-                                      "${_getViewCount()} ${LocaleKeys.views.localize}",
+                                      "${_formatNumber(context, auction.views ?? 0)} ${LocaleKeys.views.localize}",
                                       style: Styles.mediumText(
                                         color: context.isDarkMode ? Colors.white : Colors.black,
                                       ),
@@ -376,40 +348,7 @@ class AuctionCard extends StatelessWidget {
                             : LocaleKeys.joinNow.localize,
                       ),
 
-                      // AppButton(
-                      //   width: 91,
-                      //   backColor: auction.status == "expired"
-                      //       ? AppColors.grey // or any color for expired
-                      //       : auction.isWinner == true
-                      //       ? AppColors.cFFAC3F
-                      //       : AppColors.PRIMARY_COLOR_DARK,
-                      //   onPressed: auction.status == "expired"
-                      //       ? (){} // disable button if expired
-                      //       : () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (_) => BlocProvider(
-                      //           create: (_) => serviceLocator<AuctionCubit>(),
-                      //           child: SingleAuctionScreen(auctionId: auction.id ?? ""),
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      //   style: Styles.mediumText(
-                      //     color: auction.status == "expired"
-                      //         ? AppColors.grey.shade700 // optional text color for expired
-                      //         : auction.isWinner == true
-                      //         ? AppColors.black
-                      //         : AppColors.whiteColor,
-                      //     fontWeight: FontWeight.w500,
-                      //   ),
-                      //   label: auction.status == "expired"
-                      //       ? "Expired" // or LocaleKeys.expired.localize
-                      //       : auction.isWinner == true
-                      //       ? LocaleKeys.winnerAuction.localize
-                      //       : LocaleKeys.joinNow.localize,
-                      // ),
+
 
                     ],
                   ),

@@ -1661,7 +1661,8 @@
   "liveAuction": "مزاد مباشر",
   "placeBid": "تقديم عرض",
   "enterYourBid": "أدخل عرضك",
-  "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد"
+  "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد",
+  "noAuctionAvailable": "لا توجد مزادات متاحة"
 
 
 }

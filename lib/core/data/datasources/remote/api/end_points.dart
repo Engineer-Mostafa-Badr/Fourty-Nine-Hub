@@ -1959,6 +1959,7 @@ class EndPoints {
   static String getExchangeRates(String code) => '/exchange-currency/$code';
 
   static String fetchAvailableAuction = '/auctions/available';
+  static String searchAuction = '/auctions/search';
   static String fetchExpiredAuction = '/auctions/expired';
   static String fetchFavoriteAuction = '/auction-fav';
   static String fetchSingleAuction = '/auctions/';
@@ -1970,6 +1971,7 @@ class EndPoints {
   static String createAuction2 = '/auctions';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String auctionBanner = '/auctions/banner';
+  static String auctionAllWinner = '/auctions/winner-statistics';
 
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
