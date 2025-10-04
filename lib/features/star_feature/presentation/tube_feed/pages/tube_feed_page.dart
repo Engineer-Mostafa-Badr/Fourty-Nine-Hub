@@ -62,7 +62,6 @@ class _TubeFeedViewState extends State<TubeFeedView>
 
   bool _isSyncing = false;
   bool _isManualRefreshing = false;
-  bool _isTabChanging = false;
 
   @override
   void initState() {
@@ -178,12 +177,11 @@ class _TubeFeedViewState extends State<TubeFeedView>
     }
   }
 
-  void _onTabChanged() async {
+  void _onTabChanged() {
     print("📱 Tab changed to index: ${_tabController.index}");
 
     setState(() {
       _selectedTabIndex = _tabController.index;
-      _isTabChanging = true;
 
       // Reset video details view when switching tabs
       if (_selectedTabIndex != 3) {
@@ -204,16 +202,7 @@ class _TubeFeedViewState extends State<TubeFeedView>
     final category = _getTabCategory(_selectedTabIndex);
     if (category != null) {
       print("🔄 Refreshing data for category: $category");
-      await _cubit.loadTalents(category, refresh: true);
-
-      // Small delay to show loading
-      await Future.delayed(Duration(milliseconds: 300));
-    }
-
-    if (mounted) {
-      setState(() {
-        _isTabChanging = false;
-      });
+      _cubit.loadTalents(category, refresh: true);
     }
   }
 
@@ -558,59 +547,29 @@ class _TubeFeedViewState extends State<TubeFeedView>
                       ),
                   ];
                 },
-                body: Stack(
-                  children: [
-                    Builder(
-                      builder: (context) {
-                        if (_isSearching && _isSearchingProfiles) {
-                          return CustomScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics(),
-                            ),
-                            slivers: [
-                              ProfileSearchResults(
-                                profiles: state.searchProfileResults,
-                                isLoading: state.isSearchingProfiles,
-                              ),
-                            ],
-                          );
-                        } else if (_isSearching && !_isSearchingProfiles) {
-                          return _buildTalentSearchResults(state);
-                        } else {
-                          return _buildSynchronizedTabContent(state);
-                        }
-                      },
-                    ),
-                    // Loading overlay when changing tabs
-                    if (_isTabChanging)
-                      Container(
-                        color: context.isDarkMode
-                            ? Colors.black.withOpacity(0.5)
-                            : Colors.white.withOpacity(0.5),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CustomCircularProgressIndicator(),
-                              SizedBox(height: 16),
-                              Text(
-                                context.isArabic ? 'جاري التحديث...' : 'Refreshing...',
-                                style: TextStyle(
-                                  color: context.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
+                body: Builder(
+                  builder: (context) {
+                    if (_isSearching && _isSearchingProfiles) {
+                      return CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
                         ),
-                      ),
-                  ],
+                        slivers: [
+                          ProfileSearchResults(
+                            profiles: state.searchProfileResults,
+                            isLoading: state.isSearchingProfiles,
+                          ),
+                        ],
+                      );
+                    } else if (_isSearching && !_isSearchingProfiles) {
+                      return _buildTalentSearchResults(state);
+                    } else {
+                      return _buildSynchronizedTabContent(state);
+                    }
+                  },
                 ),
               ),
-            ),
+            ), 
           );
         },
       ),
