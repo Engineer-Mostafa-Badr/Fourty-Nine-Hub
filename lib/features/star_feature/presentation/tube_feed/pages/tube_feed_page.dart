@@ -5,6 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/my_talents/widgets/create_star.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
@@ -304,10 +308,16 @@ class _TubeFeedViewState extends State<TubeFeedView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: BeStarFloatingButton(
-        isLoggedIn: context.watch<UserCubit>().isLoggedIn,
-        showButton: _showFloatingButton,
-      ),
+      floatingActionButton: _showFloatingButton
+          ? buildFloatingAction(context,title: "${LocaleKeys.addTalent.localize} +", () {
+        ManageVibration.vibrate();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CreateStar(),
+          ),
+        );      })
+          : null,
       body: BlocConsumer<StarCubit, StarState>(
         listener: (context, state) {
           if (state.status == StarStates.ratingSuccess &&

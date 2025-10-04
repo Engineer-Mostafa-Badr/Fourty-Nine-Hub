@@ -1,13 +1,16 @@
 // chance_main_view.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/chance_feature/presentation/pages/create_chance_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/widgets/cards/sticky_tab_bar_delegate.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -199,182 +202,219 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       }
     });
   }
-
+  bool _showFloatingButton = true;
+  void _onScrollNotification(ScrollNotification scrollInfo) {
+    if (scrollInfo is UserScrollNotification) {
+      if (scrollInfo.direction == ScrollDirection.reverse) {
+        if (_showFloatingButton) {
+          setState(() {
+            _showFloatingButton = false;
+          });
+        }
+      } else if (scrollInfo.direction == ScrollDirection.forward) {
+        if (!_showFloatingButton) {
+          setState(() {
+            _showFloatingButton = true;
+          });
+        }
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ChanceCubit, ChanceState>(
-      listener: (context, state) {
-        if (state.status == ChanceStates.joinSuccess) {
-          showSuccessMessage(
-              context,
-              context.isArabic
-                  ? 'تم الانضمام للفرصة بنجاح'
-                  : 'Joined chance successfully');
-          _refreshChanceAds();
-        } else if (state.status == ChanceStates.error) {
-          showErrorMessage(context, getFailureMessage(state.failure!, context));
-        }
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollInfo) {
+        _onScrollNotification(scrollInfo);
+        return false;
       },
-      child: BlocBuilder<ChanceCubit, ChanceState>(
-        builder: (context, state) {
-          return CustomScaffold(
-            enableCustomAppBar: true,
-            backgroundColor: Colors.grey[50],
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(30),
-              child: BackAppBar(
-                labelSize: 32,
-                enableCustomAppBar: true,
-                label: context.isArabic ? 'فرصة' : 'Chance',
-                backColor: context.isDarkMode
-                    ? AppColors.Floating_Button_COLOR_DARK
-                    : AppColors.PRIMARY_COLOR,
-                actions: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
-                    child: GestureDetector(
-                      onTap: () {
-                        ManageVibration.vibrate();
-                        final chanceCubit = context.read<ChanceCubit>();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider.value(
-                              value: chanceCubit,
-                              child: const ChanceWinnersView(),
+      child: BlocListener<ChanceCubit, ChanceState>(
+        listener: (context, state) {
+          if (state.status == ChanceStates.joinSuccess) {
+            showSuccessMessage(
+                context,
+                context.isArabic
+                    ? 'تم الانضمام للفرصة بنجاح'
+                    : 'Joined chance successfully');
+            _refreshChanceAds();
+          } else if (state.status == ChanceStates.error) {
+            showErrorMessage(context, getFailureMessage(state.failure!, context));
+          }
+        },
+        child: BlocBuilder<ChanceCubit, ChanceState>(
+          builder: (context, state) {
+            return CustomScaffold(
+              enableCustomAppBar: true,
+              backgroundColor: Colors.grey[50],
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(30),
+                child: BackAppBar(
+                  labelSize: 32,
+                  enableCustomAppBar: true,
+                  label: context.isArabic ? 'فرصة' : 'Chance',
+                  backColor: context.isDarkMode
+                      ? AppColors.Floating_Button_COLOR_DARK
+                      : AppColors.PRIMARY_COLOR,
+                  actions: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: GestureDetector(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          final chanceCubit = context.read<ChanceCubit>();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                value: chanceCubit,
+                                child: const ChanceWinnersView(),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: BlocBuilder<ChanceCubit, ChanceState>(
-                        builder: (context, state) {
-                          int totalWinners = 0;
-                          int totalAds = 0;
-
-                          if (state.winnerStatistics != null) {
-                            totalWinners = state.winnerStatistics!.totalWinner;
-                            totalAds = state.winnerStatistics!.totalAds;
-                          }
-
-                          final winnerText = ArabicPluralization.getWinnerText(
-                            totalWinners,
-                            context.isArabic,
-                          );
-
-                          final formatNumbers = FormatNumbers();
-                          final displayTotalWinners = context.isArabic
-                              ? formatNumbers.convertToArabicNumerals(
-                                  totalWinners.toString())
-                              : totalWinners.toString();
-                          final displayTotalAds = context.isArabic
-                              ? formatNumbers
-                                  .convertToArabicNumerals(totalAds.toString())
-                              : totalAds.toString();
-
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '$winnerText ($displayTotalWinners/$displayTotalAds)',
-                                style: TextStyle(
-                                  fontSize: 24.sp,
-                                  color: !context.isDarkMode
-                                      ? Colors.white
-                                      : AppColors.PRIMARY_COLOR,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              Image.asset(
-                                Assets.cupImage,
-                                // width: 22,
-                                // height: 22,
-                              ),
-                            ],
                           );
                         },
+                        child: BlocBuilder<ChanceCubit, ChanceState>(
+                          builder: (context, state) {
+                            int totalWinners = 0;
+                            int totalAds = 0;
+
+                            if (state.winnerStatistics != null) {
+                              totalWinners = state.winnerStatistics!.totalWinner;
+                              totalAds = state.winnerStatistics!.totalAds;
+                            }
+
+                            final winnerText = ArabicPluralization.getWinnerText(
+                              totalWinners,
+                              context.isArabic,
+                            );
+
+                            final formatNumbers = FormatNumbers();
+                            final displayTotalWinners = context.isArabic
+                                ? formatNumbers.convertToArabicNumerals(
+                                    totalWinners.toString())
+                                : totalWinners.toString();
+                            final displayTotalAds = context.isArabic
+                                ? formatNumbers
+                                    .convertToArabicNumerals(totalAds.toString())
+                                : totalAds.toString();
+
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '$winnerText ($displayTotalWinners/$displayTotalAds)',
+                                  style: TextStyle(
+                                    fontSize: 24.sp,
+                                    color: !context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                Image.asset(
+                                  Assets.cupImage,
+                                  // width: 22,
+                                  // height: 22,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              body: NestedScrollView(
+                controller: _mainScrollController,
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    // Banner - يختفي مع الـ scroll
+                    if (!_isSearching)
+                      SliverAppBar(
+                        pinned: false,
+                        floating: false,
+                        snap: false,
+                        expandedHeight: 200.h,
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        surfaceTintColor: Colors.transparent,
+                        automaticallyImplyLeading: false,
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: _buildBanner(),
+                          collapseMode: CollapseMode.parallax,
+                        ),
+                      ),
+
+                    // Sticky Tabs - Normal state
+                    if (!_isSearching)
+                      SliverPersistentHeader(
+                        pinned: true,
+                        floating: false,
+                        delegate: StickyTabBarDelegate(
+                          tabController: _tabController,
+                          context: context,
+                          onSearchTap: _toggleSearch,
+                          showSearchField: false,
+                          tabTitles: [
+                            context.isArabic ? 'متاح' : 'Available',
+                            context.isArabic ? 'مفضلة' : 'Favorite',
+                            context.isArabic ? 'منتهي' : 'Expire',
+                            context.isArabic ? 'فرصي' : 'My Chance',
+                          ],
+                        ),
+                      ),
+
+                    // Sticky Tabs - Search state
+                    if (_isSearching)
+                      SliverPersistentHeader(
+                        pinned: true,
+                        floating: false,
+                        delegate: StickyTabBarDelegate(
+                          tabController: _tabController,
+                          context: context,
+                          onSearchTap: _toggleSearch,
+                          showSearchField: true,
+                          searchController: _searchController,
+                          tabTitles: [
+                            context.isArabic ? 'متاح' : 'Available',
+                            context.isArabic ? 'مفضلة' : 'Favorite',
+                            context.isArabic ? 'منتهي' : 'Expire',
+                            context.isArabic ? 'فرصي' : 'My Chance',
+                          ],
+                          // onSearchChanged: _onSearchChanged,
+                        ),
+                      ),
+
+                    // Categories Section (if visible during search) - نقلتها لتحت الـ tabs
+                    if (_isCategoriesVisible && _isSearching)
+                      SliverToBoxAdapter(
+                        child: _buildCategoriesSection(),
+                      ),
+                  ];
+                },
+                body: _buildSynchronizedTabContent(state),
+              ),
+              // floatingActionButton: FloatingActionButtonWidget(),
+              floatingActionButton: _showFloatingButton
+                  ? buildFloatingAction(context,title: "${context.isArabic ? 'اضافة فرصة' : 'Add Chance'} +", () {
+                ManageVibration.vibrate();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<ChanceCubit>(
+                      create: (context) => serviceLocator<ChanceCubit>(),
+                      child: const CreateChanceView(),
                     ),
                   ),
-                ],
-              ),
-            ),
-            body: NestedScrollView(
-              controller: _mainScrollController,
-              physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics(),
-              ),
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  // Banner - يختفي مع الـ scroll
-                  if (!_isSearching)
-                    SliverAppBar(
-                      pinned: false,
-                      floating: false,
-                      snap: false,
-                      expandedHeight: 200.h,
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      surfaceTintColor: Colors.transparent,
-                      automaticallyImplyLeading: false,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: _buildBanner(),
-                        collapseMode: CollapseMode.parallax,
-                      ),
-                    ),
-
-                  // Sticky Tabs - Normal state
-                  if (!_isSearching)
-                    SliverPersistentHeader(
-                      pinned: true,
-                      floating: false,
-                      delegate: StickyTabBarDelegate(
-                        tabController: _tabController,
-                        context: context,
-                        onSearchTap: _toggleSearch,
-                        showSearchField: false,
-                        tabTitles: [
-                          context.isArabic ? 'متاح' : 'Available',
-                          context.isArabic ? 'مفضلة' : 'Favorite',
-                          context.isArabic ? 'منتهي' : 'Expire',
-                          context.isArabic ? 'فرصي' : 'My Chance',
-                        ],
-                      ),
-                    ),
-
-                  // Sticky Tabs - Search state
-                  if (_isSearching)
-                    SliverPersistentHeader(
-                      pinned: true,
-                      floating: false,
-                      delegate: StickyTabBarDelegate(
-                        tabController: _tabController,
-                        context: context,
-                        onSearchTap: _toggleSearch,
-                        showSearchField: true,
-                        searchController: _searchController,
-                        tabTitles: [
-                          context.isArabic ? 'متاح' : 'Available',
-                          context.isArabic ? 'مفضلة' : 'Favorite',
-                          context.isArabic ? 'منتهي' : 'Expire',
-                          context.isArabic ? 'فرصي' : 'My Chance',
-                        ],
-                        // onSearchChanged: _onSearchChanged,
-                      ),
-                    ),
-
-                  // Categories Section (if visible during search) - نقلتها لتحت الـ tabs
-                  if (_isCategoriesVisible && _isSearching)
-                    SliverToBoxAdapter(
-                      child: _buildCategoriesSection(),
-                    ),
-                ];
-              },
-              body: _buildSynchronizedTabContent(state),
-            ),
-            floatingActionButton: FloatingActionButtonWidget(),
-          );
-        },
+                );
+                  })
+                  : null,
+            );
+          },
+        ),
       ),
     );
   }

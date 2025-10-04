@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/cust
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_view_body.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -94,7 +95,24 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   //
   //   _isFilterApplied = false; // Reset the flag
   // }
-
+  bool _showFloatingButton = true;
+  void _onScrollNotification(ScrollNotification scrollInfo) {
+    if (scrollInfo is UserScrollNotification) {
+      if (scrollInfo.direction == ScrollDirection.reverse) {
+        if (_showFloatingButton) {
+          setState(() {
+            _showFloatingButton = false;
+          });
+        }
+      } else if (scrollInfo.direction == ScrollDirection.forward) {
+        if (!_showFloatingButton) {
+          setState(() {
+            _showFloatingButton = true;
+          });
+        }
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
@@ -109,53 +127,83 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       //   );
       // }
 
-      return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: context.isArabic ? 'زواج' : 'Marriage',
+      return NotificationListener<ScrollNotification>(
+        onNotification: (scrollInfo) {
+          _onScrollNotification(scrollInfo);
+          return false;
+        },
+        child: CustomScaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: BackAppBar(
+              label: context.isArabic ? 'زواج' : 'Marriage',
+            ),
           ),
+          floatingActionButton: _showFloatingButton
+              ? buildFloatingAction(context,title:
+          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
+                  () {
+                    ManageVibration.vibrate();
+                    if (AuthHelper().isLoggedIn()) {
+                      context.push(
+                        Routes.CREATEAD,
+                        extra: CategorizationEntity(
+                          mainCategory: state.mainCategory!,
+                          // mainCategory: widget.mainCategory,
+                          subCategory: state.subCategories![
+                          state.subCategories?.indexWhere((element) =>
+                          element.isSelected == true) ??
+                              0],
+                          fromMarriage: true,
+                        ),
+                      );
+                    } else {
+                      return pleaseLoginDialog(context);
+                      // context.push(Routes.LOGIN);
+                    }
+          })
+              : null,
+          // floatingActionButton: AnimatedSlide(
+          //   duration: const Duration(milliseconds: 300),
+          //   offset: _isFabVisible ? Offset.zero : const Offset(0, 2),
+          //   child: AnimatedOpacity(
+          //       duration: const Duration(milliseconds: 300),
+          //       opacity: _isFabVisible ? 1 : 0,
+          //       child: state.isLoading
+          //           ? null
+          //           : CustomFloatingButtonAds(
+          //               title:
+          //                   "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
+          //               onPressed: () {
+          //                 ManageVibration.vibrate();
+          //                 if (AuthHelper().isLoggedIn()) {
+          //                   context.push(
+          //                     Routes.CREATEAD,
+          //                     extra: CategorizationEntity(
+          //                       mainCategory: state.mainCategory!,
+          //                       // mainCategory: widget.mainCategory,
+          //                       subCategory: state.subCategories![
+          //                           state.subCategories?.indexWhere((element) =>
+          //                                   element.isSelected == true) ??
+          //                               0],
+          //                       fromMarriage: true,
+          //                     ),
+          //                   );
+          //                 } else {
+          //                   return pleaseLoginDialog(context);
+          //                   // context.push(Routes.LOGIN);
+          //                 }
+          //               },
+          //             )),
+          // ),
+          body: state.isLoading
+              ? CustomLoadingSearchWidget()
+              : MarriageAdsViewBody(
+                  controller: controller,
+                  state: state,
+                  scrollController: _scrollController,
+                ),
         ),
-        floatingActionButton: AnimatedSlide(
-          duration: const Duration(milliseconds: 300),
-          offset: _isFabVisible ? Offset.zero : const Offset(0, 2),
-          child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              opacity: _isFabVisible ? 1 : 0,
-              child: state.isLoading
-                  ? null
-                  : CustomFloatingButtonAds(
-                      title:
-                          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
-                      onPressed: () {
-                        ManageVibration.vibrate();
-                        if (AuthHelper().isLoggedIn()) {
-                          context.push(
-                            Routes.CREATEAD,
-                            extra: CategorizationEntity(
-                              mainCategory: state.mainCategory!,
-                              // mainCategory: widget.mainCategory,
-                              subCategory: state.subCategories![
-                                  state.subCategories?.indexWhere((element) =>
-                                          element.isSelected == true) ??
-                                      0],
-                              fromMarriage: true,
-                            ),
-                          );
-                        } else {
-                          return pleaseLoginDialog(context);
-                          // context.push(Routes.LOGIN);
-                        }
-                      },
-                    )),
-        ),
-        body: state.isLoading
-            ? CustomLoadingSearchWidget()
-            : MarriageAdsViewBody(
-                controller: controller,
-                state: state,
-                scrollController: _scrollController,
-              ),
       );
       // if (widget.inGridView) {
       //   return Scaffold(
