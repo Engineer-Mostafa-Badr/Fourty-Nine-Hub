@@ -19,11 +19,11 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 class GlobalCard extends StatelessWidget {
-  const GlobalCard({super.key, this.views,this.onSubscribe,this.hasBottomSide, this.isView, this.subscriptionType, this.body, this.hasTopSide, this.onTap, this.onShowViewers, this.onRequest, this.clientId, required this.subcategoryId, required this.phone, required this.reportId, this.senderName, this.senderImage, this.hasReport, this.isPremium, this.isButtonEnabled, required this.otherUserId, this.subscriptionTitle});
+  const GlobalCard({super.key, this.views,this.onSubscribe,this.hasBottomSide, this.isView, this.subscriptionType, this.body, this.hasTopSide, this.onTap, this.onShowViewers, this.onRequest, this.clientId, required this.subcategoryId, required this.phone, required this.reportId, this.senderName, this.senderImage, this.hasReport, this.isPremium, this.isButtonEnabled, required this.otherUserId, this.subCategoryTitle});
   final num? views;
   final bool? isView;
   final String? subscriptionType;
-  final String? subscriptionTitle;
+  final String? subCategoryTitle;
   final Widget? body;
   final Function? onSubscribe;
   final bool? hasTopSide;
@@ -126,7 +126,7 @@ class GlobalCard extends StatelessWidget {
                         ),
                       Expanded(
                         child: ContactsTripButtons(
-                          subscriptionTitle:subscriptionTitle??LocaleKeys.ads.localize,
+                          subscriptionTitle:subCategoryTitle??LocaleKeys.ads.localize,
                           onSubscribe: onSubscribe,
                           // isPremium: false,
                           isPremium: isPremium,
@@ -172,7 +172,7 @@ class GlobalCard extends StatelessWidget {
                 onRightButtonPressed:(){
                   SubscriptionMethod().subscribe(
                     subscribeId: subcategoryId,
-                    title: subscriptionTitle??LocaleKeys.ads.localize,
+                    title: subCategoryTitle??LocaleKeys.ads.localize,
                     onSubscribe: onSubscribe!=null?onSubscribe!():()=>context.pop(),
                   );
                 }
