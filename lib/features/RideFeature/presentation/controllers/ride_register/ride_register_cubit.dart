@@ -838,6 +838,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       isLoadingSubmitRegister = true;
       showLoadingDialog(context);
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
+      print("state.selectedModel cubit ${state.selectedModel?.id}");
 
       RegisterRideNotSpecialEntity params = RegisterRideNotSpecialEntity(
           driverFirstName: rideNameController.text,
@@ -849,7 +850,12 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           plateInfo: rideVehiclePlateNumberController.text,
           vehicleBrand: state.selectedBrand?.id ?? '',
           vehicleColor: state.selectedColors?.id ?? '',
-          vehicleModel: state.newModel?.id ?? state.selectedModel?.id ?? '',
+          vehicleModel: (state.newModel?.id.isNotEmpty ?? false)
+              ?state.newModel?.id??''
+              :(state.selectedModel?.id.isNotEmpty ?? false)
+              ?state.selectedModel?.id??''
+              : '',
+              // ?? state.selectedModel?.id ?? '',
           vehicleYear: rideVehicleProductionYearController.text,
 
           // subcategoryId: "62c8baa08e28a58a3edf57ed",

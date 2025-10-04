@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import 'cards/trip_contacts_buttons.dart';
 import 'trip_join_card_button.dart';
@@ -45,8 +47,9 @@ class TripJoinButtonsSection extends StatelessWidget {
               )
             : Container(),
         isContactInfo
-            ? const Expanded(
+            ? Expanded(
                 child: ContactsTripButtons(
+                  subscriptionTitle:LocaleKeys.tripJoin.localize,
                   otherUserId: '2',
                   subcategoryId: '2',
                   phone: '2223',

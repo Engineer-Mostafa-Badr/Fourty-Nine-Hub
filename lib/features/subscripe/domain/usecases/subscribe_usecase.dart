@@ -30,7 +30,7 @@ class SubscribeParams {
 
   Map<String, dynamic> toJson() => {
         "subCategoryId": subCategoryId,
-        "paymentMethod": walletType.value(),
+        "paymentMethodType": walletType.value(),
         "isPremium": isPremium,
         "period": days,
         "periodType": "days"

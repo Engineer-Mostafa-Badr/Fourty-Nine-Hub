@@ -15,6 +15,7 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
     super.startDate,
     super.offerType,
     super.isPremium,
+    super.lastViewers,
     super.phoneNumber, // ✅ Added
     IsButtonEnabledModel? super.isButtonEnabled,
     VehicleDetailsModel? super.vehicleDetails,
@@ -37,6 +38,9 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
       offerType: json['offerType'] as String?,
       isPremium: json['isPremium'] as bool?,
       phoneNumber: json['phoneNumber'] as String?, // ✅ Added
+      lastViewers:  (json['lastViewers'] as List<dynamic>?)
+          ?.map((e) => ViewerModel.fromJson(e))
+          .toList(),
       isButtonEnabled: json['isButtonEnabled'] != null
           ? IsButtonEnabledModel.fromJson(json['isButtonEnabled'])
           : null,
@@ -56,6 +60,19 @@ class IsButtonEnabledModel extends IsButtonEnabledEntity {
   factory IsButtonEnabledModel.fromJson(Map<String, dynamic> json) {
     return IsButtonEnabledModel(
       state: json['state'] as bool?,
+    );
+  }
+}
+
+class ViewerModel extends ViewerEntity {
+  ViewerModel({super.id,super.firstName,super.lastName,super.gender});
+
+  factory ViewerModel.fromJson(Map<String, dynamic> json) {
+    return ViewerModel(
+      id: json['id']??'',
+      firstName: json['firstName']??'',
+      lastName: json['lastName']??'',
+      gender: json['gender']??'',
     );
   }
 }

@@ -63,10 +63,12 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      if (widget.type == 'ride')
+      if (widget.type == 'ride') {
         context.read<ClientTripsCubit>().getClientOfferTrips();
-      if (widget.type == 'shipping')
+      }
+      if (widget.type == 'shipping') {
         context.read<ClientTripsCubit>().getClientOfferShippingTrips();
+      }
     }
   }
 

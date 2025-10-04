@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.da
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
+import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
@@ -64,29 +66,7 @@ class ClientPendingWidget extends StatelessWidget {
                           children: [
                             Stack(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 0.0),
-                                  child: Container(
-                                    width: avatarSize,
-                                    height: avatarSize,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle),
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: (offers?.yourDetails?.pictureUrl ==
-                                                null ||
-                                            offers!.yourDetails!.pictureUrl!
-                                                .isEmpty)
-                                        ? Image.asset(
-                                            Assets.maleImagePlaceholder,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : ImageFromInternet(
-                                            image: offers!
-                                                .yourDetails!.pictureUrl!,
-                                          ),
-                                  ),
-                                ),
+                                ProfilePictureWidget(image: offers?.yourDetails?.pictureUrl,hasStories:false, isViewed: true,),
                                 if ((offers?.yourDetails?.rating?.count ?? 0) >
                                     0)
                                   PositionedDirectional(
@@ -144,42 +124,17 @@ class ClientPendingWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  Assets.rideFrom,
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Label(
-                                    text: offers?.tripDetails?.location
-                                            ?.fromTitle ??
-                                        'Cairo International Airport',
-                                    style: Styles.headerText(),
-                                  ),
-                                ),
-                              ],
+                            TripLocationWidget(
+                              isFrom:true,
+                              title: offers?.tripDetails?.location
+                                  ?.fromTitle ??
+                                  'Initial Location',
                             ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  Assets.rideTo,
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Label(
-                                    text: offers
-                                            ?.tripDetails?.location?.toTitle ??
-                                        'Cairo International Airport',
-                                    style: Styles.mediumText(
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                ),
-                              ],
+                            TripLocationWidget(
+                              isFrom:false,
+                              title: offers?.tripDetails?.location
+                                  ?.toTitle ??
+                                  'Target Location',
                             ),
                             Label(
                               text: modeType == 'shipping'

@@ -19,7 +19,7 @@ class PickUpContainer extends StatelessWidget {
         padding: const EdgeInsetsDirectional.only(start: 16),
         height: 48,
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F5F5),
+          color:context.isDarkMode?AppColors.GREY_DARK_COLOR: const Color(0xFFF5F5F5),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Label(

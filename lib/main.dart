@@ -15,6 +15,7 @@ import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
+import 'package:fourtyninehub/core/utils/handle_navigation.dart';
 import 'package:fourtyninehub/core/utils/location_service_listener.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
@@ -36,8 +37,6 @@ import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_noti
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/helpers/logging_helper.dart';
-import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
@@ -48,6 +47,8 @@ import 'core/service/network_connectivity_cubit.dart';
 import 'core/themes/light_theme.dart';
 import 'core/widget/network_alert_banner.dart';
 import 'core/widget/network_error_screen.dart';
+import 'core/service/time_sync_service.dart';
+import 'core/widget/incorrect_time_overlay.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -58,20 +59,12 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'routes/pages.dart';
-
+import 'package:crypto/crypto.dart'; // <-- add this
 // Global key for ToastificationWrapper to prevent recreation during network changes
 final GlobalKey _toastificationKey = GlobalKey();
-class DevHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-  }
-}
+
 
 void main() async {
-  HttpOverrides.global = DevHttpOverrides();
-
   try {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -106,27 +99,10 @@ void main() async {
   // });
 
   try {
-    // Test logging helper
-    LoggingHelper.info('🚀 App starting up...', data: {
-      'timestamp': DateTime.now().toIso8601String(),
-      'version': '1.0.0',
-    });
-    
-    // Test all log levels
-    LoggingHelper.verbose('🔍 Verbose log test');
-    LoggingHelper.debug('🐛 Debug log test');
-    LoggingHelper.info('ℹ️ Info log test');
-    LoggingHelper.warning('⚠️ Warning log test');
-    LoggingHelper.error('❌ Error log test');
-    
-    // Test SSL certificate logging
-    AuthInterceptor.testSSLCertificateLogging();
-    
     await CacheServiceImpl.init();
     await DI.execute();
     serviceLocator<FcmNotificationHelper>().getFcmToken();
   } catch (e, stackTrace) {
-    LoggingHelper.error('❌ App startup failed', error: e, stackTrace: stackTrace);
     return; // Exit if service initialization fails
   }
   try {
@@ -165,15 +141,13 @@ void main() async {
     await requestTrackingPermission();
     AppPages.initializeRouter(initialRoute);
     await LocationServiceWatcher().start();
+    // Start time sync service
+    await serviceLocator<TimeSyncService>().start();
     runApp(
     LocalizationService.rootWidget(
-      child: const MyApp(), // Test without Phoenix and DevicePreview
-      // child: Phoenix(
-      //   child: DevicePreview(
-      //     enabled: false,
-      //     builder: (context) => const MyApp(),
-      //   ),
-      // ),
+      child: Phoenix(
+        child: const MyApp(),
+      ),
     ),
   );
   } catch (e, stackTrace) {
@@ -207,6 +181,36 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Re-check immediately when the app returns to foreground
+      serviceLocator<TimeSyncService>().checkNow();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    NetworkManager().initialize();
+    WidgetsBinding.instance.addObserver(this);
+
+    // Navigate to incorrect time screen when detected; back to splash when corrected
+    serviceLocator<TimeSyncService>().isTimeIncorrect.addListener(() async {
+      final isIncorrect = serviceLocator<TimeSyncService>().isTimeIncorrect.value;
+      if (isIncorrect) {
+        AppPages.router.go(Routes.incorrectTime);
+      } else {
+        await DI.reset();
+        await DI.execute();
+        await serviceLocator<TimeSyncService>().start();
+        HandleNavigation.navigateToNextScreen(context);
+        // AppPages.initializeRouter(Routes.splash);
+        // Phoenix.rebirth(context);
+      }
+    });
+  }
+
   Future<dynamic> getCurrentCall() async {
     var calls = await FlutterCallkitIncoming.activeCalls();
     if (calls is List) {
@@ -228,14 +232,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
   }
 
-  @override
-  void initState() {
-    super.initState();
 
-    NetworkManager().initialize();
-
-    WidgetsBinding.instance.addObserver(this);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -281,7 +278,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               serviceLocator<PreloadBloc>(), //..getVideosFromApi()
         ),
         // BlocProvider(
-        //   create: (BuildContext context) => serviceLocator<RideCubit>(),
+        //   create: (context) => serviceLocator<RideCubit>(),
         // ),
         BlocProvider(
           create: (context) => ThemeCubit()..getMode(),
@@ -382,12 +379,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                       data: mediaQuery.copyWith(
                                         textScaler: TextScaler.noScaling,
                                       ),
-                                      child: Stack(
-                                        children: [
-                                          child!,
-                                          const WhatsAppCallScreen(),
-                                        ],
-                                      ),
+                                  child: Stack(
+                                    children: [
+                                      child!,
+                                      const WhatsAppCallScreen(),
+                                    ],
+                                  ),
                                     );
                                   },
                                   themeMode: (snapshot.data ?? false)

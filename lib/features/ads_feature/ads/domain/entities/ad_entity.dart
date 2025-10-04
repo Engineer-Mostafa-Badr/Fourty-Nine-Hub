@@ -64,7 +64,7 @@ class AdEntity {
   final String? subCategoryNameAr;
   final String? userId;
   final String? subscriptionStatus;
-  final num? views;
+  num? views;
   final String? userSubscriptionStatus;
   final String? ownerSubscriptionStatus;
   final String? currencyEn;
