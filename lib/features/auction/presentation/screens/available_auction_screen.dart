@@ -131,7 +131,7 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
         return Scaffold(
           // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: isFloatingButtonVisible
-              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize} +", () {
             ManageVibration.vibrate();
             _addAuction();
           })

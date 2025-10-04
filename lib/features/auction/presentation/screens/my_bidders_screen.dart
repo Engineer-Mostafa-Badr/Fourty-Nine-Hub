@@ -65,15 +65,15 @@ class MyBiddersScreen extends StatelessWidget {
         }
 
         return ListView.separated(
+          padding: EdgeInsets.zero,
           // padding: const EdgeInsets.all(16),
           itemCount: auctions.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 16),
+          separatorBuilder: (_, __) => const SizedBox(height: 0),
           itemBuilder: (context, index) {
             final auction = auctions[index];
             print("🎯 Rendering auction at index $index: ${auction.toString()}");
-
             return Container(
-              margin: EdgeInsets.all(32.w),
+              margin: EdgeInsets.symmetric(horizontal: 32.w,vertical: 10),
               decoration: BoxDecoration(
                 // color: AppColors.getFillColor(context),
                 border: Border.all(
