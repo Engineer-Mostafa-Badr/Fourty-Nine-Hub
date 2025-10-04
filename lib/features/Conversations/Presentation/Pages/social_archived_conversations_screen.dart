@@ -34,7 +34,7 @@ class _SocialArchivedConversationsScreenState extends State<SocialArchivedConver
       ..addListener(() {
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent - 200) {
-          serviceLocator<ConversationsCubit>().getSocialConversations();
+          serviceLocator<ConversationsCubit>().getSocialArchivedConversations();
         }
       });
     super.initState();

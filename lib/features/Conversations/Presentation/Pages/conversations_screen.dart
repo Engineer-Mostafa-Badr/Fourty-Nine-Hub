@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/Conversations/Presentation/Pages/Widgets/chat_card.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
@@ -43,6 +46,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
 
   @override
   void initState() {
+    context.read<ConversationsCubit>().initSockets();
     context.read<ConversationsCubit>().loadInitialSocialConversations();
     tabController =
     TabController(length: 4, vsync: this)
@@ -90,6 +94,43 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
     tabController.dispose();
     scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> lockedChatsOnTap() async {
+    log("lockedChatsOnTap");
+    final LocalAuthentication auth = LocalAuthentication();
+
+    // Check if local authentication is available
+    bool isAvailable =
+        await auth.canCheckBiometrics || await auth.isDeviceSupported();
+
+    if (isAvailable) {
+      try {
+        // Attempt to authenticate the user
+        bool didAuthenticate = await auth.authenticate(
+          localizedReason: context.isArabic
+              ? 'تحقق من البصمة للوصول إلى المحادثات المغلقة'
+              : 'Please authenticate to access locked chats',
+          // options: const AuthenticationOptions(
+          //   biometricOnly: true,
+          //   stickyAuth: true,
+          // ),
+        );
+
+        if (didAuthenticate) {
+          // User authenticated successfully
+          context.push(
+            Routes.socialLockedScreen
+          );
+        } else {
+          log("Authentication failed");
+        }
+      } catch (e) {
+        log("Error during authentication: $e");
+      }
+    } else {
+      log("Local authentication not available on this device.");
+    }
   }
 
   @override
@@ -162,9 +203,47 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                       create: (context) => serviceLocator<StoryCubit>()
                         ..fetchStories()
                         ..getMutedStories(),
-                      child: const Directionality(
+                      child: Directionality(
                         textDirection: TextDirection.ltr,
-                        child: ChatStories(),
+                        child: Row(
+                          children: [
+                            Expanded(child: const ChatStories()),
+                            serviceLocator<ConversationsCubit>().selectedSocialConversation.isNotEmpty ? const SizedBox.shrink() :
+                            PopupMenuButton(
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: context.isDarkMode ? Colors.white : AppColors.grey,
+                              ),
+                              color: context.isDarkMode
+                                  ? AppColors.PRIMARY_COLOR
+                                  : AppColors.BACKGROUND_COLOR,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              offset: const Offset(0, 50),
+                              onSelected: (int value) async {
+                                if (value == 1) {
+                                  ManageVibration.vibrate();
+                                  context.push(Routes.socialDeletedScreen);
+                                }
+                              },
+                              itemBuilder: (context) {
+                                return [
+                                  PopupMenuItem<int>(
+                                    value: 1,
+                                    child: Text(
+                                      context.isArabic ? "استعادة الدردشات المحذوفة" : "Restore Deleted Chats",
+                                      style: Styles.mediumText(
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : AppColors.PRIMARY_COLOR),
+                                    ),
+                                  ),
+                                ];
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -465,25 +544,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   text: context.isArabic
                       ? "دردشه مغلقة"
                       : "Locked chats",
-                  // onTap: () async {
-                  //   final result = await context.push(Routes.ARCHIVEDCHATS,
-                  //       extra: OptionsChatsViewParams(
-                  //         category: 'LockedChats',
-                  //         chatsCubit: chatsCubit,
-                  //         isSecret: true,
-                  //       ));
-
-                  //   // Check if the result is true, refresh the home page
-                  //   if (result == true) {
-                  //     log("pop");
-                  //     await chatsCubit
-                  //         .getChatsByCategory(ChatCategories.social);
-                  //     setState(() {});
-                  //   }
-                  // },
                   onTap: () async {
                     ManageVibration.vibrate();
-                    // await lockedChatsOnTap();
+                    await lockedChatsOnTap();
                   },
                 )
                     : const SizedBox.shrink(),
@@ -536,6 +599,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   text: LocaleKeys.greet.localize,
                   onTap: () async {
                     ManageVibration.vibrate();
+                    context.push(Routes.socialGreetScreen);
                     // final result = await context.push(Routes.ARCHIVEDCHATS,
                     //     extra: OptionsChatsViewParams(
                     //       category: ChatCategoriesIds.greet,

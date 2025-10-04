@@ -18,6 +18,7 @@ import '../../../../social_media/tinder/data/shared/shared.dart';
 import '../../../Domain/Entities/conversation_entity.dart';
 import '../../Controllers/cubits/conversation_states.dart';
 import '../../Controllers/cubits/conversations_cubit.dart';
+import 'conversation_logs_buttom_sheet.dart';
 
 class ChatCard extends StatefulWidget {
   final ConversationEntity? chat;
@@ -49,6 +50,7 @@ class _ChatCardState extends State<ChatCard> {
             if (serviceLocator<ConversationsCubit>().selectedSocialConversation.isEmpty) {
               // context.read<ChatsCubit>().selectChat = widget.chat!;
               // context.push(Routes.CHATROOM, extra: widget.chatsCubit);
+              serviceLocator<ConversationsCubit>().joinConversation(conversationId: widget.chat?.conversationId ?? '');
             } else {
               setState(() {
                 if (!widget.chat!.isSelected) {
@@ -532,6 +534,7 @@ class _ChatCardState extends State<ChatCard> {
                       child: InkWell(
                         onTap: () async {
                           ManageVibration.vibrate();
+                          showConversationLogsBottomSheet(context, widget.chat!);
                           // Call the getLastSeen function
                           // print('widget.chat!.isAdmin ${widget.chat!.isAdmin}');
                           // if (widget.chat!.isAdmin != "admin") {
@@ -956,4 +959,6 @@ class _ChatCardState extends State<ChatCard> {
 //     },
 //   );
 // }
+
+
 }
