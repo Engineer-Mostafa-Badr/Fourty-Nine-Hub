@@ -42,49 +42,6 @@ String convertToArabicNumerals(String input) {
   return input;
 }
 
-/*
-String formatTimestamp12(String timestamp, BuildContext context) {
-  try {
-    // Parse the ISO 8601 timestamp
-    DateTime dateTime = DateTime.parse(timestamp);
-
-    // Get current time
-    DateTime now = DateTime.now();
-
-    // Calculate the difference
-    Duration difference = now.difference(dateTime);
-
-    // Handle future dates (just in case)
-    if (difference.isNegative) {
-      return LocaleKeys.justNow.localize;
-    }
-
-    // Calculate time units
-    int seconds = difference.inSeconds;
-    int minutes = difference.inMinutes;
-    int hours = difference.inHours;
-    int days = difference.inDays;
-
-    // Return appropriate format
-    if (seconds < 60) {
-      return LocaleKeys.justNow.localize;
-    } else if (minutes < 60) {
-      return "$minutes ${LocaleKeys.minAgo.localize}";
-    } else if (hours < 24) {
-      return "${formatPrice(hours, context)} ${LocaleKeys.hour.localize}${hours == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
-    } else if (days < 7) {
-      return "${formatPrice(days, context)} ${LocaleKeys.day.localize}${days == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
-    } else {
-      int weeks = (days / 7).floor();
-      return "$weeks ${LocaleKeys.week.localize}${weeks == 1 ? '' : ''} ${LocaleKeys.ago.localize}";
-    }
-  } catch (e) {
-    // Fallback in case of parsing error
-    return "Invalid date";
-  }
-}
-*/
-
 String formatTimestamp(dynamic time, BuildContext context) {
   DateTime? date;
 

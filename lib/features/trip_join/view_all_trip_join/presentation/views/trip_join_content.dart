@@ -187,9 +187,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                   ? AppColors.getButtonPrimaryColor(context)
                   : AppColors.getFillColor(context),
               border: Border.all(
-                color: selected
-                    ? AppColors.getRedColor(context)
-                    : AppColors.getButtonPrimaryColor(context),
+                color: AppColors.getButtonPrimaryColor(context),
                 width: 2,
               ),
             ),
