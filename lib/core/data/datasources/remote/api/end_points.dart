@@ -970,7 +970,8 @@ class EndPoints {
     return '/twitter/posts/$postId/toggle-like';
   }
 
-  static String getVerification = '/user-verification-account/check-subscription';
+  static String getVerification =
+      '/user-verification-account/check-subscription';
 
   static String reactOnTwitterComment(String commentId) {
     return '/twitter/comment/react/$commentId?subCategory=${Constants.twitterSubCategory}';
@@ -1508,6 +1509,8 @@ class EndPoints {
 
   static const getFavoriteChanceAds = '/chanceAds/user/favorites';
 
+  static const getWinnerStatistics = '/chanceAds/winner-statistics';
+
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
 
@@ -1830,9 +1833,12 @@ class EndPoints {
   static const String socialUnLockConversations = "/conversations/unlock";
   static const String unreadCount = "/conversations/unread";
 
-  static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";
-  static String togglePinnedConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/pinned";
-  static String toggleMuteConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/mute";
+  static String toggleArchiveConversation({required String conversationId}) =>
+      "/conversations/$conversationId/toggle/archived";
+  static String togglePinnedConversation({required String conversationId}) =>
+      "/conversations/$conversationId/toggle/pinned";
+  static String toggleMuteConversation({required String conversationId}) =>
+      "/conversations/$conversationId/toggle/mute";
 
   //! Tube Endpoints
   static String searchProfiles(SearchProfileParams params) =>
@@ -1857,6 +1863,8 @@ class EndPoints {
 
   static String getTubeVideoDetails(String videoId) =>
       '/tube-video/details/$videoId';
+  static String getRecommendedVideos(String videoId, {int page = 1, int limit = 10}) =>
+      '/tube-video/recommended/$videoId/?page=$page&limit=$limit';
   static String likeTubeVideo(String videoId) => '/tube-video/$videoId/like';
   static String dislikeTubeVideo(String videoId) =>
       '/tube-video/$videoId/dislike';
@@ -1936,6 +1944,9 @@ class EndPoints {
 
   static String removeVideoFromWatchLater(String videoId) =>
       '/tube-watch-later/video/$videoId';
+
+  // Tube Winner Statistics
+  static const String getTubeWinnerStatistics = '/tube-profile/winner-statistics';
 
   //! Exchange Currency Endpoints
   static String convertCurrency({

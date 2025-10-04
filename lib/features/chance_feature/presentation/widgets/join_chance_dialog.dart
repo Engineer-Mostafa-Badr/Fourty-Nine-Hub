@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entity/chance_ad_entity.dart';
@@ -36,11 +37,11 @@ class _JoinChanceDialogState extends State<JoinChanceDialog> {
       final amount = double.tryParse(_amountController.text);
       if (amount != null && amount > 0) {
         context.read<ChanceCubit>().joinChanceAd(
-          JoinChanceAdParams(
-            adId: widget.chanceAd.id,
-            amount: amount,
-          ),
-        );
+              JoinChanceAdParams(
+                adId: widget.chanceAd.id,
+                amount: amount,
+              ),
+            );
       }
     }
   }
@@ -53,7 +54,8 @@ class _JoinChanceDialogState extends State<JoinChanceDialog> {
           Navigator.of(context).pop();
           showSuccessMessage(context, 'Successfully joined the chance ad!');
         } else if (state.status == ChanceStates.error) {
-          showErrorMessage(context, 'Failed to join chance ad. Please try again.');
+          showErrorMessage(
+              context, 'Failed to join chance ad. Please try again.');
         }
       },
       child: AlertDialog(
@@ -85,7 +87,9 @@ class _JoinChanceDialogState extends State<JoinChanceDialog> {
                 value: widget.chanceAd.adPercentage / 100,
                 backgroundColor: AppColors.GREY_LIGHT_COLOR,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  widget.chanceAd.adPercentage >= 100 ? Colors.green : AppColors.SECONDARY_COLOR,
+                  widget.chanceAd.adPercentage >= 100
+                      ? Colors.green
+                      : AppColors.SECONDARY_COLOR,
                 ),
               ),
               const SizedBox(height: 20),
@@ -120,7 +124,10 @@ class _JoinChanceDialogState extends State<JoinChanceDialog> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              ManageVibration.vibrate();
+              Navigator.of(context).pop();
+            },
             child: Text(
               LocaleKeys.cancel.localize,
               style: const TextStyle(color: AppColors.GREY_NORMAL_COLOR),
@@ -129,7 +136,12 @@ class _JoinChanceDialogState extends State<JoinChanceDialog> {
           BlocBuilder<ChanceCubit, ChanceState>(
             builder: (context, state) {
               return ElevatedButton(
-                onPressed: state.status == ChanceStates.loading ? null : _joinChance,
+                onPressed: state.status == ChanceStates.loading
+                    ? null
+                    : () {
+                        ManageVibration.vibrate();
+                        _joinChance();
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.SECONDARY_COLOR,
                 ),
@@ -139,7 +151,8 @@ class _JoinChanceDialogState extends State<JoinChanceDialog> {
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
                     : Text(

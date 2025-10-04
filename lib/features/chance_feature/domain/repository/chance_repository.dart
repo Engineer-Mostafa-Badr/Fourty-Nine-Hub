@@ -17,6 +17,7 @@ import '../use_case/join_chance_ad_use_case.dart';
 import '../use_case/search_chance_ads_use_case.dart';
 import '../use_case/toggle_chance_ad_favorite_use_case.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/cahnce_rate_entity.dart';
+import '../entity/winner_statistics_entity.dart';
 
 abstract class ChanceRepository {
   Future<List<ChanceEntity>> fetchChance();
@@ -45,4 +46,5 @@ abstract class ChanceRepository {
   Future<Either<Failure, List<ChanceAdEntity>>> getExpiredChanceAds();
   Future<Either<Failure, List<dynamic>>> getChanceAdWinners(String adId);
   Future<Either<Failure, bool>> incrementChanceAdView(String adId);
+  Future<Either<Failure, WinnerStatisticsEntity>> getWinnerStatistics();
 }

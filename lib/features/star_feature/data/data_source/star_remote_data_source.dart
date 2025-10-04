@@ -9,6 +9,7 @@ import '../model/star_model.dart';
 import '../model/star_winner_model.dart';
 import '../model/tube_video_models.dart'; // New import
 import '../model/active_category_model.dart';
+import '../model/tube_winner_statistics_model.dart';
 import '../../domain/entity/banner_talent_entity.dart';
 import '../../domain/entity/star_entity.dart';
 import '../../domain/entity/star_winner_entity.dart';
@@ -42,6 +43,8 @@ abstract class StarRemoteDataSource {
   Future<Either<Failure, TubeVideoListResponse>> fetchMyTubeVideos(
       StarPaginationParams params);
   Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(String videoId);
+  Future<Either<Failure, List<TubeVideoModel>>> getRecommendedVideos(
+      String videoId, int page, int limit);
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
@@ -59,6 +62,9 @@ abstract class StarRemoteDataSource {
 
   // Get active categories
   Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories();
+
+  // Get tube winner statistics
+  Future<Either<Failure, TubeWinnerStatisticsModel>> getTubeWinnerStatistics();
 }
 
 class StarRemoteDataSourceImpl extends StarRemoteDataSource {
@@ -435,6 +441,36 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, List<TubeVideoModel>>> getRecommendedVideos(
+      String videoId, int page, int limit) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getRecommendedVideos(videoId, page: page, limit: limit),
+    );
+
+    return response.fold(
+      (failure) {
+        print("Get Recommended Videos Error: $failure");
+        return Left(failure);
+      },
+      (response) {
+        print("Get Recommended Videos Success: ${response['data']}");
+        try {
+          final videos = (response['data'] as List)
+              .map((video) => TubeVideoModel.fromJson(video))
+              .toList();
+          return Right(videos);
+        } catch (e) {
+          print("Parse Recommended Videos Error: $e");
+          return Left(ServerFailure(
+            message: 'Failed to parse recommended videos',
+            name: 'Parse Error',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> likeTubeVideo(String videoId) async {
     final response = await _apiConsumer.post(
       EndPoints.likeTubeVideo(videoId),
@@ -677,6 +713,31 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
           ));
         }
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, TubeWinnerStatisticsModel>> getTubeWinnerStatistics() async {
+    return await _apiConsumer.get(EndPoints.getTubeWinnerStatistics).then(
+      (response) => response.fold(
+        (failure) {
+          print("Get Tube Winner Statistics Error: $failure");
+          return Left(failure);
+        },
+        (response) {
+          print("Get Tube Winner Statistics Success: ${response['data']}");
+          try {
+            final statisticsModel = TubeWinnerStatisticsModel.fromJson(response['data']);
+            return Right(statisticsModel);
+          } catch (e) {
+            print("Parse Tube Winner Statistics Error: $e");
+            return Left(ServerFailure(
+              message: 'Failed to parse tube winner statistics data: $e',
+              name: 'Parse Error',
+            ));
+          }
+        },
+      ),
     );
   }
 }

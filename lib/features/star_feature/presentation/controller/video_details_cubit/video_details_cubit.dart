@@ -13,7 +13,7 @@ import '../../../domain/entity/viewer_entity.dart';
 import '../../../domain/use_case/comment_use_cases.dart';
 import '../../../data/model/comment_model.dart';
 import '../../controller/star_cubit/star_cubit.dart';
-import '../../utils/video_utils.dart';
+import '../../presentation_exports.dart';
 
 part 'video_details_state.dart';
 

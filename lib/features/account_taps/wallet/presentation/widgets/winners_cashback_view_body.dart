@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winner.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/winners_grid_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 

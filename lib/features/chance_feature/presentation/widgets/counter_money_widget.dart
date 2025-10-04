@@ -21,7 +21,7 @@ class _CounterMoneyWidgetState extends State<CounterMoneyWidget> {
       children: [
         ElevatedButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             setState(() {
               if (value > 0) {
                 value = value - 1;
@@ -66,7 +66,7 @@ class _CounterMoneyWidgetState extends State<CounterMoneyWidget> {
         const Spacer(),
         ElevatedButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             setState(() {
               value = value + 1; // زيادة القيمة
             });

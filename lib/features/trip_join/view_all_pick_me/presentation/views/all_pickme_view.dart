@@ -202,9 +202,7 @@ class _AllPickMeViewState extends State<AllPickMeView>
                     ? AppColors.getButtonPrimaryColor(context)
                     : AppColors.getFillColor(context),
                 border: Border.all(
-                    color: selected
-                        ? AppColors.getRedColor(context)
-                        : AppColors.getButtonPrimaryColor(context),
+                    color: AppColors.getButtonPrimaryColor(context),
                     width: 2)),
             child: Center(
               child: Text(

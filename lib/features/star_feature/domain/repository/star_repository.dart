@@ -6,6 +6,7 @@ import '../../data/model/active_category_model.dart';
 import '../entity/banner_talent_entity.dart';
 import '../entity/star_entity.dart';
 import '../entity/star_winner_entity.dart';
+import '../entity/tube_winner_statistics_entity.dart';
 import '../use_case/comment_use_cases.dart';
 import '../use_case/fetch_all_star_use_case.dart';
 import '../use_case/upload_my_star_use_case.dart';
@@ -38,6 +39,8 @@ abstract class StarRepository {
       StarPaginationParams params);
   Future<Either<Failure, StarEntity>> fetchTubeVideoDetails(
       String videoId); // Todo: Get video by ID
+  Future<Either<Failure, List<TubeVideoModel>>> getRecommendedVideos(
+      String videoId, int page, int limit);
   Future<Either<Failure, bool>> likeTubeVideo(String videoId);
   Future<Either<Failure, bool>> dislikeTubeVideo(String videoId);
   Future<Either<Failure, bool>> incrementTubeVideoView(String videoId);
@@ -56,4 +59,7 @@ abstract class StarRepository {
 
   // Get active categories
   Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories();
+
+  // Get tube winner statistics
+  Future<Either<Failure, TubeWinnerStatisticsEntity>> getTubeWinnerStatistics();
 }

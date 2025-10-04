@@ -3,13 +3,22 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 class ScreenWakeLockManager {
   // Enable wakelock to keep screen on
   static Future<void> keepScreenOn() async {
-    // This prevents screen from turning off
-    await WakelockPlus.enable();
+    try {
+      // This prevents screen from turning off
+      await WakelockPlus.enable();
+    } catch (e) {
+      // Ignore errors when no foreground activity (e.g., during app initialization)
+      print('⚠️ WakeLock: Could not enable - $e');
+    }
   }
 
   // Disable wakelock to allow screen to turn off
   static Future<void> allowScreenOff() async {
-    await WakelockPlus.disable();
+    try {
+      await WakelockPlus.disable();
+    } catch (e) {
+      print('⚠️ WakeLock: Could not disable - $e');
+    }
   }
 
   // Toggle wakelock state

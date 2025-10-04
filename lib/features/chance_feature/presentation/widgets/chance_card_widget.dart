@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/main_categry_entity.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/entity/sup_category_entity.dart';
-import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_details_view.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/image_card_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/subscribe_widget_in_card.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/rate_product_widget.dart';
@@ -16,7 +15,6 @@ import '../../domain/entity/image_chance_entity.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../pages/chance_detail_view.dart';
 import 'join_chance_dialog.dart';
-import '../pages/chance_ad_details_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ChanceCardWidget extends StatefulWidget {

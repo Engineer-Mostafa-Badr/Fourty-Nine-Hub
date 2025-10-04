@@ -13,6 +13,7 @@ import '../../../domain/entity/banner_talent_entity.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/star_winner_entity.dart';
+import '../../../domain/entity/tube_winner_statistics_entity.dart';
 import '../../../domain/use_case/delete_my_star_use_case.dart';
 import '../../../domain/use_case/delete_tube_video_use_case.dart';
 import '../../../domain/use_case/fetch_all_star_use_case.dart';
@@ -21,6 +22,8 @@ import '../../../domain/use_case/fetch_myl_star_use_case.dart';
 import '../../../domain/use_case/fetch_winner_star_use_case.dart';
 import '../../../domain/use_case/search_profiles_use_case.dart';
 import '../../../domain/use_case/search_tube_videos_use_case.dart';
+import '../../../domain/use_case/get_tube_winner_statistics_use_case.dart';
+import '../../../domain/use_case/get_recommended_videos_use_case.dart';
 import '../../../domain/use_case/tube_favorite_use_cases.dart';
 import '../../../domain/use_case/tube_watch_later_use_cases.dart';
 import '../../../domain/use_case/upload_my_star_use_case.dart';
@@ -33,8 +36,8 @@ import '../../../domain/use_case/dislike_tube_video_use_case.dart';
 import '../../../domain/use_case/increment_tube_video_view_use_case.dart';
 import '../../../domain/use_case/rate_tube_video_use_case.dart';
 import '../../../data/model/tube_video_models.dart';
-import '../../utils/constants.dart';
-import '../../utils/enums.dart';
+import '../../presentation_exports.dart';
+
 part 'star_state.dart';
 
 class StarCubit extends Cubit<StarState> {
@@ -65,6 +68,8 @@ class StarCubit extends Cubit<StarState> {
   final IncrementTubeVideoViewUseCase _incrementTubeVideoViewUseCase;
   final RateTubeVideoUseCase _rateTubeVideoUseCase;
   final DeleteTubeVideoUseCase _deleteTubeVideoUseCase;
+  final GetTubeWinnerStatisticsUseCase _getTubeWinnerStatisticsUseCase;
+  final GetRecommendedVideosUseCase _getRecommendedVideosUseCase;
 
   final _videoUpdatesController = StreamController<String>.broadcast();
   Stream<String> get videoUpdates => _videoUpdatesController.stream;
@@ -94,6 +99,8 @@ class StarCubit extends Cubit<StarState> {
     this._incrementTubeVideoViewUseCase,
     this._rateTubeVideoUseCase,
     this._deleteTubeVideoUseCase,
+    this._getTubeWinnerStatisticsUseCase,
+    this._getRecommendedVideosUseCase,
   ) : super(StarState());
 
   // Configuration flag to choose between old Star API and new Tube Video API
@@ -125,7 +132,7 @@ class StarCubit extends Cubit<StarState> {
     try {
       // Test direct API call
       final response = await _fetchMyTubeVideosUseCase(
-        StarPaginationParams(page: 1, limit: 10),
+        StarPaginationParams(page: 1, limit: 5),
       );
 
       response.fold(
@@ -1685,6 +1692,64 @@ class StarCubit extends Cubit<StarState> {
       return talent.title.toLowerCase().contains(query.toLowerCase()) ||
           talent.description.toLowerCase().contains(query.toLowerCase());
     }).toList();
+  }
+
+  // Get tube winner statistics
+  Future<void> getTubeWinnerStatistics() async {
+    try {
+      final result = await _getTubeWinnerStatisticsUseCase(NoParams());
+
+      result.fold(
+        (failure) {
+          print('Failed to get tube winner statistics: ${failure.toString()}');
+          emit(state.copyWith(
+            status: StarStates.error,
+            failure: failure,
+          ));
+        },
+        (statistics) {
+          print('Tube winner statistics loaded: ${statistics.totalWinner}/${statistics.totalVideos}');
+          emit(state.copyWith(
+            status: StarStates.success,
+            tubeWinnerStatistics: statistics,
+          ));
+        },
+      );
+    } catch (e) {
+      print('Exception while getting tube winner statistics: $e');
+      emit(state.copyWith(
+        status: StarStates.error,
+        failure: ServerFailure(message: 'Failed to load statistics: $e', name: 'Statistics Error'),
+      ));
+    }
+  }
+
+  // Get recommended videos for a specific video
+  Future<List<TubeVideoModel>> getRecommendedVideos(
+    String videoId, {
+    int page = 1,
+    int limit = 10,
+  }) async {
+    print("🎬 Getting recommended videos for: $videoId");
+
+    final response = await _getRecommendedVideosUseCase(
+      GetRecommendedVideosParams(
+        videoId: videoId,
+        page: page,
+        limit: limit,
+      ),
+    );
+
+    return response.fold(
+      (failure) {
+        print("❌ Get recommended videos failed: $failure");
+        return [];
+      },
+      (videos) {
+        print("✅ Got ${videos.length} recommended videos");
+        return videos;
+      },
+    );
   }
 
   // Helper methods for backward compatibility

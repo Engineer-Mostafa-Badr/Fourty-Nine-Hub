@@ -14,6 +14,7 @@ class StarState {
   final List<StarWinnerEntity> winners;
   final List<UploadFileEntity>? videos;
   final BannerTalentEntity? banner;
+  final TubeWinnerStatisticsEntity? tubeWinnerStatistics;
   final Set<String> favoriteIds;
   final Set<String> watchLaterIds;
   final Set<String> ratedVideos;
@@ -41,6 +42,7 @@ class StarState {
     List<StarWinnerEntity>? winners,
     this.videos,
     this.banner,
+    this.tubeWinnerStatistics,
     Set<String>? favoriteIds,
     Set<String>? watchLaterIds,
     Set<String>? ratedVideos,
@@ -114,6 +116,7 @@ class StarState {
     List<StarWinnerEntity>? winners,
     List<UploadFileEntity>? videos,
     BannerTalentEntity? banner,
+    TubeWinnerStatisticsEntity? tubeWinnerStatistics,
     Set<String>? favoriteIds,
     Set<String>? watchLaterIds,
     Set<String>? ratedVideos,
@@ -135,6 +138,7 @@ class StarState {
       winners: winners ?? this.winners,
       videos: videos ?? this.videos,
       banner: banner ?? this.banner,
+      tubeWinnerStatistics: tubeWinnerStatistics ?? this.tubeWinnerStatistics,
       favoriteIds: favoriteIds ?? this.favoriteIds,
       watchLaterIds: watchLaterIds ?? this.watchLaterIds,
       ratedVideos: ratedVideos ?? this.ratedVideos,
