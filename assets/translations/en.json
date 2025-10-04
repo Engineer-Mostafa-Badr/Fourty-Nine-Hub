@@ -1682,8 +1682,7 @@
   "placeBid": "Place Bid",
   "enterYourBid": "Enter your bid",
   "timeLeftForAuctionEnd": "Time left for auction to end",
-  "noAuctionAvailable": LocaleKeys.noAuctionAvailable.localize
-
+  "noAuctionAvailable": "No auctions available"
 
 
 }
