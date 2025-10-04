@@ -1,23 +1,50 @@
 // AVAILABLE TAB
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
-class ExpiredAuctionScreen extends StatelessWidget {
+class ExpiredAuctionScreen extends StatefulWidget {
    ExpiredAuctionScreen({super.key});
-  final ScrollController _auctionExpiredScrollController = ScrollController();
 
+  @override
+  State<ExpiredAuctionScreen> createState() => _ExpiredAuctionScreenState();
+}
+
+class _ExpiredAuctionScreenState extends State<ExpiredAuctionScreen> {
+  late ScrollController _auctionExpiredScrollController;
+
+  bool isFloatingButtonVisible = true;
+  void _scrollListener() {
+
+    if (_auctionExpiredScrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      isFloatingButtonVisible = false;
+    } else {
+      isFloatingButtonVisible = true;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _auctionExpiredScrollController = ScrollController()..addListener(_scrollListener);
+
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuctionCubit, AuctionState>(
@@ -27,14 +54,7 @@ class ExpiredAuctionScreen extends StatelessWidget {
 
         Widget body;
 
-        // if (state.status == StateStatus.error) {
-        //   body = const Center(
-        //     child: Text(
-        //       "Something went wrong",
-        //       style: TextStyle(color: Colors.red),
-        //     ),
-        //   );
-        // }
+
          if (state.status == StateStatus.loading && auctions.isEmpty) {
           body = const Center(child: CircularProgressIndicator());
         } else if (auctions.isEmpty) {
@@ -66,26 +86,14 @@ class ExpiredAuctionScreen extends StatelessWidget {
           //   },
           // );
         }
-
-        return Stack(
-          children: [
-            body,
-            PositionedDirectional(
-              end: 16,
-              bottom: 16, // 👈 better UX (bottom-right corner)
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  context.push(Routes.createAuctionScreen);
-                },
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                icon: const Icon(Icons.add, color: Colors.white),
-                label: Text(
-                  "${LocaleKeys.addAuction.localize}",
-                  style: Styles.mediumText(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
+        return Scaffold(
+          floatingActionButton: isFloatingButtonVisible
+              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+            ManageVibration.vibrate();
+            context.push(Routes.createAuctionScreen);
+          })
+              : null,
+          body: body,
         );
       },
     );

@@ -1,5 +1,6 @@
 // AVAILABLE TAB
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
@@ -9,16 +10,42 @@ import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../subcategories/presentation/widgets/floating_add_button.dart';
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 
-class FavoriteAuctionScreen extends StatelessWidget {
+class FavoriteAuctionScreen extends StatefulWidget {
    FavoriteAuctionScreen({super.key});
-  final ScrollController _auctionScrollController = ScrollController();
 
+  @override
+  State<FavoriteAuctionScreen> createState() => _FavoriteAuctionScreenState();
+}
+
+class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
+  late ScrollController _auctionScrollController ;
+
+  bool isFloatingButtonVisible = true;
+  void _scrollListener() {
+
+    if (_auctionScrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      isFloatingButtonVisible = false;
+    } else {
+      isFloatingButtonVisible = true;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _auctionScrollController = ScrollController()..addListener(_scrollListener);
+
+  }
   @override
   Widget build(BuildContext context) {
     print("🏗️ FavoriteAuctionScreen: Building widget");
@@ -65,52 +92,29 @@ class FavoriteAuctionScreen extends StatelessWidget {
 
         // Otherwise, show the auction list
         print("📊 Rendering auction list with ${auctions.length} items");
-        return Stack(
-          children: [
-           OlxPaginationWidget(
-          itemsPerPage: 3,
-          scrollController: _auctionScrollController,
-          banners: bannersList, // 👉 add banner list if needed
-          loadPage: (page) {
-            return context.read<AuctionCubit>().getFavoriteNonSocketAuction();
-          },
-
-          items: List.generate(
-            auctions.length,
-                (index) {
-              final auction = auctions[index];
-              return AuctionCard(auction: auction,isFavorite: true,);
+        return Scaffold(
+          floatingActionButton: isFloatingButtonVisible
+              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+            ManageVibration.vibrate();
+            context.push(Routes.createAuctionScreen);
+          })
+              : null,
+          body:OlxPaginationWidget(
+            itemsPerPage: 3,
+            scrollController: _auctionScrollController,
+            banners: bannersList, // 👉 add banner list if needed
+            loadPage: (page) {
+              return context.read<AuctionCubit>().getFavoriteNonSocketAuction();
             },
-          ),
-        ),
-            // ListView.separated(
-            //   padding: const EdgeInsets.all(16),
-            //   itemCount: auctions.length,
-            //   separatorBuilder: (_, __) => const SizedBox(height: 16),
-            //   itemBuilder: (context, index) {
-            //     final auction = auctions[index];
-            //     print("🎯 Rendering auction at index $index: ${auction.toString()}");
-            //     return AuctionCard(auction: auction,isFavorite: true,);
-            //   },
-            // ),
-            PositionedDirectional(
-              end: 16,
-              top: MediaQuery.of(context).size.height * 0.50,
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  context.push(Routes.createAuctionScreen);
-                },
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                icon: const Icon(Icons.add, color: Colors.white),
-                label:  Text(
-                  "${LocaleKeys.addAuction.localize}",
-                  style:Styles.mediumText(
-                      color: Colors.white
-                  ),
-                ),
-              ),
+
+            items: List.generate(
+              auctions.length,
+                  (index) {
+                final auction = auctions[index];
+                return AuctionCard(auction: auction,isFavorite: true,);
+              },
             ),
-          ],
+          ),
         );
       },
     );

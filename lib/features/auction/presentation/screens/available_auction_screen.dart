@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
@@ -127,12 +129,14 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
         }
 
         return Scaffold(
-          body: Stack(
-            children: [
-              body,
-
-            ],
-          ),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: isFloatingButtonVisible
+              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+            ManageVibration.vibrate();
+            _addAuction();
+          })
+              : null,
+          body: body,
 
         );
       },
