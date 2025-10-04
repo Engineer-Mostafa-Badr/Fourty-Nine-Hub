@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -174,7 +175,7 @@ class AuctionCard extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          auction.title ?? "No Title",
+                          auction.title ?? "",
                           style: Styles.mediumText(
                             // fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -198,9 +199,14 @@ class AuctionCard extends StatelessWidget {
                               TextSpan(
                                 text: " ${_formatNumber(context,auction.lastPrice ?? 0,)} ",
                                 style: Styles.mediumText(
-                                  fontWeight: FontWeight.w400,
-                                  color: context.isDarkMode ? Colors.white : Colors.black,
-                                ),
+                                  fontWeight: FontWeight.bold
+                                )
+                                // TextStyle(
+                                //   fontSize: 30.sp,
+                                //   fontWeight: FontWeight.w400,
+                                //   color: Color(0xff0B1035),
+                                // ),
+
                               ),
                               TextSpan(
                                 text: LocaleKeys.EGP.localize,
@@ -235,7 +241,7 @@ class AuctionCard extends StatelessWidget {
                               TextSpan(
                                 text: " ${_formatNumber(context,auction.price ?? 0)} ",
                                 style: Styles.mediumText(
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.bold,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
