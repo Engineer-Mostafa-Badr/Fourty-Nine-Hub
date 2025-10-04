@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/Conversations/Data/DataSources/conversations_remote_datasource.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Repo/conversations_repo.dart';
+import 'package:fourtyninehub/features/Conversations/Domain/Usecases/get_conversation_logs_use_case.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Usecases/get_socail_conversations.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Usecases/toggle_archived_conversation_usecase.dart';
 import 'package:fourtyninehub/features/Conversations/Domain/Usecases/toggle_mute_conversations_use_case.dart';
@@ -10,11 +11,15 @@ import '../features/Conversations/Data/Repo/conversations_repo_impl.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/Conversations/Domain/Usecases/delete_conversations_use_case.dart';
+import '../features/Conversations/Domain/Usecases/get_deleted_social_conversations_use_case.dart';
+import '../features/Conversations/Domain/Usecases/get_socail_greet_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_social_archived_conversations_use_case.dart';
+import '../features/Conversations/Domain/Usecases/get_social_locked_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_unreaded_conversations_count_use_case.dart';
 import '../features/Conversations/Domain/Usecases/listen_to_start_typing.dart';
 import '../features/Conversations/Domain/Usecases/listen_to_stop_typing_usecase.dart';
 import '../features/Conversations/Domain/Usecases/listen_to_update_social_list_usecase.dart';
+import '../features/Conversations/Domain/Usecases/restore_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/start_typing_usecase.dart';
 import '../features/Conversations/Domain/Usecases/stop_typing_usecase.dart';
 
@@ -33,6 +38,10 @@ class ConversationsServiceLocator {
       () => GetSocialConversations(conversationsRepo: serviceLocator()));
     serviceLocator.registerLazySingleton<GetSocialArchivedConversations>(
       () => GetSocialArchivedConversations(conversationsRepo: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSocialGreetConversations>(
+      () => GetSocialGreetConversations(conversationsRepo: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSocialLockedConversations>(
+      () => GetSocialLockedConversations(conversationsRepo: serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToUpdateSocialListUseCase>(
             () =>  ListenToUpdateSocialListUseCase(conversationsRepository: serviceLocator()));
     serviceLocator.registerLazySingleton<StartTypingUseCase>(
@@ -51,14 +60,25 @@ class ConversationsServiceLocator {
             () =>  ToggleMuteConversationUseCase( conversationsRepository: serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteConversationsUseCase>(
             () =>  DeleteConversationsUseCase( conversationsRepository: serviceLocator()));
+    serviceLocator.registerLazySingleton<RestoreConversationsUseCase>(
+            () =>  RestoreConversationsUseCase( conversationsRepository: serviceLocator()));
     serviceLocator.registerLazySingleton<GetUnreadConversationsUseCase>(
             () =>  GetUnreadConversationsUseCase( conversationsRepository: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetDeletedSocialConversationsUseCase>(
+            () =>  GetDeletedSocialConversationsUseCase(conversationsRepo: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetConversationLogsUseCase>(
+            () =>  GetConversationLogsUseCase(conversationsRepo: serviceLocator()));
 
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<ConversationsCubit>(
       () => ConversationsCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

@@ -17,11 +17,11 @@ class CaptainShareInfoScreen extends StatefulWidget {
 }
 
 class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
+      onBackPressed: () => context.pop(),
       floatingActionButton: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();

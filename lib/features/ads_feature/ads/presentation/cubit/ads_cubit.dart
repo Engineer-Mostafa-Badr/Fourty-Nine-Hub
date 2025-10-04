@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -15,6 +16,8 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/fil
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../../data/models/Ad_model.dart';
@@ -112,15 +115,26 @@ class AdvertisementCubit extends Cubit<AdsState> {
     this._getMyAdByIdUseCase,
     this._viewAdUseCase,
   ) : super(AdsState());
-  adViewToAds(String id) async {
+  Future<bool> adViewToAds(String id) async {
+    bool result = false;
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+   showLoadingDialog(currentContext);
+    print("adViewToAds");
     final response = await _viewAdUseCase(id);
     response.fold((failure) {
       var currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;
+      currentContext.pop();
+      result = false;
       showErrorMessage(
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: AdsStates.error));
-    }, (data) => emit(state.copyWith(status: AdsStates.success)));
+    }, (data) {
+      currentContext.pop();
+      result = true;
+      emit(state.copyWith(status: AdsStates.success));
+    });
+    return result;
   }
 
   void changePhone({
@@ -242,6 +256,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
 
   Future<void> getAds(
       {required String subCategoryId, required String filter}) async {
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+    print("Hiii Ads");
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print(hasMoreAdsData);
     print(isLoadingAdsMore);
@@ -255,8 +272,17 @@ class AdvertisementCubit extends Cubit<AdsState> {
         limit: 3,
         userId: userId));
     response
-        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+        .fold((l) {
+          print("Hiii Ads1");
+          print("Hiii Ads1 ${getFailureMessage(l, currentContext)}");
+          showErrorMessage(
+            currentContext,
+            getFailureMessage(l, currentContext),
+          );
+          emit(state.copyWith(failure: l, status: AdsStates.error));
+        },
             (data) async {
+              print("Hiii Ads2");
       ads.addAll(data);
       if (data.length < 3) {
         hasMoreAdsData = false;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/service/time_sync_service.dart';
 import 'package:fourtyninehub/core/widget/before_splash.dart';
 import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
@@ -325,7 +326,10 @@ import 'package:go_router/go_router.dart';
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
+import '../features/Conversations/Presentation/Pages/socail_greet_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_archived_conversations_screen.dart';
+import '../features/Conversations/Presentation/Pages/social_deleted_conversations_screen.dart';
+import '../features/Conversations/Presentation/Pages/social_locked_conversations_screen.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/domain/entities/loading/get_loading_history_entity.dart';
@@ -475,16 +479,34 @@ import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
+import '../core/widget/incorrect_time_screen.dart';
 
 class AppPages {
   AppPages._();
 
-  static late final GoRouter router;
+  static late GoRouter router;
 
   static initializeRouter(String initialRoute) {
+    final hasTimeService = serviceLocator.isRegistered<TimeSyncService>();
+    final timeIncorrectListenable = hasTimeService
+        ? serviceLocator<TimeSyncService>().isTimeIncorrect
+        : null;
     router = GoRouter(
         navigatorKey: navigatorKey,
         initialLocation: initialRoute,
+        refreshListenable: timeIncorrectListenable,
+        redirect: (context, state) {
+          if (timeIncorrectListenable == null) return null;
+          final isIncorrect = timeIncorrectListenable.value;
+          final atIncorrect = state.matchedLocation == '/IncorrectTime';
+          if (isIncorrect && !atIncorrect) {
+            return '/IncorrectTime';
+          }
+          if (!isIncorrect && atIncorrect) {
+            return '/';
+          }
+          return null;
+        },
         routes: <RouteBase>[
           GoRoute(
             path: Paths.splash,
@@ -492,9 +514,20 @@ class AppPages {
             pageBuilder: (context, state) => customTransition(
               context,
               state,
-              const BeforeSplash(),
+              BeforeSplash(
+                hasNavigated: (state.extra is bool) ? state.extra as bool : false,
+              ),
             ),
             routes: [
+              GoRoute(
+                path: Paths.incorrectTime,
+                name: Routes.incorrectTime,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  const IncorrectTimeScreen(),
+                ),
+              ),
               GoRoute(
                 path: Paths.splashScreen,
                 name: Routes.splashScreen,
@@ -2398,6 +2431,36 @@ class AppPages {
                   context,
                   state,
                   SocialArchivedConversationsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.socialGreetScreen,
+                name: Routes.socialGreetScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  SocialGreetConversationsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.socialLockedScreen,
+                name: Routes.socialLockedScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  SocialLockedConversationsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.socialDeletedScreen,
+                name: Routes.socialDeletedScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  SocialDeletedConversationsScreen(),
                 ),
               ),
 

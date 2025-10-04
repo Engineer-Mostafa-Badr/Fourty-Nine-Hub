@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
+
 class GetRequestTripJoinEntity {
   final String? id;
   final String? userId;
@@ -14,12 +16,14 @@ class GetRequestTripJoinEntity {
   final String? phoneNumber;
   final IsButtonEnabledEntity? isButtonEnabled;
   final LocationEntity? location;
+  final List<ViewerEntity>? lastViewers;
 
   GetRequestTripJoinEntity({
     this.id,
     this.userId,
     this.requestType,
     this.firstName,
+    this.lastViewers,
     this.pricePerSeat,
     this.startDate,
     this.createdAt,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -151,7 +152,7 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
         hintStyle: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
-          color: widget.textColor ?? AppColors.black,
+          color: widget.textColor ?? AppColors.PRIMARY_COLOR,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -175,7 +176,7 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
         ),
         contentPadding: const EdgeInsetsDirectional.only(start: 16, top: 10),
         filled: true,
-        fillColor: widget.fillColor ?? const Color(0xFFF5F5F5),
+        fillColor: widget.fillColor ?? (context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xFFF5F5F5)),
       ),
       onChanged: (value) {
         if (widget.onChanged != null) {

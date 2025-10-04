@@ -12,15 +12,16 @@ class GradientProfileBorder extends StatelessWidget {
   final double? imageWidth;
   final String? firstChar;
   final bool isViewed;
+  final bool? hasStories;
 
-  const GradientProfileBorder({super.key, required this.imageUrl, required this.segments,this.firstChar, this.borderWidth, this.imageWidth, this.fullWidth, this.isViewed = false});
+  const GradientProfileBorder({super.key, required this.imageUrl,this.hasStories=true, required this.segments,this.firstChar, this.borderWidth, this.imageWidth, this.fullWidth, this.isViewed = false});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        CustomPaint(
+        if(hasStories==true)CustomPaint(
           size: Size(fullWidth??40, fullWidth??40),
           painter: SegmentedGradientBorderPainter(segments: segments,borderWidth: borderWidth, isViewed: isViewed),
         ),

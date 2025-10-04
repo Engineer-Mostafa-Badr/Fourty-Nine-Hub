@@ -31,32 +31,16 @@ class UserAds extends StatefulWidget {
 }
 
 class _UserAdsState extends State<UserAds> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   context.read<AdvertisementCubit>().loadData(
-  //       subCategoryId: widget.params.subCategory.id,
-  //       filter:widget.userType, fromTab: false);
-  //
-  //   // super.initState();
-  // }
+
   final AdsManager _adsManager = AdsManager();
 
-  // @override
-  // void initState() {
-  //   _adsManager.preloadAds();
-  //   super.initState();
-  // }
   late ScrollController _scrollController;
-  late AdvertisementCubit _cubit;
 
   @override
   void initState() {
     super.initState();
     _adsManager.preloadAds();
-    _cubit = context.read<AdvertisementCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    print('widget.params.mainCategory.id ${widget.params.mainCategory.id}');
   }
 
   void _onScroll() {
@@ -66,22 +50,6 @@ class _UserAdsState extends State<UserAds> {
     } else {
       widget.onScrollChanged(true);
     }
-    // if (_scrollController.position.pixels >=
-    //     _scrollController.position.maxScrollExtent - 200) {
-    //   if (widget.params.mainCategory.nameEn == 'Dating') {
-    //     context.read<AdvertisementCubit>().getAds(
-    //           subCategoryId: widget.params.subCategory.id,
-    //           filter: 'male',
-    //         );
-    //   } else {
-    //     context.read<AdvertisementCubit>().getAds(
-    //           subCategoryId: widget.params.subCategory.id,
-    //           filter: widget.params.subCategory.hasAuction == true
-    //               ? 'sale'
-    //               : 'provider',
-    //         );
-    //   }
-    // }
   }
 
   @override
@@ -150,75 +118,5 @@ class _UserAdsState extends State<UserAds> {
         ),
       ),
     );
-    /*return ListView.separated(
-      // controller: _scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: context.read<AdvertisementCubit>().ads.length +
-          (context.read<AdvertisementCubit>().isLoadingAdsMore ? 1 : 0),
-      separatorBuilder: (context, index) => const SizedBox(
-        height: 16,
-      ),
-      itemBuilder: (context, index) {
-        if (context.read<AdvertisementCubit>().ads.isEmpty) {
-          return SizedBox(
-            height: 100,
-            child: Center(
-              child: Text(
-                LocaleKeys.noAds.localize,
-                style: TextStyle(
-                  color: context.isDarkMode
-                      ? AppColors.LIGHT_COLOR
-                      : AppColors.DARK_BLUE_COLOR,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          );
-        }
-        return MyAdCard(
-          item: context.read<AdvertisementCubit>().ads[index],
-          onFav: (id) async {
-            bool result = await context
-                .read<AdvertisementCubit>()
-                .favouriteAd(context.read<AdvertisementCubit>().ads[index].id);
-            return result;
-          },
-          onRemoveFav: (id) async {
-            bool result = await context
-                .read<AdvertisementCubit>()
-                .unFavouriteAd(
-                    context.read<AdvertisementCubit>().ads[index].id);
-            return result;
-          },
-        );
-        */
-    /*return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (index > nativeAdStart && index % adFrequency == adFrequency - 1)
-              SizedBox(
-                height: 50,
-                child: getAdIfNeeded(index, _adsManager),
-              ),
-            CategoriesExtension.fromId(widget.params.mainCategory.id ?? '')
-                .view(
-              item: context.read<AdvertisementCubit>().ads[index],
-              onFav: (String id) async {
-                var result =
-                    await context.read<AdvertisementCubit>().favouriteAd(id);
-                return result;
-              },
-              onRemoveFav: (String id) async {
-                var result =
-                    await context.read<AdvertisementCubit>().unFavouriteAd(id);
-                return result;
-              },
-            ),
-          ],
-        );*/
-    /*
-      },
-    );*/
   }
 }

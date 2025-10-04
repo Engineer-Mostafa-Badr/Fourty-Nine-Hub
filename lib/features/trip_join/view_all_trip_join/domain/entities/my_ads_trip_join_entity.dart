@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
+
 class MyAdsTripJoinEntity {
   final List<MyAdsTripDocEntity>? offers;
   final PaginationEntity? pagination;
@@ -23,6 +25,7 @@ class MyAdsTripDocEntity {
   final IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
+  final List<ViewerEntity>? lastViewers;
 
   MyAdsTripDocEntity({
     this.id,
@@ -35,6 +38,7 @@ class MyAdsTripDocEntity {
     this.offerType,
     this.isPremium,
     this.phoneNumber,
+    this.lastViewers,
     this.createdAt,
     this.isButtonEnabled,
     this.vehicleDetails,

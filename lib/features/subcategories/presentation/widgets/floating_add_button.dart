@@ -8,15 +8,15 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../helpers/manage_vibration.dart';
 
-Widget buildFloatingAction(BuildContext context, Function() onTap) {
-  return CustomElevatedButton(
+Widget buildFloatingAction(BuildContext context, Function() onTap,{String? title,Widget? child}) {
+  return child??CustomElevatedButton(
     onPressed: () {
       ManageVibration.vibrate();
       onTap();
     },
     backgoundColor: AppColors.getButtonPrimaryColor(context),
-    child: Label(
-      text: '${LocaleKeys.addAde.localize} +',
+    child: child??Label(
+      text:title?? '${LocaleKeys.addAde.localize} +',
       style: Styles.mediumText(
         fontWeight: FontWeight.bold,
         color: AppColors.getReversedTextColor(context),

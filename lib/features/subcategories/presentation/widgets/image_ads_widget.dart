@@ -22,6 +22,7 @@ class ImageAdsWidget extends StatefulWidget {
     required this.isFavourite,
     required this.onPressedFavorite,
     required this.isVerified,
+    required this.isMyAd,
   });
 
   // final MyAdCard myAdCard;
@@ -29,6 +30,7 @@ class ImageAdsWidget extends StatefulWidget {
   final Function() onPressedFavorite;
   final bool isFavourite;
   final bool isVerified;
+  final bool isMyAd;
 
   @override
   State<ImageAdsWidget> createState() => _ImageAdsWidgetState();
@@ -36,47 +38,26 @@ class ImageAdsWidget extends StatefulWidget {
 
 class _ImageAdsWidgetState extends State<ImageAdsWidget> {
   int currentIndex = 0;
-  // late PageController _pageController;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _pageController = PageController(initialPage: 0);
-  //   print('PageController initialized with initial page: 0');
-  // }
-
-  // @override
-  // void dispose() {
-  //   _pageController.dispose();
-  //   super.dispose();
-  // }
-
-  // أضف هذه الدالة في _ImageAdsWidgetState:
 
   List<Widget> _buildDotsIndicator() {
     const int maxVisibleDots = 9;
     final int totalDots = widget.images.length;
 
     if (totalDots <= maxVisibleDots) {
-      // إذا كان العدد أقل من أو يساوي 9، اعرض كل النقاط
       return List.generate(totalDots, (index) => _buildDot(index));
     }
 
-    // إذا كان العدد أكثر من 9، اعرض 9 نقاط فقط
     List<Widget> dots = [];
 
     int startIndex, endIndex;
 
     if (currentIndex <= 4) {
-      // إذا كان في البداية، اعرض أول 9
       startIndex = 0;
       endIndex = 8;
     } else if (currentIndex >= totalDots - 5) {
-      // إذا كان في النهاية، اعرض آخر 9
       startIndex = totalDots - 9;
       endIndex = totalDots - 1;
     } else {
-      // في المنتصف، اعرض النقطة النشطة في الوسط مع 4 على كل جانب
       startIndex = currentIndex - 4;
       endIndex = currentIndex + 4;
     }
@@ -145,78 +126,17 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
     }
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              // SizedBox(
-              //   height: kToolbarHeight * 4,
-              //   width: double.infinity,
-              //   child: Swiper(
-              //     itemCount: widget.images.length > 4 ? 4 : widget.images.length,
-              //     onIndexChanged: (i) {},
-              //     outer: false,
-              //     loop: false,
-              //     physics: widget.images.length > 1
-              //         ? null
-              //         : const NeverScrollableScrollPhysics(),
-              //     itemBuilder: (context, index) => Padding(
-              //       padding: EdgeInsets.only(bottom: 5.h),
-              //       child: Stack(
-              //         children: [
-              //           ImageFromInternet(
-              //             width: double.infinity,
-              //             image: widget.images[index],
-              //             defaultLogo: true,
-              //             fit: BoxFit.cover,
-              //             borderRadius: BorderRadius.only(
-              //                 topLeft: Radius.circular(5.r),
-              //                 topRight: Radius.circular(5.r)),
-              //           ),
-              //           if (index == 3)
-              //             Positioned.fill(
-              //                 child: Container(
-              //               color: Colors.black.withOpacity(0.8),
-              //               alignment: AlignmentDirectional.center,
-              //               child: Label(
-              //                 text: LocaleKeys.seeAll.localize,
-              //                 style: Styles.headerText(
-              //                     color: Colors.white,
-              //                     decoration: TextDecoration.underline),
-              //               ),
-              //             ))
-              //         ],
-              //       ),
-              //     ),
-              //     pagination: SwiperPagination(
-              //         builder: SwiperCustomPagination(builder: (context, config) {
-              //       return const DotSwiperPaginationBuilder(
-              //               color: AppColors.GREY_DARK_COLOR,
-              //               activeColor: AppColors.SECONDARY_COLOR,
-              //               size: 10.0,
-              //               activeSize: 10.0)
-              //           .build(context, config);
-              //     })),
-              //   ),
-              // ),
               SizedBox(
                 height: kToolbarHeight * 4,
                 width: double.infinity,
-                // clipBehavior: Clip.antiAlias,
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(15),
-                //   border: Border.all(
-                //     color: context.isDarkMode
-                //         ? AppColors.LIGHT_COLOR
-                //         : AppColors.GREY_DARK_COLOR,
-                //     width: 1,
-                //   ),
-                // ),
                 child: PageView.builder(
-                  // controller: _pageController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   onPageChanged: (value) {
                     print('Page changed from $currentIndex to $value');
@@ -228,9 +148,6 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                   },
                   itemCount: widget.images.length,
                   itemBuilder: (context, index) {
-                    // print('Building page $index');
-                    // if (index >= widget.images.length) return Container();
-
                     return Stack(
                       children: [
                         ImageFromInternet(
@@ -238,11 +155,8 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                           height: kToolbarHeight * 4,
                           image: widget.images[index],
                           defaultLogo: true,
-                          fit: BoxFit.cover,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5.r),
-                            topRight: Radius.circular(5.r),
-                          ),
+                          fit: BoxFit.fill,
+                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
                         ),
                         if (index == 3)
                           Positioned.fill(
@@ -269,7 +183,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 child: Container(
                   decoration: BoxDecoration(
                     // color: Colors.red,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
                     border: Border.all(
                       color: context.isDarkMode
                           ? AppColors.LIGHT_COLOR
@@ -289,7 +203,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                   top: 16,
                   child: IgnorePointer(
                     child: Container(
-                      padding: const EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
@@ -317,11 +231,11 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 ),
 
               //! Favourite
-              PositionedDirectional(
+              if(!widget.isMyAd)PositionedDirectional(
                 end: 16,
                 top: 16,
                 child: Container(
-                  padding: const EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
                     color: Colors.black45,
                     borderRadius: BorderRadius.circular(5),
@@ -338,41 +252,13 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                     //     blurRadius: 10,
                     //   ),
                     // ],
-                    color: AppColors.whiteColor,
+                    color: widget.isFavourite == false?AppColors.whiteColor:AppColors.SECONDARY_COLOR,
                     onPressed: widget.onPressedFavorite,
                   ),
                 ),
               ),
             ],
           ),
-
-          //! indicators
-          // if (widget.images.length > 1)
-          //   Padding(
-          //     padding: const EdgeInsets.symmetric(vertical: 16.0),
-          //     child: AnimatedSmoothIndicator(
-          //       activeIndex: currentIndex,
-          //       count: widget.images.length,
-          //       axisDirection: Axis.horizontal,
-          //       effect: ScrollingDotsEffect(
-          //         activeStrokeWidth: 2.6,
-          //         activeDotScale: 1.3,
-          //         maxVisibleDots: 9,
-          //         radius: 10,
-          //         spacing: 5,
-          //         dotHeight: 8,
-          //         dotWidth: 8,
-          //         smallDotScale: 0.7,
-          //         fixedCenter: true,
-          //         activeDotColor: context.isDarkMode
-          //             ? Colors.white
-          //             : AppColors.SECONDARY_COLOR,
-          //         dotColor: context.isDarkMode
-          //             ? const Color(0x26FFFFFF)
-          //             : Colors.grey,
-          //       ),
-          //     ),
-          //   ),
           if (widget.images.length > 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),

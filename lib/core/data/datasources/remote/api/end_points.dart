@@ -59,7 +59,7 @@ class EndPoints {
   //logout
   static const logout = '/auth/logout';
   static const logoutFromAllDevices = '/auth/logout/all';
-  static const getAllSessions = '/auth/sessions';
+  static const getAllSessions = '/auth/sessions?page=1&limit=100';
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
@@ -1815,8 +1815,19 @@ class EndPoints {
       '/conversations?page=$page&limit=$limit';
   static getSocialArchivedConversations({int page = 1, int limit = 10}) =>
       '/conversations/archived?page=$page&limit=$limit';
+  static getSocialGreetConversations({int page = 1, int limit = 10}) =>
+      '/conversations/greet?page=$page&limit=$limit';
+  static getSocialLockedConversations({int page = 1, int limit = 10}) =>
+      '/conversations/locked?page=$page&limit=$limit';
+  static getDeletedSocialConversations({int page = 1, int limit = 10}) =>
+      '/conversations/deleted?page=$page&limit=$limit';
+  static getConversationLogs({int page = 1, int limit = 10, required String conversationId}) =>
+      '/conversations/$conversationId/logs?page=$page&limit=$limit';
 
   static const String deleteConversations = "/conversations";
+  static const String restoreConversations = "/conversations/restore";
+  static const String socialLockConversations = "/conversations/lock";
+  static const String socialUnLockConversations = "/conversations/unlock";
   static const String unreadCount = "/conversations/unread";
 
   static String toggleArchiveConversation({ required String conversationId}) => "/conversations/$conversationId/toggle/archived";

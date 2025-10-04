@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/available_trip_join_model.dart';
+
 import '../../../domain/entities/request_trip_join_entity.dart';
 
 class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
@@ -10,6 +12,7 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
     super.startDate,
     super.createdAt,
     super.isPremium,
+    super.lastViewers,
     super.isRead,
     super.gender,
     super.totalPassengers,
@@ -40,6 +43,9 @@ class GetRequestTripJoinModel extends GetRequestTripJoinEntity {
       location: json['location'] != null
           ? LocationModel.fromJson(json['location'])
           : null,
+      lastViewers:  (json['lastViewers'] as List<dynamic>?)
+          ?.map((e) => ViewerModel.fromJson(e))
+          .toList(),
     );
   }
 }

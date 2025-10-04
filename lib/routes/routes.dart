@@ -316,10 +316,14 @@ abstract class Routes {
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
   static const conversationsScreen = '/ConversationsScreen';
   static const socialArchivedScreen = '/SocialArchivedScreen';
+  static const socialGreetScreen = '/SocialGreetScreen';
+  static const socialLockedScreen = '/SocialLockedScreen';
+  static const socialDeletedScreen = '/SocialDeletedScreen';
   static const tubeProfile =  '/BeAStar/TubeProfile';
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
   static const createAuctionScreen =  '/CreateAuctionScreen';
   static const myAuctionScreen =  '/MyAuctionScreen';
+  static const incorrectTime = '/IncorrectTime';
 
 }
 
@@ -327,6 +331,7 @@ abstract class Paths {
   Paths._();
   static const splash = '/';
   static const splashScreen = 'splashScreen';
+  static const incorrectTime = 'IncorrectTime';
   static const HOME = 'Home';
   static const RIDEHOME = 'RideHome';
   static const RunningMapDetails = 'RunningMapDetails';
@@ -621,6 +626,9 @@ abstract class Paths {
   static const allClientRatingScreen = 'allClientRatingScreen';
   static const conversationsScreen = 'ConversationsScreen';
   static const socialArchivedScreen = 'SocialArchivedScreen';
+  static const socialGreetScreen = 'SocialGreetScreen';
+  static const socialLockedScreen = 'SocialLockedScreen';
+  static const socialDeletedScreen = 'SocialDeletedScreen';
 
   static const tubeProfile = 'TubeProfile';
 
