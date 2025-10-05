@@ -112,7 +112,7 @@ class TalentCardBuilders {
                     }
 
                     // Fetch video details using videoId before navigation
-                    cubit.fetchVideoDetails(talent.id);
+                    cubit.fetchVideoDetails(talent!.id);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
