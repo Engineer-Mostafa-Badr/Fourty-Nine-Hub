@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../res/assets/assets.dart';
@@ -19,35 +20,36 @@ class CustomLoadingSearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Lottie.asset(
-              Assets.searchLoading,
-              height: size.h,
-              width: size.w,
-              fit: BoxFit.contain,
-              repeat: true,
-              frameRate: FrameRate.max,
-            ),
-            if (showMessage) ...[
-              SizedBox(height: 12.h),
-              Text(
-                message ??
-                    (context.isArabic ? 'جاري البحث...' : 'Searching...'),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
-                      fontSize: 16.sp,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
+    return AppLoaderWidget.largeLogo();
+    // return Center(
+    //   child: Container(
+    //     padding: EdgeInsets.all(16.w),
+    //     child: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: [
+    //         Lottie.asset(
+    //           Assets.searchLoading,
+    //           height: size.h,
+    //           width: size.w,
+    //           fit: BoxFit.contain,
+    //           repeat: true,
+    //           frameRate: FrameRate.max,
+    //         ),
+    //         if (showMessage) ...[
+    //           SizedBox(height: 12.h),
+    //           Text(
+    //             message ??
+    //                 (context.isArabic ? 'جاري البحث...' : 'Searching...'),
+    //             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+    //                   color: Colors.grey[600],
+    //                   fontSize: 16.sp,
+    //                 ),
+    //             textAlign: TextAlign.center,
+    //           ),
+    //         ],
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

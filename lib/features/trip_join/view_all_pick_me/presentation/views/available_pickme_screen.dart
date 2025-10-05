@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
