@@ -243,7 +243,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
           if (widget.images.length > 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: DotsWidget(images: widget.images,currentIndex:currentIndex),
+              child: DotsWidget(length: widget.images.length,currentIndex:currentIndex),
             ),
         ],
       ),
