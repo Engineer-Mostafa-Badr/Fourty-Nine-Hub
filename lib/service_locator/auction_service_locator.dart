@@ -10,6 +10,7 @@ import '../features/auction/domain/usecases/bid_auction_use_case.dart';
 import '../features/auction/domain/usecases/bid_winner_auction_use_case.dart';
 import '../features/auction/domain/usecases/create_auction_use_case.dart';
 import '../features/auction/domain/usecases/error_bid_auction_use_case.dart';
+import '../features/auction/domain/usecases/fetch_all_winner_auction_use_case.dart';
 import '../features/auction/domain/usecases/fetch_available_auction_use_case.dart';
 import '../features/auction/domain/usecases/fetch_expired_auction_use_case.dart';
 import '../features/auction/domain/usecases/fetch_favorite_auction_use_case.dart';
@@ -23,6 +24,7 @@ import '../features/auction/domain/usecases/join_auction_use_case.dart';
 import '../features/auction/domain/usecases/leave_auction_use_case.dart';
 import '../features/auction/domain/usecases/listen_to_new_auction_use_case.dart';
 import '../features/auction/domain/usecases/listen_to_new_bid_auction_use_case.dart';
+import '../features/auction/domain/usecases/search_auction_use_case.dart';
 import '../features/auction/presentation/cubit/auction_cubit.dart';
 
 class AuctionServiceLocator {
@@ -107,9 +109,19 @@ class AuctionServiceLocator {
         () => BannerAuctionUseCase (serviceLocator()));
 
 
+   serviceLocator.registerLazySingleton<GetAllWinnerAuctionUseCase >(
+        () => GetAllWinnerAuctionUseCase (serviceLocator()));
+
+
+   serviceLocator.registerLazySingleton<SearchAuctionUseCase >(
+        () => SearchAuctionUseCase (serviceLocator()));
+
+
 
     serviceLocator
         .registerFactory<AuctionCubit>(() => AuctionCubit(
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -17,6 +18,7 @@ import '../../../../res/style/styles.dart';
 
 import '../../domain/usecases/create_auction_use_case.dart';
 import '../cubit/auction_cubit.dart';
+import 'fetch_single_auction_screen.dart';
 
 class CreateAuctionScreen extends StatefulWidget {
   const CreateAuctionScreen({super.key});
@@ -155,10 +157,52 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
     final cubit = context.read<AuctionCubit>();
 
     return BlocListener<AuctionCubit, AuctionState>(
+      // listener: (context, state) {
+      //   // 🔹 Error handling
+      //   if (state.status == StateStatus.error && state.failure != null) {
+      //     final errorMessage =getFailureMessage(state.failure!, context) ?? "Something went wrong!";
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text(errorMessage)),
+      //     );
+      //   }
+      //
+      //   // 🔹 Success handling
+      //   if (state.status == StateStatus.success && state.createAuction != null) {
+      //     final response = state.createAuction!;
+      //
+      //     if (response.data?.userSubscription == false) {
+      //       // 🚨 Not subscribed → open subscription
+      //       SubscriptionMethod().subscribe(
+      //         subscribeId: response.data?.subCategoryId ?? '',
+      //         onSubscribe: () {
+      //           context.pop(); // close subscription screen
+      //           context.pop(); // close create screen
+      //           context.read<AuctionCubit>().clearCreateAuctionResponse(); // ✅ Clear after handling
+      //         },
+      //         showRegular: false,
+      //         title: "Subscribe",
+      //       );
+      //     } else {
+      //       // 🎉 Successfully created
+      //       if (response.message != null) {
+      //         ScaffoldMessenger.of(context).showSnackBar(
+      //           SnackBar(content: Text(response.message!)),
+      //         );
+      //       }
+      //       context.read<AuctionCubit>().clearCreateAuctionResponse(); // ✅ Clear after handling
+      //       context.pop(true); // close create auction screen
+      //     }
+      //   }
+      // },
+      listenWhen: (previous, current) {
+        // ✅ Only trigger when createAuction actually changes from null to something
+        return previous.createAuction != current.createAuction &&
+            current.createAuction != null;
+      },
       listener: (context, state) {
         // 🔹 Error handling
         if (state.status == StateStatus.error && state.failure != null) {
-          final errorMessage =getFailureMessage(state.failure!, context) ?? "Something went wrong!";
+          final errorMessage = getFailureMessage(state.failure!, context) ?? "Something went wrong!";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(errorMessage)),
           );
@@ -169,24 +213,22 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
           final response = state.createAuction!;
 
           if (response.data?.userSubscription == false) {
-            // 🚨 Not subscribed → open subscription
             SubscriptionMethod().subscribe(
               subscribeId: response.data?.subCategoryId ?? '',
               onSubscribe: () {
-                context.pop(); // close subscription screen
-                context.pop(); // close create screen
+                context.pop();
+                context.pop();
               },
               showRegular: false,
               title: "Subscribe",
             );
           } else {
-            // 🎉 Successfully created
             if (response.message != null) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(response.message!)),
               );
             }
-            context.pop(true); // close create auction screen
+            context.pop(true);
           }
         }
       },
@@ -512,18 +554,47 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
             const SizedBox(height: 15),
 
             // ---------------- Main Category Dropdown ----------------
+            // BlocBuilder<AuctionCubit, AuctionState>(
+            //   builder: (context, state) {
+            //     return PaginatedDropdown(
+            //       title: selectedMainCategory ??  LocaleKeys.selectMainCategoryAuction.localize,
+            //       // items: cubit.mainCategories.map((e) => e.nameEn ?? "").toList(),
+            //       items: cubit.mainCategories.map((e) {
+            //         return context.isArabic ? (e.nameAr ?? "") : (e.nameEn ?? "");
+            //       }).toList(),
+            //       hasMore: cubit.hasMoreMainCategories,
+            //       loadMore: () => cubit.getMainCategoryAuction(),
+            //       onSelected: (value) {
+            //         selectedMainCategory = value;
+            //         final mainCat = cubit.mainCategories
+            //             .firstWhere((e) => e.nameEn == value);
+            //         selectedMainCategoryId = mainCat.id; // NEW
+            //         cubit.loadSubCategories(mainCat.id!);
+            //         selectedSubCategory = null;
+            //         selectedSubCategoryId = null;
+            //         setState(() {});
+            //       },
+            //     );
+            //   },
+            // ),
             BlocBuilder<AuctionCubit, AuctionState>(
               builder: (context, state) {
                 return PaginatedDropdown(
-                  title: selectedMainCategory ??  LocaleKeys.selectMainCategoryAuction.localize,
-                  items: cubit.mainCategories.map((e) => e.nameEn ?? "").toList(),
+                  title: selectedMainCategory ?? LocaleKeys.selectMainCategoryAuction.localize,
+                  items: cubit.mainCategories.map((e) {
+                    return context.isArabic ? (e.nameAr ?? "") : (e.nameEn ?? "");
+                  }).toList(),
                   hasMore: cubit.hasMoreMainCategories,
                   loadMore: () => cubit.getMainCategoryAuction(),
                   onSelected: (value) {
                     selectedMainCategory = value;
-                    final mainCat = cubit.mainCategories
-                        .firstWhere((e) => e.nameEn == value);
-                    selectedMainCategoryId = mainCat.id; // NEW
+
+                    // 🔑 match selected value depending on language
+                    final mainCat = cubit.mainCategories.firstWhere((e) {
+                      return context.isArabic ? e.nameAr == value : e.nameEn == value;
+                    });
+
+                    selectedMainCategoryId = mainCat.id;
                     cubit.loadSubCategories(mainCat.id!);
                     selectedSubCategory = null;
                     selectedSubCategoryId = null;
@@ -540,24 +611,55 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
               BlocBuilder<AuctionCubit, AuctionState>(
                 builder: (context, state) {
                   return PaginatedDropdown(
-                    title: selectedSubCategory ??  LocaleKeys.selectSubCategoryAuction.localize,
-                    items: cubit.subCategories.map((e) => e.nameEn ?? "").toList(),
+                    title: selectedSubCategory ?? LocaleKeys.selectSubCategoryAuction.localize,
+                    items: cubit.subCategories.map((e) {
+                      return context.isArabic ? (e.nameAr ?? "") : (e.nameEn ?? "");
+                    }).toList(),
                     hasMore: cubit.hasMoreSubCategories,
                     loadMore: () async {
-                      final mainCat = cubit.mainCategories
-                          .firstWhere((e) => e.nameEn == selectedMainCategory);
+                      final mainCat = cubit.mainCategories.firstWhere((e) {
+                        return context.isArabic
+                            ? e.nameAr == selectedMainCategory
+                            : e.nameEn == selectedMainCategory;
+                      });
                       await cubit.getSubCategories(mainCat.id!);
                     },
                     onSelected: (value) {
                       selectedSubCategory = value;
-                      final subCat = cubit.subCategories
-                          .firstWhere((e) => e.nameEn == value);
-                      selectedSubCategoryId = subCat.id; // NEW
+
+                      // ✅ Match selected value depending on current language
+                      final subCat = cubit.subCategories.firstWhere((e) {
+                        return context.isArabic ? e.nameAr == value : e.nameEn == value;
+                      });
+
+                      selectedSubCategoryId = subCat.id;
                       setState(() {});
                     },
                   );
                 },
               ),
+
+            // BlocBuilder<AuctionCubit, AuctionState>(
+              //   builder: (context, state) {
+              //     return PaginatedDropdown(
+              //       title: selectedSubCategory ??  LocaleKeys.selectSubCategoryAuction.localize,
+              //       items: cubit.subCategories.map((e) => e.nameEn ?? "").toList(),
+              //       hasMore: cubit.hasMoreSubCategories,
+              //       loadMore: () async {
+              //         final mainCat = cubit.mainCategories
+              //             .firstWhere((e) => e.nameEn == selectedMainCategory);
+              //         await cubit.getSubCategories(mainCat.id!);
+              //       },
+              //       onSelected: (value) {
+              //         selectedSubCategory = value;
+              //         final subCat = cubit.subCategories
+              //             .firstWhere((e) => e.nameEn == value);
+              //         selectedSubCategoryId = subCat.id; // NEW
+              //         setState(() {});
+              //       },
+              //     );
+              //   },
+              // ),
 
             const SizedBox(height: 16),
 
@@ -691,8 +793,8 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                       _endAt == null ||
                       mediaIds.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("⚠️ Please fill all fields and upload at least one media item."),
+                       SnackBar(
+                        content: Text("⚠️${LocaleKeys.pleaseFillAllFields.localize}"),
                         backgroundColor: Colors.redAccent,
                       ),
                     );
@@ -704,8 +806,8 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
 
                   if (price == null || minBiddingPrice == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("⚠️ Price and Min Bid Price must be valid numbers."),
+                       SnackBar(
+                        content: Text("⚠️ ${LocaleKeys.emptyFieldNotValid.localize}"),
                         backgroundColor: Colors.redAccent,
                       ),
                     );
@@ -728,8 +830,8 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
                   // Call cubit
                   cubit.createAuction(params: params);
                 },
-                child: const Text(
-                  "Publish",
+                child:  Text(
+                  LocaleKeys.publish.localize,
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
@@ -788,6 +890,9 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
         type: keyboardType,
         hint: hint,
         fillColor: color,
+        inputFormatters: [
+          NoPasteFormatterAuction(), // Prevent paste operations
+        ],
       ),
     );
   }
@@ -878,7 +983,7 @@ class _PaginatedDropdownState extends State<PaginatedDropdown> {
               // border: Border.all(color: Colors.grey.shade400),
             ),
             child: widget.items.isEmpty
-                ?  Center(child: Text("No items", style: Styles.mediumText(
+                ?  Center(child: Text(LocaleKeys.noData.localize, style: Styles.mediumText(
                 fontWeight: FontWeight.w400,
                 color:AppColors.black
             )))
@@ -921,607 +1026,3 @@ class _PaginatedDropdownState extends State<PaginatedDropdown> {
 }
 
 
-/*
-class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
-  String? selectedMainCategory;
-  String? selectedSubCategory;
-  // Map of file path -> VideoPlayerController
-  final Map<String, VideoPlayerController> _videoControllers = {};
-
-  @override
-  void initState() {
-    super.initState();
-    // Load initial main categories
-    context.read<AuctionCubit>().loadInitialMainCategoryAuction();
-  }
-  @override
-  void dispose() {
-    // Dispose all video controllers
-    for (var controller in _videoControllers.values) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-  Future<VideoPlayerController> _initializeVideo(String path) async {
-    if (_videoControllers.containsKey(path)) return _videoControllers[path]!;
-
-    final controller = VideoPlayerController.file(File(path));
-    await controller.initialize();
-
-    // Listen to video end to reset
-    controller.addListener(() {
-      if (controller.value.position >= controller.value.duration && controller.value.duration != Duration.zero) {
-        setState(() {
-          controller.seekTo(Duration.zero);
-          controller.pause(); // Reset to "play" state
-        });
-      }
-    });
-
-    _videoControllers[path] = controller;
-    return controller;
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<AuctionCubit>();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Add Auction",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Media Gallery Container
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.grey[50]!, Colors.grey[100]!],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 20,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      // Media list
-                      BlocBuilder<AuctionCubit, AuctionState>(
-                        builder: (context, state) {
-                          if (state.uploadedFiles.isEmpty) {
-                            return Container(
-                              // height: 200,
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.photo_library_outlined,
-                                      size: 40,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    "No media uploaded yet",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[600],
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "Upload images or videos to get started",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[500],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-
-                          return Container(
-                            height: 220,
-                            padding: const EdgeInsets.all(16),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: state.uploadedFiles.length,
-                              itemBuilder: (context, index) {
-                                final fileEntity = state.uploadedFiles[index];
-                                final path = fileEntity.file.path;
-                                final isImage = path.endsWith(".jpg") || path.endsWith(".png");
-
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 16),
-                                  child: Stack(
-                                    children: [
-                                      // Media display
-                                      Hero(
-                                        tag: "media_$index",
-                                        child: Container(
-                                          width: 160,
-                                          height: 180,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(16),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(0.1),
-                                                blurRadius: 15,
-                                                offset: const Offset(0, 8),
-                                              ),
-                                            ],
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(16),
-                                            child: isImage
-                                                ? Stack(
-                                              fit: StackFit.expand,
-                                              children: [
-                                                Image.file(File(path), fit: BoxFit.cover),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      begin: Alignment.topCenter,
-                                                      end: Alignment.bottomCenter,
-                                                      colors: [
-                                                        Colors.transparent,
-                                                        Colors.black.withOpacity(0.1),
-                                                      ],
-                                                      stops: const [0.6, 1.0],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  bottom: 8,
-                                                  left: 8,
-                                                  child: Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black.withOpacity(0.7),
-                                                      borderRadius: BorderRadius.circular(8),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: const [
-                                                        Icon(Icons.image, size: 12, color: Colors.white),
-                                                        SizedBox(width: 4),
-                                                        Text(
-                                                          "IMG",
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 10,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                                : FutureBuilder<VideoPlayerController>(
-                                              future: _initializeVideo(path),
-                                              builder: (context, snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return Container(
-                                                    color: Colors.grey[800],
-                                                    child: const Center(
-                                                      child: CircularProgressIndicator(
-                                                        color: Colors.white,
-                                                        strokeWidth: 3,
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                                final controller = snapshot.data!;
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      controller.value.isPlaying
-                                                          ? controller.pause()
-                                                          : controller.play();
-                                                    });
-                                                  },
-                                                  child: AspectRatio(
-                                                    aspectRatio: controller.value.aspectRatio,
-                                                    child: VideoPlayer(controller),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      // Delete Button
-                                      Positioned(
-                                        top: 8,
-                                        right: 8,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (_videoControllers.containsKey(path)) {
-                                              _videoControllers[path]?.dispose();
-                                              _videoControllers.remove(path);
-                                            }
-                                            context.read<AuctionCubit>().deleteUploadedFile(fileEntity);
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red.withOpacity(0.9),
-                                              shape: BoxShape.circle,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.red.withOpacity(0.3),
-                                                  blurRadius: 8,
-                                                  offset: const Offset(0, 2),
-                                                ),
-                                              ],
-                                            ),
-                                            child: const Icon(Icons.close_rounded, color: Colors.white, size: 16),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
-
-                      // Uploading overlay
-                      BlocBuilder<AuctionCubit, AuctionState>(
-                        builder: (context, state) {
-                          if (state.isUploading) {
-                            return Container(
-                              height: 220,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.9),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const CircularProgressIndicator(
-                                        strokeWidth: 3,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.9),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Text(
-                                        "Uploading media...",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey[800],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Action Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: AppButton(
-                        onPressed: () => context.read<AuctionCubit>().uploadMedia(isImage: true),
-                        label: LocaleKeys.uploadImage.localize,
-                        backColor: AppColors.PRIMARY_COLOR_DARK,
-                        iconWidget: Icon(Icons.file_upload_outlined,color: Colors.white,),
-                        // icon: Icons.file_upload_outlined,
-
-                        // child: Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: const [
-                        //     Icon(Icons.image_rounded),
-                        //     SizedBox(width: 12),
-                        //     Text("Add Image"),
-                        //   ],
-                        // ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: AppButton(
-                        onPressed: () => context.read<AuctionCubit>().uploadMedia(isImage: false),
-                        label: LocaleKeys.uploadVideo.localize,
-                        backColor: AppColors.PRIMARY_COLOR_DARK,
-                        iconWidget: Icon(Icons.file_upload_outlined,color: Colors.white,),
-                        // icon: Icons.file_upload_outlined,
-                      ),
-                    ),
-                  ],
-                ),
-
-                // const SizedBox(height: 16),
-                //
-                // OutlinedButton(
-                //   onPressed: () {
-                //     final mediaIds = context.read<AuctionCubit>().getAllMediaIds();
-                //     print("All Media IDs: $mediaIds");
-                //   },
-                //   style: OutlinedButton.styleFrom(
-                //     side: BorderSide(color: Colors.grey[300]!, width: 1.5),
-                //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                //   ),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: const [
-                //       Icon(Icons.developer_mode_rounded, size: 18),
-                //       SizedBox(width: 8),
-                //       Text("Print Media IDs"),
-                //     ],
-                //   ),
-                // ),
-              ],
-            ),
-
-            const SizedBox(height: 15),
-
-            // ---------------- Main Category Dropdown ----------------
-            BlocBuilder<AuctionCubit, AuctionState>(
-              builder: (context, state) {
-                if (cubit.mainCategories.isEmpty &&
-                    state.status == StateStatus.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                return PaginatedDropdown(
-                  title: selectedMainCategory ?? "Select Main Category",
-                  items:
-                  cubit.mainCategories.map((e) => e.nameEn ?? "").toList(),
-                  hasMore: cubit.hasMoreMainCategories,
-                  loadMore: () => cubit.getMainCategoryAuction(),
-                  onSelected: (value) {
-                    selectedMainCategory = value;
-                    final mainCat = cubit.mainCategories
-                        .firstWhere((e) => e.nameEn == value);
-                    cubit.loadSubCategories(mainCat.id!);
-                    selectedSubCategory = null;
-                    setState(() {});
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // ---------------- Sub Category Dropdown ----------------
-            if (selectedMainCategory != null)
-              BlocBuilder<AuctionCubit, AuctionState>(
-                builder: (context, state) {
-                  if (cubit.subCategories.isEmpty &&
-                      state.status == StateStatus.loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  return PaginatedDropdown(
-                    title: selectedSubCategory ?? "Select Sub Category",
-                    items:
-                    cubit.subCategories.map((e) => e.nameEn ?? "").toList(),
-                    hasMore: cubit.hasMoreSubCategories,
-                    loadMore: () async {
-                      final mainCat = cubit.mainCategories.firstWhere(
-                              (e) => e.nameEn == selectedMainCategory);
-                      await cubit.getSubCategories(mainCat.id!);
-                    },
-                    onSelected: (value) {
-                      selectedSubCategory = value;
-                      setState(() {});
-                    },
-                  );
-                },
-              ),
-            const SizedBox(height: 16),
-
-            // ---------------- Text Fields ----------------
-            _buildTextField("Title"),
-            _buildTextField("Description"),
-            _buildTextField("Price", keyboardType: TextInputType.number),
-            _buildTextField("Min Bidding Price",
-                keyboardType: TextInputType.number),
-            _buildTextField("Time"),
-
-            const SizedBox(height: 20),
-
-            // ---------------- Publish Button ----------------
-            SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                onPressed: () {},
-                child: const Text(
-                  "Publish",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-      String hint, {
-        TextInputType keyboardType = TextInputType.text,
-        Color? color,
-      }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: FormTextField(
-        type: keyboardType,
-        hint: hint,
-        fillColor: color,
-      ),
-    );
-  }
-
-}
-*/
-/*
-// ---------------- PaginatedDropdown Widget ----------------
-class PaginatedDropdown extends StatefulWidget {
-  final String title;
-  final List<String> items;
-  final Future<void> Function() loadMore;
-  final Function(String) onSelected;
-  final bool hasMore;
-
-  const PaginatedDropdown({
-    super.key,
-    required this.title,
-    required this.items,
-    required this.loadMore,
-    required this.onSelected,
-    required this.hasMore,
-  });
-
-  @override
-  State<PaginatedDropdown> createState() => _PaginatedDropdownState();
-}
-
-class _PaginatedDropdownState extends State<PaginatedDropdown> {
-  bool isOpen = false;
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 50) {
-        if (widget.hasMore) {
-          widget.loadMore();
-        }
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () => setState(() => isOpen = !isOpen),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(widget.title),
-                Icon(isOpen
-                    ? Icons.keyboard_arrow_up
-                    : Icons.keyboard_arrow_down),
-              ],
-            ),
-          ),
-        ),
-        if (isOpen)
-          Container(
-            height: 200,
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey),
-            ),
-            child: widget.items.isEmpty
-                ? const Center(child: Text("No items"))
-                : ListView.builder(
-              controller: _scrollController,
-              itemCount: widget.items.length + (widget.hasMore ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index < widget.items.length) {
-                  return ListTile(
-                    title: Text(widget.items[index]),
-                    onTap: () {
-                      widget.onSelected(widget.items[index]);
-                      setState(() => isOpen = false);
-                    },
-                  );
-                } else {
-                  return const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-      ],
-    );
-  }
-}
-*/

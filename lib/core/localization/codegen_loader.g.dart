@@ -756,7 +756,7 @@ class CodegenLoader extends AssetLoader{
   "errorLoadingSocialPage": "خطأ في تحميل الصفحة الاجتماعية",
   "updateSuccessfully": "تم التحديث بنجاح",
   "carpool": "مشاركة السيارة",
-  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستحصل على عروض قريباً.",
+  "yourRequestHasBeenSentYouWillReceiveOffersShortly": "تم إرسال طلبك. ستتلقى العروض قريبًا.",
   "thisFieldIsRequiredWithPeriod": "هذا الحقل مطلوب.",
   "pickupLocation": "موقع الاستلام",
   "destination": "الوجهة",
@@ -1676,7 +1676,8 @@ class CodegenLoader extends AssetLoader{
   "liveAuction": "مزاد مباشر",
   "placeBid": "تقديم عرض",
   "enterYourBid": "أدخل عرضك",
-  "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد"
+  "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد",
+  "noAuctionAvailable": "لا توجد مزادات متاحة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3360,7 +3361,8 @@ static const Map<String,dynamic> _en = {
   "liveAuction": "Live Auction",
   "placeBid": "Place Bid",
   "enterYourBid": "Enter your bid",
-  "timeLeftForAuctionEnd": "Time left for auction to end"
+  "timeLeftForAuctionEnd": "Time left for auction to end",
+  "noAuctionAvailable": "No auctions available"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

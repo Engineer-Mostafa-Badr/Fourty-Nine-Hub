@@ -10,6 +10,7 @@ import '../../../../core/data/datasources/remote/socket/socket_data_source.dart'
 import '../../../../core/error/failure.dart';
 import '../../../../shared_web_socket.dart';
 import '../../domain/entities/add_favorite_auction_entity.dart';
+import '../../domain/entities/auction_all_winner_entity.dart';
 import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
@@ -24,7 +25,9 @@ import '../../domain/usecases/fetch_available_auction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
+import '../../domain/usecases/search_auction_use_case.dart';
 import '../models/add_favorite_auction_model.dart';
+import '../models/auction_all_winner_model.dart';
 import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
@@ -56,6 +59,8 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, CreateAuctionEntity  >> createAuction({required CreateAuctionParams  params});
   Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params});
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
+  Future<Either<Failure, AuctionWinnerDataEntity >> getAllWinnerAuction();
+  Future<Either<Failure, List<GetAvailableAuctionEntity >>> searchAuction({required SearchAuctionParams params});
 
 }
 
@@ -165,13 +170,14 @@ class AuctionRemoteDataSourceImpl
       CliLogger.info("❌ Error while sending bid: $e");
     }
   }
+
   @override
   void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
     try {
       CliLogger.info("🔔 Listening to new bids...");
 
       // remove any old listeners to avoid duplicates
-      SharedWebSocket.socket?.off("auction:new-amount-bid");
+      // SharedWebSocket.socket?.off("auction:new-amount-bid");
 
       SharedWebSocket.socket?.on("auction:new-amount-bid", (data) {
         CliLogger.info("📩 New bid received: $data");
@@ -431,6 +437,37 @@ class AuctionRemoteDataSourceImpl
           (data) {
         final blockRestaurantModel = AuctionBannerModel.fromJson(data);
         return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuctionWinnerDataEntity>> getAllWinnerAuction() async{
+    final url = "${EndPoints.auctionAllWinner}";
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AuctionWinnerDataModel.fromJson(data['data']);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetAvailableAuctionEntity>>> searchAuction({required SearchAuctionParams params})async {
+    final url = "${EndPoints.searchAuction}?page=${params.page}&limit=${params.limit}&searchQuery=${params.searchQuery}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => GetAvailableAuctionModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
       },
     );
   }
