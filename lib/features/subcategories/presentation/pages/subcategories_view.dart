@@ -159,7 +159,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                       child: CustomNotificationBadge(
                         count: 0,
                         child: HeaderButtonWidget(
-                          title: LocaleKeys.favouriteAds.localize,
+                          title: context.isArabic?'Favourites':'المفضلة',
                           isOpened: context
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,

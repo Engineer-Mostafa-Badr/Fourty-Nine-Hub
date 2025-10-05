@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -239,6 +240,16 @@ class AuctionCard extends StatelessWidget {
                             children: [
                                TextSpan(text: LocaleKeys.startFrom.localize),
                               TextSpan(
+                                // child: SizedBox(
+                                //   width: 60,
+                                //   child: AutoSizeText(
+                                //     " ${_formatNumber(context,auction.price ?? 0)} ",
+                                //     style: Styles.mediumText(
+                                //       fontWeight: FontWeight.bold,
+                                //       color: context.isDarkMode ? Colors.white : Colors.black,
+                                //     ),
+                                //   ),
+                                // ),
                                 text: " ${_formatNumber(context,auction.price ?? 0)} ",
                                 style: Styles.mediumText(
                                   fontWeight: FontWeight.bold,

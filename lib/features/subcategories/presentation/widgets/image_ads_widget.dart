@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/common/favorite_icon.dart';
 import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/extensions/context_extension.dart';
@@ -234,28 +235,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
               if(!widget.isMyAd)PositionedDirectional(
                 end: 16,
                 top: 16,
-                child: Container(
-                  padding: const EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                    color: Colors.black45,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: IconAppButton(
-                    size: 32,
-                    icon: widget.isFavourite == false
-                        ? Icons.favorite_border
-                        : Icons.favorite,
-                    // shadows: [
-                    //   Shadow(
-                    //     color: Colors.black,
-                    //     offset: const Offset(1, 1),
-                    //     blurRadius: 10,
-                    //   ),
-                    // ],
-                    color: widget.isFavourite == false?AppColors.whiteColor:AppColors.SECONDARY_COLOR,
-                    onPressed: widget.onPressedFavorite,
-                  ),
-                ),
+                child: FavoriteIcon(isFavourite: widget.isFavourite, onPressedFavorite: widget.onPressedFavorite),
               ),
             ],
           ),
