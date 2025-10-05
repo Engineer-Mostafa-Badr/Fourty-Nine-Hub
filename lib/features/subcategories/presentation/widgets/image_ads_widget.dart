@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/common/dots_widget.dart';
 import 'package:fourtyninehub/core/widget/common/favorite_icon.dart';
 import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -41,7 +42,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
   int currentIndex = 0;
 
   List<Widget> _buildDotsIndicator() {
-    const int maxVisibleDots = 9;
+    int maxVisibleDots = widget.images.length;
     final int totalDots = widget.images.length;
 
     if (totalDots <= maxVisibleDots) {
@@ -159,20 +160,20 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                           fit: BoxFit.fill,
                           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
                         ),
-                        if (index == 3)
-                          Positioned.fill(
-                            child: Container(
-                              color: Colors.black.withOpacity(0.8),
-                              alignment: AlignmentDirectional.center,
-                              child: Label(
-                                text: LocaleKeys.seeAll.localize,
-                                style: Styles.headerText(
-                                  color: Colors.white,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          )
+                        // if (index == 3)
+                        //   Positioned.fill(
+                        //     child: Container(
+                        //       color: Colors.black.withOpacity(0.8),
+                        //       alignment: AlignmentDirectional.center,
+                        //       child: Label(
+                        //         text: LocaleKeys.seeAll.localize,
+                        //         style: Styles.headerText(
+                        //           color: Colors.white,
+                        //           decoration: TextDecoration.underline,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   )
                       ],
                     );
                   },
@@ -242,10 +243,7 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
           if (widget.images.length > 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildDotsIndicator(),
-              ),
+              child: DotsWidget(images: widget.images,currentIndex:currentIndex),
             ),
         ],
       ),
