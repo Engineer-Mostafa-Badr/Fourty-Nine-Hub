@@ -3,8 +3,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class DotsWidget extends StatefulWidget {
-  const DotsWidget({super.key, required this.images, required this.currentIndex});
-  final List<String> images;
+  const DotsWidget({super.key, required this.length, required this.currentIndex});
+  final int length;
   final int currentIndex;
   @override
   State<DotsWidget> createState() => _DotsWidgetState();
@@ -12,8 +12,8 @@ class DotsWidget extends StatefulWidget {
 
 class _DotsWidgetState extends State<DotsWidget> {
   List<Widget> _buildDotsIndicator() {
-    int maxVisibleDots = widget.images.length;
-    final int totalDots = widget.images.length;
+    int maxVisibleDots = widget.length;
+    final int totalDots = widget.length;
 
     if (totalDots <= maxVisibleDots) {
       return List.generate(totalDots, (index) => _buildDot(index));
