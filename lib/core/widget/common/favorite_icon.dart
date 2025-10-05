@@ -26,13 +26,6 @@ class FavoriteIcon extends StatelessWidget {
         icon: isFavourite == false
             ? Icons.favorite_border
             : Icons.favorite,
-        // shadows: [
-        //   Shadow(
-        //     color: Colors.black,
-        //     offset: const Offset(1, 1),
-        //     blurRadius: 10,
-        //   ),
-        // ],
         color: isFavourite == false?AppColors.whiteColor:AppColors.SECONDARY_COLOR,
         onPressed: onPressedFavorite,
       ),

@@ -34,11 +34,9 @@ class ClientPendingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final avatarSize =
-        screenWidth * 0.2; // 20% of screen width, tweak as needed
+    final avatarSize = screenWidth * 0.2; // 20% of screen width, tweak as needed
     final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
-    final badgeEndOffset =
-        avatarSize * 0.0; // 0% from right edge (or tweak slightly)
+    final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -66,9 +64,13 @@ class ClientPendingWidget extends StatelessWidget {
                           children: [
                             Stack(
                               children: [
-                                ProfilePictureWidget(image: offers?.yourDetails?.pictureUrl,hasStories:false, isViewed: true,),
-                                if ((offers?.yourDetails?.rating?.count ?? 0) >
-                                    0)
+                                ProfilePictureWidget(
+                                  image: offers?.yourDetails?.pictureUrl,
+                                  isVerified: offers?.yourDetails?.verifiedBadge,
+                                  hasStories: false,
+                                  rating: (offers?.yourDetails?.rating?.average??0).toInt(),
+                                ),
+                                if ((offers?.yourDetails?.rating?.count ?? 0) > 0)
                                   PositionedDirectional(
                                     top: badgeTopOffset,
                                     end: badgeEndOffset,
@@ -79,8 +81,7 @@ class ClientPendingWidget extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
+                                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
                                         child: Row(
                                           children: [
                                             SvgPicture.asset(
@@ -90,13 +91,8 @@ class ClientPendingWidget extends StatelessWidget {
                                             ),
                                             const SizedBox(width: 4),
                                             Label(
-                                              text: offers?.yourDetails?.rating
-                                                      ?.count
-                                                      .toString() ??
-                                                  '0',
-                                              style: Styles.smallText(
-                                                  color:
-                                                      AppColors.PRIMARY_COLOR),
+                                              text: offers?.yourDetails?.rating?.count.toString() ?? '0',
+                                              style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
                                             ),
                                           ],
                                         ),
@@ -111,8 +107,7 @@ class ClientPendingWidget extends StatelessWidget {
                             ),
                             if ((offers?.yourDetails?.rating?.average ?? 0) > 0)
                               Label(
-                                text:
-                                    '(${offers?.yourDetails?.rating?.average ?? 0})',
+                                text: '(${offers?.yourDetails?.rating?.average ?? 0})',
                                 style: Styles.smallText(),
                               ),
                           ],
@@ -125,21 +120,15 @@ class ClientPendingWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TripLocationWidget(
-                              isFrom:true,
-                              title: offers?.tripDetails?.location
-                                  ?.fromTitle ??
-                                  'Initial Location',
+                              isFrom: true,
+                              title: offers?.tripDetails?.location?.fromTitle ?? 'Initial Location',
                             ),
                             TripLocationWidget(
-                              isFrom:false,
-                              title: offers?.tripDetails?.location
-                                  ?.toTitle ??
-                                  'Target Location',
+                              isFrom: false,
+                              title: offers?.tripDetails?.location?.toTitle ?? 'Target Location',
                             ),
                             Label(
-                              text: modeType == 'shipping'
-                                  ? ''
-                                  : '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
+                              text: modeType == 'shipping' ? '' : '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
                               style: Styles.mediumText(),
                               maxLines: 2,
                             ),
@@ -157,11 +146,7 @@ class ClientPendingWidget extends StatelessWidget {
                               fit: BoxFit.contain,
                             ),
                             Label(
-                              text: context.isArabic
-                                  ? (offers?.tripDetails?.category?.nameAr ??
-                                      '')
-                                  : (offers?.tripDetails?.category?.nameEn ??
-                                      ''),
+                              text: context.isArabic ? (offers?.tripDetails?.category?.nameAr ?? '') : (offers?.tripDetails?.category?.nameEn ?? ''),
                               style: Styles.mediumText(fontSize: 25),
                             ),
                           ],
@@ -171,20 +156,15 @@ class ClientPendingWidget extends StatelessWidget {
                   ),
                   if (modeType == 'shipping') ...[
                     ReadMoreLabel(
-                        text: modeType == 'shipping'
-                            ? '${context.isArabic ? 'وصف الشحنة' : 'Cargo Description'} : ${offers?.tripDetails?.note ?? ''} '
-                            : '',
-                        style:
-                            Styles.mediumText(color: AppColors.PRIMARY_COLOR))
+                        text: modeType == 'shipping' ? '${context.isArabic ? 'وصف الشحنة' : 'Cargo Description'} : ${offers?.tripDetails?.note ?? ''} ' : '',
+                        style: Styles.mediumText(color: AppColors.PRIMARY_COLOR))
                   ],
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                        text: formatPrice(
-                            offers?.tripDetails?.price?.toInt() ?? 300,
-                            context),
+                        text: formatPrice(offers?.tripDetails?.price?.toInt() ?? 300, context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(width: 4),
@@ -202,13 +182,11 @@ class ClientPendingWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text:
-                            formatTimeOnly(offers?.tripDetails?.date, context),
+                        text: formatTimeOnly(offers?.tripDetails?.date, context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       Label(
-                        text: formatPickupDate(
-                            offers?.tripDetails?.date, context),
+                        text: formatPickupDate(offers?.tripDetails?.date, context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                     ],
@@ -223,14 +201,9 @@ class ClientPendingWidget extends StatelessWidget {
                       onPressed: () {
                         ManageVibration.vibrate();
                         if (modeType == 'shipping') {
-                          context
-                              .read<ClientTripsCubit>()
-                              .cancelClientShippingTrip(
-                                  offers?.tripDetails?.id ?? "");
+                          context.read<ClientTripsCubit>().cancelClientShippingTrip(offers?.tripDetails?.id ?? "");
                         } else {
-                          context
-                              .read<ClientTripsCubit>()
-                              .cancelClientTrip(offers?.tripDetails?.id ?? "");
+                          context.read<ClientTripsCubit>().cancelClientTrip(offers?.tripDetails?.id ?? "");
                         }
                       },
                       backColor: AppColors.cD9D9D9),
@@ -275,13 +248,10 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
     return Scaffold(
       body: BlocListener<ClientTripsCubit, ClientTripsState>(
         listener: (context, state) {
-          if (state.status == ClientTripsStates.success &&
-              state.showSnackbar &&
-              state.createNonTrackTripEntity?.message.isNotEmpty == true) {
+          if (state.status == ClientTripsStates.success && state.showSnackbar && state.createNonTrackTripEntity?.message.isNotEmpty == true) {
             showCustomSnackBar(
               context,
-              state.createNonTrackTripEntity?.message ??
-                  LocaleKeys.requestSentSuccess.localize,
+              state.createNonTrackTripEntity?.message ?? LocaleKeys.requestSentSuccess.localize,
               Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
             );
 
@@ -293,14 +263,11 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
 
           if (state.status == ClientTripsStates.error) {
             final failure = state.failure;
-            if (failure is ServerFailure &&
-                failure.errors != null &&
-                failure.errors!.isNotEmpty) {
+            if (failure is ServerFailure && failure.errors != null && failure.errors!.isNotEmpty) {
               showErrorMessage(context, failure.errors!.first);
               return;
             }
-            showErrorMessage(
-                context, getFailureMessage(state.failure!, context));
+            showErrorMessage(context, getFailureMessage(state.failure!, context));
           }
         },
         child: BlocBuilder<ClientTripsCubit, ClientTripsState>(
@@ -309,14 +276,9 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                 ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: Label(text: LocaleKeys.errorHappen.localize, style: const TextStyle(color: Colors.red)),
                       )
-                    : context
-                            .read<ClientTripsCubit>()
-                            .clientPendingTripsData
-                            .isEmpty
+                    : context.read<ClientTripsCubit>().clientPendingTripsData.isEmpty
                         ? Center(
                             child: Label(
                               text: LocaleKeys.youDontHavePendingOffer.localize,
@@ -324,29 +286,18 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: context
-                                    .read<ClientTripsCubit>()
-                                    .clientPendingTripsData
-                                    .isEmpty
+                            child: context.read<ClientTripsCubit>().clientPendingTripsData.isEmpty
                                 ? const EmptyPage()
                                 : GlowingOverscrollIndicator(
                                     color: AppColors.SECONDARY_COLOR,
                                     axisDirection: AxisDirection.down,
                                     child: ListView.separated(
-                                        itemBuilder: (context, index) =>
-                                            ClientPendingWidget(
+                                        itemBuilder: (context, index) => ClientPendingWidget(
                                               modeType: widget.type,
-                                              offers:
-                                                  state.clientPendingTripData?[
-                                                      index],
+                                              offers: state.clientPendingTripData?[index],
                                             ),
-                                        separatorBuilder: (context, index) =>
-                                            const SizedBox(height: 5),
-                                        itemCount: context
-                                                .read<ClientTripsCubit>()
-                                                .clientPendingTripsData
-                                                .length ??
-                                            0),
+                                        separatorBuilder: (context, index) => const SizedBox(height: 5),
+                                        itemCount: context.read<ClientTripsCubit>().clientPendingTripsData.length ?? 0),
                                   ),
                           );
           },
@@ -371,12 +322,9 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      if (widget.type == 'ride')
-        context.read<ClientTripsCubit>().getClientPendingTrips();
-      if (widget.type == 'shipping')
-        context.read<ClientTripsCubit>().getClientPendingShippingTrips();
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      if (widget.type == 'ride') context.read<ClientTripsCubit>().getClientPendingTrips();
+      if (widget.type == 'shipping') context.read<ClientTripsCubit>().getClientPendingShippingTrips();
     }
   }
 }
