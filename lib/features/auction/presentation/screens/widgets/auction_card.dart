@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -109,6 +111,261 @@ class AuctionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isEnded = auction.status == "ended";
 
+    return Container(
+      margin: EdgeInsets.all(8),
+      child: GlobalCard(
+        subcategoryId: '',
+        phone: '',
+        reportId: '',
+        otherUserId: '',
+        onTap: () {
+      
+      
+        },
+        hasTopSide: true,
+        hasBottomSide: false,
+        subscriptionType: LocaleKeys.notSubscribed.localize,
+        views: auction.views,
+        onRequest: (){
+      
+        },
+        onShowViewers: (){
+        },
+        onSubscribe: (){
+          context.pop();
+        },
+        body:Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image + heart
+            Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AuctionImageCarousel(
+                    images: auction.media ?? [], // ✅ use empty list if null
+                    // images: auction.media ?? [],
+                  ),
+                ),
+
+                PositionedDirectional(
+                  top: 12,
+                  start: 12,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<AuctionCubit>().toggleFavoriteAuction(auction.id ?? "");
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        // 👇 if forceFavorite=true → always heart filled
+                        isFavorite
+                            ? Icons.favorite
+                            : (auction.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border),
+                        color: Colors.red[400],
+                        size: 30,
+                      ),
+                    ),
+                  ),
+
+                ),
+
+              ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          auction.title ?? "",
+                          style: Styles.mediumText(
+                            // fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: context.isDarkMode ? Colors.white : Colors.black
+                            // height: 1.2,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Flexible(
+                        child: Text.rich(
+                          TextSpan(
+                            style:Styles.mediumText(
+                              // fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color:context.isDarkMode ? Colors.white :  Colors.black,
+                            ),
+                            children: [
+                              TextSpan(text:LocaleKeys.priceNow.localize),
+                              TextSpan(
+                                  text: " ${_formatNumber(context,auction.lastPrice ?? 0,)} ",
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.bold
+                                  )
+                                // TextStyle(
+                                //   fontSize: 30.sp,
+                                //   fontWeight: FontWeight.w400,
+                                //   color: Color(0xff0B1035),
+                                // ),
+
+                              ),
+                              TextSpan(
+                                text: LocaleKeys.EGP.localize,
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.w600, // bold
+                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text.rich(
+                          TextSpan(
+                            style: Styles.mediumText(
+                              color:context.isDarkMode ? Colors.white :  Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            children: [
+                              TextSpan(text: LocaleKeys.startFrom.localize),
+                              TextSpan(
+                                // child: SizedBox(
+                                //   width: 60,
+                                //   child: AutoSizeText(
+                                //     " ${_formatNumber(context,auction.price ?? 0)} ",
+                                //     style: Styles.mediumText(
+                                //       fontWeight: FontWeight.bold,
+                                //       color: context.isDarkMode ? Colors.white : Colors.black,
+                                //     ),
+                                //   ),
+                                // ),
+                                text: " ${_formatNumber(context,auction.price ?? 0)} ",
+                                style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold,
+                                  color: context.isDarkMode ? Colors.white : Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: LocaleKeys.EGP.localize,
+                                style: Styles.mediumText(
+                                  color:context.isDarkMode ? Colors.white :  Colors.black,
+                                  fontWeight: FontWeight.w600, // bold
+                                ),
+                              ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          isEnded ? "${LocaleKeys.ended.localize}" : _formatTimeLeft(context
+                          ),
+                          style: Styles.mediumText(
+                            color:context.isDarkMode ? Colors.white :  Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // 👈 Left side (participants + views)
+                      Flexible(
+                        child: Row(
+                          children: [
+                            // participants
+                            Flexible(
+                              child: Text(
+                                "${_formatNumber(context, auction.numberOfParticipants ?? 0)} ${LocaleKeys.participants.localize}",
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      AppButton(
+                        width: 91,
+                        backColor: (auction.status == "expired" || auction.status == "pending")
+                            ? AppColors.grey // grey out if expired or pending
+                            : auction.isWinner == true
+                            ? AppColors.cFFAC3F
+                            : AppColors.PRIMARY_COLOR_DARK,
+                        onPressed: (auction.status == "expired" || auction.status == "pending")
+                            ? (){} // 👈 null disables the button completely
+                            : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => serviceLocator<AuctionCubit>(),
+                                child: SingleAuctionScreen(
+                                  auctionId: auction.id ?? "",
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        style: Styles.mediumText(
+                          color: (auction.status == "expired" || auction.status == "pending")
+                              ? AppColors.grey.shade700
+                              : auction.isWinner == true
+                              ? AppColors.black
+                              : AppColors.whiteColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        label: auction.status == "expired"
+                            ? LocaleKeys.expired.localize
+                            : auction.status == "pending"
+                            ? LocaleKeys.pending.localize
+                            : auction.isWinner == true
+                            ? LocaleKeys.winnerAuction.localize
+                            : LocaleKeys.joinNow.localize,
+                      ),
+
+
+
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: context.isDarkMode ? Colors.white : Colors.transparent),

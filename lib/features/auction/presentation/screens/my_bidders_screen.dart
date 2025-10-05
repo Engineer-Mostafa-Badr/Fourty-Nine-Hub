@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/constants/subscription_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
 
@@ -72,6 +74,80 @@ class MyBiddersScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final auction = auctions[index];
             print("🎯 Rendering auction at index $index: ${auction.toString()}");
+            return Container(
+              margin: EdgeInsets.all(8),
+              child: GlobalCard(
+                subcategoryId: '',
+                phone: auctions[index].phone??'',
+                reportId: '',
+                otherUserId: '',
+                onTap: () {
+
+
+                },
+                hasTopSide: true,
+                hasBottomSide: true,
+                subscriptionType:  auction.subscriptionType == SubscriptionStatus.premium.status
+                    ? LocaleKeys.premium2.localize
+                    : auction.subscriptionType == SubscriptionStatus.regular.status
+                    ? LocaleKeys.regular.localize
+                    : LocaleKeys.notSubscribed.localize,
+
+                views: auction.views,
+                onShowViewers: (){},
+                onSubscribe: (){
+                  context.pop();
+                },
+                body:Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: 15.w, vertical: 10.h),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: Image.asset(
+                              auction.gender == 'male'
+                                  ? Assets.maleImagePlaceholder
+                                  : Assets.femaleImagePlacehlder,
+                            ),
+                          ),
+                          SizedBox(width: 16.w),
+                          Label(
+                            text: auction.username ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
+                            style: Styles.headerText(
+                              color: context.isDarkMode
+                                  ? AppColors.whiteColor
+                                  : AppColors.black,
+                              fontSize: 36,
+                              height: 1.60,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Label(
+                        text: "${LocaleKeys.wonTheAuction.localize}"
+                            " ${auction.auctionTitle ?? "${context.isArabic ? 'لا يوجد عنوان' : 'No title'}"} ${LocaleKeys.forAuction.localize} ${auction.price} ${LocaleKeys.EGP.localize}",
+                        style: Styles.mediumText(
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.black,
+                          fontSize: 24,
+                          height: 1.40,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 32.w,vertical: 10),
               decoration: BoxDecoration(
