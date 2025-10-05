@@ -101,7 +101,10 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     final bidAmount = _parseBid(_bidController.text);
     if (bidAmount == null || bidAmount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter a valid amount")),
+         SnackBar(content:Text(
+            context.isArabic ? "أدخل مبلغ صالح" : "Enter a valid amount"
+        ),
+        ),
       );
       return;
     }
