@@ -53,9 +53,9 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       _toggleSubCategoryToFavoritesUseCase;
   final DeleteTinderPictureUseCase _deleteTinderPictureUseCase;
 
-  final AddLikeTinderUseCase addLikeTinderUseCase;
-  final AddDisLikeTinderUseCase addDisLikeTinderUseCase;
-  final AddLoveTinderUseCase addLoveTinderUseCase;
+  // final AddLikeTinderUseCase addLikeTinderUseCase;
+  // final AddDisLikeTinderUseCase addDisLikeTinderUseCase;
+  // final AddLoveTinderUseCase addLoveTinderUseCase;
 
   TinderViewCubit( 
       this._getUserDataUseCase,
@@ -71,72 +71,74 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       this._fetchSubCategoryDataUseCase,
       this._uploadTinderPictureUseCase,
       this._toggleSubCategoryToFavoritesUseCase,
-      this._deleteTinderPictureUseCase, this.addLikeTinderUseCase, this.addDisLikeTinderUseCase, this.addLoveTinderUseCase)
+      this._deleteTinderPictureUseCase,
+      // this.addLikeTinderUseCase, this.addDisLikeTinderUseCase, this.addLoveTinderUseCase
+      )
       : super(TinderViewState());
-
-  Future<void> addLoveTinder({required String id}) async {
-    emit(state.copyWith(status: TinderStates.loading));
-
-    final response = await addLoveTinderUseCase(AddLikeParams(id: id));
-
-    response.fold(
-          (failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: TinderStates.failure,
-          tinderLikeData: null,
-        ));
-      },
-          (updatedRestaurant) {
-        emit(state.copyWith(
-          tinderLikeData: updatedRestaurant,
-          status: TinderStates.success,
-        ));
-      },
-    );
-  }
-  Future<void> addLikeTinder({required String id}) async {
-    emit(state.copyWith(status: TinderStates.loading));
-
-    final response = await addLikeTinderUseCase(AddLikeParams(id: id));
-
-    response.fold(
-          (failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: TinderStates.failure,
-          tinderLikeData: null,
-        ));
-      },
-          (updatedRestaurant) {
-        emit(state.copyWith(
-          tinderLikeData: updatedRestaurant,
-          status: TinderStates.success,
-        ));
-      },
-    );
-  }
-  Future<void> addDisLikeTinder({required String id}) async {
-    emit(state.copyWith(status: TinderStates.loading));
-
-    final response = await addDisLikeTinderUseCase(AddLikeParams(id: id));
-
-    response.fold(
-          (failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: TinderStates.failure,
-          tinderLikeData: null,
-        ));
-      },
-          (updatedRestaurant) {
-        emit(state.copyWith(
-          tinderLikeData: updatedRestaurant,
-          status: TinderStates.success,
-        ));
-      },
-    );
-  }
+  //
+  // Future<void> addLoveTinder({required String id}) async {
+  //   emit(state.copyWith(status: TinderStates.loading));
+  //
+  //   final response = await addLoveTinderUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: TinderStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: TinderStates.success,
+  //       ));
+  //     },
+  //   );
+  // }
+  // Future<void> addLikeTinder({required String id}) async {
+  //   emit(state.copyWith(status: TinderStates.loading));
+  //
+  //   final response = await addLikeTinderUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: TinderStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: TinderStates.success,
+  //       ));
+  //     },
+  //   );
+  // }
+  // Future<void> addDisLikeTinder({required String id}) async {
+  //   emit(state.copyWith(status: TinderStates.loading));
+  //
+  //   final response = await addDisLikeTinderUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: TinderStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: TinderStates.success,
+  //       ));
+  //     },
+  //   );
+  // }
 
 
   Future<void> addFavoriteCategory({required String categoryId}) async {

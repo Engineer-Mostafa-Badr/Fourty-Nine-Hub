@@ -89,20 +89,20 @@ class TinderRepositoryImpl extends TinderRepository {
     return _storiesRemoteDataSource.deletePictures(id);
   }
 
-  @override
-  Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params}) {
-    return _storiesRemoteDataSource.addTinderLike(params: params);
-  }
-
-  @override
-  Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params}) {
-    return _storiesRemoteDataSource.addTinderDisLike(params: params);
-  }
-
-  @override
-  Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params}) {
-    return _storiesRemoteDataSource.addTinderLove(params: params);
-  }
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params}) {
+  //   return _storiesRemoteDataSource.addTinderLike(params: params);
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params}) {
+  //   return _storiesRemoteDataSource.addTinderDisLike(params: params);
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params}) {
+  //   return _storiesRemoteDataSource.addTinderLove(params: params);
+  // }
 
 // @override
 // Future<Either<Failure, bool>> makeViews(String id) {

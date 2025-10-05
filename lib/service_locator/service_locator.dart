@@ -40,6 +40,7 @@ import 'conversations_service_locator.dart';
 import 'currency_service_locator.dart';
 import 'edit_food_service_locator.dart';
 import 'face_book_service_locator.dart';
+import 'find_service_locator.dart';
 import 'follow_service_locator.dart';
 import 'instagram_service_locator.dart';
 import 'join_trip_carpool_service_locator.dart';
@@ -400,6 +401,7 @@ class DI {
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
     NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
     SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
+    FindServiceLocator.execute(serviceLocator: serviceLocator);
 
     //! Exchange Currency
     CurrencyServiceLocator.execute(serviceLocator: serviceLocator);

@@ -28,7 +28,7 @@ extension DataStateExtension on TinderViewState {
   bool get isLoading => status == TinderStates.loading;
 }
 
-class TinderViewState {
+  class TinderViewState {
   final TinderStates status;
   final Failure? failure;
   final List<UserDataTinderEntity>? userData0;
@@ -93,7 +93,7 @@ class TinderViewState {
   final TinderStates? lastSeenModelState;
   final bool? isUploading;
 
-  final TinderLikeEntity? tinderLikeData;
+  // final TinderLikeEntity? tinderLikeData;
   TinderViewState({
     this.status = TinderStates.initial,
     this.failure,
@@ -139,7 +139,7 @@ class TinderViewState {
     this.getFavCategoryModelState,
     this.newImage,
     this.isUploading,
-    this.tinderLikeData,
+    // this.tinderLikeData,
   });
 
   // Method to update the state
@@ -188,7 +188,7 @@ class TinderViewState {
     TinderStates? uploadImageState,
     UploadFileEntity? newImage,
     bool? isUploading,
-    TinderLikeEntity? tinderLikeData,
+    // TinderLikeEntity? tinderLikeData,
   }) {
     return TinderViewState(
       status: status ?? this.status,
@@ -244,7 +244,7 @@ class TinderViewState {
           mainCategoryResponseState ?? this.mainCategoryResponseState,
       newImage: newImage ?? this.newImage,
       isUploading: isUploading ?? this.isUploading,
-      tinderLikeData: tinderLikeData ?? this.tinderLikeData,
+      // tinderLikeData: tinderLikeData ?? this.tinderLikeData,
     );
   }
 }

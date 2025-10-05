@@ -51,10 +51,10 @@ abstract class TinderRemoteDataSource {
   Future<Either<Failure, bool>> uploadPictures(AddImagesParams params);
   Future<Either<Failure, bool>> deletePictures(String id);
 
-  Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params});
-  Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params});
-
-  Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params});
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params});
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params});
+  //
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params});
 
 }
 
@@ -220,47 +220,47 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
     );
   }
 
-  @override
-  Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params})async {
-    final url = "${EndPoints.addLikeTinder}${params.id}";
-    final response = await _apiConsumer.post(url,);
-
-    return response.fold(
-          (l) => Left(l),
-          (data) {
-        final blockRestaurantModel = TinderLikeModel.fromJson(data);
-        return Right(blockRestaurantModel);
-      },
-    );
-  }
-
-  @override
-  Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params})async {
-    final url = "${EndPoints.addDisLikeTinder}${params.id}";
-    final response = await _apiConsumer.post(url,);
-
-    return response.fold(
-          (l) => Left(l),
-          (data) {
-        final blockRestaurantModel = TinderLikeModel.fromJson(data);
-        return Right(blockRestaurantModel);
-      },
-    );
-  }
-
-  @override
-  Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params})async {
-    final url = "${EndPoints.addLoveTinder}${params.id}";
-    final response = await _apiConsumer.post(url,);
-
-    return response.fold(
-          (l) => Left(l),
-          (data) {
-        final blockRestaurantModel = TinderLikeModel.fromJson(data);
-        return Right(blockRestaurantModel);
-      },
-    );
-  }
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params})async {
+  //   final url = "${EndPoints.addLikeTinder}${params.id}";
+  //   final response = await _apiConsumer.post(url,);
+  //
+  //   return response.fold(
+  //         (l) => Left(l),
+  //         (data) {
+  //       final blockRestaurantModel = TinderLikeModel.fromJson(data);
+  //       return Right(blockRestaurantModel);
+  //     },
+  //   );
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params})async {
+  //   final url = "${EndPoints.addDisLikeTinder}${params.id}";
+  //   final response = await _apiConsumer.post(url,);
+  //
+  //   return response.fold(
+  //         (l) => Left(l),
+  //         (data) {
+  //       final blockRestaurantModel = TinderLikeModel.fromJson(data);
+  //       return Right(blockRestaurantModel);
+  //     },
+  //   );
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params})async {
+  //   final url = "${EndPoints.addLoveTinder}${params.id}";
+  //   final response = await _apiConsumer.post(url,);
+  //
+  //   return response.fold(
+  //         (l) => Left(l),
+  //         (data) {
+  //       final blockRestaurantModel = TinderLikeModel.fromJson(data);
+  //       return Right(blockRestaurantModel);
+  //     },
+  //   );
+  // }
 
 //
 // @override

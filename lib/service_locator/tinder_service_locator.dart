@@ -64,18 +64,7 @@ class TinderServiceLocator {
               serviceLocator(),
             ));
 
-    serviceLocator.registerLazySingleton<AddLikeTinderUseCase>(
-        () => AddLikeTinderUseCase(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<AddDisLikeTinderUseCase>(
-        () => AddDisLikeTinderUseCase(
-              serviceLocator(),
-            ));
-    serviceLocator.registerLazySingleton<AddLoveTinderUseCase>(
-        () => AddLoveTinderUseCase(
-              serviceLocator(),
-            ));
+
 
     // serviceLocator.registerLazySingleton<GetMainCategoryDetailsUseCase>(
     //     () => GetMainCategoryDetailsUseCase(
@@ -114,9 +103,7 @@ class TinderServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
+
         ));
   }
 }

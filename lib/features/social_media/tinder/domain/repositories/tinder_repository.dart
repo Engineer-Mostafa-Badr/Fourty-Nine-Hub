@@ -32,8 +32,8 @@ abstract class TinderRepository {
   Future<Either<Failure, SendGiftResponse>> sendGift(SendGiftParams params);
   Future<Either<Failure, GiftApi>> fetchGifts();
   Future<Either<Failure, List<SubCategoryEntity>>> fetchSubCategoryData();
-  Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params});
-  Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params});
-  Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params});
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params});
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params});
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params});
 
 }
