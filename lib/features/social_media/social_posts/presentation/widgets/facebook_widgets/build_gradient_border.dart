@@ -43,6 +43,7 @@ class GradientProfileBorder extends StatelessWidget {
                   charPadding:0
               ),
             ),
+
           ],
         ),
       ],
