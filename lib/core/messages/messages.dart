@@ -245,12 +245,12 @@ void showLoadingDialog(BuildContext context,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const CustomCircularProgressIndicator(),
-                  const SizedBox(height: 20),
-                  Text(
-                    message ??
-                        (context.isArabic ? 'يرجى الانتظار...' : 'Loading...'),
-                    textAlign: TextAlign.center,
-                  ),
+                  // const SizedBox(height: 20),
+                  // Text(
+                  //   message ??
+                  //       (context.isArabic ? 'يرجى الانتظار...' : 'Loading...'),
+                  //   textAlign: TextAlign.center,
+                  // ),
                 ],
               ),
               contentPadding: const EdgeInsets.only(
