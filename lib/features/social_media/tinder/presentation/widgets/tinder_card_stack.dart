@@ -1089,7 +1089,8 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
       case 1:
         return _customListTile(
           Assets.location,
-          context.isArabic ? 'يبعُد 10 ميل ' : '10 Miles Away',
+            context.isArabic ? 'يبعُد 10 كم' : '10 KM Away'
+
         );
       case 2:
         return Column(
@@ -1105,7 +1106,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
               ),
               _customListTile(
                 Assets.location,
-                context.isArabic ? 'يبعُد 10 ميل' : '10 Miles Away',
+                  context.isArabic ? 'يبعُد 10 كم' : '10 KM Away'
               ),
             ]);
       case 3:

@@ -9,6 +9,7 @@ import '../../data/models/near_by_model.dart';
 import '../../data/models/normal_chat_model.dart';
 import '../../data/models/profile_user_model.dart';
 import '../../domain/domain/last_seen_entity.dart';
+import '../../domain/domain/tinder_like_entity.dart';
 import '../../domain/domain/user_data_tinder_entity.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 
@@ -92,6 +93,7 @@ class TinderViewState {
   final TinderStates? lastSeenModelState;
   final bool? isUploading;
 
+  final TinderLikeEntity? tinderLikeData;
   TinderViewState({
     this.status = TinderStates.initial,
     this.failure,
@@ -137,6 +139,7 @@ class TinderViewState {
     this.getFavCategoryModelState,
     this.newImage,
     this.isUploading,
+    this.tinderLikeData,
   });
 
   // Method to update the state
@@ -185,6 +188,7 @@ class TinderViewState {
     TinderStates? uploadImageState,
     UploadFileEntity? newImage,
     bool? isUploading,
+    TinderLikeEntity? tinderLikeData,
   }) {
     return TinderViewState(
       status: status ?? this.status,
@@ -240,6 +244,7 @@ class TinderViewState {
           mainCategoryResponseState ?? this.mainCategoryResponseState,
       newImage: newImage ?? this.newImage,
       isUploading: isUploading ?? this.isUploading,
+      tinderLikeData: tinderLikeData ?? this.tinderLikeData,
     );
   }
 }

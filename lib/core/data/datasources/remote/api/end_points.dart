@@ -1972,6 +1972,9 @@ class EndPoints {
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String auctionBanner = '/auctions/banner';
   static String auctionAllWinner = '/auctions/winner-statistics';
+  static String addLikeTinder = '/tinder/profile/like/';
+  static String addDisLikeTinder = '/tinder/profile/disLike/';
+  static String addLoveTinder = 'tinder/profile/love/';
 
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
