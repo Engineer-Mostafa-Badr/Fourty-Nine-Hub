@@ -81,7 +81,7 @@ class _ExpiredAuctionScreenState extends State<ExpiredAuctionScreen> {
         }
         return Scaffold(
           floatingActionButton: isFloatingButtonVisible
-              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize} +", () {
             ManageVibration.vibrate();
             context.push(Routes.createAuctionScreen);
           })

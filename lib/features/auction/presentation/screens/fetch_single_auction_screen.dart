@@ -25,14 +25,7 @@ import 'dart:async';
 
 
 // Replace these with your actual imports
-// import 'your_cubit.dart';
-// import 'your_entities.dart';
-// import 'your_localization.dart';
-// import 'styles.dart';
 
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class SingleAuctionScreen extends StatefulWidget {
@@ -108,7 +101,10 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     final bidAmount = _parseBid(_bidController.text);
     if (bidAmount == null || bidAmount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter a valid amount")),
+         SnackBar(content:Text(
+            context.isArabic ? "أدخل مبلغ صالح" : "Enter a valid amount"
+        ),
+        ),
       );
       return;
     }
@@ -117,18 +113,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     _bidController.clear();
   }
 
-  void _placeBid1(BuildContext context, String auctionId) {
-    final bidAmount = int.tryParse(_bidController.text);
-    if (bidAmount == null || bidAmount <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter a valid amount")),
-      );
-      return;
-    }
 
-    _cubit.sendBid(auctionId, bidAmount); // ✅ نفس cubit
-    _bidController.clear();
-  }
   String formatNumber(num number) {
     if (number >= 1000000) {
       return "${(number / 1000000).toStringAsFixed(1)}m";
@@ -197,15 +182,22 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
               }
               if (state.status == StateStatus.error &&
                   state.singleAuction == null) {
-                return const Center(
-                  child: Text("Error loading auction",
-                      style: TextStyle(color: Colors.red)),
+                return  Center(
+                    child: Text(
+                      context.isArabic ? 'حدث خطأ أثناء تحميل المزاد' : 'Error loading auction',
+
+                    style: TextStyle(color: Colors.red)),
                 );
               }
 
               final auction = state.singleAuction;
               if (auction == null) {
-                return const Center(child: Text("Auction not found"));
+                return Center(
+                  child: Text(
+                    context.isArabic ? 'المزاد غير موجود' : 'Auction not found',
+                  ),
+                );
+
               }
 
               return Column(
@@ -426,22 +418,11 @@ class _AuctionDetailsWithParticipantsState
                         images: auction.media!,
                         // images: auction.media ?? [],
                       ),
-                      // ClipRRect(
-                      //   borderRadius: BorderRadius.circular(12),
-                      //   child: Image.network(
-                      //     widget.auction.media!.first.mediaKey ?? "",
-                      //     height: 200,
-                      //     width: double.infinity,
-                      //     fit: BoxFit.cover,
-                      //     errorBuilder: (_, __, ___) => const SizedBox(
-                      //         height: 200, child: Icon(Icons.image)),
-                      //   ),
-                      // ),
                     const SizedBox(height: 16),
 
                     // Title and Description
                     Label(
-                      text: widget.auction.title ?? "No Title",
+                      text: widget.auction.title ?? "",
                       style: Styles.headerText(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
@@ -533,19 +514,6 @@ class _AuctionDetailsWithParticipantsState
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.horizontal,
-                    //   child: Row(
-                    //     spacing: 5,
-                    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //     children: [
-                    //       _buildTimeBox("${_formatNumber(context,days)}", LocaleKeys.day.localize),
-                    //       _buildTimeBox("${_formatNumber(context,hours)}", LocaleKeys.hour.localize),
-                    //       _buildTimeBox("${_formatNumber(context,minutes)}", LocaleKeys.minuteLoc.localize),
-                    //       _buildTimeBox("${_formatNumber(context,seconds)}", LocaleKeys.timer_seconds.localize),
-                    //     ],
-                    //   ),
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -653,24 +621,7 @@ class _AuctionDetailsWithParticipantsState
     }
   }
 
-  String timeAgo1(DateTime? date) {
-    if (date == null) return "";
 
-    final now = DateTime.now();
-    final diff = now.difference(date);
-
-    if (diff.inSeconds < 60) {
-      return "${diff.inSeconds}s";
-    } else if (diff.inMinutes < 60) {
-      return "${diff.inMinutes}m";
-    } else if (diff.inHours < 24) {
-      return "${diff.inHours}h";
-    } else if (diff.inDays < 7) {
-      return "${diff.inDays}d";
-    } else {
-      return "${(diff.inDays / 7).floor()}w"; // أسابيع
-    }
-  }
 
   Widget _buildParticipantsList(
       List<dynamic> participants, AuctionState state) {
@@ -689,11 +640,14 @@ class _AuctionDetailsWithParticipantsState
 
     // 🔹 Case 2: Failed to load and no data
     if (participants.isEmpty && state.participantsStatus == StateStatus.error) {
-      return const SliverToBoxAdapter(
+      return  SliverToBoxAdapter(
         child: Center(
           child: Padding(
             padding: EdgeInsets.all(32),
-            child: Text("Failed to load participants"),
+            child: Text(
+              context.isArabic ? 'فشل في تحميل المشاركين' : 'Failed to load participants',
+            ),
+
           ),
         ),
       );
@@ -744,7 +698,7 @@ class _AuctionDetailsWithParticipantsState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Label(
-                         text:  p.username ?? "Unknown",
+                         text:  p.username ?? "",
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -820,6 +774,25 @@ class _AuctionDetailsWithParticipantsState
     );
   }
 
+  String _formatNumber(BuildContext context, num? number) {
+    if (number == null) return "0";
+
+    final locale = context.isArabic ? 'ar' : 'en';
+    final formatter = NumberFormat.decimalPattern(locale);
+    String formatted = formatter.format(number);
+
+    if (context.isArabic) {
+      const english = ['0','1','2','3','4','5','6','7','8','9'];
+      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+
+      for (int i = 0; i < english.length; i++) {
+        formatted = formatted.replaceAll(english[i], arabic[i]);
+      }
+    }
+
+    return formatted;
+  }
+/*
   String _formatNumber(BuildContext context, num? value) {
     if (value == null) return '0';
 
@@ -836,7 +809,7 @@ class _AuctionDetailsWithParticipantsState
     return value.toString();
   }
 
-
+*/
 }
 
 class _WinnerDialog extends StatelessWidget {
@@ -866,7 +839,7 @@ class _WinnerDialog extends StatelessWidget {
                 // crown
                 const SizedBox(width: 8),
                 Text(
-                  winner.username ?? "Unknown",
+                  winner.username ?? "",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -889,7 +862,7 @@ class _WinnerDialog extends StatelessWidget {
 
             // Price + Auction Title
             Text(
-              "${winner.price?.toStringAsFixed(0)} EGP",
+              "${winner.price?.toStringAsFixed(0)} ${LocaleKeys.egp.localize}",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -912,7 +885,10 @@ class _WinnerDialog extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-              child: const Text("Close"),
+              child: Text(
+                context.isArabic ? 'إغلاق' : 'Close',
+              ),
+
             )
           ],
         ),

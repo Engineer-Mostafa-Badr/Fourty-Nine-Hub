@@ -1,8 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -108,18 +112,29 @@ class AuctionCard extends StatelessWidget {
     bool isEnded = auction.status == "ended";
 
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: context.isDarkMode ? Colors.white : Colors.transparent),
-        borderRadius: BorderRadius.circular(16)
-      ),
-      child: Card(
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        // elevation: 4,
-
-        // color:context.isDarkMode ? Colors.black: Colors.white,
-        clipBehavior: Clip.antiAlias,
-        child: Column(
+      margin: EdgeInsets.all(8),
+      child: GlobalCard(
+        subcategoryId: '',
+        phone: '',
+        reportId: '',
+        otherUserId: '',
+        onTap: () {
+      
+      
+        },
+        hasTopSide: true,
+        hasBottomSide: false,
+        subscriptionType: LocaleKeys.notSubscribed.localize,
+        views: auction.views,
+        onRequest: (){
+      
+        },
+        onShowViewers: (){
+        },
+        onSubscribe: (){
+          context.pop();
+        },
+        body:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image + heart
@@ -164,21 +179,20 @@ class AuctionCard extends StatelessWidget {
             ),
 
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
                         child: Text(
-                          auction.title ?? "No Title",
+                          auction.title ?? "",
                           style: Styles.mediumText(
                             // fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: context.isDarkMode ? Colors.white : Colors.black
+                              fontWeight: FontWeight.w700,
+                              color: context.isDarkMode ? Colors.white : Colors.black
                             // height: 1.2,
                           ),
                           maxLines: 1,
@@ -194,13 +208,18 @@ class AuctionCard extends StatelessWidget {
                               color:context.isDarkMode ? Colors.white :  Colors.black,
                             ),
                             children: [
-                               TextSpan(text:LocaleKeys.priceNow.localize),
+                              TextSpan(text:LocaleKeys.priceNow.localize),
                               TextSpan(
-                                text: " ${_formatNumber(context,auction.lastPrice ?? 0,)} ",
-                                style: Styles.mediumText(
-                                  fontWeight: FontWeight.w400,
-                                  color: context.isDarkMode ? Colors.white : Colors.black,
-                                ),
+                                  text: " ${_formatNumber(context,auction.lastPrice ?? 0,)} ",
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.bold
+                                  )
+                                // TextStyle(
+                                //   fontSize: 30.sp,
+                                //   fontWeight: FontWeight.w400,
+                                //   color: Color(0xff0B1035),
+                                // ),
+
                               ),
                               TextSpan(
                                 text: LocaleKeys.EGP.localize,
@@ -218,8 +237,6 @@ class AuctionCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-
-                  // Price row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -231,11 +248,21 @@ class AuctionCard extends StatelessWidget {
                               fontWeight: FontWeight.w400,
                             ),
                             children: [
-                               TextSpan(text: LocaleKeys.startFrom.localize),
+                              TextSpan(text: LocaleKeys.startFrom.localize),
                               TextSpan(
+                                // child: SizedBox(
+                                //   width: 60,
+                                //   child: AutoSizeText(
+                                //     " ${_formatNumber(context,auction.price ?? 0)} ",
+                                //     style: Styles.mediumText(
+                                //       fontWeight: FontWeight.bold,
+                                //       color: context.isDarkMode ? Colors.white : Colors.black,
+                                //     ),
+                                //   ),
+                                // ),
                                 text: " ${_formatNumber(context,auction.price ?? 0)} ",
                                 style: Styles.mediumText(
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.bold,
                                   color: context.isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
@@ -286,26 +313,6 @@ class AuctionCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            const SizedBox(width: 12), // spacing between text + views
-                            // views
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.visibility, size: 16, color: Colors.grey),
-                                  const SizedBox(width: 4),
-                                  Flexible(
-                                    child: Text(
-                                      "${_formatNumber(context, auction.views ?? 0)} ${LocaleKeys.views.localize}",
-                                      style: Styles.mediumText(
-                                        color: context.isDarkMode ? Colors.white : Colors.black,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -352,10 +359,6 @@ class AuctionCard extends StatelessWidget {
 
                     ],
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Join button
                 ],
               ),
             ),

@@ -93,7 +93,7 @@ class GlobalCard extends StatelessWidget {
                 Container(
                   height: 1.h,
                   width: double.infinity,
-                  color: AppColors.GRAY_LIGHT_COLOR3,
+                  color: Colors.grey,
                 )
               ],
               body??SizedBox.shrink(),
@@ -154,7 +154,7 @@ class GlobalCard extends StatelessWidget {
             ],
           ),
         ),
-        (isPremium == true || isButtonEnabled == true) ? SizedBox() : tripCardSubscribeText(context),
+        ((isPremium==null||isPremium == true) || (isButtonEnabled==null||isButtonEnabled == true)) ? SizedBox() : tripCardSubscribeText(context),
       ],
     );
   }

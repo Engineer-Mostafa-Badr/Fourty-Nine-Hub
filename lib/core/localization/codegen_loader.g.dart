@@ -3322,7 +3322,7 @@ static const Map<String,dynamic> _en = {
   "DidntReceiveOTP": "Didn't receive OTP?",
   "resendOTP": "Resend OTP",
   "oneTime": "One Time",
-  "eachSeat": "Per seat",
+  "eachSeat": "Per Seat",
   "justNow": "Just now",
   "minAgo": "Min ago",
   "hour": "Hour",
