@@ -13,7 +13,6 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 <<<<<<<< HEAD:lib/features/star_feature/presentation/video_player/widgets/talent_video_player.dart
 ========
 import 'package:fourtyninehub/main.dart';
->>>>>>>> 086ad4a5d (feat: Add video player feature with controls and state management):lib/features/star_feature/presentation/shared/helpers/youtube_style_video_player.dart
 import 'package:video_player/video_player.dart';
 
 import '../../../../../service_locator/service_locator.dart';
@@ -21,13 +20,19 @@ import '../../../data/model/comment_model.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/use_case/comment_use_cases.dart';
 import '../../presentation_exports.dart';
-<<<<<<<< HEAD:lib/features/star_feature/presentation/video_player/widgets/talent_video_player.dart
-import 'comments_modal.dart';
-import 'floating_video_player.dart';
-========
 import '../../presentation_exports.dart';
 
->>>>>>>> 086ad4a5d (feat: Add video player feature with controls and state management):lib/features/star_feature/presentation/shared/helpers/youtube_style_video_player.dart
+
+// YouTube Style Video Player
+class YouTubeStyleVideoPlayer extends StatefulWidget {
+  final String videoUrl;
+  final String title;
+  final bool autoPlay;
+  final bool startMuted;
+  final VoidCallback? onTap;
+  final bool showLiveIndicator;
+  final String? thumbnailUrl;
+  final StarEntity? talent;
 
 class TalentVideoPlayer extends StatefulWidget {
   final String videoUrl;
