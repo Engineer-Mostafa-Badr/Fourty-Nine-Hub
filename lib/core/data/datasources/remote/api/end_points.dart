@@ -1974,7 +1974,7 @@ class EndPoints {
   static String auctionAllWinner = '/auctions/winner-statistics';
   static String addLikeFind = '/tinder/profile/like/';
   static String addDisLikeFind = '/tinder/profile/disLike/';
-  static String addLoveFind = 'tinder/profile/love/';
+  static String addLoveFind = '/tinder/profile/love/';
   static String fetchFind = '/tinder';
 
   static String getDriverRatings(String driverId) =>

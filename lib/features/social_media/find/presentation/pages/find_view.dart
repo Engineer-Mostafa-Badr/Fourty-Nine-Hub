@@ -1,528 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 import '../../domain/entity/find_entity.dart';
 import '../cubit/find_cubit.dart'; // your cubit
 
 import '../cubit/find_state.dart';
 
-// class FindScreen extends StatefulWidget {
-//   const FindScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   State<FindScreen> createState() => _FindScreenState();
-// }
-//
-// class _FindScreenState extends State<FindScreen> {
-//   String selectedGender = "male";
-//   int _currentCardIndex = 0;
-//   CardSwiperDirection? _swipeDirection;
-//   final CardSwiperController _cardController = CardSwiperController();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     context.read<FindCubit>().loadInitialFindData(context, gender: selectedGender);
-//   }
-//
-//   @override
-//   void dispose() {
-//     _cardController.dispose();
-//     super.dispose();
-//   }
-//
-//   void _switchGender(String gender) {
-//     setState(() {
-//       selectedGender = gender;
-//       _currentCardIndex = 0;
-//       _swipeDirection = null;
-//     });
-//     context.read<FindCubit>().loadInitialFindData(context, gender: gender);
-//   }
-//
-//   @override
-//   void didUpdateWidget(FindScreen oldWidget) {
-//     super.didUpdateWidget(oldWidget);
-//     // Reset index when widget updates
-//     if (_currentCardIndex >= context.read<FindCubit>().findData.length) {
-//       setState(() {
-//         _currentCardIndex = 0;
-//       });
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("Find People"),
-//         actions: [
-//           PopupMenuButton<String>(
-//             onSelected: _switchGender,
-//             itemBuilder: (context) => [
-//               const PopupMenuItem(value: "male", child: Text("Show Male")),
-//               const PopupMenuItem(value: "female", child: Text("Show Female")),
-//             ],
-//             child: Row(
-//               children: [
-//                 Text(selectedGender.toUpperCase(),
-//                     style: const TextStyle(fontWeight: FontWeight.bold)),
-//                 const Icon(Icons.arrow_drop_down),
-//                 const SizedBox(width: 8),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//       body: BlocBuilder<FindCubit, FindState>(
-//         builder: (context, state) {
-//           final cubit = context.read<FindCubit>();
-//
-//           if (cubit.isFindDataInitialLoading && cubit.findData.isEmpty) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-//
-//           if (state.status == FindStates.failure && cubit.findData.isEmpty) {
-//             return Center(
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   const Text("Failed to load data"),
-//                   const SizedBox(height: 8),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       setState(() => _currentCardIndex = 0);
-//                       cubit.loadInitialFindData(context, gender: selectedGender);
-//                     },
-//                     child: const Text("Retry"),
-//                   ),
-//                 ],
-//               ),
-//             );
-//           }
-//
-//           if (cubit.findData.isEmpty) {
-//             return Center(
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   const Text("No people found"),
-//                   const SizedBox(height: 8),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       setState(() => _currentCardIndex = 0);
-//                       cubit.loadInitialFindData(context, gender: selectedGender);
-//                     },
-//                     child: const Text("Reload"),
-//                   ),
-//                 ],
-//               ),
-//             );
-//           }
-//
-//           // Debug info
-//           print("📊 Total people in list: ${cubit.findData.length}");
-//           print("📍 Current card index: $_currentCardIndex");
-//           print("🎯 Visible people: ${cubit.findData.length - _currentCardIndex}");
-//
-//           return _buildCardSwiper(context, cubit.findData, cubit);
-//         },
-//       ),
-//     );
-//   }
-//
-//   Widget _buildCardSwiper(BuildContext context, List<FindEntity> people, FindCubit cubit) {
-//     print("🎴 Building card swiper - Total: ${people.length}, Current Index: $_currentCardIndex");
-//
-//     // Safety check: ensure index doesn't exceed list length
-//     if (_currentCardIndex >= people.length) {
-//       _currentCardIndex = people.length > 0 ? people.length - 1 : 0;
-//     }
-//
-//     // Get only the cards that haven't been swiped yet
-//     final visiblePeople = _currentCardIndex < people.length
-//         ? people.sublist(_currentCardIndex)
-//         : <FindEntity>[];
-//
-//     print("👀 Visible people count: ${visiblePeople.length}");
-//
-//     if (visiblePeople.isEmpty) {
-//       // Show loading if we're still fetching data
-//       if (cubit.isFindDataLoadingMore) {
-//         return const Center(child: CircularProgressIndicator());
-//       }
-//
-//       // Try to load more if we have nothing to show but more data is available
-//       if (cubit.hasMoreFindData) {
-//         Future.microtask(() => cubit.getFindData(context));
-//         return const Center(child: CircularProgressIndicator());
-//       }
-//
-//       // No more data available - show end screen
-//       return Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Icon(
-//               Icons.check_circle_outline,
-//               size: 80,
-//               color: Colors.grey[400],
-//             ),
-//             const SizedBox(height: 16),
-//             const Text(
-//               "No more results to show",
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.w600,
-//               ),
-//             ),
-//             const SizedBox(height: 8),
-//             Text(
-//               "You've seen all available profiles",
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 color: Colors.grey[600],
-//               ),
-//             ),
-//             const SizedBox(height: 24),
-//             ElevatedButton.icon(
-//               onPressed: () {
-//                 setState(() => _currentCardIndex = 0);
-//               },
-//               icon: const Icon(Icons.refresh),
-//               label: const Text("Start Over"),
-//               style: ElevatedButton.styleFrom(
-//                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-//               ),
-//             ),
-//           ],
-//         ),
-//       );
-//     }
-//
-//     // Calculate how many cards to display (max 3, or fewer if we don't have enough)
-//     final numberOfCards = visiblePeople.length < 3 ? visiblePeople.length : 3;
-//
-//     // Use a unique key to force rebuild when data changes
-//     return SizedBox(
-//       key: ValueKey('swiper_${people.length}_$_currentCardIndex'),
-//       height: MediaQuery.of(context).size.height * 0.90,
-//       child: CardSwiper(
-//         controller: _cardController,
-//         backCardOffset: const Offset(0, 0),
-//         initialIndex: 0,
-//         cardsCount: visiblePeople.length,
-//         threshold: 30,
-//         allowedSwipeDirection: AllowedSwipeDirection.only(left: true, right: true),
-//         numberOfCardsDisplayed: numberOfCards,
-//         isLoop: false,
-//         padding: const EdgeInsets.only(bottom: 24),
-//         maxAngle: 50,
-//         onSwipe: (previousIndex, currentIndex, direction) {
-//           final actualIndex = _currentCardIndex + previousIndex;
-//
-//           // Safety check
-//           if (actualIndex >= people.length) {
-//             print("⚠️ Index out of bounds: $actualIndex >= ${people.length}");
-//             return false;
-//           }
-//
-//           final person = people[actualIndex];
-//
-//           if (direction == CardSwiperDirection.right) {
-//             context.read<FindCubit>().addLikeFind(id: person.id!);
-//           } else if (direction == CardSwiperDirection.left) {
-//             context.read<FindCubit>().addDisLikeFind(id: person.id!);
-//           }
-//
-//           setState(() {
-//             _currentCardIndex = actualIndex + 1;
-//             _swipeDirection = null;
-//           });
-//
-//           // Load more data when approaching the end
-//           final remainingCards = people.length - _currentCardIndex;
-//           if (remainingCards <= 5 && cubit.hasMoreFindData && !cubit.isFindDataLoadingMore) {
-//             print("🔄 Loading more data... (remaining: $remainingCards)");
-//             Future.microtask(() => context.read<FindCubit>().getFindData(context));
-//           }
-//
-//           return true;
-//         },
-//         onSwipeDirectionChange: (horizontal, vertical) {
-//           setState(() {
-//             _swipeDirection = horizontal;
-//           });
-//         },
-//         cardBuilder: (context, index, horizontalOffsetPercentage, verticalOffsetPercentage) {
-//           final actualIndex = _currentCardIndex + index;
-//           if (actualIndex >= people.length) return const SizedBox.shrink();
-//
-//           final person = people[actualIndex];
-//
-//           String? swipeLabel;
-//           Color? labelColor;
-//
-//           if (_swipeDirection != null && index == 0) {
-//             if (_swipeDirection == CardSwiperDirection.right) {
-//               swipeLabel = 'LIKE';
-//               labelColor = Colors.green;
-//             } else if (_swipeDirection == CardSwiperDirection.left) {
-//               swipeLabel = 'NOPE';
-//               labelColor = const Color(0xffEB545D);
-//             }
-//           }
-//
-//           return Stack(
-//             children: [
-//               _buildPersonCard(context, person),
-//               if (swipeLabel != null)
-//                 Positioned(
-//                   top: 60,
-//                   left: _swipeDirection == CardSwiperDirection.left ? null : 30,
-//                   right: _swipeDirection == CardSwiperDirection.left ? 30 : null,
-//                   child: Transform.rotate(
-//                     angle: _swipeDirection == CardSwiperDirection.right ? -0.6 : 0.6,
-//                     child: Container(
-//                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-//                       decoration: BoxDecoration(
-//                         border: Border.all(color: labelColor!, width: 5),
-//                       ),
-//                       child: Text(
-//                         swipeLabel,
-//                         style: TextStyle(
-//                           color: labelColor,
-//                           fontSize: 48,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               _buildActions(context, person, _cardController),
-//             ],
-//           );
-//         },
-//         duration: const Duration(milliseconds: 100),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildPersonCard(BuildContext context, FindEntity person) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//       child: Card(
-//         clipBehavior: Clip.antiAlias,
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-//         elevation: 8,
-//         child: PersonCardContent(person: person),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildActions(BuildContext context, FindEntity person, CardSwiperController controller) {
-//     return Positioned(
-//       bottom: 20,
-//       right: 8,
-//       left: 8,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           children: [
-//             _buildActionButton(
-//               icon: Icons.close,
-//               color: Colors.red,
-//               onPressed: () {
-//                 controller.swipe(CardSwiperDirection.left);
-//               },
-//             ),
-//             _buildActionButton(
-//               icon: Icons.favorite,
-//               color: Colors.pink,
-//               onPressed: () {
-//                 final cubit = context.read<FindCubit>();
-//                 final person = cubit.findData[_currentCardIndex];
-//                 cubit.addLoveFind(id: person.id!);
-//                 controller.swipe(CardSwiperDirection.right);
-//               },
-//             ),
-//             _buildActionButton(
-//               icon: Icons.thumb_up,
-//               color: Colors.green,
-//               onPressed: () {
-//                 controller.swipe(CardSwiperDirection.right);
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildActionButton({
-//     required IconData icon,
-//     required Color color,
-//     required VoidCallback onPressed,
-//   }) {
-//     return FloatingActionButton(
-//       heroTag: UniqueKey(),
-//       elevation: 4,
-//       onPressed: onPressed,
-//       backgroundColor: Colors.white,
-//       mini: true,
-//       child: Icon(icon, color: color, size: 28),
-//     );
-//   }
-// }
-//
-// class PersonCardContent extends StatefulWidget {
-//   final FindEntity person;
-//
-//   const PersonCardContent({Key? key, required this.person}) : super(key: key);
-//
-//   @override
-//   State<PersonCardContent> createState() => _PersonCardContentState();
-// }
-//
-// class _PersonCardContentState extends State<PersonCardContent> {
-//   int _currentImageIndex = 0;
-//   final List<String> _dummyImages = [
-//     'https://picsum.photos/400/600?random=1',
-//     'https://picsum.photos/400/600?random=2',
-//     'https://picsum.photos/400/600?random=3',
-//   ];
-//
-//   void _nextImage() {
-//     if (_currentImageIndex < _dummyImages.length - 1) {
-//       setState(() => _currentImageIndex++);
-//     }
-//   }
-//
-//   void _previousImage() {
-//     if (_currentImageIndex > 0) {
-//       setState(() => _currentImageIndex--);
-//     }
-//   }
-//
-//   void _handleTap(Offset localPosition, double screenWidth) {
-//     final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
-//     if (tappedLeftSide) {
-//       _previousImage();
-//     } else {
-//       _nextImage();
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final screenWidth = MediaQuery.of(context).size.width;
-//
-//     return GestureDetector(
-//       onTapUp: (details) => _handleTap(details.localPosition, screenWidth),
-//       child: Stack(
-//         children: [
-//           // Main Image
-//           Image.network(
-//             _dummyImages[_currentImageIndex],
-//             width: double.infinity,
-//             height: double.infinity,
-//             fit: BoxFit.cover,
-//             errorBuilder: (_, __, ___) => Container(
-//               color: Colors.grey[300],
-//               child: const Icon(Icons.person, size: 100, color: Colors.grey),
-//             ),
-//           ),
-//
-//           // Gradient overlay
-//           Positioned.fill(
-//             child: Container(
-//               decoration: BoxDecoration(
-//                 gradient: LinearGradient(
-//                   begin: Alignment.topCenter,
-//                   end: Alignment.bottomCenter,
-//                   colors: [
-//                     Colors.transparent,
-//                     Colors.black.withOpacity(0.7),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//
-//           // Progress indicators
-//           Positioned(
-//             top: 10,
-//             left: 10,
-//             right: 10,
-//             child: Row(
-//               children: List.generate(
-//                 _dummyImages.length,
-//                     (index) => Expanded(
-//                   child: Container(
-//                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
-//                     height: 4,
-//                     decoration: BoxDecoration(
-//                       color: index <= _currentImageIndex
-//                           ? Colors.white
-//                           : Colors.white.withOpacity(0.3),
-//                       borderRadius: BorderRadius.circular(30),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//
-//           // Person info
-//           Positioned(
-//             bottom: 80,
-//             left: 16,
-//             right: 16,
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   "${widget.person.firstName ?? ''} ${widget.person.lastName ?? ''}",
-//                   style: const TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 32,
-//                     fontWeight: FontWeight.bold,
-//                     shadows: [
-//                       Shadow(
-//                         offset: Offset(1.0, 1.0),
-//                         blurRadius: 4.0,
-//                         color: Colors.black,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 const SizedBox(height: 8),
-//                 Text(
-//                   "Followers: ${widget.person.followersCount}",
-//                   style: const TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 18,
-//                     shadows: [
-//                       Shadow(
-//                         offset: Offset(1.0, 1.0),
-//                         blurRadius: 4.0,
-//                         color: Colors.black,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
-/*
+
 
 class FindScreen extends StatefulWidget {
   const FindScreen({Key? key}) : super(key: key);
@@ -536,494 +32,14 @@ class _FindScreenState extends State<FindScreen> {
   int _currentCardIndex = 0;
   CardSwiperDirection? _swipeDirection;
   final CardSwiperController _cardController = CardSwiperController();
+  bool _showLoveAnimation = false;
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<FindCubit>().loadInitialFindData(context, gender: selectedGender);
-  }
-
-  @override
-  void dispose() {
-    _cardController.dispose();
-    super.dispose();
-  }
-
-  void _switchGender(String gender) {
-    setState(() {
-      selectedGender = gender;
-      _currentCardIndex = 0;
-      _swipeDirection = null;
+  void _triggerLoveAnimation() {
+    setState(() => _showLoveAnimation = true);
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _showLoveAnimation = false);
     });
-    context.read<FindCubit>().loadInitialFindData(context, gender: gender);
   }
-
-  @override
-  void didUpdateWidget(FindScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Reset index when widget updates
-    if (_currentCardIndex >= context.read<FindCubit>().findData.length) {
-      setState(() {
-        _currentCardIndex = 0;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Find People"),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: _switchGender,
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: "male", child: Text("Show Male")),
-              const PopupMenuItem(value: "female", child: Text("Show Female")),
-            ],
-            child: Row(
-              children: [
-                Text(selectedGender.toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const Icon(Icons.arrow_drop_down),
-                const SizedBox(width: 8),
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: BlocBuilder<FindCubit, FindState>(
-        builder: (context, state) {
-          final cubit = context.read<FindCubit>();
-
-          if (cubit.isFindDataInitialLoading && cubit.findData.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == FindStates.failure && cubit.findData.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Failed to load data"),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() => _currentCardIndex = 0);
-                      cubit.loadInitialFindData(context, gender: selectedGender);
-                    },
-                    child: const Text("Retry"),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          if (cubit.findData.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("No people found"),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() => _currentCardIndex = 0);
-                      cubit.loadInitialFindData(context, gender: selectedGender);
-                    },
-                    child: const Text("Reload"),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // Debug info
-          print("📊 Total people in list: ${cubit.findData.length}");
-          print("📍 Current card index: $_currentCardIndex");
-          print("🎯 Visible people: ${cubit.findData.length - _currentCardIndex}");
-
-          return _buildCardSwiper(context, cubit.findData, cubit);
-        },
-      ),
-    );
-  }
-
-  Widget _buildCardSwiper(BuildContext context, List<FindEntity> people, FindCubit cubit) {
-    print("🎴 Building card swiper - Total: ${people.length}, Current Index: $_currentCardIndex");
-
-    // Safety check: ensure index doesn't exceed list length
-    if (_currentCardIndex >= people.length) {
-      _currentCardIndex = people.length > 0 ? people.length - 1 : 0;
-    }
-
-    // Get only the cards that haven't been swiped yet
-    final visiblePeople = _currentCardIndex < people.length
-        ? people.sublist(_currentCardIndex)
-        : <FindEntity>[];
-
-    print("👀 Visible people count: ${visiblePeople.length}");
-
-    if (visiblePeople.isEmpty && !cubit.isFindDataLoadingMore) {
-      // Try to load more if we have nothing to show
-      if (cubit.hasMoreFindData) {
-        Future.microtask(() => cubit.getFindData(context));
-        return const Center(child: CircularProgressIndicator());
-      }
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("No more people to show"),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                setState(() => _currentCardIndex = 0);
-              },
-              child: const Text("Start Over"),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // Calculate how many cards to display (max 3, or fewer if we don't have enough)
-    final numberOfCards = visiblePeople.length < 3 ? visiblePeople.length : 3;
-
-    // Use a unique key to force rebuild when data changes
-    return SizedBox(
-      key: ValueKey('swiper_${people.length}_$_currentCardIndex'),
-      height: MediaQuery.of(context).size.height * 0.90,
-      child: CardSwiper(
-        controller: _cardController,
-        backCardOffset: const Offset(0, 0),
-        initialIndex: 0,
-        cardsCount: visiblePeople.length,
-        threshold: 30,
-        allowedSwipeDirection: AllowedSwipeDirection.only(left: true, right: true),
-        numberOfCardsDisplayed: numberOfCards,
-        isLoop: false,
-        padding: const EdgeInsets.only(bottom: 24),
-        maxAngle: 50,
-        onSwipe: (previousIndex, currentIndex, direction) {
-          final actualIndex = _currentCardIndex + previousIndex;
-
-          // Safety check
-          if (actualIndex >= people.length) {
-            print("⚠️ Index out of bounds: $actualIndex >= ${people.length}");
-            return false;
-          }
-
-          final person = people[actualIndex];
-
-          if (direction == CardSwiperDirection.right) {
-            context.read<FindCubit>().addLikeFind(id: person.id!);
-          } else if (direction == CardSwiperDirection.left) {
-            context.read<FindCubit>().addDisLikeFind(id: person.id!);
-          }
-
-          setState(() {
-            _currentCardIndex = actualIndex + 1;
-            _swipeDirection = null;
-          });
-
-          // Load more data when approaching the end
-          final remainingCards = people.length - _currentCardIndex;
-          if (remainingCards <= 5 && cubit.hasMoreFindData && !cubit.isFindDataLoadingMore) {
-            print("🔄 Loading more data... (remaining: $remainingCards)");
-            Future.microtask(() => context.read<FindCubit>().getFindData(context));
-          }
-
-          return true;
-        },
-        onSwipeDirectionChange: (horizontal, vertical) {
-          setState(() {
-            _swipeDirection = horizontal;
-          });
-        },
-        cardBuilder: (context, index, horizontalOffsetPercentage, verticalOffsetPercentage) {
-          final actualIndex = _currentCardIndex + index;
-          if (actualIndex >= people.length) return const SizedBox.shrink();
-
-          final person = people[actualIndex];
-
-          String? swipeLabel;
-          Color? labelColor;
-
-          if (_swipeDirection != null && index == 0) {
-            if (_swipeDirection == CardSwiperDirection.right) {
-              swipeLabel = 'LIKE';
-              labelColor = Colors.green;
-            } else if (_swipeDirection == CardSwiperDirection.left) {
-              swipeLabel = 'NOPE';
-              labelColor = const Color(0xffEB545D);
-            }
-          }
-
-          return Stack(
-            children: [
-              _buildPersonCard(context, person),
-              if (swipeLabel != null)
-                Positioned(
-                  top: 60,
-                  left: _swipeDirection == CardSwiperDirection.left ? null : 30,
-                  right: _swipeDirection == CardSwiperDirection.left ? 30 : null,
-                  child: Transform.rotate(
-                    angle: _swipeDirection == CardSwiperDirection.right ? -0.6 : 0.6,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: labelColor!, width: 5),
-                      ),
-                      child: Text(
-                        swipeLabel,
-                        style: TextStyle(
-                          color: labelColor,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              _buildActions(context, person, _cardController),
-            ],
-          );
-        },
-        duration: const Duration(milliseconds: 100),
-      ),
-    );
-  }
-
-  Widget _buildPersonCard(BuildContext context, FindEntity person) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 8,
-        child: PersonCardContent(person: person),
-      ),
-    );
-  }
-
-  Widget _buildActions(BuildContext context, FindEntity person, CardSwiperController controller) {
-    return Positioned(
-      bottom: 20,
-      right: 8,
-      left: 8,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildActionButton(
-              icon: Icons.close,
-              color: Colors.red,
-              onPressed: () {
-                controller.swipe(CardSwiperDirection.left);
-              },
-            ),
-            _buildActionButton(
-              icon: Icons.favorite,
-              color: Colors.pink,
-              onPressed: () {
-                final cubit = context.read<FindCubit>();
-                final person = cubit.findData[_currentCardIndex];
-                cubit.addLoveFind(id: person.id!);
-                controller.swipe(CardSwiperDirection.right);
-              },
-            ),
-            _buildActionButton(
-              icon: Icons.thumb_up,
-              color: Colors.green,
-              onPressed: () {
-                controller.swipe(CardSwiperDirection.right);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
-    return FloatingActionButton(
-      heroTag: UniqueKey(),
-      elevation: 4,
-      onPressed: onPressed,
-      backgroundColor: Colors.white,
-      mini: true,
-      child: Icon(icon, color: color, size: 28),
-    );
-  }
-}
-
-class PersonCardContent extends StatefulWidget {
-  final FindEntity person;
-
-  const PersonCardContent({Key? key, required this.person}) : super(key: key);
-
-  @override
-  State<PersonCardContent> createState() => _PersonCardContentState();
-}
-
-class _PersonCardContentState extends State<PersonCardContent> {
-  int _currentImageIndex = 0;
-  final List<String> _dummyImages = [
-    'https://picsum.photos/400/600?random=1',
-    'https://picsum.photos/400/600?random=2',
-    'https://picsum.photos/400/600?random=3',
-  ];
-
-  void _nextImage() {
-    if (_currentImageIndex < _dummyImages.length - 1) {
-      setState(() => _currentImageIndex++);
-    }
-  }
-
-  void _previousImage() {
-    if (_currentImageIndex > 0) {
-      setState(() => _currentImageIndex--);
-    }
-  }
-
-  void _handleTap(Offset localPosition, double screenWidth) {
-    final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
-    if (tappedLeftSide) {
-      _previousImage();
-    } else {
-      _nextImage();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return GestureDetector(
-      onTapUp: (details) => _handleTap(details.localPosition, screenWidth),
-      child: Stack(
-        children: [
-          // Main Image
-          Image.network(
-            _dummyImages[_currentImageIndex],
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
-              color: Colors.grey[300],
-              child: const Icon(Icons.person, size: 100, color: Colors.grey),
-            ),
-          ),
-
-          // Gradient overlay
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.7),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // Progress indicators
-          Positioned(
-            top: 10,
-            left: 10,
-            right: 10,
-            child: Row(
-              children: List.generate(
-                _dummyImages.length,
-                    (index) => Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: index <= _currentImageIndex
-                          ? Colors.white
-                          : Colors.white.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // Person info
-          Positioned(
-            bottom: 80,
-            left: 16,
-            right: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${widget.person.firstName ?? ''} ${widget.person.lastName ?? ''}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 4.0,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Followers: ${widget.person.followersCount}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 4.0,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-*/
-
-
-
-class FindScreen extends StatefulWidget {
-  const FindScreen({Key? key}) : super(key: key);
-
-  @override
-  State<FindScreen> createState() => _FindScreenState();
-}
-
-class _FindScreenState extends State<FindScreen> {
-  String selectedGender = "male";
-  int _currentCardIndex = 0;
-  CardSwiperDirection? _swipeDirection;
-  final CardSwiperController _cardController = CardSwiperController();
 
   @override
   void initState() {
@@ -1050,29 +66,12 @@ class _FindScreenState extends State<FindScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Find People"),
-        // actions: [
-        //   PopupMenuButton<String>(
-        //     onSelected: _switchGender,
-        //     itemBuilder: (context) => [
-        //       const PopupMenuItem(value: "male", child: Text("Show Male")),
-        //       const PopupMenuItem(value: "female", child: Text("Show Female")),
-        //     ],
-        //     child: Row(
-        //       children: [
-        //         Text(selectedGender.toUpperCase(),
-        //             style: const TextStyle(fontWeight: FontWeight.bold)),
-        //         const Icon(Icons.arrow_drop_down),
-        //         const SizedBox(width: 8),
-        //       ],
-        //     ),
-        //   ),
-        // ],
+        title:  Text("${LocaleKeys.find.localize}"),
         actions: [
           Row(
             children: [
               Text(
-                isMaleSelected ? 'Male' : 'Female', // or Arabic logic if needed
+                isMaleSelected ? '${LocaleKeys.maleUser.localize}' : '${LocaleKeys.femaleUser.localize}', // or Arabic logic if needed
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -1081,9 +80,8 @@ class _FindScreenState extends State<FindScreen> {
               IconButton(
                 onPressed: () {
                   setState(() {
-                    isMaleSelected = !isMaleSelected; // toggle gender
+                    isMaleSelected = !isMaleSelected;
                     selectedGender = isMaleSelected ? "male" : "female";
-
                     // Reload the data in cubit
                     _currentCardIndex = 0;
                     context.read<FindCubit>().loadInitialFindData(
@@ -1092,34 +90,86 @@ class _FindScreenState extends State<FindScreen> {
                     );
                   });
                 },
-                icon: Icon(
-                  isMaleSelected ? Icons.male : Icons.female,
-                ),
+                icon:  Icon(
+              isMaleSelected!
+              ? FontAwesomeIcons.person
+                  : FontAwesomeIcons.personDress,
+                color: context.isDarkMode
+                    ? Colors.white
+                    : Colors.red, // Optional styling
+              ),
               ),
               const SizedBox(width: 8),
             ],
           ),
         ],
       ),
-      body: BlocBuilder<FindCubit, FindState>(
-        builder: (context, state) {
-          final cubit = context.read<FindCubit>();
+      // body: BlocBuilder<FindCubit, FindState>(
+      //   builder: (context, state) {
+      //     final cubit = context.read<FindCubit>();
+      //
+      //     if (cubit.isFindDataInitialLoading && cubit.findData.isEmpty) {
+      //       return const Center(child: CircularProgressIndicator());
+      //     }
+      //
+      //     if (state.status == FindStates.failure && cubit.findData.isEmpty) {
+      //       return _buildErrorScreen(cubit);
+      //     }
+      //
+      //     if (cubit.findData.isEmpty) {
+      //       return _buildNoDataScreen(cubit);
+      //     }
+      //
+      //     return _buildCardSwiper(context, cubit.findData, cubit);
+      //   },
+      // ),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          BlocListener<FindCubit, FindState>(
+            listenWhen: (previous, current) =>
+            previous.addedLove != current.addedLove && current.addedLove == true,
+            listener: (context, state) {
+              _triggerLoveAnimation();
+            },
+            child: BlocBuilder<FindCubit, FindState>(
+              builder: (context, state) {
+                final cubit = context.read<FindCubit>();
 
-          if (cubit.isFindDataInitialLoading && cubit.findData.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
+                if (cubit.isFindDataInitialLoading && cubit.findData.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          if (state.status == FindStates.failure && cubit.findData.isEmpty) {
-            return _buildErrorScreen(cubit);
-          }
+                if (state.status == FindStates.failure && cubit.findData.isEmpty) {
+                  return _buildErrorScreen(cubit);
+                }
 
-          if (cubit.findData.isEmpty) {
-            return _buildNoDataScreen(cubit);
-          }
+                if (cubit.findData.isEmpty) {
+                  return _buildNoDataScreen(cubit);
+                }
 
-          return _buildCardSwiper(context, cubit.findData, cubit);
-        },
+                return _buildCardSwiper(context, cubit.findData, cubit);
+              },
+            ),
+          ),
+
+          // ❤️ Lottie overlay
+          AnimatedOpacity(
+            opacity: _showLoveAnimation ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: _showLoveAnimation
+                ? Lottie.asset(
+              Assets.love,
+              width: 200,
+              height: 200,
+              repeat: false,
+            )
+                : const SizedBox.shrink(),
+          ),
+        ],
       ),
+
     );
   }
 
@@ -1214,6 +264,22 @@ class _FindScreenState extends State<FindScreen> {
         ? people.sublist(_currentCardIndex)
         : <FindEntity>[];
 
+    // ✅ Automatically reload when list is empty and no more data
+    if (visiblePeople.isEmpty && !cubit.hasMoreFindData) {
+      print("Loooooooooooooooooaded");
+      Future.microtask(() {
+        // Prevent multiple reloads
+        if (!cubit.isFindDataInitialLoading) {
+          setState(() => _currentCardIndex = 0);
+          cubit.loadInitialFindData(context, gender: selectedGender);
+        }
+      });
+
+      // While waiting, show a small loader or message
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     // End of list & no more data
     if (visiblePeople.isEmpty && !cubit.hasMoreFindData) {
       return _buildNoMoreResults();
@@ -1338,58 +404,91 @@ class _FindScreenState extends State<FindScreen> {
   }
 
   Widget _buildActions(BuildContext context, FindEntity person, CardSwiperController controller) {
-    return Positioned(
-      bottom: 20,
+     return Positioned(
+      bottom: 0,
       right: 8,
       left: 8,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 32.0.h, vertical: 8.h),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildActionButton(
-              icon: Icons.close,
-              color: Colors.red,
-              onPressed: () => controller.swipe(CardSwiperDirection.left),
+              context,
+              Image.asset(Assets.unavailable), () {},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     : () => context.push(Routes.OTHERSACCOUNT, extra: cardUser.id),
+              color: AppColors.PRIMARY_COLOR, isMini: true,
             ),
             _buildActionButton(
-              icon: Icons.favorite,
-              color: Colors.pink,
-              onPressed: () {
-                final cubit = context.read<FindCubit>();
-                final person = cubit.findData[_currentCardIndex];
-                cubit.addLoveFind(id: person.id!);
-                controller.swipe(CardSwiperDirection.right);
-              },
+              context, Image.asset(Assets.tinder_gift), () {},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     :  () => showChatBottomSheet(context, cardUser),
+              color: Colors.white,
             ),
             _buildActionButton(
-              icon: Icons.thumb_up,
-              color: Colors.green,
-              onPressed: () => controller.swipe(CardSwiperDirection.right),
+              context,
+              Image.asset(Assets.green_heart), () {
+                if(person.id != null) {
+                  context.read<FindCubit>().addLoveFind(id: person.id!);
+                }else{
+                  print("id null");
+                }
+            },
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     :  () => _navigateToUserProfile(context, cardUser),
+              color: Colors.red, isMini: true,
             ),
+            _buildActionButton(
+              context,
+              Image.asset(Assets.tinder_comments), () {},
+              // !context.read<UserCubit>().isLoggedIn
+              //     ? () => context.push(Routes.LOGIN)
+              //     :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
+              color: AppColors.ACCENT_COLOR,
+            ),
+            _buildActionButton(context, Image.asset(Assets.tinder_account),
+                    () => context.push(Routes.UserProfilePage),
+                // !context.read<UserCubit>().isLoggedIn
+                //     ? () => context.push(Routes.LOGIN)
+                //     : () {
+                //         bottomSheet(
+                //             context: context,
+                //             widget: ReportView(
+                //               id: cardUser.id!,
+                //               categoryId: '66af974f8bf69f9469944746',
+                //             ));
+                //       },
+                // () => _showReportBottomSheet(context, cardUser),
+                color: Colors.red,
+                isMini: true),
           ],
         ),
       ),
     );
-  }
 
-  Widget _buildActionButton({
-    required IconData icon,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
+  }
+  Widget _buildActionButton(
+      BuildContext context, Widget child, VoidCallback onPressed,
+      {Color? color, bool? isMini}) {
     return FloatingActionButton(
       heroTag: UniqueKey(),
-      elevation: 4,
+      elevation: .9,
       onPressed: onPressed,
+      mini: isMini ?? false,
       backgroundColor: Colors.white,
-      mini: true,
-      child: Icon(icon, color: color, size: 28),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+      child: Padding(
+        padding: EdgeInsets.all(isMini == null ? 16.0.h : 8.h),
+        child: child,
+      ),
     );
   }
+
 }
-
-
 
 class PersonCardContent extends StatefulWidget {
   final FindEntity person;
@@ -1402,14 +501,24 @@ class PersonCardContent extends StatefulWidget {
 
 class _PersonCardContentState extends State<PersonCardContent> {
   int _currentImageIndex = 0;
-  final List<String> _dummyImages = [
-    'https://picsum.photos/400/600?random=1',
-    'https://picsum.photos/400/600?random=2',
-    'https://picsum.photos/400/600?random=3',
-  ];
+
+  late final List<String> _images;
+
+  @override
+  void initState() {
+    super.initState();
+    // Use real pictures if available, otherwise fallback to dummy images
+    _images = (widget.person.pictures != null && widget.person.pictures!.isNotEmpty)
+        ? widget.person.pictures!
+        : [
+      'https://picsum.photos/400/600?random=1',
+      'https://picsum.photos/400/600?random=2',
+      'https://picsum.photos/400/600?random=3',
+    ];
+  }
 
   void _nextImage() {
-    if (_currentImageIndex < _dummyImages.length - 1) {
+    if (_currentImageIndex < _images.length - 1) {
       setState(() => _currentImageIndex++);
     }
   }
@@ -1421,7 +530,7 @@ class _PersonCardContentState extends State<PersonCardContent> {
   }
 
   void _handleTap(Offset localPosition, double screenWidth) {
-    final bool tappedLeftSide = localPosition.dx < screenWidth / 2;
+    final tappedLeftSide = localPosition.dx < screenWidth / 2;
     if (tappedLeftSide) {
       _previousImage();
     } else {
@@ -1429,17 +538,49 @@ class _PersonCardContentState extends State<PersonCardContent> {
     }
   }
 
+  // Get info text depending on the current image
+  Map<String, String> _getImageInfo(int index) {
+    switch (index) {
+      case 0:
+        return {
+          'title': "${widget.person.firstName ?? ''} ${widget.person.lastName ?? ''}",
+          'subtitle': '',
+        };
+      case 1:
+        return {
+          'title': "Followers",
+          'subtitle': "${widget.person.followersCount ?? 0}",
+        };
+      case 2:
+        return {
+          'title': "Following",
+          'subtitle': "${widget.person.followingCount ?? 0}",
+        };
+      case 3:
+        return {
+          'title': "Friends",
+          'subtitle': "${widget.person.friendsCount ?? 0}",
+        };
+      default:
+        return {
+          'title': '',
+          'subtitle': '',
+        };
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final info = _getImageInfo(_currentImageIndex);
 
     return GestureDetector(
       onTapUp: (details) => _handleTap(details.localPosition, screenWidth),
       child: Stack(
         children: [
-          // Main Image
+          // Main image
           Image.network(
-            _dummyImages[_currentImageIndex],
+            _images[_currentImageIndex],
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -1472,7 +613,7 @@ class _PersonCardContentState extends State<PersonCardContent> {
             right: 10,
             child: Row(
               children: List.generate(
-                _dummyImages.length,
+                _images.length,
                     (index) => Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -1489,7 +630,7 @@ class _PersonCardContentState extends State<PersonCardContent> {
             ),
           ),
 
-          // Person info
+          // Info for each image
           Positioned(
             bottom: 80,
             left: 16,
@@ -1497,36 +638,39 @@ class _PersonCardContentState extends State<PersonCardContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "${widget.person.firstName ?? ''} ${widget.person.lastName ?? ''}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 4.0,
-                        color: Colors.black,
-                      ),
-                    ],
+                if (info['title']!.isNotEmpty)
+                  Text(
+                    info['title']!,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 4.0,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Followers: ${widget.person.followersCount}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 4.0,
-                        color: Colors.black,
-                      ),
-                    ],
+                if (info['subtitle']!.isNotEmpty)
+                  const SizedBox(height: 8),
+                if (info['subtitle']!.isNotEmpty)
+                  Text(
+                    info['subtitle']!,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1.0, 1.0),
+                          blurRadius: 4.0,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -1535,7 +679,6 @@ class _PersonCardContentState extends State<PersonCardContent> {
     );
   }
 }
-
 
 
 

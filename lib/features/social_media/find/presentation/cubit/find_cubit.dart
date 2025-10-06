@@ -19,7 +19,6 @@ class FindCubit extends Cubit<FindState> {
       this.addLoveFindUseCase,
       this.getFindUseCase)
       : super(FindState());
-
   Future<void> addLoveFind({required String id}) async {
     emit(state.copyWith(status: FindStates.loading));
 
@@ -31,16 +30,46 @@ class FindCubit extends Cubit<FindState> {
           failure: failure,
           status: FindStates.failure,
           tinderLikeData: null,
+          addedLove: false,
         ));
       },
           (updatedRestaurant) {
         emit(state.copyWith(
           tinderLikeData: updatedRestaurant,
           status: FindStates.success,
+          addedLove: true,
         ));
+
+        // 🔁 Reset addedLove so BlocListener can trigger again next time
+        Future.delayed(const Duration(milliseconds: 300), () {
+          emit(state.copyWith(addedLove: false));
+        });
       },
     );
   }
+
+  // Future<void> addLoveFind({required String id}) async {
+  //   emit(state.copyWith(status: FindStates.loading));
+  //
+  //   final response = await addLoveFindUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: FindStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: FindStates.success,
+  //         addedLove: true
+  //       ));
+  //     },
+  //   );
+  // }
 
   Future<void> addLikeFind({required String id}) async {
     emit(state.copyWith(status: FindStates.loading));

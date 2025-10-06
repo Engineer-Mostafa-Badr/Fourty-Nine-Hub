@@ -20,6 +20,7 @@ extension DataStateExtension on FindState {
   class FindState {
   final FindStates status;
   final Failure? failure;
+  final bool? addedLove;
 
   final FindLikeEntity? tinderLikeData;
   final List<FindEntity>? findData;
@@ -29,6 +30,7 @@ extension DataStateExtension on FindState {
 
     this.tinderLikeData,
     this.findData,
+    this.addedLove = false,
   });
 
   // Method to update the state
@@ -38,12 +40,14 @@ extension DataStateExtension on FindState {
 
     FindLikeEntity? tinderLikeData,
     List<FindEntity>? findData,
+    bool? addedLove,
   }) {
     return FindState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       tinderLikeData: tinderLikeData ?? this.tinderLikeData,
       findData: findData ?? this.findData,
+      addedLove: addedLove ?? this.addedLove,
     );
   }
 }
