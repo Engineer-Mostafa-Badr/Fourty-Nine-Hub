@@ -25,4 +25,4 @@ export 'helpers/validation_helper.dart';
 export 'helpers/video_picker_helper.dart';
 export 'helpers/upload_manager.dart';
 export 'helpers/bunny_video_uploader.dart';
-export 'helpers/youtube_style_video_player.dart';
+// export 'helpers/youtube_style_video_player.dart';

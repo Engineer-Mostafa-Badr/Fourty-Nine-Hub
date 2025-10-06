@@ -20,6 +20,7 @@ import 'talent_card_overlay_controls.dart';
 import '../../../../../../helpers/manage_vibration.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
+import '../../../video_player/widgets/talent_video_player.dart';
 
 class TalentCard extends StatefulWidget {
   final StarEntity talent;

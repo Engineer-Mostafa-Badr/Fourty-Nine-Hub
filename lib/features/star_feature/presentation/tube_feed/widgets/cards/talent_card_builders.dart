@@ -7,8 +7,10 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 
 import '../../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
+import '../../../../../../service_locator/service_locator.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
+import '../../../video_player/widgets/talent_video_player.dart';
 import 'talent_card.dart';
 import 'talent_history_item.dart';
 import 'talent_my_item.dart';

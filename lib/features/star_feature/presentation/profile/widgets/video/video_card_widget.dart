@@ -17,6 +17,7 @@ import '../../../../data/model/tube_video_models.dart';
 import '../../../controller/comment_cubit/comment_cubit.dart';
 import '../../../controller/star_cubit/star_cubit.dart';
 import '../../../presentation_exports.dart';
+import '../../../video_player/widgets/talent_video_player.dart';
 import '../playlist_bottom_sheet.dart';
 
 class VideoCardWidget extends StatefulWidget {

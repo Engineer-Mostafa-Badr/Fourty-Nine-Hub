@@ -10,7 +10,7 @@ import '../../controller/star_cubit/star_cubit.dart';
 import '../../shared/widgets/common/loading_indicator.dart';
 import '../../tube_feed/widgets/cards/talent_card.dart';
 import '../../presentation_exports.dart';
-
+import '../../video_player/widgets/talent_video_player.dart';
 
 import 'playlist_bottom_sheet.dart';
 import 'video/video_card_widget.dart';

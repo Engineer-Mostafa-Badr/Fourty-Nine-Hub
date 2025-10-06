@@ -10,6 +10,7 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../shared/widgets/common/loading_indicator.dart';
 import '../../presentation_exports.dart';
+import '../../video_player/widgets/talent_video_player.dart';
 
 import 'profile_video_grid.dart';
 
