@@ -434,6 +434,8 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                       reportId: context.read<UserCubit>().state.data?.id??'',
                                       otherUserId: '',
                                       onTap: (){
+                                        print("data.isView ${data.isView} LoggedId ${UserCubit.to.state.data?.id} creatorId ${data.creatorId}");
+                                        print ("value ${data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)}");
                                         if (data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)) {
                                           return;
                                         }
@@ -445,10 +447,10 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                       hasReport: true,
                                       hasTopSide: true,
                                       hasBottomSide: true,
-                                      isView: data.isView,
+                                      isView: data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId),
                                       subscriptionType: data.formattedOfferType,
                                       views: data.viewerIds??0,
-                                      onRequest: (){
+                                      onRequest:((UserCubit.to.state.data?.id ?? '') == data.creatorId)?null: (){
                                         if (!context.read<UserCubit>().isLoggedIn) {
                                           ManageVibration.vibrate();
                                           pleaseLoginDialog(context);

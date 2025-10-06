@@ -4,11 +4,12 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ProfilePictureWidget extends StatelessWidget {
-  const ProfilePictureWidget({super.key, this.width, this.height,this.hasStories=true, this.isViewed, this.segments, this.firstChar, this.image, this.rating, this.isVerified});
+  const ProfilePictureWidget({super.key, this.width,this.isMale=true, this.height,this.hasStories=true, this.isViewed, this.segments, this.firstChar, this.image, this.rating, this.isVerified});
   final double? width;
   final int? rating;
   final double? height;
   final bool? isViewed;
+  final bool? isMale;
   final bool? isVerified;
   final bool? hasStories;
   final int? segments;
@@ -22,6 +23,7 @@ class ProfilePictureWidget extends StatelessWidget {
             imageUrl:  image??"",
             imageWidth: 46,
             fullWidth: 54,
+            isMale:isMale,
             hasStories: hasStories,
             isViewed: isViewed??false,
             segments: segments??1,
