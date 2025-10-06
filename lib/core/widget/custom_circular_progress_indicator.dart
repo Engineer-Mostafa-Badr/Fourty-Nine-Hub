@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 
 import '../../res/assets/assets.dart';
 import 'package:lottie/lottie.dart';
@@ -14,14 +15,15 @@ final Animation<Color?>? valueColor;
 final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
-    return  Lottie.asset(
-      Assets.customLoading,
-      // width: value,
-      // height: value,
-      width: 50,
-      height: 50,
-      fit: BoxFit.fill,
-    );
+    return AppLoaderWidget.largeLogo();
+    // return  Lottie.asset(
+    //   Assets.customLoading,
+    //   // width: value,
+    //   // height: value,
+    //   width: 50,
+    //   height: 50,
+    //   fit: BoxFit.fill,
+    // );
     // CircularProgressIndicator(
     //   color: color ?? AppColors.getButtonPrimaryWhiteColor(context),
     //   value: value,

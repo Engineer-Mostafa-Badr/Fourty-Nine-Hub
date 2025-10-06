@@ -72,7 +72,7 @@ class _DotsWidgetState extends State<DotsWidget> {
             ? (context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR)
             : (context.isDarkMode
             ? const Color(0x26FFFFFF)
-            : Colors.grey.withOpacity(0.3 + (dotScale * 0.4))),
+            : Colors.grey.withValues(alpha:(0.3 + (dotScale * 0.4)))),
       ),
     );
   }

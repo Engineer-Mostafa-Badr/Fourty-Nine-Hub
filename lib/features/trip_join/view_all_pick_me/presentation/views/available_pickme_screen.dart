@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
@@ -433,6 +434,8 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                       reportId: context.read<UserCubit>().state.data?.id??'',
                                       otherUserId: '',
                                       onTap: (){
+                                        print("data.isView ${data.isView} LoggedId ${UserCubit.to.state.data?.id} creatorId ${data.creatorId}");
+                                        print ("value ${data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)}");
                                         if (data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)) {
                                           return;
                                         }
@@ -444,10 +447,10 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                       hasReport: true,
                                       hasTopSide: true,
                                       hasBottomSide: true,
-                                      isView: data.isView,
+                                      isView: data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId),
                                       subscriptionType: data.formattedOfferType,
                                       views: data.viewerIds??0,
-                                      onRequest: (){
+                                      onRequest:((UserCubit.to.state.data?.id ?? '') == data.creatorId)?null: (){
                                         if (!context.read<UserCubit>().isLoggedIn) {
                                           ManageVibration.vibrate();
                                           pleaseLoginDialog(context);
