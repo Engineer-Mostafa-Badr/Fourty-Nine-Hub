@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/chance_feature/presentation/controller/cu
 import 'package:fourtyninehub/features/chance_feature/presentation/widgets/chance_card_widget.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 
 class ListViewCard extends StatelessWidget {
@@ -72,8 +73,10 @@ class ListViewCard extends StatelessWidget {
                   const Text('Error loading chance ads'),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.read<ChanceCubit>().getAllChanceAds(),
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      context.read<ChanceCubit>().getAllChanceAds();
+                    },
                     child: const Text('Retry'),
                   ),
                 ],

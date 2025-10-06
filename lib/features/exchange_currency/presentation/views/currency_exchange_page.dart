@@ -1,8 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
@@ -165,10 +167,10 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     return CustomScaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
+        preferredSize: const Size.fromHeight(40),
         child: AppBar(
           scrolledUnderElevation: 0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: AppColors.PRIMARY_COLOR,
           elevation: 0,
           automaticallyImplyLeading: false,
           titleSpacing: 0,
@@ -178,16 +180,16 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
             child: IconButton(
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              icon: Icon(Icons.arrow_back,
-                  color: AppColors.getTextColor(context), size: 20),
+              icon: Icon(Icons.arrow_back_ios,
+                  color: AppColors.whiteColor, size: 20),
               onPressed: () => Navigator.pop(context),
             ),
           ),
           title: Text(
             context.isArabic ? 'تبديل العملات' : 'Exchange',
             style: TextStyle(
-              color: AppColors.getTextColor(context),
-              fontSize: 16,
+              color: AppColors.whiteColor,
+              fontSize: 32.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -484,11 +486,11 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             color: context.isArabic
                                 ? Colors.white
                                 : AppColors.getReversedTextColor(context),
-                            fontSize: 24,
+                            fontSize: 48.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        Sizer(height: 16),
                         Text(
                           context.isArabic
                               ? 'تبديل العملات بشكل سريع وعرض السعر للعملة في الوقت الحالي'
@@ -498,11 +500,11 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 ? Colors.white
                                 : AppColors.getReversedTextColor(context)
                                     .withOpacity(0.7),
-                            fontSize: 14,
+                            fontSize: 24.sp,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 24),
+                        Sizer(height: 32),
 
                         // From Currency Section
                         Container(
@@ -526,7 +528,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               Text(
                                 context.isArabic ? 'المبلغ' : 'Amount',
                                 style: TextStyle(
-                                  color: context.isArabic
+                                  color: context.isDarkMode
                                       ? Colors.white
                                       : Theme.of(context)
                                               .textTheme
@@ -534,7 +536,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                               ?.color
                                               ?.withOpacity(0.7) ??
                                           Colors.grey,
-                                  fontSize: 14,
+                                  fontSize: 24.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -550,7 +552,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                       _showFromCurrencySelector(context, cubit);
                                     },
                                     child: Container(
-                                      width: 120,
+                                      width: 240.w,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 12),
                                       decoration: BoxDecoration(
@@ -566,25 +568,24 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                           Text(
                                             _getCurrencyFlag(
                                                 cubit.fromCurrency),
-                                            style:
-                                                const TextStyle(fontSize: 20),
+                                            style: TextStyle(fontSize: 40.sp),
                                           ),
                                           const SizedBox(width: 6),
                                           Flexible(
-                                            child: Text(
-                                              _getCurrencyName(
+                                            child: AutoSizeText(
+                                              _getCurrencyShortName(
                                                   cubit.fromCurrency),
-                                              style: const TextStyle(
-                                                fontSize: 16,
+                                              style: TextStyle(
+                                                fontSize: 32.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          const SizedBox(width: 4),
+                                          Sizer(width: 24.w),
                                           Icon(
                                             Icons.keyboard_arrow_down,
-                                            size: 16,
+                                            size: 40.sp,
                                             color: Theme.of(context)
                                                     .textTheme
                                                     .bodyMedium
@@ -597,12 +598,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                     ),
                                   ),
 
-                                  const SizedBox(width: 12),
+                                  Sizer(width: 24.w),
 
                                   // Amount input
                                   Expanded(
                                     child: SizedBox(
-                                      height: 48,
+                                      height: 80.h,
                                       child: TextField(
                                         controller: _amountController,
                                         keyboardType: const TextInputType
@@ -611,8 +612,8 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                             ? [ArabicNumberInputFormatter()]
                                             : null,
                                         textAlign: TextAlign.right,
-                                        style: const TextStyle(
-                                          fontSize: 16,
+                                        style: TextStyle(
+                                          fontSize: 32.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
                                         decoration: InputDecoration(
@@ -677,7 +678,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               ),
 
                               // Swap button
-                              const SizedBox(height: 20),
+                              Sizer(height: 20.h),
                               Row(
                                 children: [
                                   Expanded(
@@ -686,7 +687,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                       thickness: 1,
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  Sizer(width: 16.w),
                                   GestureDetector(
                                     onTap: () {
                                       ManageVibration.vibrate();
@@ -723,7 +724,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  Sizer(width: 16.w),
                                   Expanded(
                                     child: Divider(
                                       color: Theme.of(context).dividerColor,
@@ -733,13 +734,13 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 ],
                               ),
 
-                              const SizedBox(height: 20),
+                              Sizer(height: 20.h),
                               Text(
                                 context.isArabic
                                     ? 'المبلغ المحول'
                                     : 'Converted Amount',
                                 style: TextStyle(
-                                  color: context.isArabic
+                                  color: context.isDarkMode
                                       ? Colors.white
                                       : Theme.of(context)
                                               .textTheme
@@ -751,7 +752,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              Sizer(height: 12.h),
 
                               // Converted Amount Section
                               Row(
@@ -763,7 +764,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                       _showToCurrencySelector(context, cubit);
                                     },
                                     child: Container(
-                                      width: 120,
+                                      width: 240.w,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 12),
                                       decoration: BoxDecoration(
@@ -780,26 +781,25 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                         children: [
                                           Text(
                                             _getCurrencyFlag(cubit.toCurrency),
-                                            style:
-                                                const TextStyle(fontSize: 20),
+                                            style: TextStyle(fontSize: 40.sp),
                                           ),
-                                          const SizedBox(width: 6),
+                                          Sizer(width: 6.w),
                                           Flexible(
-                                            child: Text(
-                                              _getCurrencyName(
+                                            child: AutoSizeText(
+                                              _getCurrencyShortName(
                                                   cubit.toCurrency),
-                                              style: const TextStyle(
-                                                fontSize: 16,
+                                              style: TextStyle(
+                                                fontSize: 32.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.red,
                                               ),
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          const SizedBox(width: 4),
+                                          Sizer(width: 4.w),
                                           Icon(
                                             Icons.keyboard_arrow_down,
-                                            size: 16,
+                                            size: 40.sp,
                                             color:
                                                 AppColors.getRedColor(context),
                                           ),
@@ -808,12 +808,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                     ),
                                   ),
 
-                                  const SizedBox(width: 12),
+                                  Sizer(width: 24.w),
 
                                   // Converted amount display
                                   Expanded(
                                     child: Container(
-                                      height: 48,
+                                      height: 70.h,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 12),
                                       decoration: BoxDecoration(
@@ -832,7 +832,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                         child: Text(
                                           _getConvertedAmount(state, cubit),
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 32.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.green.shade700,
                                           ),
@@ -959,7 +959,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   : 'Indicative Exchange Rate',
                               style: TextStyle(
                                 color: Colors.blue.shade700,
-                                fontSize: 12,
+                                fontSize: 24.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -967,7 +967,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                             Text(
                               _getExchangeRateText(state),
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 32.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue.shade800,
                               ),
@@ -1025,7 +1025,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                               size: 20,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          Sizer(width: 32.w),
                           Expanded(
                             child: Text(
                               context.isArabic
@@ -1035,7 +1035,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                 color: context.isArabic
                                     ? Colors.white
                                     : AppColors.getReversedTextColor(context),
-                                fontSize: 14,
+                                fontSize: 28.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -1169,155 +1169,221 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
       final formattedRate = _formatNumberForLocale(
           state.exchangeRate.conversionRate,
           decimalPlaces: 4);
-      return '1 ${state.exchangeRate.baseCode} = $formattedRate ${state.exchangeRate.targetCode}';
+      final baseCurrencyName =
+          _getCurrencyShortName(state.exchangeRate.baseCode);
+      final targetCurrencyName =
+          _getCurrencyShortName(state.exchangeRate.targetCode);
+      return '1 $baseCurrencyName = $formattedRate $targetCurrencyName';
     } else if (state is CurrencyUpdatedSilently) {
       final formattedRate = _formatNumberForLocale(
           state.exchangeRate.conversionRate,
           decimalPlaces: 4);
-      return '1 ${state.exchangeRate.baseCode} = $formattedRate ${state.exchangeRate.targetCode}';
+      final baseCurrencyName =
+          _getCurrencyShortName(state.exchangeRate.baseCode);
+      final targetCurrencyName =
+          _getCurrencyShortName(state.exchangeRate.targetCode);
+      return '1 $baseCurrencyName = $formattedRate $targetCurrencyName';
     } else if (cubit.lastExchangeRate != null) {
       final rate = cubit.lastExchangeRate!;
       final formattedRate =
           _formatNumberForLocale(rate.conversionRate, decimalPlaces: 4);
-      return '1 ${rate.baseCode} = $formattedRate ${rate.targetCode}';
+      final baseCurrencyName = _getCurrencyShortName(rate.baseCode);
+      final targetCurrencyName = _getCurrencyShortName(rate.targetCode);
+      return '1 $baseCurrencyName = $formattedRate $targetCurrencyName';
     }
     return '';
   }
 
   String _getCurrencyFlag(String code) {
-    final flagMap = {
-      'USD': '🇺🇸',
-      'EUR': '🇪🇺',
-      'GBP': '🇬🇧',
-      'JPY': '🇯🇵',
-      'AUD': '🇦🇺',
-      'CAD': '🇨🇦',
-      'CHF': '🇨🇭',
-      'CNY': '🇨🇳',
-      'SEK': '🇸🇪',
-      'NZD': '🇳🇿',
-      'AED': '🇦🇪',
-      'SAR': '🇸🇦',
-      'QAR': '🇶🇦',
-      'KWD': '🇰🇼',
-      'BHD': '🇧🇭',
-      'OMR': '🇴🇲',
-      'EGP': '🇪🇬',
-      'INR': '🇮🇳',
-      'BRL': '🇧🇷',
-      'RUB': '🇷🇺',
-    };
-    return flagMap[code] ?? '💱';
+    final cubit = context.read<CurrencyCubit>();
+    final currency = cubit.getCurrencyByCode(code);
+
+    if (currency != null) {
+      return currency.flag;
+    }
+
+    return '💱';
   }
 
   String _getCurrencyName(String code) {
-    final currencyNamesArabic = {
-      'USD': 'دولار',
-      'EUR': 'يورو',
-      'GBP': 'جنيه',
-      'JPY': 'ين',
-      'AUD': 'دولار',
-      'CAD': 'دولار',
-      'CHF': 'فرنك',
-      'CNY': 'يوان',
-      'SEK': 'كرونا',
-      'NZD': 'دولار',
-      'AED': 'درهم',
-      'SAR': 'ريال',
-      'QAR': 'ريال',
-      'KWD': 'دينار',
-      'BHD': 'دينار',
-      'OMR': 'ريال',
-      'EGP': 'جنيه',
-      'INR': 'روبية',
-      'BRL': 'ريال',
-      'RUB': 'روبل',
-    };
+    final cubit = context.read<CurrencyCubit>();
+    final currency = cubit.getCurrencyByCode(code);
 
-    final currencyNamesEnglish = {
-      'USD': 'USD',
-      'EUR': 'EUR',
-      'GBP': 'GBP',
-      'JPY': 'JPY',
-      'AUD': 'AUD',
-      'CAD': 'CAD',
-      'CHF': 'CHF',
-      'CNY': 'CNY',
-      'SEK': 'SEK',
-      'NZD': 'NZD',
-      'AED': 'AED',
-      'SAR': 'SAR',
-      'QAR': 'QAR',
-      'KWD': 'KWD',
-      'BHD': 'BHD',
-      'OMR': 'OMR',
-      'EGP': 'EGP',
-      'INR': 'INR',
-      'BRL': 'BRL',
-      'RUB': 'RUB',
-    };
-
-    if (context.isArabic) {
-      return currencyNamesArabic[code] ?? code;
-    } else {
-      return currencyNamesEnglish[code] ?? code;
+    if (currency != null) {
+      if (context.isArabic) {
+        return currency.nameAr;
+      } else {
+        return currency.name;
+      }
     }
+
+    return code;
+  }
+
+  String _getCurrencyShortName(String code) {
+    final currencyShortNames = {
+      'USD': context.isArabic ? 'دولار' : 'Dollar',
+      'EUR': context.isArabic ? 'يورو' : 'Euro',
+      'GBP': context.isArabic ? 'جنيه' : 'Pound',
+      'JPY': context.isArabic ? 'ين' : 'Yen',
+      'AUD': context.isArabic ? 'دولار' : 'Dollar',
+      'CAD': context.isArabic ? 'دولار' : 'Dollar',
+      'CHF': context.isArabic ? 'فرنك' : 'Franc',
+      'CNY': context.isArabic ? 'يوان' : 'Yuan',
+      'SEK': context.isArabic ? 'كرونا' : 'Krona',
+      'NZD': context.isArabic ? 'دولار' : 'Dollar',
+      'MXN': context.isArabic ? 'بيزو' : 'Peso',
+      'SGD': context.isArabic ? 'دولار' : 'Dollar',
+      'HKD': context.isArabic ? 'دولار' : 'Dollar',
+      'NOK': context.isArabic ? 'كرونا' : 'Krone',
+      'KRW': context.isArabic ? 'وون' : 'Won',
+      'TRY': context.isArabic ? 'ليرة' : 'Lira',
+      'RUB': context.isArabic ? 'روبل' : 'Ruble',
+      'INR': context.isArabic ? 'روبية' : 'Rupee',
+      'BRL': context.isArabic ? 'ريال' : 'Real',
+      'ZAR': context.isArabic ? 'راند' : 'Rand',
+      'PLN': context.isArabic ? 'زلوتي' : 'Zloty',
+      'EGP': context.isArabic ? 'جنيه' : 'Pound',
+      'AED': context.isArabic ? 'درهم' : 'Dirham',
+      'SAR': context.isArabic ? 'ريال' : 'Riyal',
+      'QAR': context.isArabic ? 'ريال' : 'Riyal',
+      'KWD': context.isArabic ? 'دينار' : 'Dinar',
+      'BHD': context.isArabic ? 'دينار' : 'Dinar',
+      'OMR': context.isArabic ? 'ريال' : 'Rial',
+      'JOD': context.isArabic ? 'دينار' : 'Dinar',
+      'LBP': context.isArabic ? 'ليرة' : 'Pound',
+      'IQD': context.isArabic ? 'دينار' : 'Dinar',
+      'IRR': context.isArabic ? 'ريال' : 'Rial',
+      'THB': context.isArabic ? 'باهت' : 'Baht',
+      'MYR': context.isArabic ? 'رنجت' : 'Ringgit',
+      'IDR': context.isArabic ? 'روبية' : 'Rupiah',
+      'PHP': context.isArabic ? 'بيزو' : 'Peso',
+      'VND': context.isArabic ? 'دونغ' : 'Dong',
+      'TWD': context.isArabic ? 'دولار' : 'Dollar',
+      'PKR': context.isArabic ? 'روبية' : 'Rupee',
+      'BGN': context.isArabic ? 'ليف' : 'Lev',
+      'CZK': context.isArabic ? 'كورونا' : 'Koruna',
+      'HUF': context.isArabic ? 'فورنت' : 'Forint',
+      'RON': context.isArabic ? 'ليو' : 'Leu',
+      'HRK': context.isArabic ? 'كونا' : 'Kuna',
+      'RSD': context.isArabic ? 'دينار' : 'Dinar',
+      'UAH': context.isArabic ? 'هريفنيا' : 'Hryvnia',
+      'BYN': context.isArabic ? 'روبل' : 'Ruble',
+      'KZT': context.isArabic ? 'تنغي' : 'Tenge',
+      'UZS': context.isArabic ? 'سوم' : 'Som',
+      'AZN': context.isArabic ? 'مانات' : 'Manat',
+      'GEL': context.isArabic ? 'لاري' : 'Lari',
+      'AMD': context.isArabic ? 'درام' : 'Dram',
+      'TMT': context.isArabic ? 'مانات' : 'Manat',
+      'KGS': context.isArabic ? 'سوم' : 'Som',
+      'TJS': context.isArabic ? 'سوموني' : 'Somoni',
+      'MDL': context.isArabic ? 'ليو' : 'Leu',
+      'MKD': context.isArabic ? 'دينار' : 'Denar',
+      'ALL': context.isArabic ? 'ليك' : 'Lek',
+      'BAM': context.isArabic ? 'مارك' : 'Mark',
+      'ISK': context.isArabic ? 'كرونا' : 'Krona',
+      'DKK': context.isArabic ? 'كرونا' : 'Krone',
+      'CLP': context.isArabic ? 'بيزو' : 'Peso',
+      'COP': context.isArabic ? 'بيزو' : 'Peso',
+      'PEN': context.isArabic ? 'سول' : 'Sol',
+      'UYU': context.isArabic ? 'بيزو' : 'Peso',
+      'PYG': context.isArabic ? 'غواراني' : 'Guarani',
+      'BOB': context.isArabic ? 'بوليفيانو' : 'Boliviano',
+      'VES': context.isArabic ? 'بوليفار' : 'Bolívar',
+      'GYD': context.isArabic ? 'دولار' : 'Dollar',
+      'SRD': context.isArabic ? 'دولار' : 'Dollar',
+      'AWG': context.isArabic ? 'فلورين' : 'Florin',
+      'ANG': context.isArabic ? 'غيلدر' : 'Guilder',
+      'BBD': context.isArabic ? 'دولار' : 'Dollar',
+      'BZD': context.isArabic ? 'دولار' : 'Dollar',
+      'BMD': context.isArabic ? 'دولار' : 'Dollar',
+      'BSD': context.isArabic ? 'دولار' : 'Dollar',
+      'CUP': context.isArabic ? 'بيزو' : 'Peso',
+      'DOP': context.isArabic ? 'بيزو' : 'Peso',
+      'GTQ': context.isArabic ? 'كيتزال' : 'Quetzal',
+      'HNL': context.isArabic ? 'ليمبيرا' : 'Lempira',
+      'HTG': context.isArabic ? 'غورد' : 'Gourde',
+      'JMD': context.isArabic ? 'دولار' : 'Dollar',
+      'KYD': context.isArabic ? 'دولار' : 'Dollar',
+      'NIO': context.isArabic ? 'كوردوبا' : 'Córdoba',
+      'PAB': context.isArabic ? 'بالبوا' : 'Balboa',
+      'TTD': context.isArabic ? 'دولار' : 'Dollar',
+      'XCD': context.isArabic ? 'دولار' : 'Dollar',
+      'AFN': context.isArabic ? 'أفغاني' : 'Afghani',
+      'BDT': context.isArabic ? 'تاكا' : 'Taka',
+      'BTN': context.isArabic ? 'نغولتروم' : 'Ngultrum',
+      'KHR': context.isArabic ? 'ريال' : 'Riel',
+      'LAK': context.isArabic ? 'كيب' : 'Kip',
+      'LKR': context.isArabic ? 'روبية' : 'Rupee',
+      'MMK': context.isArabic ? 'كيات' : 'Kyat',
+      'MNT': context.isArabic ? 'توغريك' : 'Tugrik',
+      'MVR': context.isArabic ? 'روفية' : 'Rufiyaa',
+      'NPR': context.isArabic ? 'روبية' : 'Rupee',
+      'DZD': context.isArabic ? 'دينار' : 'Dinar',
+      'AOA': context.isArabic ? 'كوانزا' : 'Kwanza',
+      'BWP': context.isArabic ? 'بولا' : 'Pula',
+      'BIF': context.isArabic ? 'فرنك' : 'Franc',
+      'CVE': context.isArabic ? 'إسكودو' : 'Escudo',
+      'KMF': context.isArabic ? 'فرنك' : 'Franc',
+      'CDF': context.isArabic ? 'فرنك' : 'Franc',
+      'DJF': context.isArabic ? 'فرنك' : 'Franc',
+      'ERN': context.isArabic ? 'ناكفا' : 'Nakfa',
+      'ETB': context.isArabic ? 'بير' : 'Birr',
+      'GMD': context.isArabic ? 'دالاسي' : 'Dalasi',
+      'GHS': context.isArabic ? 'سيدي' : 'Cedi',
+      'GNF': context.isArabic ? 'فرنك' : 'Franc',
+      'KES': context.isArabic ? 'شلن' : 'Shilling',
+      'LSL': context.isArabic ? 'لوتي' : 'Loti',
+      'LRD': context.isArabic ? 'دولار' : 'Dollar',
+      'LYD': context.isArabic ? 'دينار' : 'Dinar',
+      'MGA': context.isArabic ? 'أرياري' : 'Ariary',
+      'MWK': context.isArabic ? 'كواشا' : 'Kwacha',
+      'MRU': context.isArabic ? 'أوقية' : 'Ouguiya',
+      'MUR': context.isArabic ? 'روبية' : 'Rupee',
+      'MAD': context.isArabic ? 'درهم' : 'Dirham',
+      'MZN': context.isArabic ? 'ميتيكال' : 'Metical',
+      'NAD': context.isArabic ? 'دولار' : 'Dollar',
+      'NGN': context.isArabic ? 'نايرا' : 'Naira',
+      'RWF': context.isArabic ? 'فرنك' : 'Franc',
+      'STN': context.isArabic ? 'دوبرا' : 'Dobra',
+      'SCR': context.isArabic ? 'روبية' : 'Rupee',
+      'SLE': context.isArabic ? 'ليون' : 'Leone',
+      'SOS': context.isArabic ? 'شلن' : 'Shilling',
+      'SSP': context.isArabic ? 'جنيه' : 'Pound',
+      'SDG': context.isArabic ? 'جنيه' : 'Pound',
+      'SZL': context.isArabic ? 'ليلانجيني' : 'Lilangeni',
+      'TZS': context.isArabic ? 'شلن' : 'Shilling',
+      'TND': context.isArabic ? 'دينار' : 'Dinar',
+      'UGX': context.isArabic ? 'شلن' : 'Shilling',
+      'ZMW': context.isArabic ? 'كواشا' : 'Kwacha',
+      'ZWL': context.isArabic ? 'دولار' : 'Dollar',
+      'FJD': context.isArabic ? 'دولار' : 'Dollar',
+      'PGK': context.isArabic ? 'كينا' : 'Kina',
+      'SBD': context.isArabic ? 'دولار' : 'Dollar',
+      'TOP': context.isArabic ? 'بانغا' : 'Paʻanga',
+      'VUV': context.isArabic ? 'فاتو' : 'Vatu',
+      'WST': context.isArabic ? 'تالا' : 'Tala',
+      'XPF': context.isArabic ? 'فرنك' : 'Franc',
+    };
+
+    return currencyShortNames[code] ?? code;
   }
 
   String _getCountryName(String code, {bool? useEnglish}) {
-    final countryNamesArabic = {
-      'USD': 'أمريكا',
-      'EUR': 'أوروبا',
-      'GBP': 'بريطانيا',
-      'JPY': 'اليابان',
-      'AUD': 'أستراليا',
-      'CAD': 'كندا',
-      'CHF': 'سويسرا',
-      'CNY': 'الصين',
-      'SEK': 'السويد',
-      'NZD': 'نيوزيلندا',
-      'AED': 'الإمارات',
-      'SAR': 'السعودية',
-      'QAR': 'قطر',
-      'KWD': 'الكويت',
-      'BHD': 'البحرين',
-      'OMR': 'عمان',
-      'EGP': 'مصر',
-      'INR': 'الهند',
-      'BRL': 'البرازيل',
-      'RUB': 'روسيا',
-    };
+    final cubit = context.read<CurrencyCubit>();
+    final currency = cubit.getCurrencyByCode(code);
 
-    final countryNamesEnglish = {
-      'USD': 'United States',
-      'EUR': 'European Union',
-      'GBP': 'United Kingdom',
-      'JPY': 'Japan',
-      'AUD': 'Australia',
-      'CAD': 'Canada',
-      'CHF': 'Switzerland',
-      'CNY': 'China',
-      'SEK': 'Sweden',
-      'NZD': 'New Zealand',
-      'AED': 'United Arab Emirates',
-      'SAR': 'Saudi Arabia',
-      'QAR': 'Qatar',
-      'KWD': 'Kuwait',
-      'BHD': 'Bahrain',
-      'OMR': 'Oman',
-      'EGP': 'Egypt',
-      'INR': 'India',
-      'BRL': 'Brazil',
-      'RUB': 'Russia',
-    };
+    if (currency != null) {
+      bool shouldUseEnglish = useEnglish ?? !context.isArabic;
 
-    bool shouldUseEnglish = useEnglish ?? !context.isArabic;
-
-    if (shouldUseEnglish) {
-      return countryNamesEnglish[code] ?? code;
-    } else {
-      return countryNamesArabic[code] ?? code;
+      if (shouldUseEnglish) {
+        return currency.countryName ?? currency.name;
+      } else {
+        return currency.countryNameAr ?? currency.nameAr;
+      }
     }
+
+    return code;
   }
 
   void _showFromCurrencySelector(BuildContext context, CurrencyCubit cubit) {

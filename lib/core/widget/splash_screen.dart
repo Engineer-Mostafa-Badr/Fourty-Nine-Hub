@@ -72,8 +72,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final isShowOnboarding = await CacheManager.getShowOnboarding();
     String nextRoute;
     serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
-    bool isAccessTokenExpired = (accessToken != null && accessToken.isNotEmpty)?JwtDecoder.isExpired(accessToken):false;
-    bool isRefreshTokenExpired = (refreshToken != null && refreshToken.isNotEmpty)?JwtDecoder.isExpired(refreshToken??''):false;
 
     if(context.isUserLoggedIn!=true){
       print("context.isUserLoggedIn1 ${context.isUserLoggedIn}");
@@ -89,7 +87,8 @@ class _SplashScreenState extends State<SplashScreen> {
         context.go(nextRoute);
       }
       return;
-    }else{
+    }else
+    {
       var result = await serviceLocator<ApiConsumer>().get('/settings');
       result.fold((failure){
       }, (data) async {
@@ -235,18 +234,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
       return newToken;
     } catch (e) {
-      context.read<UserCubit>().attachToken();
-      context.read<UserCubit>().getUser();
-      context.read<CreatePostCubit>().loadData();
-      context.read<SecretsCubit>().getAllSecrets();
-      context.read<CustomPageCubit>().fetchActivate();
-      context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-      context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-      context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-      context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-      context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
-      var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-      currentContext.push(Routes.LOGIN);
+      // context.read<UserCubit>().attachToken();
+      // context.read<UserCubit>().getUser();
+      // context.read<CreatePostCubit>().loadData();
+      // context.read<SecretsCubit>().getAllSecrets();
+      // context.read<CustomPageCubit>().fetchActivate();
+      // context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+      // context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+      // context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+      // context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+      // context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+      // var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      // currentContext.push(Routes.LOGIN);
       print('❌ AuthInterceptor: Refresh token API failed: $e');
       return null;
     }

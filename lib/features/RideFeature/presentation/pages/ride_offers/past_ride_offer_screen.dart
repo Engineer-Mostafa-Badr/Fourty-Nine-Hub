@@ -285,24 +285,24 @@ class ClientPastWidget extends StatelessWidget {
                     ],
                   ),
                   Label(
-                    text: offers?.driverDetails?.firstName ?? '',
+                    text: offers?.clientDetails?.firstName ?? '',
                     style: Styles.mediumText(),
                   ),
                   Label(
                       text: context.isArabic
-                          ? offers?.driverDetails!.vehicleDetails?.brandAr ?? ''
-                          : offers?.driverDetails!.vehicleDetails?.brandEn ??
+                          ? offers?.driverDetails?.vehicleDetails?.brandAr ?? ''
+                          : offers?.driverDetails?.vehicleDetails?.brandEn ??
                               '',
                       style: Styles.mediumText()),
                   Label(
                       text: context.isArabic
-                          ? offers?.driverDetails!.vehicleDetails?.modelAr ?? ''
-                          : offers?.driverDetails!.vehicleDetails?.modelEn ??
+                          ? offers?.driverDetails?.vehicleDetails?.modelAr ?? ''
+                          : offers?.driverDetails?.vehicleDetails?.modelEn ??
                               '',
                       style: Styles.mediumText()),
                   Label(
                     text:
-                        '(${_formatNumber(offers?.driverDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)})',
+                        '(${_formatNumber(offers?.clientDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)})',
                     style: Styles.smallText(),
                   ),
                 ],

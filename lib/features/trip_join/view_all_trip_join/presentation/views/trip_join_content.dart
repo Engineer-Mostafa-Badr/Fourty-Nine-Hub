@@ -13,7 +13,6 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'widgets/trip_join/my_trip_widget.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class TripJoinContent extends StatefulWidget {
   const TripJoinContent({super.key});
@@ -25,7 +24,7 @@ class TripJoinContent extends StatefulWidget {
 class _TripJoinContentState extends State<TripJoinContent>
     with TickerProviderStateMixin {
   String _displayedCategory = LocaleKeys.availableTrips;
-  int selectedIndex = 0; // Changed to 0 to match availableTrips as default
+  int selectedIndex = 0;
   late TabController tabController;
   late ScrollController _scrollController;
 
@@ -93,68 +92,11 @@ class _TripJoinContentState extends State<TripJoinContent>
           children: [
             _buildStatusCategories(),
             Sizer(height: 10.h),
-
             Expanded(child:_buildCardForCategory(state)),
-            // Expanded(
-            //   child: Builder(
-            //     builder: (_) {
-            //       final itemCount = _getItemCount(state);
-            //       if (itemCount == 0 && !_isLoading(state)) {
-            //         return const Center(child: Text("No data found"));
-            //       }
-            //       return _buildCardForCategory(0, state);
-            //       return ListView.builder(
-            //         shrinkWrap: true,
-            //         controller: _scrollController,
-            //         physics: const NeverScrollableScrollPhysics(),
-            //         itemCount: itemCount + (_isLoading(state) ? 1 : 0),
-            //         itemBuilder: (BuildContext context, int index) {
-            //           if (index == itemCount && _isLoading(state)) {
-            //             return const Padding(
-            //               padding: EdgeInsets.all(16.0),
-            //               child: Center(child: CircularProgressIndicator()),
-            //             );
-            //           }
-            //
-            //           return _buildCardForCategory(index, state);
-            //         },
-            //       );
-            //     },
-            //   ),
-            // ),
-
-
           ],
         );
       },
     );
-  }
-
-  int _getItemCount(ViewAllTripJoinState state) {
-    switch (_displayedCategory) {
-      case LocaleKeys.availableTrips:
-        return state.availableTripJoinEntity?.length ?? 0;
-      case LocaleKeys.requestLog:
-        return state.requestTripJoinEntity?.length ?? 0;
-      case LocaleKeys.myAds:
-        return state.myAdsTripJoinData?.length ?? 0;
-      default:
-        return 0;
-    }
-  }
-
-  bool _isLoading(ViewAllTripJoinState state) {
-    final cubit = context.read<ViewAllTripJoinCubit>();
-    switch (_displayedCategory) {
-      case LocaleKeys.availableTrips:
-        return cubit.isLoadingMoreTripJoin;
-      case LocaleKeys.requestLog:
-        return cubit.isLoadingMoreRequestTripJoin;
-      case LocaleKeys.myAds:
-        return cubit.isLoadingMoreMyAds;
-      default:
-        return false;
-    }
   }
 
   Widget _buildCardForCategory( ViewAllTripJoinState state) {
@@ -245,9 +187,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                   ? AppColors.getButtonPrimaryColor(context)
                   : AppColors.getFillColor(context),
               border: Border.all(
-                color: selected
-                    ? AppColors.getRedColor(context)
-                    : AppColors.getButtonPrimaryColor(context),
+                color: AppColors.getButtonPrimaryColor(context),
                 width: 2,
               ),
             ),
@@ -265,31 +205,6 @@ class _TripJoinContentState extends State<TripJoinContent>
               ),
             ),
           ),
-          // Visibility(
-          //   visible: title == LocaleKeys.requestLog,
-          //   child: Positioned(
-          //     top: -3.h,
-          //     right: 4.h,
-          //     child: Container(
-          //       padding: const EdgeInsets.all(5),
-          //       decoration: BoxDecoration(
-          //         shape: BoxShape.circle,
-          //         color: AppColors.getRedColor(context),
-          //       ),
-          //       child: Center(
-          //         child: Text(
-          //          "${formatCount(context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0)}",
-          //           style: Styles.smallText(
-          //             color: context.isDarkMode
-          //                 ? Colors.black
-          //                 : AppColors.whiteColor,
-          //             fontSize: 20,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Visibility(
             visible: title == LocaleKeys.requestLog &&
                 (context.read<ViewAllTripJoinCubit>().state.requestCountData?.countRequest ?? 0) > 0,

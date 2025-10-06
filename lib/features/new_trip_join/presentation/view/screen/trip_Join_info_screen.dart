@@ -17,6 +17,7 @@ class TripJoinInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SharedScaffold(
+      onBackPressed: () => context.pop(),
       floatingActionButton: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();

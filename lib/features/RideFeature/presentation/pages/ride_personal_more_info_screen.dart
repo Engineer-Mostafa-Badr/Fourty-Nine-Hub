@@ -391,8 +391,8 @@ class _RidePersonalMoreInfoScreenState
                 context,
                 widget.subCategoryId,
                 title: context.isArabic
-                    ? "من فضلك ادفع الدين"
-                    : 'Please pay the Debt for more trips',
+                    ? "من فضلك اشترك للحصول على المزيد من الرحلات"
+                    : 'Please subscribe for more trips',
               );
             } else {
               showErrorMessage(context, getFailureMessage(failure, context));
@@ -421,234 +421,13 @@ class _RidePersonalMoreInfoScreenState
                   firstColor: AppColors.c3897F0,
                   isStartLocation: false),
               const SizedBox(height: 8),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Expanded(
-              //       child: GestureDetector(
-              //         onTap: () async {
-              //           if (cubit.selectedDate.isEmpty) {
-              //             ScaffoldMessenger.of(context).showSnackBar(
-              //               SnackBar(
-              //                 content: Text(
-              //                   context.isArabic
-              //                       ? 'يرجى اختيار التاريخ أولاً'
-              //                       : LocaleKeys.pleaseSelectDateFirst.localize,
-              //                 ),
-              //               ),
-              //             );
-              //             return;
-              //           }
-              //
-              //           final TimeOfDay? selectedTime = await showTimePicker(
-              //             context: context,
-              //             initialTime: TimeOfDay.now(),
-              //             // barrierColor: Colors.blue,
-              //             builder: (BuildContext context, Widget? child) {
-              //               return Theme(
-              //                 data: Theme.of(context).copyWith(
-              //                   textSelectionTheme: TextSelectionThemeData(
-              //                     cursorColor: AppColors.PRIMARY_COLOR, // ✅ correct way
-              //                   ),
-              //
-              //
-              //                   timePickerTheme: TimePickerThemeData(
-              //                     // backgroundColor: Colors.blue,
-              //
-              //                     dayPeriodColor:   context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR_DARK,
-              //                     // dayPeriodTextColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.whiteColor,
-              //                     // dialTextColor: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-              //                     hourMinuteColor:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-              //                     dialTextStyle: TextStyle(
-              //                       fontFamily:
-              //                           context.isArabic ? 'Tajawal' : null,
-              //                       fontSize: 16,
-              //                       color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR
-              //                     ),
-              //                     hourMinuteTextStyle: TextStyle(
-              //                       fontFamily:
-              //                           context.isArabic ? 'Tajawal' : null,
-              //                       fontSize: 24,
-              //                         color: context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR
-              //                     ),
-              //                     entryModeIconColor:
-              //                     context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.PRIMARY_COLOR,
-              //                     hourMinuteTextColor:   context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.whiteColor,
-              //                     dialHandColor: Theme.of(context).primaryColor,
-              //                     // backgroundColor:   context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR
-              //                   ),
-              //                 ),
-              //                 child: Localizations.override(
-              //                   context: context,
-              //                   locale: context.isArabic
-              //                       ? const Locale('ar', 'EG')
-              //                       : const Locale('en', 'US'),
-              //                   // ✅ force correct number system
-              //                   child: MediaQuery(
-              //                     data: MediaQuery.of(context)
-              //                         .copyWith(alwaysUse24HourFormat: false),
-              //                     child: child!,
-              //                   ),
-              //                 ),
-              //               );
-              //             },
-              //           );
-              //
-              //           if (selectedTime != null) {
-              //             final now = DateTime.now();
-              //
-              //             // Robust date parsing
-              //             // final parts =
-              //             //     cubit.selectedDate.split(RegExp(r'[/-]')).map((part) {
-              //             //   // Convert Arabic digits to Latin if needed
-              //             //   const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
-              //             //   const latinDigits = '0123456789';
-              //             //   return part.replaceAllMapped(
-              //             //       RegExp('[${arabicDigits}]'),
-              //             //       (match) => latinDigits[
-              //             //           arabicDigits.indexOf(match.group(0)!)]);
-              //             // }).toList();
-              //             final cleanedDate = convertToEnglishDigits(cubit.selectedDate);
-              //             final parts = cleanedDate.split(RegExp(r'[/-]'));
-              //
-              //             if (parts.length != 3) {
-              //               ScaffoldMessenger.of(context).showSnackBar(
-              //                 SnackBar(
-              //                   content: Text(
-              //                     context.isArabic
-              //                         ? 'تنسيق التاريخ غير صالح'
-              //                         : 'Invalid date format',
-              //                   ),
-              //                 ),
-              //               );
-              //               return;
-              //             }
-              //
-              //             final selectedDateParsed = DateTime(
-              //               int.parse(parts[2]), // year
-              //               int.parse(parts[1]), // month
-              //               int.parse(parts[0]), // day
-              //             );
-              //
-              //             final selectedDateTime = DateTime(
-              //               selectedDateParsed.year,
-              //               selectedDateParsed.month,
-              //               selectedDateParsed.day,
-              //               selectedTime.hour,
-              //               selectedTime.minute,
-              //             );
-              //
-              //             final isToday = selectedDateParsed.year == now.year &&
-              //                 selectedDateParsed.month == now.month &&
-              //                 selectedDateParsed.day == now.day;
-              //
-              //             final minTime = now.add(const Duration(minutes: 15));
-              //             if (isToday && selectedDateTime.isBefore(minTime)) {
-              //               ScaffoldMessenger.of(context).showSnackBar(
-              //                 SnackBar(
-              //                   content: Text(
-              //                     context.isArabic
-              //                         ? 'لا يمكنك اختيار وقت مضى'
-              //                         : LocaleKeys.youCantChoosePastTime.tr(),
-              //                   ),
-              //                 ),
-              //               );
-              //               return;
-              //             }
-              //
-              //             setState(() {
-              //               cubit.selectedTime =
-              //                   formatTimeWithLocale(selectedTime, context);
-              //               cubit.makeNonTrackingTripParam.date =
-              //                   selectedDateTime;
-              //             });
-              //           }
-              //         },
-              //         child: PickUpContainer(
-              //           fontWeight: FontWeight.w400,
-              //           title: cubit.selectedTime.isEmpty
-              //               ? (context.isArabic
-              //                   ? 'اختر الوقت'
-              //                   : LocaleKeys.chooseTheTime.localize)
-              //               : cubit.selectedTime,
-              //         ),
-              //       ),
-              //     ),
-              //     const SizedBox(width: 7),
-              //     Expanded(
-              //       child: CustomDatePickerButton(
-              //         selectedDate: cubit.selectedDate.isEmpty
-              //             ? LocaleKeys.chooseTheDate.tr()
-              //             : cubit.selectedDate,
-              //         onDateSelected: (newDate) {
-              //           setState(() {
-              //             cubit.selectedDate = newDate;
-              //             cubit.selectedTime = ""; // Reset time when date changes
-              //
-              //             // Parse the date safely using multiple formats
-              //             DateTime parsedDate;
-              //             try {
-              //               // Format input string to ensure consistent format
-              //               final parts = newDate.split('/');
-              //               if (parts.length == 3) {
-              //                 // Make sure month has leading zero if needed
-              //                 final day = parts[0];
-              //                 final month = parts[1].length == 1
-              //                     ? '0${parts[1]}'
-              //                     : parts[1];
-              //                 final year = parts[2];
-              //
-              //                 // Now parse with consistent format
-              //                 parsedDate = DateFormat('dd/MM/yyyy')
-              //                     .parse('$day/$month/$year');
-              //               } else {
-              //                 // Fallback for unexpected format
-              //                 throw FormatException('Invalid date format');
-              //               }
-              //             } catch (e) {
-              //               // Try alternative parsing methods
-              //               try {
-              //                 parsedDate = DateTime.parse(newDate);
-              //               } catch (_) {
-              //                 // Last resort: use current date
-              //                 print(
-              //                     'Failed to parse date: $newDate, using current date');
-              //                 parsedDate = DateTime.now();
-              //               }
-              //             }
-              //
-              //             final now = DateTime.now();
-              //
-              //             // Set initial time to current time or start of day for future dates
-              //             DateTime initialTime;
-              //             if (parsedDate.year == now.year &&
-              //                 parsedDate.month == now.month &&
-              //                 parsedDate.day == now.day) {
-              //               // If today, use current time
-              //               initialTime = now;
-              //             } else {
-              //               // If future date, set to start of day
-              //               initialTime = DateTime(parsedDate.year,
-              //                   parsedDate.month, parsedDate.day);
-              //             }
-              //
-              //             if (widget.type == 'shipping') {
-              //               cubit.makeLoadingTripParam.date = initialTime;
-              //             } else {
-              //               cubit.makeNonTrackingTripParam.date = initialTime;
-              //             }
-              //           });
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         ManageVibration.vibrate();
                         if (cubit.selectedDate.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -798,6 +577,7 @@ class _RidePersonalMoreInfoScreenState
                           ? LocaleKeys.chooseTheDate.tr()
                           : cubit.selectedDate,
                       onDateSelected: (newDate) {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         setState(() {
                           cubit.selectedDate = newDate;
                           cubit.selectedTime = "";
@@ -850,91 +630,11 @@ class _RidePersonalMoreInfoScreenState
 
               const SizedBox(height: 8),
               if (widget.type != 'shipping')
-                // PickUpTextFormField(
-                //   fieldType: FieldType.phone,
-                //   controller: cubit.phoneController,
-                //   // onChanged: (value) {
-                //   //   if (context.isArabic) {
-                //   //     final formatted = convertDigits(value, toArabic: true);
-                //   //     final selectionIndex = formatted.length;
-                //   //
-                //   //     cubit.passengerController.value = TextEditingValue(
-                //   //       text: formatted,
-                //   //       selection: TextSelection.collapsed(offset: selectionIndex),
-                //   //     );
-                //   //
-                //   //     final englishValue = convertDigits(formatted, toArabic: false);
-                //   //     cubit.makeNonTrackingTripParam.passengers = int.tryParse(englishValue);
-                //   //   } else {
-                //   //     cubit.passengerController.text = value;
-                //   //     cubit.makeNonTrackingTripParam.passengers = int.tryParse(value);
-                //   //   }
-                //   //
-                //   // },
-                //   onChanged: (value) {
-                //     final englishPhone = convertDigits(value, toArabic: false);
-                //     if (widget.type == 'shipping') {
-                //       cubit.makeLoadingTripParam.phone = englishPhone;
-                //     } else {
-                //       cubit.makeNonTrackingTripParam.phone = englishPhone;
-                //     }
-                //   },
-                //
-                //   validator: (value) {
-                //     final numericValue = convertDigits(value ?? '', toArabic: false).trim();
-                //     print('VALIDATOR converted: "$numericValue"');
-                //
-                //     if (numericValue.isEmpty) {
-                //       print('=> ERROR: required');
-                //       return LocaleKeys.required.localize;
-                //     }
-                //
-                //     if (numericValue.length != 11) {
-                //       return context.isArabic
-                //           ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                //           : 'Phone number must be exactly 11 digits.';
-                //     }
-                //
-                //     if (!numericValue.startsWith('010') &&
-                //         !numericValue.startsWith('011') &&
-                //         !numericValue.startsWith('012') &&
-                //         !numericValue.startsWith('015')) {
-                //       return context.isArabic
-                //           ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                //           : 'Phone number must start with 010, 011, 012, or 015.';
-                //     }
-                //
-                //     return null;
-                //   },
-                //
-                //   hintText: convertDigits(
-                //     LocaleKeys.numberOfPassenger.localize,
-                //     toArabic: context.isArabic,
-                //   ),
-                // ),
                 PickUpTextFormField(
                   fieldType: FieldType.phone,
                   controller: cubit.passengerController,
                   onChanged: (value) {
-                    // if (context.isArabic) {
-                    //   final formatted = convertDigits(value, toArabic: true);
-                    //   final selectionIndex = formatted.length;
-                    //
-                    //   cubit.passengerController.value = TextEditingValue(
-                    //     text: formatted,
-                    //     selection:
-                    //         TextSelection.collapsed(offset: selectionIndex),
-                    //   );
-                    //
-                    //   final englishValue =
-                    //       convertDigits(formatted, toArabic: false);
-                    //   cubit.makeNonTrackingTripParam.passengers =
-                    //       int.tryParse(englishValue); // ✅ parsed to int
-                    // } else {
-                    //   cubit.passengerController.text = value;
-                    //   cubit.makeNonTrackingTripParam.passengers =
-                    //       int.tryParse(value); // ✅ parsed to int
-                    // }
+                    formKey.currentState?.validate();
                     if (context.isArabic) {
                       final formatted = convertDigits(value, toArabic: true);
                       final selectionIndex = formatted.length;
@@ -990,7 +690,10 @@ class _RidePersonalMoreInfoScreenState
                 PickUpTextFormField(
                   fieldType: FieldType.text,
                   controller: cubit.descController,
-                  onChanged: (v) {}, // or leave it out
+                  onChanged: (v) {
+                    formKey.currentState?.validate();
+
+                  }, // or leave it out
 
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -1031,6 +734,7 @@ class _RidePersonalMoreInfoScreenState
                   return null;
                 },
                 onChanged: (value) {
+                  formKey.currentState?.validate();
                   final englishPhone = convertDigits(value, toArabic: false);
                   if (widget.type == 'shipping') {
                     cubit.makeLoadingTripParam.phone = englishPhone;
@@ -1047,7 +751,10 @@ class _RidePersonalMoreInfoScreenState
               ),
               const SizedBox(height: 8),
               GestureDetector(
-                onTap: () => _showOfferFareBottomSheet(context),
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _showOfferFareBottomSheet(context);
+                },
                 child: PickUpContainer(
                   title: cubit.offerPrice.isEmpty
                       ? LocaleKeys.offerPrice.localize
@@ -1093,7 +800,7 @@ class _RidePersonalMoreInfoScreenState
                                 final passengerCount =
                                     int.tryParse(passengerText) ?? 0;
 
-                                if (widget.type == 'shipping') {
+                                if (widget.type == "shipping") {
                                   cubit.makeLoadingTripParam
                                     ..isPremium = false
                                     ..price = price
@@ -1126,41 +833,39 @@ class _RidePersonalMoreInfoScreenState
                                   final tripParams = CreateLoadingTripParams(
                                     subcategoryId: widget.subCategoryId,
                                     fromTitle:
-                                        cubit.makeLoadingTripParam.fromTitle ??
-                                            '',
+                                    cubit.makeLoadingTripParam.fromTitle ??
+                                        '',
                                     toTitle:
-                                        cubit.makeLoadingTripParam.toTitle ??
-                                            '',
+                                    cubit.makeLoadingTripParam.toTitle ??
+                                        '',
                                     price: price,
                                     date: cubit.makeLoadingTripParam.date!,
                                     phone:
-                                        cubit.makeLoadingTripParam.phone ?? '',
+                                    cubit.makeLoadingTripParam.phone ?? '',
                                     passengers: passengerCount,
                                     isPremium: true,
                                     description:
-                                        cubit.makeLoadingTripParam.desc ?? '',
+                                    cubit.makeLoadingTripParam.desc ?? '',
                                     desc: cubit.descController.text,
                                   );
 
                                   cubit.createShippingTrip(
                                       params: tripParams, context: context);
                                 } else {
-                                  if (passengerCount > 1000) {
-                                    showErrorMessage(
-                                      context,
-                                      context.isArabic
-                                          ? 'لا يمكن أن يكون عدد الركاب أكبر من 1000'
-                                          : 'Passenger count cannot be greater than 1000',
-                                    );
-                                    return;
-                                  }
-
+                                  // final p = cubit.makeNonTrackingTripParam
+                                  //   ..passengers = passengerCount;
                                   final p = cubit.makeNonTrackingTripParam
-                                    ..passengers = passengerCount;
+                                    ..passengers = passengerCount
+                                    ..price =
+                                        price; // ✅ Add this to assign the parsed price
 
                                   if (!_validateRequiredFields(p)) {
-                                    print("$p");
-                                    print("$price");
+                                    print("${p.price} price");
+                                    print("${p.passengers} passengers");
+                                    print("${p.phone}");
+                                    print("${p.date} date ");
+                                    print("${p.toTitle} totitle");
+                                    print("${p.fromTitle} fromtitle");
                                     showErrorMessage(
                                       context,
                                       LocaleKeys
@@ -1170,16 +875,17 @@ class _RidePersonalMoreInfoScreenState
                                   }
 
                                   final tripParams = CreateNonTrackTripParams(
-                                      subcategoryId: widget.subCategoryId,
-                                      fromTitle: p.fromTitle!,
-                                      toTitle: p.toTitle!,
-                                      price: price,
-                                      date: p.date!,
-                                      phone: p.phone!,
-                                      passengers: passengerCount,
-                                      isPremium: true,
-                                      description: p.description ?? '',
-                                      desc: cubit.descController.text);
+                                    subcategoryId: widget.subCategoryId,
+                                    fromTitle: p.fromTitle!,
+                                    toTitle: p.toTitle!,
+                                    price: price,
+                                    date: p.date!,
+                                    phone: p.phone!,
+                                    passengers: passengerCount,
+                                    isPremium: true,
+                                    description: p.description ?? '',
+                                    desc: cubit.descController.text,
+                                  );
 
                                   cubit.createNonTrackTrip(
                                       params: tripParams, context: context);

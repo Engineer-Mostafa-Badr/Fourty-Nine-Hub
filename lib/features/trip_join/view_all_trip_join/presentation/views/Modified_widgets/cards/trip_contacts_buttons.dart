@@ -28,6 +28,7 @@ class ContactsTripButtons extends StatefulWidget {
 
   final String? clientId;
   final String subcategoryId;
+  final String subscriptionTitle;
   final String phone;
   final String id;
   final String? senderName;
@@ -35,13 +36,16 @@ class ContactsTripButtons extends StatefulWidget {
   final bool? hasReport;
   final bool? isPremium;
   final bool? isButtonEnabled;
+  final Function? onSubscribe;
   const ContactsTripButtons(
       {super.key,
       required this.otherUserId,
       required this.subcategoryId,
+      required this.subscriptionTitle,
       required this.phone,
       this.senderName,
       this.senderImage,
+      this.onSubscribe,
       required this.id,
       this.hasReport = false,
       this.isPremium = false, // ✅ Add this
@@ -70,7 +74,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
           icon: Icon(
             size: 20,
             Icons.call,
-            color: widget.isPremium!
+            color: widget.isPremium==true
                 ? Colors.red
                 : (context.isDarkMode ? (isEnabled && context.read<UserCubit>().isLoggedIn)
                 ? AppColors.grey
@@ -101,7 +105,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
             ManageVibration.vibrate();
             SubscriptionMethod().subscribe(
               subscribeId: widget.subcategoryId,
-              title: LocaleKeys.ads.localize,
+              title: widget.subscriptionTitle,
               onSubscribe: (){
 
               }
@@ -120,7 +124,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
               : AppColors.DARK_GRAY_COLOR,
           icon: SvgPicture.asset(
             Assets.mailRed,
-            color: widget.isPremium!
+            color: widget.isPremium==true
                 ? Colors.red
                 : (context.isDarkMode ? (isEnabled && context.read<UserCubit>().isLoggedIn)
                 ? AppColors.grey
@@ -155,7 +159,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
 
             SubscriptionMethod().subscribe(
               subscribeId: widget.subcategoryId,
-              title: LocaleKeys.ads.localize,
+              title: widget.subscriptionTitle,
               onSubscribe: (){},
             );
           },

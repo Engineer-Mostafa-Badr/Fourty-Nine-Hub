@@ -88,6 +88,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                           views: widget.item.views ?? 0),
                     Expanded(
                       child: ImageAdsWidget(
+                        isMyAd:widget.item.userId == userId,
                         images:
                             widget.item.images.map((e) => e.mediaKey).toList(),
                         // isFavourite: widget.item.isFavourite ?? false,

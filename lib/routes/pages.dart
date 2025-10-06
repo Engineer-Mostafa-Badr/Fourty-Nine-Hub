@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/service/time_sync_service.dart';
 import 'package:fourtyninehub/core/widget/before_splash.dart';
 import 'package:fourtyninehub/core/widget/splash_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
@@ -282,8 +283,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/pages/tube_feed_page.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
@@ -405,7 +405,7 @@ import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
-import '../features/chance_feature/presentation/pages/chance_main_view.dart';
+import '../features/chance_feature/presentation/pages/chance_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
 import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
@@ -469,7 +469,7 @@ import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import '../features/star_feature/presentation/pages/my_talent.dart';
+import '../features/star_feature/presentation/presentation_exports.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/trip_join/view_all_trip_join/presentation/views/trip_join_view.dart';
@@ -479,16 +479,34 @@ import '../features/zoom/presentation/pages/meeting_room.dart';
 import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
+import '../core/widget/incorrect_time_screen.dart';
 
 class AppPages {
   AppPages._();
 
-  static late final GoRouter router;
+  static late GoRouter router;
 
   static initializeRouter(String initialRoute) {
+    final hasTimeService = serviceLocator.isRegistered<TimeSyncService>();
+    final timeIncorrectListenable = hasTimeService
+        ? serviceLocator<TimeSyncService>().isTimeIncorrect
+        : null;
     router = GoRouter(
         navigatorKey: navigatorKey,
         initialLocation: initialRoute,
+        refreshListenable: timeIncorrectListenable,
+        redirect: (context, state) {
+          if (timeIncorrectListenable == null) return null;
+          final isIncorrect = timeIncorrectListenable.value;
+          final atIncorrect = state.matchedLocation == '/IncorrectTime';
+          if (isIncorrect && !atIncorrect) {
+            return '/IncorrectTime';
+          }
+          if (!isIncorrect && atIncorrect) {
+            return '/';
+          }
+          return null;
+        },
         routes: <RouteBase>[
           GoRoute(
             path: Paths.splash,
@@ -496,9 +514,20 @@ class AppPages {
             pageBuilder: (context, state) => customTransition(
               context,
               state,
-              const BeforeSplash(),
+              BeforeSplash(
+                hasNavigated: (state.extra is bool) ? state.extra as bool : false,
+              ),
             ),
             routes: [
+              GoRoute(
+                path: Paths.incorrectTime,
+                name: Routes.incorrectTime,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  const IncorrectTimeScreen(),
+                ),
+              ),
               GoRoute(
                 path: Paths.splashScreen,
                 name: Routes.splashScreen,
@@ -2111,9 +2140,7 @@ class AppPages {
                       path: Paths.CREATEPOST,
                       name: Routes.CREATEPOST,
                       pageBuilder: (context, state) => customTransition(
-                          context, state, const CreatePostView(
-
-                      )),
+                          context, state, const CreatePostView()),
                     ),
                     GoRoute(
                       path: Paths.CREATEPOSTTWITTER,
@@ -2329,22 +2356,22 @@ class AppPages {
               //           ),
               //         ),
               //       ),
-                    // CreateAuctionView
-                  //   GoRoute(
-                  //     path: Paths.CREATEAUCTION,
-                  //     name: Routes.CREATEAUCTION,
-                  //     pageBuilder: (context, state) => customTransition(
-                  //         context,
-                  //         state,
-                  //         BlocProvider.value(
-                  //           value: serviceLocator<CreateAuctionCubit>(),
-                  //           child: CreateAuctionView(
-                  //             adId: state.extra as String,
-                  //           ),
-                  //         )),
-                  //   ),
-                  //   // OtherAccountView
-                  // ]),
+              // CreateAuctionView
+              //   GoRoute(
+              //     path: Paths.CREATEAUCTION,
+              //     name: Routes.CREATEAUCTION,
+              //     pageBuilder: (context, state) => customTransition(
+              //         context,
+              //         state,
+              //         BlocProvider.value(
+              //           value: serviceLocator<CreateAuctionCubit>(),
+              //           child: CreateAuctionView(
+              //             adId: state.extra as String,
+              //           ),
+              //         )),
+              //   ),
+              //   // OtherAccountView
+              // ]),
 
               // ChatView
               GoRoute(
@@ -3704,11 +3731,13 @@ class AppPages {
                     name: Routes.BE_STAR_DETAILS,
                     pageBuilder: (context, state) {
                       return customTransition(
-                          context,
-                          state,
-                          BlocProvider<StarCubit>(
-                              create: (_) => serviceLocator(),
-                              child: const AllWinnerView()));
+                        context,
+                        state,
+                        BlocProvider<StarCubit>(
+                          create: (_) => serviceLocator<StarCubit>(),
+                          child: const AllWinnerView(),
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -3719,14 +3748,14 @@ class AppPages {
                     MultiBlocProvider(
                       providers: [
                         BlocProvider<StarCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator<StarCubit>(),
                         ),
                         // أضف هذا السطر
                         BlocProvider<CommentCubit>(
-                          create: (_) => serviceLocator(),
+                          create: (_) => serviceLocator<CommentCubit>(),
                         ),
                       ],
-                      child: const BeStarView(),
+                      child: const TubeFeedView(),
                     ),
                   );
                 },
@@ -4918,7 +4947,7 @@ class AppPages {
                 builder: (context, state) {
                   return BlocProvider(
                     create: (_) =>
-                        serviceLocator<AuctionCubit>()..fetchAuctionBanner(),
+                        serviceLocator<AuctionCubit>()..fetchAuctionBanner()..fetchAuctionAllWinner(),
                         // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
                     child: AuctionScreen(),
                   );
@@ -4929,8 +4958,7 @@ class AppPages {
                 name: Routes.createAuctionScreen,
                 builder: (context, state) {
                   return BlocProvider(
-                    create: (_) =>
-                        serviceLocator<AuctionCubit>(),
+                    create: (_) => serviceLocator<AuctionCubit>(),
                     child: CreateAuctionScreen(),
                   );
                 },

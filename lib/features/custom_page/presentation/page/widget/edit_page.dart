@@ -60,8 +60,9 @@ class _EditPageState extends State<EditPage> {
                 leading: Builder(builder: (context) {
                   return IconButton(
                       onPressed: () {
-      ManageVibration.vibrate();
-                        if (BlocProvider.of<EditPageCubit>(context).currentIndex >
+                        ManageVibration.vibrate();
+                        if (BlocProvider.of<EditPageCubit>(context)
+                                .currentIndex >
                             0) {
                           BlocProvider.of<EditPageCubit>(context).changePage(
                               BlocProvider.of<EditPageCubit>(context)

@@ -698,7 +698,7 @@ abstract class Assets {
 
   // special loading in ads
   static String searchLoading = 'assets/lottie/special_loading.json';
-  static String customLoading = 'assets/lottie/loading.json';
+  static String customLoading = 'assets/lottie/Loading_Edit_by_m7m7.json';
 
   //SpotLight
   static String spotlight_profile = "assets/images/spotlight_profile.png";

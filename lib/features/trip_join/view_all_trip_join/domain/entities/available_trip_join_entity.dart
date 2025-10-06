@@ -13,6 +13,7 @@ class AvailableTripJoinEntity {
   final String? offerType;
   final bool? isPremium;
   final String? phoneNumber; // ✅ Added
+  final List<ViewerEntity>? lastViewers; // ✅ Added
   final IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
@@ -27,6 +28,7 @@ class AvailableTripJoinEntity {
     this.viewerIds,
     this.isRepeat,
     this.isView,
+    this.lastViewers,
     this.passengers,
     this.startDate,
     this.offerType,
@@ -75,5 +77,18 @@ class CoordinatesEntity {
   CoordinatesEntity({
     this.address,
     this.coordinates,
+  });
+}
+
+class ViewerEntity{
+  final String? id;
+  final String? firstName;
+  final String? lastName;
+  final String? gender;
+  ViewerEntity({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.gender,
   });
 }

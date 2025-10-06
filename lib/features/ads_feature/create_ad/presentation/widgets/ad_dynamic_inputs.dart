@@ -77,6 +77,20 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     );
   }
 
+  String formatText(String input) {
+    // Handle camelCase by adding spaces before uppercase letters
+    String processedInput = input.replaceAllMapped(
+      RegExp(r'([a-z])([A-Z])'),
+      (match) => '${match.group(1)} ${match.group(2)}',
+    );
+    
+    // Split by dash, underscore, or space
+    return processedInput
+        .split(RegExp(r'[-_\s]+'))
+        .where((word) => word.isNotEmpty)
+        .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+        .join(' ');
+  }
   Widget _buildTextFieldWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +103,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn,
+                : formatText(widget.property.nameEn),
             style: Styles.mediumText(
                 fontSize: 32, color: AppColors.getTextColor(context)),
           ),
@@ -100,7 +114,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
         CreateAdTextFormField(
           hintText: getLang() == 'ar'
               ? widget.property.nameAr
-              : widget.property.nameEn,
+              : formatText(widget.property.nameEn),
           onChanged: (v) => widget.onTextChanged(v),
           keyboardType: TextInputType.text,
           validator: (value) {
@@ -149,7 +163,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr.replaceAll('_', ' ')
-                : widget.property.nameEn.replaceAll('_', ' '),
+                : formatText(widget.property.nameEn),
             style: Styles.mediumText(
                 fontSize: 32, color: AppColors.getTextColor(context)),
           ),
@@ -170,7 +184,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           items: widget.property.values
               .map<DropdownMenuItem<SelectionEntity>>((e) => DropdownMenuItem(
                     value: e,
-                    child: Text(context.isArabic ? e.nameAr : e.nameEn),
+                    child: Text(context.isArabic ? e.nameAr : formatText(e.nameEn)),
                   ))
               .toList(),
           onChange: (SelectionEntity? newValue) {
@@ -252,7 +266,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn,
+                : formatText(widget.property.nameEn),
             style: Styles.mediumText(
                 fontSize: 32,
                 color:
@@ -266,7 +280,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           onChanged: (String v) => widget.onTextChanged(v),
           hintText: getLang() == 'ar'
               ? widget.property.nameAr
-              : widget.property.nameEn,
+              : formatText(widget.property.nameEn),
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           validator: (value) {
@@ -299,7 +313,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn,
+                : formatText(widget.property.nameEn),
             style: Styles.mediumText(
                 fontSize: 32,
                 color: context.isDarkMode

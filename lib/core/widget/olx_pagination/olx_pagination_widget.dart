@@ -93,10 +93,12 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
                 automaticallyImplyLeading: false,
                 pinned: false,
                 expandedHeight: screenHeight, // Reduced height for banner
-                flexibleSpace: BannerAdsWidget(
+                flexibleSpace: widget.banners.isNotEmpty
+                    ? BannerAdsWidget(
                   key: Key('banner_$page'),
                   banner: widget.banners[(page - 1) % widget.banners.length],
-                ),
+                )
+                    : const SizedBox.shrink(),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(

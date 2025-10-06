@@ -6,6 +6,7 @@ class AuctionState {
   final List<GetAvailableAuctionEntity>? getExpiredAuction;
   final List<GetAvailableAuctionEntity>? getFavoriteAuction;
   final List<GetAvailableAuctionEntity>? getMyAuction;
+  final List<GetAvailableAuctionEntity>? searchAuction;
   final List<AuctionParticipantsEntity>? auctionParticipants;
   final List<AuctionMainCategoryEntity>? auctionMainData;
   final Failure? failure;
@@ -19,6 +20,7 @@ class AuctionState {
   final BidWinnerEntity? bidWinner; // 👑 new field
   final List<MyBiddersEntity>? myBiddersData;
   final AuctionBannerEntity? auctionBanner;
+  final AuctionWinnerDataEntity? auctionWinnerData;
   AuctionState({
     this.status,
     this.participantsStatus, // 👈 add
@@ -33,9 +35,11 @@ class AuctionState {
     this.getMyAuction,
     this.bidError,
     this.bidWinner,
+    this.auctionWinnerData,
     this.createAuction,
     this.myBiddersData,
     this.auctionBanner,
+    this.searchAuction,
     this.uploadedFiles = const [],
     this.isUploading = false,
     this.isLoading = false,
@@ -45,6 +49,7 @@ class AuctionState {
     StateStatus? status,
     StateStatus? participantsStatus, // 👈 add
     List<GetAvailableAuctionEntity>? getAvailableAuction,
+    List<GetAvailableAuctionEntity>? searchAuction,
     Failure? failure,
     GetAvailableAuctionEntity? singleAuction,
     List<AuctionParticipantsEntity>? auctionParticipants,
@@ -61,6 +66,7 @@ class AuctionState {
     CreateAuctionEntity ? createAuction,
     List<MyBiddersEntity>? myBiddersData,
     AuctionBannerEntity? auctionBanner,
+    AuctionWinnerDataEntity? auctionWinnerData,
   }) {
     return AuctionState(
       status: status ?? this.status,
@@ -82,6 +88,8 @@ class AuctionState {
       myBiddersData: myBiddersData ?? this.myBiddersData,
       auctionBanner: auctionBanner ?? this.auctionBanner,
       isLoading: isLoading ?? this.isLoading,
+      auctionWinnerData: auctionWinnerData ?? this.auctionWinnerData,
+      searchAuction: searchAuction ?? this.searchAuction,
     );
   }
 }

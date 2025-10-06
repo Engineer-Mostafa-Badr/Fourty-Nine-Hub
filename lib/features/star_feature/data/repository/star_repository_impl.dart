@@ -5,6 +5,7 @@ import '../data_source/star_remote_data_source.dart';
 import '../../domain/entity/banner_talent_entity.dart';
 import '../../domain/entity/star_entity.dart';
 import '../../domain/entity/star_winner_entity.dart';
+import '../../domain/entity/tube_winner_statistics_entity.dart';
 import '../../domain/repository/star_repository.dart';
 import '../../domain/use_case/fetch_all_star_use_case.dart';
 import '../../domain/use_case/upload_my_star_use_case.dart';
@@ -105,6 +106,12 @@ class StarRepositoryImpl extends StarRepository {
   }
 
   @override
+  Future<Either<Failure, List<TubeVideoModel>>> getRecommendedVideos(
+      String videoId, int page, int limit) {
+    return _remoteDataSource.getRecommendedVideos(videoId, page, limit);
+  }
+
+  @override
   Future<Either<Failure, bool>> likeTubeVideo(String videoId) {
     return _remoteDataSource.likeTubeVideo(videoId);
   }
@@ -164,5 +171,10 @@ class StarRepositoryImpl extends StarRepository {
   @override
   Future<Either<Failure, ActiveCategoryResponse>> getActiveCategories() {
     return _remoteDataSource.getActiveCategories();
+  }
+
+  @override
+  Future<Either<Failure, TubeWinnerStatisticsEntity>> getTubeWinnerStatistics() {
+    return _remoteDataSource.getTubeWinnerStatistics();
   }
 }
