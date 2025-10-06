@@ -37,11 +37,12 @@ class UserDataTinderModel extends UserDataTinderEntity {
       followersCount: json['followersCount'] ?? 0,
       followingCount: json['followingCount'] ?? 0,
       friendsCount: json['friendsCount'] ?? 0,
-      pictures: json['pictures'] != null
-          ? List<TinderUserPicture>.from(
-              json['pictures'].map((x) => TinderUserPictureModel.fromJson(x)),
-            )
-          : [],
+        pictures:[]
+      // pictures: json['pictures'] != null
+      //     ? List<TinderUserPicture>.from(
+      //         json['pictures'].map((x) => TinderUserPictureModel.fromJson(x)),
+      //       )
+      //     : [],
     );
   }
 }

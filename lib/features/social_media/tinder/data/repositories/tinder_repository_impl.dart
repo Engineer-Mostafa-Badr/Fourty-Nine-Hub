@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/domain/tinder_like_entity.dart';
+import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/add_like_tinder_use_case.dart';
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/error/failure.dart';
 import '../data_sources/tinder_data_source.dart';
@@ -86,6 +88,21 @@ class TinderRepositoryImpl extends TinderRepository {
   Future<Either<Failure, bool>> deletePictures(String id) {
     return _storiesRemoteDataSource.deletePictures(id);
   }
+
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params}) {
+  //   return _storiesRemoteDataSource.addTinderLike(params: params);
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params}) {
+  //   return _storiesRemoteDataSource.addTinderDisLike(params: params);
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params}) {
+  //   return _storiesRemoteDataSource.addTinderLove(params: params);
+  // }
 
 // @override
 // Future<Either<Failure, bool>> makeViews(String id) {
