@@ -3748,7 +3748,7 @@ class AppPages {
                         context,
                         state,
                         BlocProvider<StarCubit>(
-                          create: (_) => serviceLocator<StarCubit>(),
+                          create: (_) => serviceLocator(),
                           child: const AllWinnerView(),
                         ),
                       );
@@ -4961,8 +4961,8 @@ class AppPages {
                 builder: (context, state) {
                   return BlocProvider(
                     create: (_) =>
-                        serviceLocator<AuctionCubit>()..fetchAuctionBanner()..fetchAuctionAllWinner(),
-                        // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
+                        serviceLocator<AuctionCubit>()..fetchAuctionBanner(),
+                    // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
                     child: AuctionScreen(),
                   );
                 },

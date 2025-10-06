@@ -36,34 +36,38 @@ class NetworkErrorScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 32.h),
-                
+
                 // Title
                 Text(
                   LocaleKeys.noInternetConnection.tr(),
                   style: Styles.headerText(
-                    fontSize: 24.sp,
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16.h),
-                
+                SizedBox(height: 20.h),
+
                 // Description
                 Text(
                   LocaleKeys.checkInternetConnection.tr(),
                   style: Styles.mediumText(
-                    fontSize: 16.sp,
-                    color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    fontSize: 20.sp,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color
+                        ?.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 32.h),
-                
+                SizedBox(height: 36.h),
+
                 // Retry button
                 ElevatedButton.icon(
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     // Trigger network check by refreshing the NetworkManager
                     NetworkManager().initialize();
                     // Also trigger a manual check
@@ -71,13 +75,13 @@ class NetworkErrorScreen extends StatelessWidget {
                   },
                   icon: Icon(
                     Icons.refresh_rounded,
-                    size: 20.sp,
+                    size: 24.sp,
                     color: Colors.white,
                   ),
                   label: Text(
                     LocaleKeys.retry.tr(),
                     style: Styles.mediumText(
-                      fontSize: 16.sp,
+                      fontSize: 20.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
@@ -101,4 +105,4 @@ class NetworkErrorScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

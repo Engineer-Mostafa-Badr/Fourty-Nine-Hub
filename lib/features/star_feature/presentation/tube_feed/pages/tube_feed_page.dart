@@ -15,7 +15,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/utils/arabic_pluralization.dart';
 import '../../../../../core/utils/format_numbers.dart';
-import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
