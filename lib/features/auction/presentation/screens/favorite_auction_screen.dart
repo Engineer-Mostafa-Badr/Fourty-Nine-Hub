@@ -95,7 +95,7 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
         print("📊 Rendering auction list with ${auctions.length} items");
         return Scaffold(
           floatingActionButton: isFloatingButtonVisible
-              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize}", () {
+              ? buildFloatingAction(context,title:   "${LocaleKeys.addAuction.localize} +", () {
             ManageVibration.vibrate();
             context.push(Routes.createAuctionScreen);
           })

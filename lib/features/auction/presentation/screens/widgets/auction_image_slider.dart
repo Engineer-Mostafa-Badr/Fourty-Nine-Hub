@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../res/style/app_colors.dart';
@@ -114,12 +115,12 @@ class _AuctionImageCarouselState extends State<AuctionImageCarousel> {
               borderRadius: BorderRadius.circular(12),
               child: isVideo
                   ? VideoPlayerWidget.network(url: mediaUrl)
-                  : Image.network(
-                mediaUrl,
+                  : ImageFromInternet(
+              image: mediaUrl,
                 height: 201,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _buildErrorWidget(),
+                // errorBuilder: (_, __, ___) => _buildErrorWidget(),
               ),
             );
           },

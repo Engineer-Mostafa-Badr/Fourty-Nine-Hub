@@ -219,16 +219,31 @@ class _MyAdCardState extends State<MyAdCard> {
           children: [
             Row(
               children: [
-                Label(
-                  text:
-                  '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
-                  style: Styles.headerText(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      color: context.isDarkMode
-                          ? AppColors.whiteColor
-                          : AppColors.SECONDARY_COLOR),
-                  maxLines: 1,
+                Row(
+                  children: [
+                    Label(
+                      text:
+                      '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ',
+                      style: Styles.headerText(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.PRIMARY_COLOR),
+                      maxLines: 1,
+                    ),
+                    Label(
+                      text:
+                      '${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
+                      style: Styles.headerText(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.SECONDARY_COLOR),
+                      maxLines: 1,
+                    ),
+                  ],
                 ),
                 Sizer(width: 16),
                 if (widget.item.mainCategoryId ==

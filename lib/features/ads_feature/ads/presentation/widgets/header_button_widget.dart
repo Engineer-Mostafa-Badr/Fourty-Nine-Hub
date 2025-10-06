@@ -36,6 +36,7 @@ class HeaderButtonWidget extends StatelessWidget {
         child: Center(
           child: Text(
             title,
+            textAlign: TextAlign.center,
             style: Styles.headerText(
               fontSize: 22,
               color: isOpened ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context),

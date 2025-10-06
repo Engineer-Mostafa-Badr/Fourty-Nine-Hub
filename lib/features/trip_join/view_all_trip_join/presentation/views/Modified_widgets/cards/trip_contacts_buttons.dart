@@ -74,7 +74,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
           icon: Icon(
             size: 20,
             Icons.call,
-            color: widget.isPremium!
+            color: widget.isPremium==true
                 ? Colors.red
                 : (context.isDarkMode ? (isEnabled && context.read<UserCubit>().isLoggedIn)
                 ? AppColors.grey
@@ -124,7 +124,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
               : AppColors.DARK_GRAY_COLOR,
           icon: SvgPicture.asset(
             Assets.mailRed,
-            color: widget.isPremium!
+            color: widget.isPremium==true
                 ? Colors.red
                 : (context.isDarkMode ? (isEnabled && context.read<UserCubit>().isLoggedIn)
                 ? AppColors.grey
