@@ -1587,16 +1587,16 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   @override
   void listenToOfferUpdateShippingTrip(Function(ClientOfferTripEntity offer) params) {
     try {
-      CliLogger.info("Listen to  Update Offer  Trip  ${SocketIOListeners.rideUpdateOfferShippingClientTrip}");
-      log("Listen to Update Offer Trip Trip ");
+      CliLogger.info("Listen to Loading Update Offer  Trip  ${SocketIOListeners.rideUpdateOfferShippingClientTrip}");
+      log("Listen to Loading Update Offer Trip Trip ");
       SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateOfferShippingClientTrip, (data) {
-        CliLogger.info(" Update Offer Trip data :  $data");
-        log(" Update Offer Trip data :  $data");
-        print(" Update Offer Trip data :  $data");
+        CliLogger.info("Loading Update Offer Trip data :  $data");
+        log("Loading Update Offer Trip data :  $data");
+        print("Loading Update Offer Trip data :  $data");
         params(ClientOfferTripModel.fromJson(data["offersUpdated"]));
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to Loading Update Offer error $e");
     }
   }
 

@@ -344,8 +344,8 @@ class EditProfileTinder extends StatelessWidget {
 // import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 // import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 // import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/upload_tinder_picture_use_case.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
+// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/find_cubit.dart';
+// import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/find_state.dart';
 // import 'package:fourtyninehub/res/style/app_colors.dart';
 // import 'package:fourtyninehub/service_locator/service_locator.dart';
 //

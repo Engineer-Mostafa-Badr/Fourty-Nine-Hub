@@ -20,6 +20,8 @@ abstract class ConversationsRemoteDataSource {
       {required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getSocialGreetConversations(
       {required ConversationPagination pagination});
+  Future<Either<Failure, List<ConversationEntity>>> getSocialAnonymousConversations(
+      {required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getSocialLockedConversations(
       {required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getDeletedSocialConversations(
@@ -97,6 +99,18 @@ class ConversationsRemoteDataSourceImpl
   Future<Either<Failure, List<ConversationEntity>>> getSocialLockedConversations(
       {required ConversationPagination pagination}) async {
     final response = await _apiConsumer.get(EndPoints.getSocialLockedConversations(
+        page: pagination.page, limit: pagination.limit));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['conversations'] as List)
+            .map((e) => ConversationModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<ConversationEntity>>> getSocialAnonymousConversations(
+      {required ConversationPagination pagination}) async {
+    final response = await _apiConsumer.get(EndPoints.getSocialAnonymousConversations(
         page: pagination.page, limit: pagination.limit));
     return response.fold(
         (failure) => Left(failure),

@@ -318,6 +318,7 @@ abstract class Routes {
   static const socialArchivedScreen = '/SocialArchivedScreen';
   static const socialGreetScreen = '/SocialGreetScreen';
   static const socialLockedScreen = '/SocialLockedScreen';
+  static const socialAnonymousScreen = '/socialAnonymousScreen';
   static const socialDeletedScreen = '/SocialDeletedScreen';
   static const tubeProfile =  '/BeAStar/TubeProfile';
   static const availableAuctionScreen =  '/AvailableAuctionScreen';
@@ -628,6 +629,7 @@ abstract class Paths {
   static const socialArchivedScreen = 'SocialArchivedScreen';
   static const socialGreetScreen = 'SocialGreetScreen';
   static const socialLockedScreen = 'SocialLockedScreen';
+  static const socialAnonymousScreen = 'socialAnonymousScreen';
   static const socialDeletedScreen = 'SocialDeletedScreen';
 
   static const tubeProfile = 'TubeProfile';

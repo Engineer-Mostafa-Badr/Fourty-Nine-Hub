@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -236,14 +238,11 @@ class ClientOfferWidget extends StatelessWidget {
     final badgeEndOffset =
         avatarSize * 0.0; // 0% from right edge (or tweak slightly)
 
-    return Container(
+    return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+    body: Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-          color:
-              context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-          borderRadius: BorderRadius.circular(20)),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClickableWidget(
             onTap: () {
@@ -253,50 +252,13 @@ class ClientOfferWidget extends StatelessWidget {
                 extra: offers?.id,
               );
             },
-            child: Column(children: [
-              Stack(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                    child: Container(
-                        // width: 75,
-                        // height: 75,
-                        width: avatarSize,
-                        height: avatarSize,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: offers?.driverDetails?.pictureUrl == null ||
-                                offers!.driverDetails!.pictureUrl!.isEmpty
-                            ? Image.asset(
-                                Assets.maleImagePlaceholder,
-                                fit: BoxFit.cover,
-                              )
-                            : ImageFromInternet(
-                                image: offers!.driverDetails!.pictureUrl!,
-                              )),
-                  ),
-                  PositionedDirectional(
-                      top: badgeTopOffset,
-                      end: badgeEndOffset,
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.grey,
-                            // color: AppColors.cF5F5F5,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Row(children: [
-                                SvgPicture.asset(Assets.star2,
-                                    width: 8, height: 8),
-                                const Sizer(width: 4),
-                                Label(
-                                    text: ratingCount,
-                                    style: Styles.smallText(
-                                        color: AppColors.PRIMARY_COLOR))
-                              ]))))
-                ],
+              ProfilePictureWidget(
+                  rating:(offers?.driverDetails?.rating?.average??0).toInt(),
+                image: offers?.driverDetails?.pictureUrl??'',
+
               ),
               Label(
                   text: offers?.driverDetails?.firstName ?? '',
@@ -343,7 +305,7 @@ class ClientOfferWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                         text: offers?.tripDetails?.location
-                                                ?.fromTitle ??
+                                            ?.fromTitle ??
                                             'Cairo International Airport',
                                         style: Styles.headerText()))
                               ],
@@ -359,7 +321,7 @@ class ClientOfferWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                         text: offers?.tripDetails?.location
-                                                ?.toTitle ??
+                                            ?.toTitle ??
                                             'Cairo International Airport',
                                         style: Styles.mediumText(
                                             fontWeight: FontWeight.w300)))
@@ -368,7 +330,7 @@ class ClientOfferWidget extends StatelessWidget {
                             if (modeType == 'ride')
                               Label(
                                   text:
-                                      '${LocaleKeys.passenger.localize}  $passengersCount',
+                                  '${LocaleKeys.passenger.localize}  $passengersCount',
                                   style: Styles.mediumText())
                           ],
                         ),
@@ -386,11 +348,11 @@ class ClientOfferWidget extends StatelessWidget {
                               Label(
                                   text: isArabic
                                       ? (offers?.tripDetails?.subcategory
-                                              ?.nameAr ??
-                                          '')
+                                      ?.nameAr ??
+                                      '')
                                       : (offers?.tripDetails?.subcategory
-                                              ?.nameEn ??
-                                          ''),
+                                      ?.nameEn ??
+                                      ''),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
@@ -403,8 +365,8 @@ class ClientOfferWidget extends StatelessWidget {
                         text: formatPrice(
                             offers?.isFromSocket == true
                                 ? offers?.newOfferPrice ??
-                                    offers?.newOfferPrice ??
-                                    300
+                                offers?.newOfferPrice ??
+                                300
                                 : offers?.newOfferPrice ?? 300,
                             context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
@@ -422,7 +384,7 @@ class ClientOfferWidget extends StatelessWidget {
                     children: [
                       Label(
                         text:
-                            formatTimeOnly(offers?.tripDetails?.date, context),
+                        formatTimeOnly(offers?.tripDetails?.date, context),
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
@@ -448,12 +410,12 @@ class ClientOfferWidget extends StatelessWidget {
                               ManageVibration.vibrate();
                               modeType == 'ride'
                                   ? context
-                                      .read<ClientTripsCubit>()
-                                      .acceptClientTrip(offers?.id ?? "")
+                                  .read<ClientTripsCubit>()
+                                  .acceptClientTrip(offers?.id ?? "")
                                   : context
-                                      .read<ClientTripsCubit>()
-                                      .acceptClientShippingTrip(
-                                          offers?.id ?? "");
+                                  .read<ClientTripsCubit>()
+                                  .acceptClientShippingTrip(
+                                  offers?.id ?? "");
                               onRefuseOffer(offers?.id ?? "");
                             },
                             backColor: AppColors.PRIMARY_COLOR),
@@ -470,12 +432,12 @@ class ClientOfferWidget extends StatelessWidget {
                               ManageVibration.vibrate();
                               modeType == 'ride'
                                   ? await context
-                                      .read<ClientTripsCubit>()
-                                      .refuseClientTrip(offers?.id ?? "")
+                                  .read<ClientTripsCubit>()
+                                  .refuseClientTrip(offers?.id ?? "")
                                   : await context
-                                      .read<ClientTripsCubit>()
-                                      .refuseClientShippingTrip(
-                                          offers?.id ?? "", context);
+                                  .read<ClientTripsCubit>()
+                                  .refuseClientShippingTrip(
+                                  offers?.id ?? "", context);
                               onRefuseOffer(offers?.id ?? "");
                             },
                             backColor: AppColors.SECONDARY_COLOR_DARK2),
@@ -488,6 +450,7 @@ class ClientOfferWidget extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.da
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
@@ -38,12 +39,25 @@ class ClientPendingWidget extends StatelessWidget {
     final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
     final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
 
-    return Container(
+    String _formatNumber(String input, BuildContext context) {
+      if (Localizations.localeOf(context).languageCode != 'ar') {
+        return input;
+      }
+
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+      String output = input;
+      for (int i = 0; i < english.length; i++) {
+        output = output.replaceAll(english[i], arabic[i]);
+      }
+      return output;
+    }
+
+
+    return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+    body: Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-        borderRadius: BorderRadius.circular(20),
-      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -62,44 +76,11 @@ class ClientPendingWidget extends StatelessWidget {
                         flex: 2,
                         child: Column(
                           children: [
-                            Stack(
-                              children: [
-                                ProfilePictureWidget(
-                                  image: offers?.yourDetails?.pictureUrl,
-                                  isVerified: offers?.yourDetails?.verifiedBadge,
-                                  hasStories: false,
-                                  rating: (offers?.yourDetails?.rating?.average??0).toInt(),
-                                ),
-                                if ((offers?.yourDetails?.rating?.count ?? 0) > 0)
-                                  PositionedDirectional(
-                                    top: badgeTopOffset,
-                                    end: badgeEndOffset,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.grey,
-                                        // color: AppColors.cF5F5F5,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              Assets.star2,
-                                              width: 8,
-                                              height: 8,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Label(
-                                              text: offers?.yourDetails?.rating?.count.toString() ?? '0',
-                                              style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                            ProfilePictureWidget(
+                              image: offers?.yourDetails?.pictureUrl,
+                              isVerified: offers?.yourDetails?.verifiedBadge,
+                              hasStories: false,
+                              rating: (offers?.yourDetails?.rating?.average??0).toInt(),
                             ),
                             Label(
                               text: offers?.yourDetails?.firstName ?? '',
@@ -127,8 +108,13 @@ class ClientPendingWidget extends StatelessWidget {
                               isFrom: false,
                               title: offers?.tripDetails?.location?.toTitle ?? 'Target Location',
                             ),
-                            Label(
-                              text: modeType == 'shipping' ? '' : '${LocaleKeys.passenger.localize}  ${formatPrice(offers?.tripDetails?.passengers ?? 1, context)}',
+                            (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
+                              text:
+                              '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                              style: Styles.mediumText(),
+                            ):Label(
+                              text:
+                              '${LocaleKeys.cargoDescription.localize}: ${offers?.tripDetails?.note}',
                               style: Styles.mediumText(),
                               maxLines: 2,
                             ),
@@ -154,11 +140,11 @@ class ClientPendingWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (modeType == 'shipping') ...[
-                    ReadMoreLabel(
-                        text: modeType == 'shipping' ? '${context.isArabic ? 'وصف الشحنة' : 'Cargo Description'} : ${offers?.tripDetails?.note ?? ''} ' : '',
-                        style: Styles.mediumText(color: AppColors.PRIMARY_COLOR))
-                  ],
+                  // if (modeType == 'shipping') ...[
+                  //   ReadMoreLabel(
+                  //       text: modeType == 'shipping' ? '${context.isArabic ? 'وصف الشحنة' : 'Cargo Description'} : ${offers?.tripDetails?.note ?? ''} ' : '',
+                  //       style: Styles.mediumText(color: AppColors.PRIMARY_COLOR))
+                  // ],
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -213,6 +199,7 @@ class ClientPendingWidget extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

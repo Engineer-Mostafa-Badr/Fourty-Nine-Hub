@@ -198,6 +198,7 @@ abstract class Assets {
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
+  static String love = 'assets/lottie/love.json';
   static String likeReaction = 'assets/lottie/like_reaction.json';
   static String hahaReaction = 'assets/lottie/haha_reaction.json';
   static String angryReaction = 'assets/lottie/angry_reaction.json';

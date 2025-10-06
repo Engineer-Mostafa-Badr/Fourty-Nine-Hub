@@ -13,6 +13,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/enums/base_status_enum.dart';
+import '../../../../core/widget/common/profile_picture_widget.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
@@ -674,20 +675,25 @@ class _AuctionDetailsWithParticipantsState
               child: Row(
                 children: [
                   // Profile Picture
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.grey.shade300,
-                    backgroundImage: p.profilePicture != null ? NetworkImage(p.profilePicture!) : null,
-                    onBackgroundImageError: p.profilePicture != null
-                        ? (_, __) {
-                      // Optional: log error or fallback
-                      CliLogger.info("Profile image failed to load");
-                    }
-                        : null,
-                    child: p.profilePicture == null
-                        ? const Icon(Icons.person, size: 24, color: Colors.white) // fallback logo
-                        : null,
+                  ProfilePictureWidget(
+                    image:  p.profilePicture,
+                    hasStories: false,
+                    isVerified: true,
                   ),
+                  // CircleAvatar(
+                  //   radius: 24,
+                  //   backgroundColor: Colors.grey.shade300,
+                  //   backgroundImage: p.profilePicture != null ? NetworkImage(p.profilePicture!) : null,
+                  //   onBackgroundImageError: p.profilePicture != null
+                  //       ? (_, __) {
+                  //     // Optional: log error or fallback
+                  //     CliLogger.info("Profile image failed to load");
+                  //   }
+                  //       : null,
+                  //   child: p.profilePicture == null
+                  //       ? const Icon(Icons.person, size: 24, color: Colors.white) // fallback logo
+                  //       : null,
+                  // ),
 
 
                   const SizedBox(width: 12),

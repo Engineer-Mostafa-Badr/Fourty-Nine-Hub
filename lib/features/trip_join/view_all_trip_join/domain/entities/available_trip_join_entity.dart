@@ -1,6 +1,10 @@
 class AvailableTripJoinEntity {
   final String? id;
   final String? creatorId;
+  final String? creatorFirstName;
+  final String? creatorLastName;
+  final String? creatorGender;
+  final bool? creatorVerification;
   final double? pricePerSeat;
   final String? status;
   num? viewerIds;
@@ -21,6 +25,10 @@ class AvailableTripJoinEntity {
   AvailableTripJoinEntity({
     this.id,
     this.creatorId,
+    this.creatorFirstName,
+    this.creatorLastName,
+    this.creatorGender,
+    this.creatorVerification,
     this.pricePerSeat,
     this.isNormalRequested,
     this.isPremiumRequested,
