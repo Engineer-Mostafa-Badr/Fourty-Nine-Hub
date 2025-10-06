@@ -566,6 +566,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
                   text: LocaleKeys.anonymous.localize,
                   onTap: () async {
                     ManageVibration.vibrate();
+                    context.push(Routes.socialAnonymousScreen);
                     // final result = await context.push(Routes.ARCHIVEDCHATS,
                     //     extra: OptionsChatsViewParams(
                     //       category: ChatCategoriesIds.anonymous,
