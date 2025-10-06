@@ -1819,6 +1819,8 @@ class EndPoints {
       '/conversations/greet?page=$page&limit=$limit';
   static getSocialLockedConversations({int page = 1, int limit = 10}) =>
       '/conversations/locked?page=$page&limit=$limit';
+  static getSocialAnonymousConversations({int page = 1, int limit = 10}) =>
+      '/conversations/anonymous?page=$page&limit=$limit';
   static getDeletedSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations/deleted?page=$page&limit=$limit';
   static getConversationLogs({int page = 1, int limit = 10, required String conversationId}) =>

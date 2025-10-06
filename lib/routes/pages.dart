@@ -326,6 +326,7 @@ import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/socail_greet_conversations_screen.dart';
+import '../features/Conversations/Presentation/Pages/social_anonymous_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_archived_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_deleted_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_locked_conversations_screen.dart';
@@ -2411,6 +2412,16 @@ class AppPages {
                   context,
                   state,
                   SocialGreetConversationsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.socialAnonymousScreen,
+                name: Routes.socialAnonymousScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  SocialAnonymousConversationsScreen(),
                 ),
               ),
 
