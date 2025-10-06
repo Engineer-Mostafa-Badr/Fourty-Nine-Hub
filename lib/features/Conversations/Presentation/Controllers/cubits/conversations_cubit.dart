@@ -15,9 +15,11 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../routes/pages.dart';
 import '../../../../../shared_web_socket.dart';
+import '../../../Data/Models/conversation_model.dart';
 import '../../../Domain/Usecases/delete_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_conversation_logs_use_case.dart';
 import '../../../Domain/Usecases/get_deleted_social_conversations_use_case.dart';
+import '../../../Domain/Usecases/get_socail_anonymous_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_socail_greet_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_social_archived_conversations_use_case.dart';
 import '../../../Domain/Usecases/get_social_locked_conversations_use_case.dart';
@@ -36,6 +38,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   final GetSocialArchivedConversations getSocialArchivedConversationsUseCase;
   final GetSocialGreetConversations getSocialGreetConversationsUseCase;
   final GetSocialLockedConversations getSocialLockedConversationsUseCase;
+  final GetSocialAnonymousConversationsUseCase getSocialAnonymousConversationsUseCase;
   final GetDeletedSocialConversationsUseCase getDeletedSocialConversationsUseCase;
   final GetConversationLogsUseCase getConversationLogsUseCase;
   final ListenToUpdateSocialListUseCase listenToUpdateSocialListUseCase;
@@ -60,6 +63,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     this.getSocialGreetConversationsUseCase,
     this.getDeletedSocialConversationsUseCase,
     this.getSocialLockedConversationsUseCase,
+    this.getSocialAnonymousConversationsUseCase,
     this.getConversationLogsUseCase,
     this.listenToUpdateSocialListUseCase,
     this.startTypingUseCase,
@@ -229,6 +233,36 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
   _listenToUpdateSocialList() {
     log("listenToUpdateSocialList");
+    try {
+      // SharedWebSocket.instance.socket!.connect();
+
+      SharedWebSocket.socket?.on('conversation:anonymous-update-list', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("Listen to Update Social List :  $data");
+          ConversationEntity conversation = ConversationModel.fromJson(data);
+          log("conversation updated :  $conversation");
+          if(socialAnonymousConversations.any((element) => element.conversationId == conversation.conversationId)){
+            // update conversation
+            socialAnonymousConversations[socialAnonymousConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
+          }
+          else{
+            socialAnonymousConversations.add(conversation);
+          }
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+        } catch (e) {
+          CliLogger.error("Listen to Update Social Anonymous List Error 1 :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("Listen to Update Social Anonymous List Error 2:  $e");
+    }
+  }
+
+  listenToUpdateSocialAnonymousList() {
+    log("listenToUpdateSocialAnonymousList");
     listenToUpdateSocialListUseCase((conversation) {
       log("conversation updated :  $conversation");
       if(socialConversations.any((element) => element.conversationId == conversation.conversationId)){
@@ -277,6 +311,7 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   List<ConversationEntity> socialArchivedConversations = [];
   List<ConversationEntity> socialGreetConversations = [];
   List<ConversationEntity> socialLockedConversations = [];
+  List<ConversationEntity> socialAnonymousConversations = [];
   List<DateTime> conversationLogs = [];
   bool isLoadingMoreConversationLogs = false;
   bool hasMoreDataConversationLogs = true;
@@ -296,6 +331,9 @@ class ConversationsCubit extends Cubit<ConversationsState> {
   bool isLoadingMoreSocialLockedConversation = false;
   bool hasMoreDataSocialLockedConversations = true;
   int currentPageSocialLockedConversations = 1;
+  bool isLoadingMoreSocialAnonymousConversation = false;
+  bool hasMoreDataSocialAnonymousConversations = true;
+  int currentPageSocialAnonymousConversations = 1;
 
   Future<void> loadInitialConversationLogs({required String conversationId}) async {
     conversationLogs.clear();
@@ -345,6 +383,14 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     await _fetchSocialLockedConversations();
   }
 
+  Future<void> loadInitialSocialAnonymousConversations() async {
+    socialAnonymousConversations.clear();
+    currentPageSocialAnonymousConversations = 1;
+    hasMoreDataSocialAnonymousConversations = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialAnonymousConversations();
+  }
+
   Future<void> getConversationLogs({required String conversationId}) async {
     if (hasMoreDataConversationLogs || isLoadingMoreConversationLogs) return;
     isLoadingMoreConversationLogs = true;
@@ -385,6 +431,13 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     isLoadingMoreSocialLockedConversation = true;
     emit(state.copyWith(status: ConversationsStates.loading));
     await _fetchSocialLockedConversations();
+  }
+
+  Future<void> getSocialAnonymousConversations() async {
+    if (hasMoreDataSocialAnonymousConversations || isLoadingMoreSocialAnonymousConversation) return;
+    isLoadingMoreSocialAnonymousConversation = true;
+    emit(state.copyWith(status: ConversationsStates.loading));
+    await _fetchSocialAnonymousConversations();
   }
 
   Future<void> _fetchConversationLogs({required String conversationId}) async {
@@ -605,6 +658,45 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
     if (!exists) {
       socialLockedConversations.add(conversation);
+    }
+  }
+
+  Future<void> _fetchSocialAnonymousConversations() async {
+    final result = await getSocialAnonymousConversationsUseCase(
+      pagination: ConversationPagination(
+        page: currentPageSocialAnonymousConversations,
+        limit: pageSize,
+      ),
+    );
+
+    result.fold(
+      (l) {
+        isLoadingMoreSocialAnonymousConversation = false; // Reset loading state on error
+        emit(state.copyWith(status: ConversationsStates.error, failure: l));
+      },
+      (data) {
+        for (ConversationEntity conversation in data) {
+          addUniqueSocialAnonymousConversation(conversation);
+        }
+
+        if (data.length < pageSize) {
+          hasMoreDataSocialAnonymousConversations = false;
+        } else {
+          currentPageSocialAnonymousConversations++;
+        }
+        isLoadingMoreSocialAnonymousConversation = false;
+        emit(state.copyWith(status: ConversationsStates.success));
+      },
+    );
+  }
+
+  void addUniqueSocialAnonymousConversation(ConversationEntity conversation) {
+    final exists = socialAnonymousConversations.any(
+          (c) => c.conversationId == conversation.conversationId,
+    );
+
+    if (!exists) {
+      socialAnonymousConversations.add(conversation);
     }
   }
 

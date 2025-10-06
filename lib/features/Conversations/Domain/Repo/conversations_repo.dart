@@ -11,6 +11,7 @@ abstract class ConversationsRepo {
   Future<Either<Failure, List<ConversationEntity>>> getSocialGreetConversations({required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getSocialLockedConversations({required ConversationPagination pagination});
   Future<Either<Failure, List<ConversationEntity>>> getDeletedSocialConversations({required ConversationPagination pagination});
+  Future<Either<Failure, List<ConversationEntity>>> getSocialAnonymousConversations({required ConversationPagination pagination});
   void listenToUpdateSocialList(Function(ConversationEntity) params);
   Future<Either<Failure, bool>> startTyping({required String conversationId});
   void listenToStartTyping(Function(String) params);

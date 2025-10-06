@@ -24,7 +24,9 @@ class AvailablePickMeBody extends StatelessWidget {
       children: [
         const Sizer(),
         TripCardInfoWidget(
-          firstName: 'm',lastName: 'm',
+          firstName: data.creatorFirstName??'',lastName: data.creatorLastName??'',
+            isMale: data.creatorGender == 'male',
+            isVerified: data.creatorVerification??false,
             title: context.isArabic ? data.vehicleDetails?.brandAr ?? "" : data.vehicleDetails?.brandEn ?? "",
             model: context.isArabic ? data.vehicleDetails?.modelAr ?? "" : data.vehicleDetails?.modelEn ?? "",
             icon: Assets.tripJoinCarIcon,
@@ -78,6 +80,8 @@ class AvailablePickMeBody extends StatelessWidget {
   TripCardInfoWidget({
     required String firstName,
     required String lastName,
+    required bool isMale,
+    required bool isVerified,
     required String title,
     required String model,
     required String icon,
@@ -92,28 +96,24 @@ class AvailablePickMeBody extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ProfilePictureWidget(
-            image: '',
-            firstChar: firstName[0].toUpperCase(),
-            hasStories: false,
-
-          ),
-          const Sizer(),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Row(
               children: [
-                Text(
-                  title,
-                  style: Styles.mediumText(),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                ProfilePictureWidget(
+                  image: '',
+                  firstChar: firstName[0].toUpperCase(),
+                  hasStories: false,
+                  isMale: isMale,
+                  isVerified: isVerified,
                 ),
-                Label(
-                  text: model,
-                  style: Styles.mediumText(),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                const Sizer(),
+                Expanded(
+                  child: Text(
+                    "$firstName $lastName",
+                    style: Styles.mediumText(),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
