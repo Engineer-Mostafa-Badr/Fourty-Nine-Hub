@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
-import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,7 +46,6 @@ import 'core/themes/light_theme.dart';
 import 'core/widget/network_alert_banner.dart';
 import 'core/widget/network_error_screen.dart';
 import 'core/service/time_sync_service.dart';
-import 'core/widget/incorrect_time_overlay.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -59,7 +56,7 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'routes/pages.dart';
-import 'package:crypto/crypto.dart'; // <-- add this
+// <-- add this
 // Global key for ToastificationWrapper to prevent recreation during network changes
 final GlobalKey _toastificationKey = GlobalKey();
 

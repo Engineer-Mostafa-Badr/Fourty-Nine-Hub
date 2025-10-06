@@ -4,6 +4,10 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
   AvailableTripJoinModel({
     super.id,
     super.creatorId,
+    super.creatorFirstName,
+    super.creatorLastName,
+    super.creatorGender,
+    super.creatorVerification,
     super.pricePerSeat,
     super.isNormalRequested,
     super.isPremiumRequested,
@@ -26,6 +30,10 @@ class AvailableTripJoinModel extends AvailableTripJoinEntity {
     return AvailableTripJoinModel(
       id: json['id'] as String?,
       creatorId: json['creatorId'] as String?,
+      creatorFirstName: json['creatorDetails']!=null?(json['creatorDetails']?['firstName']??''):"",
+      creatorLastName: json['creatorDetails']!=null?(json['creatorDetails']?['lastName']??''):"",
+      creatorGender: json['creatorDetails']!=null?(json['creatorDetails']?['gender']??''):"",
+      creatorVerification: json['creatorDetails']!=null?(json['creatorDetails']?['isVerified']??false):false,
       pricePerSeat: (json['pricePerSeat'] as num?)?.toDouble(),
       status: json['status'] as String?,
       viewerIds: (json['viewerIds'] as num?)?.toInt(),

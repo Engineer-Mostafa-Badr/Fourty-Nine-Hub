@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
@@ -118,9 +119,29 @@ class _TripJoinContentState extends State<TripJoinContent>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: _buildCategory(
+          child: TabWidget(
             title: LocaleKeys.availableTrips,
-            index: 0,
+            selected:tabController.index == 0, onTap: () {
+            ManageVibration.vibrate();
+            tabController.animateTo(0);
+            context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
+            setState(() {
+              _displayedCategory = LocaleKeys.availableTrips;
+              selectedIndex = 0;
+            });
+
+            // Load data for the selected category
+            final cubit = context.read<ViewAllTripJoinCubit>();
+            switch (LocaleKeys.availableTrips) {
+              case LocaleKeys.availableTrips:
+                break;
+              case LocaleKeys.requestLog:
+                break;
+              case LocaleKeys.myAds:
+                cubit.loadInitialMyAds(); // Uncomment and reload when implemented
+                break;
+            }
+          },
           ),
         ),
         const Sizer(width: 10),
