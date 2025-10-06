@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/ride_non_socket_details_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -193,7 +195,8 @@ class ClientPastWidget extends StatelessWidget {
     // Format price with Arabic digits if needed
     final priceText =
         _formatNumber("${offers?.tripDetails?.price?.toInt() ?? 300}", context);
-    return ClickableWidget(
+    return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+    body: ClickableWidget(
       onTap: () {
         ManageVibration.vibrate();
         Navigator.push(
@@ -207,11 +210,6 @@ class ClientPastWidget extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color:
-              context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-          borderRadius: BorderRadius.circular(20),
-        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -227,60 +225,10 @@ class ClientPastWidget extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: Container(
-                          width: 75,
-                          height: 75,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: offers?.driverDetails?.pictureUrl == null ||
-                                  offers!.driverDetails!.pictureUrl!.isEmpty
-                              ? Image.asset(
-                                  Assets.maleImagePlaceholder,
-                                  fit: BoxFit.cover,
-                                )
-                              : ImageFromInternet(
-                                  fit: BoxFit.cover,
-                                  image: offers!.driverDetails!.pictureUrl!,
-                                ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.grey,
-                            // color: AppColors.cF5F5F5,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  Assets.star2,
-                                  width: 8,
-                                  height: 8,
-                                ),
-                                const Sizer(width: 4),
-                                Label(
-                                  text: _formatNumber(
-                                      offers?.driverDetails?.rating?.count
-                                              .toString() ??
-                                          '0',
-                                      context),
-                                  style: Styles.smallText(
-                                      color: AppColors.PRIMARY_COLOR),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      ProfilePictureWidget(
+                        image: offers?.driverDetails?.pictureUrl,
+                        hasStories: false,
+                        rating: (offers?.driverDetails?.rating?.average??0).toInt(),
                       ),
                     ],
                   ),
@@ -292,17 +240,17 @@ class ClientPastWidget extends StatelessWidget {
                       text: context.isArabic
                           ? offers?.driverDetails?.vehicleDetails?.brandAr ?? ''
                           : offers?.driverDetails?.vehicleDetails?.brandEn ??
-                              '',
+                          '',
                       style: Styles.mediumText()),
                   Label(
                       text: context.isArabic
                           ? offers?.driverDetails?.vehicleDetails?.modelAr ?? ''
                           : offers?.driverDetails?.vehicleDetails?.modelEn ??
-                              '',
+                          '',
                       style: Styles.mediumText()),
                   Label(
                     text:
-                        '(${_formatNumber(offers?.clientDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)})',
+                    '(${_formatNumber(offers?.clientDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)})',
                     style: Styles.smallText(),
                   ),
                 ],
@@ -340,7 +288,7 @@ class ClientPastWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                       text: offers?.tripDetails?.location
-                                              ?.fromTitle ??
+                                          ?.fromTitle ??
                                           'Cairo International Airport',
                                       style: Styles.headerText(),
                                     ),
@@ -362,7 +310,7 @@ class ClientPastWidget extends StatelessWidget {
                                     flex: 8,
                                     child: Label(
                                       text: offers?.tripDetails?.location
-                                              ?.toTitle ??
+                                          ?.toTitle ??
                                           'Cairo International Airport',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.w300),
@@ -370,10 +318,15 @@ class ClientPastWidget extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Label(
+                              (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
                                 text:
-                                    '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                                '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
                                 style: Styles.mediumText(),
+                              ):Label(
+                                text:
+                                '${LocaleKeys.cargoDescription.localize}: ${offers?.tripDetails?.note}',
+                                style: Styles.mediumText(),
+                                maxLines: 2,
                               ),
                             ],
                           ),
@@ -388,7 +341,7 @@ class ClientPastWidget extends StatelessWidget {
                                 //     :
                                 ImageFromInternet(
                                     image:
-                                        offers?.subCategory?.pictureUrl ?? '',
+                                    offers?.subCategory?.pictureUrl ?? '',
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain),
@@ -445,6 +398,7 @@ class ClientPastWidget extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
