@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/auction/auction_helper.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/functions/global/upload_image.dart';
+import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/messages/messages.dart';
@@ -360,6 +361,69 @@ class AuctionCubit extends Cubit<AuctionState> {
 
 
 
+  void listenToNewBids() {
+    CliLogger.info('🎧 Listening to new bids...');
+
+    listenToNewBidAuctionUseCase((newParticipant) {
+      CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
+
+      if (isClosed) {
+        CliLogger.info("⚠️ Cubit closed, skipping emit...");
+        return;
+      }
+
+      participants.removeWhere((p) => p.userId == newParticipant.userId);
+      participants.insert(0, newParticipant);
+
+      emit(state.copyWith(
+        auctionParticipants: List.from(participants),
+        status: StateStatus.success,
+      ));
+    });
+  }
+  // @override
+  // Future<void> close() {
+  //   SharedWebSocket.socket?.off(SocketIOListeners.auctionNewAmountBid);
+  //   return super.close();
+  // }
+
+
+  void joinAuction(String auctionId) {
+    try {
+      CliLogger.info("Cubit: joining auction $auctionId");
+      joinToAuctionUseCase(auctionId); // 🔥 just send ID
+    } catch (e) {
+      CliLogger.info("Cubit: error joining auction: $e");
+    }
+  }
+
+  void listenToNewAuction() {
+    CliLogger.info('Listen To New Auction');
+    // TripsResponseEntity
+    listenToNewAuctionUseCase((trip) {
+      List<GetAvailableAuctionEntity> list =
+          availableAuctionNonSocketData ?? [];
+      list.insert(0, trip);
+      emit(state.copyWith(getAvailableAuction: list));
+      log(trip.toString());
+    });
+  }
+
+  void sendBid(String auctionId, int amount) async {
+    try {
+      CliLogger.info("Cubit: send bid $amount");
+      await bidAuctionUseCase(BidAuctionParams(
+        auctionId: auctionId,
+        newPrice: amount,
+      ));
+      emit(state.copyWith(status: StateStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
+        status: StateStatus.error,
+      ));
+    }
+  }
+
 
   Future<void> uploadMedia({required bool isImage}) async {
     emit(state.copyWith(isUploading: true, status: StateStatus.loading));
@@ -476,45 +540,6 @@ class AuctionCubit extends Cubit<AuctionState> {
   }
 
 
-  void listenToNewBids() {
-    CliLogger.info('🎧 Listening to new bids...');
-
-    listenToNewBidAuctionUseCase((newParticipant) {
-      CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
-
-      if (isClosed) {
-        CliLogger.info("⚠️ Cubit closed, skipping emit...");
-        return;
-      }
-
-      participants.removeWhere((p) => p.userId == newParticipant.userId);
-      participants.insert(0, newParticipant);
-
-      emit(state.copyWith(
-        auctionParticipants: List.from(participants),
-        status: StateStatus.success,
-      ));
-    });
-  }
-
-
-
-
-  void sendBid(String auctionId, int amount) async {
-    try {
-      CliLogger.info("Cubit: send bid $amount");
-      await bidAuctionUseCase(BidAuctionParams(
-        auctionId: auctionId,
-        newPrice: amount,
-      ));
-      emit(state.copyWith(status: StateStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-        status: StateStatus.error,
-      ));
-    }
-  }
-
   // 📌 Auction Cubit Pagination Properties
   List<GetAvailableAuctionEntity> availableAuctionNonSocketData = [];
   bool hasMoreAvailableNonSocketAuction = true;
@@ -609,26 +634,6 @@ class AuctionCubit extends Cubit<AuctionState> {
 
 
 
-  void joinAuction(String auctionId) {
-    try {
-      CliLogger.info("Cubit: joining auction $auctionId");
-      joinToAuctionUseCase(auctionId); // 🔥 just send ID
-    } catch (e) {
-      CliLogger.info("Cubit: error joining auction: $e");
-    }
-  }
-
-  void listenToNewAuction() {
-    CliLogger.info('Listen To New Auction');
-    // TripsResponseEntity
-    listenToNewAuctionUseCase((trip) {
-      List<GetAvailableAuctionEntity> list =
-          availableAuctionNonSocketData ?? [];
-      list.insert(0, trip);
-      emit(state.copyWith(getAvailableAuction: list));
-      log(trip.toString());
-    });
-  }
 
   Future<void> getSingleAuction(String id) async {
     emit(state.copyWith(status: StateStatus.loading));

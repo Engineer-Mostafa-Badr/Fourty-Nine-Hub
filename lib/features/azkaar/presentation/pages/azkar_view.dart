@@ -33,14 +33,14 @@ class _AzkarViewState extends State<AzkarView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      enableCustomAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.azkar.localize,
-          enableCustomAppBar: true,
-        ),
-      ),
+      // enableCustomAppBar: true,
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(30),
+      //   child: BackAppBar(
+      //     label: LocaleKeys.azkar.localize,
+      //     enableCustomAppBar: true,
+      //   ),
+      // ),
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status == AzkarStates.loading) {

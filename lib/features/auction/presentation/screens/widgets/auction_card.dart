@@ -119,9 +119,7 @@ class AuctionCard extends StatelessWidget {
         reportId: '',
         otherUserId: '',
         onTap: () {
-      
-      
-        },
+          },
         hasTopSide: true,
         hasBottomSide: false,
         subscriptionType: LocaleKeys.notSubscribed.localize,
@@ -316,15 +314,62 @@ class AuctionCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                      // AppButton(
+                      //   width: 91,
+                      //   backColor: (auction.status == "expired" || auction.status == "pending")
+                      //       ? AppColors.grey // grey out if expired or pending
+                      //       : auction.isWinner == true
+                      //       ? AppColors.cFFAC3F
+                      //       : AppColors.PRIMARY_COLOR_DARK,
+                      //   onPressed: (auction.status == "expired" || auction.status == "pending")
+                      //       ? (){} // 👈 null disables the button completely
+                      //       : () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (_) => BlocProvider(
+                      //           create: (_) => serviceLocator<AuctionCubit>(),
+                      //           child: SingleAuctionScreen(
+                      //             auctionId: auction.id ?? "",
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      //   style: Styles.mediumText(
+                      //     color: (auction.status == "expired" || auction.status == "pending")
+                      //         ? AppColors.grey.shade700
+                      //         : auction.isWinner == true
+                      //         ? AppColors.black
+                      //         : AppColors.whiteColor,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      //   // label: auction.status == "expired"
+                      //   //     ? LocaleKeys.expired.localize
+                      //   //     : auction.status == "pending"
+                      //   //     ? LocaleKeys.pending.localize
+                      //   //     : auction.isWinner == true
+                      //   //     ? LocaleKeys.winnerAuction.localize
+                      //   //     : LocaleKeys.joinNow.localize,
+                      //   label: auction.status == "expired"
+                      //       ? LocaleKeys.expired.localize
+                      //       : auction.status == "pending"
+                      //       ? LocaleKeys.pending.localize
+                      //       : auction.isWinner == true
+                      //       ? LocaleKeys.winnerAuction.localize
+                      //       : LocaleKeys.joinNow.localize,
+                      // ),
+
                       AppButton(
                         width: 91,
-                        backColor: (auction.status == "expired" || auction.status == "pending")
-                            ? AppColors.grey // grey out if expired or pending
-                            : auction.isWinner == true
-                            ? AppColors.cFFAC3F
+                        backColor: auction.isWinner == true
+                            ? AppColors.cFFAC3F // 🟧 Winner color
+                            : (auction.status == "expired" || auction.status == "pending")
+                            ? AppColors.grey
                             : AppColors.PRIMARY_COLOR_DARK,
+
                         onPressed: (auction.status == "expired" || auction.status == "pending")
-                            ? (){} // 👈 null disables the button completely
+                            ? () {}
                             : () {
                           Navigator.push(
                             context,
@@ -338,22 +383,24 @@ class AuctionCard extends StatelessWidget {
                             ),
                           );
                         },
+
                         style: Styles.mediumText(
-                          color: (auction.status == "expired" || auction.status == "pending")
-                              ? AppColors.grey.shade700
-                              : auction.isWinner == true
+                          color: auction.isWinner == true
                               ? AppColors.black
+                              : (auction.status == "expired" || auction.status == "pending")
+                              ? AppColors.grey.shade700
                               : AppColors.whiteColor,
                           fontWeight: FontWeight.w500,
                         ),
-                        label: auction.status == "expired"
+
+                        label: auction.isWinner == true
+                            ? LocaleKeys.winnerAuction.localize // 🏆 Winner text
+                            : auction.status == "expired"
                             ? LocaleKeys.expired.localize
                             : auction.status == "pending"
                             ? LocaleKeys.pending.localize
-                            : auction.isWinner == true
-                            ? LocaleKeys.winnerAuction.localize
                             : LocaleKeys.joinNow.localize,
-                      ),
+                      )
 
 
 
