@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
@@ -18,7 +18,6 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
-import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -35,117 +34,82 @@ class ClientPendingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final avatarSize = screenWidth * 0.2; // 20% of screen width, tweak as needed
-    final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
-    final badgeEndOffset = avatarSize * 0.0; // 0% from right edge (or tweak slightly)
 
     String _formatNumber(String input, BuildContext context) {
-      if (Localizations.localeOf(context).languageCode != 'ar') {
-        return input;
+      if (input.isEmpty) return '';
+
+      // Parse number safely
+      final number = double.tryParse(input.replaceAll(',', '')) ?? 0;
+
+      // Format large numbers
+      String formatted;
+      if (number >= 1000000000) {
+        formatted = "${(number / 1000000000).toStringAsFixed(1)}B";
+      } else if (number >= 1000000) {
+        formatted = "${(number / 1000000).toStringAsFixed(1)}M";
+      } else if (number >= 1000) {
+        formatted = "${(number / 1000).toStringAsFixed(1)}K";
+      } else {
+        formatted = number.toStringAsFixed(0);
       }
 
-      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-      String output = input;
-      for (int i = 0; i < english.length; i++) {
-        output = output.replaceAll(english[i], arabic[i]);
+      // Remove trailing .0 if exists
+      if (formatted.endsWith('.0')) {
+        formatted = formatted.replaceAll('.0', '');
       }
-      return output;
+
+      // Localize to Arabic if needed
+      if (Localizations.localeOf(context).languageCode == 'ar') {
+        const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+        for (int i = 0; i < english.length; i++) {
+          formatted = formatted.replaceAll(english[i], arabic[i]);
+        }
+      }
+
+      return formatted;
+    }
+
+    String _capitalize(String? s) {
+      if (s == null || s.isEmpty) return '';
+      return s[0].toUpperCase() + s.substring(1).toLowerCase();
     }
 
 
     return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
     body: Container(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
         children: [
-          // Trip Details Column
-          Expanded(
-            flex: 8,
-            child: IntrinsicWidth(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            ProfilePictureWidget(
-                              image: offers?.yourDetails?.pictureUrl,
-                              isVerified: offers?.yourDetails?.verifiedBadge,
-                              hasStories: false,
-                              rating: (offers?.yourDetails?.rating?.average??0).toInt(),
-                            ),
-                            Label(
-                              text: offers?.yourDetails?.firstName ?? '',
-                              style: Styles.mediumText(),
-                            ),
-                            if ((offers?.yourDetails?.rating?.average ?? 0) > 0)
-                              Label(
-                                text: '(${offers?.yourDetails?.rating?.average ?? 0})',
-                                style: Styles.smallText(),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 32),
-                      Expanded(
-                        flex: 7,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TripLocationWidget(
-                              isFrom: true,
-                              title: offers?.tripDetails?.location?.fromTitle ?? 'Initial Location',
-                            ),
-                            TripLocationWidget(
-                              isFrom: false,
-                              title: offers?.tripDetails?.location?.toTitle ?? 'Target Location',
-                            ),
-                            (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
-                              text:
-                              '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
-                              style: Styles.mediumText(),
-                            ):Label(
-                              text:
-                              '${LocaleKeys.cargoDescription.localize}: ${offers?.tripDetails?.note}',
-                              style: Styles.mediumText(),
-                              maxLines: 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: [
-                            ImageFromInternet(
-                              image: offers!.tripDetails!.category!.picture!,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.contain,
-                            ),
-                            Label(
-                              text: context.isArabic ? (offers?.tripDetails?.category?.nameAr ?? '') : (offers?.tripDetails?.category?.nameEn ?? ''),
-                              style: Styles.mediumText(fontSize: 25),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  TripLocationWidget(
+                    isFrom: true,
+                    title: offers?.tripDetails?.location?.fromTitle ?? 'Initial Location',
                   ),
-                  // if (modeType == 'shipping') ...[
-                  //   ReadMoreLabel(
-                  //       text: modeType == 'shipping' ? '${context.isArabic ? 'وصف الشحنة' : 'Cargo Description'} : ${offers?.tripDetails?.note ?? ''} ' : '',
-                  //       style: Styles.mediumText(color: AppColors.PRIMARY_COLOR))
-                  // ],
-                  const SizedBox(height: 4),
+                  TripLocationWidget(
+                    isFrom: false,
+                    title: offers?.tripDetails?.location?.toTitle ?? 'Target Location',
+                  ),
+                  (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
+                    text:
+                    '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                    style: Styles.mediumText(),
+                  ):Label(
+                    text:
+                    '${LocaleKeys.cargoDescription.localize}: ${offers?.tripDetails?.note}',
+                    style: Styles.mediumText(),
+                    maxLines: 2,
+                  ),
+                ],
+              ),),
+              Column(
+                children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -163,40 +127,49 @@ class ClientPendingWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Label(
-                        text: formatTimeOnly(offers?.tripDetails?.date, context),
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                      Label(
-                        text: formatPickupDate(offers?.tripDetails?.date, context),
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                    ],
+                  ImageFromInternet(
+                    image: offers!.tripDetails!.category!.picture!,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.contain,
                   ),
-                  const SizedBox(height: 8),
-                  AppButton(
-                      border: Border.all(color: AppColors.PRIMARY_COLOR_DARK),
-                      height: 30,
-                      radius: 15,
-                      color: AppColors.PRIMARY_COLOR_DARK,
-                      label: LocaleKeys.cancel.tr(),
-                      onPressed: () {
-                        ManageVibration.vibrate();
-                        if (modeType == 'shipping') {
-                          context.read<ClientTripsCubit>().cancelClientShippingTrip(offers?.tripDetails?.id ?? "");
-                        } else {
-                          context.read<ClientTripsCubit>().cancelClientTrip(offers?.tripDetails?.id ?? "");
-                        }
-                      },
-                      backColor: AppColors.cD9D9D9),
+                  Label(
+                    text: context.isArabic ? (offers?.tripDetails?.category?.nameAr ?? '') : (offers?.tripDetails?.category?.nameEn ?? ''),
+                    style: Styles.mediumText(fontSize: 25),
+                  ),
                 ],
               ),
-            ),
+            ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Label(
+                text: formatTimeOnly(offers?.tripDetails?.date, context),
+                style: Styles.mediumText(fontWeight: FontWeight.w700),
+              ),
+              Label(
+                text: formatPickupDate(offers?.tripDetails?.date, context),
+                style: Styles.mediumText(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          AppButton(
+              border: Border.all(color: AppColors.PRIMARY_COLOR_DARK),
+              height: 30,
+              radius: 15,
+              color: AppColors.PRIMARY_COLOR_DARK,
+              label: LocaleKeys.cancel.tr(),
+              onPressed: () {
+                ManageVibration.vibrate();
+                if (modeType == 'shipping') {
+                  context.read<ClientTripsCubit>().cancelClientShippingTrip(offers?.tripDetails?.id ?? "");
+                } else {
+                  context.read<ClientTripsCubit>().cancelClientTrip(offers?.tripDetails?.id ?? "");
+                }
+              },
+              backColor: AppColors.cD9D9D9),
         ],
       ),
     ),

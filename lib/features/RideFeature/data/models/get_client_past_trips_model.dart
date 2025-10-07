@@ -5,7 +5,7 @@ import '../../domain/entities/get_client_past_trips_entity.dart';
 class ClientPastTripModel extends ClientPastTripEntity {
   ClientPastTripModel({
     super.tripDetails,
-    // super.yourDetails,
+    super.isButtonEnabled,
     super.subCategory,
     super.clientDetails,
     super.driverDetails,
@@ -16,6 +16,9 @@ class ClientPastTripModel extends ClientPastTripEntity {
       tripDetails: json['tripDetails'] != null
           ? TripDetailsModel.fromJson(json['tripDetails'])
           : null,
+      isButtonEnabled: json['state'] != null
+          ? json['state']['isButtonEnabled']??false
+          : false,
       // yourDetails: json['yourDetails'] != null
       //     ? YourDetailsModel.fromJson(json['yourDetails'])
       //     : null,
@@ -133,16 +136,24 @@ class DriverDetailsModel extends DriverDetailsEntity {
     super.userId,
     super.firstName,
     super.pictureUrl,
+    super.phoneNumber,
+    super.lastName,
+    super.countTrips,
+    super.verifiedBadge,
     RatingModel? super.rating,
     VehicleDetailsModel? super.vehicleDetails, // ✅ NEW
   });
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
-      id: json['id'],
-      userId: json['userId'],
-      firstName: json['firstName'],
-      pictureUrl: json['pictureUrl'],
+      id: json['id']??'',
+      userId: json['userId']??'',
+      firstName: json['firstName']??'',
+      lastName: json['lastName']??'',
+      phoneNumber: json['phoneNumber']??'',
+      verifiedBadge: json['verifiedBadge']??false,
+      pictureUrl: json['pictureUrl']??'',
+      countTrips: json['countTrips']??0,
       rating: json['rating'] != null
           ? RatingModel.fromJson(json['rating'])
           : null,

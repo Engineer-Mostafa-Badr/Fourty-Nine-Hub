@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
+import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/ride_non_socket_details_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -159,20 +160,45 @@ class ClientPastWidget extends StatelessWidget {
 
   // Helper method to convert digits based on locale
   String _formatNumber(String input, BuildContext context) {
-    if (Localizations.localeOf(context).languageCode != 'ar') {
-      return input;
+    if (input.isEmpty) return '';
+
+    // Parse number safely
+    final number = double.tryParse(input.replaceAll(',', '')) ?? 0;
+
+    // Format large numbers
+    String formatted;
+    if (number >= 1000000000) {
+      formatted = "${(number / 1000000000).toStringAsFixed(1)}B";
+    } else if (number >= 1000000) {
+      formatted = "${(number / 1000000).toStringAsFixed(1)}M";
+    } else if (number >= 1000) {
+      formatted = "${(number / 1000).toStringAsFixed(1)}K";
+    } else {
+      formatted = number.toStringAsFixed(0);
     }
 
-    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-
-    String output = input;
-    for (int i = 0; i < english.length; i++) {
-      output = output.replaceAll(english[i], arabic[i]);
+    // Remove trailing .0 if exists
+    if (formatted.endsWith('.0')) {
+      formatted = formatted.replaceAll('.0', '');
     }
-    return output;
+
+    // Localize to Arabic if needed
+    if (Localizations.localeOf(context).languageCode == 'ar') {
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+      for (int i = 0; i < english.length; i++) {
+        formatted = formatted.replaceAll(english[i], arabic[i]);
+      }
+    }
+
+    return formatted;
   }
 
+  String _capitalize(String? s) {
+    if (s == null || s.isEmpty) return '';
+    return s[0].toUpperCase() + s.substring(1).toLowerCase();
+  }
   @override
   Widget build(BuildContext context) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
@@ -195,7 +221,13 @@ class ClientPastWidget extends StatelessWidget {
     // Format price with Arabic digits if needed
     final priceText =
         _formatNumber("${offers?.tripDetails?.price?.toInt() ?? 300}", context);
-    return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+    return GlobalCard(
+      subcategoryId: offers?.subCategory?.id??'',
+      phone: offers?.driverDetails?.phoneNumber??'',
+      reportId: offers?.driverDetails?.id??'',
+      otherUserId: '',
+    hasBottomSide: true,
+    isButtonEnabled: offers?.isButtonEnabled,
     body: ClickableWidget(
       onTap: () {
         ManageVibration.vibrate();
@@ -210,150 +242,187 @@ class ClientPastWidget extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
           children: [
-            ClickableWidget(
-              onTap: () {
-                ManageVibration.vibrate();
-                context.push(
-                  Routes.allDriverRatingScreen,
-                  extra: offers?.driverDetails?.userId,
-                );
-              },
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      ProfilePictureWidget(
-                        image: offers?.driverDetails?.pictureUrl,
-                        hasStories: false,
-                        rating: (offers?.driverDetails?.rating?.average??0).toInt(),
-                      ),
-                    ],
-                  ),
-                  Label(
-                    text: offers?.clientDetails?.firstName ?? '',
-                    style: Styles.mediumText(),
-                  ),
-                  Label(
-                      text: context.isArabic
-                          ? offers?.driverDetails?.vehicleDetails?.brandAr ?? ''
-                          : offers?.driverDetails?.vehicleDetails?.brandEn ??
-                          '',
-                      style: Styles.mediumText()),
-                  Label(
-                      text: context.isArabic
-                          ? offers?.driverDetails?.vehicleDetails?.modelAr ?? ''
-                          : offers?.driverDetails?.vehicleDetails?.modelEn ??
-                          '',
-                      style: Styles.mediumText()),
-                  Label(
-                    text:
-                    '(${_formatNumber(offers?.clientDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)})',
-                    style: Styles.smallText(),
-                  ),
-                ],
-              ),
-            ),
-            const Sizer(width: 32),
-            Expanded(
-              flex: 8,
-              child: IntrinsicWidth(
-                child: Column(
-                  spacing: 4,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ClickableWidget(
+                    onTap: () {
+                      // ManageVibration.vibrate();
+                      // context.push(
+                      //   Routes.allDriverRatingScreen,
+                      //   extra: offers?.driverDetails?.userId,
+                      // );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          flex: 7,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                spacing: 5,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ProfilePictureWidget(
+                              width: 60,
+                              image: offers?.driverDetails?.pictureUrl,
+                              hasStories: false,
+                              rating: (offers?.driverDetails?.rating?.average??0).toInt(),
+                              isVerified: offers?.driverDetails?.verifiedBadge,
+                            ),
+                            Sizer(),
+                            Expanded(
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Image.asset(
-                                      Assets.rideFrom,
-                                      width: 24,
-                                      height: 24,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Label(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          text:
+                                          "${_capitalize(offers?.driverDetails?.firstName)} ${_capitalize(offers?.driverDetails?.lastName)}",
+                                          style: Styles.mediumText(),
+                                        ),
+                                      ),
+
+                                    ],
                                   ),
-                                  Expanded(
-                                    flex: 8,
-                                    child: Label(
-                                      text: offers?.tripDetails?.location
-                                          ?.fromTitle ??
-                                          'Cairo International Airport',
-                                      style: Styles.headerText(),
-                                    ),
+                                  Row(
+                                    children: [
+                                      Label(
+                                        text:
+                                        ' (${_formatNumber(offers?.driverDetails?.countTrips?.toStringAsFixed(0) ?? '0', context)})${context.isArabic?'رحلات': ' Trips'}',
+                                        style: Styles.smallText(),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.star, size: 18, color: Colors.yellow),
+                                          Label(
+                                            text:
+                                            ' (${_formatNumber(offers?.driverDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)}/${_formatNumber(offers?.driverDetails?.rating?.count?.toStringAsFixed(1) ?? '0', context)})',
+                                            style: Styles.smallText(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Label(
+                                          text: context.isArabic
+                                              ? offers?.driverDetails?.vehicleDetails?.brandAr ?? ''
+                                              : offers?.driverDetails?.vehicleDetails?.brandEn ??
+                                              '',
+                                          style: Styles.mediumText(
+                                            fontSize: 24
+                                          )),
+                                      Label(
+                                          text: ' - ',
+                                          style: Styles.mediumText()),
+                                      Label(
+                                          text: context.isArabic
+                                              ? offers?.driverDetails?.vehicleDetails?.modelAr ?? ''
+                                              : offers?.driverDetails?.vehicleDetails?.modelEn ??
+                                              '',
+                                          style: Styles.mediumText(
+                                              fontSize: 24
+                                          )
+                                      ),
+
+                                    ],
                                   ),
                                 ],
                               ),
-                              Row(
-                                spacing: 5,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Image.asset(
-                                      Assets.rideTo,
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 8,
-                                    child: Label(
-                                      text: offers?.tripDetails?.location
-                                          ?.toTitle ??
-                                          'Cairo International Airport',
-                                      style: Styles.mediumText(
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
-                                text:
-                                '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
-                                style: Styles.mediumText(),
-                              ):Label(
-                                text:
-                                '${LocaleKeys.cargoDescription.localize}: ${offers?.tripDetails?.note}',
-                                style: Styles.mediumText(),
-                                maxLines: 2,
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                // offers?.category?.picture != null
-                                //     ? Image.asset(Assets.rideIcon,
-                                //     width: 40, height: 40, fit: BoxFit.cover)
-                                //     :
-                                ImageFromInternet(
-                                    image:
-                                    offers?.subCategory?.pictureUrl ?? '',
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.contain),
-                                Label(
-                                    text: context.isArabic
-                                        ? (offers?.subCategory?.nameAr ?? '')
-                                        : (offers?.subCategory?.nameEn ?? ''),
-                                    style: Styles.mediumText(fontSize: 25))
-                              ],
-                            )),
+                        Sizer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location
+                                ?.fromTitle ??
+                                'From Location',fontSize:28),
+                            TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location
+                                ?.toTitle ??
+                                'Cairo International Airport',fontSize:28),
+                            (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
+                              text:
+                              '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                              style: Styles.mediumText(),
+                            ):Label(
+                              text:
+                              '${LocaleKeys.cargoDescription.localize}: ${offers?.tripDetails?.note}',
+                              style: Styles.mediumText(),
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
+                  ),
+                ),
+                // Expanded(child: Column(
+                //   children: [
+                //
+                //   ],
+                // )),
+                const Sizer(width: 32),
+                Column(
+                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     // Expanded(
+                    //     //   flex: 7,
+                    //     //   child: Column(
+                    //     //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     //     children: [
+                    //     //       TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location
+                    //     //           ?.fromTitle ??
+                    //     //           'Cairo International Airport',fontSize:28),
+                    //     //       TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location
+                    //     //           ?.toTitle ??
+                    //     //           'Cairo International Airport',fontSize:28),
+                    //     //       (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
+                    //     //         text:
+                    //     //         '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                    //     //         style: Styles.mediumText(),
+                    //     //       ):Label(
+                    //     //         text:
+                    //     //         '${LocaleKeys.cargoDescription.localize}:\n ${offers?.tripDetails?.note}',
+                    //     //         style: Styles.mediumText(),
+                    //     //         maxLines: 2,
+                    //     //       ),
+                    //     //     ],
+                    //     //   ),
+                    //     // ),
+                    //     Expanded(
+                    //         flex: 3,
+                    //         child: Column(
+                    //           children: [
+                    //             // offers?.category?.picture != null
+                    //             //     ? Image.asset(Assets.rideIcon,
+                    //             //     width: 40, height: 40, fit: BoxFit.cover)
+                    //             //     :
+                    //             ImageFromInternet(
+                    //                 image:
+                    //                 offers?.subCategory?.pictureUrl ?? '',
+                    //                 width: 40,
+                    //                 height: 40,
+                    //                 fit: BoxFit.contain),
+                    //             Label(
+                    //                 text: context.isArabic
+                    //                     ? (offers?.subCategory?.nameAr ?? '')
+                    //                     : (offers?.subCategory?.nameEn ?? ''),
+                    //                 style: Styles.mediumText(fontSize: 25))
+                    //           ],
+                    //         )),
+                    //   ],
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -372,29 +441,50 @@ class ClientPastWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
                       children: [
+                        // offers?.category?.picture != null
+                        //     ? Image.asset(Assets.rideIcon,
+                        //     width: 40, height: 40, fit: BoxFit.cover)
+                        //     :
+                        ImageFromInternet(
+                            image:
+                            offers?.subCategory?.pictureUrl ?? '',
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.contain),
                         Label(
-                          text: formatTimeOnly(
-                              offers?.tripDetails?.pickupTime, context),
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Label(
-                          text: formatPickupDate(
-                              offers?.tripDetails?.pickupTime, context),
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                            text: context.isArabic
+                                ? (offers?.subCategory?.nameAr ?? '')
+                                : (offers?.subCategory?.nameEn ?? ''),
+                            style: Styles.mediumText(fontSize: 25))
                       ],
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
+            Sizer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Label(
+                  text: formatTimeOnly(
+                      offers?.tripDetails?.pickupTime, context),
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Label(
+                  text: formatPickupDate(
+                      offers?.tripDetails?.pickupTime, context),
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+
           ],
         ),
       ),
