@@ -27,13 +27,29 @@ class CommentModel extends CommentEntity {
   final List<CommentModel> replies;
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
+    // Handle likes - can be int or List
+    int likesCount = 0;
+    if (json['likes'] is int) {
+      likesCount = json['likes'];
+    } else if (json['likes'] is List) {
+      likesCount = (json['likes'] as List).length;
+    }
+
+    // Handle dislikes - can be int or List
+    int dislikesCount = 0;
+    if (json['dislikes'] is int) {
+      dislikesCount = json['dislikes'];
+    } else if (json['dislikes'] is List) {
+      dislikesCount = (json['dislikes'] as List).length;
+    }
+
     return CommentModel(
       id: json['_id'] ?? '',
       userId: json['userId'] ?? '',
       videoId: json['video'] ?? '',
       content: json['content'] ?? '',
-      likes: json['likes'] ?? 0,
-      dislikes: json['dislikes'] ?? 0,
+      likes: likesCount,
+      dislikes: dislikesCount,
       isLiked: false, // This should be determined by checking user's like status
       isDisliked: false, // This should be determined by checking user's dislike status
       owner: CommentOwnerModel.fromJson(json['owner'] ?? {}),

@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/star_feature/presentation/shared/utils/en
 import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/loading_indicator.dart';
 import '../../presentation_exports.dart';
 
-
 class ProfileWatchLaterTab extends StatefulWidget {
   final bool isCurrentUser;
   final String? userId;
@@ -62,8 +61,7 @@ class _ProfileWatchLaterTabState extends State<ProfileWatchLaterTab>
         if (state.isLoading(TalentCategory.watchLater) &&
             watchLaterVideos.isEmpty) {
           return const Center(
-            child:
-                StarLoadingIndicator(message: 'Loading watch later videos...'),
+            child: StarLoadingIndicator(),
           );
         }
 
@@ -85,8 +83,7 @@ class _ProfileWatchLaterTabState extends State<ProfileWatchLaterTab>
                   return Container(
                     padding: EdgeInsets.all(16),
                     child: const Center(
-                      child: StarLoadingIndicator(
-                          message: 'Loading more...'),
+                      child: StarLoadingIndicator(),
                     ),
                   );
                 }
@@ -108,7 +105,6 @@ class _ProfileWatchLaterTabState extends State<ProfileWatchLaterTab>
       },
     );
   }
-
 
   Widget _buildEmptyState(BuildContext context) {
     return Center(

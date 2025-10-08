@@ -106,6 +106,42 @@ class CommentCubit extends Cubit<CommentState> {
     );
   }
 
+  // Reply to a comment
+  Future<void> replyToComment({
+    required String videoId,
+    required String parentCommentId,
+    required String content,
+  }) async {
+    emit(state.copyWith(isCreatingComment: true));
+
+    final response = await _createCommentUseCase(CreateCommentParams(
+      content: content,
+      videoId: videoId,
+      parentCommentId: parentCommentId,
+    ));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+          isCreatingComment: false,
+          error: failure.toString(),
+        ));
+      },
+      (success) {
+        emit(state.copyWith(
+          isCreatingComment: false,
+          error: null,
+        ));
+        // Refresh comments to show the new reply
+        getVideoComments(videoId, refresh: true);
+      },
+    );
+  }
+
   // Like a comment
   Future<void> likeComment(String commentId) async {
     // Optimistic update

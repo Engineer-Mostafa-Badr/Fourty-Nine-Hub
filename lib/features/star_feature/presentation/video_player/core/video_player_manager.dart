@@ -23,6 +23,9 @@ class VideoPlayerManager {
   final Map<String, VideoPlayerControllerWrapper> _controllers = {};
   final Map<String, DateTime> _lastAccessTime = {};
 
+  // Track currently playing video (only one video should play at a time)
+  String? _currentlyPlayingVideoId;
+
   /// Get or create controller with resource management
   Future<VideoPlayerControllerWrapper?> getController(
     String videoUrl,
@@ -111,6 +114,12 @@ class VideoPlayerManager {
         await wrapper.controller.dispose();
         _controllers.remove(videoId);
         _lastAccessTime.remove(videoId);
+
+        // Clear currently playing if this video was playing
+        if (_currentlyPlayingVideoId == videoId) {
+          _currentlyPlayingVideoId = null;
+        }
+
         debugPrint('🗑️ Disposed controller: $videoId');
       } catch (e) {
         debugPrint('Error disposing controller $videoId: $e');
@@ -127,13 +136,72 @@ class VideoPlayerManager {
     debugPrint('🗑️ Disposed all controllers');
   }
 
-  /// Pause all videos except specified one
+  /// Request to play a video - automatically pauses all other videos
+  /// This ensures only one video plays at a time
+  Future<bool> requestPlay(String videoId) async {
+    // Check if controller exists
+    final wrapper = _controllers[videoId];
+    if (wrapper == null) {
+      debugPrint('⚠️ Cannot play: Controller not found for $videoId');
+      return false;
+    }
+
+    // If this video is already playing, do nothing
+    if (_currentlyPlayingVideoId == videoId) {
+      debugPrint('ℹ️ Video $videoId is already playing');
+      return true;
+    }
+
+    // Pause currently playing video
+    if (_currentlyPlayingVideoId != null && _currentlyPlayingVideoId != videoId) {
+      final currentWrapper = _controllers[_currentlyPlayingVideoId];
+      if (currentWrapper != null) {
+        await currentWrapper.pause();
+        debugPrint('⏸️ Paused video: $_currentlyPlayingVideoId');
+      }
+    }
+
+    // Play the requested video
+    try {
+      await wrapper.play();
+      _currentlyPlayingVideoId = videoId;
+      _lastAccessTime[videoId] = DateTime.now();
+      debugPrint('▶️ Now playing: $videoId');
+      return true;
+    } catch (e) {
+      debugPrint('❌ Failed to play video $videoId: $e');
+      return false;
+    }
+  }
+
+  /// Pause specific video
+  Future<void> pauseVideo(String videoId) async {
+    final wrapper = _controllers[videoId];
+    if (wrapper != null) {
+      await wrapper.pause();
+      if (_currentlyPlayingVideoId == videoId) {
+        _currentlyPlayingVideoId = null;
+      }
+      debugPrint('⏸️ Paused video: $videoId');
+    }
+  }
+
+  /// Get currently playing video ID
+  String? get currentlyPlayingVideoId => _currentlyPlayingVideoId;
+
+  /// Check if a specific video is currently playing
+  bool isPlaying(String videoId) {
+    return _currentlyPlayingVideoId == videoId;
+  }
+
+  /// Pause all videos except specified one (legacy method - kept for compatibility)
   Future<void> pauseAllExcept(String? exceptVideoId) async {
     for (final entry in _controllers.entries) {
       if (entry.key != exceptVideoId) {
         await entry.value.pause();
       }
     }
+    _currentlyPlayingVideoId = exceptVideoId;
   }
 
   /// Get stats for debugging
@@ -142,6 +210,7 @@ class VideoPlayerManager {
       'activeControllers': _controllers.length,
       'maxConcurrent': maxConcurrentVideos,
       'controllers': _controllers.keys.toList(),
+      'currentlyPlaying': _currentlyPlayingVideoId,
     };
   }
 

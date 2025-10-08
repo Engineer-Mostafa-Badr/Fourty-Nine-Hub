@@ -21,7 +21,6 @@ import '../../../data/model/active_category_model.dart';
 import '../../../domain/use_case/get_active_categories_use_case.dart';
 import '../../presentation_exports.dart';
 
-
 class AddTalentWidget extends StatefulWidget {
   const AddTalentWidget({super.key});
 
@@ -66,7 +65,6 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
 
   // Create instance of Bunny uploader
   final BunnyVideoUploader _bunnyUploader = BunnyVideoUploader();
-
 
   @override
   Widget build(BuildContext context) {
@@ -992,15 +990,21 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     } catch (e) {
       print('Error initializing video: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.isArabic
-                  ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
-                  : 'Error loading video. Please try again.',
-            ),
-            backgroundColor: Colors.red,
-          ),
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       context.isArabic
+        //           ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
+        //           : 'Error loading video. Please try again.',
+        //     ),
+        //     backgroundColor: Colors.red,
+        //   ),
+        // );
+        showErrorMessage(
+          context,
+          context.isArabic
+              ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
+              : 'Error loading video. Please try again.',
         );
 
         // Reset video selection on error
@@ -1060,51 +1064,71 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     // تحقق إضافي من الوصف
     final description = _descriptionController.text.trim();
     if (description.length < 3 || description.length > 1000) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.isArabic
-              ? 'يجب أن يكون طول الوصف بين 3 و 1000 حرف'
-              : 'Description length must be between 3-1000 characters'),
-          backgroundColor: Colors.red,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(context.isArabic
+      //         ? 'يجب أن يكون طول الوصف بين 3 و 1000 حرف'
+      //         : 'Description length must be between 3-1000 characters'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(
+        context,
+        context.isArabic
+            ? 'يجب أن يكون طول الوصف بين 3 و 1000 حرف'
+            : 'Description length must be between 3-1000 characters',
       );
       _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
     if (_selectedVideo == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
-          backgroundColor: Colors.red,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //         context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(
+        context,
+        context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video',
       );
       _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
     if (_selectedThumbnail == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.isArabic
-              ? 'يرجى اختيار صورة مصغرة'
-              : 'Please select a thumbnail'),
-          backgroundColor: Colors.red,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(context.isArabic
+      //         ? 'يرجى اختيار صورة مصغرة'
+      //         : 'Please select a thumbnail'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(
+        context,
+        context.isArabic
+            ? 'يرجى اختيار صورة مصغرة'
+            : 'Please select a thumbnail',
       );
       _preventDoubleSubmit = false; // Reset flag on validation error
       return;
     }
 
     if (_selectedCategory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.isArabic
-              ? 'يرجى اختيار فئة'
-              : 'Please select a category'),
-          backgroundColor: Colors.red,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(context.isArabic
+      //         ? 'يرجى اختيار فئة'
+      //         : 'Please select a category'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(
+        context,
+        context.isArabic ? 'يرجى اختيار فئة' : 'Please select a category',
       );
       _preventDoubleSubmit = false; // Reset flag on validation error
       return;
@@ -1395,15 +1419,21 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   Navigator.of(dialogContext).pop(duration);
                 } else {
                   // عرض خطأ
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'يرجى إدخال مدة صحيحة (1-3600 ثانية)'
-                            : 'Please enter valid duration (1-3600 seconds)',
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       context.isArabic
+                  //           ? 'يرجى إدخال مدة صحيحة (1-3600 ثانية)'
+                  //           : 'Please enter valid duration (1-3600 seconds)',
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //   ),
+                  // );
+                  showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'يرجى إدخال مدة صحيحة (1-3600 ثانية)'
+                        : 'Please enter valid duration (1-3600 seconds)',
                   );
                 }
               },

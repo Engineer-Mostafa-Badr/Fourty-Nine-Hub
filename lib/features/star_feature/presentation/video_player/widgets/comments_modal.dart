@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
+import '../../../../../core/messages/messages.dart';
 import '../../../data/model/comment_model.dart';
 import '../../presentation_exports.dart';
 
@@ -157,29 +158,31 @@ class _CommentsModalState extends State<CommentsModal> {
     );
   }
 
-  Widget _buildCommentItem(CommentModel comment, BuildContext context) {
+  Widget _buildCommentItem(CommentModel comment, BuildContext context,
+      {bool isReply = false}) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 20, left: isReply ? 48 : 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Profile picture
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              shape: BoxShape.circle,
-            ),
-            child: ClipOval(
-              child: comment.owner.channelPicture?.mediaKey.isNotEmpty == true
-                  ? CachedNetworkImage(
-                      imageUrl: comment.owner.channelPicture!.mediaKey,
-                      fit: BoxFit.cover,
-                    )
-                  : const Icon(Icons.person, size: 20, color: Colors.grey),
-            ),
-          ),
+          comment.owner.channelPicture?.mediaKey.isNotEmpty == true
+              ? ImageFromInternet(
+                  image: comment.owner.channelPicture!.mediaKey,
+                  width: 36,
+                  height: 36,
+                  isCircle: true,
+                  fit: BoxFit.cover,
+                )
+              : Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.person, size: 20, color: Colors.grey),
+                ),
           const SizedBox(width: 12),
 
           // Comment content
@@ -272,8 +275,38 @@ class _CommentsModalState extends State<CommentsModal> {
                         ],
                       ),
                     ),
+                    if (!isReply) ...[
+                      const SizedBox(width: 16),
+                      GestureDetector(
+                        onTap: () => _showReplyDialog(comment),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.reply,
+                              size: 16,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              context.isArabic ? 'رد' : 'Reply',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
+                // Show replies if they exist
+                if (comment.replies.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  ...comment.replies.map((reply) =>
+                      _buildCommentItem(reply, context, isReply: true)),
+                ],
               ],
             ),
           ),
@@ -388,24 +421,24 @@ class _CommentsModalState extends State<CommentsModal> {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      shape: BoxShape.circle,
-                    ),
-                    child: ClipOval(
-                      child: comment
-                                  .owner.channelPicture?.mediaKey.isNotEmpty ==
-                              true
-                          ? CachedNetworkImage(
-                              imageUrl: comment.owner.channelPicture!.mediaKey,
-                              fit: BoxFit.cover,
-                            )
-                          : Icon(Icons.person, color: Colors.grey, size: 16),
-                    ),
-                  ),
+                  comment.owner.channelPicture?.mediaKey.isNotEmpty == true
+                      ? ImageFromInternet(
+                          image: comment.owner.channelPicture!.mediaKey,
+                          width: 32,
+                          height: 32,
+                          isCircle: true,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            shape: BoxShape.circle,
+                          ),
+                          child:
+                              Icon(Icons.person, color: Colors.grey, size: 16),
+                        ),
                   SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -606,13 +639,17 @@ class _CommentsModalState extends State<CommentsModal> {
                       editController.text.trim(),
                     );
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text(
+                //       context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
+                //     ),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+                showSuccessMessage(
+                  context,
+                  context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
                 );
               }
             },
@@ -659,13 +696,17 @@ class _CommentsModalState extends State<CommentsModal> {
               // Call delete comment API
               context.read<CommentCubit>().deleteComment(comment.id);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
-                  ),
-                  backgroundColor: Colors.red,
-                ),
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
+              //     ),
+              //     backgroundColor: Colors.red,
+              //   ),
+              // );
+              showSuccessMessage(
+                context,
+                context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
               );
             },
             style: ElevatedButton.styleFrom(
@@ -681,59 +722,37 @@ class _CommentsModalState extends State<CommentsModal> {
 
 // Reply dialog
   void _showReplyDialog(CommentModel comment) {
-    final TextEditingController replyController = TextEditingController();
+    final replyController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          context.isArabic ? 'رد على التعليق' : 'Reply to Comment',
+          context.isArabic
+              ? 'الرد على ${comment.owner.channelName}'
+              : 'Reply to ${comment.owner.channelName}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Original comment
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                '"${comment.content}"',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+        content: TextField(
+          controller: replyController,
+          maxLines: 3,
+          decoration: InputDecoration(
+            hintText: context.isArabic ? 'اكتب ردك...' : 'Write your reply...',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            SizedBox(height: 12),
-
-            // Reply field
-            TextField(
-              controller: replyController,
-              decoration: InputDecoration(
-                hintText:
-                    context.isArabic ? 'اكتب ردك...' : 'Write your reply...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: EdgeInsets.all(12),
-              ),
-              maxLines: 3,
-              autofocus: true,
-            ),
-          ],
+          ),
+          autofocus: true,
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              replyController.dispose();
+            },
             child: Text(
               context.isArabic ? 'إلغاء' : 'Cancel',
               style: TextStyle(color: Colors.grey[600]),
@@ -741,29 +760,22 @@ class _CommentsModalState extends State<CommentsModal> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (replyController.text.trim().isNotEmpty) {
+              final replyText = replyController.text.trim();
+              if (replyText.isNotEmpty) {
                 Navigator.pop(context);
-                // Call reply API
-                // context.read<CommentCubit>().replyToComment(
-                //       comment.id,
-                //       replyController.text.trim(),
-                //     );
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic ? 'تم إضافة الرد' : 'Reply added',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+                context.read<CommentCubit>().replyToComment(
+                      videoId: widget.videoId,
+                      parentCommentId: comment.id,
+                      content: replyText,
+                    );
+                replyController.dispose();
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
             ),
-            child: Text(context.isArabic ? 'رد' : 'Reply'),
+            child: Text(context.isArabic ? 'إرسال' : 'Send'),
           ),
         ],
       ),
@@ -801,15 +813,19 @@ class _CommentsModalState extends State<CommentsModal> {
               Navigator.pop(context);
               // Call report API here
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic
-                        ? 'تم الإبلاغ عن التعليق'
-                        : 'Comment reported',
-                  ),
-                  backgroundColor: Colors.orange,
-                ),
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       context.isArabic
+              //           ? 'تم الإبلاغ عن التعليق'
+              //           : 'Comment reported',
+              //     ),
+              //     backgroundColor: Colors.orange,
+              //   ),
+              // );
+              showSuccessMessage(
+                context,
+                context.isArabic ? 'تم الإبلاغ عن التعليق' : 'Comment reported',
               );
             },
             style: ElevatedButton.styleFrom(

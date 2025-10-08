@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../../core/messages/messages.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/entity/user_star_entity.dart';
@@ -119,11 +120,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           builder: (context, state) {
             if (state.isLoading && state.selectedPlaylist == null) {
               return Center(
-                child: StarLoadingIndicator(
-                  message: context.isArabic
-                      ? 'جاري تحميل قائمة التشغيل...'
-                      : 'Loading playlist...',
-                ),
+                child: StarLoadingIndicator(),
               );
             }
 
@@ -912,7 +909,6 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
     _playbackManager.playVideo(playlist.videos.first.id);
   }
 
-
   void _showVideoOptions(StarEntity video, int index, PlaylistEntity playlist) {
     OptionsBottomSheet.showOptions(
       context: context,
@@ -984,30 +980,42 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
               listener: (context, state) {
                 if (state.isSuccess) {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'تم إزالة الفيديو من قائمة التشغيل'
-                            : 'Video removed from playlist',
-                      ),
-                      backgroundColor: Colors.green,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       context.isArabic
+                  //           ? 'تم إزالة الفيديو من قائمة التشغيل'
+                  //           : 'Video removed from playlist',
+                  //     ),
+                  //     backgroundColor: Colors.green,
+                  //   ),
+                  // );
+                  showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم إزالة الفيديو من قائمة التشغيل'
+                        : 'Video removed from playlist',
                   );
                   // Refresh the main playlist
                   _loadPlaylistDetails();
                 } else if (state.isError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        state.failure?.toString() ??
-                            (context.isArabic
-                                ? 'فشل في إزالة الفيديو'
-                                : 'Failed to remove video'),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       state.failure?.toString() ??
+                  //           (context.isArabic
+                  //               ? 'فشل في إزالة الفيديو'
+                  //               : 'Failed to remove video'),
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //   ),
+                  // );
+                  showErrorMessage(
+                      context,
+                      state.failure?.toString() ??
+                          (context.isArabic
+                              ? 'فشل في إزالة الفيديو'
+                              : 'Failed to remove video'));
                 }
               },
               builder: (context, state) {
@@ -1015,10 +1023,12 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   onPressed: state.isLoading
                       ? null
                       : () async {
-                          await context.read<PlaylistCubit>().removeVideoFromPlaylist(
-                            playlist.id,
-                            video.id,
-                          );
+                          await context
+                              .read<PlaylistCubit>()
+                              .removeVideoFromPlaylist(
+                                playlist.id,
+                                video.id,
+                              );
                         },
                   style: TextButton.styleFrom(foregroundColor: Colors.red),
                   child: state.isLoading
@@ -1087,15 +1097,21 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
             listener: (context, state) {
               if (state.isSuccess && !state.isUpdating) {
                 Navigator.pop(dialogContext);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم تحديث قائمة التشغيل بنجاح'
-                          : 'Playlist updated successfully',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text(
+                //       context.isArabic
+                //           ? 'تم تحديث قائمة التشغيل بنجاح'
+                //           : 'Playlist updated successfully',
+                //     ),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+                showSuccessMessage(
+                  context,
+                  context.isArabic
+                      ? 'تم تحديث قائمة التشغيل بنجاح'
+                      : 'Playlist updated successfully',
                 );
               }
             },
@@ -1151,15 +1167,21 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
               if (state.isSuccess && !state.isDeleting) {
                 Navigator.pop(dialogContext); // Close dialog
                 Navigator.pop(context); // Close page
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic
-                          ? 'تم حذف قائمة التشغيل بنجاح'
-                          : 'Playlist deleted successfully',
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text(
+                //       context.isArabic
+                //           ? 'تم حذف قائمة التشغيل بنجاح'
+                //           : 'Playlist deleted successfully',
+                //     ),
+                //     backgroundColor: Colors.red,
+                //   ),
+                // );
+                showSuccessMessage(
+                  context,
+                  context.isArabic
+                      ? 'تم حذف قائمة التشغيل بنجاح'
+                      : 'Playlist deleted successfully',
                 );
               }
             },

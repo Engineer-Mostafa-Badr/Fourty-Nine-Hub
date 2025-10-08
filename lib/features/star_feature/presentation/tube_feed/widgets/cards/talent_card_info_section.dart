@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
@@ -9,10 +8,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../../helpers/manage_vibration.dart';
-import '../../../../../../res/assets/assets.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
-import 'talent_card_overlay_controls.dart';
+import '../../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 class TalentCardInfoSection extends StatelessWidget {
   final StarEntity talent;
@@ -43,37 +41,13 @@ class TalentCardInfoSection extends StatelessWidget {
               ManageVibration.vibrate();
               onProfileTap();
             },
-            child: CircleAvatar(
-              radius: 25,
-              backgroundColor: Colors.grey[300],
-              child: talent.user.image.isNotEmpty
-                  ? ClipOval(
-                      child: Image.network(
-                        talent.user.image,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildFallbackAvatar();
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            width: 50,
-                            height: 50,
-                            color: Colors.grey[300],
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.grey),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  : _buildFallbackAvatar(),
+            child: ImageFromInternet(
+              image: talent.user.image,
+              width: 50,
+              height: 50,
+              isCircle: true,
+              isMale: true, // Default to male avatar if no gender info
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(width: 12),
@@ -159,18 +133,6 @@ class TalentCardInfoSection extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFallbackAvatar() {
-    return Container(
-      width: 50,
-      height: 50,
-      color: Colors.grey[300],
-      child: Image.asset(
-        Assets.manIcon,
-        fit: BoxFit.contain,
       ),
     );
   }

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../presentation_exports.dart';
-
 
 class AddToPlaylistDialog extends StatefulWidget {
   final String videoId;
@@ -261,16 +261,23 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
 
     if (success) {
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic
-                ? 'تم إضافة الفيديو إلى "${playlist.name}"'
-                : 'Added to "${playlist.name}"',
-          ),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       context.isArabic
+      //           ? 'تم إضافة الفيديو إلى "${playlist.name}"'
+      //           : 'Added to "${playlist.name}"',
+      //     ),
+      //     backgroundColor: Colors.green,
+      //     duration: Duration(seconds: 2),
+      //   ),
+      // );
+
+      showSuccessMessage(
+        context,
+        context.isArabic
+            ? 'تم إضافة الفيديو إلى "${playlist.name}"'
+            : 'Added to "${playlist.name}"',
       );
 
       // Close dialog after short delay
@@ -281,13 +288,18 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
       });
     } else {
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic ? 'فشل في إضافة الفيديو' : 'Failed to add video',
-          ),
-          backgroundColor: Colors.red,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       context.isArabic ? 'فشل في إضافة الفيديو' : 'Failed to add video',
+      //     ),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+
+      showErrorMessage(
+        context,
+        context.isArabic ? 'فشل في إضافة الفيديو' : 'Failed to add video',
       );
     }
   }
@@ -350,29 +362,42 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
               listener: (context, state) {
                 if (state.isSuccess && !state.isCreating) {
                   Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'تم إنشاء قائمة التشغيل بنجاح'
-                            : 'Playlist created successfully',
-                      ),
-                      backgroundColor: Colors.green,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       context.isArabic
+                  //           ? 'تم إنشاء قائمة التشغيل بنجاح'
+                  //           : 'Playlist created successfully',
+                  //     ),
+                  //     backgroundColor: Colors.green,
+                  //   ),
+                  // );
+                  showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم إنشاء قائمة التشغيل بنجاح'
+                        : 'Playlist created successfully',
                   );
                   // Refresh playlists in the main dialog
                   context.read<PlaylistCubit>().getMyPlaylists(refresh: true);
                 } else if (state.isError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        state.failure?.toString() ??
-                            (context.isArabic
-                                ? 'فشل في إنشاء قائمة التشغيل'
-                                : 'Failed to create playlist'),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       state.failure?.toString() ??
+                  //           (context.isArabic
+                  //               ? 'فشل في إنشاء قائمة التشغيل'
+                  //               : 'Failed to create playlist'),
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //   ),
+                  // );
+                  showErrorMessage(
+                    context,
+                    state.failure?.toString() ??
+                        (context.isArabic
+                            ? 'فشل في إنشاء قائمة التشغيل'
+                            : 'Failed to create playlist'),
                   );
                 }
               },
@@ -382,15 +407,21 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
                       ? null
                       : () async {
                           if (nameController.text.trim().isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  context.isArabic
-                                      ? 'يرجى إدخال اسم القائمة'
-                                      : 'Please enter playlist name',
-                                ),
-                                backgroundColor: Colors.orange,
-                              ),
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(
+                            //     content: Text(
+                            //       context.isArabic
+                            //           ? 'يرجى إدخال اسم القائمة'
+                            //           : 'Please enter playlist name',
+                            //     ),
+                            //     backgroundColor: Colors.orange,
+                            //   ),
+                            // );
+                            showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى إدخال اسم القائمة'
+                                  : 'Please enter playlist name',
                             );
                             return;
                           }

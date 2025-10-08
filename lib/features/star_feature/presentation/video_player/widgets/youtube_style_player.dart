@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -140,16 +142,22 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
 
         if (mounted) {
           // Show error state in UI
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to load video. Please try again.'),
-              backgroundColor: Colors.red,
-              action: SnackBarAction(
-                label: 'Retry',
-                textColor: Colors.white,
-                onPressed: () => _initializeVideo(),
-              ),
-            ),
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text('Failed to load video. Please try again.'),
+          //     backgroundColor: Colors.red,
+          //     action: SnackBarAction(
+          //       label: 'Retry',
+          //       textColor: Colors.white,
+          //       onPressed: () => _initializeVideo(),
+          //     ),
+          //   ),
+          // );
+          showErrorMessage(
+            context,
+            context.isArabic
+                ? 'فشل تحميل الفيديو'
+                : 'Failed to load video. Please try again.',
           );
         }
       });
@@ -205,16 +213,22 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
         // If this is the last strategy and it failed, show error to user
         if (i == strategies.length - 1) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Video format not supported on this device'),
-                backgroundColor: Colors.red,
-                action: SnackBarAction(
-                  label: 'Retry',
-                  textColor: Colors.white,
-                  onPressed: () => _initializeVideo(),
-                ),
-              ),
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text('Video format not supported on this device'),
+            //     backgroundColor: Colors.red,
+            //     action: SnackBarAction(
+            //       label: 'Retry',
+            //       textColor: Colors.white,
+            //       onPressed: () => _initializeVideo(),
+            //     ),
+            //   ),
+            // );
+            showErrorMessage(
+              context,
+              context.isArabic
+                  ? 'صيغة الفيديو غير مدعومة على هذا الجهاز'
+                  : 'Video format not supported on this device',
             );
           }
         }

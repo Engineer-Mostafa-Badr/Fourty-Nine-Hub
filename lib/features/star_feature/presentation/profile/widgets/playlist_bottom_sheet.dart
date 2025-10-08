@@ -440,20 +440,26 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
         if (mounted) {
           Navigator.pop(context);
           if (showSuccessMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  context.isArabic
-                      ? 'تم إضافة الفيديو إلى "${playlist.name}"'
-                      : 'Added to "${playlist.name}"',
-                ),
-                backgroundColor: Colors.green,
-                action: SnackBarAction(
-                  label: context.isArabic ? 'عرض' : 'View',
-                  textColor: Colors.white,
-                  onPressed: () => _navigateToPlaylist(playlist),
-                ),
-              ),
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text(
+            //       context.isArabic
+            //           ? 'تم إضافة الفيديو إلى "${playlist.name}"'
+            //           : 'Added to "${playlist.name}"',
+            //     ),
+            //     backgroundColor: Colors.green,
+            //     action: SnackBarAction(
+            //       label: context.isArabic ? 'عرض' : 'View',
+            //       textColor: Colors.white,
+            //       onPressed: () => _navigateToPlaylist(playlist),
+            //     ),
+            //   ),
+            // );
+            _showSnackBar(
+              context.isArabic
+                  ? 'تم إضافة الفيديو إلى "${playlist.name}"'
+                  : 'Added to "${playlist.name}"',
+              Colors.green,
             );
           }
         }
@@ -477,12 +483,13 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
 
   void _showSnackBar(String message, Color backgroundColor) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: backgroundColor,
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(message),
+      //     backgroundColor: backgroundColor,
+      //   ),
+      // );
+      showSuccessMessage(context, message, color: backgroundColor);
     }
   }
 

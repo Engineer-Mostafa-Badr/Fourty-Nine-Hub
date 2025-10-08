@@ -132,7 +132,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         _showErrorMessage(failure);
         return false;
       },
-      (message) {
+      (message) async {
         print('✅ Subscription successful: $message');
 
         // Update local profile state to reflect subscription
@@ -146,6 +146,9 @@ class ProfileCubit extends Cubit<ProfileState> {
             profile: updatedProfile,
             message: message,
           ));
+
+          // Refresh profile from API to get updated data
+          await getProfileById(profileId, showLoading: false);
         }
 
         _showSuccessMessage(message);
@@ -174,7 +177,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         _showErrorMessage(failure);
         return false;
       },
-      (message) {
+      (message) async {
         print('✅ Unsubscription successful: $message');
 
         // Update local profile state to reflect unsubscription
@@ -188,6 +191,9 @@ class ProfileCubit extends Cubit<ProfileState> {
             profile: updatedProfile,
             message: message,
           ));
+
+          // Refresh profile from API to get updated data
+          await getProfileById(profileId, showLoading: false);
         }
 
         _showSuccessMessage(message);

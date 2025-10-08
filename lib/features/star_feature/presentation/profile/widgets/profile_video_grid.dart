@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../service_locator/service_locator.dart';
@@ -391,11 +392,17 @@ class ProfileVideoGrid extends StatelessWidget {
       final months = (difference.inDays / 30).floor();
       return isArabic ? 'منذ ${months} شهر' : '${months}mo ago';
     } else if (difference.inDays > 0) {
-      return isArabic ? 'منذ ${difference.inDays} يوم' : '${difference.inDays}d ago';
+      return isArabic
+          ? 'منذ ${difference.inDays} يوم'
+          : '${difference.inDays}d ago';
     } else if (difference.inHours > 0) {
-      return isArabic ? 'منذ ${difference.inHours} ساعة' : '${difference.inHours}h ago';
+      return isArabic
+          ? 'منذ ${difference.inHours} ساعة'
+          : '${difference.inHours}h ago';
     } else if (difference.inMinutes > 0) {
-      return isArabic ? 'منذ ${difference.inMinutes} دقيقة' : '${difference.inMinutes}m ago';
+      return isArabic
+          ? 'منذ ${difference.inMinutes} دقيقة'
+          : '${difference.inMinutes}m ago';
     }
     return isArabic ? 'الآن' : 'Just now';
   }
@@ -434,9 +441,11 @@ class ProfileVideoGrid extends StatelessWidget {
         onTap: () {
           ManageVibration.vibrate();
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Video shared')),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(content: Text('Video shared')),
+          // );
+          showSuccessMessage(
+              context, context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared');
         },
       ),
     ]);
@@ -465,9 +474,11 @@ class ProfileVideoGrid extends StatelessWidget {
           onTap: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Video reported')),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(content: Text('Video reported')),
+            // );
+            showSuccessMessage(context,
+                context.isArabic ? 'تم بلاغ الفيديو' : 'Video reported');
           },
           iconColor: Colors.red,
           textColor: Colors.red,
@@ -521,14 +532,16 @@ class ProfileVideoGrid extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
               starCubit.deleteMyTubeVideo(video.id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic ? 'تم حذف الفيديو' : 'Video deleted',
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       context.isArabic ? 'تم حذف الفيديو' : 'Video deleted',
+              //     ),
+              //     backgroundColor: Colors.red,
+              //   ),
+              // );
+              showSuccessMessage(context,
+                  context.isArabic ? 'تم حذف الفيديو' : 'Video deleted');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

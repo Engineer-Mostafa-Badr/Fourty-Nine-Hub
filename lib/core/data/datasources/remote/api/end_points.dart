@@ -1948,6 +1948,13 @@ class EndPoints {
   // Tube Winner Statistics
   static const String getTubeWinnerStatistics = '/tube-profile/winner-statistics';
 
+  // Tube Winner Endpoint
+  static const String getTubeWinner = '/tube-profile/winner';
+
+  // Tube Comment Reply Endpoint
+  static String replyToComment(String commentId) =>
+      '/tube-comment/reply/$commentId';
+
   //! Exchange Currency Endpoints
   static String convertCurrency({
     required String from,
