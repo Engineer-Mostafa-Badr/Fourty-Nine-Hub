@@ -38,6 +38,11 @@ class ConversationsRepoImpl extends ConversationsRepo {
   }
 
   @override
+  Future<Either<Failure, List<ConversationEntity>>> getSocialAnonymousConversations({required ConversationPagination pagination}) async {
+    return await conversationsRemoteDataSource.getSocialAnonymousConversations(pagination: pagination);
+  }
+
+  @override
   void listenToUpdateSocialList(Function(ConversationEntity) params) {
     return conversationsRemoteDataSource.listenToUpdateSocialList(params);
   }

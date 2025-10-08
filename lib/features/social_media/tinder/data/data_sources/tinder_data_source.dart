@@ -1,14 +1,18 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/auction/data/models/add_favorite_auction_model.dart';
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../../core/error/failure.dart';
+import '../../domain/domain/tinder_like_entity.dart';
+import '../../domain/use_case/add_like_tinder_use_case.dart';
 import '../models/get_fav_category_model.dart';
 import '../models/get_fav_sub_category_model.dart';
 import '../models/gift_model.dart';
 import '../models/last_seen_model.dart';
 import '../models/near_by_model.dart';
 import '../models/profile_user_model.dart';
+import '../models/tinder_like_model.dart';
 import '../models/user_data_tinder_model.dart';
 import '../../domain/domain/last_seen_entity.dart';
 import '../../domain/domain/user_data_tinder_entity.dart';
@@ -46,6 +50,12 @@ abstract class TinderRemoteDataSource {
 
   Future<Either<Failure, bool>> uploadPictures(AddImagesParams params);
   Future<Either<Failure, bool>> deletePictures(String id);
+
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params});
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params});
+  //
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params});
+
 }
 
 class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
@@ -209,6 +219,48 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
       (response) => Right(response['status']),
     );
   }
+
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params})async {
+  //   final url = "${EndPoints.addLikeTinder}${params.id}";
+  //   final response = await _apiConsumer.post(url,);
+  //
+  //   return response.fold(
+  //         (l) => Left(l),
+  //         (data) {
+  //       final blockRestaurantModel = TinderLikeModel.fromJson(data);
+  //       return Right(blockRestaurantModel);
+  //     },
+  //   );
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params})async {
+  //   final url = "${EndPoints.addDisLikeTinder}${params.id}";
+  //   final response = await _apiConsumer.post(url,);
+  //
+  //   return response.fold(
+  //         (l) => Left(l),
+  //         (data) {
+  //       final blockRestaurantModel = TinderLikeModel.fromJson(data);
+  //       return Right(blockRestaurantModel);
+  //     },
+  //   );
+  // }
+  //
+  // @override
+  // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params})async {
+  //   final url = "${EndPoints.addLoveTinder}${params.id}";
+  //   final response = await _apiConsumer.post(url,);
+  //
+  //   return response.fold(
+  //         (l) => Left(l),
+  //         (data) {
+  //       final blockRestaurantModel = TinderLikeModel.fromJson(data);
+  //       return Right(blockRestaurantModel);
+  //     },
+  //   );
+  // }
 
 //
 // @override

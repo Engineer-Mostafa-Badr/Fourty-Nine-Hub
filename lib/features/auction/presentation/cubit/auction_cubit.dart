@@ -151,93 +151,7 @@ class AuctionCubit extends Cubit<AuctionState> {
       },
     );
   }
-/*
-// 📌 Initial load (refreshes and loads first page)
-  void loadInitialSearchAuction(BuildContext context) async {
-    print("🚀 CUBIT: loadInitialSearchAuction() called");
 
-    isAuctionInitialLoading = true;
-    searchAuctionData.clear();
-    currentPageSearchAuction = 1;
-    hasMoreSearchAuction = true;
-
-    emit(state.copyWith(
-      status: StateStatus.loading,
-      getAvailableAuction: [],
-    ));
-
-    await getSearchAuction(context);
-
-    isAuctionInitialLoading = false;
-  }
-
-// 📌 Pagination call (next pages)
-  Future<void> getSearchAuction(BuildContext context) async {
-    print("🚀 CUBIT: getSearchAuction() called");
-    print("📊 State: hasMore=$hasMoreSearchAuction, isLoading=$isAuctionMoreSearchAuction, page=$currentPageSearchAuction");
-
-    if (!hasMoreSearchAuction || isAuctionMoreSearchAuction) {
-      print("⚠️ Skipping API call - no more data or already loading");
-      return;
-    }
-
-    isAuctionMoreSearchAuction = true;
-
-    // 🔄 Only emit loading if it's the first page
-    if (currentPageSearchAuction == 1) {
-      emit(state.copyWith(status: StateStatus.loading));
-    }
-
-    final response = await searchAuctionUseCase(
-      SearchAuctionParams(
-        page: currentPageSearchAuction,
-        limit: auctionPageSize,
-        searchQuery: '',
-
-      ),
-    );
-
-    response.fold(
-          (failure) {
-        print("❌ API call failed: $failure");
-        isAuctionMoreSearchAuction = false;
-
-        emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ));
-      },
-          (data) {
-        print("✅ API call success, received ${data.length} items");
-
-        // ➕ Append or reset list depending on page
-        if (currentPageSearchAuction == 1) {
-          searchAuctionData = List.from(data);
-        } else {
-          searchAuctionData.addAll(data);
-        }
-
-        print("📊 Total Auction items now: ${searchAuctionData.length}");
-
-        // 🔄 Check for more data
-        if (data.length < auctionPageSize) {
-          hasMoreSearchAuction = false;
-          print("🛑 No more auction pages");
-        } else {
-          currentPageSearchAuction++;
-          print("➡️ Next auction page: $currentPageSearchAuction");
-        }
-
-        isAuctionMoreSearchAuction = false;
-
-        emit(state.copyWith(
-          status: StateStatus.success,
-          searchAuction: searchAuctionData,
-        ));
-      },
-    );
-  }
-*/
 
   Future<void> fetchAuctionAllWinner() async {
     emit(state.copyWith(status: StateStatus.loading, isLoading: true));
@@ -444,85 +358,7 @@ class AuctionCubit extends Cubit<AuctionState> {
   }
 
 
-  /*
-  Future<void> toggleFavoriteAuction(String auctionId) async {
-    emit(state.copyWith(status: StateStatus.loading));
 
-    final response = await addFavoriteAuctionUseCase(
-      FavoriteAuctionParams(id: auctionId),
-    );
-
-    response.fold(
-          (failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ));
-      },
-          (entity) {
-        // Find the auction in all lists and flip its isFavorite flag
-        favoriteAuctionNonSocketData =
-            favoriteAuctionNonSocketData.map((a) {
-              if (a.id == auctionId) {
-                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
-              }
-              return a;
-            }).toList();
-
-        availableAuctionNonSocketData =
-            availableAuctionNonSocketData.map((a) {
-              if (a.id == auctionId) {
-                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
-              }
-              return a;
-            }).toList();
-
-        expiredAuctionNonSocketData =
-            expiredAuctionNonSocketData.map((a) {
-              if (a.id == auctionId) {
-                return a.copyWith(isFavorite: !(a.isFavorite ?? false));
-              }
-              return a;
-            }).toList();
-
-        emit(state.copyWith(
-          status: StateStatus.success,
-          addFavoriteAuctionEntity: entity,
-          getAvailableAuction: availableAuctionNonSocketData,
-          getExpiredAuction: expiredAuctionNonSocketData,
-          getFavoriteAuction: favoriteAuctionNonSocketData,
-        ));
-      },
-    );
-  }
-*/
-/*
-  Future<void> toggleFavoriteAuction(String auctionId) async {
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await addFavoriteAuctionUseCase(
-      FavoriteAuctionParams(id: auctionId),
-    );
-
-    response.fold(
-          (failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ));
-      },
-          (entity) {
-        // Entity comes from AddFavoriteAuctionEntity
-        CliLogger.info("⭐ Favorite updated: ${entity.message}");
-
-        emit(state.copyWith(
-          status: StateStatus.success,
-          addFavoriteAuctionEntity: entity,
-        ));
-      },
-    );
-  }
-*/
 
 
   Future<void> uploadMedia({required bool isImage}) async {
@@ -586,60 +422,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     isInitialLoadingParticipants = false;
     emit(state.copyWith(status: StateStatus.success));
   }
-  /*
-  /// Initial load (reset participants and fetch page 1)
-  void loadInitialParticipants(String auctionId) async {
-    emit(state.copyWith(status: StateStatus.loading)); // show loader
-    isInitialLoadingParticipants = true;
-    participants.clear();
-    currentPageParticipants = 1;
-    hasMoreParticipants = true;
 
-    await getParticipants(auctionId);
-
-    isInitialLoadingParticipants = false;
-    // ❌ don't emit success here — getParticipants already does it
-  }
-
-
-  /// Fetch paginated participants
-  Future<void> getParticipants(String auctionId) async {
-    if (!hasMoreParticipants || isLoadingMoreParticipants) return;
-
-    isLoadingMoreParticipants = true;
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await getParticipantsAuctionUseCase(
-      PriceAuctionParams(
-        id: auctionId,
-        page: currentPageParticipants,
-        limit: 10,
-      ),
-    );
-
-    response.fold(
-          (failure) {
-        isLoadingMoreParticipants = false;
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-          (data) {
-        participants.addAll(data);
-
-        if (data.length < 10) {
-          hasMoreParticipants = false;
-        } else {
-          currentPageParticipants++;
-        }
-
-        isLoadingMoreParticipants = false;
-        emit(state.copyWith(
-          auctionParticipants: List.from(participants),
-          status: StateStatus.success,
-        ));
-      },
-    );
-  }
-*/
   void loadInitialParticipants(String auctionId) async {
     emit(state.copyWith(participantsStatus: StateStatus.loading));
     isInitialLoadingParticipants = true;
@@ -692,26 +475,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     );
   }
 
-/*
-  void listenToNewBids() {
-    CliLogger.info('🎧 Listening to new bids...');
 
-    listenToNewBidAuctionUseCase((newParticipant) {
-      CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
-
-      // remove if exists
-      participants.removeWhere((p) => p.userId == newParticipant.userId);
-
-      // always insert on top
-      participants.insert(0, newParticipant);
-
-      emit(state.copyWith(
-        auctionParticipants: List.from(participants),
-        status: StateStatus.success,
-      ));
-    });
-  }
-*/
   void listenToNewBids() {
     CliLogger.info('🎧 Listening to new bids...');
 
@@ -733,13 +497,6 @@ class AuctionCubit extends Cubit<AuctionState> {
     });
   }
 
-  // @override
-  // Future<void> close() {
-  //   CliLogger.info("🛑 Closing AuctionCubit, removing socket listeners...");
-  //   SharedWebSocket.socket?.off("auction:new-amount-bid");
-  //   SharedWebSocket.socket?.off("auction:bid-error");
-  //   return super.close();
-  // }
 
 
 
@@ -784,63 +541,7 @@ class AuctionCubit extends Cubit<AuctionState> {
 
     isAuctionInitialLoading = false;
   }
-  // Future<void> getAvailableNonSocketAuction(
-  //     BuildContext context, {
-  //       int? page, // allow widget to pass page
-  //     }) async {
-  //   final fetchPage = page ?? currentPageAvailableNonSocketAuction;
-  //
-  //   print("🚀 CUBIT: getAvailableNonSocketAuction(page=$fetchPage) called");
-  //   print("📊 hasMore=$hasMoreAvailableNonSocketAuction, isLoading=$isAuctionMoreAvailableNonSocketAuction");
-  //
-  //   if (!hasMoreAvailableNonSocketAuction || isAuctionMoreAvailableNonSocketAuction) {
-  //     print("⚠️ Skipping API call - no more data or already loading");
-  //     return;
-  //   }
-  //
-  //   isAuctionMoreAvailableNonSocketAuction = true;
-  //
-  //   if (fetchPage == 1) {
-  //     emit(state.copyWith(status: StateStatus.loading));
-  //   }
-  //
-  //   final response = await getAvailableAuctionUseCase(
-  //     GetAuctionParams(page: fetchPage, limit: auctionPageSize),
-  //   );
-  //
-  //   response.fold(
-  //         (failure) {
-  //       print("❌ API call failed: $failure");
-  //       isAuctionMoreAvailableNonSocketAuction = false;
-  //       emit(state.copyWith(status: StateStatus.error, failure: failure));
-  //     },
-  //         (data) {
-  //       print("✅ API success, received ${data.length} items for page=$fetchPage");
-  //
-  //       if (fetchPage == 1) {
-  //         availableAuctionNonSocketData = List.from(data);
-  //       } else {
-  //         availableAuctionNonSocketData.addAll(data);
-  //       }
-  //
-  //       if (data.length < auctionPageSize) {
-  //         hasMoreAvailableNonSocketAuction = false;
-  //         print("🛑 No more pages");
-  //       } else {
-  //         currentPageAvailableNonSocketAuction = fetchPage + 1;
-  //       }
-  //
-  //       isAuctionMoreAvailableNonSocketAuction = false;
-  //
-  //       emit(state.copyWith(
-  //         status: StateStatus.success,
-  //         getAvailableAuction: availableAuctionNonSocketData,
-  //       ));
-  //     },
-  //   );
-  // }
 
-// 📌 Pagination call (next pages)
   Future<void> getAvailableNonSocketAuction(BuildContext context) async {
     print("🚀 CUBIT: getAvailableNonSocketAuction() called");
     print("📊 State: hasMore=$hasMoreAvailableNonSocketAuction, isLoading=$isAuctionMoreAvailableNonSocketAuction, page=$currentPageAvailableNonSocketAuction");
@@ -905,92 +606,7 @@ class AuctionCubit extends Cubit<AuctionState> {
     );
   }
 
-/*
-  List<GetAvailableAuctionEntity> availableAuctionNonSocketData = [];
-  bool hasMoreAvailableNonSocketAuction = true;
-  int currentPageAvailableNonSocketAuction = 1;
-  bool isAuctionMoreAvailableNonSocketAuction = false;
-  bool isAuctionAvailableNonSocketAuction = false;
 
-  void loadInitialAvailableNonSocketAuction() async {
-    print("🚀🚀🚀 CUBIT: loadInitialAvailableNonSocketAuction() called");
-    emit(state.copyWith(status: StateStatus.loading)); // emit loading state
-    isAuctionAvailableNonSocketAuction = true;
-    availableAuctionNonSocketData.clear();
-    currentPageAvailableNonSocketAuction = 1;
-    hasMoreAvailableNonSocketAuction = true;
-    await getAvailableNonSocketAuction();
-    isAuctionAvailableNonSocketAuction = false;
-    emit(state.copyWith(status: StateStatus.success));
-  }
-
-  Future<void> getAvailableNonSocketAuction() async {
-    print("🚀🚀🚀 CUBIT: getAvailableNonSocketAuction() called");
-    print("📊 Current state: hasMore=$hasMoreAvailableNonSocketAuction, isLoading=$isAuctionMoreAvailableNonSocketAuction");
-    print("📊 Current data length: ${availableAuctionNonSocketData.length}");
-    print("📊 Current page: $currentPageAvailableNonSocketAuction");
-
-    if (!hasMoreAvailableNonSocketAuction || isAuctionMoreAvailableNonSocketAuction) {
-      print("⚠️ CUBIT: Skipping call - no more data or already loading");
-      return;
-    }
-
-    isAuctionMoreAvailableNonSocketAuction = true;
-
-    // Only emit loading if it's the first page (initial load)
-    if (currentPageAvailableNonSocketAuction == 1) {
-      print("⏳ CUBIT: Emitting loading state for initial load");
-      emit(state.copyWith(status: StateStatus.loading));
-    }
-
-    print("📡 CUBIT: Making API call for page $currentPageAvailableNonSocketAuction");
-    final response = await getAvailableAuctionUseCase(
-        GetAuctionParams(
-            page: currentPageAvailableNonSocketAuction, limit: 5));
-
-    response.fold(
-          (failure) {
-        print("❌ CUBIT: API call failed: $failure");
-        isAuctionMoreAvailableNonSocketAuction = false;
-        emit(state.copyWith(
-            failure: failure,
-            status: StateStatus.error));
-      },
-          (data) {
-        print("✅ CUBIT: API call successful, received ${data.length} items");
-        print("📦 CUBIT: Data received: $data");
-
-        // If it's the first page, replace the data, otherwise add to it
-        if (currentPageAvailableNonSocketAuction == 1) {
-          availableAuctionNonSocketData = List.from(data);
-          print("🔄 CUBIT: Replaced data for first page");
-        } else {
-          availableAuctionNonSocketData.addAll(data);
-          print("➕ CUBIT: Added data to existing list");
-        }
-
-        print("📊 CUBIT: Total items now: ${availableAuctionNonSocketData.length}");
-
-        if (data.isEmpty || data.length < 5) {
-          hasMoreAvailableNonSocketAuction = false;
-          print("🛑 CUBIT: No more pages available");
-        } else {
-          currentPageAvailableNonSocketAuction++;
-          print("➡️ CUBIT: Moving to next page: $currentPageAvailableNonSocketAuction");
-        }
-
-        isAuctionMoreAvailableNonSocketAuction = false;
-
-        // Emit success state with the data
-        print("✅ CUBIT: Emitting success state");
-        emit(state.copyWith(
-          status: StateStatus.success,
-          getAvailableAuction: availableAuctionNonSocketData, // Use the full list, not just the new data
-        ));
-      },
-    );
-  }
-*/
 
 
   void joinAuction(String auctionId) {
@@ -1480,50 +1096,6 @@ class AuctionCubit extends Cubit<AuctionState> {
   }
 
 
-/*
-  List<AuctionMainCategoryEntity> mainCategories = [];
-  bool hasMoreMainCategories = true;
-  int currentPageMainCategories = 1;
-  bool isLoadingMoreMainCategories = false;
-*/
-
-/*
-  /// Load initial main categories
-  Future<void> loadInitialMainCategories() async {
-    emit(state.copyWith(status: StateStatus.loading));
-    mainCategories.clear();
-    currentPageMainCategories = 1;
-    hasMoreMainCategories = true;
-    await getMainCategories();
-    emit(state.copyWith(status: StateStatus.success));
-  }
-
-  Future<void> getMainCategories() async {
-    if (!hasMoreMainCategories || isLoadingMoreMainCategories) return;
-
-    isLoadingMoreMainCategories = true;
-    final response = await getAuctionMainCategoryUseCase(
-      GetAuctionParams(page: currentPageMainCategories, limit: 10),
-    );
-
-    response.fold(
-          (failure) {
-        isLoadingMoreMainCategories = false;
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-          (data) {
-        mainCategories.addAll(data);
-        if (data.length < 10) {
-          hasMoreMainCategories = false;
-        } else {
-          currentPageMainCategories++;
-        }
-        isLoadingMoreMainCategories = false;
-        emit(state.copyWith(status: StateStatus.success));
-      },
-    );
-  }
-*/
 
 
 }

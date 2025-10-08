@@ -25,7 +25,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../helpers/manage_vibration.dart';
-
 class TinderView extends StatelessWidget {
   const TinderView({super.key});
 
@@ -37,18 +36,18 @@ class TinderView extends StatelessWidget {
           context.read<UserCubit>().state.data?.gender == 'male' ? false : true,
     );*/
       MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
-       // BlocProvider(create: (_) => serviceLocator<ChatRoomCubit>()),
-        BlocProvider(create: (_) => serviceLocator<UserCubit>()),
-      //  BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
-      ],
-      child: TinderScreen1(
-        isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
-            ? false
-            : true,
-      ),
-    );
+        providers: [
+          BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
+          // BlocProvider(create: (_) => serviceLocator<ChatRoomCubit>()),
+          BlocProvider(create: (_) => serviceLocator<UserCubit>()),
+          //  BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
+        ],
+        child: TinderScreen1(
+          isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
+              ? false
+              : true,
+        ),
+      );
   }
 }
 
@@ -75,7 +74,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
 
   @override
   void didChangeDependencies() {
-     _initializeTinderData();
+    _initializeTinderData();
     super.didChangeDependencies();
   }
 
@@ -90,7 +89,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
     final tinderCubit = context.read<TinderViewCubit>();
     tinderCubit
       ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-       ..fetchSubCategoryData()
+      ..fetchSubCategoryData()
       ..fetchFavorites();
     // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
   }
@@ -98,100 +97,100 @@ class _TinderScreen1State extends State<TinderScreen1> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(35),
-          child: AppBar(
-            leadingWidth: 200.w,
-            leading: Row(
-              children: [
-                IconButton(
-                    visualDensity:
-                        const VisualDensity(horizontal: -2, vertical: -4),
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back)),
-                // const Sizer(),
-                Text(
-                  LocaleKeys.searchFind.tr(),
-                  style: Styles.headerText(),
-                ),
-              ],
-            ),
-            title: ClickableWidget(
-                onTap: () => context.push(Routes.FindMyProfileScreen),
-                child: Image.asset(
-                  Assets.male_profile,
-                  width: 70.w,
-                )),
-            centerTitle: true,
-            actions: [
-              // The text behind the icon
-              Text(
-                isMaleSelected!
-                    ? context.isArabic
-                        ? "ذكر"
-                        : 'Male'
-                    : context.isArabic
-                        ? "انثى"
-                        : 'Female',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: context.isDarkMode
-                      ? AppColors.whiteColor
-                      : Colors.red, // Subtle background color
-                ),
-              ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(35),
+        child: AppBar(
+          leadingWidth: 200.w,
+          leading: Row(
+            children: [
               IconButton(
-                onPressed: () {
-                  ManageVibration.vibrate();
-                  setState(() {
-                    isMaleSelected = !isMaleSelected!; // Toggle the state
-                    final tinderCubit = context.read<TinderViewCubit>();
-                    tinderCubit
-                      ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-                      // ..fetchSubCategoryData()
-                      ..fetchFavorites();
-                  });
-                },
-                icon: Icon(
-                  isMaleSelected!
-                      ? FontAwesomeIcons.person
-                      : FontAwesomeIcons.personDress,
-
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : Colors.red, // Optional styling
-                ),
-                visualDensity: const VisualDensity(
-                    horizontal: -4, vertical: -4), // Tooltip for accessibility
+                  visualDensity:
+                  const VisualDensity(horizontal: -2, vertical: -4),
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back)),
+              // const Sizer(),
+              Text(
+                LocaleKeys.searchFind.tr(),
+                style: Styles.headerText(),
               ),
             ],
           ),
+          title: ClickableWidget(
+              onTap: () => context.push(Routes.FindMyProfileScreen),
+              child: Image.asset(
+                Assets.male_profile,
+                width: 70.w,
+              )),
+          centerTitle: true,
+          actions: [
+            // The text behind the icon
+            Text(
+              isMaleSelected!
+                  ? context.isArabic
+                  ? "ذكر"
+                  : 'Male'
+                  : context.isArabic
+                  ? "انثى"
+                  : 'Female',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: context.isDarkMode
+                    ? AppColors.whiteColor
+                    : Colors.red, // Subtle background color
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                ManageVibration.vibrate();
+                setState(() {
+                  isMaleSelected = !isMaleSelected!; // Toggle the state
+                  final tinderCubit = context.read<TinderViewCubit>();
+                  tinderCubit
+                    ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
+                  // ..fetchSubCategoryData()
+                    ..fetchFavorites();
+                });
+              },
+              icon: Icon(
+                isMaleSelected!
+                    ? FontAwesomeIcons.person
+                    : FontAwesomeIcons.personDress,
+
+                color: context.isDarkMode
+                    ? Colors.white
+                    : Colors.red, // Optional styling
+              ),
+              visualDensity: const VisualDensity(
+                  horizontal: -4, vertical: -4), // Tooltip for accessibility
+            ),
+          ],
         ),
-        body:
-        BlocBuilder<TinderViewCubit, TinderViewState>(
-          builder: (context, state) {
-            if (state.status == TinderStates.success) {
-              return _buildLoggedInContent(context, state);
-            }
-            return const Center(child: CustomCircularProgressIndicator());
-          },
-        ),
-        );
+      ),
+      body:
+      BlocBuilder<TinderViewCubit, TinderViewState>(
+        builder: (context, state) {
+          if (state.status == TinderStates.success) {
+            return _buildLoggedInContent(context, state);
+          }
+          return const Center(child: CustomCircularProgressIndicator());
+        },
+      ),
+    );
   }
 
   Widget _buildLoggedInContent(
-    BuildContext context,
+      BuildContext context,
       state
-  ) {
+      ) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         controller: _scrollController,
         child:   Column(
           children: [
-              if (state.userData0 != null && state.userData0!.isNotEmpty)
-              const TinderCardStack()
+            if (state.userData0 != null && state.userData0!.isNotEmpty)
+              TinderCardStack()
             else
               SizedBox(
                 height: 1.sh,
@@ -221,28 +220,28 @@ class _TinderScreen1State extends State<TinderScreen1> {
                 final controller = context.read<TinderViewCubit>();
                 if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
                   return Padding(
-                  padding: EdgeInsets.all(8.0.w),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.subCategoryData?.length ?? 0,
-                    controller: _scrollController,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
+                    padding: EdgeInsets.all(8.0.w),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.subCategoryData?.length ?? 0,
+                      controller: _scrollController,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) => SubcategoryCardTinder(
+                        mainCategory: state.mainCategoryResponse!,
+                        item: state.subCategoryData![index],
+                        onFav: () async {
+                          var result = await controller.toggleSubCategoryToFavorites(
+                            state.subCategoryData![index].id,
+                          );
+                          return result;
+                        },
+                      ),
                     ),
-                    itemBuilder: (context, index) => SubcategoryCardTinder(
-                      mainCategory: state.mainCategoryResponse!,
-                      item: state.subCategoryData![index],
-                      onFav: () async {
-                        var result = await controller.toggleSubCategoryToFavorites(
-                          state.subCategoryData![index].id,
-                        );
-                        return result;
-                      },
-                    ),
-                  ),
-                );
+                  );
                 }
                 return const Center(child: CustomCircularProgressIndicator());
               },
@@ -254,3 +253,4 @@ class _TinderScreen1State extends State<TinderScreen1> {
     );
   }
 }
+

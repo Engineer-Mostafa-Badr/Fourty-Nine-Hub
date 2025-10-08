@@ -40,7 +40,6 @@ import '../models/my_bidders_model.dart';
 
 abstract class AuctionRemoteDataSource {
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getAvailableAuction({required GetAuctionParams params});
-
    void listenToNewAuction(Function(GetAvailableAuctionEntity trip) params);
   void joinAuction(String auctionId); // 🔥 add this
   Future<Either<Failure, GetAvailableAuctionEntity>> getSingleAuction({required SingleAuctionParams params});
@@ -54,7 +53,7 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, AddFavoriteAuctionEntity >> addFavoriteAuction({required FavoriteAuctionParams params});
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getMyAuction({required GetAuctionParams params});
   void listenToBidError(Function(BidErrorEntity error) onError);
-  void listenToBidWinner(Function(BidWinnerEntity winner) onData); // ✅ fixed naming
+  void listenToBidWinner(Function(BidWinnerEntity winner) onData);
   void leaveAuction(String auctionId);
   Future<Either<Failure, CreateAuctionEntity  >> createAuction({required CreateAuctionParams  params});
   Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params});

@@ -12,6 +12,7 @@ import 'package:get_it/get_it.dart';
 
 import '../features/Conversations/Domain/Usecases/delete_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_deleted_social_conversations_use_case.dart';
+import '../features/Conversations/Domain/Usecases/get_socail_anonymous_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_socail_greet_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_social_archived_conversations_use_case.dart';
 import '../features/Conversations/Domain/Usecases/get_social_locked_conversations_use_case.dart';
@@ -68,12 +69,15 @@ class ConversationsServiceLocator {
             () =>  GetDeletedSocialConversationsUseCase(conversationsRepo: serviceLocator()));
     serviceLocator.registerLazySingleton<GetConversationLogsUseCase>(
             () =>  GetConversationLogsUseCase(conversationsRepo: serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSocialAnonymousConversationsUseCase>(
+            () =>  GetSocialAnonymousConversationsUseCase(conversationsRepo: serviceLocator()));
 
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<ConversationsCubit>(
       () => ConversationsCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

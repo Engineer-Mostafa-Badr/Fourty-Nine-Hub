@@ -326,6 +326,7 @@ import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/socail_greet_conversations_screen.dart';
+import '../features/Conversations/Presentation/Pages/social_anonymous_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_archived_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_deleted_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_locked_conversations_screen.dart';
@@ -456,6 +457,8 @@ import '../features/social_media/club_house/presentation/pages/club_house_home_s
 import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
+import '../features/social_media/find/presentation/cubit/find_cubit.dart';
+import '../features/social_media/find/presentation/pages/find_view.dart';
 import '../features/social_media/instagram/presentation/pages/followers_screen.dart';
 import '../features/social_media/instagram/presentation/widgets/create_post_second_page_instagram_view_body.dart';
 import '../features/social_media/instagram/presentation/widgets/tag_user_view.dart';
@@ -2248,11 +2251,23 @@ class AppPages {
                             ),
                           ),
                         ]),
+                    // GoRoute(
+                    //   path: Paths.TINDER,
+                    //   name: Routes.Tinder,
+                    //   pageBuilder: (context, state) =>
+                    //       customTransition(context, state, const FindScreen()),
+                    //       // customTransition(context, state, const TinderView()),
+                    // ),
                     GoRoute(
                       path: Paths.TINDER,
-                      name: Routes.Tinder,
-                      pageBuilder: (context, state) =>
-                          customTransition(context, state, const TinderView()),
+                      name:Routes.Tinder,
+                      builder: (context, state) {
+                        return BlocProvider(
+                          create: (_) =>
+                          serviceLocator<FindCubit>(),
+                          child: FindScreen(),
+                        );
+                      },
                     ),
                     GoRoute(
                       path: Paths.UserProfilePage,
@@ -2438,6 +2453,16 @@ class AppPages {
                   context,
                   state,
                   SocialGreetConversationsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.socialAnonymousScreen,
+                name: Routes.socialAnonymousScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  SocialAnonymousConversationsScreen(),
                 ),
               ),
 

@@ -1,5 +1,8 @@
 import '../features/social_media/tinder/data/data_sources/tinder_data_source.dart';
+import '../features/social_media/tinder/domain/use_case/add_dis_like_tinder_use_case.dart';
 import '../features/social_media/tinder/domain/use_case/add_favourite_category_use_case.dart';
+import '../features/social_media/tinder/domain/use_case/add_like_tinder_use_case.dart';
+import '../features/social_media/tinder/domain/use_case/add_love_tinder_use_case.dart';
 import '../features/social_media/tinder/domain/use_case/chech_user_nearby_use_case.dart';
 import '../features/social_media/tinder/domain/use_case/delete_tinder_picture_use_case.dart';
 import '../features/social_media/tinder/domain/use_case/fetch_favourites_category_use_case.dart';
@@ -61,6 +64,8 @@ class TinderServiceLocator {
               serviceLocator(),
             ));
 
+
+
     // serviceLocator.registerLazySingleton<GetMainCategoryDetailsUseCase>(
     //     () => GetMainCategoryDetailsUseCase(
     //           serviceLocator(),
@@ -98,6 +103,7 @@ class TinderServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+
         ));
   }
 }
