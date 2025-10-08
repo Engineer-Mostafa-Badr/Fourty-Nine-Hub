@@ -1,14 +1,16 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/localization/locales.dart';
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../domain/entity/star_winner_entity.dart';
 import '../../presentation_exports.dart';
-
 
 class AllWinnerGridView extends StatelessWidget {
   final List<StarWinnerEntity>? winner;
@@ -19,10 +21,10 @@ class AllWinnerGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       // padding: EdgeInsets.all(16.w),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+        crossAxisSpacing: 12.w,
+        mainAxisSpacing: 12.w,
         childAspectRatio: 0.65,
       ),
       itemBuilder: (context, index) {
@@ -37,10 +39,10 @@ class AllWinnerGridView extends StatelessWidget {
 
   Widget _buildWinnerCard(StarWinnerEntity star) {
     return Container(
-      padding: const EdgeInsets.only(top: 20),
+      padding: EdgeInsets.only(top: 20.h),
       decoration: BoxDecoration(
         color: const Color(0xff4d4c4c),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         children: [
@@ -72,7 +74,7 @@ class AllWinnerGridView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                AutoSizeText(
                   "${star.user.firstName} ${star.user.lastName}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -120,7 +122,7 @@ class AllWinnerGridView extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  '1000 ${LocaleKeys.egp.localize}',
+                  '${star.profit.toShortScale} ${LocaleKeys.egp.localize}',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 26.sp,
@@ -133,5 +135,13 @@ class AllWinnerGridView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String formatDateInWinners(String date, BuildContext context) {
+    DateTime parsedDate = DateTime.parse(date);
+
+    return context.locale == Locales.english
+        ? DateFormat('d/M/yyyy', 'en').format(parsedDate)
+        : DateFormat('yyyy/M/d', 'ar').format(parsedDate);
   }
 }

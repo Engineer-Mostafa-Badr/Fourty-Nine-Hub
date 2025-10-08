@@ -212,13 +212,15 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       },
       (response) {
         print("🌐 Add Video to Watch Later Success: ${response['message']}");
-        return Right(response['message'] ?? 'Video added to watch later successfully');
+        return Right(
+            response['message'] ?? 'Video added to watch later successfully');
       },
     );
   }
 
   @override
-  Future<Either<Failure, String>> removeVideoFromWatchLater(String videoId) async {
+  Future<Either<Failure, String>> removeVideoFromWatchLater(
+      String videoId) async {
     print("🌐 Calling removeVideoFromWatchLater API for videoId: $videoId");
     print("🌐 Endpoint: ${EndPoints.removeVideoFromWatchLater(videoId)}");
 
@@ -232,8 +234,10 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
         return Left(failure);
       },
       (response) {
-        print("🌐 Remove Video from Watch Later Success: ${response['message']}");
-        return Right(response['message'] ?? 'Video removed from watch later successfully');
+        print(
+            "🌐 Remove Video from Watch Later Success: ${response['message']}");
+        return Right(response['message'] ??
+            'Video removed from watch later successfully');
       },
     );
   }
@@ -326,7 +330,7 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (response) {
-        return Right((response['data'] as List)
+        return Right((response['data']['winners'] as List)
             .map((e) => StarWinnerModel.fromJson(e))
             .toList());
       },
@@ -532,7 +536,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> rateTubeVideo(String videoId, double rate) async {
+  Future<Either<Failure, bool>> rateTubeVideo(
+      String videoId, double rate) async {
     final response = await _apiConsumer.post(
       EndPoints.rateTubeVideo,
       data: {
@@ -710,7 +715,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
       (response) {
         print("Get Active Categories Success: ${response['data']}");
         try {
-          final activeCategoriesResponse = ActiveCategoryResponse.fromJson(response);
+          final activeCategoriesResponse =
+              ActiveCategoryResponse.fromJson(response);
           return Right(activeCategoriesResponse);
         } catch (e) {
           print("Parse Active Categories Error: $e");
@@ -724,28 +730,30 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TubeWinnerStatisticsModel>> getTubeWinnerStatistics() async {
+  Future<Either<Failure, TubeWinnerStatisticsModel>>
+      getTubeWinnerStatistics() async {
     return await _apiConsumer.get(EndPoints.getTubeWinnerStatistics).then(
-      (response) => response.fold(
-        (failure) {
-          print("Get Tube Winner Statistics Error: $failure");
-          return Left(failure);
-        },
-        (response) {
-          print("Get Tube Winner Statistics Success: ${response['data']}");
-          try {
-            final statisticsModel = TubeWinnerStatisticsModel.fromJson(response['data']);
-            return Right(statisticsModel);
-          } catch (e) {
-            print("Parse Tube Winner Statistics Error: $e");
-            return Left(ServerFailure(
-              message: 'Failed to parse tube winner statistics data: $e',
-              name: 'Parse Error',
-            ));
-          }
-        },
-      ),
-    );
+          (response) => response.fold(
+            (failure) {
+              print("Get Tube Winner Statistics Error: $failure");
+              return Left(failure);
+            },
+            (response) {
+              print("Get Tube Winner Statistics Success: ${response['data']}");
+              try {
+                final statisticsModel =
+                    TubeWinnerStatisticsModel.fromJson(response['data']);
+                return Right(statisticsModel);
+              } catch (e) {
+                print("Parse Tube Winner Statistics Error: $e");
+                return Left(ServerFailure(
+                  message: 'Failed to parse tube winner statistics data: $e',
+                  name: 'Parse Error',
+                ));
+              }
+            },
+          ),
+        );
   }
 
   @override
@@ -785,7 +793,8 @@ class StarRemoteDataSourceImpl extends StarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, String>> replyToComment(CreateCommentParams params) async {
+  Future<Either<Failure, String>> replyToComment(
+      CreateCommentParams params) async {
     final response = await _apiConsumer.post(
       EndPoints.replyToComment(params.parentCommentId!),
       data: {

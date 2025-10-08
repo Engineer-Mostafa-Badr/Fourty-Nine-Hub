@@ -83,8 +83,9 @@ class WinnersGridViewItem extends StatelessWidget {
                 text: winner.name,
                 style: Styles.headerText(
                   fontSize: 24,
-                  color:
-                      context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+                  color: context.isDarkMode
+                      ? const Color(0xff0D0D0D)
+                      : Colors.white,
                 ),
               ),
             ),
@@ -96,8 +97,9 @@ class WinnersGridViewItem extends StatelessWidget {
                 text: winner.title!,
                 style: Styles.mediumText(
                   fontSize: 20,
-                  color:
-                      context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+                  color: context.isDarkMode
+                      ? const Color(0xff0D0D0D)
+                      : Colors.white,
                 ),
               ),
             ),
