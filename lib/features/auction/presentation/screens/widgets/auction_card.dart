@@ -6,6 +6,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/widgets/show_winner_widget.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +16,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entities/get_all_auction_entity.dart';
+import '../../../domain/entities/listen_winner_bid_entity.dart';
 import '../../cubit/auction_cubit.dart';
 import '../fetch_single_auction_screen.dart';
 import 'auction_image_slider.dart';
@@ -127,8 +130,262 @@ class AuctionCard extends StatelessWidget {
         onRequest: (){
       
         },
-        onShowViewers: (){
+        onShowViewers: () async {
+          final cubit = context.read<AuctionCubit>();
+
+          // Fetch viewers first
+          await cubit.fetchViewerEntity(id: auction.id!);
+
+          final viewers = cubit.state.auctionViewerData;
+
+          if (viewers != null && viewers.isNotEmpty) {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) {
+                return Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.blue.shade50, Colors.purple.shade50],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Header
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.shade600,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(Icons.people, color: Colors.white, size: 24),
+                                ),
+                                SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Auction Viewers",
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade900,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${viewers.length} ${viewers.length == 1 ? 'viewer' : 'viewers'} online",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: Icon(Icons.close, color: Colors.grey.shade700),
+                              style: IconButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 24),
+
+                        // Viewers list
+                        Flexible(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: viewers.isEmpty
+                                ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(48.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.people_outline, size: 64, color: Colors.grey.shade300),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      "No viewers yet",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                                : ListView.separated(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.all(8),
+                              itemCount: viewers.length,
+                              separatorBuilder: (context, index) => Divider(height: 1, indent: 72),
+                              itemBuilder: (context, index) {
+                                final viewer = viewers[index];
+                                final hasImage = viewer.profilePictureKey != null &&
+                                    viewer.profilePictureKey!.isNotEmpty;
+
+                                return Container(
+                                  margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.transparent,
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    leading: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.blue.shade200,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 24,
+                                        backgroundColor: Colors.blue.shade100,
+                                        backgroundImage: hasImage
+                                            ? NetworkImage(viewer.profilePictureKey!)
+                                            : null,
+                                        child: !hasImage
+                                            ? Text(
+                                          (viewer.firstName?.isNotEmpty ?? false)
+                                              ? viewer.firstName![0].toUpperCase()
+                                              : '?',
+                                          style: TextStyle(
+                                            color: Colors.blue.shade700,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        )
+                                            : null,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "${viewer.firstName ?? 'Unknown'} ${viewer.lastName ?? ''}".trim(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
+                                    subtitle: viewer.gender != null && viewer.gender!.isNotEmpty
+                                        ? Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            viewer.gender?.toLowerCase() == 'male'
+                                                ? Icons.male
+                                                : viewer.gender?.toLowerCase() == 'female'
+                                                ? Icons.female
+                                                : Icons.person,
+                                            size: 14,
+                                            color: Colors.grey.shade500,
+                                          ),
+                                          SizedBox(width: 4),
+                                          Text(
+                                            viewer.gender!,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey.shade600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                        : null,
+                                    trailing: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.shade400,
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.green.shade200,
+                                            blurRadius: 4,
+                                            spreadRadius: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 24),
+
+                        // Close button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade600,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              "Close",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            // Handle empty viewers or error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("No viewers available")),
+            );
+          }
         },
+
+
         onSubscribe: (){
           context.pop();
         },
@@ -359,7 +616,7 @@ class AuctionCard extends StatelessWidget {
                       //       ? LocaleKeys.winnerAuction.localize
                       //       : LocaleKeys.joinNow.localize,
                       // ),
-
+/*
                       AppButton(
                         width: 91,
                         backColor: auction.isWinner == true
@@ -401,6 +658,171 @@ class AuctionCard extends StatelessWidget {
                             ? LocaleKeys.pending.localize
                             : LocaleKeys.joinNow.localize,
                       )
+*/
+                      AppButton(
+                        width: 91,
+                        backColor: auction.isWinner == true
+                            ? AppColors.cFFAC3F
+                            : (auction.status == "expired" || auction.status == "pending")
+                            ? AppColors.grey
+                            : AppColors.PRIMARY_COLOR_DARK,
+                        onPressed: () {
+                          // Only proceed if not pending
+                          if (auction.status != "pending") {
+                            if (auction.winnerData != null) {
+                              // Show winner overlay for winner or expired auction with winner data
+                          /*
+                              showGeneralDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                barrierLabel: 'WinnerOverlay',
+                                barrierColor: Colors.black54,
+                                transitionDuration: const Duration(milliseconds: 200),
+                                pageBuilder: (context, _, __) {
+                                  // return WinnerOverlay(
+                                  // // return WinnerOverlayWidget(
+                                  //   winner: auction.winnerData!,
+                                  //   onClose: () => Navigator.of(context).pop(),
+                                  // );
+
+                                },
+                                transitionBuilder: (context, animation, secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: ScaleTransition(
+                                      scale: Tween(begin: 0.95, end: 1.0).animate(animation),
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                              );
+                              */
+                              showGeneralDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                barrierLabel: 'WinnerOverlay',
+                                barrierColor: Colors.black54, // optional: slight background dim
+                                transitionDuration: const Duration(milliseconds: 200),
+                                pageBuilder: (context, _, __) {
+                                  return WinnerOverlayWidget(
+                                    winner: auction.winnerData!,
+                                    onClose: () {
+                                      Navigator.of(context).pop(); // close overlay
+                                    },
+                                  );
+                                },
+                                transitionBuilder: (context, animation, secondaryAnimation, child) {
+                                  // optional: fade + scale animation
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: ScaleTransition(
+                                      scale: Tween(begin: 0.95, end: 1.0).animate(animation),
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                              );
+                            } else if (auction.status != "expired" && auction.status != "winner") {
+                              // If no winnerData and not expired/winner, navigate to auction
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider(
+                                    create: (_) => serviceLocator<AuctionCubit>(),
+                                    child: SingleAuctionScreen(
+                                      auctionId: auction.id ?? "",
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        style: Styles.mediumText(
+                          color: auction.isWinner == true
+                              ? AppColors.black
+                              : (auction.status == "expired" || auction.status == "pending")
+                              ? AppColors.grey.shade700
+                              : AppColors.whiteColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        label: auction.isWinner == true
+                            ? LocaleKeys.winnerAuction.localize
+                            : auction.status == "expired"
+                            ? LocaleKeys.expired.localize
+                            : auction.status == "pending"
+                            ? LocaleKeys.pending.localize
+                            : LocaleKeys.joinNow.localize,
+                      )
+
+                      // AppButton(
+                      //   width: 91,
+                      //   backColor: auction.isWinner == true
+                      //       ? AppColors.cFFAC3F
+                      //       : (auction.status == "expired" || auction.status == "pending")
+                      //       ? AppColors.grey
+                      //       : AppColors.PRIMARY_COLOR_DARK,
+                      //   onPressed: (auction.status == "expired" || auction.status == "pending")
+                      //       ? () {}
+                      //       : () {
+                      //     if (auction.winnerData != null) {
+                      //       showGeneralDialog(
+                      //         context: context,
+                      //         barrierDismissible: true,
+                      //         barrierLabel: 'WinnerOverlay',
+                      //         barrierColor: Colors.black54, // optional: slight background dim
+                      //         transitionDuration: const Duration(milliseconds: 200),
+                      //         pageBuilder: (context, _, __) {
+                      //           return WinnerOverlay(
+                      //             winner: BidWinnerEntity(
+                      //               gender: "Male",
+                      //             ),
+                      //             onClose: () {
+                      //               Navigator.of(context).pop(); // close overlay
+                      //             },
+                      //           );
+                      //         },
+                      //         transitionBuilder: (context, animation, secondaryAnimation, child) {
+                      //           // optional: fade + scale animation
+                      //           return FadeTransition(
+                      //             opacity: animation,
+                      //             child: ScaleTransition(
+                      //               scale: Tween(begin: 0.95, end: 1.0).animate(animation),
+                      //               child: child,
+                      //             ),
+                      //           );
+                      //         },
+                      //       );
+                      //     } else {
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (_) => BlocProvider(
+                      //             create: (_) => serviceLocator<AuctionCubit>(),
+                      //             child: SingleAuctionScreen(
+                      //               auctionId: auction.id ?? "",
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      //   style: Styles.mediumText(
+                      //     color: auction.isWinner == true
+                      //         ? AppColors.black
+                      //         : (auction.status == "expired" || auction.status == "pending")
+                      //         ? AppColors.grey.shade700
+                      //         : AppColors.whiteColor,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      //   label: auction.isWinner == true
+                      //       ? LocaleKeys.winnerAuction.localize
+                      //       : auction.status == "expired"
+                      //       ? LocaleKeys.expired.localize
+                      //       : auction.status == "pending"
+                      //       ? LocaleKeys.pending.localize
+                      //       : LocaleKeys.joinNow.localize,
+                      // )
 
 
 

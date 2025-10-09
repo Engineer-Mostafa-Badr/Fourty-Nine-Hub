@@ -1972,6 +1972,7 @@ class EndPoints {
   static String fetchMyAuction = '/auctions/my';
   static String createAuction2 = '/auctions';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
+  static String getAuctionViewers = '/auctions/last-ten-auction-viewed/';
   static String auctionBanner = '/auctions/banner';
   static String auctionAllWinner = '/auctions/winner-statistics';
   static String addLikeFind = '/tinder/profile/like/';

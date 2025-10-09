@@ -15,6 +15,7 @@ import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entity/find_entity.dart';
 import '../cubit/find_cubit.dart'; // your cubit
 
@@ -36,6 +37,8 @@ class _FindScreenState extends State<FindScreen> {
   CardSwiperDirection? _swipeDirection;
   final CardSwiperController _cardController = CardSwiperController();
   bool _showLoveAnimation = false;
+  bool isLoggedIn = false;
+  String userId = "";
 
   void _triggerLoveAnimation() {
     setState(() => _showLoveAnimation = true);
@@ -43,27 +46,75 @@ class _FindScreenState extends State<FindScreen> {
       if (mounted) setState(() => _showLoveAnimation = false);
     });
   }
-
   @override
   void initState() {
     super.initState();
-    context.read<FindCubit>().loadInitialFindData(context, gender: selectedGender);
+
+    final userState = context.read<UserCubit>().state;
+    final user = userState.data;
+    isLoggedIn = !(user?.isGuest ?? true);
+    userId = isLoggedIn ? user!.id : "";
+
+    final String gender = isLoggedIn ? (user?.gender ?? "male") : selectedGender;
+
+    context.read<FindCubit>().loadInitialFindData(
+      context,
+      gender: gender,
+      userId: userId,
+      isLoggedIn: isLoggedIn,
+    );
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   final userState = context.read<UserCubit>().state;
+  //   final user = userState.data; // Assuming your BasicState<UserEntity> has a `.data`
+  //   print("UserX ${user}");
+  //   print("UserX ${user?.isGuest}");
+  //   print("UserX ${user?.username}");
+  //   print("UserX ${user?.gender}");
+  //   // Check if user is logged in
+  //   final bool isLoggedIn = !(user?.isGuest ?? true);
+  //
+  //   // Get gender from user if logged in, otherwise fallback
+  //   final String gender = isLoggedIn
+  //       ? (user?.gender ?? "male")
+  //       : selectedGender;
+  //
+  //   // Get userId (or empty string if guest)
+  //   final String userId = isLoggedIn ? user!.id : "";
+  //
+  //   // Now call your FindCubit
+  //   context.read<FindCubit>().loadInitialFindData(
+  //     context,
+  //     gender: gender,
+  //     userId: userId,
+  //     isLoggedIn: isLoggedIn,
+  //   );
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<FindCubit>().loadInitialFindData(context, gender: selectedGender);
+  // }
 
   @override
   void dispose() {
     _cardController.dispose();
     super.dispose();
   }
-
-  void _switchGender(String gender) {
-    setState(() {
-      selectedGender = gender;
-      _currentCardIndex = 0;
-      _swipeDirection = null;
-    });
-    context.read<FindCubit>().loadInitialFindData(context, gender: gender);
-  }
+  //
+  // void _switchGender(String gender) {
+  //   setState(() {
+  //     selectedGender = gender;
+  //     _currentCardIndex = 0;
+  //     _swipeDirection = null;
+  //   });
+  //   context.read<FindCubit>().loadInitialFindData(context, gender: gender);
+  // }
   bool isMaleSelected = true; // Add this to your State class
   @override
   Widget build(BuildContext context) {
@@ -138,6 +189,59 @@ class _FindScreenState extends State<FindScreen> {
             GestureDetector(
               onTap: () {
                 ManageVibration.vibrate();
+
+                setState(() {
+                  isMaleSelected = !isMaleSelected!;
+                  _currentCardIndex = 0;
+
+                  // ✅ Update the selected gender string
+                  selectedGender = isMaleSelected! ? "male" : "female";
+
+                  // ✅ Access the user info from UserCubit
+                  final userState = context.read<UserCubit>().state;
+                  final user = userState.data;
+                  final bool isLoggedIn = !(user?.isGuest ?? true);
+                  final String userId = isLoggedIn ? user!.id : "";
+
+                  // ✅ Reload data with the new gender and user info
+                  context.read<FindCubit>().loadInitialFindData(
+                    context,
+                    gender: selectedGender,
+                    userId: userId,
+                    isLoggedIn: isLoggedIn,
+                  );
+                });
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    isMaleSelected!
+                        ? (context.isArabic ? "ذكر" : "Male")
+                        : (context.isArabic ? "أنثى" : "Female"),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: context.isDarkMode
+                          ? AppColors.whiteColor
+                          : Colors.red,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(
+                    isMaleSelected!
+                        ? FontAwesomeIcons.person
+                        : FontAwesomeIcons.personDress,
+                    color: context.isDarkMode ? Colors.white : Colors.red,
+                  ),
+                ],
+              ),
+            ),
+
+            /*
+            GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate();
                 setState(() {
                   isMaleSelected = !isMaleSelected!;
 
@@ -178,56 +282,8 @@ class _FindScreenState extends State<FindScreen> {
                 ],
               ),
             ),
+*/
 
-            // The text behind the icon
-            // Text(
-            //   isMaleSelected!
-            //       ? context.isArabic
-            //       ? "ذكر"
-            //       : 'Male'
-            //       : context.isArabic
-            //       ? "انثى"
-            //       : 'Female',
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     fontWeight: FontWeight.w600,
-            //     color: context.isDarkMode
-            //         ? AppColors.whiteColor
-            //         : Colors.red, // Subtle background color
-            //   ),
-            // ),
-            // IconButton(
-            //   onPressed: () {
-            //     ManageVibration.vibrate();
-            //     setState(() {
-            //       isMaleSelected = !isMaleSelected!; // Toggle the state
-            //       final tinderCubit = context.read<FindCubit>();
-            //       setState(() {
-            //         // Reload the data in cubit
-            //         _currentCardIndex = 0;
-            //         context.read<FindCubit>().loadInitialFindData(
-            //           context,
-            //           gender: selectedGender,
-            //         );
-            //       });
-            //       // tinderCubit
-            //       //   ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-            //       // // ..fetchSubCategoryData()
-            //       //   ..fetchFavorites();
-            //     });
-            //   },
-            //   icon: Icon(
-            //     isMaleSelected!
-            //         ? FontAwesomeIcons.person
-            //         : FontAwesomeIcons.personDress,
-            //
-            //     color: context.isDarkMode
-            //         ? Colors.white
-            //         : Colors.red, // Optional styling
-            //   ),
-            //   visualDensity: const VisualDensity(
-            //       horizontal: -4, vertical: -4), // Tooltip for accessibility
-            // ),
           ],
         ),
       ),
@@ -291,7 +347,7 @@ class _FindScreenState extends State<FindScreen> {
           ElevatedButton(
             onPressed: () {
               setState(() => _currentCardIndex = 0);
-              cubit.loadInitialFindData(context, gender: selectedGender);
+              // cubit.loadInitialFindData(context, gender: selectedGender);
             },
             child: const Text("Retry"),
           ),
@@ -310,7 +366,7 @@ class _FindScreenState extends State<FindScreen> {
           ElevatedButton(
             onPressed: () {
               setState(() => _currentCardIndex = 0);
-              cubit.loadInitialFindData(context, gender: selectedGender);
+              // cubit.loadInitialFindData(context, gender: selectedGender);
             },
             child: const Text("Reload"),
           ),
@@ -349,10 +405,10 @@ class _FindScreenState extends State<FindScreen> {
           ElevatedButton.icon(
             onPressed: () {
               setState(() => _currentCardIndex = 0);
-              context.read<FindCubit>().loadInitialFindData(
-                context,
-                gender: selectedGender,
-              );
+              // context.read<FindCubit>().loadInitialFindData(
+              //   context,
+              //   gender: selectedGender,
+              // );
             },
             icon: const Icon(Icons.refresh),
             label: const Text("Start Over"),
@@ -376,12 +432,38 @@ class _FindScreenState extends State<FindScreen> {
     if (visiblePeople.isEmpty && !cubit.hasMoreFindData) {
       print("Loooooooooooooooooaded");
       Future.microtask(() {
+        final cubit = context.read<FindCubit>();
+
         // Prevent multiple reloads
         if (!cubit.isFindDataInitialLoading) {
           setState(() => _currentCardIndex = 0);
-          cubit.loadInitialFindData(context, gender: selectedGender);
+
+          // ✅ Get user info from UserCubit
+          final userState = context.read<UserCubit>().state;
+          final user = userState.data;
+          final bool isLoggedIn = !(user?.isGuest ?? true);
+          final String userId = isLoggedIn ? user!.id : "";
+          final String gender = isLoggedIn
+              ? (user?.gender ?? selectedGender)
+              : selectedGender;
+
+          // ✅ Load initial find data with user context
+          cubit.loadInitialFindData(
+            context,
+            gender: gender,
+            userId: userId,
+            isLoggedIn: isLoggedIn,
+          );
         }
       });
+
+      // Future.microtask(() {
+      //   // Prevent multiple reloads
+      //   if (!cubit.isFindDataInitialLoading) {
+      //     setState(() => _currentCardIndex = 0);
+      //     cubit.loadInitialFindData(context, gender: selectedGender);
+      //   }
+      // });
 
       // While waiting, show a small loader or message
       return const Center(
@@ -427,8 +509,10 @@ class _FindScreenState extends State<FindScreen> {
           final person = people[actualIndex];
 
           if (direction == CardSwiperDirection.right) {
+            if(isLoggedIn)
             cubit.addLikeFind(id: person.id!);
           } else if (direction == CardSwiperDirection.left) {
+            if(isLoggedIn)
             cubit.addDisLikeFind(id: person.id!);
           }
 
@@ -610,7 +694,7 @@ class _FindScreenState extends State<FindScreen> {
           ),
           child: Center(
             child: Padding(
-              padding: EdgeInsets.all((isMini ?? false) ? 8.0 : 16.0),
+              padding: EdgeInsets.all(isMini == null ? 16.0.h : 8.h),
               child: child,
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/common/tab_widget.dart';
 import '../../../../core/widget/custom_scaffold.dart';

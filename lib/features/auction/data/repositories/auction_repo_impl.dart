@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/auction/domain/entities/auction_banner_en
 import 'package:fourtyninehub/features/auction/domain/entities/auction_main_category_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_participants_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/auction_sub_category_entity.dart';
+import 'package:fourtyninehub/features/auction/domain/entities/auction_viewer_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/error_bid_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/get_all_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/listen_winner_bid_entity.dart';
@@ -129,6 +130,11 @@ class AuctionRepoImpl implements AuctionRepository {
   @override
   Future<Either<Failure, List<GetAvailableAuctionEntity>>> searchAuction({required SearchAuctionParams params}) {
     return _remoteDataSource.searchAuction(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params}) {
+    return _remoteDataSource.getViewerAuction(params: params);
   }
 
 

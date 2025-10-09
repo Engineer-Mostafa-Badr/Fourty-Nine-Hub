@@ -131,6 +131,7 @@ class WinnerDataModel extends WinnerDataEntity {
     super.userId,
     super.firstName,
     super.lastName,
+    super.profilePictureKey,
     super.gender,
     super.price,
     super.title,
@@ -142,10 +143,24 @@ class WinnerDataModel extends WinnerDataEntity {
       userId: json['userId'] as String?,
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
+      profilePictureKey: json['profilePictureKey'] as String?, // ✅ added
       gender: json['gender'] as String?,
       price: json['price'] as num?,
       title: json['title'] as String?,
       time: json['time'] != null ? DateTime.parse(json['time']) : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'firstName': firstName,
+      'lastName': lastName,
+      'profilePictureKey': profilePictureKey,
+      'gender': gender,
+      'price': price,
+      'title': title,
+      'time': time?.toIso8601String(),
+    };
   }
 }

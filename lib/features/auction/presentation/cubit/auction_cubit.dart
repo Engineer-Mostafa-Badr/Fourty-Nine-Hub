@@ -21,6 +21,7 @@ import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
+import '../../domain/entities/auction_viewer_entity.dart';
 import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';
@@ -41,6 +42,7 @@ import '../../domain/usecases/fetch_myauction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
+import '../../domain/usecases/get_viewer_auction_use_case.dart';
 import '../../domain/usecases/join_auction_use_case.dart';
 import '../../domain/usecases/leave_auction_use_case.dart';
 import '../../domain/usecases/listen_to_new_auction_use_case.dart';
@@ -51,7 +53,7 @@ import '../../domain/usecases/search_auction_use_case.dart';
 part 'auction_state.dart';
 
 class AuctionCubit extends Cubit<AuctionState> {
-  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase, this.getMyAuctionUseCase, this.errorBidAuctionUseCase, this.bidWinnerAuctionUseCase, this.leaveToAuctionUseCase, this.createAuctionUseCase, this.getMyBiddersAuctionUseCase, this.bannerAuctionUseCase, this.getAllWinnerAuctionUseCase, this.searchAuctionUseCase)  : super(AuctionState());
+  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase, this.getMyAuctionUseCase, this.errorBidAuctionUseCase, this.bidWinnerAuctionUseCase, this.leaveToAuctionUseCase, this.createAuctionUseCase, this.getMyBiddersAuctionUseCase, this.bannerAuctionUseCase, this.getAllWinnerAuctionUseCase, this.searchAuctionUseCase, this.getViewerAuctionUseCase)  : super(AuctionState());
 
   final GetAvailableAuctionUseCase getAvailableAuctionUseCase;
   final ListenToNewAuctionUseCase listenToNewAuctionUseCase;
@@ -74,6 +76,7 @@ class AuctionCubit extends Cubit<AuctionState> {
   final BannerAuctionUseCase bannerAuctionUseCase;
   final GetAllWinnerAuctionUseCase getAllWinnerAuctionUseCase;
   final SearchAuctionUseCase searchAuctionUseCase;
+  final GetViewerAuctionUseCase getViewerAuctionUseCase;
 
   // 📌 Auction Cubit Pagination Properties
   List<GetAvailableAuctionEntity> searchAuctionData = [];
@@ -148,6 +151,27 @@ class AuctionCubit extends Cubit<AuctionState> {
         emit(state.copyWith(
           status: StateStatus.success,
           searchAuction: searchAuctionData,
+        ));
+      },
+    );
+  }
+
+  Future<void> fetchViewerEntity({required String  id}) async {
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await getViewerAuctionUseCase(FavoriteAuctionParams(id: id));
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ));
+      },
+          (updatedRestaurant) {
+        emit(state.copyWith(
+          auctionViewerData: updatedRestaurant,
+          status: StateStatus.success,
         ));
       },
     );

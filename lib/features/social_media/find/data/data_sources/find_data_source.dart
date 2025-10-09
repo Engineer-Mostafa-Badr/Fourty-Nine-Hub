@@ -70,8 +70,11 @@ class FindRemoteDataSourceImpl implements FindRemoteDataSource {
 
   @override
   Future<Either<Failure, List<FindEntity>>> getFind({required GetFindParams params}) async{
-    final url =
-        "${EndPoints.fetchFind}?gender=${params.gender}&page=${params.page}&limit=${params.limit}";
+    // final url =
+    //     "${EndPoints.fetchFind}?gender=${params.gender}&page=${params.page}&limit=${params.limit}";
+    final url = params.isLoggedIn && params.userId.isNotEmpty
+        ? "${EndPoints.fetchFind}?userId=${params.userId}&gender=${params.gender}&page=${params.page}&limit=${params.limit}"
+        : "${EndPoints.fetchFind}?gender=${params.gender}&page=${params.page}&limit=${params.limit}";
 
     final response = await _apiConsumer.get(url);
 

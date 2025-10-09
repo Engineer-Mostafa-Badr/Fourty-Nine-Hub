@@ -15,6 +15,7 @@ import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
+import '../../domain/entities/auction_viewer_entity.dart';
 import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';
@@ -32,6 +33,7 @@ import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
 import '../models/auction_sub_category_model.dart';
+import '../models/auction_viewer_model.dart';
 import '../models/error_bid_auction_model.dart';
 import '../models/get_all_auction_model.dart';
 import '../models/listen_winner_bid_model.dart';
@@ -60,6 +62,7 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
   Future<Either<Failure, AuctionWinnerDataEntity >> getAllWinnerAuction();
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> searchAuction({required SearchAuctionParams params});
+  Future<Either<Failure, List<AuctionViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params});
 
 }
 
@@ -509,6 +512,23 @@ class AuctionRemoteDataSourceImpl
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params}) async{
+    final url = "${EndPoints.getAuctionViewers}${params.id}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data']['views'] as List)
+            .map((e) => AuctionViewerModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
   }
 
 

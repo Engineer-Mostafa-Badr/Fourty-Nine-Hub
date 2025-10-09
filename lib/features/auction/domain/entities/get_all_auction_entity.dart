@@ -175,6 +175,7 @@ class WinnerDataEntity {
   final String? userId;
   final String? firstName;
   final String? lastName;
+  final String? profilePictureKey;
   final String? gender;
   final num? price;
   final String? title;
@@ -184,6 +185,7 @@ class WinnerDataEntity {
     this.userId,
     this.firstName,
     this.lastName,
+    this.profilePictureKey,
     this.gender,
     this.price,
     this.title,
