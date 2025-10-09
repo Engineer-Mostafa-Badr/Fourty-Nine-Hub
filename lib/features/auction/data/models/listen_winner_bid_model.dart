@@ -9,6 +9,8 @@ class BidWinnerModel extends BidWinnerEntity {
     super.gender,
     super.auctionTitle,
     super.auctionId,
+    super.updatedAt,
+    super.profilePictureKey    ,
   });
 
   factory BidWinnerModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,8 @@ class BidWinnerModel extends BidWinnerEntity {
       gender: json['gender'] as String?,
       auctionTitle: json['auctionTitle'] as String?,
       auctionId: json['auctionId'] as String?,
+      profilePictureKey: json['profilePictureKey'] as String?,
+      updatedAt: json['time'] as String?,
     );
   }
 

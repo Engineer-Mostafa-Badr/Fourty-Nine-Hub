@@ -517,7 +517,8 @@ class AppPages {
               context,
               state,
               BeforeSplash(
-                hasNavigated: (state.extra is bool) ? state.extra as bool : false,
+                hasNavigated:
+                    (state.extra is bool) ? state.extra as bool : false,
               ),
             ),
             routes: [
@@ -2260,11 +2261,17 @@ class AppPages {
                     // ),
                     GoRoute(
                       path: Paths.TINDER,
-                      name:Routes.Tinder,
+                      name: Routes.Tinder,
                       builder: (context, state) {
-                        return BlocProvider(
-                          create: (_) =>
-                          serviceLocator<FindCubit>(),
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) => serviceLocator<FindCubit>(),
+                            ),
+                            BlocProvider(
+                              create: (_) => serviceLocator<UserCubit>(),
+                            ),
+                          ],
                           child: FindScreen(),
                         );
                       },
@@ -4960,8 +4967,9 @@ class AppPages {
                 name: Routes.availableAuctionScreen,
                 builder: (context, state) {
                   return BlocProvider(
-                    create: (_) =>
-                        serviceLocator<AuctionCubit>()..fetchAuctionBanner(),
+                    create: (_) => serviceLocator<AuctionCubit>()
+                      ..fetchAuctionBanner()
+                      ..fetchAuctionAllWinner(),
                     // serviceLocator<AuctionCubit>()..getAvailableNonSocketAuction(),
                     child: AuctionScreen(),
                   );

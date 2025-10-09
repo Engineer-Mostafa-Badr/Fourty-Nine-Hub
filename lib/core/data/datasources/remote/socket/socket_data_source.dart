@@ -97,6 +97,7 @@ abstract class SocketIOListeners {
   static const String leaveAuction = 'leave:auction';
   static const String auctionWinner = 'auction:winner';
   static const String bidAuction = 'auction:add:bid:amount';
+  static const String auctionNewAmountBid = 'auction:new-amount-bid';
 
 }
 

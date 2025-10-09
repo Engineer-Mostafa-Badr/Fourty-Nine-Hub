@@ -20,13 +20,12 @@ class GetFindParams {
   final String gender;
   final int page;
   final int limit;
-  // final String userId;
-  // final bool isLoggedIn;
+  final String userId;
+  final bool isLoggedIn;
 
   GetFindParams(
-      {required this.gender, required this.page, required this.limit,
+      {required this.gender, required this.page, required this.limit,required this.userId, required this.isLoggedIn});
 
-      });
 
   //toJson
   Map<String, dynamic> toJsonNotLoggedIn() => {
@@ -35,5 +34,10 @@ class GetFindParams {
         'limit': limit,
       };
 
-
+  Map<String, dynamic> toJsonLoggedIn() => {
+    'gender': gender,
+    'page': page,
+    'limit': limit,
+    'userId': userId,
+  };
 }

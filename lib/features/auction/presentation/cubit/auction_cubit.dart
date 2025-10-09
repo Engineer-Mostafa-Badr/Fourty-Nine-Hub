@@ -7,9 +7,11 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/auction/auction_helper.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/functions/global/upload_image.dart';
+import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/messages/messages.dart';
@@ -20,6 +22,7 @@ import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
+import '../../domain/entities/auction_viewer_entity.dart';
 import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';
@@ -40,6 +43,7 @@ import '../../domain/usecases/fetch_myauction_use_case.dart';
 import '../../domain/usecases/fetch_participants_auction_use_case.dart';
 import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
+import '../../domain/usecases/get_viewer_auction_use_case.dart';
 import '../../domain/usecases/join_auction_use_case.dart';
 import '../../domain/usecases/leave_auction_use_case.dart';
 import '../../domain/usecases/listen_to_new_auction_use_case.dart';
@@ -50,7 +54,7 @@ import '../../domain/usecases/search_auction_use_case.dart';
 part 'auction_state.dart';
 
 class AuctionCubit extends Cubit<AuctionState> {
-  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase, this.getMyAuctionUseCase, this.errorBidAuctionUseCase, this.bidWinnerAuctionUseCase, this.leaveToAuctionUseCase, this.createAuctionUseCase, this.getMyBiddersAuctionUseCase, this.bannerAuctionUseCase, this.getAllWinnerAuctionUseCase, this.searchAuctionUseCase)  : super(AuctionState());
+  AuctionCubit(this.getAvailableAuctionUseCase, this.listenToNewAuctionUseCase, this.joinToAuctionUseCase, this.getSingleAuctionUseCase, this.getParticipantsAuctionUseCase, this.bidAuctionUseCase, this.listenToNewBidAuctionUseCase, this.getAuctionMainCategoryUseCase, this.getAuctionSubCategoryUseCase, this.getExpiredAuctionUseCase, this.getFavoriteAuctionUseCase, this.addFavoriteAuctionUseCase, this.getMyAuctionUseCase, this.errorBidAuctionUseCase, this.bidWinnerAuctionUseCase, this.leaveToAuctionUseCase, this.createAuctionUseCase, this.getMyBiddersAuctionUseCase, this.bannerAuctionUseCase, this.getAllWinnerAuctionUseCase, this.searchAuctionUseCase, this.getViewerAuctionUseCase)  : super(AuctionState());
 
   final GetAvailableAuctionUseCase getAvailableAuctionUseCase;
   final ListenToNewAuctionUseCase listenToNewAuctionUseCase;
@@ -73,6 +77,7 @@ class AuctionCubit extends Cubit<AuctionState> {
   final BannerAuctionUseCase bannerAuctionUseCase;
   final GetAllWinnerAuctionUseCase getAllWinnerAuctionUseCase;
   final SearchAuctionUseCase searchAuctionUseCase;
+  final GetViewerAuctionUseCase getViewerAuctionUseCase;
 
   // 📌 Auction Cubit Pagination Properties
   List<GetAvailableAuctionEntity> searchAuctionData = [];
@@ -147,6 +152,27 @@ class AuctionCubit extends Cubit<AuctionState> {
         emit(state.copyWith(
           status: StateStatus.success,
           searchAuction: searchAuctionData,
+        ));
+      },
+    );
+  }
+
+  Future<void> fetchViewerEntity({required String  id}) async {
+    // emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await getViewerAuctionUseCase(FavoriteAuctionParams(id: id));
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(
+          failure: failure,
+          status: StateStatus.error,
+        ));
+      },
+          (updatedRestaurant) {
+        emit(state.copyWith(
+          auctionViewerData: updatedRestaurant,
+          status: StateStatus.success,
         ));
       },
     );
@@ -360,6 +386,69 @@ class AuctionCubit extends Cubit<AuctionState> {
 
 
 
+  void listenToNewBids() {
+    CliLogger.info('🎧 Listening to new bids...');
+
+    listenToNewBidAuctionUseCase((newParticipant) {
+      CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
+
+      if (isClosed) {
+        CliLogger.info("⚠️ Cubit closed, skipping emit...");
+        return;
+      }
+
+      participants.removeWhere((p) => p.userId == newParticipant.userId);
+      participants.insert(0, newParticipant);
+
+      emit(state.copyWith(
+        auctionParticipants: List.from(participants),
+        status: StateStatus.success,
+      ));
+    });
+  }
+  // @override
+  // Future<void> close() {
+  //   SharedWebSocket.socket?.off(SocketIOListeners.auctionNewAmountBid);
+  //   return super.close();
+  // }
+
+
+  void joinAuction(String auctionId) {
+    try {
+      CliLogger.info("Cubit: joining auction $auctionId");
+      joinToAuctionUseCase(auctionId); // 🔥 just send ID
+    } catch (e) {
+      CliLogger.info("Cubit: error joining auction: $e");
+    }
+  }
+
+  void listenToNewAuction() {
+    CliLogger.info('Listen To New Auction');
+    // TripsResponseEntity
+    listenToNewAuctionUseCase((trip) {
+      List<GetAvailableAuctionEntity> list =
+          availableAuctionNonSocketData ?? [];
+      list.insert(0, trip);
+      emit(state.copyWith(getAvailableAuction: list));
+      log(trip.toString());
+    });
+  }
+
+  void sendBid(String auctionId, int amount) async {
+    try {
+      CliLogger.info("Cubit: send bid $amount");
+      await bidAuctionUseCase(BidAuctionParams(
+        auctionId: auctionId,
+        newPrice: amount,
+      ));
+      emit(state.copyWith(status: StateStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
+        status: StateStatus.error,
+      ));
+    }
+  }
+
 
   Future<void> uploadMedia({required bool isImage}) async {
     emit(state.copyWith(isUploading: true, status: StateStatus.loading));
@@ -476,45 +565,6 @@ class AuctionCubit extends Cubit<AuctionState> {
   }
 
 
-  void listenToNewBids() {
-    CliLogger.info('🎧 Listening to new bids...');
-
-    listenToNewBidAuctionUseCase((newParticipant) {
-      CliLogger.info("📩 New bid participant: ${newParticipant.userId}");
-
-      if (isClosed) {
-        CliLogger.info("⚠️ Cubit closed, skipping emit...");
-        return;
-      }
-
-      participants.removeWhere((p) => p.userId == newParticipant.userId);
-      participants.insert(0, newParticipant);
-
-      emit(state.copyWith(
-        auctionParticipants: List.from(participants),
-        status: StateStatus.success,
-      ));
-    });
-  }
-
-
-
-
-  void sendBid(String auctionId, int amount) async {
-    try {
-      CliLogger.info("Cubit: send bid $amount");
-      await bidAuctionUseCase(BidAuctionParams(
-        auctionId: auctionId,
-        newPrice: amount,
-      ));
-      emit(state.copyWith(status: StateStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-        status: StateStatus.error,
-      ));
-    }
-  }
-
   // 📌 Auction Cubit Pagination Properties
   List<GetAvailableAuctionEntity> availableAuctionNonSocketData = [];
   bool hasMoreAvailableNonSocketAuction = true;
@@ -609,26 +659,6 @@ class AuctionCubit extends Cubit<AuctionState> {
 
 
 
-  void joinAuction(String auctionId) {
-    try {
-      CliLogger.info("Cubit: joining auction $auctionId");
-      joinToAuctionUseCase(auctionId); // 🔥 just send ID
-    } catch (e) {
-      CliLogger.info("Cubit: error joining auction: $e");
-    }
-  }
-
-  void listenToNewAuction() {
-    CliLogger.info('Listen To New Auction');
-    // TripsResponseEntity
-    listenToNewAuctionUseCase((trip) {
-      List<GetAvailableAuctionEntity> list =
-          availableAuctionNonSocketData ?? [];
-      list.insert(0, trip);
-      emit(state.copyWith(getAvailableAuction: list));
-      log(trip.toString());
-    });
-  }
 
   Future<void> getSingleAuction(String id) async {
     emit(state.copyWith(status: StateStatus.loading));

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import '../entities/add_favorite_auction_entity.dart';
@@ -7,6 +8,7 @@ import '../entities/auction_banner_entity.dart';
 import '../entities/auction_main_category_entity.dart';
 import '../entities/auction_participants_entity.dart';
 import '../entities/auction_sub_category_entity.dart';
+import '../entities/auction_viewer_entity.dart';
 import '../entities/error_bid_auction_entity.dart';
 import '../entities/get_all_auction_entity.dart';
 import '../entities/listen_winner_bid_entity.dart';
@@ -35,6 +37,7 @@ abstract class AuctionRepository {
   Future<Either<Failure, AuctionWinnerDataEntity >> getAllWinnerAuction();
   Future<Either<Failure, List<AuctionParticipantsEntity>>> getParticipantsAuction({required PriceAuctionParams params});
   Future<Either<Failure, AddFavoriteAuctionEntity >> addFavoriteAuction({required FavoriteAuctionParams params});
+  Future<Either<Failure, List<ViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params});
   Future<Either<Failure, CreateAuctionEntity  >> createAuction({required CreateAuctionParams  params});
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
 

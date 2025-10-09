@@ -745,4 +745,6 @@ abstract class Assets {
   static String talentGIF = 'assets/gifs/talentGIF.gif';
 
   static String auctionBanner = 'assets/images/auction.jpg';
+
+  static String winnerCrown = 'assets/icons/crown.svg';
 }

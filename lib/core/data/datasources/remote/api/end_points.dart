@@ -63,7 +63,7 @@ class EndPoints {
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
-
+  //https://49backend.com
   // static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
@@ -1972,6 +1972,7 @@ class EndPoints {
   static String fetchMyAuction = '/auctions/my';
   static String createAuction2 = '/auctions';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
+  static String getAuctionViewers = '/auctions/last-ten-auction-viewed/';
   static String auctionBanner = '/auctions/banner';
   static String auctionAllWinner = '/auctions/winner-statistics';
   static String addLikeFind = '/tinder/profile/like/';
