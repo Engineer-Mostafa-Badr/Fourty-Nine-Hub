@@ -15,6 +15,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -616,7 +617,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                                 .withOpacity(0.95)
                                                 : AppColors.LIGHT_COLOR,
                                             constraints: BoxConstraints(
-                                              maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                              maxHeight: MediaQuery.of(context).size.height * 0.32,
                                             ),
                                             context: context,
                                             shape: const RoundedRectangleBorder(
@@ -628,37 +629,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                             isDismissible: true,
                                             // isScrollControlled: true,
                                             builder: (BuildContext context) {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  children: [
-                                                    Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                    Expanded(
-                                                      child: ListView(
-                                                        shrinkWrap: true,
-                                                        children: List.generate(data.lastViewers?.length??0, (i)=>Container(
-                                                          padding: EdgeInsets.only(bottom: 10),
-                                                          child: Row(
-                                                            children: [
-                                                              ImageFromInternet(
-                                                                  image: '',
-                                                                  isCircle: true,
-                                                                  defaultLogo: false,
-                                                                  isMale: data.lastViewers?[i].gender=='male',
-                                                                  width: 40,
-                                                                  height: 40,
-                                                                  firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
-                                                                  charPadding: 0),
-                                                              const Sizer(),
-                                                              Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                            ],
-                                                          ),
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
+                                              return LastViewersWidget(lastViewers: data.lastViewers,);
                                             },
                                           );
                                         }

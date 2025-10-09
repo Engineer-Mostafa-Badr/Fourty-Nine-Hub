@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -340,15 +341,10 @@ class TripCard extends StatelessWidget {
     }
 
 
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: context.isDarkMode ? Colors.grey[800] : Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
-      child: Column(
+      child: GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+      body: Column(
         children: [
           // Flutter Map with two markers
           if(trip.startLocationLat != null && trip.startLocationLng != null && trip.targetLocationLat != null && trip.targetLocationLng != null)
@@ -365,42 +361,42 @@ class TripCard extends StatelessWidget {
                 ),
               ),
             ),
-            // ClipRRect(
-            //   borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-            //   child: SizedBox(
-            //     height: 130,
-            //     child: FlutterMap(
-            //       options: MapOptions(
-            //         center: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
-            //         zoom: 10.0,
-            //       ),
-            //       children: [
-            //         TileLayer(
-            //           urlTemplate: context.isDarkMode
-            //               ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-            //               : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
-            //           userAgentPackageName: 'com.example.app',
-            //         ),
-            //         MarkerLayer(
-            //           markers: [
-            //             Marker(
-            //               point: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
-            //               width: 40,
-            //               height: 40,
-            //               child: const Icon(Icons.location_on, color: Colors.blue),
-            //             ),
-            //             Marker(
-            //               point: LatLng(trip.targetLocationLat?? 0, trip.targetLocationLng?? 0),
-            //               width: 40,
-            //               height: 40,
-            //               child: const Icon(Icons.location_on, color: AppColors.c19D176),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+          // ClipRRect(
+          //   borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          //   child: SizedBox(
+          //     height: 130,
+          //     child: FlutterMap(
+          //       options: MapOptions(
+          //         center: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
+          //         zoom: 10.0,
+          //       ),
+          //       children: [
+          //         TileLayer(
+          //           urlTemplate: context.isDarkMode
+          //               ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+          //               : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", // Normal mode map
+          //           userAgentPackageName: 'com.example.app',
+          //         ),
+          //         MarkerLayer(
+          //           markers: [
+          //             Marker(
+          //               point: LatLng(trip.startLocationLat?? 0, trip.startLocationLng?? 0),
+          //               width: 40,
+          //               height: 40,
+          //               child: const Icon(Icons.location_on, color: Colors.blue),
+          //             ),
+          //             Marker(
+          //               point: LatLng(trip.targetLocationLat?? 0, trip.targetLocationLng?? 0),
+          //               width: 40,
+          //               height: 40,
+          //               child: const Icon(Icons.location_on, color: AppColors.c19D176),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
 
           // Trip Details
@@ -432,6 +428,7 @@ class TripCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

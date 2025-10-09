@@ -4,9 +4,10 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TripLocationWidget extends StatelessWidget {
-  const TripLocationWidget({super.key, required this.isFrom, required this.title});
+  const TripLocationWidget({super.key, required this.isFrom,this.fontSize, required this.title});
   final bool isFrom;
   final String title;
+  final double? fontSize;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -21,7 +22,7 @@ class TripLocationWidget extends StatelessWidget {
           child: Label(
             maxLines: 2,
             text: title,
-            style: Styles.headerText(fontSize: 24),
+            style: Styles.headerText(fontSize: fontSize??24),
           ),
         ),
       ],

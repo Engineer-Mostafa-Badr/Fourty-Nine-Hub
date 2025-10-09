@@ -146,16 +146,57 @@ class _TripJoinContentState extends State<TripJoinContent>
         ),
         const Sizer(width: 10),
         Expanded(
-          child: _buildCategory(
+          child: TabWidget(
             title: LocaleKeys.requestLog,
-            index: 1,
+            selected:tabController.index == 1, onTap: () {
+            ManageVibration.vibrate();
+            tabController.animateTo(1);
+            context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();
+            context.read<ViewAllTripJoinCubit>().getRequestCount();
+            setState(() {
+              _displayedCategory = LocaleKeys.requestLog;
+              selectedIndex = 1;
+            });
+
+            // Load data for the selected category
+            final cubit = context.read<ViewAllTripJoinCubit>();
+            switch (LocaleKeys.requestLog) {
+              case LocaleKeys.availableTrips:
+                break;
+              case LocaleKeys.requestLog:
+                break;
+              case LocaleKeys.myAds:
+                cubit.loadInitialMyAds(); // Uncomment and reload when implemented
+                break;
+            }
+          },
           ),
         ),
         const Sizer(width: 10),
         Expanded(
-          child: _buildCategory(
+          child: TabWidget(
             title: LocaleKeys.myAds,
-            index: 2,
+            selected:tabController.index == 2, onTap: () {
+            ManageVibration.vibrate();
+            tabController.animateTo(2);
+            context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
+            setState(() {
+              _displayedCategory = LocaleKeys.myAds;
+              selectedIndex = 2;
+            });
+
+            // Load data for the selected category
+            final cubit = context.read<ViewAllTripJoinCubit>();
+            switch (LocaleKeys.myAds) {
+              case LocaleKeys.availableTrips:
+                break;
+              case LocaleKeys.requestLog:
+                break;
+              case LocaleKeys.myAds:
+                cubit.loadInitialMyAds(); // Uncomment and reload when implemented
+                break;
+            }
+          },
           ),
         ),
       ],

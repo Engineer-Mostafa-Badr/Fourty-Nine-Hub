@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">٤٩</string>
     <string name="facebook_app_id">660212443761468</string>
-    <string name="fb_login_protocol_scheme">fbd022d588e73f2526b115f049c8ab4c5b</string>
     <string name="facebook_client_token">255815a3e684d4212c43e057a063712a</string>
         <string name="mapbox_access_token">sk.eyJ1IjoiNDlhcHAiLCJhIjoiY20xem83MGQ5MDg3aDJqczhhYnlmMGI1ZSJ9.8sYHBUyxYXncueYcckCBMg</string>
         <!-- Google Sign-In Configuration -->

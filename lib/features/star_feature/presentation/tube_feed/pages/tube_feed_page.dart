@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/my_talents/widgets/create_star.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -524,7 +525,6 @@ class _TubeFeedViewState extends State<TubeFeedView>
                       SliverToBoxAdapter(
                         child: BeStarHeaderSection(state: state),
                       ),
-
                     // Sticky Tabs
                     if (!_isSearching)
                       SliverPersistentHeader(

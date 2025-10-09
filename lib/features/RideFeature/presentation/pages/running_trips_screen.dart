@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -339,12 +340,8 @@ class TripCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color:context.isDarkMode ? Colors.grey[800] :  Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
-      child: Column(
+      child: GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+      body: Column(
         children: [
           // Flutter Map with two markers
           if(trip.startLocationLat != null && trip.startLocationLng != null && trip.targetLocationLat != null && trip.targetLocationLng != null)
@@ -427,6 +424,7 @@ class TripCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }
