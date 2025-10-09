@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/trip_receipt.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
@@ -51,24 +52,25 @@ class _RideHistoryDetailsScreenState extends State<RideHistoryDetailsScreen> {
       child: Builder(
         builder: (context) {
           return CustomScaffold(
-            appBar: AppBar(
-              titleSpacing: 0,
-              centerTitle: false,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: Transform(
-                transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-                child: Text(
-                  context.isArabic ? "تفاصيل الرحلة" : "Ride Details",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 24),
-                ),
-              ),
-            ),
+            appBar:DefaultAppBar(title: context.isArabic ? "تفاصيل الرحلة" : "Ride Details"),
+            // appBar: AppBar(
+            //   titleSpacing: 0,
+            //   centerTitle: false,
+            //   leading: IconButton(
+            //     icon: const Icon(Icons.arrow_back_ios_new_outlined),
+            //     onPressed: () {
+            //       Navigator.pop(context);
+            //     },
+            //   ),
+            //   title: Transform(
+            //     transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+            //     child: Text(
+            //       context.isArabic ? "تفاصيل الرحلة" : "Ride Details",
+            //       style: const TextStyle(
+            //           fontWeight: FontWeight.w600, fontSize: 24),
+            //     ),
+            //   ),
+            // ),
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

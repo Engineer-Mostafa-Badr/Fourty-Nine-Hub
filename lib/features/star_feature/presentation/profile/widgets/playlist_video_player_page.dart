@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import '../../presentation_exports.dart';
+import '../../video_player/widgets/talent_video_player.dart';
 
 import 'playlist_playback_manager.dart';
 

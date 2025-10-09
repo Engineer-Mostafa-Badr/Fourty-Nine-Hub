@@ -1807,13 +1807,33 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchAllHistoryTrips(
-      {required int limit, required int page}) async {
+  List<HistoryTripsEntity> pastTrips = [];
+  bool isLoadingMorePastTrips = false;
+  bool isLoadingPastTrips = false;
+  bool hasMorePastTripsData = true;
+  int currentPastTripsPage = 1;
+  int pastTripsPageSize = 4;
+  void loadInitialData() async {
+    isLoadingPastTrips = true;
+    isLoadingMorePastTrips = false;
+    emit(state.copyWith(status: RideStates.loading));
+    pastTrips.clear();
+    currentPastTripsPage = 1;
+    isLoadingMorePastTrips = false;
+    hasMorePastTripsData = true;
+    await fetchAllHistoryTrips();
+    isLoadingPastTrips = false;
+    emit(state.copyWith(status: RideStates.success));
+  }
+
+  Future<void> fetchAllHistoryTrips() async {
+    if (!hasMorePastTripsData || isLoadingMorePastTrips) return;
+    isLoadingMorePastTrips = true;
     emit(state.copyWith(status: RideStates.loading));
 
     final Either<Failure, List<HistoryTripsEntity>> result =
         await getAllHistoryTripsUseCase(
-            GetAllHistoryTripsUseCaseParams(limit, page));
+            GetAllHistoryTripsUseCaseParams(10, currentPastTripsPage));
 
     result.fold(
       (failure) {
@@ -1824,12 +1844,22 @@ class RideCubit extends Cubit<RideState> {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (historyTrips) {
-        final List<HistoryTripsEntity> updatedTrips = page == 1
-            ? historyTrips
-            : [...?state.historyTrips, ...historyTrips];
+        pastTrips.addAll(historyTrips);
+
+        if (historyTrips.length < 10) {
+          hasMorePastTripsData = false;
+        } else {
+          currentPastTripsPage++;
+        }
+
+        isLoadingMorePastTrips = false;
+
+        // final List<HistoryTripsEntity> updatedTrips = page == 1
+        //     ? historyTrips
+        //     : [...?state.historyTrips, ...historyTrips];
 
         emit(state.copyWith(
-            status: RideStates.success, historyTrips: updatedTrips));
+            status: RideStates.success, historyTrips: historyTrips));
       },
     );
   }

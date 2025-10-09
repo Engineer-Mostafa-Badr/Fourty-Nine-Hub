@@ -21,7 +21,7 @@ class ProfilePictureWidget extends StatelessWidget {
       children: [
         GradientProfileBorder(
             imageUrl:  image??"",
-            imageWidth: 46,
+            imageWidth: width??46,
             fullWidth: 54,
             isMale:isMale,
             hasStories: hasStories,

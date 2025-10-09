@@ -1,11 +1,13 @@
 class ClientPastTripEntity {
   final TripDetailsEntity? tripDetails;
+  final bool? isButtonEnabled;
   final SubCategoryEntity? subCategory;
   final ClientDetailsEntity? clientDetails;
   final DriverDetailsEntity? driverDetails;
 
   ClientPastTripEntity({
     this.tripDetails,
+    this.isButtonEnabled,
     this.subCategory,
     this.clientDetails,
     this.driverDetails,
@@ -84,7 +86,11 @@ class DriverDetailsEntity {
   final String? id;
   final String? userId;
   final String? firstName;
+  final String? lastName;
   final String? pictureUrl;
+  final String? phoneNumber;
+  final num? countTrips;
+  final bool? verifiedBadge;
   final RatingEntity? rating;
   final VehicleDetailsEntity? vehicleDetails; // ✅ NEW
 
@@ -93,8 +99,12 @@ class DriverDetailsEntity {
     this.userId,
     this.firstName,
     this.pictureUrl,
+    this.phoneNumber,
     this.rating,
+    this.countTrips,
     this.vehicleDetails, // ✅ NEW
+    this.verifiedBadge,
+    this.lastName,
   });
 }
 

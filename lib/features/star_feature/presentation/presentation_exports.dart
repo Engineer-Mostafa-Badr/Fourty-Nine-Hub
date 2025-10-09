@@ -1,3 +1,8 @@
+/// Star Feature Presentation Layer - Master Exports
+///
+/// This file provides a single entry point for all presentation layer exports
+/// organized by feature modules
+
 // Video Player Core
 export 'video_player/video_player_exports.dart';
 

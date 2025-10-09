@@ -3755,7 +3755,7 @@ class AppPages {
                         context,
                         state,
                         BlocProvider<StarCubit>(
-                          create: (_) => serviceLocator<StarCubit>(),
+                          create: (_) => serviceLocator(),
                           child: const AllWinnerView(),
                         ),
                       );

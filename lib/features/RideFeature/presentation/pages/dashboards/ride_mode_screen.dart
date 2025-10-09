@@ -18,6 +18,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -63,14 +64,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
     SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext, currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound ?? false);
-    print("dispose REID:NEW_AVAILABLE_TRIP");
+    debugPrint("dispose REID:NEW_AVAILABLE_TRIP");
     super.dispose();
   }
 
   @override
   void initState() {
     SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
-    print("widget.params.isSocket ${widget.params.isSocket}");
+    debugPrint("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
     availableScrollController = ScrollController();
     pastScrollController = ScrollController();
@@ -122,7 +123,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
   void _onScrollPastTrips() {
     if (widget.params.isSocket == true && context.read<DashboardsCubit>().state.currentIndex == 2) {
-      print("object");
+      debugPrint("object");
       if (_pastTripsScrollController.position.pixels >= _pastTripsScrollController.position.maxScrollExtent) {
         context.read<DashboardsCubit>().getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
       }
@@ -137,27 +138,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
         child: SharedScaffold(
           mainCategoryId: 2,
           isWithBackArrow: true,
+          onBackPressed: ()=> context.pop(),
           body: NestedAppbar(
             scrollController: _scrollController,
             appBars: const [],
             body: BlocConsumer<DashboardsCubit, DashboardsState>(
               listener: (context, state) {
-                // if (state.isErrorOffers) {
-                //   String errorName = getFailureName(state.failure!, context);
-                //   errorName == 'DebtError'
-                //       ? showDebtDialog(
-                //           context, state.availableTrips![0].subCategory!.id)
-                //       : errorName == 'SubscribeError'
-                //           ? showSubscribeDialog(
-                //               context, state.availableTrips![0].subCategory!.id)
-                //           : showErrorMessage(context,
-                //               getFailureMessage(state.failure!, context));
-                // }
               },
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();
-                print("state.tripStatus ${state.tripStatus}");
-                print("cubit.activeTrip?.driverIsArrivingIn ${cubit.activeTrip?.driverIsArrivingIn}");
+                debugPrint("state.tripStatus ${state.tripStatus}");
+                debugPrint("cubit.activeTrip?.driverIsArrivingIn ${cubit.activeTrip?.driverIsArrivingIn}");
 
                 return DefaultTabController(
                   length: 4,
@@ -284,7 +275,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                       ? OlxPaginationWidget(
                                                           itemsPerPage: 2,
                                                           loadPage: (page) {
-                                                            print('==> page $page');
+                                                            debugPrint('==> page $page');
                                                             return context
                                                                 .read<DashboardsCubit>()
                                                                 .getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
@@ -431,7 +422,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                             : OlxPaginationWidget(
                                                 itemsPerPage: 2,
                                                 loadPage: (page) {
-                                                  print('==> page $page');
+                                                  debugPrint('==> page $page');
                                                   return context.read<DashboardsCubit>().getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
                                                 },
                                                 banners: bannersList,

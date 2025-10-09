@@ -34,6 +34,9 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
 class DriverDetailsModel extends DriverDetailsEntity {
   DriverDetailsModel({
     super.firstName,
+    super.lastName,
+    super.verifiedBadge,
+    super.countTrips,
     super.pictureUrl,
     super.rating,
     super.vehicleDetails,
@@ -41,8 +44,11 @@ class DriverDetailsModel extends DriverDetailsEntity {
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
-      firstName: json['firstName'],
-      pictureUrl: json['pictureUrl'],
+      firstName: json['firstName']??'',
+      lastName: json['lastName']??'',
+      verifiedBadge: json['verifiedBadge']??false,
+      countTrips: json['countTrips']??0,
+      pictureUrl: json['pictureUrl']??'',
       rating: json['rating'] != null
           ? RatingModel.fromJson(json['rating'])
           : null,

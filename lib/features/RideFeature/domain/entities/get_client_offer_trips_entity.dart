@@ -23,13 +23,19 @@ class ClientOfferTripEntity {
 
 class DriverDetailsEntity {
   final String? firstName;
+  final String? lastName;
   final String? pictureUrl;
+  final bool? verifiedBadge;
+  final num? countTrips;
   final RatingEntity? rating;
   final VehicleDetailsEntity? vehicleDetails;
 
   DriverDetailsEntity({
     this.firstName,
+    this.lastName,
     this.pictureUrl,
+    this.countTrips,
+    this.verifiedBadge,
     this.rating,
     this.vehicleDetails,
   });

@@ -15,6 +15,7 @@ import '../../../../../../service_locator/service_locator.dart';
 import '../../../../data/model/tube_video_models.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
+import '../../../video_player/widgets/talent_video_player.dart';
 
 class TalentHistoryItem extends StatelessWidget {
   final StarEntity talent;

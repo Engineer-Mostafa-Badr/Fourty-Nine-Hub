@@ -70,7 +70,7 @@ class _AppLoaderWidgetState extends State<AppLoaderWidget> with SingleTickerProv
             SpinKitSpinningLines(color:AppColors.SECONDARY_COLOR),
             Sizer(),
             Text(
-              context.isArabic?'الرجاء الانتظار...':'Loading...',
+              context.isArabic?'جاري التحميل...':'Loading...',
               style: Styles.mediumText(color: !context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor),
             ),
           ],
