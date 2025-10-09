@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -48,19 +53,12 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
   void initState() {
     super.initState();
     if (widget.type == 'shipping') {
-      // context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
       context.read<ClientTripsCubit>().listenToUpdateOfferTripShipping();
     }
     if (widget.type == 'ride') {
-      // context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
       context.read<ClientTripsCubit>().listenToUpdateOfferTripNonSocket();
     }
-    _scrollController = ScrollController()..addListener(_onScroll);
-    // if (!dashboardCubit.isClosed) {
-    // // dashboardCubit.getAvailableNonSocketTrips(),
-    // dashboardCubit.listenToRemoveUntrackedTrip(),
-    // dashboardCubit.listenToNewTripNonSocket()
-    // // }
+    _scrollController = ScrollController();
   }
 
   void _onScroll() {
@@ -77,8 +75,10 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    SharedWebSocket.socket!.off(SocketIOListeners.rideUpdateUntrackedTrip);
+    SharedWebSocket.socket!.off(SocketIOListeners.rideUpdateOfferShippingClientTrip);
+    // _scrollController.removeListener(_onScroll);
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -141,25 +141,37 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                                     .read<ClientTripsCubit>()
                                     .clientOfferTripsData
                                     .isEmpty
-                                ? const EmptyPage()
-                                : ListView.separated(
-                                    itemBuilder: (context, index) =>
-                                        ClientOfferWidget(
-                                          offers: context
-                                              .read<ClientTripsCubit>()
-                                              .clientOfferTripsData[index],
-                                          modeType: widget.type,
-                                          onRefuseOffer: (String id) {
-                                            // context.read<ClientTripsCubit>().refuseClientShippingTrip(id,context);
-                                            setState(() {});
-                                          },
-                                        ),
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(height: 5),
-                                    itemCount: context
+                                ? CustomEmptyWidget(label: context.isArabic?'لا يوجد لديك عروض':'You don\'t have any offers',)
+                                :OlxPaginationWidget(
+                              itemsPerPage: 3,
+                              scrollController: _scrollController,
+                              banners: bannersList,
+                              loadPage: (page) {
+                                if (widget.type == 'ride') {
+                                  return context.read<ClientTripsCubit>().getClientOfferTrips();
+                                }else{
+                                  return context.read<ClientTripsCubit>().getClientOfferShippingTrips();
+                                }
+                                },
+
+                              items: List.generate(
+                                context
+                                    .read<ClientTripsCubit>()
+                                    .clientOfferTripsData.length,
+                                    (index) {
+                                  return ClientOfferWidget(
+                                    offers: context
                                         .read<ClientTripsCubit>()
-                                        .clientOfferTripsData
-                                        .length),
+                                        .clientOfferTripsData[index],
+                                    modeType: widget.type,
+                                    onRefuseOffer: (String id) {
+                                      // context.read<ClientTripsCubit>().refuseClientShippingTrip(id,context);
+                                      setState(() {});
+                                    },
+                                  );
+                                },
+                              ),
+                            )
                           );
           },
         ),

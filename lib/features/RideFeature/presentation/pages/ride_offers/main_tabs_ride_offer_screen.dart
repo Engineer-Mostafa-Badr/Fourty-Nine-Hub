@@ -8,6 +8,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
+import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
@@ -60,21 +62,8 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.isArabic ? 'وضع المستخدم' : 'User Mode',
-          style: Styles.headerText(),
-        ),
-        elevation: 0,
-        // Match your design
-        shadowColor: Colors.transparent,
-        shape: const Border(
-          bottom: BorderSide(color: Colors.transparent, width: 0),
-        ),
-        leading: ClickableWidget(
-          onTap: () => context.go(Routes.RIDE_HOME),
-          child: Icon(Icons.arrow_back, color: context.isDarkMode ? Colors.white : Colors.black),
-        ),
+      appBar: DefaultAppBar(
+        title: context.isArabic ? 'وضع المستخدم' : 'User Mode',
       ),
       body: Column(
         children: [
@@ -83,14 +72,9 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
             child: Row(
               children: [
                 Expanded(
-                  child: AppButton(
-                    radius: 15,
-                    style: Styles.mediumText(
-                      color: selectedTap == 'ride' ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    label: LocaleKeys.ride.tr(),
-                    onPressed: () {
+                  child: TabWidget(
+                    title: LocaleKeys.ride.tr(),
+                    onTap: () {
                       ManageVibration.vibrate();
                       if (selectedTap != 'ride') {
                         setState(() {
@@ -120,19 +104,15 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                         }
                       }
                     },
-                    backColor: selectedTap == 'ride' ? AppColors.PRIMARY_COLOR : const Color(0xFFE0E0E0),
+                    selected: selectedTap == 'ride',
                   ),
                 ),
                 Sizer(),
                 Expanded(
-                  child: AppButton(
-                    style: Styles.mediumText(
-                      color: selectedTap == 'shipping' ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    radius: 15,
-                    label: context.isArabic ? 'تحميله' : 'Shipping',
-                    onPressed: () {
+                  child: TabWidget(
+                    selected: selectedTap == 'shipping',
+                    title: context.isArabic ? 'تحميله' : 'Shipping',
+                    onTap: () {
                       ManageVibration.vibrate();
                       if (selectedTap != 'shipping') {
                         setState(() {
@@ -161,7 +141,6 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                         }
                       }
                     },
-                    backColor: selectedTap == 'shipping' ? AppColors.PRIMARY_COLOR : const Color(0xFFE0E0E0),
                   ),
                 ),
               ],
@@ -196,8 +175,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
 
   Widget _buildTabBar() {
     return Container(
-      margin: EdgeInsetsDirectional.only(start: 16),
-      height: 40,
+      margin: const EdgeInsetsDirectional.only(start: 16),
       child: TabBar(
         tabAlignment: TabAlignment.start,
         dividerColor: Colors.transparent,
@@ -206,72 +184,47 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
         indicator: const BoxDecoration(color: Colors.transparent),
         labelPadding: EdgeInsets.zero,
         onTap: (index) {
-          if (index == 1) {
-            // loadInitialClientAcceptedShippingTrips
-            if (selectedTap == 'ride') {
-              context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
-            }
-            if (selectedTap == 'shipping') {
-              context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
-            }
-          }
-          if (index == 2) {
-            print("object1");
-            if (selectedTap == 'ride') {
-              context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
-            }
-            if (selectedTap == 'shipping') {
-              context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
-            }
-          }
-          if (index == 0) {
-            if (selectedTap == 'ride') {
-              context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
-            }
-            if (selectedTap == 'shipping') {
-              context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
-            }
-          }
-          if (index == 3) {
-            print("object");
-            if (selectedTap == 'ride') {
-              context.read<ClientTripsCubit>().loadInitialClientPastTrips();
-            }
-            if (selectedTap == 'shipping') {
-              context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
-            }
-          }
 
-          // if (index == 0) {
-          //   _loadInitialClientOfferTrips();
-          // }
-          // if (index == 2) {
-          //   _loadInitialClientAcceptedTrips();
-          // }
-          // if (index == 3) {
-          //   _loadInitialClientPastTrips();
-          // }
-          setState(() {});
         },
         tabs: List.generate(_tabTitles.length, (index) {
           final isSelected = _tabController.index == index;
           return Padding(
-            padding: const EdgeInsetsDirectional.only(end: 8),
+            padding: EdgeInsetsDirectional.only(end: 12.w),
             child: Tab(
-              child: Container(
-                width: 200.w,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.PRIMARY_COLOR : const Color(0xFFE0E0E0),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  _tabTitles[index],
-                  style: Styles.mediumText(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
+              child: SizedBox(
+                width: 180.w,
+                child: TabWidget(
+                  title: _tabTitles[index],
+                  selected: isSelected,
+                  onTap: () {
+                    _tabController.animateTo(index);
+                    if (index == 0) {
+                      if (selectedTap == 'ride') {
+                        context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
+                      } else {
+                        context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
+                      }
+                    } else if (index == 1) {
+                      if (selectedTap == 'ride') {
+                        context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
+                      } else {
+                        context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
+                      }
+                    } else if (index == 2) {
+                      if (selectedTap == 'ride') {
+                        context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
+                      } else {
+                        context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
+                      }
+                    } else if (index == 3) {
+                      if (selectedTap == 'ride') {
+                        context.read<ClientTripsCubit>().loadInitialClientPastTrips();
+                      } else {
+                        context.read<ClientTripsCubit>().loadInitialClientPastShippingTrips();
+                      }
+                    }
+                    setState(() {});
+                  },
                 ),
               ),
             ),
@@ -280,4 +233,5 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
       ),
     );
   }
+
 }

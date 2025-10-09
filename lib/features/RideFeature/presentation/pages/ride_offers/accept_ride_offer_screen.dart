@@ -9,6 +9,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 
@@ -44,7 +46,7 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController();
   }
 
   void _onScroll() {
@@ -61,8 +63,8 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    // _scrollController.removeListener(_onScroll);
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -137,19 +139,31 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                                         .clientAcceptedTripsData
                                         .isEmpty
                                 ? const EmptyPage()
-                                : ListView.separated(
-                                    itemBuilder: (context, index) =>
-                                        ClientAcceptWidget(
-                                          offers: state
-                                              .clientAcceptedTripData?[index],
-                                        ),
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(height: 5),
-                                    itemCount: context
-                                            .read<ClientTripsCubit>()
-                                            .clientAcceptedTripsData
-                                            .length ??
-                                        0),
+                            :OlxPaginationWidget(
+                              itemsPerPage: 3,
+                              scrollController: _scrollController,
+                              banners: bannersList,
+                              loadPage: (page) {
+                                if (widget.type == 'ride') {
+                                  return context.read<ClientTripsCubit>().getClientAcceptedTrips();
+                                }else{
+                                  return context.read<ClientTripsCubit>().getClientAcceptedShippingTrips();
+                                }
+                              },
+
+                              items: List.generate(
+                                context
+                                    .read<ClientTripsCubit>()
+                                    .clientAcceptedTripsData.length,
+                                    (index) {
+                                  return ClientAcceptWidget(
+                                    offers: context
+                                        .read<ClientTripsCubit>()
+                                        .clientAcceptedTripsData[index],
+                                  );
+                                },
+                              ),
+                            )
                           );
           },
         ),

@@ -43,7 +43,7 @@ class PersonTripWidget extends StatelessWidget {
             SizedBox(
               width: 70,
               child: Text(
-                name!,
+                _capitalize(name??''),
                 style:  TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -57,5 +57,9 @@ class PersonTripWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+  String _capitalize(String? s) {
+    if (s == null || s.isEmpty) return '';
+    return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 }

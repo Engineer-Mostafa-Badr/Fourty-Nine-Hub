@@ -9,6 +9,8 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
@@ -71,10 +73,7 @@ class ClientPendingWidget extends StatelessWidget {
       return formatted;
     }
 
-    String _capitalize(String? s) {
-      if (s == null || s.isEmpty) return '';
-      return s[0].toUpperCase() + s.substring(1).toLowerCase();
-    }
+
 
 
     return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
@@ -248,17 +247,43 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                             padding: const EdgeInsets.all(16.0),
                             child: context.read<ClientTripsCubit>().clientPendingTripsData.isEmpty
                                 ? const EmptyPage()
-                                : GlowingOverscrollIndicator(
-                                    color: AppColors.SECONDARY_COLOR,
-                                    axisDirection: AxisDirection.down,
-                                    child: ListView.separated(
-                                        itemBuilder: (context, index) => ClientPendingWidget(
-                                              modeType: widget.type,
-                                              offers: state.clientPendingTripData?[index],
-                                            ),
-                                        separatorBuilder: (context, index) => const SizedBox(height: 5),
-                                        itemCount: context.read<ClientTripsCubit>().clientPendingTripsData.length ?? 0),
-                                  ),
+                                : OlxPaginationWidget(
+                              itemsPerPage: 3,
+                              scrollController: _scrollController,
+                              banners: bannersList,
+                              loadPage: (page) {
+                                if (widget.type == 'ride') {
+                                  return context.read<ClientTripsCubit>().getClientPendingTrips();
+                                }else{
+                                  return context.read<ClientTripsCubit>().getClientPendingShippingTrips();
+                                }
+                              },
+
+                              items: List.generate(
+                                context
+                                    .read<ClientTripsCubit>()
+                                    .clientPendingTripsData.length,
+                                    (index) {
+                                  return ClientPendingWidget(
+                                    modeType: widget.type,
+                                    offers: context
+                                        .read<ClientTripsCubit>()
+                                        .clientPendingTripsData[index],
+                                  );
+                                },
+                              ),
+                            )
+                            // GlowingOverscrollIndicator(
+                            //         color: AppColors.SECONDARY_COLOR,
+                            //         axisDirection: AxisDirection.down,
+                            //         child: ListView.separated(
+                            //             itemBuilder: (context, index) => ClientPendingWidget(
+                            //                   modeType: widget.type,
+                            //                   offers: state.clientPendingTripData?[index],
+                            //                 ),
+                            //             separatorBuilder: (context, index) => const SizedBox(height: 5),
+                            //             itemCount: context.read<ClientTripsCubit>().clientPendingTripsData.length ?? 0),
+                            //       ),
                           );
           },
         ),
@@ -268,8 +293,8 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    // _scrollController.removeListener(_onScroll);
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -278,7 +303,7 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
     // if(widget.type=='shipping')context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
     // if(widget.type=='ride')context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
+    _scrollController = ScrollController();
   }
 
   void _onScroll() {
