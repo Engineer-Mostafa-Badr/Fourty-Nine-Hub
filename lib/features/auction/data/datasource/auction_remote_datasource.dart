@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/available_trip_join_model.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
@@ -62,7 +64,7 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
   Future<Either<Failure, AuctionWinnerDataEntity >> getAllWinnerAuction();
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> searchAuction({required SearchAuctionParams params});
-  Future<Either<Failure, List<AuctionViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params});
+  Future<Either<Failure, List<ViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params});
 
 }
 
@@ -515,7 +517,7 @@ class AuctionRemoteDataSourceImpl
   }
 
   @override
-  Future<Either<Failure, List<AuctionViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params}) async{
+  Future<Either<Failure, List<ViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params}) async{
     final url = "${EndPoints.getAuctionViewers}${params.id}";
 
     final response = await _apiConsumer.get(url);
@@ -524,7 +526,7 @@ class AuctionRemoteDataSourceImpl
           (l) => Left(l),
           (data) {
         final rideList = (data['data']['views'] as List)
-            .map((e) => AuctionViewerModel.fromJson(e as Map<String, dynamic>))
+            .map((e) => ViewerModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(rideList);
       },

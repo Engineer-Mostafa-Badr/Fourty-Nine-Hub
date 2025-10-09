@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_image_slider.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -202,7 +203,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
           return true;
         },
         child: Scaffold(
-          appBar: AppBar(title: Text(LocaleKeys.auction.localize)),
+          appBar: DefaultAppBar(title: LocaleKeys.auction.localize),
           body: BlocBuilder<AuctionCubit, AuctionState>(
             builder: (context, state) {
               if (state.status == StateStatus.loading &&
@@ -231,32 +232,6 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
 
               return Column(
                 children: [
-
-                  // IconButton(
-                  //   onPressed: () {
-                  //     late OverlayEntry overlay;
-                  //
-                  //     overlay = OverlayEntry(
-                  //       builder: (context) => Stack(
-                  //         children: [
-                  //           _WinnerOverlay(
-                  //             winner: BidWinnerEntity(
-                  //               username: "Moaz Mohamed",
-                  //               price: 100000,
-                  //               auctionTitle: "Car",
-                  //             ),
-                  //             onClose: () => overlay.remove(),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     );
-                  //
-                  //     Overlay.of(context).insert(overlay);
-                  //   },
-                  //   icon: const Icon(Icons.emoji_events),
-                  // ),
-
-                  // Combined auction details and participants
                   Expanded(
                     child: _AuctionDetailsWithParticipants(
                       auction: auction,

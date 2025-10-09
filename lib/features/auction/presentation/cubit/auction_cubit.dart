@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/auction/auction_helper.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/functions/global/upload_image.dart';
@@ -157,7 +158,7 @@ class AuctionCubit extends Cubit<AuctionState> {
   }
 
   Future<void> fetchViewerEntity({required String  id}) async {
-    emit(state.copyWith(status: StateStatus.loading));
+    // emit(state.copyWith(status: StateStatus.loading));
 
     final response = await getViewerAuctionUseCase(FavoriteAuctionParams(id: id));
 

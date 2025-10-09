@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/show_winner_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -134,255 +135,45 @@ class AuctionCard extends StatelessWidget {
           final cubit = context.read<AuctionCubit>();
 
           // Fetch viewers first
-          await cubit.fetchViewerEntity(id: auction.id!);
+          if((auction.views??0)>0){
+            await cubit.fetchViewerEntity(id: auction.id!);
 
-          final viewers = cubit.state.auctionViewerData;
+            final viewers = cubit.state.auctionViewerData;
 
-          if (viewers != null && viewers.isNotEmpty) {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              builder: (context) {
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.blue.shade50, Colors.purple.shade50],
-                    ),
+            if (viewers != null && viewers.isNotEmpty) {
+              showModalBottomSheet(
+                backgroundColor: context.isDarkMode
+                    ? AppColors.DARK_BLUE_COLOR
+                    .withOpacity(0.95)
+                    : AppColors.LIGHT_COLOR,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.32,
+                ),
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(32.0),
+                    topRight: Radius.circular(32.0),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Header
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.shade600,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(Icons.people, color: Colors.white, size: 24),
-                                ),
-                                SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Auction Viewers",
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey.shade900,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${viewers.length} ${viewers.length == 1 ? 'viewer' : 'viewers'} online",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: Icon(Icons.close, color: Colors.grey.shade700),
-                              style: IconButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 24),
-
-                        // Viewers list
-                        Flexible(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: viewers.isEmpty
-                                ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(48.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.people_outline, size: 64, color: Colors.grey.shade300),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      "No viewers yet",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                                : ListView.separated(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.all(8),
-                              itemCount: viewers.length,
-                              separatorBuilder: (context, index) => Divider(height: 1, indent: 72),
-                              itemBuilder: (context, index) {
-                                final viewer = viewers[index];
-                                final hasImage = viewer.profilePictureKey != null &&
-                                    viewer.profilePictureKey!.isNotEmpty;
-
-                                return Container(
-                                  margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.transparent,
-                                  ),
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                    leading: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.blue.shade200,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: CircleAvatar(
-                                        radius: 24,
-                                        backgroundColor: Colors.blue.shade100,
-                                        backgroundImage: hasImage
-                                            ? NetworkImage(viewer.profilePictureKey!)
-                                            : null,
-                                        child: !hasImage
-                                            ? Text(
-                                          (viewer.firstName?.isNotEmpty ?? false)
-                                              ? viewer.firstName![0].toUpperCase()
-                                              : '?',
-                                          style: TextStyle(
-                                            color: Colors.blue.shade700,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        )
-                                            : null,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      "${viewer.firstName ?? 'Unknown'} ${viewer.lastName ?? ''}".trim(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        color: Colors.grey.shade800,
-                                      ),
-                                    ),
-                                    subtitle: viewer.gender != null && viewer.gender!.isNotEmpty
-                                        ? Padding(
-                                      padding: const EdgeInsets.only(top: 4.0),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            viewer.gender?.toLowerCase() == 'male'
-                                                ? Icons.male
-                                                : viewer.gender?.toLowerCase() == 'female'
-                                                ? Icons.female
-                                                : Icons.person,
-                                            size: 14,
-                                            color: Colors.grey.shade500,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            viewer.gender!,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey.shade600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                        : null,
-                                    trailing: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: Colors.green.shade400,
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.green.shade200,
-                                            blurRadius: 4,
-                                            spreadRadius: 1,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 24),
-
-                        // Close button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.shade600,
-                              foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              "Close",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          } else {
-            // Handle empty viewers or error
+                ),
+                isDismissible: true,
+                // isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return LastViewersWidget(lastViewers: viewers,);
+                },
+              );
+            } else {
+              // Handle empty viewers or error
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("No viewers available")),
+              );
+            }
+          }else{
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("No viewers available")),
             );
           }
+
         },
 
 

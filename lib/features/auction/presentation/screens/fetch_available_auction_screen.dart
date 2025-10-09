@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/common/tab_widget.dart';
@@ -223,248 +224,256 @@ class _AuctionScreenState extends State<AuctionScreen>
           );
         }
       },
-  child: Scaffold(
-      // scaffoldBackgroundWithAppBarColor: AppColors.PRIMARY_COLOR,
-      // backgroundColor: AppColors.PRIMARY_COLOR,
-      // enableCustomAppBar: true,
-      appBar: PreferredSize(
-        // surfaceTintColor: Colors.transparent,
-        // backgroundColor: context.isDarkMode
-        //     ? Colors.black
-        //     : AppColors.PRIMARY_COLOR,
-        // toolbarHeight: 50,
-        preferredSize: const Size.fromHeight(30),
-        child: BlocBuilder<AuctionCubit, AuctionState>(
-          builder: (context, state) {
-            return BackAppBar(
-              backColor: AppColors.PRIMARY_COLOR,
-              label:   LocaleKeys.auction.localize,
-              enableCustomAppBar: true,
-              actions: [
-                const SizedBox(width: 6),
-                // const Spacer(),
-                Text(
-                  "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Colors.white),
-                ),
-                const SizedBox(width: 6),
-                const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
-                const SizedBox(width: 5),
-              ],
-            );
-          },
-        ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BlocBuilder<AuctionCubit, AuctionState>(
-            builder: (context, state) {
-              return Container(
-                // decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR),
-                // padding: const EdgeInsets.only(
-                //     top: 0, left: 0, right: 0, bottom: 0),
-                padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
-                // color: context.isDarkMode ? Colors.black : Colors.white,
-                child: Column(
-                  children: [
-                    // Row(
-                    //   children: [
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         context.pop();
-                    //       },
-                    //       child: const Icon(Icons.arrow_back_ios, size: 20),
-                    //     ),
-                    //     const SizedBox(width: 8),
-                    //     Text(
-                    //       LocaleKeys.auction.localize,
-                    //       style: TextStyle(
-                    //           color: Colors.white,
-                    //           fontSize: 18,
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //     const Spacer(),
-                    //     Text(
-                    //       "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
-                    //       style: const TextStyle(
-                    //           fontWeight: FontWeight.w500,
-                    //           fontSize: 14,
-                    //           color: Colors.white),
-                    //     ),
-                    //     const SizedBox(width: 6),
-                    //     const Icon(Icons.emoji_events,
-                    //         color: Colors.amber, size: 20),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 16),
-                    if (state.isLoading)
-                      const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    else
-                      ClipRRect(
-                        // borderRadius: BorderRadius.circular(12),
-                        child: _buildBannerWidget(state, context),
-                      ),
-                  ],
-                ),
-              );
-            },
+  child: BlocBuilder<AuctionCubit, AuctionState>(
+    builder: (context,state) {
+      return Scaffold(
+          // scaffoldBackgroundWithAppBarColor: AppColors.PRIMARY_COLOR,
+          // backgroundColor: AppColors.PRIMARY_COLOR,
+          // enableCustomAppBar: true,
+          appBar: DefaultAppBar(
+            title:LocaleKeys.auction.localize,
+            actions: [
+              const SizedBox(width: 6),
+              // const Spacer(),
+              Text(
+                "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
+                style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.white),
+              ),
+              const SizedBox(width: 6),
+              const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+              const SizedBox(width: 5),
+            ],
           ),
-
-          // Search Bar or Tab Bar
-          Container(
-            color: context.isDarkMode ? Colors.black : Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: _isSearching
-                ? TextFormField(
-                    controller: _searchController,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintText: LocaleKeys.search.localize,
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: _toggleSearch,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                    ),
-                    textInputAction: TextInputAction.search,
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        context
-                            .read<AuctionCubit>()
-                            .loadInitialSearchAuction(context, value);
-                      }
-                    },
-                  )
-                : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: _toggleSearch,
-                      child: SvgPicture.asset(
-                        Assets.searchIcon,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Row(
-                        children: List.generate(4, (index) {
-                          final labels = [
-                            LocaleKeys.available.localize,
-                            LocaleKeys.expired.localize,
-                            LocaleKeys.favorite.localize,
-                            LocaleKeys.myBidders.localize,
-                          ];
-
-                          // final counts = [
-                          //   // context.watch<AuctionCubit>().state.availableCount ?? 0,
-                          //   // context.watch<AuctionCubit>().state.expiredCount ?? 0,
-                          //   // context.watch<AuctionCubit>().state.favoriteCount ?? 0,
-                          //   // context.watch<AuctionCubit>().state.myBiddersCount ?? 0,
-                          // ];
-
-                          return Expanded(
-                            child: AnimatedBuilder(
-                              animation: _tabController,
-                              builder: (context, _) {
-                                final isSelected = _tabController.index == index;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                                  child: TabWidget(
-                                    title: labels[index],
-                                    // count: counts[index],
-                                    selected: isSelected,
-                                    onTap: () {
-                                      _tabController.animateTo(index);
-                                      final cubit = context.read<AuctionCubit>();
-                                      switch (index) {
-                                        case 0:
-                                          cubit.loadInitialAvailableNonSocketAuction(context);
-                                          break;
-                                        case 1:
-                                          cubit.loadInitialExpiredNonSocketAuction();
-                                          break;
-                                        case 2:
-                                          cubit.loadInitialFavoriteNonSocketAuction();
-                                          break;
-                                        case 3:
-                                          cubit.loadInitialMyBidders();
-                                          break;
-                                      }
-                                    },
-                                  ),
-                                );
-                              },
+          // PreferredSize(
+          //   // surfaceTintColor: Colors.transparent,
+          //   // backgroundColor: context.isDarkMode
+          //   //     ? Colors.black
+          //   //     : AppColors.PRIMARY_COLOR,
+          //   // toolbarHeight: 50,
+          //   preferredSize: const Size.fromHeight(30),
+          //   child: BlocBuilder<AuctionCubit, AuctionState>(
+          //     builder: (context, state) {
+          //       return BackAppBar(
+          //         backColor: AppColors.PRIMARY_COLOR,
+          //         label:   LocaleKeys.auction.localize,
+          //         enableCustomAppBar: true,
+          //
+          //       );
+          //     },
+          //   ),
+          // ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<AuctionCubit, AuctionState>(
+                builder: (context, state) {
+                  return Container(
+                    // decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR),
+                    // padding: const EdgeInsets.only(
+                    //     top: 0, left: 0, right: 0, bottom: 0),
+                    padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
+                    // color: context.isDarkMode ? Colors.black : Colors.white,
+                    child: Column(
+                      children: [
+                        // Row(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         context.pop();
+                        //       },
+                        //       child: const Icon(Icons.arrow_back_ios, size: 20),
+                        //     ),
+                        //     const SizedBox(width: 8),
+                        //     Text(
+                        //       LocaleKeys.auction.localize,
+                        //       style: TextStyle(
+                        //           color: Colors.white,
+                        //           fontSize: 18,
+                        //           fontWeight: FontWeight.w600),
+                        //     ),
+                        //     const Spacer(),
+                        //     Text(
+                        //       "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
+                        //       style: const TextStyle(
+                        //           fontWeight: FontWeight.w500,
+                        //           fontSize: 14,
+                        //           color: Colors.white),
+                        //     ),
+                        //     const SizedBox(width: 6),
+                        //     const Icon(Icons.emoji_events,
+                        //         color: Colors.amber, size: 20),
+                        //   ],
+                        // ),
+                        // const SizedBox(height: 16),
+                        if (state.isLoading)
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: CircularProgressIndicator(),
                             ),
-                          );
-                        }),
-                      ),
+                          )
+                        else
+                          ClipRRect(
+                            // borderRadius: BorderRadius.circular(12),
+                            child: _buildBannerWidget(state, context),
+                          ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const SizedBox(width: 28),
-                    Expanded(
-                      child: AnimatedBuilder(
-                        animation: _tabController,
-                        builder: (context, _) {
-                          final isSelected = _tabController.index == 4;
-                          return TabWidget(
-                            title: LocaleKeys.myAuction.localize,
-                            // count: context.watch<AuctionCubit>().state.myAuctionCount ?? 0,
-                            selected: isSelected,
-                            onTap: () {
-                              _tabController.animateTo(4);
-                              final cubit = context.read<AuctionCubit>();
-                              cubit.loadInitialMyAuction();
-                            },
-                          );
+                  );
+                },
+              ),
+
+              // Search Bar or Tab Bar
+              Container(
+                color: context.isDarkMode ? Colors.black : Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: _isSearching
+                    ? TextFormField(
+                        controller: _searchController,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: LocaleKeys.search.localize,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: _toggleSearch,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                        ),
+                        textInputAction: TextInputAction.search,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            context
+                                .read<AuctionCubit>()
+                                .loadInitialSearchAuction(context, value);
+                          }
                         },
-                      ),
+                      )
+                    : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: _toggleSearch,
+                          child: SvgPicture.asset(
+                            Assets.searchIcon,
+                            color: context.isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Row(
+                            children: List.generate(4, (index) {
+                              final labels = [
+                                LocaleKeys.available.localize,
+                                LocaleKeys.expired.localize,
+                                LocaleKeys.favorite.localize,
+                                LocaleKeys.myBidders.localize,
+                              ];
+
+                              // final counts = [
+                              //   // context.watch<AuctionCubit>().state.availableCount ?? 0,
+                              //   // context.watch<AuctionCubit>().state.expiredCount ?? 0,
+                              //   // context.watch<AuctionCubit>().state.favoriteCount ?? 0,
+                              //   // context.watch<AuctionCubit>().state.myBiddersCount ?? 0,
+                              // ];
+
+                              return Expanded(
+                                child: AnimatedBuilder(
+                                  animation: _tabController,
+                                  builder: (context, _) {
+                                    final isSelected = _tabController.index == index;
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                                      child: TabWidget(
+                                        title: labels[index],
+                                        // count: counts[index],
+                                        selected: isSelected,
+                                        onTap: () {
+                                          _tabController.animateTo(index);
+                                          final cubit = context.read<AuctionCubit>();
+                                          switch (index) {
+                                            case 0:
+                                              cubit.loadInitialAvailableNonSocketAuction(context);
+                                              break;
+                                            case 1:
+                                              cubit.loadInitialExpiredNonSocketAuction();
+                                              break;
+                                            case 2:
+                                              cubit.loadInitialFavoriteNonSocketAuction();
+                                              break;
+                                            case 3:
+                                              cubit.loadInitialMyBidders();
+                                              break;
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const SizedBox(width: 28),
+                        Expanded(
+                          child: AnimatedBuilder(
+                            animation: _tabController,
+                            builder: (context, _) {
+                              final isSelected = _tabController.index == 4;
+                              return TabWidget(
+                                title: LocaleKeys.myAuction.localize,
+                                // count: context.watch<AuctionCubit>().state.myAuctionCount ?? 0,
+                                selected: isSelected,
+                                onTap: () {
+                                  _tabController.animateTo(4);
+                                  final cubit = context.read<AuctionCubit>();
+                                  cubit.loadInitialMyAuction();
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
-            )
+                )
 
-          ),
+              ),
 
-          // Content Area
-          Expanded(
-            child: _isSearching
-                ? const SearchAuctionScreen()
-                : TabBarView(
-                    controller: _tabController,
-                    children: [
-                      AvailableAuctionScreen(),
-                      ExpiredAuctionScreen(),
-                      FavoriteAuctionScreen(),
-                      MyBiddersScreen(),
-                      MyAuctionScreen(),
-                    ],
-                  ),
+              // Content Area
+              Expanded(
+                child: _isSearching
+                    ? const SearchAuctionScreen()
+                    : TabBarView(
+                        controller: _tabController,
+                        children: [
+                          AvailableAuctionScreen(),
+                          ExpiredAuctionScreen(),
+                          FavoriteAuctionScreen(),
+                          MyBiddersScreen(),
+                          MyAuctionScreen(),
+                        ],
+                      ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
+        );
+    }
+  ),
 );
   }
 }
