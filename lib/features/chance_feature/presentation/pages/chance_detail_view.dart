@@ -525,22 +525,28 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       margin: EdgeInsets.symmetric(horizontal: 20.w),
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          ManageVibration.vibrate();
-                          _showParticipateBottomSheet();
-                        },
+                        onPressed: widget.chanceAd?.isComplete ?? false
+                            ? null // Disable button when chance is complete
+                            : () {
+                                ManageVibration.vibrate();
+                                _showParticipateBottomSheet();
+                              },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: widget.chanceAd?.isComplete ?? false
+                              ? Colors.grey // Grey when disabled
+                              : Colors.red,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                         ),
                         child: Text(
-                          context.isArabic ? 'انضم' : 'Join',
+                          widget.chanceAd?.isComplete ?? false
+                              ? (context.isArabic ? 'مكتمل' : 'Completed')
+                              : (context.isArabic ? 'انضم' : 'Join'),
                           style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
@@ -714,7 +720,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
                 // Question
                 Text(
-                  context.isArabic ? 'هل تريد مشاركة?' : 'One or more shares?',
+                  context.isArabic ? 'هل تريد مشاركة؟' : 'One or more shares?',
                   style: TextStyle(
                     fontSize: 32.sp,
                     color: Colors.black87,
@@ -743,7 +749,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       ),
                     ),
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 32.sp,
                       color: Colors.black87,
                     ),
                   ),

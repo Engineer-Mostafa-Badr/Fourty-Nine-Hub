@@ -459,22 +459,29 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     }, (data) {
       bool selectedPrice = data.any((element) => element.nameAr == 'السعر');
       print("selectedPrice:$selectedPrice");
+
+      // Clear the values list to prevent duplication
+      values.clear();
+
       for (int i = 0; i <= data.length - 1; i++) {
         data[i].values.isNotEmpty
             ? values.add(data[i].values.first)
             : values.add(SelectionEntity(nameAr: '', nameEn: ''));
         print(values[i].nameEn);
-        emit(state.copyWith(selections: values, isPrice: selectedPrice));
-        print(state.selections![i].nameEn);
       }
+
       // print(object)
       final propertiesList = data
           .where((element) =>
               element.nameAr != 'السعر' && element.nameAr != 'الراتب')
           .toList();
 
+      // Emit once after all values are processed
       emit(state.copyWith(
-          adProperties: propertiesList, filterAdProperties: data));
+          adProperties: propertiesList,
+          filterAdProperties: data,
+          selections: values,
+          isPrice: selectedPrice));
     });
   }
 

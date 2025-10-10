@@ -6,10 +6,10 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entit
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/messages/messages.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../presentation_exports.dart';
-
 
 import '../../shared/widgets/common/error_widget.dart';
 import '../../shared/widgets/common/loading_indicator.dart';
@@ -90,11 +90,7 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
 
         if (state.isLoading && !state.hasPlaylists) {
           return Center(
-            child: StarLoadingIndicator(
-              message: context.isArabic
-                  ? 'جاري تحميل قوائم التشغيل...'
-                  : 'Loading playlists...',
-            ),
+            child: StarLoadingIndicator(),
           );
         }
 
@@ -447,24 +443,34 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
               listener: (context, state) {
                 if (state.isSuccess && !state.isCreating) {
                   Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'تم إنشاء قائمة التشغيل بنجاح'
-                            : 'Playlist created successfully',
-                      ),
-                      backgroundColor: Colors.green,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       context.isArabic
+                  //           ? 'تم إنشاء قائمة التشغيل بنجاح'
+                  //           : 'Playlist created successfully',
+                  //     ),
+                  //     backgroundColor: Colors.green,
+                  //   ),
+                  // );
+                  showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم إنشاء قائمة التشغيل بنجاح'
+                        : 'Playlist created successfully',
                   );
                 } else if (state.isError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        _getErrorMessage(context, state),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       _getErrorMessage(context, state),
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //   ),
+                  // );
+                  showErrorMessage(
+                    context,
+                    _getErrorMessage(context, state),
                   );
                 }
               },
@@ -474,15 +480,21 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
                       ? null
                       : () async {
                           if (nameController.text.trim().isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  context.isArabic
-                                      ? 'يرجى إدخال اسم القائمة'
-                                      : 'Please enter playlist name',
-                                ),
-                                backgroundColor: Colors.orange,
-                              ),
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(
+                            //     content: Text(
+                            //       context.isArabic
+                            //           ? 'يرجى إدخال اسم القائمة'
+                            //           : 'Please enter playlist name',
+                            //     ),
+                            //     backgroundColor: Colors.orange,
+                            //   ),
+                            // );
+                            showErrorMessage(
+                              context,
+                              context.isArabic
+                                  ? 'يرجى إدخال اسم القائمة'
+                                  : 'Please enter playlist name',
                             );
                             return;
                           }
@@ -559,15 +571,21 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
               listener: (context, state) {
                 if (state.isSuccess && !state.isUpdating) {
                   Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'تم تحديث قائمة التشغيل بنجاح'
-                            : 'Playlist updated successfully',
-                      ),
-                      backgroundColor: Colors.green,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       context.isArabic
+                  //           ? 'تم تحديث قائمة التشغيل بنجاح'
+                  //           : 'Playlist updated successfully',
+                  //     ),
+                  //     backgroundColor: Colors.green,
+                  //   ),
+                  // );
+                  showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم تحديث قائمة التشغيل بنجاح'
+                        : 'Playlist updated successfully',
                   );
                 }
               },
@@ -625,15 +643,21 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
               listener: (context, state) {
                 if (state.isSuccess && !state.isDeleting) {
                   Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.isArabic
-                            ? 'تم حذف قائمة التشغيل بنجاح'
-                            : 'Playlist deleted successfully',
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       context.isArabic
+                  //           ? 'تم حذف قائمة التشغيل بنجاح'
+                  //           : 'Playlist deleted successfully',
+                  //     ),
+                  //     backgroundColor: Colors.red,
+                  //   ),
+                  // );
+                  showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم حذف قائمة التشغيل بنجاح'
+                        : 'Playlist deleted successfully',
                   );
                 }
               },

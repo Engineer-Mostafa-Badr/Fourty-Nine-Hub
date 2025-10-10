@@ -22,8 +22,15 @@ class TalentCardOverlayControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StarCubit, StarState>(
+      bloc: cubit,
+      buildWhen: (previous, current) {
+        // Only rebuild when favorites change
+        return previous.favoriteTalents != current.favoriteTalents;
+      },
       builder: (context, state) {
-        final isFavorite = cubit.isFavorite(talent.id);
+        final isFavorite = state.favoriteTalents.any(
+          (fav) => fav.id == talent.id,
+        );
 
         return Positioned(
           top: 8,

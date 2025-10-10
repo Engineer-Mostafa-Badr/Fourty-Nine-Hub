@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
@@ -19,6 +20,8 @@ import '../../../domain/use_case/comment_use_cases.dart';
 import '../../presentation_exports.dart';
 import 'comments_modal.dart';
 import 'floating_video_player.dart';
+import 'related_videos_section.dart';
+import 'video_info_section.dart' as video_info;
 
 class TalentVideoPlayer extends StatefulWidget {
   final String videoUrl;
@@ -46,9 +49,6 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   bool _isInitialized = false;
   bool _isPlaying = true;
   bool _showControls = false;
-  bool _showFullDescription = false;
-  // Remove local state variables - will use API data instead
-  bool _isSubscribed = false;
   List<TubeVideoModel> _recommendedVideos = [];
   bool _loadingRecommended = false;
 
@@ -73,37 +73,6 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     }
   }
 
-  // Helper methods to get like/dislike states from updated video data
-  bool _isLiked(StarCubit starCubit) {
-    // Always ensure the video is in state before checking
-    starCubit.ensureVideoInState(widget.talent);
-
-    final updatedVideo = starCubit.getVideoById(widget.talent.id);
-    if (updatedVideo != null) {
-      return updatedVideo.isLike;
-    }
-    // Fallback to original data
-    if (widget.talent is TubeVideoModel) {
-      return (widget.talent as TubeVideoModel).isLike;
-    }
-    return false;
-  }
-
-  bool _isDisliked(StarCubit starCubit) {
-    // Always ensure the video is in state before checking
-    starCubit.ensureVideoInState(widget.talent);
-
-    final updatedVideo = starCubit.getVideoById(widget.talent.id);
-    if (updatedVideo != null) {
-      return updatedVideo.isDislike;
-    }
-    // Fallback to original data
-    if (widget.talent is TubeVideoModel) {
-      return (widget.talent as TubeVideoModel).isDislike;
-    }
-    return false;
-  }
-
   bool _isFullscreen = false;
   Timer? _hideControlsTimer;
   bool _isDragging = false;
@@ -112,6 +81,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
   late CommentCubit _commentCubit;
   late StarCubit _starCubit;
+  late ProfileCubit _profileCubit;
 
   @override
   void initState() {
@@ -130,6 +100,9 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     _starCubit = widget.starCubit ?? serviceLocator<StarCubit>();
     _starCubit.ensureVideoInState(widget.talent);
 
+    // Initialize ProfileCubit for subscription functionality
+    _profileCubit = serviceLocator<ProfileCubit>();
+
     // Initialize video controller in all cases, but only start playback if approved
     _initializeVideo();
 
@@ -139,6 +112,16 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    // ✅ إضافة تعيين Status Bar للأسود
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.black, // لون الخلفية
+        statusBarIconBrightness:
+            Brightness.light, // الأيقونات فاتحة للخلفية الداكنة
+        statusBarBrightness: Brightness.dark, // للـ iOS
+      ),
+    );
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -171,6 +154,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
       if (mounted) {
         print('✅ TalentVideoPlayer: Video initialized successfully');
+
+        // Add listener for video end and play state changes
+        _controller!.addListener(_videoListener);
+
         setState(() {
           _isInitialized = true;
         });
@@ -222,17 +209,18 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
         if (mounted) {
           // Show error state in UI
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to load video. Please try again.'),
-              backgroundColor: Colors.red,
-              action: SnackBarAction(
-                label: 'Retry',
-                textColor: Colors.white,
-                onPressed: () => _initializeVideo(),
-              ),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text('Failed to load video. Please try again.'),
+          //     backgroundColor: Colors.red,
+          //     action: SnackBarAction(
+          //       label: 'Retry',
+          //       textColor: Colors.white,
+          //       onPressed: () => _initializeVideo(),
+          //     ),
+          //   ),
+          // );
+          showErrorMessage(context, secondError.toString());
         }
       });
     } catch (e) {
@@ -290,19 +278,22 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
       print('💥 TalentVideoPlayer: All codec fallback strategies failed');
       final deviceInfo = VideoUtils.getDeviceInfo();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Video format not supported on ${deviceInfo['platform']}. Please try another video.'),
-          backgroundColor: Colors.orange,
-          duration: Duration(seconds: 5),
-          action: SnackBarAction(
-            label: 'Retry',
-            textColor: Colors.white,
-            onPressed: () => _initializeVideo(),
-          ),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //         'Video format not supported on ${deviceInfo['platform']}. Please try another video.'),
+      //     backgroundColor: Colors.orange,
+      //     duration: Duration(seconds: 5),
+      //     action: SnackBarAction(
+      //       label: 'Retry',
+      //       textColor: Colors.white,
+      //       onPressed: () => _initializeVideo(),
+      //     ),
+      //   ),
+      // );
+
+      showErrorMessage(context,
+          'Video format not supported on ${deviceInfo['platform']}. Please try another video.');
     }
   }
 
@@ -320,6 +311,17 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
 
+    // ✅ إعادة Status Bar للإعدادات الافتراضية
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor:
+            Colors.transparent, // أو اللون الذي تريده للصفحات الأخرى
+        statusBarIconBrightness:
+            Brightness.dark, // أيقونات داكنة للخلفيات الفاتحة
+        statusBarBrightness: Brightness.light, // للـ iOS
+      ),
+    );
+
     // Always dispose controller if it exists, but avoid floating video issues
     try {
       if (_controller != null && !FloatingVideoManager.isPlayerVisible) {
@@ -334,29 +336,127 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     super.dispose();
   }
 
+  // Video listener to sync play state and handle video end
+  void _videoListener() {
+    if (_controller == null || !mounted) return;
+
+    final isPlaying = _controller!.value.isPlaying;
+    final position = _controller!.value.position;
+    final duration = _controller!.value.duration;
+
+    // Update play/pause icon when state changes
+    if (_isPlaying != isPlaying) {
+      setState(() {
+        _isPlaying = isPlaying;
+      });
+    }
+
+    // Check if video ended (within 1 second of duration)
+    if (duration.inSeconds > 0 &&
+        position.inSeconds >= duration.inSeconds - 1 &&
+        _isPlaying) {
+      // Video ended, pause and reset icon
+      setState(() {
+        _isPlaying = false;
+      });
+    }
+  }
+
   void _togglePlayPause() {
     if (!widget.talent.isApproved || !_isInitialized || _controller == null)
       return;
 
-    if (_controller!.value.isPlaying) {
-      _controller!.pause();
-    } else {
-      _controller!.play();
-    }
     setState(() {
-      _isPlaying = !_isPlaying;
+      if (_controller!.value.isPlaying) {
+        _controller!.pause();
+        _isPlaying = false;
+      } else {
+        _controller!.play();
+        _isPlaying = true;
+      }
     });
   }
 
+  // Play next video from recommended list
+  void _playNextVideo() {
+    if (_recommendedVideos.isEmpty) {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //           context.isArabic ? 'لا توجد فيديوهات أخرى' : 'No more videos')),
+      // );
+      showSuccessMessage(context,
+          context.isArabic ? 'لا توجد فيديوهات أخرى' : 'No more videos');
+      return;
+    }
+
+    final nextVideo = _recommendedVideos.first;
+    _navigateToVideo(nextVideo);
+  }
+
+  // Play previous video (navigate back)
+  void _playPreviousVideo() {
+    Navigator.pop(context);
+  }
+
+  // Navigate to another video
+  void _navigateToVideo(StarEntity video) {
+    final videoUrl = video is TubeVideoModel
+        ? (video.videoUrl ?? video.mediaUrl.first.mediaKey)
+        : video.mediaUrl.first.mediaKey;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: _starCubit),
+            BlocProvider<CommentCubit>(
+              create: (context) => serviceLocator<CommentCubit>(),
+            ),
+          ],
+          child: TalentVideoPlayer(
+            videoUrl: videoUrl,
+            talent: video,
+            starCubit: _starCubit,
+          ),
+        ),
+      ),
+    );
+  }
+
   String formatDuration(Duration duration) {
-    if (duration == Duration.zero) return '0:00';
+    if (duration == Duration.zero) {
+      return context.isArabic ? '٠:٠٠' : '0:00';
+    }
+
     final minutes = duration.inMinutes.remainder(60).toString();
     final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+    String timeString;
     if (duration.inHours > 0) {
       final hours = duration.inHours.toString();
-      return '$hours:${minutes.padLeft(2, '0')}:$seconds';
+      timeString = '$hours:${minutes.padLeft(2, '0')}:$seconds';
+    } else {
+      timeString = '$minutes:$seconds';
     }
-    return '$minutes:$seconds';
+
+    // Convert to Arabic numbers if Arabic locale
+    if (context.isArabic) {
+      return _convertToArabicNumbers(timeString);
+    }
+    return timeString;
+  }
+
+  String _convertToArabicNumbers(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    String result = input;
+    for (int i = 0; i < english.length; i++) {
+      result = result.replaceAll(english[i], arabic[i]);
+    }
+    return result;
   }
 
   void _seekToPosition(double localX, double maxWidth) {
@@ -380,12 +480,33 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     });
 
     if (_isFullscreen) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+      // Determine orientation based on video aspect ratio
+      if (_controller != null && _controller!.value.isInitialized) {
+        final aspectRatio = _controller!.value.aspectRatio;
+
+        if (aspectRatio > 1.0) {
+          // Landscape video (wider than tall)
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ]);
+        } else {
+          // Portrait video (taller than wide)
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+        }
+      } else {
+        // Fallback to landscape if ratio unavailable
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      }
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     } else {
+      // Exit fullscreen - back to portrait
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -581,13 +702,38 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                     ),
                     Row(
                       children: [
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     _performHapticFeedback();
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //           content: Text('Cast feature coming soon')),
+                        //     );
+                        //   },
+                        //   child: Container(
+                        //     padding: const EdgeInsets.all(8),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.black.withOpacity(0.5),
+                        //       shape: BoxShape.circle,
+                        //     ),
+                        //     child: const Icon(
+                        //       Icons.cast,
+                        //       color: Colors.white,
+                        //       size: 20,
+                        //     ),
+                        //   ),
+                        // ),
                         GestureDetector(
                           onTap: () {
                             _performHapticFeedback();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Cast feature coming soon')),
+                            FloatingVideoManager.showFloatingPlayer(
+                              context: context,
+                              videoUrl: widget.videoUrl,
+                              title: widget.talent.title,
+                              controller: _controller!,
+                              isPlaying: _isPlaying,
                             );
+                            Navigator.pop(context);
                           },
                           child: Container(
                             padding: const EdgeInsets.all(8),
@@ -596,7 +742,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
-                              Icons.cast,
+                              Icons.picture_in_picture,
                               color: Colors.white,
                               size: 20,
                             ),
@@ -641,32 +787,6 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: () {
-                            _performHapticFeedback();
-                            FloatingVideoManager.showFloatingPlayer(
-                              context: context,
-                              videoUrl: widget.videoUrl,
-                              title: widget.talent.title,
-                              controller: _controller!,
-                              isPlaying: _isPlaying,
-                            );
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.picture_in_picture,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],
@@ -680,9 +800,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                       GestureDetector(
                         onTap: () {
                           _performHapticFeedback();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Previous video')),
-                          );
+                          _playPreviousVideo();
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -720,9 +838,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                       GestureDetector(
                         onTap: () {
                           _performHapticFeedback();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Next video')),
-                          );
+                          _playNextVideo();
                         },
                         child: Container(
                           padding: const EdgeInsets.all(12),
@@ -848,11 +964,12 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                                   color: Colors.white
                                                       .withOpacity(0.3),
                                                   borderRadius:
-                                                      BorderRadius.circular(2),
+                                                      BorderRadius.circular(
+                                                          2.r),
                                                 ),
                                               ),
                                               Container(
-                                                height: 4,
+                                                height: 4.h,
                                                 width: constraints.maxWidth *
                                                     progress.clamp(0.0, 1.0),
                                                 decoration: BoxDecoration(
@@ -869,10 +986,10 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
                                                     .clamp(
                                                         0.0,
                                                         constraints.maxWidth -
-                                                            16),
+                                                            16.w),
                                                 child: Container(
-                                                  width: 10,
-                                                  height: 10,
+                                                  width: 25.w,
+                                                  height: 25.h,
                                                   decoration: BoxDecoration(
                                                     color: Colors.red,
                                                     shape: BoxShape.circle,
@@ -934,801 +1051,34 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   }
 
   Widget _buildVideoInfo() {
-    return BlocProvider.value(
-      value: _commentCubit,
-      child: BlocBuilder<CommentCubit, CommentState>(
-        builder: (context, commentState) {
-          return BlocBuilder<StarCubit, StarState>(
-            builder: (context, starState) {
-              final starCubit = _starCubit;
-              final isFavorite = starCubit.isFavorite(widget.talent.id);
-
-              return Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title - استخدم الداتا الحقيقية
-                    Text(
-                      widget.talent.title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Views and time - استخدم الداتا الحقيقية
-                    Row(
-                      children: [
-                        Text(
-                          '${_formatViewCount(widget.talent.totalViews).toArabicNumbers(context)} ${context.isArabic ? 'مشاهدة' : 'views'}',
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
-                        ),
-                        Text(
-                          ' · ',
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
-                        ),
-                        Text(
-                          _formatTimeAgo(
-                                  widget.talent.createdAt ?? DateTime.now())
-                              .toArabicNumbers(context),
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
-                        ),
-                        const Spacer(),
-                        // Star rating - استخدم الداتا الحقيقية
-                        Row(
-                          children: List.generate(
-                            5,
-                            (index) => GestureDetector(
-                              onTap: () {
-                                starCubit.updateRating(
-                                    widget.talent.id, index + 1);
-                              },
-                              child: Icon(
-                                index < widget.talent.averageRating
-                                    ? Icons.star
-                                    : Icons.star_outline,
-                                size: 20,
-                                color: index < widget.talent.averageRating
-                                    ? Colors.amber[600]
-                                    : Colors.grey[400],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 8),
-                    // Description (إذا كان موجود)
-                    if (widget.talent.description.isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.talent.description,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                              maxLines: _showFullDescription ? null : 2,
-                              overflow: _showFullDescription
-                                  ? TextOverflow.visible
-                                  : TextOverflow.ellipsis,
-                            ),
-                            if (widget.talent.description.length > 100)
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _showFullDescription =
-                                        !_showFullDescription;
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Text(
-                                    _showFullDescription
-                                        ? (context.isArabic
-                                            ? 'إظهار أقل'
-                                            : 'Show less')
-                                        : (context.isArabic
-                                            ? 'إظهار المزيد'
-                                            : 'Show more'),
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    // Channel info and subscribe - استخدم الداتا الحقيقية
-                    Row(
-                      children: [
-                        // Avatar
-                        GestureDetector(
-                          onTap: () => _navigateToProfile(),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              shape: BoxShape.circle,
-                            ),
-                            child: ClipOval(
-                              child: widget.talent.user.image.isNotEmpty
-                                  ? CachedNetworkImage(
-                                      imageUrl: widget.talent.user.image,
-                                      fit: BoxFit.cover,
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.person,
-                                              color: Colors.grey),
-                                    )
-                                  : const Icon(Icons.person,
-                                      color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-
-                        // Channel name and subscribers - استخدم الداتا الحقيقية
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => _navigateToProfile(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${widget.talent.user.firstName} ${widget.talent.user.lastName}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  '${_formatViewCount(widget.talent.user.viewNumber).toArabicNumbers(context)} ${context.isArabic ? 'مشترك' : 'subscribers'}',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Subscribe button with bell
-                        Container(
-                          decoration: BoxDecoration(
-                            color: _isSubscribed ? Colors.grey : Colors.black,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isSubscribed = !_isSubscribed;
-                                  });
-                                  // ScaffoldMessenger.of(context).showSnackBar(
-                                  //   SnackBar(
-                                  //     content: Text(
-                                  //       _isSubscribed
-                                  //           ? (context.isArabic
-                                  //               ? 'تم الاشتراك'
-                                  //               : 'Subscribed')
-                                  //           : (context.isArabic
-                                  //               ? 'تم إلغاء الاشتراك'
-                                  //               : 'Unsubscribed'),
-                                  //     ),
-                                  //     duration: Duration(seconds: 2),
-                                  //   ),
-                                  // );
-                                  showSuccessMessage(
-                                      context,
-                                      _isSubscribed
-                                          ? (context.isArabic
-                                              ? 'تم الاشتراك'
-                                              : 'Subscribed')
-                                          : (context.isArabic
-                                              ? 'تم إلغاء الاشتراك'
-                                              : 'Unsubscribed'));
-                                },
-                                child: Text(
-                                  _isSubscribed
-                                      ? (context.isArabic
-                                          ? 'مشترك'
-                                          : 'Subscribed')
-                                      : (context.isArabic
-                                          ? 'اشتراك'
-                                          : 'Subscribe'),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              if (!_isSubscribed) ...[
-                                Container(
-                                  width: 1,
-                                  height: 20,
-                                  color: Colors.grey[600],
-                                ),
-                                // IconButton(
-                                //   icon: const Icon(
-                                //     Icons.notifications_none,
-                                //     color: Colors.white,
-                                //     size: 18,
-                                //   ),
-                                //   onPressed: () {
-                                //     ScaffoldMessenger.of(context).showSnackBar(
-                                //       SnackBar(
-                                //         content: Text(
-                                //           context.isArabic
-                                //               ? 'اشترك أولاً لتفعيل الإشعارات'
-                                //               : 'Subscribe first to enable notifications',
-                                //         ),
-                                //       ),
-                                //     );
-                                //   },
-                                //   padding:
-                                //       const EdgeInsets.symmetric(horizontal: 8),
-                                //   constraints: const BoxConstraints(),
-                                // ),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Action buttons
-                    Row(
-                      children: [
-                        // Like/Dislike button container
-                        StreamBuilder<String>(
-                          stream: starCubit.videoUpdates,
-                          builder: (context, snapshot) {
-                            // Ensure video is in state first
-                            starCubit.ensureVideoInState(widget.talent);
-
-                            // Get fresh data on stream update
-                            final video =
-                                starCubit.getVideoById(widget.talent.id);
-                            final isLiked =
-                                video?.isLike ?? _isLiked(starCubit);
-                            final isDisliked =
-                                video?.isDislike ?? _isDisliked(starCubit);
-                            final likes = video?.likes ?? widget.talent.likes;
-                            final dislikes =
-                                video?.dislikes ?? widget.talent.dislikes;
-
-                            return Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Like button
-                                  IconButton(
-                                    icon: Icon(
-                                      isLiked
-                                          ? Icons.thumb_up
-                                          : Icons.thumb_up_outlined,
-                                      size: 20,
-                                      color: isLiked
-                                          ? Colors.blue
-                                          : Colors.grey[700],
-                                    ),
-                                    onPressed: () {
-                                      ManageVibration.vibrate();
-                                      starCubit
-                                          .ensureVideoInState(widget.talent);
-                                      starCubit.likeTubeVideo(widget.talent.id);
-                                    },
-                                  ),
-
-                                  // Likes count
-                                  Text(
-                                    likes.toString().toArabicNumbers(context),
-                                    style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontSize: 14,
-                                    ),
-                                  ),
-
-                                  // Divider
-                                  Container(
-                                    width: 1,
-                                    height: 24,
-                                    color: Colors.grey[400],
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                  ),
-
-                                  // Dislike button
-                                  IconButton(
-                                    icon: Icon(
-                                      isDisliked
-                                          ? Icons.thumb_down
-                                          : Icons.thumb_down_outlined,
-                                      size: 20,
-                                      color: isDisliked
-                                          ? Colors.red
-                                          : Colors.grey[700],
-                                    ),
-                                    onPressed: () {
-                                      ManageVibration.vibrate();
-                                      starCubit
-                                          .ensureVideoInState(widget.talent);
-                                      starCubit
-                                          .dislikeTubeVideo(widget.talent.id);
-                                    },
-                                  ),
-
-                                  // Dislikes count
-                                  Text(
-                                    dislikes
-                                        .toString()
-                                        .toArabicNumbers(context),
-                                    style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    // Comments section header
-                    GestureDetector(
-                      onTap: () => _showCommentsModal(commentState.comments),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  context.isArabic ? 'التعليقات' : 'Comments',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Label(
-                                  text: commentState.totalComments
-                                      .toString()
-                                      .toArabicNumbers(context),
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Icon(
-                                  Icons.keyboard_arrow_right,
-                                  color: Colors.grey[600],
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                            // Show loading or first comment preview
-                            if (commentState.isLoading)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              )
-                            else if (commentState.comments.isNotEmpty)
-                              _buildCommentPreview(commentState.comments.first),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildCommentPreview(CommentModel comment) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              shape: BoxShape.circle,
-            ),
-            child: ClipOval(
-              child: comment.owner.channelPicture?.mediaKey.isNotEmpty == true
-                  ? CachedNetworkImage(
-                      imageUrl: comment.owner.channelPicture!.mediaKey,
-                      fit: BoxFit.cover,
-                    )
-                  : const Icon(Icons.person, color: Colors.grey, size: 16),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              comment.content,
-              style: const TextStyle(fontSize: 12),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
+    return video_info.VideoInfoSection(
+      talent: widget.talent,
+      starCubit: _starCubit,
+      commentCubit: _commentCubit,
+      onProfileTap: _navigateToProfile,
+      onCommentsTap: () => _showCommentsModal(_commentCubit.state.comments),
     );
   }
 
   Widget _buildRelatedVideos() {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Text(
-              context.isArabic ? 'مقاطع مرتبطة' : 'Related Videos',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          if (_loadingRecommended)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: CircularProgressIndicator(),
-              ),
-            )
-          else if (_recommendedVideos.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Text(
-                  context.isArabic
-                      ? 'لا توجد فيديوهات مرتبطة'
-                      : 'No related videos',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            )
-          else
-            ..._recommendedVideos.map((video) => _buildTalentCard(video)),
-        ],
-      ),
+    return RelatedVideosSection(
+      recommendedVideos: _recommendedVideos,
+      isLoading: _loadingRecommended,
+      starCubit: _starCubit,
+      onVideoTap: (video) => _navigateToVideo(video),
     );
-  }
-
-  Widget _buildTalentCard(StarEntity talent) {
-    final mediaUrl =
-        talent.mediaUrl.isNotEmpty ? talent.mediaUrl.first.mediaKey : '';
-    final createdAt = talent.createdAt ?? DateTime.now();
-
-    Map<String, num> talentRatings = {};
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Video Thumbnail with YouTube-style player
-          GestureDetector(
-            onTap: () {
-              // Navigate to new video player with the selected talent
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(
-                        value: context.read<StarCubit>(),
-                      ),
-                      BlocProvider<CommentCubit>(
-                        create: (context) => serviceLocator<CommentCubit>(),
-                      ),
-                    ],
-                    child: TalentVideoPlayer(
-                      videoUrl: mediaUrl,
-                      talent: talent,
-                    ),
-                  ),
-                ),
-              );
-            },
-            child: Stack(
-              children: [
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/testforvideo.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                // Heart button
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                // Mute button
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.volume_off,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                // Duration
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Text(
-                      '7:54',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                // Play button overlay
-                const Center(
-                  child: Icon(
-                    Icons.play_circle_outline,
-                    size: 60,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Video Info Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Profile Picture
-                CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: talent.user.image.isNotEmpty
-                      ? NetworkImage(talent.user.image)
-                      : null,
-                  child: talent.user.image.isEmpty
-                      ? Icon(Icons.person, size: 18, color: Colors.grey[600])
-                      : null,
-                ),
-                const SizedBox(width: 12),
-
-                // Title and Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        talent.title,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          height: 1.3,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "${talent.user.firstName} ${talent.user.lastName}",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        "${_formatViewCount(talent.totalViews)} views • ${_formatTimeAgo(createdAt)}",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // More Options and Stars
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () => _showVideoOptions(talent),
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Colors.grey[700],
-                        size: 20,
-                      ),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints(minWidth: 32, minHeight: 32),
-                    ),
-                    // Interactive Star Rating
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(
-                        5,
-                        (starIndex) => GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              // Update rating locally using talent id
-                              talentRatings[talent.id] = starIndex + 1;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Rated ${starIndex + 1} stars'),
-                                duration: const Duration(seconds: 1),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
-                            child: Icon(
-                              starIndex <
-                                      (talentRatings[talent.id] ??
-                                          talent.averageRating)
-                                  ? Icons.star
-                                  : Icons.star_border,
-                              color: starIndex <
-                                      (talentRatings[talent.id] ??
-                                          talent.averageRating)
-                                  ? Colors.amber
-                                  : Colors.grey[400],
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formatViewCount(num views) {
-    final viewCount = views.toInt();
-    if (viewCount >= 1000000) {
-      return '${(viewCount / 1000000).toStringAsFixed(1)}M';
-    } else if (viewCount >= 1000) {
-      return '${(viewCount / 1000).toStringAsFixed(1)}K';
-    }
-    return viewCount.toString();
-  }
-
-  String _formatTimeAgo(DateTime dateTime) {
-    final difference = DateTime.now().difference(dateTime);
-
-    if (difference.inDays > 365) {
-      final years = (difference.inDays / 365).floor();
-      return context.isArabic
-          ? '$years ${years == 1 ? 'سنة' : 'سنوات'}'
-          : '$years year${years == 1 ? '' : 's'} ago';
-    } else if (difference.inDays > 30) {
-      final months = (difference.inDays / 30).floor();
-      return context.isArabic
-          ? '$months ${months == 1 ? 'شهر' : 'أشهر'}'
-          : '$months month${months == 1 ? '' : 's'} ago';
-    } else if (difference.inDays > 0) {
-      return context.isArabic
-          ? '${difference.inDays} ${difference.inDays == 1 ? 'يوم' : 'أيام'}'
-          : '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
-    } else if (difference.inHours > 0) {
-      return context.isArabic
-          ? '${difference.inHours} ${difference.inHours == 1 ? 'ساعة' : 'ساعات'}'
-          : '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago';
-    }
-    return context.isArabic ? 'منذ قليل' : 'Just now';
   }
 
   void _showVideoOptions(StarEntity talent) {
     OptionsBottomSheet.showOptions(context: context, options: [
+      OptionItem(
+        icon: Icons.person_outline,
+        title: context.isArabic ? 'زيارة القناة' : 'Visit Channel',
+        onTap: () {
+          Navigator.pop(context);
+          _navigateToProfile();
+        },
+      ),
       OptionItem(
         icon: Icons.playlist_add,
         title: context.isArabic ? 'إضافة لقائمة التشغيل' : 'Add to playlist',
@@ -1800,26 +1150,29 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
       );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          // spacing: -10,
-          children: [
-            _buildVideoPlayer(),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  children: [
-                    _buildVideoInfo(),
-                    const Divider(height: 1),
-                    _buildRelatedVideos(),
-                  ],
+    return BlocProvider.value(
+      value: _profileCubit,
+      child: Scaffold(
+        backgroundColor: context.isDarkMode ? Colors.black : Colors.white,
+        body: SafeArea(
+          child: Column(
+            // spacing: -10,
+            children: [
+              _buildVideoPlayer(),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: [
+                      _buildVideoInfo(),
+                      const Divider(height: 1),
+                      _buildRelatedVideos(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

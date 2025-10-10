@@ -66,7 +66,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     WidgetsBinding.instance.addObserver(this);
 
     // Initialize controllers
-    _amountController.text = '00.00';
+    // _amountController.text = '00.00';
 
     // Animation controllers
     _refreshAnimationController = AnimationController(
@@ -813,7 +813,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                   // Converted amount display
                                   Expanded(
                                     child: Container(
-                                      height: 70.h,
+                                      height: 80.h,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 12),
                                       decoration: BoxDecoration(
@@ -836,7 +836,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                             fontWeight: FontWeight.bold,
                                             color: Colors.green.shade700,
                                           ),
-                                          textAlign: TextAlign.right,
+                                          // textAlign: TextAlign.right,
                                         ),
                                       ),
                                     ),
@@ -1173,7 +1173,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
           _getCurrencyShortName(state.exchangeRate.baseCode);
       final targetCurrencyName =
           _getCurrencyShortName(state.exchangeRate.targetCode);
-      return '1 $baseCurrencyName = $formattedRate $targetCurrencyName';
+      return '${context.isArabic ? '١' : '1'} $baseCurrencyName = $formattedRate $targetCurrencyName';
     } else if (state is CurrencyUpdatedSilently) {
       final formattedRate = _formatNumberForLocale(
           state.exchangeRate.conversionRate,
@@ -1182,14 +1182,14 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
           _getCurrencyShortName(state.exchangeRate.baseCode);
       final targetCurrencyName =
           _getCurrencyShortName(state.exchangeRate.targetCode);
-      return '1 $baseCurrencyName = $formattedRate $targetCurrencyName';
+      return '${context.isArabic ? '١' : '1'} $baseCurrencyName = $formattedRate $targetCurrencyName';
     } else if (cubit.lastExchangeRate != null) {
       final rate = cubit.lastExchangeRate!;
       final formattedRate =
           _formatNumberForLocale(rate.conversionRate, decimalPlaces: 4);
       final baseCurrencyName = _getCurrencyShortName(rate.baseCode);
       final targetCurrencyName = _getCurrencyShortName(rate.targetCode);
-      return '1 $baseCurrencyName = $formattedRate $targetCurrencyName';
+      return '${context.isArabic ? '١' : '1'} $baseCurrencyName = $formattedRate $targetCurrencyName';
     }
     return '';
   }

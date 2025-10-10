@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
+import '../../../../../core/messages/messages.dart';
 import '../../../domain/entity/user_star_entity.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../presentation_exports.dart';
@@ -202,25 +203,29 @@ class ProfileAppBar extends StatelessWidget {
 
   void _handleFollowUser(BuildContext context) {
     // تنفيذ منطق المتابعة
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic ? 'تم إرسال طلب المتابعة' : 'Follow request sent',
-        ),
-        backgroundColor: Colors.green,
-      ),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text(
+    //       context.isArabic ? 'تم إرسال طلب المتابعة' : 'Follow request sent',
+    //     ),
+    //     backgroundColor: Colors.green,
+    //   ),
+    // );
+    showSuccessMessage(context,
+        context.isArabic ? 'تم إرسال طلب المتابعة' : 'Follow request sent');
   }
 
   void _handleShareProfile(BuildContext context) {
     // تنفيذ منطق مشاركة الملف الشخصي
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          context.isArabic ? 'تم نسخ رابط الملف الشخصي' : 'Profile link copied',
-        ),
-      ),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text(
+    //       context.isArabic ? 'تم نسخ رابط الملف الشخصي' : 'Profile link copied',
+    //     ),
+    //   ),
+    // );
+    showSuccessMessage(context,
+        context.isArabic ? 'تم نسخ رابط الملف الشخصي' : 'Profile link copied');
   }
 
   void _handleReportUser(BuildContext context) {
@@ -244,14 +249,16 @@ class ProfileAppBar extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic ? 'تم الإبلاغ بنجاح' : 'Report submitted',
-                  ),
-                  backgroundColor: Colors.orange,
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       context.isArabic ? 'تم الإبلاغ بنجاح' : 'Report submitted',
+              //     ),
+              //     backgroundColor: Colors.orange,
+              //   ),
+              // );
+              showSuccessMessage(context,
+                  context.isArabic ? 'تم الإبلاغ بنجاح' : 'Report submitted');
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(

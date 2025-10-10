@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -108,12 +108,16 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
           });
         }
 
-        // Auto-play if configured
-        if (widget.autoPlay && _visibilityFraction > 0.3) {
+        // Auto-play if configured - use centralized control
+        // Using 50% threshold (industry standard - MRC/Active View)
+        if (widget.autoPlay && _visibilityFraction > 0.5) {
           await Future.delayed(const Duration(milliseconds: 100));
           if (mounted && !_isDisposed && _wrapper != null) {
-            await _wrapper!.play();
-            _trackVideoStart();
+            final success =
+                await VideoPlayerManager.instance.requestPlay(videoId);
+            if (success) {
+              _trackVideoStart();
+            }
           }
         }
       }
@@ -142,21 +146,6 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     }
   }
 
-  void _togglePlayPause() {
-    if (_wrapper == null || !_isInitialized || _isDisposed || !mounted) return;
-
-    try {
-      if (_isPlaying) {
-        _wrapper!.pause();
-      } else {
-        _wrapper!.play();
-        _trackVideoStart();
-      }
-    } catch (e) {
-      debugPrint('Error toggling play/pause: $e');
-    }
-  }
-
   void _toggleMute() {
     if (mounted && !_isDisposed && _wrapper != null) {
       setState(() {
@@ -172,6 +161,43 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     }
   }
 
+  // Build favorite button with BlocBuilder to prevent excessive rebuilds
+  Widget _buildFavoriteButton() {
+    if (widget.talent == null || widget.cubit == null) {
+      return const SizedBox.shrink();
+    }
+
+    return BlocBuilder<StarCubit, StarState>(
+      bloc: widget.cubit,
+      buildWhen: (previous, current) {
+        // Only rebuild when favorites actually change
+        return previous.favoriteTalents != current.favoriteTalents;
+      },
+      builder: (context, state) {
+        final isFavorite = state.favoriteTalents.any(
+          (fav) => fav.id == widget.talent!.id,
+        );
+
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.6),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: IconButton(
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: const Color(0xffFF0000),
+              size: 20,
+            ),
+            onPressed: _toggleFavorite,
+            padding: const EdgeInsets.all(8),
+            constraints: const BoxConstraints(),
+          ),
+        );
+      },
+    );
+  }
+
   void _handleVisibilityChanged(VisibilityInfo info) {
     if (_isDisposed) return;
 
@@ -181,27 +207,30 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     _playDelayTimer?.cancel();
     _initTimer?.cancel();
 
-    if (info.visibleFraction > 0.3) {
-      // Visible - initialize if needed
+    if (info.visibleFraction > 0.5) {
+      // Visible (>50%) - initialize if needed
       if (!_isInitialized && !_isInitializing) {
         _initTimer = Timer(const Duration(milliseconds: 200), () {
-          if (mounted && !_isDisposed && _visibilityFraction > 0.3) {
+          if (mounted && !_isDisposed && _visibilityFraction > 0.5) {
             _initializeVideo();
           }
         });
       } else if (_isInitialized && widget.autoPlay && !_isPlaying) {
-        // Auto-play with delay
-        _playDelayTimer = Timer(const Duration(milliseconds: 300), () {
+        // Auto-play with delay - use centralized control
+        _playDelayTimer = Timer(const Duration(milliseconds: 300), () async {
           if (mounted && !_isDisposed && _wrapper != null && !_isPlaying) {
-            _wrapper!.play();
-            _trackVideoStart();
+            final success =
+                await VideoPlayerManager.instance.requestPlay(videoId);
+            if (success) {
+              _trackVideoStart();
+            }
           }
         });
       }
-    } else if (info.visibleFraction < 0.2) {
-      // Not visible - pause
+    } else if (info.visibleFraction < 0.25) {
+      // Not visible - pause using centralized control
       if (_wrapper != null && _isPlaying) {
-        _wrapper!.pause();
+        VideoPlayerManager.instance.pauseVideo(videoId);
       }
 
       // Dispose if completely out of view
@@ -229,110 +258,91 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = widget.talent != null && widget.cubit != null
-        ? widget.cubit!.isFavorite(widget.talent!.id)
-        : false;
-
     return RepaintBoundary(
       child: VisibilityDetector(
         key: Key('feed-video-$videoId'),
         onVisibilityChanged: _handleVisibilityChanged,
         child: GestureDetector(
-        onTap: () {
-          ManageVibration.vibrate();
-          if (_isInitialized) {
-            setState(() => _showControls = !_showControls);
-          }
-          widget.onTap?.call();
-        },
-        child: Container(
-          height: MediaQuery.of(context).size.height * widget.heightFraction,
-          width: double.infinity,
-          color: Colors.black,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Thumbnail (when not playing)
-              if (!_isPlaying)
-                Positioned.fill(
-                  child: VideoThumbnail(
-                    thumbnailUrl: widget.thumbnailUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-              // Video Player (when initialized)
-              if (_isInitialized &&
-                  _wrapper != null &&
-                  !_isDisposed &&
-                  mounted &&
-                  _wrapper!.isInitialized)
-                Opacity(
-                  opacity: _isPlaying ? 1.0 : 0.0,
-                  child: AspectRatio(
-                    aspectRatio: _wrapper!.controller.value.aspectRatio,
-                    child: VideoPlayer(_wrapper!.controller),
-                  ),
-                ),
-
-              // Loading indicator
-              if (_isInitializing)
-                Container(
-                  color: Colors.black54,
-                  child: const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ),
-                ),
-
-              // Favorite button (top left)
-              if (widget.talent != null && widget.cubit != null)
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            ManageVibration.vibrate();
+            if (_isInitialized) {
+              setState(() => _showControls = !_showControls);
+            }
+            widget.onTap?.call();
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height * widget.heightFraction,
+            width: double.infinity,
+            color: Colors.black,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Thumbnail (when not playing)
+                if (!_isPlaying)
+                  Positioned.fill(
+                    child: VideoThumbnail(
+                      thumbnailUrl: widget.thumbnailUrl,
+                      fit: BoxFit.cover,
                     ),
-                    child: IconButton(
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: const Color(0xffFF0000),
-                        size: 20,
+                  ),
+
+                // Video Player (when initialized)
+                if (_isInitialized &&
+                    _wrapper != null &&
+                    !_isDisposed &&
+                    mounted &&
+                    _wrapper!.isInitialized)
+                  Opacity(
+                    opacity: _isPlaying ? 1.0 : 0.0,
+                    child: AspectRatio(
+                      aspectRatio: _wrapper!.controller.value.aspectRatio,
+                      child: VideoPlayer(_wrapper!.controller),
+                    ),
+                  ),
+
+                // Loading indicator
+                if (_isInitializing)
+                  Container(
+                    color: Colors.black54,
+                    child: const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  ),
+
+                // Favorite button (top left) - Only rebuild when favorites change
+                if (widget.talent != null && widget.cubit != null)
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: _buildFavoriteButton(),
+                  ),
+
+                // Mute button (top right, when playing)
+                if (_isInitialized && _isPlaying)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      onPressed: _toggleFavorite,
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(),
-                    ),
-                  ),
-                ),
-
-              // Mute button (top right, when playing)
-              if (_isInitialized && _isPlaying)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        _isMuted ? Icons.volume_off : Icons.volume_up,
-                        color: Colors.white,
-                        size: 20,
+                      child: IconButton(
+                        icon: Icon(
+                          _isMuted ? Icons.volume_off : Icons.volume_up,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onPressed: _toggleMute,
+                        padding: const EdgeInsets.all(8),
+                        constraints: const BoxConstraints(),
                       ),
-                      onPressed: _toggleMute,
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }

@@ -260,8 +260,8 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                         Spacer(),
                         SvgPicture.asset(
                           Assets.arrowIcon,
-                          width: 12,
-                          height: 12,
+                          width: 12.w,
+                          height: 12.h,
                           colorFilter: ColorFilter.mode(
                             AppColors.getReversedTextColor(context),
                             BlendMode.srcIn,
@@ -324,8 +324,8 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                         Spacer(),
                         SvgPicture.asset(
                           Assets.arrowIcon,
-                          width: 12,
-                          height: 12,
+                          width: 12.w,
+                          height: 12.h,
                           colorFilter: ColorFilter.mode(
                             AppColors.getReversedTextColor(context),
                             BlendMode.srcIn,
@@ -657,7 +657,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.myAds!.isEmpty) {
+      if (widget.state.myAds?.isEmpty??false) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
 

@@ -27,16 +27,21 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   // final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   int _currentPage = 1; // Start at page 1
+  bool _hasLoadedInitialPage = false;
 
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_scrollListener);
     // Load initial page if items are empty
-    if (widget.items.isEmpty) _loadPage(_currentPage);
+    if (widget.items.isEmpty && !_hasLoadedInitialPage) {
+      _hasLoadedInitialPage = true;
+      _loadPage(_currentPage);
+    }
   }
 
   void _scrollListener() {
+    if (!mounted) return;
     if (widget.scrollController.position.pixels >=
             widget.scrollController.position.maxScrollExtent - 100 &&
         !_isLoading) {
@@ -46,8 +51,10 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
 
   Future<void> _loadPage(int page) async {
     if (_isLoading) return;
+    if (!mounted) return;
     setState(() => _isLoading = true);
     await widget.loadPage(page);
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
       _currentPage = page;

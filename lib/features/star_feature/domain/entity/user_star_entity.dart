@@ -6,13 +6,16 @@ class UserStarEntity {
   final String image;
   final num viewNumber;
   final num averageRating;
+  final String gender;
 
-  UserStarEntity(
-      {required this.id,
-      required this.firstName,
-      required this.lastName,
-      required this.email,
-      required this.image,
-      required this.viewNumber,
-      required this.averageRating});
+  UserStarEntity({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.image,
+    required this.viewNumber,
+    required this.averageRating,
+    this.gender = 'male', // Default to male
+  });
 }

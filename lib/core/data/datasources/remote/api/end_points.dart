@@ -1826,7 +1826,8 @@ class EndPoints {
       '/conversations/anonymous?page=$page&limit=$limit';
   static getDeletedSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations/deleted?page=$page&limit=$limit';
-  static getConversationLogs({int page = 1, int limit = 10, required String conversationId}) =>
+  static getConversationLogs(
+          {int page = 1, int limit = 10, required String conversationId}) =>
       '/conversations/$conversationId/logs?page=$page&limit=$limit';
 
   static const String deleteConversations = "/conversations";
@@ -1865,7 +1866,8 @@ class EndPoints {
 
   static String getTubeVideoDetails(String videoId) =>
       '/tube-video/details/$videoId';
-  static String getRecommendedVideos(String videoId, {int page = 1, int limit = 10}) =>
+  static String getRecommendedVideos(String videoId,
+          {int page = 1, int limit = 10}) =>
       '/tube-video/recommended/$videoId/?page=$page&limit=$limit';
   static String likeTubeVideo(String videoId) => '/tube-video/$videoId/like';
   static String dislikeTubeVideo(String videoId) =>
@@ -1948,7 +1950,15 @@ class EndPoints {
       '/tube-watch-later/video/$videoId';
 
   // Tube Winner Statistics
-  static const String getTubeWinnerStatistics = '/tube-profile/winner-statistics';
+  static const String getTubeWinnerStatistics =
+      '/tube-profile/winner-statistics';
+
+  // Tube Winner Endpoint
+  static const String getTubeWinner = '/tube-profile/winner';
+
+  // Tube Comment Reply Endpoint
+  static String replyToComment(String commentId) =>
+      '/tube-comment/reply/$commentId';
 
   //! Exchange Currency Endpoints
   static String convertCurrency({

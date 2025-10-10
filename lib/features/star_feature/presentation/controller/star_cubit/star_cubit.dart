@@ -1708,7 +1708,8 @@ class StarCubit extends Cubit<StarState> {
           ));
         },
         (statistics) {
-          print('Tube winner statistics loaded: ${statistics.totalWinner}/${statistics.totalVideos}');
+          print(
+              'Tube winner statistics loaded: ${statistics.totalWinner}/${statistics.totalVideos}');
           emit(state.copyWith(
             status: StarStates.success,
             tubeWinnerStatistics: statistics,
@@ -1719,7 +1720,8 @@ class StarCubit extends Cubit<StarState> {
       print('Exception while getting tube winner statistics: $e');
       emit(state.copyWith(
         status: StarStates.error,
-        failure: ServerFailure(message: 'Failed to load statistics: $e', name: 'Statistics Error'),
+        failure: ServerFailure(
+            message: 'Failed to load statistics: $e', name: 'Statistics Error'),
       ));
     }
   }
@@ -1750,6 +1752,37 @@ class StarCubit extends Cubit<StarState> {
         return videos;
       },
     );
+  }
+
+  // Load winners data
+  Future loadInitialDataWinner({bool refresh = false}) async {
+    print("🏆 Loading winners data...");
+
+    if (refresh || state.winners.isEmpty) {
+      emit(state.copyWith(status: StarStates.loading));
+
+      final response = await _fetchWinnerStarUseCase(
+        StarPaginationParams(page: 1, limit: 20),
+      );
+
+      response.fold(
+        (failure) {
+          print("❌ Failed to load winners: $failure");
+          var currentContext =
+              AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          emit(state.copyWith(status: StarStates.error, failure: failure));
+        },
+        (winnersData) {
+          print("✅ Successfully loaded ${winnersData.length} winners");
+          emit(state.copyWith(
+            winners: winnersData,
+            status: StarStates.success,
+          ));
+        },
+      );
+    }
   }
 
   // Helper methods for backward compatibility

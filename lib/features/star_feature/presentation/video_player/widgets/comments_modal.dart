@@ -1,10 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 
+import '../../../../../core/messages/messages.dart';
 import '../../../data/model/comment_model.dart';
 import '../../presentation_exports.dart';
 
@@ -39,6 +42,13 @@ class _CommentsModalState extends State<CommentsModal> {
       // Load more comments when reached bottom
       context.read<CommentCubit>().loadMoreComments(widget.videoId);
     }
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -137,7 +147,7 @@ class _CommentsModalState extends State<CommentsModal> {
           ),
           SizedBox(height: 16),
           Text(
-            'No comments yet',
+            context.isArabic ? 'لا توجد تعليقات' : 'No comments yet',
             style: TextStyle(
               fontSize: 18,
               color: Colors.grey[600],
@@ -146,7 +156,9 @@ class _CommentsModalState extends State<CommentsModal> {
           ),
           SizedBox(height: 8),
           Text(
-            'Be the first to comment!',
+            context.isArabic
+                ? 'بدء التعليقات من هنا'
+                : 'Be the first to comment!',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[500],
@@ -157,29 +169,60 @@ class _CommentsModalState extends State<CommentsModal> {
     );
   }
 
-  Widget _buildCommentItem(CommentModel comment, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Profile picture
-          Container(
+  Widget _buildCommentItem(CommentModel comment, BuildContext context,
+      {bool isReply = false}) {
+    final mediaKey = comment.owner.channelPicture?.mediaKey;
+    final hasAvatar = mediaKey != null && mediaKey.trim().isNotEmpty;
+    Widget avatar = hasAvatar
+        ? ImageFromInternet(
+            image: mediaKey,
+            width: 36,
+            height: 36,
+            isCircle: true,
+            fit: BoxFit.cover,
+          )
+        : Container(
             width: 36,
             height: 36,
             decoration: BoxDecoration(
               color: Colors.grey[300],
               shape: BoxShape.circle,
             ),
-            child: ClipOval(
-              child: comment.owner.channelPicture?.mediaKey.isNotEmpty == true
-                  ? CachedNetworkImage(
-                      imageUrl: comment.owner.channelPicture!.mediaKey,
-                      fit: BoxFit.cover,
-                    )
-                  : const Icon(Icons.person, size: 20, color: Colors.grey),
-            ),
-          ),
+            child: const Icon(Icons.person, size: 20, color: Colors.grey),
+          );
+    return Container(
+      margin: EdgeInsets.only(bottom: 20, left: isReply ? 48 : 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Profile picture
+          // use ImageFromInternet
+          // comment.owner.channelPicture?.mediaKey.isNotEmpty == true
+          //     ? ImageFromInternet(
+          //         image: comment.owner.channelPicture!.mediaKey,
+          //         width: 36,
+          //         height: 36,
+          //         isCircle: true,
+          //         fit: BoxFit.cover,
+          //       )
+          //     : Container(
+          //         width: 36,
+          //         height: 36,
+          //         decoration: BoxDecoration(
+          //           color: Colors.grey[300],
+          //           shape: BoxShape.circle,
+          //         ),
+          //         child: const Icon(Icons.person, size: 20, color: Colors.grey),
+          //       ),
+          avatar,
+
+          // ImageFromInternet(
+          //   image: comment.owner.channelPicture!.mediaKey,
+          //   width: 36,
+          //   height: 36,
+          //   isCircle: true,
+          //   fit: BoxFit.cover,
+          // ),
           const SizedBox(width: 12),
 
           // Comment content
@@ -189,12 +232,16 @@ class _CommentsModalState extends State<CommentsModal> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      comment.owner.channelName,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[600],
+                    Expanded(
+                      child: Text(
+                        comment.owner.channelName,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[600],
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -213,67 +260,113 @@ class _CommentsModalState extends State<CommentsModal> {
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        context.read<CommentCubit>().likeComment(comment.id);
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            comment.isLiked
-                                ? Icons.thumb_up
-                                : Icons.thumb_up_outlined,
-                            size: 16,
-                            color: comment.isLiked
-                                ? Colors.blue
-                                : Colors.grey[600],
+                BlocBuilder<CommentCubit, CommentState>(
+                  builder: (context, state) {
+                    // Find the updated comment from state
+                    final updatedComment = state.comments
+                        .expand((c) => [c, ...c.replies])
+                        .firstWhere(
+                          (c) => c.id == comment.id,
+                          orElse: () => comment,
+                        );
+
+                    return Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context
+                                .read<CommentCubit>()
+                                .likeComment(comment.id);
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                updatedComment.isLiked
+                                    ? Icons.thumb_up
+                                    : Icons.thumb_up_outlined,
+                                size: 16,
+                                color: updatedComment.isLiked
+                                    ? Colors.blue
+                                    : Colors.grey[600],
+                              ),
+                              const SizedBox(width: 4),
+                              Label(
+                                text: updatedComment.likes
+                                    .toString()
+                                    .toArabicNumbers(context),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 4),
-                          Label(
-                            text: comment.likes
-                                .toString()
-                                .toArabicNumbers(context),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                        ),
+                        const SizedBox(width: 16),
+                        GestureDetector(
+                          onTap: () {
+                            context
+                                .read<CommentCubit>()
+                                .dislikeComment(comment.id);
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                updatedComment.isDisliked
+                                    ? Icons.thumb_down
+                                    : Icons.thumb_down_outlined,
+                                size: 16,
+                                color: updatedComment.isDisliked
+                                    ? Colors.red
+                                    : Colors.grey[600],
+                              ),
+                              const SizedBox(width: 4),
+                              Label(
+                                text: updatedComment.dislikes
+                                    .toString()
+                                    .toArabicNumbers(context),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (!isReply) ...[
+                          const SizedBox(width: 16),
+                          GestureDetector(
+                            onTap: () => _showReplyDialog(comment),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.reply,
+                                  size: 16,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  context.isArabic ? 'رد' : 'Reply',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    GestureDetector(
-                      onTap: () {
-                        context.read<CommentCubit>().dislikeComment(comment.id);
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            comment.isDisliked
-                                ? Icons.thumb_down
-                                : Icons.thumb_down_outlined,
-                            size: 16,
-                            color: comment.isDisliked
-                                ? Colors.red
-                                : Colors.grey[600],
-                          ),
-                          const SizedBox(width: 4),
-                          Label(
-                            text: comment.dislikes
-                                .toString()
-                                .toArabicNumbers(context),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
+                // Show replies if they exist
+                if (comment.replies.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  ...comment.replies.map((reply) =>
+                      _buildCommentItem(reply, context, isReply: true)),
+                ],
               ],
             ),
           ),
@@ -310,6 +403,7 @@ class _CommentsModalState extends State<CommentsModal> {
       child: SafeArea(
         child: Row(
           children: [
+            // Avatar
             Container(
               width: 32,
               height: 32,
@@ -324,7 +418,8 @@ class _CommentsModalState extends State<CommentsModal> {
               child: TextField(
                 controller: _commentController,
                 decoration: InputDecoration(
-                  hintText: 'Add a comment...',
+                  hintText:
+                      context.isArabic ? 'اكتب تعليقك...' : 'Add a comment...',
                   hintStyle: TextStyle(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -388,24 +483,24 @@ class _CommentsModalState extends State<CommentsModal> {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      shape: BoxShape.circle,
-                    ),
-                    child: ClipOval(
-                      child: comment
-                                  .owner.channelPicture?.mediaKey.isNotEmpty ==
-                              true
-                          ? CachedNetworkImage(
-                              imageUrl: comment.owner.channelPicture!.mediaKey,
-                              fit: BoxFit.cover,
-                            )
-                          : Icon(Icons.person, color: Colors.grey, size: 16),
-                    ),
-                  ),
+                  comment.owner.channelPicture?.mediaKey.isNotEmpty == true
+                      ? ImageFromInternet(
+                          image: comment.owner.channelPicture!.mediaKey,
+                          width: 32,
+                          height: 32,
+                          isCircle: true,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            shape: BoxShape.circle,
+                          ),
+                          child:
+                              Icon(Icons.person, color: Colors.grey, size: 16),
+                        ),
                   SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -555,9 +650,8 @@ class _CommentsModalState extends State<CommentsModal> {
 
 // Check if comment belongs to current user
   bool _isUserComment(CommentModel comment) {
-    // هنا تحط الـ logic بتاع التحقق من إن التعليق للمستخدم الحالي
-    // ممكن تقارن الـ user ID أو channel name
-    return comment.owner.channelName == '@Me'; // مؤقت للتجربة
+    final currentUserId = UserCubit.to.state.data?.id;
+    return currentUserId != null && comment.userId == currentUserId;
   }
 
 // Edit comment dialog
@@ -606,13 +700,17 @@ class _CommentsModalState extends State<CommentsModal> {
                       editController.text.trim(),
                     );
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text(
+                //       context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
+                //     ),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+                showSuccessMessage(
+                  context,
+                  context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
                 );
               }
             },
@@ -659,13 +757,17 @@ class _CommentsModalState extends State<CommentsModal> {
               // Call delete comment API
               context.read<CommentCubit>().deleteComment(comment.id);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
-                  ),
-                  backgroundColor: Colors.red,
-                ),
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
+              //     ),
+              //     backgroundColor: Colors.red,
+              //   ),
+              // );
+              showSuccessMessage(
+                context,
+                context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
               );
             },
             style: ElevatedButton.styleFrom(
@@ -681,145 +783,108 @@ class _CommentsModalState extends State<CommentsModal> {
 
 // Reply dialog
   void _showReplyDialog(CommentModel comment) {
-    final TextEditingController replyController = TextEditingController();
-
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'رد على التعليق' : 'Reply to Comment',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Original comment
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                '"${comment.content}"',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-            SizedBox(height: 12),
-
-            // Reply field
-            TextField(
-              controller: replyController,
-              decoration: InputDecoration(
-                hintText:
-                    context.isArabic ? 'اكتب ردك...' : 'Write your reply...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: EdgeInsets.all(12),
-              ),
-              maxLines: 3,
-              autofocus: true,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (replyController.text.trim().isNotEmpty) {
-                Navigator.pop(context);
-                // Call reply API
-                // context.read<CommentCubit>().replyToComment(
-                //       comment.id,
-                //       replyController.text.trim(),
-                //     );
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      context.isArabic ? 'تم إضافة الرد' : 'Reply added',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
-            ),
-            child: Text(context.isArabic ? 'رد' : 'Reply'),
-          ),
-        ],
+      builder: (context) => _ReplyDialog(
+        comment: comment,
+        videoId: widget.videoId,
       ),
     );
   }
 
-// Report dialog
+  // Report dialog - استخدام ReportView
   void _showReportDialog(CommentModel comment) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          context.isArabic ? 'الإبلاغ عن التعليق' : 'Report Comment',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Text(
-          context.isArabic
-              ? 'هل تريد الإبلاغ عن هذا التعليق لانتهاكه قواعد المجتمع؟'
-              : 'Do you want to report this comment for violating community guidelines?',
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              context.isArabic ? 'إلغاء' : 'Cancel',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Call report API here
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.isArabic
-                        ? 'تم الإبلاغ عن التعليق'
-                        : 'Comment reported',
-                  ),
-                  backgroundColor: Colors.orange,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-            ),
-            child: Text(context.isArabic ? 'إبلاغ' : 'Report'),
-          ),
-        ],
+      isScrollControlled: true,
+      // backgroundColor: Colors.transparent,
+      builder: (context) => ReportView(
+        id: comment.userId,
+        categoryId: comment.id, // استخدام comment ID كـ categoryId
       ),
+    );
+  }
+}
+
+// Reply Dialog as separate StatefulWidget
+class _ReplyDialog extends StatefulWidget {
+  final CommentModel comment;
+  final String videoId;
+
+  const _ReplyDialog({
+    required this.comment,
+    required this.videoId,
+  });
+
+  @override
+  State<_ReplyDialog> createState() => _ReplyDialogState();
+}
+
+class _ReplyDialogState extends State<_ReplyDialog> {
+  late final TextEditingController _replyController;
+
+  @override
+  void initState() {
+    super.initState();
+    _replyController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _replyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        context.isArabic
+            ? 'الرد على ${widget.comment.owner.channelName}'
+            : 'Reply to ${widget.comment.owner.channelName}',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: TextField(
+        controller: _replyController,
+        maxLines: 3,
+        decoration: InputDecoration(
+          hintText: context.isArabic ? 'اكتب ردك...' : 'Write your reply...',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        autofocus: true,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            context.isArabic ? 'إلغاء' : 'Cancel',
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            final replyText = _replyController.text.trim();
+            if (replyText.isNotEmpty) {
+              context.read<CommentCubit>().replyToComment(
+                    videoId: widget.videoId,
+                    parentCommentId: widget.comment.id,
+                    content: replyText,
+                  );
+              Navigator.pop(context);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+          ),
+          child: Text(context.isArabic ? 'إرسال' : 'Send'),
+        ),
+      ],
     );
   }
 }
