@@ -29,7 +29,7 @@ import '../../../../authentication/presentation/controllers/user_cubit/user_cubi
 import '../cubit/ads_cubit.dart';
 import '../../../../subcategories/presentation/widgets/build_tag_ads_widget.dart';
 
-class MarriageAdsListViewItem extends StatelessWidget {
+class MarriageAdsListViewItem extends StatefulWidget {
   const MarriageAdsListViewItem({
     super.key,
     required this.marriageAds,
@@ -40,44 +40,49 @@ class MarriageAdsListViewItem extends StatelessWidget {
   final SubcategoriesState state;
 
   @override
+  State<MarriageAdsListViewItem> createState() => _MarriageAdsListViewItemState();
+}
+
+class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
+  @override
   Widget build(BuildContext context) {
     return GlobalCard(
-      subcategoryId: marriageAds.subCategoryId ?? '',
-      phone: marriageAds.phone ?? "",
-      reportId: marriageAds.user?.id ?? '',
+      subcategoryId: widget.marriageAds.subCategoryId ?? '',
+      phone: widget.marriageAds.phone ?? "",
+      reportId: widget.marriageAds.user?.id ?? '',
       otherUserId: '',
       onTap: () async {
         ManageVibration.vibrate();
-        context.push(Routes.ADdetails, extra: marriageAds.id);
+        context.push(Routes.ADdetails, extra: widget.marriageAds.id);
       },
       isButtonEnabled: SubscriptionStatus.notSubscribed.status !=
-              marriageAds.userSubscriptionStatus ||
+              widget.marriageAds.userSubscriptionStatus ||
           SubscriptionStatus.notSubscribed.status !=
-              marriageAds.ownerSubscriptionStatus,
+              widget.marriageAds.ownerSubscriptionStatus,
       isPremium: SubscriptionStatus.premium.status ==
-          marriageAds.ownerSubscriptionStatus,
+          widget.marriageAds.ownerSubscriptionStatus,
       hasReport: true,
       hasTopSide: true,
       hasBottomSide:
-          marriageAds.user?.id != context.read<UserCubit>().state.data?.id,
+          widget.marriageAds.user?.id != context.read<UserCubit>().state.data?.id,
       isView: null,
       subCategoryTitle: context.isArabic
-          ? marriageAds.subCategoryNameAr
-          : marriageAds.subCategoryNameEn,
-      subscriptionType: marriageAds.ownerSubscriptionStatus ==
+          ? widget.marriageAds.subCategoryNameAr
+          : widget.marriageAds.subCategoryNameEn,
+      subscriptionType: widget.marriageAds.ownerSubscriptionStatus ==
               SubscriptionStatus.premium.status
           ? LocaleKeys.premium2.localize
-          : marriageAds.ownerSubscriptionStatus ==
+          : widget.marriageAds.ownerSubscriptionStatus ==
                   SubscriptionStatus.regular.status
               ? LocaleKeys.regular.localize
               : LocaleKeys.notSubscribed.localize,
-      views: marriageAds.views,
+      views: widget.marriageAds.views,
       onRequest: () {
         ManageVibration.vibrate();
         bottomSheet(
           context: context,
           widget: CustomMarriageButtonSheet(
-            marriageAds: marriageAds,
+            marriageAds: widget.marriageAds,
           ),
         );
       },
@@ -388,7 +393,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
           Row(
             children: [
               ImageFromInternet(
-                image: marriageAds.images.first,
+                image: widget.marriageAds.images.first,
                 height: 40.h,
                 width: 40.w,
                 isCircle: true,
@@ -398,7 +403,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
               ),
               Expanded(
                 child: Label(
-                  text: marriageAds.title,
+                  text: widget.marriageAds.title,
                   style: Styles.headerText(
                     color: AppColors.getTextColor(context),
                     height: 1.60,
@@ -408,20 +413,29 @@ class MarriageAdsListViewItem extends StatelessWidget {
               ),
               IconAppButton(
                 size: 32.h,
-                icon: marriageAds.isFavourite == false
+                icon: widget.marriageAds.isFavourite == false
                     ? Icons.favorite_border
                     : Icons.favorite,
                 color: AppColors.SECONDARY_COLOR,
                 onPressed: () async {
                   ManageVibration.vibrate();
-                  if (marriageAds.isFavourite == false) {
-                    await context
+                  if (widget.marriageAds.isFavourite == false) {
+                    bool result = await context
                         .read<AdvertisementCubit>()
-                        .favouriteAd(marriageAds.id);
+                        .favouriteAd(widget.marriageAds.id);
+                    if(result == true){
+                      widget.marriageAds.isFavourite = true;
+                      setState(() {});
+
+                    }
                   } else {
-                    await context
+                    bool result= await context
                         .read<AdvertisementCubit>()
-                        .unFavouriteAd(marriageAds.id);
+                        .unFavouriteAd(widget.marriageAds.id);
+                    if(result == true){
+                      widget.marriageAds.isFavourite = false;
+                      setState(() {});
+                    }
                   }
                 },
               ),
@@ -433,7 +447,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
           ),
           // description
           Label(
-            text: marriageAds.description,
+            text: widget.marriageAds.description,
             style: Styles.mediumText(
               fontSize: 48.sp,
               height: 1.40,
@@ -445,7 +459,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
             height: 4.h,
           ),
           // location
-          if (marriageAds.address?.cityEn != null)
+          if (widget.marriageAds.address?.cityEn != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -459,8 +473,8 @@ class MarriageAdsListViewItem extends StatelessWidget {
                 Flexible(
                   child: Label(
                     text: (context.isArabic
-                            ? marriageAds.address?.addressAr
-                            : marriageAds.address?.addressEn) ??
+                            ? widget.marriageAds.address?.addressAr
+                            : widget.marriageAds.address?.addressEn) ??
                         '',
                     style: Styles.mediumText(
                       fontSize: 48.sp,
