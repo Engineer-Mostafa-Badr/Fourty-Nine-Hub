@@ -162,12 +162,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       return widget.profile?.user?.isAccountVerified ?? false;
     }
 
-    // للمستخدمين الآخرين - نحتاج للتحقق من نوع UserStarEntity
-    // إذا كان UserStarEntity يحتوي على isAccountVerified
-    // return widget.user?.isAccountVerified ?? false;
-
-    // مؤقتاً حتى نتأكد من بنية UserStarEntity
-    return false;
+    // للمستخدمين الآخرين - من الـ profile المحمل
+    return widget.profile?.user?.isAccountVerified ?? false;
   }
 
   Widget _buildProfileInfoSection(BuildContext context) {
@@ -179,6 +175,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         widget.isCurrentUser && widget.profile?.channelPicture != null
             ? widget.profile!.channelPicture!.mediaKey
             : widget.user?.image ?? '';
+
+    // Determine gender - for current user check profile.user.gender, for others check widget.user.gender
+    final isMale = widget.isCurrentUser
+        ? (widget.profile?.user?.gender.toLowerCase() != 'female')
+        : (widget.user?.gender.toLowerCase() != 'female');
 
     final displayName = widget.isCurrentUser &&
             widget.profile != null &&
@@ -194,28 +195,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           children: [
             Stack(
               children: [
-                Container(
+                ImageFromInternet(
+                  image: profileImageUrl,
                   width: profileSize,
                   height: profileSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.grey[300]!,
-                      width: 2,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: ImageFromInternet(
-                      image: profileImageUrl,
-                      width: profileSize,
-                      height: profileSize,
-                      isCircle: true,
-                      isMale: widget.profile?.user?.gender.toLowerCase() !=
-                          'female',
-                      defaultLogo: profileImageUrl.isEmpty,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  isCircle: true,
+                  isMale: isMale,
+                  defaultLogo: profileImageUrl.isEmpty,
+                  fit: BoxFit.cover,
                 ),
 
                 // Profile picture edit button (only for current user)
@@ -279,7 +266,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           ),
                         ),
                       ),
-                      if (!_isAccountVerified()) ...[
+                      if (_isAccountVerified()) ...[
                         SizedBox(width: 6),
                         const Icon(
                           Icons.verified,
@@ -356,8 +343,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                 _isSubscribing = true;
                               });
 
+                              // Use userId for subscribe/unsubscribe
                               await profileCubit.toggleSubscription(
-                                widget.profile!.id,
+                                widget.profile!.userId,
                               );
 
                               if (mounted) {

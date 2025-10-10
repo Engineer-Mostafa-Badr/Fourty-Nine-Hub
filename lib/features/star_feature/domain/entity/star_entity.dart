@@ -15,6 +15,7 @@ class StarEntity {
   final int likes;
   final int dislikes;
   final bool isRate;
+  final String? ownerId; // Profile/Channel ID of the video owner
 
   DateTime? createdAt;
   String? createAt;
@@ -39,6 +40,7 @@ class StarEntity {
     this.likes = 0, // Default value for likes
     this.dislikes = 0, // Default value for dislikes
     this.isRate = false, // Default value for isRate
+    this.ownerId, // Profile/Channel ID
     this.createdAt,
     this.createAt,
   });
@@ -57,6 +59,7 @@ class StarEntity {
     int? likes, // Added likes parameter
     int? dislikes, // Added dislikes parameter
     bool? isRate, // Added isRate parameter
+    String? ownerId, // Added ownerId parameter
     DateTime? createdAt,
     String? createAt,
   }) =>
@@ -74,6 +77,7 @@ class StarEntity {
         likes: likes ?? this.likes,
         dislikes: dislikes ?? this.dislikes,
         isRate: isRate ?? this.isRate,
+        ownerId: ownerId ?? this.ownerId,
         createdAt: createdAt ?? this.createdAt,
         createAt: createAt ?? this.createAt,
       );

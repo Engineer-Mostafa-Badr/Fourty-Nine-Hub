@@ -205,39 +205,39 @@ class _RelatedVideoCardState extends State<_RelatedVideoCard> {
                         ),
                       ),
                 // Heart button
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                // Mute button
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.volume_off,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 8,
+                //   left: 8,
+                //   child: Container(
+                //     padding: const EdgeInsets.all(6),
+                //     decoration: BoxDecoration(
+                //       color: Colors.black.withOpacity(0.6),
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child: const Icon(
+                //       Icons.favorite,
+                //       color: Colors.red,
+                //       size: 20,
+                //     ),
+                //   ),
+                // ),
+                // // Mute button
+                // Positioned(
+                //   top: 8,
+                //   right: 8,
+                //   child: Container(
+                //     padding: const EdgeInsets.all(6),
+                //     decoration: BoxDecoration(
+                //       color: Colors.black.withOpacity(0.6),
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child: const Icon(
+                //       Icons.volume_off,
+                //       color: Colors.white,
+                //       size: 20,
+                //     ),
+                //   ),
+                // ),
                 // Duration
                 if (talent is TubeVideoModel && talent.duration > 0)
                   Positioned(

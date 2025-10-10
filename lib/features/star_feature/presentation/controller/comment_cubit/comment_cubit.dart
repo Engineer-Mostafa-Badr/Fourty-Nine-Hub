@@ -26,13 +26,19 @@ class CommentCubit extends Cubit<CommentState> {
 
   // Get comments for a video
   Future<void> getVideoComments(String videoId, {bool refresh = false}) async {
+    print('💬 CommentCubit: Getting comments for video $videoId, refresh: $refresh');
+
     if (refresh) {
       _resetPagination();
     }
 
-    if (state.isLoading || (!state.hasMore && !refresh)) return;
+    if (state.isLoading || (!state.hasMore && !refresh)) {
+      print('💬 CommentCubit: Skipping - isLoading: ${state.isLoading}, hasMore: ${state.hasMore}');
+      return;
+    }
 
     emit(state.copyWith(isLoading: true));
+    print('💬 CommentCubit: Loading comments - page: ${state.currentPage}');
 
     final response = await _getCommentsUseCase(GetCommentsParams(
       videoId: videoId,
@@ -42,6 +48,7 @@ class CommentCubit extends Cubit<CommentState> {
 
     response.fold(
       (failure) {
+        print('❌ CommentCubit: Failed to load comments - $failure');
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
@@ -53,6 +60,9 @@ class CommentCubit extends Cubit<CommentState> {
         ));
       },
       (commentsResponse) {
+        print('✅ CommentCubit: Loaded ${commentsResponse.comments.length} comments');
+        print('✅ CommentCubit: Total comments: ${commentsResponse.pagination.total}');
+
         final newComments = refresh
             ? commentsResponse.comments
             : [...state.comments, ...commentsResponse.comments];
@@ -66,6 +76,8 @@ class CommentCubit extends Cubit<CommentState> {
           totalComments: commentsResponse.pagination.total,
           error: null,
         ));
+
+        print('💬 CommentCubit: State updated - total comments in state: ${newComments.length}');
       },
     );
   }

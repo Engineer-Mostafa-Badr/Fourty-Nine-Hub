@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../service_locator/service_locator.dart';
@@ -387,10 +388,10 @@ class ProfileVideoGrid extends StatelessWidget {
 
     if (difference.inDays > 365) {
       final years = (difference.inDays / 365).floor();
-      return isArabic ? 'منذ ${years} سنة' : '${years}y ago';
+      return isArabic ? 'منذ $years سنة' : '${years}y ago';
     } else if (difference.inDays > 30) {
       final months = (difference.inDays / 30).floor();
-      return isArabic ? 'منذ ${months} شهر' : '${months}mo ago';
+      return isArabic ? 'منذ $months شهر' : '${months}mo ago';
     } else if (difference.inDays > 0) {
       return isArabic
           ? 'منذ ${difference.inDays} يوم'
@@ -435,19 +436,19 @@ class ProfileVideoGrid extends StatelessWidget {
         },
         iconColor: starCubit.isFavorite(video.id) ? Colors.red : null,
       ),
-      OptionItem(
-        icon: Icons.share,
-        title: context.isArabic ? 'مشاركة' : 'Share',
-        onTap: () {
-          ManageVibration.vibrate();
-          Navigator.pop(context);
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(content: Text('Video shared')),
-          // );
-          showSuccessMessage(
-              context, context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared');
-        },
-      ),
+      // OptionItem(
+      //   icon: Icons.share,
+      //   title: context.isArabic ? 'مشاركة' : 'Share',
+      //   onTap: () {
+      //     ManageVibration.vibrate();
+      //     Navigator.pop(context);
+      //     // ScaffoldMessenger.of(context).showSnackBar(
+      //     //   SnackBar(content: Text('Video shared')),
+      //     // );
+      //     showSuccessMessage(
+      //         context, context.isArabic ? 'تم مشاركة الفيديو' : 'Video shared');
+      //   },
+      // ),
     ]);
 
     // Delete option only for current user's videos
@@ -474,11 +475,22 @@ class ProfileVideoGrid extends StatelessWidget {
           onTap: () {
             ManageVibration.vibrate();
             Navigator.pop(context);
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(content: Text('Video reported')),
-            // );
-            showSuccessMessage(context,
-                context.isArabic ? 'تم بلاغ الفيديو' : 'Video reported');
+
+            // Get userId from video
+            String userId = '';
+            if (video is TubeVideoModel) {
+              userId = video.userId ?? '';
+            }
+
+            // Show ReportView
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => ReportView(
+                id: userId,
+                categoryId: video.id,
+              ),
+            );
           },
           iconColor: Colors.red,
           textColor: Colors.red,

@@ -20,6 +20,8 @@ import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../core/constants/subscription_status.dart';
+import '../../../../../core/widget/common/global_card.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/ads_cubit.dart';
@@ -37,223 +39,436 @@ class MarriageAdsListViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClickableWidget(
-      onTap: () {
+    return GlobalCard(
+      subcategoryId: marriageAds.subCategoryId ?? '',
+      phone: marriageAds.phone ?? "",
+      reportId: marriageAds.user?.id ?? '',
+      otherUserId: '',
+      onTap: () async {
         ManageVibration.vibrate();
         context.push(Routes.ADdetails, extra: marriageAds.id);
       },
-      child: Container(
-        // margin: EdgeInsets.only(bottom: 20.h),
-        // padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: AppColors.getTextColor(context),
+      isButtonEnabled: SubscriptionStatus.notSubscribed.status !=
+              marriageAds.userSubscriptionStatus ||
+          SubscriptionStatus.notSubscribed.status !=
+              marriageAds.ownerSubscriptionStatus,
+      isPremium: SubscriptionStatus.premium.status ==
+          marriageAds.ownerSubscriptionStatus,
+      hasReport: true,
+      hasTopSide: true,
+      hasBottomSide: marriageAds.user?.id == marriageAds.user?.id,
+      isView: null,
+      subCategoryTitle: context.isArabic
+          ? marriageAds.subCategoryNameAr
+          : marriageAds.subCategoryNameEn,
+      subscriptionType: marriageAds.ownerSubscriptionStatus ==
+              SubscriptionStatus.premium.status
+          ? LocaleKeys.premium2.localize
+          : marriageAds.ownerSubscriptionStatus ==
+                  SubscriptionStatus.regular.status
+              ? LocaleKeys.regular.localize
+              : LocaleKeys.notSubscribed.localize,
+      views: marriageAds.views,
+      onRequest: () {
+        ManageVibration.vibrate();
+        bottomSheet(
+          context: context,
+          widget: CustomMarriageButtonSheet(
+            marriageAds: marriageAds,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // eye icon, views and premium
-            BuildTagAdsWidget(
-              // change status to premium
-              status: marriageAds.ownerSubscriptionStatus ?? '',
-              views: marriageAds.views ?? 0,
-            ),
-            Divider(
-              color: AppColors.getTextColor(context),
-              height: 0,
-            ),
-            // user image and title
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // user image , title and favourite
-                  Row(
-                    children: [
-                      ImageFromInternet(
-                        image: marriageAds.images.first,
-                        height: 40,
-                        width: 40,
-                        isCircle: true,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Label(
-                        text: marriageAds.title,
-                        style: Styles.headerText(
-                          color: AppColors.getTextColor(context),
-                          height: 1.60,
-                        ),
-                      ),
-                      Spacer(),
-                      IconAppButton(
-                        size: 32,
-                        icon: marriageAds.isFavourite == false
-                            ? Icons.favorite_border
-                            : Icons.favorite,
-                        color: AppColors.SECONDARY_COLOR,
-                        onPressed: () async {
-                          ManageVibration.vibrate();
-                          if (marriageAds.isFavourite == false) {
-                            await context
-                                .read<AdvertisementCubit>()
-                                .favouriteAd(marriageAds.id);
-                          } else {
-                            await context
-                                .read<AdvertisementCubit>()
-                                .unFavouriteAd(marriageAds.id);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+        );
+      },
+      // onShowViewers: () {
+      //   if ((marriageAds.lastViewers?.length ?? 0) > 0) {
+      //     ManageVibration.vibrate();
+      //     showModalBottomSheet(
+      //       backgroundColor: context.isDarkMode
+      //           ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
+      //           : AppColors.LIGHT_COLOR,
+      //       constraints: BoxConstraints(
+      //         maxHeight: MediaQuery.of(context).size.height * 0.3,
+      //       ),
+      //       context: context,
+      //       shape: const RoundedRectangleBorder(
+      //         borderRadius: BorderRadius.only(
+      //           topLeft: Radius.circular(32.0),
+      //           topRight: Radius.circular(32.0),
+      //         ),
+      //       ),
+      //       isDismissible: true,
+      //       builder: (BuildContext context) {
+      //         return Padding(
+      //           padding: const EdgeInsets.all(8.0),
+      //           child: Column(
+      //             children: [
+      //               Text(
+      //                 context.isArabic ? 'المشاهدون' : 'Viewers',
+      //                 style: Styles.headerText(
+      //                     color: context.isDarkMode
+      //                         ? Colors.white
+      //                         : AppColors.PRIMARY_COLOR),
+      //               ),
+      //               Expanded(
+      //                 child: ListView(
+      //                   shrinkWrap: true,
+      //                   children: List.generate(
+      //                       data.lastViewers?.length ?? 0,
+      //                       (i) => Container(
+      //                             padding: EdgeInsets.only(bottom: 10),
+      //                             child: Row(
+      //                               children: [
+      //                                 ImageFromInternet(
+      //                                     image: '',
+      //                                     isCircle: true,
+      //                                     defaultLogo: false,
+      //                                     isMale: data.lastViewers?[i].gender ==
+      //                                         'male',
+      //                                     width: 40,
+      //                                     height: 40,
+      //                                     firstChar: data
+      //                                         .lastViewers?[i].firstName?[0]
+      //                                         .toUpperCase(),
+      //                                     charPadding: 0),
+      //                                 const Sizer(),
+      //                                 Text(
+      //                                   data.lastViewers?[i].firstName ?? '',
+      //                                   style: Styles.mediumText(
+      //                                       color: context.isDarkMode
+      //                                           ? Colors.white
+      //                                           : AppColors.PRIMARY_COLOR),
+      //                                 ),
+      //                               ],
+      //                             ),
+      //                           )),
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         );
+      //       },
+      //     );
+      //   }
+      // },
+      onSubscribe: () {
+        context.pop();
+      },
+      body: _buildBody(context),
+    );
+    // return ClickableWidget(
+    //   onTap: () {
+    //     ManageVibration.vibrate();
+    //     context.push(Routes.ADdetails, extra: marriageAds.id);
+    //   },
+    //   child: Container(
+    //     // margin: EdgeInsets.only(bottom: 20.h),
+    //     // padding: EdgeInsets.all(16.w),
+    //     decoration: BoxDecoration(
+    //       color: Theme.of(context).scaffoldBackgroundColor,
+    //       borderRadius: BorderRadius.circular(15),
+    //       border: Border.all(
+    //         color: AppColors.getTextColor(context),
+    //       ),
+    //     ),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         // eye icon, views and premium
+    //         BuildTagAdsWidget(
+    //           // change status to premium
+    //           status: marriageAds.ownerSubscriptionStatus ?? '',
+    //           views: marriageAds.views ?? 0,
+    //         ),
+    //         Divider(
+    //           color: AppColors.getTextColor(context),
+    //           height: 0,
+    //         ),
+    //         // user image and title
+    //         Padding(
+    //           padding:
+    //               const EdgeInsets.only(left: 18, right: 18, top: 8, bottom: 4),
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               // user image , title and favourite
+    //               Row(
+    //                 children: [
+    //                   ImageFromInternet(
+    //                     image: marriageAds.images.first,
+    //                     height: 40,
+    //                     width: 40,
+    //                     isCircle: true,
+    //                   ),
+    //                   const SizedBox(
+    //                     width: 8,
+    //                   ),
+    //                   Label(
+    //                     text: marriageAds.title,
+    //                     style: Styles.headerText(
+    //                       color: AppColors.getTextColor(context),
+    //                       height: 1.60,
+    //                     ),
+    //                   ),
+    //                   Spacer(),
+    //                   IconAppButton(
+    //                     size: 32,
+    //                     icon: marriageAds.isFavourite == false
+    //                         ? Icons.favorite_border
+    //                         : Icons.favorite,
+    //                     color: AppColors.SECONDARY_COLOR,
+    //                     onPressed: () async {
+    //                       ManageVibration.vibrate();
+    //                       if (marriageAds.isFavourite == false) {
+    //                         await context
+    //                             .read<AdvertisementCubit>()
+    //                             .favouriteAd(marriageAds.id);
+    //                       } else {
+    //                         await context
+    //                             .read<AdvertisementCubit>()
+    //                             .unFavouriteAd(marriageAds.id);
+    //                       }
+    //                     },
+    //                   ),
+    //                 ],
+    //               ),
 
-                  const SizedBox(
-                    height: 4,
+    //               const SizedBox(
+    //                 height: 4,
+    //               ),
+    //               // description
+    //               Label(
+    //                 text: marriageAds.description,
+    //                 style: Styles.mediumText(
+    //                   fontSize: 24,
+    //                   height: 1.40,
+    //                   color: AppColors.getTextColor(context),
+    //                 ),
+    //                 maxLines: 5,
+    //               ),
+    //               const SizedBox(
+    //                 height: 4,
+    //               ),
+    //               // location
+    //               if (marriageAds.address?.cityEn != null)
+    //                 Row(
+    //                   mainAxisAlignment: MainAxisAlignment.end,
+    //                   children: [
+    //                     SvgPicture.asset(
+    //                       Assets.mapPinIcon,
+    //                       color: context.isDarkMode ? Colors.white : null,
+    //                     ),
+    //                     const SizedBox(
+    //                       width: 4,
+    //                     ),
+    //                     Label(
+    //                       text: (context.isArabic
+    //                               ? marriageAds.address?.addressAr
+    //                               : marriageAds.address?.addressEn) ??
+    //                           '',
+    //                       style: Styles.headerText(
+    //                         fontSize: 24,
+    //                         color: AppColors.getTextColor(context),
+    //                       ),
+    //                     ),
+    //                   ],
+    //                 ),
+    //             ],
+    //           ),
+    //         ),
+    //         Divider(
+    //           color: AppColors.getTextColor(context),
+    //           height: 0,
+    //         ),
+    //         // buttons
+    //         Padding(
+    //           padding:
+    //               const EdgeInsets.only(left: 18, right: 18, top: 4, bottom: 8),
+    //           child: Column(
+    //             children: [
+    //               Row(
+    //                 // crossAxisAlignment: CrossAxisAlignment.center,
+    //                 children: [
+    //                   // Expanded(
+    //                   //   flex: 3,
+    //                   //   child: BlocProvider(
+    //                   //     create: (BuildContext context) =>serviceLocator<AdvertisementCubit>(),
+    //                   //     child: PremiumRequestButton(
+    //                   //       adId: controller.marriageAds[index].id,
+    //                   //       subCategoryId:
+    //                   //       controller.marriageAds[index].subCategoryId ?? '',
+    //                   //       subscriptionStatus:
+    //                   //       controller.marriageAds[index].subscriptionStatus ?? '',
+    //                   //     ),
+    //                   //   ),
+    //                   // ),
+
+    //                   Expanded(
+    //                     flex: 5,
+    //                     child: SizedBox(
+    //                       height: 30,
+    //                       width: 141,
+    //                       child: AvaialbleTripsButton(
+    //                         title: LocaleKeys.request.localize,
+    //                         color: AppColors.getRedColor(context),
+    //                         radius: 15,
+    //                         // padding: const EdgeInsets.symmetric(
+    //                         //     horizontal: 15, vertical: 5,),
+    //                         onTap: () {
+    //                           ManageVibration.vibrate();
+    //                           bottomSheet(
+    //                             context: context,
+    //                             widget: CustomMarriageButtonSheet(
+    //                               marriageAds: marriageAds,
+    //                             ),
+    //                           );
+    //                           // showModalBottomSheet(
+    //                           //   backgroundColor: context.isDarkMode
+    //                           //       ? AppColors.DARK_BLUE_COLOR
+    //                           //           .withOpacity(0.95)
+    //                           //       : AppColors.LIGHT_COLOR,
+    //                           //   context: context,
+    //                           //   shape: const RoundedRectangleBorder(
+    //                           //     borderRadius: BorderRadius.only(
+    //                           //       topLeft: Radius.circular(32.0),
+    //                           //       topRight: Radius.circular(32.0),
+    //                           //     ),
+    //                           //   ),
+    //                           //   isDismissible: true,
+    //                           //   isScrollControlled: true,
+    //                           //   builder: (BuildContext context) {
+    //                           //     return CustomMarriageButtonSheet(
+    //                           //       marriageAds: marriageAds,
+    //                           //     );
+    //                           //   },
+    //                           // );
+    //                         },
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   const Spacer(
+    //                     flex: 1,
+    //                   ),
+    //                   Expanded(
+    //                     flex: 6,
+    //                     child: MarriageCallMessageButtons(
+    //                       otherUserId: marriageAds.userId ?? '',
+    //                       startPadding: 16,
+    //                       subcategoryId: state
+    //                               .subCategories?[state.subCategories
+    //                                       ?.indexWhere((element) =>
+    //                                           element.isSelected == true) ??
+    //                                   0]
+    //                               .id ??
+    //                           '',
+    //                       phone: marriageAds.phone ?? '',
+    //                       id: marriageAds.id,
+    //                       hasReport: true,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 18.w, right: 18.w, top: 8.h, bottom: 4.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // user image , title and favourite
+          Row(
+            children: [
+              ImageFromInternet(
+                image: marriageAds.images.first,
+                height: 40.h,
+                width: 40.w,
+                isCircle: true,
+              ),
+              SizedBox(
+                width: 8.w,
+              ),
+              Expanded(
+                child: Label(
+                  text: marriageAds.title,
+                  style: Styles.headerText(
+                    color: AppColors.getTextColor(context),
+                    height: 1.60,
                   ),
-                  // description
-                  Label(
-                    text: marriageAds.description,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconAppButton(
+                size: 32.h,
+                icon: marriageAds.isFavourite == false
+                    ? Icons.favorite_border
+                    : Icons.favorite,
+                color: AppColors.SECONDARY_COLOR,
+                onPressed: () async {
+                  ManageVibration.vibrate();
+                  if (marriageAds.isFavourite == false) {
+                    await context
+                        .read<AdvertisementCubit>()
+                        .favouriteAd(marriageAds.id);
+                  } else {
+                    await context
+                        .read<AdvertisementCubit>()
+                        .unFavouriteAd(marriageAds.id);
+                  }
+                },
+              ),
+            ],
+          ),
+
+          SizedBox(
+            height: 4.h,
+          ),
+          // description
+          Label(
+            text: marriageAds.description,
+            style: Styles.mediumText(
+              fontSize: 24.sp,
+              height: 1.40,
+              color: AppColors.getTextColor(context),
+            ),
+            maxLines: 5,
+          ),
+          SizedBox(
+            height: 4.h,
+          ),
+          // location
+          if (marriageAds.address?.cityEn != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SvgPicture.asset(
+                  Assets.mapPinIcon,
+                  color: context.isDarkMode ? Colors.white : null,
+                ),
+                SizedBox(
+                  width: 4.w,
+                ),
+                Flexible(
+                  child: Label(
+                    text: (context.isArabic
+                            ? marriageAds.address?.addressAr
+                            : marriageAds.address?.addressEn) ??
+                        '',
                     style: Styles.mediumText(
-                      fontSize: 24,
+                      fontSize: 24.sp,
                       height: 1.40,
                       color: AppColors.getTextColor(context),
                     ),
-                    maxLines: 5,
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  // location
-                  if (marriageAds.address?.cityEn != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SvgPicture.asset(
-                          Assets.mapPinIcon,
-                          color: context.isDarkMode ? Colors.white : null,
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Label(
-                          text: (context.isArabic
-                                  ? marriageAds.address?.addressAr
-                                  : marriageAds.address?.addressEn) ??
-                              '',
-                          style: Styles.headerText(
-                            fontSize: 24,
-                            color: AppColors.getTextColor(context),
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Divider(
-              color: AppColors.getTextColor(context),
-              height: 0,
-            ),
-            // buttons
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 18, right: 18, top: 4, bottom: 8),
-              child: Column(
-                children: [
-                  Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Expanded(
-                      //   flex: 3,
-                      //   child: BlocProvider(
-                      //     create: (BuildContext context) =>serviceLocator<AdvertisementCubit>(),
-                      //     child: PremiumRequestButton(
-                      //       adId: controller.marriageAds[index].id,
-                      //       subCategoryId:
-                      //       controller.marriageAds[index].subCategoryId ?? '',
-                      //       subscriptionStatus:
-                      //       controller.marriageAds[index].subscriptionStatus ?? '',
-                      //     ),
-                      //   ),
-                      // ),
-
-                      Expanded(
-                        flex: 5,
-                        child: SizedBox(
-                          height: 30,
-                          width: 141,
-                          child: AvaialbleTripsButton(
-                            title: LocaleKeys.request.localize,
-                            color: AppColors.getRedColor(context),
-                            radius: 15,
-                            // padding: const EdgeInsets.symmetric(
-                            //     horizontal: 15, vertical: 5,),
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              bottomSheet(
-                                context: context,
-                                widget: CustomMarriageButtonSheet(
-                                  marriageAds: marriageAds,
-                                ),
-                              );
-                              // showModalBottomSheet(
-                              //   backgroundColor: context.isDarkMode
-                              //       ? AppColors.DARK_BLUE_COLOR
-                              //           .withOpacity(0.95)
-                              //       : AppColors.LIGHT_COLOR,
-                              //   context: context,
-                              //   shape: const RoundedRectangleBorder(
-                              //     borderRadius: BorderRadius.only(
-                              //       topLeft: Radius.circular(32.0),
-                              //       topRight: Radius.circular(32.0),
-                              //     ),
-                              //   ),
-                              //   isDismissible: true,
-                              //   isScrollControlled: true,
-                              //   builder: (BuildContext context) {
-                              //     return CustomMarriageButtonSheet(
-                              //       marriageAds: marriageAds,
-                              //     );
-                              //   },
-                              // );
-                            },
-                          ),
-                        ),
-                      ),
-                      const Spacer(
-                        flex: 1,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: MarriageCallMessageButtons(
-                          otherUserId: marriageAds.userId ?? '',
-                          startPadding: 16,
-                          subcategoryId: state
-                                  .subCategories?[state.subCategories
-                                          ?.indexWhere((element) =>
-                                              element.isSelected == true) ??
-                                      0]
-                                  .id ??
-                              '',
-                          phone: marriageAds.phone ?? '',
-                          id: marriageAds.id,
-                          hasReport: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

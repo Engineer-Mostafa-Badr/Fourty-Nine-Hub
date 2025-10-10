@@ -147,8 +147,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             message: message,
           ));
 
-          // Refresh profile from API to get updated data
-          await getProfileById(profileId, showLoading: false);
+          // Don't refresh from API immediately as it may return stale data
+          // The state is already updated locally
         }
 
         _showSuccessMessage(message);
@@ -192,8 +192,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             message: message,
           ));
 
-          // Refresh profile from API to get updated data
-          await getProfileById(profileId, showLoading: false);
+          // Don't refresh from API immediately as it may return stale data
+          // The state is already updated locally
         }
 
         _showSuccessMessage(message);

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../data/model/comment_model.dart';
+import '../../../data/model/tube_video_models.dart';
 import '../../presentation_exports.dart';
 
 class VideoInfoSection extends StatefulWidget {
@@ -38,8 +41,10 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
     super.initState();
     // Get ProfileCubit instance
     _profileCubit = context.read<ProfileCubit>();
-    // Load profile info for the video owner to check subscription status
-    _profileCubit.getProfileById(widget.talent.user.id, showLoading: false);
+    // Load profile info using Profile/Channel ID (ownerId)
+    final profileId = widget.talent.ownerId ?? widget.talent.user.id;
+    print('🔍 Loading profile with Profile ID: $profileId');
+    _profileCubit.getProfileById(profileId, showLoading: false);
   }
 
   String _formatViewCount(num views) {
@@ -93,23 +98,16 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
       padding: const EdgeInsets.only(top: 8),
       child: Row(
         children: [
-          comment.owner.channelPicture?.mediaKey.isNotEmpty == true
-              ? ImageFromInternet(
-                  image: comment.owner.channelPicture!.mediaKey,
-                  width: 32,
-                  height: 32,
-                  isCircle: true,
-                  fit: BoxFit.cover,
-                )
-              : Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.person, color: Colors.grey, size: 16),
-                ),
+          ImageFromInternet(
+            image: comment.owner.channelPicture?.mediaKey ?? '',
+            width: 32,
+            height: 32,
+            isCircle: true,
+            isMale: comment.owner.gender?.toLowerCase() != 'female',
+            defaultLogo:
+                (comment.owner.channelPicture?.mediaKey.isEmpty ?? true),
+            fit: BoxFit.cover,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -132,7 +130,7 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
         final averageRating = widget.talent.averageRating;
 
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(20),
@@ -249,26 +247,26 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                         ),
                         const Spacer(),
                         // Star rating
-                        Row(
-                          children: List.generate(
-                            5,
-                            (index) => GestureDetector(
-                              onTap: () {
-                                starCubit.updateRating(
-                                    widget.talent.id, index + 1);
-                              },
-                              child: Icon(
-                                index < widget.talent.averageRating
-                                    ? Icons.star
-                                    : Icons.star_outline,
-                                size: 20,
-                                color: index < widget.talent.averageRating
-                                    ? Colors.amber[600]
-                                    : Colors.grey[400],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Row(
+                        //   children: List.generate(
+                        //     5,
+                        //     (index) => GestureDetector(
+                        //       onTap: () {
+                        //         starCubit.updateRating(
+                        //             widget.talent.id, index + 1);
+                        //       },
+                        //       child: Icon(
+                        //         index < widget.talent.averageRating
+                        //             ? Icons.star
+                        //             : Icons.star_outline,
+                        //         size: 20,
+                        //         color: index < widget.talent.averageRating
+                        //             ? Colors.amber[600]
+                        //             : Colors.grey[400],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
 
@@ -332,24 +330,16 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                         // Avatar
                         GestureDetector(
                           onTap: widget.onProfileTap,
-                          child: widget.talent.user.image.isNotEmpty
-                              ? ImageFromInternet(
-                                  image: widget.talent.user.image,
-                                  width: 40,
-                                  height: 40,
-                                  isCircle: true,
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(Icons.person,
-                                      color: Colors.grey),
-                                ),
+                          child: ImageFromInternet(
+                            image: widget.talent.user.image,
+                            width: 40,
+                            height: 40,
+                            isCircle: true,
+                            isMale: widget.talent.user.gender.toLowerCase() !=
+                                'female',
+                            defaultLogo: widget.talent.user.image.isEmpty,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         const SizedBox(width: 12),
 
@@ -385,6 +375,23 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                             final isSubscribed =
                                 profileState.profile?.isSubscribed ?? false;
 
+                            // Check if current user is viewing their own video
+                            String? videoOwnerId;
+                            if (widget.talent is TubeVideoModel) {
+                              videoOwnerId =
+                                  (widget.talent as TubeVideoModel).userId;
+                            }
+                            videoOwnerId ??= widget.talent.user.id;
+
+                            final currentUserId = UserCubit.to.state.data?.id;
+                            final isOwnVideo = currentUserId != null &&
+                                currentUserId == videoOwnerId;
+
+                            // Hide subscribe button if viewing own video
+                            if (isOwnVideo) {
+                              return SizedBox.shrink();
+                            }
+
                             return Container(
                               decoration: BoxDecoration(
                                 color:
@@ -396,8 +403,19 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                   TextButton(
                                     onPressed: () async {
                                       ManageVibration.vibrate();
-                                      await _profileCubit.toggleSubscription(
-                                          widget.talent.user.id);
+                                      // Use userId for subscribe/unsubscribe
+                                      String? subscribeId;
+                                      if (widget.talent is TubeVideoModel) {
+                                        subscribeId =
+                                            (widget.talent as TubeVideoModel)
+                                                .userId;
+                                      }
+                                      subscribeId ??= widget.talent.user.id;
+
+                                      print(
+                                          '🔔 Toggling subscription with User ID: $subscribeId');
+                                      await _profileCubit
+                                          .toggleSubscription(subscribeId);
                                     },
                                     child: Text(
                                       isSubscribed
@@ -448,7 +466,7 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                 video?.dislikes ?? widget.talent.dislikes;
 
                             return Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              padding: EdgeInsets.symmetric(horizontal: 8.w),
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(20),
@@ -589,7 +607,21 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                 ),
                               )
                             else if (commentState.comments.isNotEmpty)
-                              _buildCommentPreview(commentState.comments.first),
+                              _buildCommentPreview(commentState.comments.first)
+                            // else
+                            //   // No comments yet
+                            //   Padding(
+                            //     padding: const EdgeInsets.only(top: 8),
+                            //     child: Text(
+                            //       context.isArabic
+                            //           ? 'لا توجد تعليقات'
+                            //           : 'No comments yet',
+                            //       style: TextStyle(
+                            //         color: Colors.grey[600],
+                            //         fontSize: 12,
+                            //       ),
+                            //     ),
+                            //   ),
                           ],
                         ),
                       ),

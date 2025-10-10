@@ -9,6 +9,7 @@ class UserStarModel extends UserStarEntity {
     required super.image,
     required super.viewNumber,
     required super.averageRating,
+    super.gender,
   });
 
   factory UserStarModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +29,9 @@ class UserStarModel extends UserStarEntity {
           : json['USER_PROFILE']['profilePictureKey']['mediaKey'] ?? '',
       viewNumber: json['viewNumber  '] ?? 0,
       averageRating: json['averageRating'] ?? 0,
+      gender: json['userId'] != null
+          ? json['userId']['gender'] ?? 'male'
+          : json['gender'] ?? 'male',
     );
   }
 }

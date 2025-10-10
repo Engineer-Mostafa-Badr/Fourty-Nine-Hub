@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -72,6 +73,15 @@ class _TubeFeedViewState extends State<TubeFeedView>
       print("🎯 BeStarView initialized");
       context.read<StarCubit>().debugMyTalentsFlow();
     });
+    // ✅ إضافة تعيين Status Bar للأسود
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.black, // لون الخلفية
+        statusBarIconBrightness:
+            Brightness.light, // الأيقونات فاتحة للخلفية الداكنة
+        statusBarBrightness: Brightness.dark, // للـ iOS
+      ),
+    );
   }
 
   @override
@@ -481,6 +491,16 @@ class _TubeFeedViewState extends State<TubeFeedView>
     disposeTabController();
     disposeScrollControllers();
     disposeSearchController();
+    // ✅ إعادة Status Bar للإعدادات الافتراضية
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor:
+            Colors.transparent, // أو اللون الذي تريده للصفحات الأخرى
+        statusBarIconBrightness:
+            Brightness.dark, // أيقونات داكنة للخلفيات الفاتحة
+        statusBarBrightness: Brightness.light, // للـ iOS
+      ),
+    );
     super.dispose();
   }
 }

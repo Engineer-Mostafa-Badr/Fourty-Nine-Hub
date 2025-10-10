@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/thumbnail_widget.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/options_bottom_sheet.dart';
@@ -236,6 +237,11 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
   }
 
   Widget _buildProfilePicture(BuildContext context) {
+    // Get gender from video owner
+    final isMale = widget.video is TubeVideoModel
+        ? (widget.video).user.gender.toLowerCase() != 'female'
+        : true;
+
     return GestureDetector(
       onTap: () => ManageVibration.vibrate(),
       child: Container(
@@ -246,19 +252,14 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
             width: 1,
           ),
         ),
-        child: CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.grey[300],
-          backgroundImage: widget.video.user.image.isNotEmpty
-              ? NetworkImage(widget.video.user.image)
-              : null,
-          child: widget.video.user.image.isEmpty
-              ? Icon(
-                  Icons.person,
-                  size: _getResponsiveIconSize(context, 14),
-                  color: Colors.grey[600],
-                )
-              : null,
+        child: ImageFromInternet(
+          image: widget.video.user.image,
+          width: 40,
+          height: 40,
+          isCircle: true,
+          isMale: isMale,
+          defaultLogo: widget.video.user.image.isEmpty,
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -357,6 +358,32 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
   Widget _buildStarRating(BuildContext context) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
+        // Show average rating if video has been rated (isRate == true)
+        if (widget.video.isRate) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                widget.video.averageRating
+                    .toStringAsFixed(1)
+                    .toArabicNumbers(context),
+                style: TextStyle(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 4),
+              Icon(
+                Icons.star,
+                color: Colors.amber,
+                size: 16,
+              ),
+            ],
+          );
+        }
+
         // Check if video has been rated
         final isVideoRated =
             context.read<StarCubit>().isVideoRated(widget.video.id);
@@ -481,10 +508,10 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
       //   ),
       // );
       showSuccessMessage(
-        context,  
+        context,
         context.isArabic
-          ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
-          : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+            ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+            : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
       );
       return;
     }

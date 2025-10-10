@@ -37,6 +37,7 @@ class PlaylistFormWidget extends StatelessWidget {
   });
 
   @override
+
   Widget build(BuildContext context) {
     return Container(
       key: ValueKey('create_form_$uniqueId'),

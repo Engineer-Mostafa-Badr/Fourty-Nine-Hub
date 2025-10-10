@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
@@ -67,16 +68,19 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      child: Column(
-        children: [
-          _buildHandleBar(),
-          _buildHeader(),
-          Divider(height: 1, color: Colors.grey[200]),
-          _buildVideoInfoSection(),
-          _buildCreateNewPlaylistSection(),
-          Divider(height: 1, color: Colors.grey[200]),
-          Expanded(child: _buildPlaylistsList()),
-        ],
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildHandleBar(),
+            _buildHeader(),
+            Divider(height: 1, color: Colors.grey[200]),
+            _buildVideoInfoSection(),
+            _buildCreateNewPlaylistSection(),
+            Divider(height: 1, color: Colors.grey[200]),
+            Expanded(child: _buildPlaylistsList()),
+          ],
+        ),
       ),
     );
   }
@@ -133,7 +137,10 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
 
   Widget _buildCreateNewPlaylistSection() {
     return _isCreatingPlaylist
-        ? _buildCreatePlaylistForm()
+        ? SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: _buildCreatePlaylistForm())
         : _buildCreatePlaylistButton();
   }
 

@@ -45,7 +45,7 @@ class PlaylistThumbnailSelector extends StatelessWidget {
         if (selectedThumbnail != null) _buildSelectedThumbnailInfo(context),
         const SizedBox(height: 4),
         Text(
-          context.isArabic 
+          context.isArabic
               ? 'يرجى اختيار صورة مصغرة لقائمة التشغيل'
               : 'Please select a thumbnail for the playlist',
           style: TextStyle(
@@ -63,12 +63,14 @@ class PlaylistThumbnailSelector extends StatelessWidget {
       height: PlaylistBottomSheetConstants.thumbnailHeight,
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
+        borderRadius:
+            BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: selectedThumbnail != null
           ? ClipRRect(
-              borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
+              borderRadius: BorderRadius.circular(
+                  PlaylistBottomSheetConstants.borderRadius),
               child: Image.file(
                 selectedThumbnail!,
                 fit: BoxFit.cover,
@@ -122,7 +124,8 @@ class PlaylistThumbnailSelector extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 8),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.smallBorderRadius),
+            borderRadius: BorderRadius.circular(
+                PlaylistBottomSheetConstants.smallBorderRadius),
           ),
         ),
       ),

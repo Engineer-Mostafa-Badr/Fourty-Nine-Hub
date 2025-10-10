@@ -112,6 +112,16 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    // ✅ إضافة تعيين Status Bar للأسود
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.black, // لون الخلفية
+        statusBarIconBrightness:
+            Brightness.light, // الأيقونات فاتحة للخلفية الداكنة
+        statusBarBrightness: Brightness.dark, // للـ iOS
+      ),
+    );
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -301,6 +311,17 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
 
+    // ✅ إعادة Status Bar للإعدادات الافتراضية
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor:
+            Colors.transparent, // أو اللون الذي تريده للصفحات الأخرى
+        statusBarIconBrightness:
+            Brightness.dark, // أيقونات داكنة للخلفيات الفاتحة
+        statusBarBrightness: Brightness.light, // للـ iOS
+      ),
+    );
+
     // Always dispose controller if it exists, but avoid floating video issues
     try {
       if (_controller != null && !FloatingVideoManager.isPlayerVisible) {
@@ -345,13 +366,14 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     if (!widget.talent.isApproved || !_isInitialized || _controller == null)
       return;
 
-    if (_controller!.value.isPlaying) {
-      _controller!.pause();
-    } else {
-      _controller!.play();
-    }
     setState(() {
-      _isPlaying = !_isPlaying;
+      if (_controller!.value.isPlaying) {
+        _controller!.pause();
+        _isPlaying = false;
+      } else {
+        _controller!.play();
+        _isPlaying = true;
+      }
     });
   }
 
