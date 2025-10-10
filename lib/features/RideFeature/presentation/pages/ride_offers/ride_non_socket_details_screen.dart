@@ -480,7 +480,7 @@ class _RideNonSocketDetailsScreenState
                                                     .tripDetails?.id ??
                                                 '',
                                             userType: "client",
-                                            tripType: "nonTracking");
+                                            tripType: widget.params.isShipping?"loading":"nonTracking");
                                         // cubit.requestEmergencySupport(
                                         //     context: context,
                                         //     clientId: widget.params.tripEntity
