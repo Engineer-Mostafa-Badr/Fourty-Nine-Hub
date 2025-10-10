@@ -5,6 +5,8 @@ class BidWinnerEntity {
   final String? gender;
   final String? auctionTitle;
   final String? auctionId;
+  final String? profilePictureKey;
+  final String? updatedAt;
 
   const BidWinnerEntity({
     this.winnerId,
@@ -13,5 +15,7 @@ class BidWinnerEntity {
     this.gender,
     this.auctionTitle,
     this.auctionId,
+    this.updatedAt,
+    this.profilePictureKey,
   });
 }

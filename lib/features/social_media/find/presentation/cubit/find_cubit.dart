@@ -126,7 +126,99 @@ class FindCubit extends Cubit<FindState> {
   bool isFindDataInitialLoading = false; // separate flag for first load
 
   final int pageSize = 5; // how many items per page
+// 📌 Initial load (with user info)
+  void loadInitialFindData(
+      BuildContext context, {
+        required String gender,
+        required String userId,
+        required bool isLoggedIn,
+      }) async {
+    print("🚀 CUBIT: loadInitialFindData() called with gender=$gender, userId=$userId, isLoggedIn=$isLoggedIn");
 
+    selectedGender = gender;
+    isFindDataInitialLoading = true;
+    findData.clear();
+    currentPageFindData = 1;
+    hasMoreFindData = true;
+
+    emit(state.copyWith(
+      status: FindStates.loading,
+      findData: [],
+    ));
+
+    await getFindData(context, userId: userId, isLoggedIn: isLoggedIn);
+
+    isFindDataInitialLoading = false;
+  }
+  Future<void> getFindData(
+      BuildContext context, {
+        String? userId,
+        bool? isLoggedIn,
+      }) async {
+    print("🚀 CUBIT: getFindData() called");
+    print("📊 State: hasMore=$hasMoreFindData, isLoading=$isFindDataLoadingMore, page=$currentPageFindData, gender=$selectedGender");
+
+    if (!hasMoreFindData || isFindDataLoadingMore) {
+      print("⚠️ Skipping API call - no more data or already loading");
+      return;
+    }
+
+    isFindDataLoadingMore = true;
+
+    if (currentPageFindData == 1) {
+      emit(state.copyWith(status: FindStates.loading));
+    }
+
+    final response = await getFindUseCase(
+      GetFindParams(
+        page: currentPageFindData,
+        limit: pageSize,
+        gender: selectedGender ?? "",
+        userId: userId ?? "",
+        isLoggedIn: isLoggedIn ?? false,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        print("❌ API call failed: $failure");
+        isFindDataLoadingMore = false;
+
+        emit(state.copyWith(
+          failure: failure,
+          status: FindStates.failure,
+        ));
+      },
+          (data) {
+        print("✅ API call success, received ${data.length} items");
+
+        if (currentPageFindData == 1) {
+          findData = List.from(data);
+        } else {
+          findData.addAll(data);
+        }
+
+        if (data.isEmpty) {
+          hasMoreFindData = false;
+          print("🛑 No more pages available (empty response)");
+        } else {
+          currentPageFindData++;
+          print("➡️ Next page: $currentPageFindData (received ${data.length} items)");
+        }
+
+        isFindDataLoadingMore = false;
+
+        emit(state.copyWith(
+          status: FindStates.success,
+          findData: findData,
+        ));
+
+        print("📦 Total items in findData: ${findData.length}");
+      },
+    );
+  }
+
+/*
   // 📌 Initial load (with gender)
   void loadInitialFindData(BuildContext context,
       {required String gender}) async {
@@ -214,6 +306,7 @@ class FindCubit extends Cubit<FindState> {
       },
     );
   }
+  */
 }
 /*
 class FindCubit extends Cubit<FindState> {

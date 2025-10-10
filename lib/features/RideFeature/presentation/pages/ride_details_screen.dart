@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
@@ -14,16 +16,18 @@ class RideDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0,
-        title: Label(text:LocaleKeys.rideDetails.localize,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 24
-          ),
-        ),
-      ),
+      appBar:DefaultAppBar(title: context.isArabic ? "تفاصيل الرحلة" : "Ride Details"),
+
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   scrolledUnderElevation: 0,
+      //   title: Label(text:LocaleKeys.rideDetails.localize,
+      //     style: const TextStyle(
+      //       fontWeight: FontWeight.w600,
+      //       fontSize: 24
+      //     ),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

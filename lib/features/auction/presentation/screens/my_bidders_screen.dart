@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
@@ -96,7 +97,49 @@ class MyBiddersScreen extends StatelessWidget {
                     : LocaleKeys.notSubscribed.localize,
 
                 views: auction.views,
-                onShowViewers: (){},
+                onShowViewers: () async {
+                  final cubit = context.read<AuctionCubit>();
+
+                  // Fetch viewers first
+                  if((auction.views??0)>0){
+                    await cubit.fetchViewerEntity(id: auction.auctionId!);
+
+                    final viewers = cubit.state.auctionViewerData;
+
+                    if (viewers != null && viewers.isNotEmpty) {
+                      showModalBottomSheet(
+                        backgroundColor: context.isDarkMode
+                            ? AppColors.DARK_BLUE_COLOR
+                            .withOpacity(0.95)
+                            : AppColors.LIGHT_COLOR,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.32,
+                        ),
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32.0),
+                            topRight: Radius.circular(32.0),
+                          ),
+                        ),
+                        isDismissible: true,
+                        // isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return LastViewersWidget(lastViewers: viewers,);
+                        },
+                      );
+                    } else {
+                      // Handle empty viewers or error
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("No viewers available")),
+                      );
+                    }
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("No viewers available")),
+                    );
+                  }
+                },
                 onSubscribe: (){
                   context.pop();
                 },

@@ -27,6 +27,7 @@ class ExpiredAuctionScreen extends StatefulWidget {
 
 class _ExpiredAuctionScreenState extends State<ExpiredAuctionScreen> {
   late ScrollController _auctionExpiredScrollController;
+  late final AuctionCubit _cubit; // ✅ نخزن cubit هنا
 
   bool isFloatingButtonVisible = true;
   void _scrollListener() {
@@ -44,6 +45,7 @@ class _ExpiredAuctionScreenState extends State<ExpiredAuctionScreen> {
   void initState() {
     super.initState();
     _auctionExpiredScrollController = ScrollController()..addListener(_scrollListener);
+
 
   }
   @override

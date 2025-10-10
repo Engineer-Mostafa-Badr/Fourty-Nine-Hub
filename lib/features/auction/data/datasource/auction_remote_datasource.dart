@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/available_trip_join_model.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
@@ -15,6 +17,7 @@ import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
+import '../../domain/entities/auction_viewer_entity.dart';
 import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';
@@ -32,6 +35,7 @@ import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
 import '../models/auction_sub_category_model.dart';
+import '../models/auction_viewer_model.dart';
 import '../models/error_bid_auction_model.dart';
 import '../models/get_all_auction_model.dart';
 import '../models/listen_winner_bid_model.dart';
@@ -60,6 +64,7 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction();
   Future<Either<Failure, AuctionWinnerDataEntity >> getAllWinnerAuction();
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> searchAuction({required SearchAuctionParams params});
+  Future<Either<Failure, List<ViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params});
 
 }
 
@@ -84,39 +89,6 @@ class AuctionRemoteDataSourceImpl
         return Right(rideList);
       },
     );
-  }
-  @override
-  void joinAuction(String auctionId) {
-    try {
-      CliLogger.info("Joining auction $auctionId");
-      // send just the string ID
-      SharedWebSocket.socket?.emit(
-        SocketIOListeners.joinAuction,
-        auctionId,
-      );
-    } catch (e) {
-      CliLogger.info("Error while joining auction: $e");
-    }
-  }
-
-
-@override
-  void listenToNewAuction(Function(GetAvailableAuctionEntity trip) params) {
-    try {
-      CliLogger.info("auction NewAuction ");
-      log("auction NewAuction ");
-      SharedWebSocket.socket!.emit(SocketIOListeners.joinAuction, (data) {
-        // final decodedData = jsonDecode(data);
-        // CliLogger.info("offer data :  $decodedData");
-        // params(RideOfferModel.fromJson(decodedData));
-        CliLogger.info("New Trip data :  $data");
-        log("New Trip data :  $data");
-        log("New Trip data['newAvailableTrip'] :  ${data['newAvailableTrip']}");
-        params(GetAvailableAuctionModel.fromJson(data['newAvailableTrip']));
-      });
-    } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
-    }
   }
 
   @override
@@ -150,54 +122,7 @@ class AuctionRemoteDataSourceImpl
     );
   }
 
-  @override
-  void sendBid(String auctionId, int newPrice) {
-    try {
-      final payload = {
-        "auctionId": auctionId,
-        "bidAmount": newPrice,
-      };
 
-      CliLogger.info("➡️ Sending bid: $payload");
-
-      SharedWebSocket.socket?.emit(
-        "auction:add:bid:amount",
-        jsonEncode(payload),   // 👈 send as raw JSON string
-      );
-
-    } catch (e) {
-      CliLogger.info("❌ Error while sending bid: $e");
-    }
-  }
-
-  @override
-  void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
-    try {
-      CliLogger.info("🔔 Listening to new bids...");
-
-      // remove any old listeners to avoid duplicates
-      // SharedWebSocket.socket?.off("auction:new-amount-bid");
-
-      SharedWebSocket.socket?.on("auction:new-amount-bid", (data) {
-        CliLogger.info("📩 New bid received: $data");
-
-        try {
-          final decoded = (data is String) ? jsonDecode(data) : data;
-
-          final payload = decoded is Map && decoded.containsKey("data")
-              ? decoded["data"]
-              : decoded;
-
-          final participant = AuctionParticipantsModel.fromJson(payload);
-          onData(participant);
-        } catch (e, st) {
-          CliLogger.info("❌ Error parsing new bid: $e\n$st");
-        }
-      });
-    } catch (e, st) {
-      CliLogger.info("❌ Error while setting up bid listener: $e\n$st");
-    }
-  }
 
   // @override
   // void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
@@ -325,75 +250,7 @@ class AuctionRemoteDataSourceImpl
     );
   }
 
-  @override
-  void listenToBidError(Function(BidErrorEntity error) onError) {
-    try {
-      CliLogger.info("🔔 Listening to bid errors...");
 
-      SharedWebSocket.socket?.on("error", (data) {
-        CliLogger.info("📩 Bid error received: $data");
-
-        try {
-          final decoded = (data is String) ? jsonDecode(data) : data;
-
-          // 👇 unwrap "data" if the backend sends { "data": {...} }
-          final payload = decoded is Map && decoded.containsKey("data")
-              ? decoded["data"]
-              : decoded;
-
-          final errorEntity = BidErrorModel.fromJson(payload);
-          onError(errorEntity);
-        } catch (e, st) {
-          CliLogger.info("❌ Error parsing bid error: $e\n$st");
-        }
-      });
-    } catch (e, st) {
-      CliLogger.info("❌ Error while setting up bid error listener: $e\n$st");
-    }
-  }
-
-  @override
-  void listenToBidWinner(Function(BidWinnerEntity winner) onData) {
-    try {
-      CliLogger.info("👑 Listening for auction winners...");
-
-      SharedWebSocket.socket?.on(
-          SocketIOListeners.auctionWinner,
-              (data) {
-        CliLogger.info("👑 Winner event received: $data");
-
-        try {
-          final decoded = (data is String) ? jsonDecode(data) : data;
-
-          // 👇 unwrap "data" if backend sends { "data": {...} }
-          final payload = decoded is Map && decoded.containsKey("data")
-              ? decoded["data"]
-              : decoded;
-
-          final winner = BidWinnerModel.fromJson(payload);
-          onData(winner); // ✅ forward to cubit via repository
-        } catch (e, st) {
-          CliLogger.info("❌ Error parsing winner event: $e\n$st");
-        }
-      });
-    } catch (e, st) {
-      CliLogger.info("❌ Error while setting up winner listener: $e\n$st");
-    }
-  }
-
-  @override
-  void leaveAuction(String auctionId) {
-    try {
-      CliLogger.info("Leaving auction $auctionId");
-      // send just the string ID
-      SharedWebSocket.socket?.emit(
-        SocketIOListeners.leaveAuction,
-        auctionId,
-      );
-    } catch (e) {
-      CliLogger.info("Error while joining auction: $e");
-    }
-  }
 
   @override
   Future<Either<Failure, CreateAuctionEntity >> createAuction({required CreateAuctionParams params}) async{
@@ -472,25 +329,209 @@ class AuctionRemoteDataSourceImpl
   }
 
 
+  @override
+  void listenToBidError(Function(BidErrorEntity error) onError) {
+    try {
+      CliLogger.info("🔔 Listening to bid errors...");
 
-// @override
-  // void sendBid(String auctionId, int newPrice) {
+      SharedWebSocket.socket?.on("error", (data) {
+        CliLogger.info("📩 Bid error received: $data");
+
+        try {
+          final decoded = (data is String) ? jsonDecode(data) : data;
+
+          // 👇 unwrap "data" if the backend sends { "data": {...} }
+          final payload = decoded is Map && decoded.containsKey("data")
+              ? decoded["data"]
+              : decoded;
+
+          final errorEntity = BidErrorModel.fromJson(payload);
+          onError(errorEntity);
+        } catch (e, st) {
+          CliLogger.info("❌ Error parsing bid error: $e\n$st");
+        }
+      });
+    } catch (e, st) {
+      CliLogger.info("❌ Error while setting up bid error listener: $e\n$st");
+    }
+  }
+
+  @override
+  void listenToBidWinner(Function(BidWinnerEntity winner) onData) {
+    try {
+      CliLogger.info("👑 Listening for auction winners...");
+      SharedWebSocket.socket?.off(SocketIOListeners.auctionWinner);
+
+      SharedWebSocket.socket?.on(
+          SocketIOListeners.auctionWinner,
+              (data) {
+            CliLogger.info("👑 Winner event received: $data");
+
+            try {
+              final decoded = (data is String) ? jsonDecode(data) : data;
+
+              // 👇 unwrap "data" if backend sends { "data": {...} }
+              final payload = decoded is Map && decoded.containsKey("data")
+                  ? decoded["data"]
+                  : decoded;
+
+              final winner = BidWinnerModel.fromJson(payload);
+              onData(winner); // ✅ forward to cubit via repository
+            } catch (e, st) {
+              CliLogger.info("❌ Error parsing winner event: $e\n$st");
+            }
+          });
+    } catch (e, st) {
+      CliLogger.info("❌ Error while setting up winner listener: $e\n$st");
+    }
+  }
+
+  @override
+  void leaveAuction(String auctionId) {
+    try {
+      CliLogger.info("Leaving auction $auctionId");
+      // send just the string ID
+      SharedWebSocket.socket?.emit(
+        SocketIOListeners.leaveAuction,
+        auctionId,
+      );
+    } catch (e) {
+      CliLogger.info("Error while joining auction: $e");
+    }
+  }
+  @override
+  void sendBid(String auctionId, int newPrice) {
+    try {
+      final payload = {
+        "auctionId": auctionId,
+        "bidAmount": newPrice,
+      };
+
+      CliLogger.info("➡️ Sending bid: $payload");
+
+      SharedWebSocket.socket?.emit(
+        // "auction:add:bid:amount",
+        SocketIOListeners.bidAuction,
+        // "auction:add:bid:amount",
+        jsonEncode(payload),   // 👈 send as raw JSON string
+      );
+
+    } catch (e) {
+      CliLogger.info("❌ Error while sending bid: $e");
+    }
+  }
+
+
+  @override
+  void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
+    try {
+      CliLogger.info("🔔 Listening to new bids...");
+
+      // ✅ Always clear any previous listeners for this event first
+      // SharedWebSocket.socket?.off(SocketIOListeners.auctionNewAmountBid);
+
+      // ✅ Then add a fresh listener
+      SharedWebSocket.socket?.on(SocketIOListeners.auctionNewAmountBid, (data) {
+        CliLogger.info("📩 New bid received: $data");
+
+        try {
+          final decoded = (data is String) ? jsonDecode(data) : data;
+
+          final payload = decoded is Map && decoded.containsKey("data")
+              ? decoded["data"]
+              : decoded;
+
+          final participant = AuctionParticipantsModel.fromJson(payload);
+          onData(participant);
+        } catch (e, st) {
+          CliLogger.info("❌ Error parsing new bid: $e\n$st");
+        }
+      });
+    } catch (e, st) {
+      CliLogger.info("❌ Error while setting up bid listener: $e\n$st");
+    }
+  }
+
+  // @override
+  // void listenToNewBidAuction(Function(AuctionParticipantsEntity participant) onData) {
   //   try {
-  //     CliLogger.info("Sending bid: $newPrice on auction $auctionId");
+  //     CliLogger.info("🔔 Listening to new bids...");
   //
-  //     SharedWebSocket.socket?.emit(
-  //       SocketIOListeners.bidAuction, // "auction:add:bid:amount"
-  //       {
-  //         "auctionId": auctionId,
-  //         "bidAmount": newPrice,
-  //       },
-  //     );
+  //     // remove any old listeners to avoid duplicates
+  //     // SharedWebSocket.socket?.off("auction:new-amount-bid");
   //
+  //     SharedWebSocket.socket?.on(SocketIOListeners.auctionNewAmountBid, (data) {
+  //       // SharedWebSocket.socket?.on("auction:new-amount-bid", (data) {
+  //       CliLogger.info("📩 New bid received: $data");
   //
-  //   } catch (e) {
-  //     CliLogger.info("Error while sending bid: $e");
+  //       try {
+  //         final decoded = (data is String) ? jsonDecode(data) : data;
+  //
+  //         final payload = decoded is Map && decoded.containsKey("data")
+  //             ? decoded["data"]
+  //             : decoded;
+  //
+  //         final participant = AuctionParticipantsModel.fromJson(payload);
+  //         onData(participant);
+  //       } catch (e, st) {
+  //         CliLogger.info("❌ Error parsing new bid: $e\n$st");
+  //       }
+  //     });
+  //   } catch (e, st) {
+  //     CliLogger.info("❌ Error while setting up bid listener: $e\n$st");
   //   }
   // }
+
+  @override
+  void joinAuction(String auctionId) {
+    try {
+      CliLogger.info("Joining auction $auctionId");
+      // send just the string ID
+      SharedWebSocket.socket?.emit(
+        SocketIOListeners.joinAuction,
+        auctionId,
+      );
+    } catch (e) {
+      CliLogger.info("Error while joining auction: $e");
+    }
+  }
+
+
+  @override
+  void listenToNewAuction(Function(GetAvailableAuctionEntity trip) params) {
+    try {
+      CliLogger.info("auction NewAuction ");
+      log("auction NewAuction ");
+      SharedWebSocket.socket!.emit(SocketIOListeners.joinAuction, (data) {
+        // final decodedData = jsonDecode(data);
+        // CliLogger.info("offer data :  $decodedData");
+        // params(RideOfferModel.fromJson(decodedData));
+        CliLogger.info("New Trip data :  $data");
+        log("New Trip data :  $data");
+        log("New Trip data['newAvailableTrip'] :  ${data['newAvailableTrip']}");
+        params(GetAvailableAuctionModel.fromJson(data['newAvailableTrip']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params}) async{
+    final url = "${EndPoints.getAuctionViewers}${params.id}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data']['views'] as List)
+            .map((e) => ViewerModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
 
 
 

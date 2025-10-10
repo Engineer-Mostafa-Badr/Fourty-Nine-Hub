@@ -1,8 +1,9 @@
 class ClientAcceptedTripEntity {
   final TripDetailsEntity? tripDetails;
+  final bool? isButtonEnabled;
   final DriverDetailsEntity? driverDetails;
 
-  ClientAcceptedTripEntity({this.tripDetails, this.driverDetails});
+  ClientAcceptedTripEntity({this.tripDetails,this.isButtonEnabled, this.driverDetails});
 }
 
 class TripDetailsEntity {
@@ -39,25 +40,34 @@ class LocationEntity {
 }
 
 class CategoryEntity {
+  final String? id;
   final String? nameAr;
   final String? nameEn;
   final String? picture;
 
-  CategoryEntity({this.nameAr, this.nameEn, this.picture});
+  CategoryEntity({this.nameAr,this.id, this.nameEn, this.picture});
 }
 
 class DriverDetailsEntity {
   final String? id;
   final String? firstName;
+  final String? lastName;
+  final String? phoneNumber;
   final String? picture;
+  final bool? verifiedBadge;
+  final num? countTrips;
   final RatingEntity? rating;
   final VehicleDetailsEntity? vehicleDetails;
 
   DriverDetailsEntity({
     this.id,
     this.firstName,
+    this.lastName,
+    this.phoneNumber,
     this.picture,
     this.rating,
+    this.verifiedBadge,
+    this.countTrips,
     this.vehicleDetails,
 
   });

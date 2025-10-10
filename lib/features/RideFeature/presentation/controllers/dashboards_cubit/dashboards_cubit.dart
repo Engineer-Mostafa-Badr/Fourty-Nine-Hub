@@ -3115,6 +3115,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         desiredAccuracy: LocationAccuracy.high,
       );
     }
+    print("currentPosition ${currentPosition?.latitude}");
     final Either<Failure, bool> result = await emergencySupportUseCase(
         EmergencySupportParams(
             driverId: driverId,
