@@ -657,7 +657,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.myAds!.isEmpty) {
+      if (widget.state.myAds?.isEmpty??false) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
 
