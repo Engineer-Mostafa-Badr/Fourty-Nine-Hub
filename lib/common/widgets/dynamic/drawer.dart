@@ -1108,7 +1108,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           var currentContext =
               AppPages.router.configuration.navigatorKey.currentContext!;
           currentContext.pop();
-          context.go(Routes.LUCKYWHEEL);
+          context.push(Routes.LUCKYWHEEL);
         } else {
           return pleaseLoginDialog(context);
 
