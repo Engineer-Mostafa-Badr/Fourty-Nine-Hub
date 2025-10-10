@@ -24,6 +24,8 @@ import '../../../../../core/constants/subscription_status.dart';
 import '../../../../../core/widget/common/global_card.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../cubit/ads_cubit.dart';
 import '../../../../subcategories/presentation/widgets/build_tag_ads_widget.dart';
 
@@ -56,7 +58,8 @@ class MarriageAdsListViewItem extends StatelessWidget {
           marriageAds.ownerSubscriptionStatus,
       hasReport: true,
       hasTopSide: true,
-      hasBottomSide: marriageAds.user?.id == marriageAds.user?.id,
+      hasBottomSide:
+          marriageAds.user?.id != context.read<UserCubit>().state.data?.id,
       isView: null,
       subCategoryTitle: context.isArabic
           ? marriageAds.subCategoryNameAr
@@ -432,7 +435,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
           Label(
             text: marriageAds.description,
             style: Styles.mediumText(
-              fontSize: 24.sp,
+              fontSize: 48.sp,
               height: 1.40,
               color: AppColors.getTextColor(context),
             ),
@@ -460,7 +463,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             : marriageAds.address?.addressEn) ??
                         '',
                     style: Styles.mediumText(
-                      fontSize: 24.sp,
+                      fontSize: 48.sp,
                       height: 1.40,
                       color: AppColors.getTextColor(context),
                     ),
