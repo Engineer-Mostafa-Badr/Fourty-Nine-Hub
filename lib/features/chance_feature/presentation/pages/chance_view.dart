@@ -28,6 +28,7 @@ import '../../../../core/utils/arabic_pluralization.dart';
 import '../../../../core/utils/format_numbers.dart';
 import '../../domain/entity/chance_ad_entity.dart';
 import '../../domain/use_case/join_chance_ad_use_case.dart';
+import '../../../../common/models/public/pagination_params.dart';
 
 import '../widgets/floating_action_button_widget.dart';
 import 'chance_detail_view.dart';
@@ -66,6 +67,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   final TextEditingController _searchController = TextEditingController();
   // Removed _paginationScrollController since we're using slivers now
   int _selectedTabIndex = 0;
+  List<dynamic> _categories = []; // Store fetched categories
+  bool _isCategoriesLoading = false;
 
   // Main scroll controller for the outer NestedScrollView
   final ScrollController _mainScrollController = ScrollController();
@@ -156,12 +159,18 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   }
 
   void _onTabChanged() {
+    // Prevent duplicate calls during animation
+    // Only load data when the tab is actually changing, not during animation
+    if (!_tabController.indexIsChanging) return;
+
     setState(() {
       _selectedTabIndex = _tabController.index;
       // Clear search when switching tabs
       _isSearching = false;
       _isCategoriesVisible = false;
       _searchController.clear();
+      // Reset pagination when switching tabs
+      _lastLoadedPage = 1;
     });
 
     // Load data based on selected tab
@@ -181,16 +190,36 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     }
   }
 
-  void _onSearchChanged() {
+  void _onSearchChanged() async {
     setState(() {
       _isCategoriesVisible = _searchController.text.isNotEmpty;
+      _lastLoadedPage = 1; // Reset pagination when searching
     });
 
     if (_searchController.text.isNotEmpty) {
+      // Fetch categories when search text is not empty
+      if (_categories.isEmpty && !_isCategoriesLoading) {
+        await _fetchCategories();
+      }
       context.read<ChanceCubit>().searchChanceAds(_searchController.text);
     } else {
       context.read<ChanceCubit>().getAllChanceAds();
     }
+  }
+
+  Future<void> _fetchCategories() async {
+    setState(() {
+      _isCategoriesLoading = true;
+    });
+
+    final categories = await context
+        .read<ChanceCubit>()
+        .fetchMainCategoryChance(paginationParams: PaginationParams(page: 1));
+
+    setState(() {
+      _categories = categories;
+      _isCategoriesLoading = false;
+    });
   }
 
   void _toggleSearch() {
@@ -202,6 +231,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       }
     });
   }
+
   bool _showFloatingButton = true;
   void _onScrollNotification(ScrollNotification scrollInfo) {
     if (scrollInfo is UserScrollNotification) {
@@ -220,6 +250,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
@@ -237,7 +268,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     : 'Joined chance successfully');
             _refreshChanceAds();
           } else if (state.status == ChanceStates.error) {
-            showErrorMessage(context, getFailureMessage(state.failure!, context));
+            showErrorMessage(
+                context, getFailureMessage(state.failure!, context));
           }
         },
         child: BlocBuilder<ChanceCubit, ChanceState>(
@@ -277,11 +309,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                             int totalAds = 0;
 
                             if (state.winnerStatistics != null) {
-                              totalWinners = state.winnerStatistics!.totalWinner;
+                              totalWinners =
+                                  state.winnerStatistics!.totalWinner;
                               totalAds = state.winnerStatistics!.totalAds;
                             }
 
-                            final winnerText = ArabicPluralization.getWinnerText(
+                            final winnerText =
+                                ArabicPluralization.getWinnerText(
                               totalWinners,
                               context.isArabic,
                             );
@@ -292,8 +326,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                                     totalWinners.toString())
                                 : totalWinners.toString();
                             final displayTotalAds = context.isArabic
-                                ? formatNumbers
-                                    .convertToArabicNumerals(totalAds.toString())
+                                ? formatNumbers.convertToArabicNumerals(
+                                    totalAds.toString())
                                 : totalAds.toString();
 
                             return Row(
@@ -326,9 +360,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
               ),
               body: NestedScrollView(
                 controller: _mainScrollController,
-                physics: const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(),
-                ),
+                physics: const BouncingScrollPhysics(),
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     // Banner - يختفي مع الـ scroll
@@ -399,18 +431,21 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
               ),
               // floatingActionButton: FloatingActionButtonWidget(),
               floatingActionButton: _showFloatingButton
-                  ? buildFloatingAction(context,title: "${context.isArabic ? 'اضافة فرصة' : 'Add Chance'} +", () {
-                ManageVibration.vibrate();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider<ChanceCubit>(
-                      create: (context) => serviceLocator<ChanceCubit>(),
-                      child: const CreateChanceView(),
-                    ),
-                  ),
-                );
-                  })
+                  ? buildFloatingAction(context,
+                      title:
+                          "${context.isArabic ? 'اضافة فرصة' : 'Add Chance'} +",
+                      () {
+                      ManageVibration.vibrate();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider<ChanceCubit>(
+                            create: (context) => serviceLocator<ChanceCubit>(),
+                            child: const CreateChanceView(),
+                          ),
+                        ),
+                      );
+                    })
                   : null,
             );
           },
@@ -449,21 +484,18 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   }
 
   Widget _buildCategoriesSection() {
-    final categories = [
-      'Cars',
-      'Real Estate',
-      'Electronics',
-      'Home Appliances',
-      'Furniture',
-      'Fashion & Clothing',
-      'Watches & Accessories',
-      'Sports Equipment',
-      'Books & Stationery',
-      'Pets & Pet Supplies',
-      'Health & Beauty Products',
-      'Toys & Kids Items',
-      'Tools & Hardware'
-    ];
+    if (_isCategoriesLoading) {
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_categories.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24.w),
@@ -479,10 +511,13 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
         ],
       ),
       child: Column(
-        children: categories.map((category) {
+        children: _categories.map((category) {
+          final categoryName =
+              context.isArabic ? category.nameAr : category.nameEn;
+
           return ListTile(
             title: Text(
-              category,
+              categoryName,
               style: TextStyle(
                 fontSize: 24.sp,
                 fontWeight: FontWeight.w600,
@@ -490,10 +525,12 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
             ),
             onTap: () {
               ManageVibration.vibrate();
+              // Search by category ID
+              context.read<ChanceCubit>().searchChanceAds(category.id);
               setState(() {
                 _isCategoriesVisible = false;
                 _isSearching = false;
-                _searchController.clear();
+                _searchController.text = categoryName;
               });
             },
           );
@@ -504,9 +541,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
 
   Widget _buildSynchronizedTabContent(ChanceState state) {
     return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(
-        parent: BouncingScrollPhysics(),
-      ),
+      physics: const NeverScrollableScrollPhysics(),
       slivers: [
         _buildTabContentSliver(state),
       ],
@@ -843,10 +878,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       // Get updated favorite status from state
                       bool currentFavoriteStatus = isFavorite;
 
-                      // في تبويب المفضلة، القلب دائماً أحمر
-                      if (isFavorite) {
-                        currentFavoriteStatus = true;
-                      } else if (adId != null) {
+                      // Get the latest favorite status from state
+                      if (adId != null) {
                         try {
                           ChanceAdEntity? updatedAd;
 
@@ -899,15 +932,21 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       }
 
                       return GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           ManageVibration.vibrate();
+                          final cubit = context.read<ChanceCubit>();
+
                           if (adId != null && adId.isNotEmpty) {
-                            print('Toggling favorite for adId: $adId');
-                            context
-                                .read<ChanceCubit>()
-                                .toggleChanceAdFavorite(adId);
-                          } else {
-                            print('Error: adId is null or empty');
+                            await cubit.toggleChanceAdFavorite(adId);
+                          } else if (chanceAd != null &&
+                              chanceAd.id.isNotEmpty) {
+                            // Fallback to using chanceAd.id if adId is empty
+                            await cubit.toggleChanceAdFavorite(chanceAd.id);
+                          }
+
+                          // Refresh favorite list if we're in the favorite tab
+                          if (_selectedTabIndex == 1) {
+                            await cubit.getFavoriteChanceAds();
                           }
                         },
                         child: Container(
@@ -1072,32 +1111,40 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       ),
                       // Action Button
                       GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          if (status == ChanceStatus.winner) {
-                            _showWinnerDialogFromAd(chanceAd);
-                          } else if (adId != null) {
-                            final cubit = context.read<ChanceCubit>();
-                            _showJoinDialog(chanceAd, cubit);
-                          }
-                        },
+                        onTap: chanceAd.isComplete
+                            ? null // Disable tap when chance is complete
+                            : () {
+                                ManageVibration.vibrate();
+                                if (status == ChanceStatus.winner) {
+                                  _showWinnerDialogFromAd(chanceAd);
+                                } else if (adId != null) {
+                                  final cubit = context.read<ChanceCubit>();
+                                  _showJoinDialog(chanceAd, cubit);
+                                }
+                              },
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 20.w, vertical: 10.h),
                           decoration: BoxDecoration(
-                            color: status == ChanceStatus.winner
-                                ? Colors.orange
-                                : Colors.red,
+                            color: chanceAd.isComplete
+                                ? Colors.grey // Grey when disabled
+                                : (status == ChanceStatus.winner
+                                    ? Colors.orange
+                                    : Colors.red),
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Text(
-                            status == ChanceStatus.winner
+                            chanceAd.isComplete
                                 ? context.isArabic
-                                    ? 'الفائز'
-                                    : 'Winner'
-                                : context.isArabic
-                                    ? 'انضم الآن'
-                                    : 'Join Now',
+                                    ? 'مكتمل'
+                                    : 'Completed'
+                                : (status == ChanceStatus.winner
+                                    ? context.isArabic
+                                        ? 'الفائز'
+                                        : 'Winner'
+                                    : context.isArabic
+                                        ? 'انضم الآن'
+                                        : 'Join Now'),
                             style: TextStyle(
                               fontSize: 24.sp,
                               color: Colors.white,
@@ -1324,6 +1371,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     // Refresh data based on current tab
     final cubit = context.read<ChanceCubit>();
 
+    // Reset pagination when refreshing
+    setState(() {
+      _lastLoadedPage = 1;
+    });
+
     switch (_tabController.index) {
       case 0: // All Ads
         cubit.getAllChanceAds();
@@ -1342,9 +1394,15 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     }
   }
 
+  int _lastLoadedPage = 1;
+
   Future<void> _loadChanceAdsPage(int page) async {
+    // Prevent loading the same page multiple times
+    if (page == _lastLoadedPage) return;
+
     final cubit = context.read<ChanceCubit>();
     await cubit.getAllChanceAds(page: page, limit: 10);
+    _lastLoadedPage = page;
   }
 
   // void _showJoinDialog(ChanceAdEntity chanceAd) {

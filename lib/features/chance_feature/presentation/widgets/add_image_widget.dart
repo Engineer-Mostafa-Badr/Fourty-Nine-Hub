@@ -107,7 +107,7 @@ class _AddImageWidgetState extends State<AddImageWidget> {
                   child: Center(
                     child: Text(
                       isUploading
-                          ? "Uploading..."
+                          ? LocaleKeys.uploadingImage.localize
                           : LocaleKeys.addImages.localize,
                       textAlign: TextAlign.center,
                       style: Styles.smallText(

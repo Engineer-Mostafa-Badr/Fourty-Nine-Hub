@@ -215,7 +215,12 @@ class ChanceCubit extends Cubit<ChanceState> {
   }
 
   Future<void> getAllChanceAds({int page = 1, int limit = 10}) async {
-    emit(state.copyWith(status: ChanceStates.loading));
+    // Only show loading state for the first page
+    // For pagination (page > 1), keep the current state to avoid showing full-screen loader
+    if (page == 1) {
+      emit(state.copyWith(status: ChanceStates.loading));
+    }
+
     final response = await _getAllChanceAdsUseCase(
       GetAllChanceAdsParams(
         paginationParams: PaginationParams(page: page, limit: limit),
