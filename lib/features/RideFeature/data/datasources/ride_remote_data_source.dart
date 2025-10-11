@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/client/unread_offers_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/cost_per_km_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_info_model.dart';
@@ -28,6 +29,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_mod
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
@@ -281,6 +283,9 @@ abstract class RideRemoteDataSource {
   void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params);
   void listenToOfferUpdateShippingTrip(Function(ClientOfferTripEntity offer) params);
   Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params);
+  Future<Either<Failure, bool>> readLoadingOffer(String params);
+  Future<Either<Failure, bool>> readNonTrackingOffer(String params);
+  Future<Either<Failure, UnreadOffersEntity>> getUnreadOffers();
 
   Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params);
   Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
@@ -1641,6 +1646,47 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (data) {
         final rateData = RateResponseModel.fromJson(data);
         return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> readLoadingOffer(String params)async {
+    final url = EndPoints.readLoadingOffer(params);
+
+    final response = await _apiConsumer.put(url);
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['status']??false);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> readNonTrackingOffer(String params)async {
+    final url = EndPoints.readNonTrackingOffer(params);
+
+    final response = await _apiConsumer.put(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['status']??false);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UnreadOffersEntity>> getUnreadOffers() async {
+    final url = EndPoints.getUnreadOffers;
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(UnreadOffersModel.fromJson(data['data']));
       },
     );
   }

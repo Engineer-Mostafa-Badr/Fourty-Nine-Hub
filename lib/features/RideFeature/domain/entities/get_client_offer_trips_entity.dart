@@ -9,10 +9,12 @@ class ClientOfferTripEntity {
   final DriverDetailsEntity? driverDetails;
   final TripDetailsEntity? tripDetails;
   final bool isFromSocket;
+  bool? isRead;
   ClientOfferTripEntity({
     this.id,
     this.status,
     this.price,
+    this.isRead,
     this.passengers,
     this.newOfferPrice,
     this.driverDetails,

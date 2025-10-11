@@ -11,13 +11,15 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
     super.passengers,
     super.driverDetails,
     super.tripDetails,
+    super.isRead,
   });
 
   factory ClientOfferTripModel.fromJson(Map<String, dynamic> json) {
     return ClientOfferTripModel(
-      id: json['id'],
+      id: json['id']??'',
+      isRead: json['isRead']??false,
       status: json['status'],
-      price: (json['price'] as num?),
+      price: (json['price'] ??0),
       newOfferPrice: json['newOfferPrice']!=null?(json['newOfferPrice'] as num?):json['newPrice']!=null?(json['newPrice'] as num?):0,
       passengers: json['passengers']?.toInt(),
 

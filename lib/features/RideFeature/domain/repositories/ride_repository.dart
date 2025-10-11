@@ -1,6 +1,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
@@ -169,6 +170,9 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> sendOkIamComing();
   Future<Either<Failure, bool>> ratingDriverByClient(RatingDriverByClientUseCaseParams params);
   Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params);
+  Future<Either<Failure, UnreadOffersEntity>> getUnreadOffers();
+  Future<Either<Failure, bool>> readLoadingOffer(String params);
+  Future<Either<Failure, bool>> readNonTrackingOffer(String params);
   Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params);
   Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
   Future<Either<Failure, ClientAllRatingEntity >> getClientAllRating(DriverAllRatingParams params);

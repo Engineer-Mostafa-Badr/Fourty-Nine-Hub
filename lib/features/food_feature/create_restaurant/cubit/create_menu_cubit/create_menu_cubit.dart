@@ -25,7 +25,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
       "price": menuItem.price,
       "foodName": menuItem.foodName
     };
-    var url = 'https://49backend.com/api/v1/food/add-food';
+    var url = 'https://d0e2803e70a6.ngrok-free.app/api/v1/food/add-food';
 
     final response = await apiConsumer.post(url, data: data);
 

@@ -5,13 +5,16 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_circle_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:latlong2/latlong.dart';
@@ -48,30 +51,17 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
   @override
   void initState() {
     super.initState();
+    widget.params.rideCubit.loadInitialRunningTripsData();
     newScrollController = ScrollController();
-    _scrollController = ScrollController()..addListener(_onScroll);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.params.rideCubit.fetchAllRunningTrips(limit: limit, page: page);
-    });
+    // _scrollController = ScrollController()..addListener(_onScroll);
+    //
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   widget.params.rideCubit.loadInitialRunningTripsData();
+    // });
   }
 
-  void _onScroll() {
-    if (_scrollController.position.extentAfter < 100 && !isFetching) {
-      _fetchMoreTrips();
-    }
-  }
 
-  _fetchMoreTrips() {
-    if (isFetching) return;
-    setState(() => isFetching = true);
 
-    widget.params.rideCubit.fetchAllRunningTrips(limit: limit, page: ++page).then((_) {
-      if (mounted) setState(() => isFetching = false);
-    }).catchError((_) {
-      if (mounted) setState(() => isFetching = false);
-    });
-  }
 
 
   @override
@@ -81,88 +71,63 @@ class _RunningTripScreenState extends State<RunningTripScreen> {
       child: Builder(
         builder: (context) {
           return CustomScaffold(
-            appBar: AppBar(
-              titleSpacing: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              centerTitle: false,
-              title: Transform(
-                transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-                child: Text(
-                  LocaleKeys.runningTrips.localize,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
-                ),
-              ),
+            appBar: DefaultAppBar(
+              title:LocaleKeys.runningTrips.localize,
             ),
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
-                if (state.status == RideStates.loading && page == 1) {
-                  return const Center(child: CircularProgressIndicator());
+                if (widget.params.rideCubit.isLoadingRunningTrips) {
+                  return const Center(child: CustomCircularProgressIndicator());
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else  {
-                  if(state.runningTrips?.isEmpty??true) {
-                    return Center(child: Text(context.isArabic ? "لا يوجد رحلات حالية" : "No running trips"));
+                  if(widget.params.rideCubit.runningTrips.isEmpty) {
+                    return Center(child: CustomEmptyWidget(label: context.isArabic ? "لا يوجد رحلات حالية" : "No running trips"));
                   }
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      page = 1;
-                      isFetching = false;
-                      await widget.params.rideCubit.fetchAllRunningTrips(limit: limit, page: page);
+                  return OlxPaginationWidget(
+                    itemsPerPage: 3,
+                    loadPage: (page) {
+                      return widget.params.rideCubit.fetchAllRunningTrips();
                     },
-                    backgroundColor: AppColors.whiteColor,
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                    child: OlxPaginationWidget(
-                      itemsPerPage: 2,
-                      loadPage: (page) {
-                        print('==> page $page');
-                        return _fetchMoreTrips();
-                      },
-                      banners: bannersList,
-                      items: List.generate(
-                        state.runningTrips?.length ?? 0,
-                            (index){
-                              if (index == state.runningTrips?.length) {
-                                return const Center(child: CustomCircularProgressIndicator());
-                              }
-                              final trip = state.runningTrips?[index];
-                              if (trip == null) return const SizedBox.shrink();
-                              // return Padding(
-                              //   padding: const EdgeInsets.all(16),
-                              //   child: Row(
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //     children: [
-                              //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
-                              //       const SizedBox(width: 16),
-                              //       PriceColumn(
-                              //         startAddressTitle: trip.startLocationAddressTitle,
-                              //         targetAddressTitle: trip.targetLocationAddressTitle,
-                              //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
-                              //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
-                              //       ),
-                              //
-                              //       const Spacer(),
-                              //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
-                              //     ],
-                              //   ),
-                              // );
-                              return TripCard(trip: trip);
-                                    }
-                      ), scrollController: newScrollController,
-                    ),
+                    banners: bannersList,
+                    items: List.generate(
+                      widget.params.rideCubit.runningTrips.length ?? 0,
+                          (index){
+                            if (index == widget.params.rideCubit.runningTrips.length) {
+                              return const Center(child: CustomCircularProgressIndicator());
+                            }
+                            final trip = widget.params.rideCubit.runningTrips[index];
+                            // return Padding(
+                            //   padding: const EdgeInsets.all(16),
+                            //   child: Row(
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       CarContainer(title: context.isArabic ? trip.subCategoryNameAr : trip.subCategoryNameEn, image: trip.subCategoryPicture),
+                            //       const SizedBox(width: 16),
+                            //       PriceColumn(
+                            //         startAddressTitle: trip.startLocationAddressTitle,
+                            //         targetAddressTitle: trip.targetLocationAddressTitle,
+                            //         date: DateFormat('hh:mm a', context.isArabic ? 'ar' : 'en').format(trip.createdAt!),
+                            //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? "ج.م" : "EGP"}',
+                            //       ),
+                            //
+                            //       const Spacer(),
+                            //       PersonTripWidget(image: trip.driverProfileUrl, name: trip.driverFirstName?.split(' ').first, rate: trip.driverAverageRating?.toString(),),
+                            //     ],
+                            //   ),
+                            // );
+                            return TripCard(trip: trip);
+                                  }
+                    ), scrollController: newScrollController,
                   );
                   // return ListView.builder(
                   //   controller: _scrollController,
-                  //   itemCount: (state.runningTrips?.length ?? 0) + (isFetching ? 1 : 0),
+                  //   itemCount: (widget.params.rideCubit.runningTrips.length ?? 0) + (isFetching ? 1 : 0),
                   //   itemBuilder: (context, index) {
-                  //     if (index == state.runningTrips?.length) {
+                  //     if (index == widget.params.rideCubit.runningTrips.length) {
                   //       return const Center(child: CustomCircularProgressIndicator());
                   //     }
-                  //     final trip = state.runningTrips?[index];
+                  //     final trip = widget.params.rideCubit.runningTrips[index];
                   //     if (trip == null) return const SizedBox.shrink();
                   //     // return Padding(
                   //     //   padding: const EdgeInsets.all(16),
@@ -219,76 +184,11 @@ class PriceColumn extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if(startAddressTitle != null)
-          Row(
-            children: [
-              const Icon(
-                Icons.location_on,
-                color: AppColors.c19D176,
-                size: 18,
-              ),
-              const SizedBox(width: 4),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
-                child: Label(
-                  text: startAddressTitle!,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          TripLocationWidget(isFrom: true, title: startAddressTitle??''),
         const SizedBox(height: 16),
         if(targetAddressTitle != null)
-          Row(
-            children: [
-              const Icon(
-                Icons.location_on,
-                color: AppColors.blueColor,
-                size: 18,
-              ),
-              const SizedBox(width: 4),
-              ConstrainedBox(
-                constraints:  BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
-                child: Label(
-                  text: targetAddressTitle!,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          TripLocationWidget(isFrom: false, title: targetAddressTitle??''),
         const SizedBox(height: 4),
-
-        // Row(
-        //   spacing: 4,
-        //   children: [
-        //     Label(
-        //       text: date,
-        //       style: const TextStyle(
-        //         fontWeight: FontWeight.w400,
-        //         fontSize: 14,
-        //       ),
-        //     ),
-        //     const SizedBox(width: 40),
-        //     Label(
-        //       text: FormatNumbers().convertNumberToLocalizedString(price, isArabic: context.isArabic),
-        //       style:  TextStyle(
-        //         fontWeight: FontWeight.w600,
-        //         fontSize: 14,
-        //         color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-        //       ),
-        //     ),
-        //     // Label(
-        //     //     text: LocaleKeys.egp.tr(),
-        //     //     style: Styles.mediumText(
-        //     //         color: AppColors.SECONDARY_COLOR,
-        //     //         fontWeight: FontWeight.w700))
-        //   ],
-        // ),
 
       ],
     );
@@ -408,10 +308,12 @@ class TripCard extends StatelessWidget {
                   price: '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
                 ),
                 const SizedBox(width: 8),
-                PriceColumn(
-                  startAddressTitle: trip.startLocationAddressTitle,
-                  targetAddressTitle: trip.targetLocationAddressTitle,
+                Expanded(
+                  child: PriceColumn(
+                    startAddressTitle: trip.startLocationAddressTitle,
+                    targetAddressTitle: trip.targetLocationAddressTitle,
 
+                  ),
                 ),
                 const Spacer(),
                 PersonTripWidget(

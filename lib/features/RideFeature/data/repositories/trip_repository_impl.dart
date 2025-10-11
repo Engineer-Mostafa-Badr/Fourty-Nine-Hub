@@ -381,6 +381,11 @@ class TripRepositoryImpl implements TripRepository {
     return  remoteDataSource.addRateWithDriverLoading(params);
 
   }
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params) {
+    return  remoteDataSource.addRateWithClientLoading(params);
+
+  }
 
 
 }

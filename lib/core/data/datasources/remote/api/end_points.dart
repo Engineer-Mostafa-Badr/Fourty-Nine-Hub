@@ -62,11 +62,11 @@ class EndPoints {
   static const getAllSessions = '/auth/sessions?page=1&limit=100';
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://49backend.com';
-  //https://49backend.com
-  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
-  static const developmentBaseUrl = 'https://49backend.com/api/v1';
-  static const productionBaseUrl = 'https://49backend.com/api/v1';
+  static const developmentWebSocketBaseUrl = 'https://d0e2803e70a6.ngrok-free.app';
+  //https://d0e2803e70a6.ngrok-free.app
+  // static const developmentWebSocketBaseUrl = 'https://d0e2803e70a6.ngrok-free.app';
+  static const developmentBaseUrl = 'https://d0e2803e70a6.ngrok-free.app/api/v1';
+  static const productionBaseUrl = 'https://d0e2803e70a6.ngrok-free.app/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const loginWithPhone = '/auth/login/phone-number';
@@ -1738,7 +1738,12 @@ class EndPoints {
       '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket =
       '/ride/untracked/ratings/client';
+  static readLoadingOffer(String id) =>
+      '/loading/client/trips/offers/$id/read';
+  static readNonTrackingOffer(String id) =>
+      '/ride/non-tracking/offers/$id/read';
   static const updateClientRating = '/ride/untracked/ratings/client';
+  static const getUnreadOffers = '/ride/non-tracking/offers/offers/unread';
   static const updateDriverRatingNonSocket = '/ride/untracked/ratings/driver';
   static const updateDriverLoadingSettings = '/loading/drivers/settings';
   static const getDriverAllRating = '/ride/untracked/ratings/driver';

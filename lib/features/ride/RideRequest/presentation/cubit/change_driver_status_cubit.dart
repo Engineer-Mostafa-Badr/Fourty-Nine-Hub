@@ -11,7 +11,7 @@ class ChangeDriverStatusCubit extends Cubit<RiderState> {
   Future<void> getDriverStatus() async {
     emit(LoadingGetDriverStatus());
     var response = await apiConsumer
-        .get("https://49backend.com/api/v1/ride/riders/check-activate");
+        .get("https://d0e2803e70a6.ngrok-free.app/api/v1/ride/riders/check-activate");
 
     response.fold(
       (left) {
@@ -31,7 +31,7 @@ class ChangeDriverStatusCubit extends Cubit<RiderState> {
   Future<void> changeDriverStatus() async {
     emit(LoadingGetDriverStatus());
     var response =
-        await apiConsumer.put("https://49backend.com/api/v1/ride/riders/activate");
+        await apiConsumer.put("https://d0e2803e70a6.ngrok-free.app/api/v1/ride/riders/activate");
 
     response.fold(
       (left) {
