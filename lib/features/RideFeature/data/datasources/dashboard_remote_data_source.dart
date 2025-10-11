@@ -836,7 +836,9 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.removeUntrackedTrip, (data) {
         CliLogger.info("Remove Trip Non Tracking data :  $data");
         log("Remove Non Tracking Trip data :  $data");
-        params(data['tripsCanceled']['ids'][0]);
+        String removedId = data['tripsCanceled']!=null?
+        data['tripsCanceled']['ids'][0]:data['removedTrip']!=null?data['removedTrip']['id']??'':'';
+        params(removedId);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip Remove Non Tracking error $e");
