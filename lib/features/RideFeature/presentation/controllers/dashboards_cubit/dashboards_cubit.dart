@@ -1024,22 +1024,17 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   void listenToAcceptTripOfferTrip(
       int index, BuildContext context, RideModeParams params) {
-    CliLogger.info('Remove Trip');
+    CliLogger.info('Listen to Accept Offer By Client');
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-    // TripsResponseEntity
     listenToAcceptUntrackedTripOfferUseCase((tripId) {
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       if (tripId.isNotEmpty) {
         list.removeWhere((e) => e.id == tripId);
-
-        // Switch to index 4 (Accepted Trips) whenever a trip is accepted
         emit(state.copyWith(
           availableRideTrips: list,
-          // currentIndex: 4,
           status: DashboardsStates.success,
         ));
         changeIndex(4, currentContext, params);
-        // loadInitialAcceptedNonSocketTrips();
       }
     });
   }
@@ -1595,17 +1590,22 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   bool isLoadingAvailableNonSocketTrips = false;
 
   void loadInitialAvailableNonSocketTrips() async {
-    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    print("loadInitialAvailableNonSocketTrips");
     isLoadingAvailableNonSocketTrips = true;
+    isLoadingMoreAvailableNonSocketTrips = false;
     availableRideNonSocketData.clear();
     currentPageAvailableNonSocketTrips = 1;
     hasMoreAvailableNonSocketTrips = true;
+    emit(state.copyWith(status: DashboardsStates.loading));
     await getAvailableNonSocketTrips();
     isLoadingAvailableNonSocketTrips = false;
     emit(state.copyWith(status: DashboardsStates.success));
   }
 
   Future<void> getAvailableNonSocketTrips() async {
+    print("hasMoreAvailableNonSocketTrips $hasMoreAvailableNonSocketTrips");
+    print("isLoadingMoreAvailableNonSocketTrips $isLoadingMoreAvailableNonSocketTrips");
+    print("currentPageAvailableNonSocketTrips $currentPageAvailableNonSocketTrips");
     if (!hasMoreAvailableNonSocketTrips || isLoadingMoreAvailableNonSocketTrips) {
       return;
     }
@@ -1624,10 +1624,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) {
         availableRideNonSocketData.addAll(data);
-        if ((data.length ?? 0) < 5) {
+        if ((data.length ) < 5) {
           hasMoreAvailableNonSocketTrips = false;
-          // emit(state.copyWith(isLoadingMore: false));
-          emit(state.copyWith(status: DashboardsStates.loading));
         } else {
           currentPageAvailableNonSocketTrips++;
         }
@@ -1805,14 +1803,19 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
 
-  void listenToNewTripNonSocket() {
-    CliLogger.info('Listen To New Trip');
+  void listenToNewTripNonSocket(RideModeParams params) {
+    CliLogger.info('Listen To New Trip Non Tracking');
     // TripsResponseEntity
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     listenToAvailableUntrackedTripUseCase((trip) {
-      List<AvailableRideNonSocketTripEntity> list =
-          availableRideNonSocketData ?? [];
-      list.insert(0, trip);
-      emit(state.copyWith(availableRideNonSocketTrips: list));
+      // List<AvailableRideNonSocketTripEntity> list =
+      //     availableRideNonSocketData ?? [];
+      if(state.currentIndex==0){
+        availableRideNonSocketData.insert(0, trip);
+        emit(state.copyWith(availableRideNonSocketTrips: availableRideNonSocketData));
+      }else{
+        changeIndex(0, currentContext, params);
+      }
       log(trip.toString());
     });
   }
@@ -1820,7 +1823,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
 
   void listenToRemoveUntrackedTrip() {
-    CliLogger.info('Remove Trip');
+    CliLogger.info('Remove Trip Non Tracking');
     // TripsResponseEntity
     listenToRemoveUntrackedTripUseCase((tripId) {
       List<AvailableRideNonSocketTripEntity> list =

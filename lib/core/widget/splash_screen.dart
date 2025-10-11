@@ -182,7 +182,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       print('🔄 AuthInterceptor: Calling refresh token API From Splash');
       final response = await serviceLocator<Dio>().post(
-        "https://49backend.com/api/v1/auth/refresh-token",
+        "https://d0e2803e70a6.ngrok-free.app/api/v1/auth/refresh-token",
         data: {
           'refreshToken': token,
         },

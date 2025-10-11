@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
@@ -8,12 +9,12 @@ import '../dashboards/add_rate_with_driver_use_case.dart';
 
 
 
-class AddRateWithClientUseCase extends UseCase<RateResponseEntity , AddRateWithDriverParams> {
+class GetUnreadOffersUseCase extends UseCase<UnreadOffersEntity , NoParams> {
   final RideRepository _repo;
-  AddRateWithClientUseCase(this._repo);
+  GetUnreadOffersUseCase(this._repo);
 
   @override
-  Future<Either<Failure, RateResponseEntity >> call(AddRateWithDriverParams params) {
-    return _repo.addRateWithClient(params);
+  Future<Either<Failure, UnreadOffersEntity >> call(NoParams params) {
+    return _repo.getUnreadOffers();
   }
 }

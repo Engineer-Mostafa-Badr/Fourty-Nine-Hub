@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/settings_not_socket.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/available_non_socket_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -62,6 +63,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
   @override
   dispose() {
     SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
+    SharedWebSocket.socket!.off("RIDE:NON_TRACKING_TRIPS_UPDATED");
+    SharedWebSocket.socket!.off("RIDE:REMOVE_TRIP_FROM_LIST");
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext, currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound ?? false);
     debugPrint("dispose REID:NEW_AVAILABLE_TRIP");
@@ -97,7 +100,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
           : [
               widget.params.modeType == "ride" ? dashboardCubit.loadInitialAvailableNonSocketTrips() : dashboardCubit.loadInitialAvailableNonSocketLoading(),
               dashboardCubit.listenToRemoveUntrackedTrip(),
-              dashboardCubit.listenToNewTripNonSocket(),
+              dashboardCubit.listenToNewTripNonSocket(widget.params),
               dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params),
               dashboardCubit.getDriverSettings(context),
               if (widget.params.modeType == "truck")
@@ -138,13 +141,12 @@ class _RideModeScreenState extends State<RideModeScreen> {
         child: SharedScaffold(
           mainCategoryId: 2,
           isWithBackArrow: true,
-          onBackPressed: ()=> context.pop(),
+          onBackPressed: () => context.pop(),
           body: NestedAppbar(
             scrollController: _scrollController,
             appBars: const [],
             body: BlocConsumer<DashboardsCubit, DashboardsState>(
-              listener: (context, state) {
-              },
+              listener: (context, state) {},
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();
                 debugPrint("state.tripStatus ${state.tripStatus}");
@@ -290,7 +292,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                                       cubit.refuseTripOffer(id);
                                                                     },
                                                                     params: widget.params,
-                                                                  )), scrollController: availableScrollController,)
+                                                                  )),
+                                                          scrollController: availableScrollController,
+                                                        )
                                                       : Center(
                                                           child: Text(
                                                             context.isArabic ? 'لا يوجد رحلات متاحة' : 'No Available Trips',
@@ -310,15 +314,31 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                   : (cubit.isLoadingAvailableNonSocketTrips
                                                       ? const Center(child: CustomCircularProgressIndicator())
                                                       : (cubit.availableRideNonSocketData.isEmpty
-                                                          ? Center(child: Text(LocaleKeys.youDontHaveAvailableOffer.localize))
-                                                          : ListView.separated(
-                                                              controller: _availableTripsScrollController,
-                                                              itemBuilder: (context, index) => AvailableNonSocketWidget(
-                                                                offers: cubit.availableRideNonSocketData[index],
-                                                              ),
-                                                              itemCount: cubit.availableRideNonSocketData.length,
-                                                              separatorBuilder: (context, index) => const SizedBox(height: 15),
-                                                            ))))
+                                                          ? Center(child: CustomEmptyWidget(label: LocaleKeys.youDontHaveAvailableOffer.localize))
+                                                          : OlxPaginationWidget(
+                                                              items: List.generate(
+                                                                  cubit.availableRideNonSocketData.length,
+                                                                  (i) => Padding(
+                                                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                                                    child: AvailableNonSocketWidget(
+                                                                          offers: cubit.availableRideNonSocketData[i],
+                                                                        ),
+                                                                  )),
+                                                              banners: bannersList,
+                                                              itemsPerPage: 3,
+                                                              loadPage: (page) {
+                                                                return context.read<DashboardsCubit>().getAvailableNonSocketTrips();
+                                                              },
+                                                              scrollController: _availableTripsScrollController)
+                                                      // ListView.separated(
+                                                      //                             controller: _availableTripsScrollController,
+                                                      //                             itemBuilder: (context, index) => AvailableNonSocketWidget(
+                                                      //                               offers: cubit.availableRideNonSocketData[index],
+                                                      //                             ),
+                                                      //                             itemCount: cubit.availableRideNonSocketData.length,
+                                                      //                             separatorBuilder: (context, index) => const SizedBox(height: 15),
+                                                      //                           )
+                                                      )))
                               : const NotReadyAvailableTripsWidget(),
                           // (state.driverSettingsEntity?.isReady !=
                           //                 true)
@@ -358,7 +378,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         )
                       // running Trips
                       else if (cubit.state.currentIndex == 1)
-                        TrackingActiveTrip(params: widget.params,)
+                        TrackingActiveTrip(
+                          params: widget.params,
+                        )
                       // Past Trips
                       else if (cubit.state.currentIndex == 2)
                         Expanded(
@@ -426,10 +448,10 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                   return context.read<DashboardsCubit>().getPastTrips(context, widget.params.isSocket == true ? "tracking" : 'non-tracking');
                                                 },
                                                 banners: bannersList,
-                                                items: List.generate(
-                                                    cubit.pastRideTrips.length,
-                                                    (index) =>
-                                                        PastTripsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', tripEntity: cubit.pastRideTrips[index])), scrollController: pastScrollController,),
+                                                items: List.generate(cubit.pastRideTrips.length,
+                                                    (index) => PastTripsWidget(modeType: widget.params.isSocket == true ? 'ride' : 'truk', tripEntity: cubit.pastRideTrips[index])),
+                                                scrollController: pastScrollController,
+                                              ),
                           ),
                         )
                       // Settings
@@ -567,5 +589,4 @@ class _RideModeScreenState extends State<RideModeScreen> {
       ),
     );
   }
-
 }

@@ -72,6 +72,7 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
+   Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);

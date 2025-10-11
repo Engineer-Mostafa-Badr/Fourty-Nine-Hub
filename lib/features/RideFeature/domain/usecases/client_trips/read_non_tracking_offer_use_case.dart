@@ -8,12 +8,12 @@ import '../dashboards/add_rate_with_driver_use_case.dart';
 
 
 
-class AddRateWithClientUseCase extends UseCase<RateResponseEntity , AddRateWithDriverParams> {
+class ReadNonTrackingOfferUseCase extends UseCase<bool , String> {
   final RideRepository _repo;
-  AddRateWithClientUseCase(this._repo);
+  ReadNonTrackingOfferUseCase(this._repo);
 
   @override
-  Future<Either<Failure, RateResponseEntity >> call(AddRateWithDriverParams params) {
-    return _repo.addRateWithClient(params);
+  Future<Either<Failure, bool >> call(String params) {
+    return _repo.readNonTrackingOffer(params);
   }
 }
