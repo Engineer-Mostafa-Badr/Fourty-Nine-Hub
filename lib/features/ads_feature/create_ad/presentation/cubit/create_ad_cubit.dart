@@ -457,21 +457,32 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: CreateAdStates.error));
     }, (data) {
-      bool selectedPrice = data.any((element) => element.nameAr == 'السعر');
+      // Remove duplicates based on property name
+      final Map<String, AdPropertiesEntity> uniqueProps = {};
+      for (var prop in data) {
+        final key = '${prop.nameAr}_${prop.nameEn}';
+        if (!uniqueProps.containsKey(key)) {
+          uniqueProps[key] = prop;
+        }
+      }
+      final deduplicatedData = uniqueProps.values.toList();
+
+      bool selectedPrice =
+          deduplicatedData.any((element) => element.nameAr == 'السعر');
       print("selectedPrice:$selectedPrice");
 
       // Clear the values list to prevent duplication
       values.clear();
 
-      for (int i = 0; i <= data.length - 1; i++) {
-        data[i].values.isNotEmpty
-            ? values.add(data[i].values.first)
+      for (int i = 0; i <= deduplicatedData.length - 1; i++) {
+        deduplicatedData[i].values.isNotEmpty
+            ? values.add(deduplicatedData[i].values.first)
             : values.add(SelectionEntity(nameAr: '', nameEn: ''));
         print(values[i].nameEn);
       }
 
       // print(object)
-      final propertiesList = data
+      final propertiesList = deduplicatedData
           .where((element) =>
               element.nameAr != 'السعر' && element.nameAr != 'الراتب')
           .toList();
@@ -479,7 +490,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       // Emit once after all values are processed
       emit(state.copyWith(
           adProperties: propertiesList,
-          filterAdProperties: data,
+          filterAdProperties: deduplicatedData,
           selections: values,
           isPrice: selectedPrice));
     });

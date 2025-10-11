@@ -6,7 +6,8 @@ class CustomCard extends StatelessWidget {
   const CustomCard({
     super.key,
     required this.children,
-    this.title = '', this.radius=10,
+    this.title = '',
+    this.radius = 10,
     this.padding,
     this.color,
   });

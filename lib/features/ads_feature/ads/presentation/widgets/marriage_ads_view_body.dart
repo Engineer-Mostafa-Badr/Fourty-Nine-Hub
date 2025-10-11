@@ -647,7 +647,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
-      if (widget.state.myAds != null) {
+      if (widget.state.myAds == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -657,7 +657,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.myAds?.isEmpty??false) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
 
@@ -694,8 +694,8 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
 
     // Favourite Ads
     if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
-      print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
-      if (widget.state.adsRequestsLog == null) {
+      print('state.myAds ${widget.state.myAds?.length}');
+      if (widget.state.myAds == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -705,10 +705,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.adsRequestsLog!.isEmpty) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
-      return MarriageRequest(
+      return MarriageAdsListView(
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,
