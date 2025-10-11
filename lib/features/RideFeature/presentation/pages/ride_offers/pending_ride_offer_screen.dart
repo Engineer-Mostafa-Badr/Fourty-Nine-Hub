@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -235,12 +236,12 @@ class _PendingRideOfferScreenState extends State<PendingRideOfferScreen> {
                 ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(text: LocaleKeys.errorHappen.localize, style: const TextStyle(color: Colors.red)),
+                        child: CustomEmptyWidget(label: LocaleKeys.errorHappen.localize),
                       )
                     : context.read<ClientTripsCubit>().clientPendingTripsData.isEmpty
                         ? Center(
-                            child: Label(
-                              text: LocaleKeys.youDontHavePendingOffer.localize,
+                            child: CustomEmptyWidget(
+                              label: LocaleKeys.youDontHavePendingOffer.localize,
                             ),
                           )
                         : Padding(

@@ -122,6 +122,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       });
     }
  */
+  late TabController tabController;
 
   List<ClientPastTripEntity> clientPastTripsData = [];
 

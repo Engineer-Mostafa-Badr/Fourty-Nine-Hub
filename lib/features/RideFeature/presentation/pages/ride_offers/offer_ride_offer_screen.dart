@@ -100,21 +100,16 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                 ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: CustomEmptyWidget(
+                            label: LocaleKeys.errorHappen.localize,
+                            ),
                       )
                     : context
                             .read<ClientTripsCubit>()
                             .clientOfferTripsData
                             .isEmpty
                         ? Center(
-                            child: Label(
-                              text:
-                                  LocaleKeys.youDontHaveAvailableOffer.localize,
-                              // style:
-                              //     TextStyle(color: Colors.red, fontSize: 18)
-                            ),
+                            child: CustomEmptyWidget(label: LocaleKeys.youDontHaveAvailableOffer.localize),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
