@@ -91,7 +91,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           height: 16,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               InkWell(
@@ -210,6 +210,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: InkWell(
                   onTap: () async {
+                    if (widget.state.subCategories == null ||
+                        widget.state.subCategories!.isEmpty) {
+                      return;
+                    }
                     ManageVibration.vibrate();
                     dynamic data = await context.push(
                       Routes.FILTERADS,
@@ -278,6 +282,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: InkWell(
                   onTap: () async {
+                    if (widget.state.subCategories == null ||
+                        widget.state.subCategories!.isEmpty) {
+                      return;
+                    }
                     ManageVibration.vibrate();
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,

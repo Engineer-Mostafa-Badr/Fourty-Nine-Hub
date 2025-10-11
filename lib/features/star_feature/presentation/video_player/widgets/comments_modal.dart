@@ -8,8 +8,46 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 
 import '../../../../../core/messages/messages.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../data/model/comment_model.dart';
 import '../../presentation_exports.dart';
+
+// Extension to translate timeAgo to Arabic
+extension TimeAgoExtension on String {
+  String toArabicTimeAgo(BuildContext context) {
+    if (!context.isArabic) return this;
+
+    // Extract number and unit from English string
+    final parts = trim().split(' ');
+    if (parts.length < 2) return this;
+
+    final number = parts[0];
+    final unit = parts[1].toLowerCase();
+
+    // Translate "Just now"
+    if (contains('Just now') || contains('just now')) {
+      return 'الآن';
+    }
+
+    // Translate time units
+    String arabicUnit = '';
+    if (unit.contains('year')) {
+      arabicUnit = int.parse(number) == 1 ? 'سنة' : 'سنوات';
+    } else if (unit.contains('month')) {
+      arabicUnit = int.parse(number) == 1 ? 'شهر' : 'أشهر';
+    } else if (unit.contains('day')) {
+      arabicUnit = int.parse(number) == 1 ? 'يوم' : 'أيام';
+    } else if (unit.contains('hour')) {
+      arabicUnit = int.parse(number) == 1 ? 'ساعة' : 'ساعات';
+    } else if (unit.contains('minute')) {
+      arabicUnit = int.parse(number) == 1 ? 'دقيقة' : 'دقائق';
+    } else {
+      return this; // Unknown unit, return as is
+    }
+
+    return 'منذ $number $arabicUnit';
+  }
+}
 
 // Updated Comments Modal
 class CommentsModal extends StatefulWidget {
@@ -29,11 +67,22 @@ class CommentsModal extends StatefulWidget {
 class _CommentsModalState extends State<CommentsModal> {
   final TextEditingController _commentController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool _hasText = false;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _commentController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final hasText = _commentController.text.isNotEmpty;
+    if (hasText != _hasText) {
+      setState(() {
+        _hasText = hasText;
+      });
+    }
   }
 
   void _onScroll() {
@@ -190,93 +239,67 @@ class _CommentsModalState extends State<CommentsModal> {
             ),
             child: const Icon(Icons.person, size: 20, color: Colors.grey),
           );
-    return Container(
-      margin: EdgeInsets.only(bottom: 20, left: isReply ? 48 : 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Profile picture
-          // use ImageFromInternet
-          // comment.owner.channelPicture?.mediaKey.isNotEmpty == true
-          //     ? ImageFromInternet(
-          //         image: comment.owner.channelPicture!.mediaKey,
-          //         width: 36,
-          //         height: 36,
-          //         isCircle: true,
-          //         fit: BoxFit.cover,
-          //       )
-          //     : Container(
-          //         width: 36,
-          //         height: 36,
-          //         decoration: BoxDecoration(
-          //           color: Colors.grey[300],
-          //           shape: BoxShape.circle,
-          //         ),
-          //         child: const Icon(Icons.person, size: 20, color: Colors.grey),
-          //       ),
-          avatar,
+    return BlocBuilder<CommentCubit, CommentState>(
+      builder: (context, state) {
+        // Find the updated comment from state (search in both comments and replies)
+        final updatedComment =
+            state.comments.expand((c) => [c, ...c.replies]).firstWhere(
+                  (c) => c.id == comment.id,
+                  orElse: () => comment,
+                );
 
-          // ImageFromInternet(
-          //   image: comment.owner.channelPicture!.mediaKey,
-          //   width: 36,
-          //   height: 36,
-          //   isCircle: true,
-          //   fit: BoxFit.cover,
-          // ),
-          const SizedBox(width: 12),
+        return Container(
+          margin: EdgeInsets.only(bottom: 20, left: isReply ? 48 : 0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              avatar,
+              const SizedBox(width: 12),
 
-          // Comment content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+              // Comment content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        comment.owner.channelName,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[600],
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            updatedComment.owner.channelName,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[600],
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
+                        const SizedBox(width: 8),
+                        Text(
+                          updatedComment.timeAgo
+                              .toArabicTimeAgo(context)
+                              .toArabicNumbers(context),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(height: 4),
                     Text(
-                      comment.timeAgo.toArabicNumbers(context),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[500],
-                      ),
+                      updatedComment.content,
+                      style: const TextStyle(fontSize: 14),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  comment.content,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 8),
-                BlocBuilder<CommentCubit, CommentState>(
-                  builder: (context, state) {
-                    // Find the updated comment from state
-                    final updatedComment = state.comments
-                        .expand((c) => [c, ...c.replies])
-                        .firstWhere(
-                          (c) => c.id == comment.id,
-                          orElse: () => comment,
-                        );
-
-                    return Row(
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
                         GestureDetector(
                           onTap: () {
                             context
                                 .read<CommentCubit>()
-                                .likeComment(comment.id);
+                                .likeComment(updatedComment.id);
                           },
                           child: Row(
                             children: [
@@ -307,7 +330,7 @@ class _CommentsModalState extends State<CommentsModal> {
                           onTap: () {
                             context
                                 .read<CommentCubit>()
-                                .dislikeComment(comment.id);
+                                .dislikeComment(updatedComment.id);
                           },
                           child: Row(
                             children: [
@@ -336,7 +359,7 @@ class _CommentsModalState extends State<CommentsModal> {
                         if (!isReply) ...[
                           const SizedBox(width: 16),
                           GestureDetector(
-                            onTap: () => _showReplyDialog(comment),
+                            onTap: () => _showReplyDialog(updatedComment),
                             child: Row(
                               children: [
                                 Icon(
@@ -358,28 +381,28 @@ class _CommentsModalState extends State<CommentsModal> {
                           ),
                         ],
                       ],
-                    );
-                  },
+                    ),
+                    // Show replies if they exist
+                    if (updatedComment.replies.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      ...updatedComment.replies.map((reply) =>
+                          _buildCommentItem(reply, context, isReply: true)),
+                    ],
+                  ],
                 ),
-                // Show replies if they exist
-                if (comment.replies.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  ...comment.replies.map((reply) =>
-                      _buildCommentItem(reply, context, isReply: true)),
-                ],
-              ],
-            ),
-          ),
+              ),
 
-          // More options
-          IconButton(
-            icon: Icon(Icons.more_vert, size: 18, color: Colors.grey[600]),
-            onPressed: () => _showCommentOptions(comment),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
+              // More options
+              IconButton(
+                icon: Icon(Icons.more_vert, size: 18, color: Colors.grey[600]),
+                onPressed: () => _showCommentOptions(updatedComment),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -427,18 +450,25 @@ class _CommentsModalState extends State<CommentsModal> {
                   ),
                 ),
                 onSubmitted: (value) => _submitComment(state),
+                enabled: !state.isCreatingComment,
               ),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.send,
-                color: _commentController.text.isNotEmpty
-                    ? Colors.blue
-                    : Colors.grey[400],
-              ),
-              onPressed:
-                  state.isCreatingComment ? null : () => _submitComment(state),
-            ),
+            const SizedBox(width: 8),
+            state.isCreatingComment
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
+                  )
+                : IconButton(
+                    icon: Icon(
+                      Icons.send,
+                      color: _hasText ? Colors.blue : Colors.grey[400],
+                    ),
+                    onPressed: _hasText ? () => _submitComment(state) : null,
+                  ),
           ],
         ),
       ),
@@ -539,7 +569,7 @@ class _CommentsModalState extends State<CommentsModal> {
                   ListTile(
                     leading: Icon(
                       Icons.edit,
-                      color: Colors.blue,
+                      color: AppColors.PRIMARY_COLOR,
                       size: 22,
                     ),
                     title: Text(
@@ -560,7 +590,7 @@ class _CommentsModalState extends State<CommentsModal> {
                   ListTile(
                     leading: Icon(
                       Icons.delete,
-                      color: Colors.red,
+                      color: AppColors.red_Color_DARK,
                       size: 22,
                     ),
                     title: Text(
@@ -661,7 +691,7 @@ class _CommentsModalState extends State<CommentsModal> {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(
           context.isArabic ? 'تعديل التعليق' : 'Edit Comment',
           style: TextStyle(
@@ -684,7 +714,7 @@ class _CommentsModalState extends State<CommentsModal> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               context.isArabic ? 'إلغاء' : 'Cancel',
               style: TextStyle(color: Colors.grey[600]),
@@ -693,24 +723,25 @@ class _CommentsModalState extends State<CommentsModal> {
           ElevatedButton(
             onPressed: () {
               if (editController.text.trim().isNotEmpty) {
-                Navigator.pop(context);
+                final commentId = comment.id;
+                final content = editController.text.trim();
+                final videoId = widget.videoId;
+                final isArabic = context.isArabic;
+
+                // Close dialog first
+                Navigator.pop(dialogContext);
+
                 // Call update comment API
                 context.read<CommentCubit>().updateComment(
-                      comment.id,
-                      editController.text.trim(),
+                      commentId,
+                      content,
+                      videoId,
                     );
 
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //     content: Text(
-                //       context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
-                //     ),
-                //     backgroundColor: Colors.green,
-                //   ),
-                // );
+                // Show message
                 showSuccessMessage(
                   context,
-                  context.isArabic ? 'تم تحديث التعليق' : 'Comment updated',
+                  isArabic ? 'جاري تحديث التعليق...' : 'Updating comment...',
                 );
               }
             },
@@ -729,7 +760,7 @@ class _CommentsModalState extends State<CommentsModal> {
   void _showDeleteCommentDialog(CommentModel comment) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(
           context.isArabic ? 'حذف التعليق' : 'Delete Comment',
           style: TextStyle(
@@ -745,7 +776,7 @@ class _CommentsModalState extends State<CommentsModal> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               context.isArabic ? 'إلغاء' : 'Cancel',
               style: TextStyle(color: Colors.grey[600]),
@@ -753,21 +784,20 @@ class _CommentsModalState extends State<CommentsModal> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              // Call delete comment API
-              context.read<CommentCubit>().deleteComment(comment.id);
+              final commentId = comment.id;
+              final videoId = widget.videoId;
+              final isArabic = context.isArabic;
 
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(
-              //     content: Text(
-              //       context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
-              //     ),
-              //     backgroundColor: Colors.red,
-              //   ),
-              // );
+              // Close dialog first
+              Navigator.pop(dialogContext);
+
+              // Call delete comment API
+              context.read<CommentCubit>().deleteComment(commentId, videoId);
+
+              // Show message
               showSuccessMessage(
                 context,
-                context.isArabic ? 'تم حذف التعليق' : 'Comment deleted',
+                isArabic ? 'جاري حذف التعليق...' : 'Deleting comment...',
               );
             },
             style: ElevatedButton.styleFrom(
@@ -870,12 +900,25 @@ class _ReplyDialogState extends State<_ReplyDialog> {
           onPressed: () {
             final replyText = _replyController.text.trim();
             if (replyText.isNotEmpty) {
+              final videoId = widget.videoId;
+              final parentCommentId = widget.comment.id;
+              final isArabic = context.isArabic;
+
+              // Close dialog first
+              Navigator.pop(context);
+
+              // Call reply API
               context.read<CommentCubit>().replyToComment(
-                    videoId: widget.videoId,
-                    parentCommentId: widget.comment.id,
+                    videoId: videoId,
+                    parentCommentId: parentCommentId,
                     content: replyText,
                   );
-              Navigator.pop(context);
+
+              // Show message
+              showSuccessMessage(
+                context,
+                isArabic ? 'جاري إضافة الرد...' : 'Adding reply...',
+              );
             }
           },
           style: ElevatedButton.styleFrom(

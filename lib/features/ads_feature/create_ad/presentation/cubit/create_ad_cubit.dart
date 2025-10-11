@@ -520,7 +520,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print("fromMarriage$fromMarriage");
 
     await Future.wait([
-      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
+      // getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
       _getGovernorates(),
     ]);
     emit(state.copyWith(status: CreateAdStates.success));
