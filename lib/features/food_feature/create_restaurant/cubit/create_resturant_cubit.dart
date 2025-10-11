@@ -58,7 +58,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   //     "government": params.government,
   //     "city": params.city,
   //   };
-  //   var url = 'https://d0e2803e70a6.ngrok-free.app/api/v1/restaurants/update-restaurant-info/$id';
+  //   var url = 'https://49backend.com/api/v1/restaurants/update-restaurant-info/$id';
   //
   //   final response = await apiConsumer.put(url, data: data);
   //
