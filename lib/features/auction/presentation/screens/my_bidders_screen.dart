@@ -27,8 +27,22 @@ import '../../../authentication/presentation/controllers/user_cubit/user_cubit.d
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 
-class MyBiddersScreen extends StatelessWidget {
+class MyBiddersScreen extends StatefulWidget {
   const MyBiddersScreen({super.key});
+
+  @override
+  State<MyBiddersScreen> createState() => _MyBiddersScreenState();
+}
+
+class _MyBiddersScreenState extends State<MyBiddersScreen> {
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<AuctionCubit>().loadInitialMyBidders();
+
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -204,9 +218,6 @@ class MyBiddersScreen extends StatelessWidget {
     );
   }
 
-
-
-
   String _formatNumber(BuildContext context, num? number) {
     if (number == null) return "0";
 
@@ -226,7 +237,5 @@ class MyBiddersScreen extends StatelessWidget {
 
     return formatted;
   }
-
-
 }
 

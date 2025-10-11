@@ -247,81 +247,26 @@ class _AuctionScreenState extends State<AuctionScreen>
               const SizedBox(width: 5),
             ],
           ),
-          // PreferredSize(
-          //   // surfaceTintColor: Colors.transparent,
-          //   // backgroundColor: context.isDarkMode
-          //   //     ? Colors.black
-          //   //     : AppColors.PRIMARY_COLOR,
-          //   // toolbarHeight: 50,
-          //   preferredSize: const Size.fromHeight(30),
-          //   child: BlocBuilder<AuctionCubit, AuctionState>(
-          //     builder: (context, state) {
-          //       return BackAppBar(
-          //         backColor: AppColors.PRIMARY_COLOR,
-          //         label:   LocaleKeys.auction.localize,
-          //         enableCustomAppBar: true,
-          //
-          //       );
-          //     },
-          //   ),
-          // ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BlocBuilder<AuctionCubit, AuctionState>(
                 builder: (context, state) {
-                  return Container(
-                    // decoration: BoxDecoration(color: AppColors.PRIMARY_COLOR),
-                    // padding: const EdgeInsets.only(
-                    //     top: 0, left: 0, right: 0, bottom: 0),
-                    padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
-                    // color: context.isDarkMode ? Colors.black : Colors.white,
-                    child: Column(
-                      children: [
-                        // Row(
-                        //   children: [
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         context.pop();
-                        //       },
-                        //       child: const Icon(Icons.arrow_back_ios, size: 20),
-                        //     ),
-                        //     const SizedBox(width: 8),
-                        //     Text(
-                        //       LocaleKeys.auction.localize,
-                        //       style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.w600),
-                        //     ),
-                        //     const Spacer(),
-                        //     Text(
-                        //       "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
-                        //       style: const TextStyle(
-                        //           fontWeight: FontWeight.w500,
-                        //           fontSize: 14,
-                        //           color: Colors.white),
-                        //     ),
-                        //     const SizedBox(width: 6),
-                        //     const Icon(Icons.emoji_events,
-                        //         color: Colors.amber, size: 20),
-                        //   ],
-                        // ),
-                        // const SizedBox(height: 16),
-                        if (state.isLoading)
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(20),
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        else
-                          ClipRRect(
-                            // borderRadius: BorderRadius.circular(12),
-                            child: _buildBannerWidget(state, context),
+                  return Column(
+                    children: [
+                      if (state.isLoading)
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: CircularProgressIndicator(),
                           ),
-                      ],
-                    ),
+                        )
+                      else
+                        ClipRRect(
+                          // borderRadius: BorderRadius.circular(12),
+                          child: _buildBannerWidget(state, context),
+                        ),
+                    ],
                   );
                 },
               ),
@@ -402,16 +347,16 @@ class _AuctionScreenState extends State<AuctionScreen>
                                           final cubit = context.read<AuctionCubit>();
                                           switch (index) {
                                             case 0:
-                                              cubit.loadInitialAvailableNonSocketAuction(context);
+                                              // cubit.loadInitialAvailableNonSocketAuction(context);
                                               break;
                                             case 1:
-                                              cubit.loadInitialExpiredNonSocketAuction();
+                                              // cubit.loadInitialExpiredNonSocketAuction();
                                               break;
                                             case 2:
-                                              cubit.loadInitialFavoriteNonSocketAuction();
+                                              // cubit.loadInitialFavoriteNonSocketAuction();
                                               break;
                                             case 3:
-                                              cubit.loadInitialMyBidders();
+                                              // cubit.loadInitialMyBidders();
                                               break;
                                           }
                                         },
