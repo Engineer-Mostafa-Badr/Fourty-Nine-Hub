@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/client/client_all_rating_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
@@ -535,6 +536,23 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params) {
     return rideRemoteDataSource.addRateWithClient(params);
+  }
+
+
+  @override
+  Future<Either<Failure, bool>> readLoadingOffer(String params) {
+    return rideRemoteDataSource.readLoadingOffer(params);
+  }
+
+
+  @override
+  Future<Either<Failure, bool>> readNonTrackingOffer(String params) {
+    return rideRemoteDataSource.readNonTrackingOffer(params);
+  }
+
+  @override
+  Future<Either<Failure, UnreadOffersEntity>> getUnreadOffers() {
+    return rideRemoteDataSource.getUnreadOffers();
   }
 
   @override

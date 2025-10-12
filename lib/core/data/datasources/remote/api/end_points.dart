@@ -1738,7 +1738,12 @@ class EndPoints {
       '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket =
       '/ride/untracked/ratings/client';
+  static readLoadingOffer(String id) =>
+      '/loading/client/trips/offers/$id/read';
+  static readNonTrackingOffer(String id) =>
+      '/ride/non-tracking/offers/$id/read';
   static const updateClientRating = '/ride/untracked/ratings/client';
+  static const getUnreadOffers = '/ride/non-tracking/offers/unread';
   static const updateDriverRatingNonSocket = '/ride/untracked/ratings/driver';
   static const updateDriverLoadingSettings = '/loading/drivers/settings';
   static const getDriverAllRating = '/ride/untracked/ratings/driver';
@@ -1912,9 +1917,8 @@ class EndPoints {
   // Create new playlist
   static const String createPlaylist = '/tube-playlist';
 
-  // Get all playlists for owner
-  static String getPlaylists(String ownerId) =>
-      '/tube-playlist?ownerId=$ownerId';
+  // Get all playlists (can filter by ownerId)
+  static const String getPlaylists = '/tube-playlist';
 
   // Get playlist by ID (basic info)
   static String getPlaylistById(String playlistId) =>

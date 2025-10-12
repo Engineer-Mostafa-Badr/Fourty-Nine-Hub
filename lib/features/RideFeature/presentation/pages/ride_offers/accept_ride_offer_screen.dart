@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_client_accepted_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -117,17 +118,15 @@ class _AcceptRideOfferScreenState extends State<AcceptRideOfferScreen> {
                 ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: CustomEmptyWidget(label: LocaleKeys.errorHappen.localize,
+                           ),
                       )
                     : context
                                 .read<ClientTripsCubit>()
                                 .clientAcceptedTripsData
                                 .isEmpty
                         ? Center(
-                            child: Label(
-                                text:
+                            child: CustomEmptyWidget(label:
                                     LocaleKeys.youDontHaveAcceptedOffer.localize
                                 // , style: TextStyle(color: Colors.red, fontSize: 18)
                                 ),

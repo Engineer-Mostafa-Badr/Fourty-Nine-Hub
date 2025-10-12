@@ -5,6 +5,7 @@ String numAr(num number) {
   final formatter = NumberFormat('#,##0.###', 'ar_EG');
   return formatter.format(number);
 }
+
 String convertToArabicNumbers(String input) {
   const englishToArabic = {
     '0': '٠',
@@ -23,6 +24,7 @@ String convertToArabicNumbers(String input) {
     return englishToArabic[char] ?? char;
   }).join();
 }
+
 extension NumberExtensions on num {
   String toLocalizedArabic(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
@@ -51,7 +53,7 @@ extension StringExtensions on String {
       '7': '٧',
       '8': '٨',
       '9': '٩',
-      '.':','
+      '.': ','
     };
 
     return split('').map((char) => englishToArabic[char] ?? char).join();

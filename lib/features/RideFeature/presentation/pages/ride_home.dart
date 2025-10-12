@@ -43,6 +43,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/to
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:latlong2/latlong.dart';
@@ -1619,12 +1620,24 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               ],
             ),
             child: Center(
-              child: Text(
-                context.isArabic ? 'وضع المستخدم' : 'User Mode',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    context.isArabic ? 'وضع المستخدم' : 'User Mode',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    " (${((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString()})",
+                    style: TextStyle(
+                        color: AppColors.SECONDARY_COLOR,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1700,34 +1713,62 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClickableWidget(
-            onTap: () {
-              ManageVibration.vibrate();
-              openDrawer();
-            },
-            child: Container(
-              width: 75.w,
-              height: 35,
-              decoration: BoxDecoration(
-                color: context.isDarkMode
-                    ? AppColors.GREY_DARK_COLOR
-                    : AppColors.whiteColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
-                ],
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ClickableWidget(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  openDrawer();
+                },
+                child: Container(
+                  width: 75.w,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? AppColors.GREY_DARK_COLOR
+                        : AppColors.whiteColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3)),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    Assets.rideMenu,
+                    color: context.isDarkMode ? AppColors.whiteColor : null,
+                  ),
+                ),
               ),
-              padding: const EdgeInsets.all(4),
-              alignment: Alignment.center,
-              child: Image.asset(
-                Assets.rideMenu,
-                color: context.isDarkMode ? AppColors.whiteColor : null,
-              ),
-            ),
+              Visibility(
+                visible: ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)) > 0,
+                child: PositionedDirectional(
+                  top: -10.h,
+                  end: -10.w,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.getRedColor(context)),
+                    child: Center(
+                      child: Text(
+                        ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString(),
+                        style: Styles.smallText(
+                            color: context.isDarkMode
+                                ? Colors.black
+                                : AppColors.whiteColor,
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
           Sizer(),
           Expanded(

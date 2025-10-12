@@ -19,6 +19,7 @@ import 'package:fourtyninehub/core/utils/loading_method_helper.dart';
 import 'package:fourtyninehub/core/utils/ride_method_helper.dart';
 import 'package:fourtyninehub/core/utils/upload_record.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_request_trip_model.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
@@ -37,6 +38,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pendin
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/get_unread_offers_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_picture_optional.dart';
@@ -196,6 +198,7 @@ class RideCubit extends Cubit<RideState> {
   final PartialPaymentInTripUseCase partialPaymentInTripUseCase;
 
   final GetDriverRatingsUseCase getDriverRatingsUseCase;
+  final GetUnreadOffersUseCase getUnreadOffersUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -235,6 +238,7 @@ class RideCubit extends Cubit<RideState> {
     this.getAvailableMapCountryUseCase,
     this.partialPaymentInTripUseCase,
     this.getDriverRatingsUseCase,
+    this.getUnreadOffersUseCase,
   ) : super(RideState(
           rideOffers: [],
         )) {
@@ -784,6 +788,7 @@ class RideCubit extends Cubit<RideState> {
     await Future.wait([
       // _fetchUserLocation(),
 
+      getUnreadOffers(),
       getAvailableMapCountry(),
       fetchRideDriverInfo(context, false),
       fetchRideDriverInfo(context, true),
@@ -1753,13 +1758,35 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchAllCompletedTrips(
-      {required int limit, required int page}) async {
-    //emit(state.copyWith(status: RideStates.loading));
+  List<CompletedTripsEntity> completedTrips = [];
+  bool isLoadingMoreCompletedTrips = false;
+  bool isLoadingCompletedTrips = false;
+  bool hasMoreCompletedTripsData = true;
+  int currentCompletedTripsPage = 1;
+  int completedTripsPageSize = 10;
+  void loadInitialCompletedTripsData() async {
+    isLoadingCompletedTrips = true;
+    isLoadingMoreCompletedTrips = false;
+    emit(state.copyWith(status: RideStates.loading));
+    completedTrips.clear();
+    currentCompletedTripsPage = 1;
+    isLoadingMoreCompletedTrips = false;
+    hasMoreCompletedTripsData = true;
+    await fetchAllCompletedTrips();
+    isLoadingCompletedTrips = false;
+    emit(state.copyWith(status: RideStates.success));
+  }
+
+  Future<void> fetchAllCompletedTrips() async {
+    print("hasMoreCompletedTripsData $hasMoreCompletedTripsData");
+    print("isLoadingMoreCompletedTrips $isLoadingMoreCompletedTrips");
+    if (!hasMoreCompletedTripsData || isLoadingMoreCompletedTrips) return;
+    isLoadingMoreCompletedTrips = true;
+    emit(state.copyWith(status: RideStates.loading));
 
     final Either<Failure, List<CompletedTripsEntity>> result =
         await getAllCompletedTripsUseCase(
-            GetAllCompletedTripsUseCaseParams(limit, page));
+            GetAllCompletedTripsUseCaseParams(completedTripsPageSize, currentCompletedTripsPage));
 
     result.fold(
       (failure) {
@@ -1769,24 +1796,50 @@ class RideCubit extends Cubit<RideState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (completedTrips) {
-        final List<CompletedTripsEntity> updatedTrips = page == 1
-            ? completedTrips
-            : [...?state.completedTrips, ...completedTrips];
+      (data) {
+        completedTrips.addAll(data);
 
+        if (completedTrips.length < 10) {
+          hasMoreRunningTripsData = false;
+        } else {
+          currentRunningTripsPage++;
+        }
+
+        isLoadingMoreCompletedTrips = false;
         emit(state.copyWith(
-            status: RideStates.success, completedTrips: updatedTrips));
+            status: RideStates.success, completedTrips: completedTrips));
       },
     );
   }
 
-  Future<void> fetchAllRunningTrips(
-      {required int limit, required int page}) async {
+  List<RunningTripsEntity> runningTrips = [];
+  bool isLoadingMoreRunningTrips = false;
+  bool isLoadingRunningTrips = false;
+  bool hasMoreRunningTripsData = true;
+  int currentRunningTripsPage = 1;
+  int runningTripsPageSize = 10;
+  void loadInitialRunningTripsData() async {
+    isLoadingRunningTrips = true;
+    isLoadingMoreRunningTrips = false;
+    emit(state.copyWith(status: RideStates.loading));
+    runningTrips.clear();
+    currentRunningTripsPage = 1;
+    isLoadingMoreRunningTrips = false;
+    hasMoreRunningTripsData = true;
+    await fetchAllRunningTrips();
+    isLoadingRunningTrips = false;
+    emit(state.copyWith(status: RideStates.success));
+  }
+
+
+  Future<void> fetchAllRunningTrips() async {
+    if (!hasMoreRunningTripsData || isLoadingMoreRunningTrips) return;
+    isLoadingMoreRunningTrips = true;
     emit(state.copyWith(status: RideStates.loading));
 
     final Either<Failure, List<RunningTripsEntity>> result =
         await getAllRunningTripsUseCase(
-            GetAllRunningTripsUseCaseParams(limit, page));
+            GetAllRunningTripsUseCaseParams(runningTripsPageSize, currentRunningTripsPage));
 
     result.fold(
       (failure) {
@@ -1796,13 +1849,22 @@ class RideCubit extends Cubit<RideState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (runningTrips) {
-        final List<RunningTripsEntity> updatedTrips = page == 1
-            ? runningTrips
-            : [...?state.runningTrips, ...runningTrips];
+      (data) {
+        runningTrips.addAll(data);
+
+        if (runningTrips.length < 10) {
+          hasMoreRunningTripsData = false;
+        } else {
+          currentRunningTripsPage++;
+        }
+
+        isLoadingMorePastTrips = false;
+        // final List<RunningTripsEntity> updatedTrips = page == 1
+        //     ? runningTrips
+        //     : [...?state.runningTrips, ...runningTrips];
 
         emit(state.copyWith(
-            status: RideStates.success, runningTrips: updatedTrips));
+            status: RideStates.success, runningTrips: runningTrips));
       },
     );
   }
@@ -3212,6 +3274,19 @@ class RideCubit extends Cubit<RideState> {
       (data) async {
         context.pop();
         emit(state.copyWith(status: RideStates.success, driverRatings: data));
+      },
+    );
+  }
+
+  Future<void> getUnreadOffers() async {
+    final Either<Failure, UnreadOffersEntity> result =
+        await getUnreadOffersUseCase(NoParams());
+    result.fold(
+      (failure) {
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
+      (data) async {
+        emit(state.copyWith(status: RideStates.success, unreadOffers: data));
       },
     );
   }

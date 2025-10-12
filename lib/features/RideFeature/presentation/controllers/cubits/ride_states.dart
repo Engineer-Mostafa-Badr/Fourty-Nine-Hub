@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
@@ -47,6 +48,7 @@ class RideState {
   final RideStates status;
   final Failure? failure;
   final DriverRatingsEntity? driverRatings;
+  final UnreadOffersEntity? unreadOffers;
   final XFile? personalPicture;
   final XFile? driverLicensePicture;
   final XFile? backOfDriverLicensePicture;
@@ -117,6 +119,7 @@ class RideState {
     this.status = RideStates.initState,
     this.failure,
     this.driverRatings,
+    this.unreadOffers,
     this.personalPicture,
     this.driverLicensePicture,
     this.backOfDriverLicensePicture,
@@ -188,6 +191,7 @@ class RideState {
     RideStates? status,
     Failure? failure,
     DriverRatingsEntity? driverRatings,
+    UnreadOffersEntity? unreadOffers,
     XFile? personalPicture,
     XFile? driverLicensePicture,
     XFile? backOfDriverLicensePicture,
@@ -259,6 +263,7 @@ class RideState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       driverRatings: driverRatings ?? this.driverRatings,
+      unreadOffers: unreadOffers ?? this.unreadOffers,
       registerType: registerType ?? this.registerType,
       personalPicture: personalPicture ?? this.personalPicture,
       color: color ?? this.color,

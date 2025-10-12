@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/create_loadin
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_shipping_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/listen_to_offer_update_client_shipping_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/read_loading_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/read_non_tracking_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_accepted_shipping_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_client_offer_shipping_trips_use_case.dart';
@@ -94,6 +97,8 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
   final UpdateClientRateNonSocketUseCase updateClientRateNonSocketUseCase;
   final GetDriverAllRatingUseCase getDriverAllRatingUseCase;
   final GetClientAllRatingUseCase getClientAllRatingUseCase;
+  final ReadNonTrackingOfferUseCase readNonTrackingOfferUseCase;
+  final ReadLoadingOfferUseCase readLoadingOfferUseCase;
   final ListenToOfferUpdateShippingTripUseCase
       listenToOfferUpdateShippingTripUseCase;
   TextEditingController phoneController = TextEditingController();
@@ -117,6 +122,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       });
     }
  */
+  late TabController tabController;
 
   List<ClientPastTripEntity> clientPastTripsData = [];
 
@@ -178,6 +184,8 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     this.updateClientRateNonSocketUseCase,
     this.getDriverAllRatingUseCase,
     this.getClientAllRatingUseCase,
+    this.readNonTrackingOfferUseCase,
+    this.readLoadingOfferUseCase,
   ) : super(ClientTripsState());
 
   Future<void> acceptClientShippingTrip(String tripId) async {
@@ -1211,50 +1219,61 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     return result;
   }
 
-  /*
-  void listenToUpdateOfferTripNonSocketnew() {
-    CliLogger.info('Listen To New Trip');
-    listenToOfferUpdateUntrackedTripUseCase((trip) {
-      if (isClosed) return;
-
-      final updatedTrip = ClientOfferTripEntity(
-        id: trip.id,
-        status: trip.status,
-        price: trip.price,
-        passengers: trip.passengers,
-        newOfferPrice: trip.newOfferPrice,
-        driverDetails: trip.driverDetails,
-        tripDetails: trip.tripDetails,
-        isFromSocket: true,
-      );
-
-      // Defensive: ensure the list is not null
-      List<ClientOfferTripEntity> list = List.from(clientOfferTripsData ?? []);
-
-      // Check if this trip already exists
-      final existingIndex = list.indexWhere((item) => item.id == updatedTrip.id);
-
-      if (existingIndex != -1) {
-        // Exists -> update only (NO counter increment)
-        list[existingIndex] = updatedTrip;
-        CliLogger.info('Updated existing trip at index $existingIndex');
-        emit(state.copyWith(clientOfferTripData: list, newOfferCount: _newOffer));
-      } else {
-        // New trip -> add and increase counter
-        list.add(updatedTrip);
-        // _newOffer++; // ✅ Only increment for NEW trips
-        CliLogger.info('New offer received. Counter incremented: $_newOffer');
-        emit(state.copyWith(clientOfferTripData: list,));
-      }
-
-      clientOfferTripsData = list; // Save back
-
-      // Debug logs
-      debugPrint("Updated new offer count: $_newOffer");
-      CliLogger.info('State emitted. Length: ${list.length}');
-    });
+  Future<bool> readNonTrackingOffer(String offerId) async {
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await readNonTrackingOfferUseCase(
+      offerId
+    );
+    bool result = false;
+    response.fold(
+      (failure) {
+        currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+        result = false;
+      },
+      (data) {
+        currentContext.pop();
+        result = true;
+        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.isRead = true;
+        emit(state.copyWith(
+          status: ClientTripsStates.success,
+        ));
+      },
+    );
+    return result;
   }
-*/
+  Future<bool> readLoadingOffer(String offerId) async {
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await readLoadingOfferUseCase(
+      offerId
+    );
+    bool result = false;
+    response.fold(
+      (failure) {
+        currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+        result = false;
+      },
+      (data) {
+        currentContext.pop();
+        result = true;
+        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.isRead = true;
+        emit(state.copyWith(
+          status: ClientTripsStates.success,
+        ));
+      },
+    );
+    return result;
+  }
+
 
   void resetCounter() {
     debugPrint("resetCounter called");

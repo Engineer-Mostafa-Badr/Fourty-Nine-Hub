@@ -369,12 +369,19 @@ class _ProfilePlaylistsTabState extends State<ProfilePlaylistsTab>
   void _handlePlaylistTap(BuildContext context, PlaylistEntity playlist) {
     ManageVibration.vibrate();
 
-    // Navigate to playlist details page
+    // Navigate to playlist details page with both PlaylistCubit and StarCubit
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => serviceLocator<PlaylistCubit>(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => serviceLocator<PlaylistCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => serviceLocator<StarCubit>(),
+              ),
+            ],
             child: PlaylistDetailsPage(playlist: playlist),
           ),
         ));
