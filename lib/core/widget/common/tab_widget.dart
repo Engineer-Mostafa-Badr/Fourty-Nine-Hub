@@ -6,11 +6,12 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TabWidget extends StatelessWidget {
-  const TabWidget({super.key, required this.title, this.count, required this.selected, required this.onTap});
+  const TabWidget({super.key, required this.title, this.count, required this.selected, required this.onTap, this.textSize});
   final String title;
   final int? count;
   final bool selected;
   final Function() onTap;
+  final double? textSize;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,7 +39,7 @@ class TabWidget extends StatelessWidget {
               child: Text(
                 title,
                 style: Styles.headerText(
-                    fontSize: 24,
+                    fontSize: textSize ?? 24,
                     color: selected
                         ? context.isDarkMode
                         ? Colors.black

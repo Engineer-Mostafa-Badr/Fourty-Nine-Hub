@@ -339,6 +339,7 @@ class _AuctionScreenState extends State<AuctionScreen>
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 2),
                                       child: TabWidget(
+                                        textSize: 18,
                                         title: labels[index],
                                         // count: counts[index],
                                         selected: isSelected,
