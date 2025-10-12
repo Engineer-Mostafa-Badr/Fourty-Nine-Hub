@@ -896,7 +896,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingOffer, (data) {
         CliLogger.info("Remove Accepted Loading Offer data :  $data");
         log("Remove Accepted Loading Offer data :  $data");
-        params(data['tripsCanceled']['ids'][0]);
+        params(data['removedTrip']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to Remove Accepted Loading Offer error $e");

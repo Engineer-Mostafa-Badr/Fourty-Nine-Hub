@@ -533,7 +533,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
       flex: 3,
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
+        // child: TabWidget(),
+        child:Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,

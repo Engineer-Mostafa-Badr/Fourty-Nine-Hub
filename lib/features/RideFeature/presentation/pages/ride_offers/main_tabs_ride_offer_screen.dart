@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offer
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/styles.dart';
@@ -54,6 +55,8 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
 
   @override
   void dispose() {
+    SharedWebSocket.socket!.off("LOADING:NEW_TRIP_OFFER_UPDATED");
+    SharedWebSocket.socket!.off("RIDE:NON_TRACKING_OFFERS_UPDATE");
     context.read<ClientTripsCubit>().tabController.dispose();
     super.dispose();
   }
