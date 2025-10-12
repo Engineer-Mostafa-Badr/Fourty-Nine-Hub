@@ -46,7 +46,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
 
   @override
   void initState() {
-    context.read<ConversationsCubit>().initSockets();
+    context.read<ConversationsCubit>().initSocialSockets();
     context.read<ConversationsCubit>().loadInitialSocialConversations();
     tabController =
     TabController(length: 4, vsync: this)

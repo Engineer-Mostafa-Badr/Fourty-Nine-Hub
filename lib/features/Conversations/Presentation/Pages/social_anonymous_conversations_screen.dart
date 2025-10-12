@@ -29,7 +29,7 @@ class _SocialAnonymousConversationsScreenState extends State<SocialAnonymousConv
   late ScrollController scrollController;
   @override
   void initState() {
-    serviceLocator<ConversationsCubit>().listenToUpdateSocialAnonymousList();
+    serviceLocator<ConversationsCubit>().initSocialAnonymousSockets();
     serviceLocator<ConversationsCubit>().loadInitialSocialAnonymousConversations();
     scrollController = ScrollController()
       ..addListener(() {
