@@ -235,7 +235,8 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                                   priceOffer: price,
                                 ),
                                 context,
-                                widget.offers?.clientDetails?.id ?? ""
+                                widget.offers?.subCategory?.id ?? "",
+                                context.isArabic?widget.offers?.subCategory?.nameAr ?? "":widget.offers?.subCategory?.nameEn ?? "",
                             );
                           },
                           backColor: context.isDarkMode
@@ -366,6 +367,7 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                       ),
                       parentContext,
                       widget.offers?.subCategory?.id ?? "",
+                      context.isArabic?widget.offers?.subCategory?.nameAr ?? "":widget.offers?.subCategory?.nameEn ?? "",
                     );
                   },
                   label: LocaleKeys.done.localize,
@@ -471,7 +473,8 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
                             priceOffer: enteredPrice,
                           ),
                           context,
-                          widget.offers?.subCategory?.id ?? ""
+                          widget.offers?.subCategory?.id ?? "",
+                        context.isArabic?widget.offers?.subCategory?.nameAr ?? "":widget.offers?.subCategory?.nameEn ?? "",
                       );
                     }
                   },

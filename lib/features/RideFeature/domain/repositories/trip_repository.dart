@@ -83,6 +83,8 @@ abstract class TripRepository {
    void listenToRemoveLoading(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
+   void listenToAcceptLoadingTripOffer(Function(String tripId) params);
+   void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params);
    void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
    void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
    void listenToPartialPaymentDriver(Function(num amountPaidCash) params);

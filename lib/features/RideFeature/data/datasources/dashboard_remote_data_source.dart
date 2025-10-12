@@ -132,6 +132,8 @@ abstract class TripRemoteDataSource {
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params);
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params);
 
   Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params);
 
@@ -868,6 +870,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       });
     } catch (e) {
       CliLogger.info("can't listen to Accept Offer By Client error $e");
+    }
+  }
+
+  @override
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Accept Loading Offer");
+      log("Listen to Accept Loading Offer ");
+      SharedWebSocket.socket!.on(SocketIOListeners.acceptLoadingOffer, (data) {
+        CliLogger.info("Accept Loading Offer data :  $data");
+        log("Accept Loading Offer data :  $data");
+        params(data['tripsCanceled']['ids'][0]);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Accept Loading Offer error $e");
+    }
+  }
+
+  @override
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Accepted Loading Offer");
+      log("Listen to Remove Accepted Loading Offer ");
+      SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingOffer, (data) {
+        CliLogger.info("Remove Accepted Loading Offer data :  $data");
+        log("Remove Accepted Loading Offer data :  $data");
+        params(data['tripsCanceled']['ids'][0]);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Remove Accepted Loading Offer error $e");
     }
   }
 

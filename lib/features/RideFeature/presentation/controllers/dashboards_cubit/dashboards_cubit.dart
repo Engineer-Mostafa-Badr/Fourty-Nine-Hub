@@ -51,6 +51,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/listen_to_accept_loading_trip_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/listen_to_remove_accepted_loading_trip_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/start_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/complete_ride_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_driver_rate_client_usecase.dart';
@@ -200,6 +202,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   final UpdateDriverRateLoadingNonSocketUseCase updateDriverRateLoadingNonSocketUseCase;
   final AddRateWithDriverLoadingUseCase addRateWithDriverLoadingUseCase;
+  final ListenToAcceptLoadingTripOfferUseCase listenToAcceptLoadingTripOfferUseCase;
+  final ListenToRemoveAcceptedLoadingTripOfferUseCase listenToRemoveAcceptedLoadingTripOfferUseCase;
 
 
 
@@ -252,6 +256,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.getRideGovernoratesUseCase,
       this.addRateWithDriverUseCase,
       this.listenToClientComingUseCase,
+      this.listenToAcceptLoadingTripOfferUseCase,
+      this.listenToRemoveAcceptedLoadingTripOfferUseCase,
       this.getAcceptedNonSocketLoadingUseCase, this.createOfferLoadingUseCase,
       this.getAvailableNonSocketLoadingUseCase, this.getHistoryNonSocketLoadingUseCase,
       this.updateDriverRateNonSocketUseCase, this.getDriverLoadingSettingsUseCase,
@@ -582,7 +588,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
 
   Future<void> createLoadingOffer(
-      CreateNonTrackOfferParams params, context, String subCategoryId) async {
+      CreateNonTrackOfferParams params, context, String subCategoryId,String subCategoryName) async {
     if (isClosed) {
       return;
     }
@@ -600,7 +606,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           // showSubscribeDialog(context, subCategoryId);
           SubscriptionMethod().subscribe(
             subscribeId: subCategoryId,
-            title: 'Ride',
+            title: subCategoryName,
           );
         }
       },
@@ -1059,6 +1065,35 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           status: DashboardsStates.success,
         ));
         changeIndex(4, currentContext, params);
+      }
+    });
+  }
+
+  void listenToAcceptTripOfferLoading(
+  int index, BuildContext context, RideModeParams params) {
+    CliLogger.info('Listen to Accept Trip Offer Loading');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToAcceptLoadingTripOfferUseCase((tripId) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      if (tripId.isNotEmpty) {
+        availableLoadingNonSocketData.removeWhere((e) => e.tripDetails?.id == tripId);
+        emit(state.copyWith(
+          status: DashboardsStates.success,
+        ));
+        changeIndex(4, currentContext, params);
+      }
+    });
+  }
+
+  void listenToRemoveAcceptedTripOfferLoading() {
+    CliLogger.info('Listen to Remove Accepted Trip Offer Loading');
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    listenToRemoveAcceptedLoadingTripOfferUseCase((tripId) {
+      if (tripId.isNotEmpty) {
+        availableLoadingNonSocketData.removeWhere((e) => e.tripDetails?.id == tripId);
+        emit(state.copyWith(
+          status: DashboardsStates.success,
+        ));
       }
     });
   }

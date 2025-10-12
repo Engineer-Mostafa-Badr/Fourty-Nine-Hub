@@ -67,6 +67,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
     SharedWebSocket.socket!.off("RIDE:REMOVE_TRIP_FROM_LIST");
     SharedWebSocket.socket!.off("LOADING:NEW_TRIP");
     SharedWebSocket.socket!.off("LOADING:CANCELED_LOADING_TRIP");
+    SharedWebSocket.socket!.off("LOADING:ACCEPTED_TRIP_OFFER");
+    SharedWebSocket.socket!.off("LOADING:REMOVE_TRIP");
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext, currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound ?? false);
     debugPrint("dispose REID:NEW_AVAILABLE_TRIP");
@@ -109,6 +111,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
         dashboardCubit.loadInitialAvailableNonSocketLoading(),
         dashboardCubit.listenToRemoveLoading(),
         dashboardCubit.listenToNewLoading(),
+        dashboardCubit.listenToAcceptTripOfferLoading(4, context, widget.params),
+        dashboardCubit.listenToRemoveAcceptedTripOfferLoading(),
       ]:[];
     });
   }
