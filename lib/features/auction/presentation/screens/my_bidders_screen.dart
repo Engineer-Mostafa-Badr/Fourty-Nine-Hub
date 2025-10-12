@@ -145,13 +145,27 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                     } else {
                       // Handle empty viewers or error
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("No viewers available")),
+                        SnackBar(
+                          content: Text(
+                            context.isArabic
+                                ? 'لا يوجد مشاهدون متاحون'
+                                : 'No viewers available',
+                          ),
+                        ),
                       );
+
                     }
                   }else{
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("No viewers available")),
+                      SnackBar(
+                        content: Text(
+                          context.isArabic
+                              ? 'لا يوجد مشاهدون متاحون'
+                              : 'No viewers available',
+                        ),
+                      ),
                     );
+
                   }
                 },
                 onSubscribe: (){
