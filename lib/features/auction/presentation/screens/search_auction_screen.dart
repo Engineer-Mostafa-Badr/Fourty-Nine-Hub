@@ -89,7 +89,14 @@ class _SearchAuctionScreenState extends State<SearchAuctionScreen> {
             ),
           );
         } else {
-          body = const Center(child: Text("Something went wrong"));
+          body = Center(
+            child: Text(
+              context.isArabic
+                  ? 'حدث خطأ ما'
+                  : 'Something went wrong',
+            ),
+          );
+
         }
 
         return Scaffold(
