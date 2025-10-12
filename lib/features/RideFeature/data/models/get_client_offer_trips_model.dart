@@ -11,13 +11,11 @@ class ClientOfferTripModel extends ClientOfferTripEntity {
     super.passengers,
     super.driverDetails,
     super.tripDetails,
-    super.isRead,
   });
 
   factory ClientOfferTripModel.fromJson(Map<String, dynamic> json) {
     return ClientOfferTripModel(
       id: json['id']??'',
-      isRead: json['isRead']??false,
       status: json['status'],
       price: (json['price'] ??0),
       newOfferPrice: json['newOfferPrice']!=null?(json['newOfferPrice'] as num?):json['newPrice']!=null?(json['newPrice'] as num?):0,
@@ -41,6 +39,7 @@ class DriverDetailsModel extends DriverDetailsEntity {
     super.countTrips,
     super.pictureUrl,
     super.rating,
+    super.isRead,
     super.vehicleDetails,
   });
 
@@ -48,6 +47,7 @@ class DriverDetailsModel extends DriverDetailsEntity {
     return DriverDetailsModel(
       firstName: json['firstName']??'',
       lastName: json['lastName']??'',
+      isRead: json['isRead']??false,
       verifiedBadge: json['verifiedBadge']??false,
       countTrips: json['countTrips']??0,
       pictureUrl: json['pictureUrl']??'',

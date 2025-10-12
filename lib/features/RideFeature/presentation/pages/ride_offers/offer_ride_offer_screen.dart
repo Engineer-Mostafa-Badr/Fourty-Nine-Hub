@@ -211,14 +211,15 @@ class ClientOfferWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("offers?.isRead ${offers?.driverDetails?.isRead}");
     return GlobalCard(subcategoryId: '',
-      isView: offers?.isRead??false,
+      isView: offers?.driverDetails?.isRead??false,
       phone: '',
       reportId: '',
       otherUserId: '',
     onTap: (){
       ManageVibration.vibrate();
-      if((offers?.isRead??false)==false){
+      if((offers?.driverDetails?.isRead??false)==false){
         if(modeType == 'ride')context.read<ClientTripsCubit>().readNonTrackingOffer(offers?.id??'');
         if(modeType == 'shipping')context.read<ClientTripsCubit>().readLoadingOffer(offers?.id??'');
       }

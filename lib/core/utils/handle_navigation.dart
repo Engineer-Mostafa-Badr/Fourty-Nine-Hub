@@ -134,7 +134,7 @@ Future<UserTokensEntity?> _refreshToken(String token) async {
   try {
     print('🔄 AuthInterceptor: Calling refresh token API From Splash');
     final response = await serviceLocator<Dio>().post(
-      "https://e2088eefa04f.ngrok-free.app/api/v1/auth/refresh-token",
+      "https://49backend.com/api/v1/auth/refresh-token",
       data: {
         'refreshToken': token,
       },

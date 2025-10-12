@@ -9,12 +9,10 @@ class ClientOfferTripEntity {
   final DriverDetailsEntity? driverDetails;
   final TripDetailsEntity? tripDetails;
   final bool isFromSocket;
-  bool? isRead;
   ClientOfferTripEntity({
     this.id,
     this.status,
     this.price,
-    this.isRead,
     this.passengers,
     this.newOfferPrice,
     this.driverDetails,
@@ -28,6 +26,7 @@ class DriverDetailsEntity {
   final String? lastName;
   final String? pictureUrl;
   final bool? verifiedBadge;
+  bool? isRead;
   final num? countTrips;
   final RatingEntity? rating;
   final VehicleDetailsEntity? vehicleDetails;
@@ -38,6 +37,7 @@ class DriverDetailsEntity {
     this.pictureUrl,
     this.countTrips,
     this.verifiedBadge,
+    this.isRead,
     this.rating,
     this.vehicleDetails,
   });
