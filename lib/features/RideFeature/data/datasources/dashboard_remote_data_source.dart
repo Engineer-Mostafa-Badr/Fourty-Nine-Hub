@@ -881,7 +881,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       SharedWebSocket.socket!.on(SocketIOListeners.acceptLoadingOffer, (data) {
         CliLogger.info("Accept Loading Offer data :  $data");
         log("Accept Loading Offer data :  $data");
-        params(data['tripsCanceled']['ids'][0]);
+        params(data['acceptedOffer']['tripId']);
       });
     } catch (e) {
       CliLogger.info("can't listen to Accept Loading Offer error $e");
