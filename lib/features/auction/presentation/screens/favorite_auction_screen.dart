@@ -44,6 +44,8 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<AuctionCubit>().loadInitialFavoriteNonSocketAuction();
+
     _auctionScrollController = ScrollController()..addListener(_scrollListener);
 
   }

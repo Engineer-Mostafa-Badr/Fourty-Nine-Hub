@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/widgets/show_winner_widget.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -170,13 +171,22 @@ class WinnerOverlay extends StatelessWidget {
                                               ),
                                             ),
                                             const SizedBox(height: 4),
+                                            // Text(
+                                            //   "${NumberFormat.decimalPattern(context.isArabic ? 'ar' : 'en').format(winner.price ?? 0)} ${LocaleKeys.egp.localize}",
+                                            //   style: Styles.mediumText(
+                                            //     fontWeight: FontWeight.w600,
+                                            //     color: Colors.white,
+                                            //   ),
+                                            // ),
                                             Text(
-                                              "${NumberFormat.decimalPattern(context.isArabic ? 'ar' : 'en').format(winner.price ?? 0)} ${LocaleKeys.egp.localize}",
+                                              "${formatNumberAuction(context,winner.price ??0)} ${LocaleKeys.egp.localize}",
                                               style: Styles.mediumText(
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.white,
                                               ),
                                             ),
+
+
                                             Label(
                                               text:winner.auctionTitle ?? "",
                                               style: Styles.mediumText(

@@ -45,6 +45,8 @@ class _ExpiredAuctionScreenState extends State<ExpiredAuctionScreen> {
   void initState() {
     super.initState();
     _auctionExpiredScrollController = ScrollController()..addListener(_scrollListener);
+    context.read<AuctionCubit>().loadInitialExpiredNonSocketAuction();
+
 
 
   }

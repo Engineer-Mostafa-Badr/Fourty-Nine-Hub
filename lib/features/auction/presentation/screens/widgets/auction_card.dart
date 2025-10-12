@@ -165,13 +165,27 @@ class AuctionCard extends StatelessWidget {
             } else {
               // Handle empty viewers or error
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("No viewers available")),
+                SnackBar(
+                  content: Text(
+                    context.isArabic
+                        ? 'لا يوجد مشاهدون متاحون'
+                        : 'No viewers available',
+                  ),
+                ),
               );
+
             }
           }else{
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("No viewers available")),
+              SnackBar(
+                content: Text(
+                  context.isArabic
+                      ? 'لا يوجد مشاهدون متاحون'
+                      : 'No viewers available',
+                ),
+              ),
             );
+
           }
 
         },
@@ -546,74 +560,6 @@ class AuctionCard extends StatelessWidget {
                             : LocaleKeys.joinNow.localize,
                       )
 
-                      // AppButton(
-                      //   width: 91,
-                      //   backColor: auction.isWinner == true
-                      //       ? AppColors.cFFAC3F
-                      //       : (auction.status == "expired" || auction.status == "pending")
-                      //       ? AppColors.grey
-                      //       : AppColors.PRIMARY_COLOR_DARK,
-                      //   onPressed: (auction.status == "expired" || auction.status == "pending")
-                      //       ? () {}
-                      //       : () {
-                      //     if (auction.winnerData != null) {
-                      //       showGeneralDialog(
-                      //         context: context,
-                      //         barrierDismissible: true,
-                      //         barrierLabel: 'WinnerOverlay',
-                      //         barrierColor: Colors.black54, // optional: slight background dim
-                      //         transitionDuration: const Duration(milliseconds: 200),
-                      //         pageBuilder: (context, _, __) {
-                      //           return WinnerOverlay(
-                      //             winner: BidWinnerEntity(
-                      //               gender: "Male",
-                      //             ),
-                      //             onClose: () {
-                      //               Navigator.of(context).pop(); // close overlay
-                      //             },
-                      //           );
-                      //         },
-                      //         transitionBuilder: (context, animation, secondaryAnimation, child) {
-                      //           // optional: fade + scale animation
-                      //           return FadeTransition(
-                      //             opacity: animation,
-                      //             child: ScaleTransition(
-                      //               scale: Tween(begin: 0.95, end: 1.0).animate(animation),
-                      //               child: child,
-                      //             ),
-                      //           );
-                      //         },
-                      //       );
-                      //     } else {
-                      //       Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //           builder: (_) => BlocProvider(
-                      //             create: (_) => serviceLocator<AuctionCubit>(),
-                      //             child: SingleAuctionScreen(
-                      //               auctionId: auction.id ?? "",
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       );
-                      //     }
-                      //   },
-                      //   style: Styles.mediumText(
-                      //     color: auction.isWinner == true
-                      //         ? AppColors.black
-                      //         : (auction.status == "expired" || auction.status == "pending")
-                      //         ? AppColors.grey.shade700
-                      //         : AppColors.whiteColor,
-                      //     fontWeight: FontWeight.w500,
-                      //   ),
-                      //   label: auction.isWinner == true
-                      //       ? LocaleKeys.winnerAuction.localize
-                      //       : auction.status == "expired"
-                      //       ? LocaleKeys.expired.localize
-                      //       : auction.status == "pending"
-                      //       ? LocaleKeys.pending.localize
-                      //       : LocaleKeys.joinNow.localize,
-                      // )
 
 
 

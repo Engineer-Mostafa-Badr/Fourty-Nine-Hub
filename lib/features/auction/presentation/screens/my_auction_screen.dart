@@ -44,6 +44,8 @@ class _MyAuctionScreenState extends State<MyAuctionScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<AuctionCubit>().loadInitialMyAuction();
+
     _scrollController = ScrollController()
       ..addListener(_scrollListener);
   }
