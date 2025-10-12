@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../presentation_exports.dart';
 import 'playlist_details_page.dart';
 import 'playlist_bottom_sheet_constants.dart';
@@ -509,7 +510,17 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PlaylistDetailsPage(playlist: playlist),
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => serviceLocator<PlaylistCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<StarCubit>(),
+            ),
+          ],
+          child: PlaylistDetailsPage(playlist: playlist),
+        ),
       ),
     );
   }
