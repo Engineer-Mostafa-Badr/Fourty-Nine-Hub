@@ -475,33 +475,6 @@ class AuctionCard extends StatelessWidget {
                           // Only proceed if not pending
                           if (auction.status != "pending") {
                             if (auction.winnerData != null) {
-                              // Show winner overlay for winner or expired auction with winner data
-                          /*
-                              showGeneralDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                barrierLabel: 'WinnerOverlay',
-                                barrierColor: Colors.black54,
-                                transitionDuration: const Duration(milliseconds: 200),
-                                pageBuilder: (context, _, __) {
-                                  // return WinnerOverlay(
-                                  // // return WinnerOverlayWidget(
-                                  //   winner: auction.winnerData!,
-                                  //   onClose: () => Navigator.of(context).pop(),
-                                  // );
-
-                                },
-                                transitionBuilder: (context, animation, secondaryAnimation, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: ScaleTransition(
-                                      scale: Tween(begin: 0.95, end: 1.0).animate(animation),
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                              );
-                              */
                               showGeneralDialog(
                                 context: context,
                                 barrierDismissible: true,
@@ -529,6 +502,7 @@ class AuctionCard extends StatelessWidget {
                               );
                             } else if (auction.status != "expired" && auction.status != "winner") {
                               // If no winnerData and not expired/winner, navigate to auction
+                              if(auction.status == "available")
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
