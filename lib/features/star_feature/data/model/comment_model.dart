@@ -27,15 +27,33 @@ class CommentModel extends CommentEntity {
   final List<CommentModel> replies;
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
+    // Handle likes - can be int or List
+    int likesCount = 0;
+    if (json['likes'] is int) {
+      likesCount = json['likes'];
+    } else if (json['likes'] is List) {
+      likesCount = (json['likes'] as List).length;
+    }
+
+    // Handle dislikes - can be int or List
+    int dislikesCount = 0;
+    if (json['dislikes'] is int) {
+      dislikesCount = json['dislikes'];
+    } else if (json['dislikes'] is List) {
+      dislikesCount = (json['dislikes'] as List).length;
+    }
+
     return CommentModel(
       id: json['_id'] ?? '',
       userId: json['userId'] ?? '',
       videoId: json['video'] ?? '',
       content: json['content'] ?? '',
-      likes: json['likes'] ?? 0,
-      dislikes: json['dislikes'] ?? 0,
-      isLiked: false, // This should be determined by checking user's like status
-      isDisliked: false, // This should be determined by checking user's dislike status
+      likes: likesCount,
+      dislikes: dislikesCount,
+      isLiked:
+          false, // This should be determined by checking user's like status
+      isDisliked:
+          false, // This should be determined by checking user's dislike status
       owner: CommentOwnerModel.fromJson(json['owner'] ?? {}),
       replies: (json['replies'] as List?)
               ?.map((reply) => CommentModel.fromJson(reply))
@@ -134,20 +152,48 @@ class CommentOwnerModel {
   final String id;
   final String channelName;
   final CommentChannelPicture? channelPicture;
+  final String? gender;
 
   CommentOwnerModel({
     required this.id,
     required this.channelName,
     this.channelPicture,
+    this.gender,
   });
 
+  // factory CommentOwnerModel.fromJson(Map<String, dynamic> json) {
+  //   return CommentOwnerModel(
+  //     id: json['_id'] ?? '',
+  //     channelName: json['channelName'] ?? 'Unknown User',
+  //     channelPicture: json['channelPicture'] != null
+  //         ? CommentChannelPicture.fromJson(json['channelPicture'])
+  //         : null,
+  //     gender: json['gender'],
+  //   );
+  // }
+
   factory CommentOwnerModel.fromJson(Map<String, dynamic> json) {
+    CommentChannelPicture? parsedPicture;
+
+    final pictureData = json['channelPicture'];
+    if (pictureData != null) {
+      if (pictureData is String) {
+        // Handle direct URL string
+        parsedPicture = CommentChannelPicture(
+          id: '',
+          mediaKey: pictureData.trim(),
+        );
+      } else if (pictureData is Map<String, dynamic>) {
+        // Handle object with mediaKey
+        parsedPicture = CommentChannelPicture.fromJson(pictureData);
+      }
+    }
+
     return CommentOwnerModel(
       id: json['_id'] ?? '',
       channelName: json['channelName'] ?? 'Unknown User',
-      channelPicture: json['channelPicture'] != null
-          ? CommentChannelPicture.fromJson(json['channelPicture'])
-          : null,
+      channelPicture: parsedPicture,
+      gender: json['gender'],
     );
   }
 
@@ -156,6 +202,7 @@ class CommentOwnerModel {
       '_id': id,
       'channelName': channelName,
       'channelPicture': channelPicture?.toJson(),
+      'gender': gender,
     };
   }
 }
@@ -170,9 +217,26 @@ class CommentChannelPicture {
   });
 
   factory CommentChannelPicture.fromJson(Map<String, dynamic> json) {
+    String mediaKey = '';
+
+    // Try to get mediaKey from normal fields
+    if (json['mediaKey'] != null) {
+      mediaKey = json['mediaKey'].toString().trim();
+    } else if (json['url'] != null) {
+      mediaKey = json['url'].toString().trim();
+    } else {
+      // If not found, check if there's a key that looks like a URL
+      for (var key in json.keys) {
+        if (key.startsWith('http')) {
+          mediaKey = key.trim();
+          break;
+        }
+      }
+    }
+
     return CommentChannelPicture(
       id: json['_id'] ?? '',
-      mediaKey: json['mediaKey'] ?? '',
+      mediaKey: mediaKey,
     );
   }
 
@@ -196,18 +260,38 @@ class CommentsListResponse {
 
   factory CommentsListResponse.fromJson(Map<String, dynamic> json) {
     try {
+      print('📝 Parsing CommentsListResponse - JSON: $json');
       final dataMap = json['data'] as Map<String, dynamic>? ?? {};
+      print('📝 Data map keys: ${dataMap.keys}');
       final commentsData = dataMap['comments'] as List? ?? [];
-      final paginationData = dataMap['pagination'] as Map<String, dynamic>? ?? {};
+      print('📝 Comments count: ${commentsData.length}');
+      final paginationData =
+          dataMap['pagination'] as Map<String, dynamic>? ?? {};
+      print('📝 Pagination data: $paginationData');
+
+      final parsedComments = commentsData
+          .map((comment) {
+            try {
+              return CommentModel.fromJson(comment);
+            } catch (e) {
+              print('❌ Error parsing comment: $e');
+              print('❌ Comment data: $comment');
+              return null;
+            }
+          })
+          .whereType<CommentModel>()
+          .toList();
+
+      print('📝 Successfully parsed ${parsedComments.length} comments');
 
       return CommentsListResponse(
-        comments: commentsData
-            .map((comment) => CommentModel.fromJson(comment))
-            .toList(),
+        comments: parsedComments,
         pagination: CommentsPaginationModel.fromJson(paginationData),
       );
-    } catch (e) {
-      print('Error parsing CommentsListResponse: $e');
+    } catch (e, stackTrace) {
+      print('❌ Error parsing CommentsListResponse: $e');
+      print('❌ StackTrace: $stackTrace');
+      print('❌ JSON: $json');
       return CommentsListResponse(
         comments: [],
         pagination: CommentsPaginationModel(

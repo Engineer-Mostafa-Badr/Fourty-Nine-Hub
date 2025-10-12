@@ -117,8 +117,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
   ) : super(AdsState());
   Future<bool> adViewToAds(String id) async {
     bool result = false;
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-   showLoadingDialog(currentContext);
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     print("adViewToAds");
     final response = await _viewAdUseCase(id);
     response.fold((failure) {
@@ -205,9 +206,20 @@ class AdvertisementCubit extends Cubit<AdsState> {
   }
 
   Future<bool> favouriteAd(String id) async {
+    // Optimistic update: Update UI immediately
+    final adIndex = ads.indexWhere((ad) => ad.id == id);
+    if (adIndex != -1) {
+      ads[adIndex].isFavourite = true;
+      emit(state.copyWith(status: AdsStates.success));
+    }
+
     final response = await _favouriteAdUseCase(id);
     bool result = false;
     response.fold((failure) {
+      // Revert the change if the request fails
+      if (adIndex != -1) {
+        ads[adIndex].isFavourite = false;
+      }
       var currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;
       showErrorMessage(
@@ -257,7 +269,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   Future<void> getAds(
       {required String subCategoryId, required String filter}) async {
     var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
     print("Hiii Ads");
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print(hasMoreAdsData);
@@ -271,18 +283,16 @@ class AdvertisementCubit extends Cubit<AdsState> {
         page: adsPage,
         limit: 3,
         userId: userId));
-    response
-        .fold((l) {
-          print("Hiii Ads1");
-          print("Hiii Ads1 ${getFailureMessage(l, currentContext)}");
-          showErrorMessage(
-            currentContext,
-            getFailureMessage(l, currentContext),
-          );
-          emit(state.copyWith(failure: l, status: AdsStates.error));
-        },
-            (data) async {
-              print("Hiii Ads2");
+    response.fold((l) {
+      print("Hiii Ads1");
+      print("Hiii Ads1 ${getFailureMessage(l, currentContext)}");
+      showErrorMessage(
+        currentContext,
+        getFailureMessage(l, currentContext),
+      );
+      emit(state.copyWith(failure: l, status: AdsStates.error));
+    }, (data) async {
+      print("Hiii Ads2");
       ads.addAll(data);
       if (data.length < 3) {
         hasMoreAdsData = false;
@@ -483,9 +493,20 @@ class AdvertisementCubit extends Cubit<AdsState> {
   }
 
   Future<bool> unFavouriteAd(String id) async {
+    // Optimistic update: Update UI immediately
+    final adIndex = ads.indexWhere((ad) => ad.id == id);
+    if (adIndex != -1) {
+      ads[adIndex].isFavourite = false;
+      emit(state.copyWith(status: AdsStates.success));
+    }
+
     final response = await _removeFavouriteAdUseCase(id);
     bool result = false;
     response.fold((failure) {
+      // Revert the change if the request fails
+      if (adIndex != -1) {
+        ads[adIndex].isFavourite = true;
+      }
       var currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;
       showErrorMessage(

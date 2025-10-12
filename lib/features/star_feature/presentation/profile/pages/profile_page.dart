@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/
 import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/loading_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../presentation_exports.dart';
 import '../widgets/edit_profile_sheet.dart';
@@ -198,12 +200,11 @@ class _ProfilePageViewState extends State<ProfilePageView>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.white,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
-          return SafeArea(
-              child: _buildContent(profileState, widget.isCurrentUser));
+          return _buildContent(profileState, widget.isCurrentUser);
         },
       ),
     );
@@ -241,7 +242,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
 
     if (profileState.isLoading && !profileState.hasProfile) {
       return const Center(
-        child: StarLoadingIndicator(message: 'Loading profile...'),
+        child: StarLoadingIndicator(),
       );
     }
 
@@ -274,10 +275,10 @@ class _ProfilePageViewState extends State<ProfilePageView>
             snap: true,
             toolbarHeight: 40,
             // titleSpacing: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.PRIMARY_COLOR,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
+              icon: Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 ManageVibration.vibrate();
                 Navigator.pop(context);
@@ -286,7 +287,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
             actions: [
               if (isCurrentUserFromProfile)
                 IconButton(
-                  icon: Icon(Icons.edit, color: Colors.black),
+                  icon: Icon(Icons.edit, color: Colors.white),
                   onPressed: () {
                     ManageVibration.vibrate();
                     _showEditProfileSheet();
@@ -295,7 +296,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
             ],
             title: Text(
               _getAppBarTitle(isCurrentUserFromProfile),
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           SliverToBoxAdapter(

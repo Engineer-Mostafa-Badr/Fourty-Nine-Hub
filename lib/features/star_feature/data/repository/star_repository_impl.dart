@@ -177,4 +177,19 @@ class StarRepositoryImpl extends StarRepository {
   Future<Either<Failure, TubeWinnerStatisticsEntity>> getTubeWinnerStatistics() {
     return _remoteDataSource.getTubeWinnerStatistics();
   }
+
+  @override
+  Future<Either<Failure, String>> subscribeToChannel(String userId) {
+    return _remoteDataSource.subscribeToChannel(userId);
+  }
+
+  @override
+  Future<Either<Failure, String>> unsubscribeFromChannel(String userId) {
+    return _remoteDataSource.unsubscribeFromChannel(userId);
+  }
+
+  @override
+  Future<Either<Failure, String>> replyToComment(CreateCommentParams params) {
+    return _remoteDataSource.replyToComment(params);
+  }
 }

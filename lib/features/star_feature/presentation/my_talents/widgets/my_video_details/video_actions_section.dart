@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart'; // إضافة import للـ cubit
+import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
+
+import '../../../../../../core/messages/messages.dart'; // إضافة import للـ cubit
 
 class VideoActionsSection extends StatelessWidget {
   final StarEntity talent;
@@ -107,16 +109,22 @@ class VideoActionsSection extends StatelessWidget {
                       cubit.deleteMyTubeVideo(talent.id);
 
                       // عرض رسالة تأكيد
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            context.isArabic
-                                ? 'تم حذف الفيديو بنجاح'
-                                : 'Video deleted successfully',
-                          ),
-                          backgroundColor: Colors.green,
-                          duration: Duration(seconds: 2),
-                        ),
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     content: Text(
+                      //       context.isArabic
+                      //           ? 'تم حذف الفيديو بنجاح'
+                      //           : 'Video deleted successfully',
+                      //     ),
+                      //     backgroundColor: Colors.green,
+                      //     duration: Duration(seconds: 2),
+                      //   ),
+                      // );
+                      showSuccessMessage(
+                        context,
+                        context.isArabic
+                            ? 'تم حذف الفيديو بنجاح'
+                            : 'Video deleted successfully',
                       );
                     },
                     style: ElevatedButton.styleFrom(

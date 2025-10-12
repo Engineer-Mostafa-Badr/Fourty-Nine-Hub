@@ -34,7 +34,7 @@ class ChanceAdModel extends ChanceAdEntity {
 
   factory ChanceAdModel.fromJson(Map<String, dynamic> json) {
     return ChanceAdModel(
-      id: json['id'] ?? '',
+      id: json['_id'] ?? json['id'] ?? '',
       winnerId: json['winnerId'],
       images: (json['images'] as List? ?? [])
           .map((image) {

@@ -62,4 +62,11 @@ abstract class StarRepository {
 
   // Get tube winner statistics
   Future<Either<Failure, TubeWinnerStatisticsEntity>> getTubeWinnerStatistics();
+
+  // Profile subscription methods
+  Future<Either<Failure, String>> subscribeToChannel(String userId);
+  Future<Either<Failure, String>> unsubscribeFromChannel(String userId);
+
+  // Comment reply method
+  Future<Either<Failure, String>> replyToComment(CreateCommentParams params);
 }
