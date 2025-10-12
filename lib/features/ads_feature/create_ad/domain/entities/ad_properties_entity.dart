@@ -6,13 +6,18 @@ class AdPropertiesEntity {
   final String nameEn;
   final String type;
   final List<SelectionEntity> values;
+  final String? subCategoryId;
+  final String? mainCategoryId;
   AdPropertyType get adPropertyType => getAdPropertyTypeValue(type);
-  AdPropertiesEntity(
-      {required this.id,
-      required this.nameAr,
-      required this.nameEn,
-      required this.type,
-      required this.values});
+  AdPropertiesEntity({
+    required this.id,
+    required this.nameAr,
+    required this.nameEn,
+    required this.type,
+    required this.values,
+    this.subCategoryId,
+    this.mainCategoryId,
+  });
 
   //toJson
   Map<String, dynamic> toJson() {

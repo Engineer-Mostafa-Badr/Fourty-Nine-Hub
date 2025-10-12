@@ -223,7 +223,9 @@ class CommentCubit extends Cubit<CommentState> {
   }
 
   // Delete a comment
-  Future<void> deleteComment(String commentId) async {
+  Future<void> deleteComment(String commentId, String videoId) async {
+    emit(state.copyWith(isDeletingComment: true));
+
     final response = await _deleteCommentUseCase(commentId);
 
     response.fold(
@@ -232,22 +234,23 @@ class CommentCubit extends Cubit<CommentState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(state.copyWith(error: failure.toString()));
+        emit(state.copyWith(
+          isDeletingComment: false,
+          error: failure.toString(),
+        ));
       },
       (success) {
-        final updatedComments =
-            state.comments.where((comment) => comment.id != commentId).toList();
-
-        emit(state.copyWith(
-          comments: updatedComments,
-          totalComments: state.totalComments - 1,
-        ));
+        emit(state.copyWith(isDeletingComment: false));
+        // Refresh comments to get updated data from server
+        getVideoComments(videoId, refresh: true);
       },
     );
   }
 
   // Update a comment
-  Future<void> updateComment(String commentId, String newContent) async {
+  Future<void> updateComment(String commentId, String newContent, String videoId) async {
+    emit(state.copyWith(isUpdatingComment: true));
+
     final response = await _updateCommentUseCase(UpdateCommentParams(
       commentId: commentId,
       content: newContent,
@@ -259,14 +262,15 @@ class CommentCubit extends Cubit<CommentState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(state.copyWith(error: failure.toString()));
+        emit(state.copyWith(
+          isUpdatingComment: false,
+          error: failure.toString(),
+        ));
       },
       (success) {
-        _updateCommentLocally(
-            commentId,
-            (comment) => comment.copyWith(
-                  content: newContent,
-                ));
+        emit(state.copyWith(isUpdatingComment: false));
+        // Refresh comments to get updated data from server
+        getVideoComments(videoId, refresh: true);
       },
     );
   }

@@ -1917,9 +1917,8 @@ class EndPoints {
   // Create new playlist
   static const String createPlaylist = '/tube-playlist';
 
-  // Get all playlists for owner
-  static String getPlaylists(String ownerId) =>
-      '/tube-playlist?ownerId=$ownerId';
+  // Get all playlists (can filter by ownerId)
+  static const String getPlaylists = '/tube-playlist';
 
   // Get playlist by ID (basic info)
   static String getPlaylistById(String playlistId) =>

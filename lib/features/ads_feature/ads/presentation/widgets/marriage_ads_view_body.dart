@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -89,7 +91,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           height: 16,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               InkWell(
@@ -208,6 +210,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: InkWell(
                   onTap: () async {
+                    if (widget.state.subCategories == null ||
+                        widget.state.subCategories!.isEmpty) {
+                      return;
+                    }
                     ManageVibration.vibrate();
                     dynamic data = await context.push(
                       Routes.FILTERADS,
@@ -276,6 +282,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: InkWell(
                   onTap: () async {
+                    if (widget.state.subCategories == null ||
+                        widget.state.subCategories!.isEmpty) {
+                      return;
+                    }
                     ManageVibration.vibrate();
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
@@ -647,7 +657,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
-      if (widget.state.myAds != null) {
+      if (widget.state.myAds == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -657,7 +667,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.myAds?.isEmpty??false) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
 
@@ -694,8 +704,8 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
 
     // Favourite Ads
     if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
-      print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
-      if (widget.state.adsRequestsLog == null) {
+      print('state.myAds ${widget.state.myAds?.length}');
+      if (widget.state.myAds == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -705,10 +715,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.adsRequestsLog!.isEmpty) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
-      return MarriageRequest(
+      return MarriageAdsListView(
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,

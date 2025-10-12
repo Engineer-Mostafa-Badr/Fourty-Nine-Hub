@@ -78,7 +78,7 @@ class _CreateAdViewState extends State<CreateAdView> {
           preferredSize: Size.fromHeight(30),
           child: HomeAppbar(
             isWithBackArrow: true,
-            onBackPressed: ()=>context.pop(),
+            onBackPressed: () => context.pop(),
           ),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
@@ -782,7 +782,7 @@ class _CreateAdViewState extends State<CreateAdView> {
 
   @override
   void initState() {
-    print("/v1/ads/PropsByMainCategoryId/62c8bafb8e28a58a3edf589b");
+    print("/v1/ads/PropsByMainCategoryId/62c8be568e28a58a3edf5f1d");
     context.read<CreateAdCubit>().loadData(
         subCategoryId: widget.categorization.fromMarriage == false
             ? widget.categorization.subCategory.id
