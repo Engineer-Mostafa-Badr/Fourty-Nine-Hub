@@ -264,8 +264,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                               ? const Center(child: CustomCircularProgressIndicator())
                                               : cubit.availableLoadingNonSocketData.isEmpty
                                                   ? Center(
-                                                      child: Text(
-                                                        LocaleKeys.youDontHaveAvailableOffer.localize,
+                                                      child: CustomEmptyWidget(
+                                                        label:LocaleKeys.youDontHaveAvailableOffer.localize,
                                                       ),
                                                     )
                                                   : ListView.separated(
@@ -395,7 +395,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                     ? const Center(child: CustomCircularProgressIndicator()) // supposed loading here
                                     : cubit.historyLoadingNonSocketData.isEmpty
                                         ? Center(
-                                            child: Text(LocaleKeys.youDontHavePastOffer.localize),
+                                            child: CustomEmptyWidget(label:LocaleKeys.youDontHavePastOffer.localize),
                                           )
                                         : ListView.separated(
                                             itemBuilder: (context, index) => PastLoadingWidget(tripEntity: cubit.historyLoadingNonSocketData[index]),
@@ -406,7 +406,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                     ? cubit.isLoadingMorePastNonSocketTrips
                                         ? const Center(child: CustomCircularProgressIndicator())
                                         : cubit.pastRideNonSocketData.isEmpty
-                                            ? Center(child: Text(LocaleKeys.youDontHaveAcceptedOffer.localize))
+                                            ? Center(child: CustomEmptyWidget(label:LocaleKeys.youDontHaveAcceptedOffer.localize))
                                             : ListView.builder(
                                                 itemCount: cubit.pastRideNonSocketData.length,
                                                 itemBuilder: (context, index) {
@@ -498,7 +498,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                       ? const Center(child: CustomCircularProgressIndicator()) // supposed loading here
                                       : cubit.acceptedLoadingNonSocketData.isEmpty
                                           ? Center(
-                                              child: Text(LocaleKeys.youDontHaveAcceptedOffer.localize),
+                                              child: CustomEmptyWidget(label:LocaleKeys.youDontHaveAcceptedOffer.localize),
                                             )
                                           : ListView.separated(
                                               itemBuilder: (context, index) => AcceptedNonSocketLoadingWidget(offers: cubit.acceptedLoadingNonSocketData[index]),
@@ -506,7 +506,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                               separatorBuilder: (context, index) => const SizedBox(height: 15),
                                             )
                                   : cubit.acceptedRideNonSocketData.isEmpty
-                                      ? Center(child: Text(LocaleKeys.youDontHaveAcceptedOffer.localize))
+                                      ? Center(child: CustomEmptyWidget(label:LocaleKeys.youDontHaveAcceptedOffer.localize))
                                       : ListView.builder(
                                           itemCount: cubit.acceptedRideNonSocketData.length,
                                           itemBuilder: (context, index) => Padding(
