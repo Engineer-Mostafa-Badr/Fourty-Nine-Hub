@@ -10,6 +10,25 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../domain/entities/get_all_auction_entity.dart';
+String formatNumberAuction(BuildContext context, num? number) {
+  if (number == null) return "0";
+
+  final locale = context.isArabic ? 'ar' : 'en';
+  final formatter = NumberFormat.decimalPattern(locale);
+  String formatted = formatter.format(number);
+
+  if (context.isArabic) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < english.length; i++) {
+      formatted = formatted.replaceAll(english[i], arabic[i]);
+    }
+  }
+
+  return formatted;
+}
+
 class WinnerOverlayWidget extends StatelessWidget {
   final WinnerDataEntity winner;
   final VoidCallback onClose;
@@ -167,13 +186,22 @@ class WinnerOverlayWidget extends StatelessWidget {
                                             ),
 
                                             const SizedBox(height: 4),
+                                            // Text(
+                                            //   "${NumberFormat.decimalPattern(context.isArabic ? 'ar' : 'en').format(winner.price ?? 0)} ${LocaleKeys.egp.localize}",
+                                            //   style: Styles.mediumText(
+                                            //     fontWeight: FontWeight.w600,
+                                            //     color: Colors.white,
+                                            //   ),
+                                            // ),
                                             Text(
-                                              "${NumberFormat.decimalPattern(context.isArabic ? 'ar' : 'en').format(winner.price ?? 0)} ${LocaleKeys.egp.localize}",
+                                              "${formatNumberAuction(context,winner.price ??0)} ${LocaleKeys.egp.localize}",
                                               style: Styles.mediumText(
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.white,
                                               ),
                                             ),
+
+
                                             Label(
                                               text:winner.title ?? "",
                                               style: Styles.mediumText(
