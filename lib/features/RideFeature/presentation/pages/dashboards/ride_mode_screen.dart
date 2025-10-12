@@ -65,6 +65,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
     SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
     SharedWebSocket.socket!.off("RIDE:NON_TRACKING_TRIPS_UPDATED");
     SharedWebSocket.socket!.off("RIDE:REMOVE_TRIP_FROM_LIST");
+    SharedWebSocket.socket!.off("LOADING:NEW_TRIP");
+    SharedWebSocket.socket!.off("LOADING:CANCELED_LOADING_TRIP");
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext, currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound ?? false);
     debugPrint("dispose REID:NEW_AVAILABLE_TRIP");
@@ -84,7 +86,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       // if (!dashboardCubit.isClosed) {
-      widget.params.isSocket == true
+      widget.params.isSocket == true && widget.params.modeType == "ride"
           ? [
               dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context, widget.params),
               // if (widget.params.currentIndex == null || widget.params.currentIndex == 0) dashboardCubit.loadAvailableRideTrips(context),
@@ -97,19 +99,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToEndTrip(context, widget.params),
               dashboardCubit.listenToPartialPaymentDriver(context),
             ]
-          : [
-              widget.params.modeType == "ride" ? dashboardCubit.loadInitialAvailableNonSocketTrips() : dashboardCubit.loadInitialAvailableNonSocketLoading(),
-              dashboardCubit.listenToRemoveUntrackedTrip(),
-              dashboardCubit.listenToNewTripNonSocket(widget.params),
-              dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params),
-              dashboardCubit.getDriverSettings(context),
-              if (widget.params.modeType == "truck")
-                {
-                  dashboardCubit.listenToRemoveLoading(),
-                  dashboardCubit.listenToNewLoading(),
-                  // dashboardCubit.listenToAcceptLoadingOffer(),
-                }
-            ];
+          :widget.params.isSocket == false &&widget.params.modeType == "ride"? [
+          dashboardCubit.loadInitialAvailableNonSocketTrips(),
+          dashboardCubit.listenToRemoveUntrackedTrip(),
+          dashboardCubit.listenToNewTripNonSocket(widget.params),
+          dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params),
+          dashboardCubit.getDriverSettings(context),
+            ]:widget.params.modeType == "truck"?[
+        dashboardCubit.loadInitialAvailableNonSocketLoading(),
+        dashboardCubit.listenToRemoveLoading(),
+        dashboardCubit.listenToNewLoading(),
+      ]:[];
     });
   }
 

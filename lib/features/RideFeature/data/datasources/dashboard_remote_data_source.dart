@@ -1020,9 +1020,9 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToRemoveLoading(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Remove Loading ");
+      CliLogger.info("Listen to Remove Loading ${SocketIOListeners.removeLoadingTrip} ");
       log("Listen to Remove Trip ");
-      SharedWebSocket.socket!.on(SocketIOListeners.removeLoading, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingTrip, (data) {
         CliLogger.info("Remove Loading data :  $data");
         log("Remove Loading data :  $data");
         params(data['tripsCanceled']['ids'][0]);
@@ -1041,7 +1041,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info(" New Loading  data :  $data");
         log(" New Loading  data :  $data");
         print(" New Loading  data :  $data");
-        params(GetLoadingAvailableModel.fromJson(data["tripsUpdated"]));
+        params(GetLoadingAvailableModel.fromJson(data["newTrip"]));
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

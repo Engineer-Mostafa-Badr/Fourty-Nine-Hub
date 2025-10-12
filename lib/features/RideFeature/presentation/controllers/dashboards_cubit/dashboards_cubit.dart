@@ -710,7 +710,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       bool isSuccess = await RideMethodHelper().updateExpiredImage(
         recordType: 'TECHNICAL_EXAMINATION',
         expiryDate: rideTechnicalExaminationExpireDateController.text,
-        mediaIds: mediaIds,
+        mediaIds: [
+          {
+            'mediaId': terminalExaminationImageMediaId,
+            'name': 'technicalExaminationKey'
+          },
+        ],
       );
         if (isSuccess) {
           showSuccessMessage(
@@ -762,7 +767,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       bool isSuccess = await RideMethodHelper().updateExpiredImage(
         recordType: 'DRUG_ANALYSIS',
         expiryDate: rideDragAnalysisExpireDateController.text,
-        mediaIds: mediaIds,
+        mediaIds: [
+          {
+            'mediaId': drugAnalysisImageMediaId,
+            'name': 'drugAnalysisKey'
+          },
+        ],
       );
       if (isSuccess) {
           showSuccessMessage(
@@ -830,7 +840,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       bool isSuccess = await RideMethodHelper().updateExpiredImage(
         recordType: 'CRIMINAL_RECORD',
         expiryDate: rideCriminalRecordExpireDateController.text,
-        mediaIds: mediaIds,
+        mediaIds: [
+          {
+            'mediaId': criminalRecordImageMediaId,
+            'name': 'criminalRecordKey'
+          },
+        ],
       );
         if (isSuccess) {
           showSuccessMessage(
@@ -975,7 +990,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     bool isSuccess = await RideMethodHelper().updateExpiredImage(
       recordType: 'CAR_LICENSE',
       expiryDate: rideVehicleExpireDateController.text,
-      mediaIds: mediaIds,
+      mediaIds: [
+        {
+          'mediaId': vehicleFrontPictureMediaId,
+          'name': 'carLicenseFrontKey'
+        },
+        {
+          'mediaId': vehicleBackPictureMediaId,
+          'name': 'carLicenseBehindKey'
+        },
+      ],
     );
     if (isSuccess) {
       showSuccessMessage(
@@ -1144,7 +1168,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       bool isSuccess = await RideMethodHelper().updateExpiredImage(
         recordType: 'DRIVING_LICENSE',
         expiryDate: rideDriverExpireDateController.text,
-        mediaIds: mediaIds,
+        mediaIds: [
+          {
+            'mediaId': drivingImageInFrontMediaId,
+            'name': 'drivingLicenseFrontKey'
+          },
+          {
+            'mediaId': drivingImageInBackMediaId,
+            'name': 'drivingLicenseBehindKey'
+          },
+        ],
       );
             if (isSuccess) {
               showSuccessMessage(
@@ -1308,7 +1341,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       bool isSuccess = await RideMethodHelper().updateExpiredImage(
         recordType: 'National_ID',
         expiryDate: ridePersonalDocExpireDateController.text,
-        mediaIds: mediaIds,
+        mediaIds: [
+        {
+        'mediaId': personalFrontMediaId,
+        'name': 'idFrontKey'
+        },
+        {
+        'mediaId': personalBackMediaId,
+        'name': 'idBehindKey'
+        },
+        ],
       );
       // await RideMethodHelper().uploadDriverId(
       //     idImageInBehind: state.personalBackIdPicture!,
