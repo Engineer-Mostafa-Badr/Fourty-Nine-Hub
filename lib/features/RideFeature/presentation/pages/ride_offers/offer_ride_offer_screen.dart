@@ -387,7 +387,7 @@ class ClientOfferWidget extends StatelessWidget {
                     children: [
                       Label(
                         text: formatPrice(
-                            offers?.price ?? 0, context),
+                            (offers?.newOfferPrice??0)>0?(offers?.newOfferPrice??0):(offers?.price ?? 0), context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const Sizer(width: 4),
