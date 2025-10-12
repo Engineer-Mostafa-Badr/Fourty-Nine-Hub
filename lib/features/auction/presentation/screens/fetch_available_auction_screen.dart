@@ -243,7 +243,7 @@ class _AuctionScreenState extends State<AuctionScreen>
                     color: Colors.white),
               ),
               const SizedBox(width: 6),
-              const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+               Image.asset(Assets.winners),
               const SizedBox(width: 5),
             ],
           ),
