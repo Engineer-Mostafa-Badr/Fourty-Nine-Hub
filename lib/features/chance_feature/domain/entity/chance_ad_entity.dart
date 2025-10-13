@@ -18,6 +18,7 @@ class ChanceAdEntity {
   final int contributors;
   final bool isComplete;
   final int cycleWinner;
+  final int cycle;
   final double adPercentage;
   final int views;
   final String createdAt;
@@ -44,6 +45,7 @@ class ChanceAdEntity {
     required this.contributors,
     required this.isComplete,
     required this.cycleWinner,
+    required this.cycle,
     required this.adPercentage,
     required this.views,
     required this.createdAt,
@@ -71,6 +73,7 @@ class ChanceAdEntity {
     int? contributors,
     bool? isComplete,
     int? cycleWinner,
+    int? cycle,
     double? adPercentage,
     int? views,
     String? createdAt,
@@ -97,6 +100,7 @@ class ChanceAdEntity {
       contributors: contributors ?? this.contributors,
       isComplete: isComplete ?? this.isComplete,
       cycleWinner: cycleWinner ?? this.cycleWinner,
+      cycle: cycle ?? this.cycle,
       adPercentage: adPercentage ?? this.adPercentage,
       views: views ?? this.views,
       createdAt: createdAt ?? this.createdAt,

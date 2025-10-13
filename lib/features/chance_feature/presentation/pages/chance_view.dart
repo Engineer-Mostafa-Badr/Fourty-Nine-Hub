@@ -725,7 +725,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     return _buildChanceCard(
       title: ad.title,
       price: ad.price.toInt(),
-      endDate: ad.isComplete ? 'Ended' : 'Active',
+      endDate:
+          '${context.isArabic ? 'دورة' : 'Cycle'} ${context.isArabic ? FormatNumbers().convertToArabicNumerals(ad.cycle.toString()) : ad.cycle}',
       progress: progress.clamp(0.0, 1.0),
       participants: ad.contributorsCount ?? ad.contributors,
       views: ad.views,
@@ -762,7 +763,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     return _buildChanceCard(
       title: ad.title,
       price: ad.price.toInt(),
-      endDate: 'Ended',
+      endDate:
+          '${context.isArabic ? 'دورة' : 'Cycle'} ${context.isArabic ? FormatNumbers().convertToArabicNumerals(ad.cycle.toString()) : ad.cycle}',
       progress: progress.clamp(0.0, 1.0),
       participants: ad.contributors,
       views: ad.views,
@@ -1050,9 +1052,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w400,
-                          color: status == ChanceStatus.available
-                              ? Colors.orange
-                              : Colors.grey[600],
+                          // color: status == ChanceStatus.available
+                          //     ? Colors.orange
+                          //     : Colors.grey[600],
+                          color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     ],
