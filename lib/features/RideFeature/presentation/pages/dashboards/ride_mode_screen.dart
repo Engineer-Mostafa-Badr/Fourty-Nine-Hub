@@ -72,6 +72,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
     SharedWebSocket.socket!.off("LOADING:CANCELED_LOADING_TRIP");
     SharedWebSocket.socket!.off("LOADING:ACCEPTED_TRIP_OFFER");
     SharedWebSocket.socket!.off("LOADING:REMOVE_TRIP");
+    SharedWebSocket.socket!.off("RIDE:TRIP_CANCELLED_BY_CLIENT");
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext, currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound ?? false);
     debugPrint("dispose REID:NEW_AVAILABLE_TRIP");
