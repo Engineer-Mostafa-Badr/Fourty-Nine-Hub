@@ -1507,8 +1507,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 context.push(Routes.rideModeScreen,
                     extra: RideModeParams(
                         modeType: 'truck',
-                        isSocket:
-                            driverInfo?.driverType == 'socket' ? true : false));
+                        isSocket: false));
               }
             }
           },
@@ -1804,10 +1803,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             RegistrationStatus.approved.status) {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
-                              modeType: 'truk',
-                              isSocket: driverInfo?.driverType == 'socket'
-                                  ? true
-                                  : false));
+                              modeType: 'truck',
+                              isSocket: false));
                     }
                   }
                 },

@@ -1238,7 +1238,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       (data) {
         currentContext.pop();
         result = true;
-        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.isRead = true;
+        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.driverDetails?.isRead = true;
         emit(state.copyWith(
           status: ClientTripsStates.success,
         ));
@@ -1265,7 +1265,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       (data) {
         currentContext.pop();
         result = true;
-        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.isRead = true;
+        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.driverDetails?.isRead = true;
         emit(state.copyWith(
           status: ClientTripsStates.success,
         ));

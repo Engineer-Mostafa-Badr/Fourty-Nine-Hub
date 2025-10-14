@@ -42,8 +42,8 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: backColor ?? Colors.transparent,
-      surfaceTintColor: backColor ?? Colors.transparent,
+      backgroundColor: backColor ?? AppColors.PRIMARY_COLOR,
+      surfaceTintColor: backColor ?? AppColors.PRIMARY_COLOR,
       elevation: 0,
       centerTitle: false,
       titleSpacing: 0,
@@ -58,15 +58,15 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Icon(
               Icons.arrow_back,
               size: 40.w,
-              color: enableCustomAppBar ? AppColors.getReversedTextColor(context) : iconColor,
+              color: AppColors.whiteColor,
             ),
           ),
       title: label != null
           ? Label(
               text: label ?? '',
               maxLines: 2,
-              style: Styles.headerText(fontSize: labelSize??36).copyWith(
-                  color: enableCustomAppBar ? AppColors.getReversedTextColor(context) : textColor))
+              style: Styles.headerText(fontSize: labelSize??32).copyWith(
+                  color: AppColors.whiteColor))
           : null,
       actions: actions,
       bottom: subTitle?.isEmpty ?? true ? null : PreferredSize(
@@ -111,5 +111,5 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(30);
+  Size get preferredSize => const Size.fromHeight(50);
 }

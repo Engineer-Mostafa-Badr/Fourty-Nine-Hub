@@ -160,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen> {
             } else if (isActivate) {
               nextRoute = Routes.HOME;
             } else {
-              nextRoute = Routes.LOGIN;
+              nextRoute = Routes.HOME;
             }
 
             print('Navigating to: $nextRoute');

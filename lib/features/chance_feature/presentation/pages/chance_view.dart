@@ -237,87 +237,77 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
           builder: (context, state) {
             return CustomScaffold(
               enableCustomAppBar: true,
-              backgroundColor: Colors.grey[50],
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(30),
-                child: BackAppBar(
-                  labelSize: 32,
-                  enableCustomAppBar: true,
-                  label: context.isArabic ? 'فرصة' : 'Chance',
-                  backColor: context.isDarkMode
-                      ? AppColors.Floating_Button_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR,
-                  actions: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          final chanceCubit = context.read<ChanceCubit>();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
-                                value: chanceCubit,
-                                child: const ChanceWinnersView(),
-                              ),
+              appBar: BackAppBar(
+                label: context.isArabic ? 'فرصة' : 'Chance',
+                enableCustomAppBar: true,
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        final chanceCubit = context.read<ChanceCubit>();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: chanceCubit,
+                              child: const ChanceWinnersView(),
                             ),
+                          ),
+                        );
+                      },
+                      child: BlocBuilder<ChanceCubit, ChanceState>(
+                        builder: (context, state) {
+                          int totalWinners = 0;
+                          int totalAds = 0;
+
+                          if (state.winnerStatistics != null) {
+                            totalWinners =
+                                state.winnerStatistics!.totalWinner;
+                            totalAds = state.winnerStatistics!.totalAds;
+                          }
+
+                          final winnerText =
+                              ArabicPluralization.getWinnerText(
+                            totalWinners,
+                            context.isArabic,
+                          );
+
+                          final formatNumbers = FormatNumbers();
+                          final displayTotalWinners = context.isArabic
+                              ? formatNumbers.convertToArabicNumerals(
+                                  totalWinners.toString())
+                              : totalWinners.toString();
+                          final displayTotalAds = context.isArabic
+                              ? formatNumbers.convertToArabicNumerals(
+                                  totalAds.toString())
+                              : totalAds.toString();
+
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '$winnerText ($displayTotalWinners/$displayTotalAds)',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  color:  Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Image.asset(
+                                Assets.cupImage,
+                                // width: 22,
+                                // height: 22,
+                              ),
+                            ],
                           );
                         },
-                        child: BlocBuilder<ChanceCubit, ChanceState>(
-                          builder: (context, state) {
-                            int totalWinners = 0;
-                            int totalAds = 0;
-
-                            if (state.winnerStatistics != null) {
-                              totalWinners =
-                                  state.winnerStatistics!.totalWinner;
-                              totalAds = state.winnerStatistics!.totalAds;
-                            }
-
-                            final winnerText =
-                                ArabicPluralization.getWinnerText(
-                              totalWinners,
-                              context.isArabic,
-                            );
-
-                            final formatNumbers = FormatNumbers();
-                            final displayTotalWinners = context.isArabic
-                                ? formatNumbers.convertToArabicNumerals(
-                                    totalWinners.toString())
-                                : totalWinners.toString();
-                            final displayTotalAds = context.isArabic
-                                ? formatNumbers.convertToArabicNumerals(
-                                    totalAds.toString())
-                                : totalAds.toString();
-
-                            return Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  '$winnerText ($displayTotalWinners/$displayTotalAds)',
-                                  style: TextStyle(
-                                    fontSize: 24.sp,
-                                    color: !context.isDarkMode
-                                        ? Colors.white
-                                        : AppColors.PRIMARY_COLOR,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(width: 8.w),
-                                Image.asset(
-                                  Assets.cupImage,
-                                  // width: 22,
-                                  // height: 22,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               body: Column(
                 children: [
