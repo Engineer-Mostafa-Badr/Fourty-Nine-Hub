@@ -198,7 +198,79 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
 
   IO.Socket? socket;
   final subscribedEvents = <String>{};
-  const String url = 'https://9ad6cb01f298.ngrok-free.app';
+  const String url = 'https://49backend.com';
+  String? currentToken;
+  Timer? reconnectTimer;
+  int reconnectAttempts = 0;
+  final maxReconnectAttempts = 5;
+
+  // Forward declaration for mutual recursion
+  late void Function() attemptReconnect;
+
+  // Declare connectSocket first
+  void connectSocket(String token, IO.Socket? existingSocket, 
+      Set<String> events, SendPort sendPort) {
+    existingSocket?.disconnect();
+    existingSocket?.dispose();
+
+    socket = IO.io(
+      url,
+      {
+        'transports': ['websocket'],
+        'autoConnect': true,
+        'extraHeaders': {'Authorization': token},
+      },
+    );
+
+    socket!.connect();
+
+    socket!.onConnect((_) {
+      log("[WebSocketIsolate] Socket connected");
+      reconnectAttempts = 0; // Reset on successful connection
+      reconnectTimer?.cancel();
+      _sendEventToMain(sendPort, 'connect', null);
+    });
+
+    socket!.onDisconnect((_) {
+      log("[WebSocketIsolate] Socket disconnected");
+      _sendEventToMain(sendPort, 'disconnect', null);
+      // Attempt to reconnect
+      attemptReconnect();
+    });
+
+    socket!.onError((error) {
+      log("[WebSocketIsolate] Socket error: ${error?.toString() ?? 'Unknown error'}");
+      // Convert error to string to avoid JSON encoding issues
+      final errorMessage = error?.toString() ?? 'Unknown error';
+      _sendEventToMain(sendPort, 'error', {'message': errorMessage});
+    });
+
+    // Re-subscribe to all events
+    for (final event in events) {
+      _subscribeToEvent(socket!, event, sendPort);
+    }
+  }
+
+  // Now define attemptReconnect
+  attemptReconnect = () {
+    if (reconnectAttempts >= maxReconnectAttempts) {
+      log("[WebSocketIsolate] Max reconnection attempts reached");
+      return;
+    }
+
+    reconnectAttempts++;
+    final delay = Duration(seconds: min(reconnectAttempts * 2, 10));
+    
+    log("[WebSocketIsolate] Attempting to reconnect in ${delay.inSeconds}s (attempt $reconnectAttempts)");
+    
+    reconnectTimer?.cancel();
+    reconnectTimer = Timer(delay, () {
+      if (currentToken != null) {
+        log("[WebSocketIsolate] Reconnecting...");
+        connectSocket(currentToken!, socket, subscribedEvents, mainSendPort);
+      }
+    });
+  };
 
   receivePort.listen((message) {
     final isolateMessage =
@@ -206,43 +278,15 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
 
     switch (isolateMessage.type) {
       case WebSocketMessageType.connect:
-        final token = isolateMessage.data['token'];
-
-        socket?.disconnect();
-        socket?.dispose();
-
-        socket = IO.io(
-          url,
-          {
-            'transports': ['websocket'],
-            'autoConnect': true,
-            'extraHeaders': {'Authorization': token},
-          },
-        );
-
-        socket!.connect();
-
-        socket!.onConnect((_) {
-          log("[WebSocketIsolate] Socket connected");
-          _sendEventToMain(mainSendPort, 'connect', null);
-        });
-
-        socket!.onDisconnect((_) {
-          log("[WebSocketIsolate] Socket disconnected");
-          _sendEventToMain(mainSendPort, 'disconnect', null);
-        });
-
-        socket!.onError((error) {
-          log("[WebSocketIsolate] Socket error: $error");
-          _sendEventToMain(mainSendPort, 'error', error);
-        });
-
-        for (final event in subscribedEvents) {
-          _subscribeToEvent(socket!, event, mainSendPort);
-        }
+        currentToken = isolateMessage.data['token'];
+        reconnectAttempts = 0;
+        reconnectTimer?.cancel();
+        connectSocket(currentToken!, socket, subscribedEvents, mainSendPort);
         break;
 
       case WebSocketMessageType.disconnect:
+        reconnectTimer?.cancel();
+        currentToken = null;
         socket?.disconnect();
         break;
 
@@ -274,6 +318,22 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
   });
 }
 
+int min(int a, int b) => a < b ? a : b;
+
+Future<void> initializeWebSocket(String token) async {
+  try {
+    print('[WebSocket] Initializing WebSocket connection...');
+
+    await WebSocketIsolateManager.instance.initialize();
+    await WebSocketIsolateManager.instance.connect(token);
+
+    print('[WebSocket] ✓ WebSocket connected successfully');
+  } catch (e) {
+    print('[WebSocket] Error initializing WebSocket: $e');
+    rethrow;
+  }
+}
+
 void _subscribeToEvent(IO.Socket socket, String event, SendPort sendPort) {
   socket.on(event, (data) {
     _sendEventToMain(sendPort, event, data);
@@ -281,12 +341,29 @@ void _subscribeToEvent(IO.Socket socket, String event, SendPort sendPort) {
 }
 
 void _sendEventToMain(SendPort sendPort, String event, dynamic data) {
-  final message = WebSocketIsolateMessage(
-    WebSocketMessageType.socketEvent,
-    {
-      'event': event,
-      'data': data,
-    },
-  );
-  sendPort.send(jsonEncode(message.toJson()));
+  try {
+    final message = WebSocketIsolateMessage(
+      WebSocketMessageType.socketEvent,
+      {
+        'event': event,
+        'data': data,
+      },
+    );
+    sendPort.send(jsonEncode(message.toJson()));
+  } catch (e) {
+    // If JSON encoding fails, send a simplified version
+    log("[WebSocketIsolate] Failed to encode message: $e");
+    try {
+      final fallbackMessage = WebSocketIsolateMessage(
+        WebSocketMessageType.socketEvent,
+        {
+          'event': event,
+          'data': {'error': 'Failed to serialize data: ${e.toString()}'},
+        },
+      );
+      sendPort.send(jsonEncode(fallbackMessage.toJson()));
+    } catch (e2) {
+      log("[WebSocketIsolate] Failed to send fallback message: $e2");
+    }
+  }
 }
