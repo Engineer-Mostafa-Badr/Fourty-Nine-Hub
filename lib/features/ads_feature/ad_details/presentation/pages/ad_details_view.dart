@@ -465,7 +465,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           // ),
           Container(
             padding:
-                const EdgeInsets.only(left: 16, right: 16, bottom: 32, top: 8),
+                const EdgeInsets.all(8),
             child: Column(
               children: [
                 // if (state.ad?.userSubscriptionStatus ==

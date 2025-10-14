@@ -132,6 +132,8 @@ abstract class TripRemoteDataSource {
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params);
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params);
 
   Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params);
 
@@ -872,6 +874,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Accept Loading Offer");
+      log("Listen to Accept Loading Offer ");
+      SharedWebSocket.socket!.on(SocketIOListeners.acceptLoadingOffer, (data) {
+        CliLogger.info("Accept Loading Offer data :  $data");
+        log("Accept Loading Offer data :  $data");
+        params(data['acceptedOffer']['tripId']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Accept Loading Offer error $e");
+    }
+  }
+
+  @override
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Accepted Loading Offer");
+      log("Listen to Remove Accepted Loading Offer ");
+      SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingOffer, (data) {
+        CliLogger.info("Remove Accepted Loading Offer data :  $data");
+        log("Remove Accepted Loading Offer data :  $data");
+        params(data['removedTrip']['id']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Remove Accepted Loading Offer error $e");
+    }
+  }
+
+  @override
   void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
     try {
       CliLogger.info("Listen to  New Trip Non Tracking");
@@ -1020,12 +1052,12 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToRemoveLoading(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Remove Loading ");
+      CliLogger.info("Listen to Remove Loading ${SocketIOListeners.removeLoadingTrip} ");
       log("Listen to Remove Trip ");
-      SharedWebSocket.socket!.on(SocketIOListeners.removeLoading, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingTrip, (data) {
         CliLogger.info("Remove Loading data :  $data");
         log("Remove Loading data :  $data");
-        params(data['tripsCanceled']['ids'][0]);
+        params(data['tripsCanceled']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
@@ -1041,7 +1073,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info(" New Loading  data :  $data");
         log(" New Loading  data :  $data");
         print(" New Loading  data :  $data");
-        params(GetLoadingAvailableModel.fromJson(data["tripsUpdated"]));
+        params(GetLoadingAvailableModel.fromJson(data["newTrip"]));
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

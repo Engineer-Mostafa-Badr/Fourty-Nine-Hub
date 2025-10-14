@@ -216,6 +216,7 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
             contributorsCount: 0,
             isFavorite: false,
             userContribution: null,
+            cycle: 0,
           ));
         }
         return Right(ChanceAdModel.fromJson(response['data']));

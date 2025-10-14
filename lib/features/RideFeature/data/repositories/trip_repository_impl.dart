@@ -311,6 +311,16 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params) {
+    return remoteDataSource.listenToAcceptLoadingTripOffer(params);
+  }
+
+  @override
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params) {
+    return remoteDataSource.listenToRemoveAcceptedLoadingTripOffer(params);
+  }
+
+  @override
   void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
   return remoteDataSource.listenToAvailableUntrackedTrip(params);
   }

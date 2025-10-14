@@ -17,25 +17,32 @@ class SubCategoryListViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: AlignmentDirectional.center,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      height: 32,
-     constraints: BoxConstraints(minWidth: 220.w),
-      // width: 116,
-      decoration: BoxDecoration(
-        color: subCategory?.isSelected == true
-            ? AppColors.getButtonPrimaryColor(context)
-            : AppColors.getFillColor(context),
-        borderRadius: BorderRadius.circular(10),
+      padding: EdgeInsets.all(
+        8,
       ),
-      child: Label(
-        text: context.isArabic
+     constraints: BoxConstraints(minWidth: 220.w),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40.h),
+          color: subCategory?.isSelected==true
+              ? AppColors.getButtonPrimaryColor(context)
+              : AppColors.getFillColor(context),
+          border: Border.all(
+              color: AppColors.getButtonPrimaryColor(context),
+              width: 2)),
+      child: Text(
+         context.isArabic
             ? (subCategory?.nameAr ?? '')
             : (subCategory?.nameEn ?? ''),
-        style: Styles.mediumText(
-          fontSize: 24,
-          color: subCategory?.isSelected == true ? AppColors.getReversedTextColor(context) : AppColors.getTextColor(context),
-        ),
+        maxLines: 2,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+        style: Styles.headerText(
+            fontSize: 24,
+            color: subCategory?.isSelected==true
+                ? context.isDarkMode
+                ? Colors.black
+                : Colors.white
+                : AppColors.getTextColor(context)),
       ),
     );
   }

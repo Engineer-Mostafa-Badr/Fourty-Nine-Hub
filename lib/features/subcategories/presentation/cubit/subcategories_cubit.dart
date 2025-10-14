@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -32,6 +33,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   final GetCustomPageSubCategoriesUseCase _getCustomPageSubCategoriesUseCase;
   final ToggleSubCategoryToFavoritesUseCase
       _toggleSubCategoryToFavoritesUseCase;
+  final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final GetAdsUseCase _getAdsUseCase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final FilterAdUseCase _filterAdUseCase;
@@ -108,6 +110,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   SubcategoriesCubit(
     this._getSubcategoriesUsecase,
     this._toggleSubCategoryToFavoritesUseCase,
+    this._toggleFavoriteCategoryUseCase,
     this._getMainCategoryDetailsUseCase,
     this._getAdsUseCase,
     this._filterAdUseCase,
@@ -835,6 +838,20 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     //   isMyAdsOpen = false;
     // }
     emit(state.copyWith());
+  }
+
+  Future<bool> toggleFavoriteMedicalService(String subcategoryId) async {
+    print("toggleFavoriteMedicalService");
+    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+    bool result = false;
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+            (data) {
+          result = data;
+          emit(state.copyWith(status: SubcategoriesStates.initState));
+        });
+    return result;
   }
 
   Future<bool> toggleSubCategoryToFavorites(String subcategoryId) async {

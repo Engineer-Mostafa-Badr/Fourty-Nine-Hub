@@ -34,21 +34,21 @@ class BeStarHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("Banner Title: ${state.banner?.titleAr} ${state.banner?.titleEn}");
     return Container(
-      padding: EdgeInsets.only(left: 16.w, right: 16.w),
+      padding: EdgeInsets.all(8),
       child: Column(
         children: [
           // Banner Image
           Container(
             width: double.infinity,
-            height: 280.h,
+            height: 180,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: ImageFromInternet(
               image: state.banner?.banner ?? '',
               fit: BoxFit.fitWidth,
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
           const Sizer(),

@@ -13,7 +13,7 @@ class RideMethodHelper {
   Future<bool> updateExpiredImage(
       {required String recordType,
         required String expiryDate,
-        required List<String> mediaIds}) async {
+        required List<Map<String, dynamic>> mediaIds}) async {
     bool successUpdate = false;
     var response = await serviceLocator<ApiConsumer>().put(EndPoints.requestUpdate,
         data: {

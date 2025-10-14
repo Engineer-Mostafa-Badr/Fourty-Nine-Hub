@@ -34,9 +34,7 @@ class GovernorateFilterAdsView extends StatefulWidget {
 class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
   @override
   void initState() {
-    context.read<CreateAdCubit>().loadData(
-        subCategoryId: widget.categorization.mainCategory.id,
-        fromMarriage: false);
+    context.read<CreateAdCubit>().loadGovernorateData();
     super.initState();
   }
 
@@ -56,16 +54,14 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-              label:
-                  "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
-        ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(10.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        enableCustomAppBar: true,
+        appBar: BackAppBar(
+            label:
+                "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+        body: Expanded(
+          child: ListView(
+            padding: EdgeInsets.all(16),
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(text: LocaleKeys.governorate.localize),
               SizedBox(
@@ -192,7 +188,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                   width: double.infinity,
                   label: LocaleKeys.filter.localize,
                   onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
                     controller.filterGovernorateAds(
                         categorize: widget.categorization, context: context);
                   }),

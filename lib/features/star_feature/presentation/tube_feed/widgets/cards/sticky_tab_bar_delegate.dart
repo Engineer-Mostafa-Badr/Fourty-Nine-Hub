@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+import '../../../../../../res/style/app_colors.dart';
 
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;
@@ -141,6 +142,12 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
 
   Widget _buildTabPill(String text, int index, bool isSelected) {
     final size = MediaQuery.sizeOf(context);
+    // Get primary color based on dark mode
+    final primaryColor = AppColors.PRIMARY_COLOR;
+
+    final fillColor =
+        context.isDarkMode ? Colors.grey[800]! : const Color(0xffF5F5F5);
+
     return GestureDetector(
       onTap: () {
         ManageVibration.vibrate();
@@ -150,27 +157,27 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.056, vertical: size.height * 0.01),
+            horizontal: size.width * 0.056, vertical: size.height * 0.014),
         decoration: BoxDecoration(
-          color: isSelected
-              ? (context.isDarkMode ? Colors.white : Color(0xff0B1035))
-              : Color(0xffE0E0E0),
-          borderRadius: BorderRadius.circular(size.width * 0.025),
+          color: isSelected ? primaryColor : fillColor,
+          borderRadius:
+              BorderRadius.circular(40.h), // Pill shape like TabWidget
           border: Border.all(
-            color: isSelected
-                ? Colors.transparent
-                : (context.isDarkMode ? Colors.grey[600]! : Colors.grey[300]!),
-            width: 1,
+            color: primaryColor, // Always show border with primary color
+            width: 2, // Same as TabWidget
           ),
         ),
-        child: Label(
-          text: text,
-          style: TextStyle(
-            color: isSelected
-                ? (context.isDarkMode ? Colors.black : Colors.white)
-                : (context.isDarkMode ? Colors.white : Colors.black),
-            fontSize: context.isArabic ? size.width * 0.03 : size.width * 0.025,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        child: Center(
+          child: Label(
+            text: text,
+            style: TextStyle(
+              color: isSelected
+                  ? (context.isDarkMode ? Colors.black : Colors.white)
+                  : (context.isDarkMode ? Colors.white : Colors.black),
+              fontSize:
+                  context.isArabic ? size.width * 0.03 : size.width * 0.025,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
       ),

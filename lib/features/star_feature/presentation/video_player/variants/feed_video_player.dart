@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../core/video_player_controller_wrapper.dart';
@@ -51,6 +54,7 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
   bool _isDisposed = false;
+  double _currentProgress = 0.0;
 
   Timer? _playDelayTimer;
   Timer? _initTimer;
@@ -89,6 +93,13 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
           setState(() {
             _isPlaying = state.isPlaying;
             _isInitialized = state.isInitialized;
+
+            // Update progress bar
+            if (state.isPlaying && state.duration.inMilliseconds > 0) {
+              _currentProgress =
+                  state.position.inMilliseconds / state.duration.inMilliseconds;
+              _currentProgress = _currentProgress.clamp(0.0, 1.0);
+            }
           });
 
           if (state.isPlaying && !_hasTrackedView) {
@@ -157,6 +168,7 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
 
   void _toggleFavorite() {
     if (widget.talent != null && widget.cubit != null) {
+      ManageVibration.vibrate();
       widget.cubit!.toggleFavorite(widget.talent!.id);
     }
   }
@@ -178,21 +190,19 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
           (fav) => fav.id == widget.talent!.id,
         );
 
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.6),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: IconButton(
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: const Color(0xffFF0000),
-              size: 20,
+        return IconAppButton(
+          icon: isFavorite ? Icons.favorite : Icons.favorite_outline,
+          onPressed: _toggleFavorite,
+          color: AppColors.SECONDARY_COLOR,
+          size: 55.sp,
+          shadows: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.8),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            onPressed: _toggleFavorite,
-            padding: const EdgeInsets.all(8),
-            constraints: const BoxConstraints(),
-          ),
+          ],
         );
       },
     );
@@ -336,6 +346,29 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
                         onPressed: _toggleMute,
                         padding: const EdgeInsets.all(8),
                         constraints: const BoxConstraints(),
+                      ),
+                    ),
+                  ),
+
+                // Progress bar (bottom, when playing)
+                if (_isInitialized && _isPlaying)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                      child: FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: _currentProgress,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                          ),
+                        ),
                       ),
                     ),
                   ),

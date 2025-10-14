@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 
 import '../../presentation_exports.dart';
 import '../widgets/common/empty_state_widget.dart';
-import '../widgets/common/load_more_widget.dart';
 
 class HistoryContentBuilder {
   static Widget buildSliver({
     required BuildContext context,
     required StarCubit cubit,
+    ScrollController? scrollController,
   }) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         if (state.isLoading(TalentCategory.history) &&
             state.historyTalents.isEmpty) {
-          return SliverToBoxAdapter(
+          return SliverFillRemaining(
+            hasScrollBody: false,
             child: SizedBox(
               height: 200,
               child: const Center(child: CustomCircularProgressIndicator()),
@@ -34,26 +37,26 @@ class HistoryContentBuilder {
           );
         }
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index == historyTalents.length) {
-                return LoadMoreWidget(
-                  state: state,
-                  category: TalentCategory.history,
-                  cubit: cubit,
-                );
-              }
+        final controller = scrollController ?? ScrollController();
 
-              final talent = historyTalents[index];
-              return TalentHistoryItem(
-                talent: talent,
-                cubit: cubit,
-                index: index,
-              );
-            },
-            childCount: historyTalents.length +
-                (state.hasMore(TalentCategory.history) ? 1 : 0),
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).height * .6,
+            child: OlxPaginationWidget(
+              items: List.generate(
+                historyTalents.length,
+                (index) => TalentHistoryItem(
+                  talent: historyTalents[index],
+                  cubit: cubit,
+                  index: index,
+                ),
+              ),
+              banners: bannersList,
+              loadPage: (page) => cubit.loadTalents(TalentCategory.history),
+              scrollController: controller,
+              itemsPerPage: 3,
+            ),
           ),
         );
       },

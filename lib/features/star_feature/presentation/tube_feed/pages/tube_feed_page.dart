@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/my_talents/widgets/create_star.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -17,22 +18,7 @@ import '../../../../../core/utils/format_numbers.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../controller/star_cubit/star_cubit.dart';
-import '../../my_talents/pages/my_video_details_view.dart';
 import '../../presentation_exports.dart';
-import '../../shared/shared_exports.dart';
-import '../builders/available_content_builder.dart';
-import '../builders/favorite_content_builder.dart';
-import '../builders/history_content_builder.dart';
-import '../builders/my_talent_content_builder.dart';
-import '../mixins/scroll_sync_mixin.dart';
-import '../mixins/search_mixin.dart';
-import '../mixins/tab_management_mixin.dart';
-import '../widgets/cards/profile_search_results.dart';
-import '../widgets/cards/sticky_tab_bar_delegate.dart';
-import '../widgets/cards/talent_card.dart';
-import '../widgets/header/be_star_header_section.dart';
-import '../../shared/widgets/common/loading_indicator.dart';
 
 class TubeFeedView extends StatefulWidget {
   const TubeFeedView({super.key});
@@ -129,31 +115,33 @@ class _TubeFeedViewState extends State<TubeFeedView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: _showFloatingButton
-          ? buildFloatingAction(context,
-              title: "${LocaleKeys.addTalent.localize} +", () {
-              ManageVibration.vibrate();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CreateStar()),
-              );
-            })
-          : null,
-      body: BlocConsumer<StarCubit, StarState>(
+    return BlocConsumer<StarCubit, StarState>(
         listener: _handleStateListener,
-        builder: (context, state) {
-          if (state.status == StarStates.loading &&
-              state.availableTalents.isEmpty) {
-            return const StarLoadingIndicator();
-          }
-
-          return RefreshIndicator(
+      builder: (context,state) {
+        return CustomScaffold(
+          enableCustomAppBar: true,
+          floatingActionButton: _showFloatingButton
+              ? buildFloatingAction(context,
+                  title: "${LocaleKeys.addTalent.localize} +", () {
+                  ManageVibration.vibrate();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CreateStar()),
+                  );
+                })
+              : null,
+          appBar: BackAppBar(
+            label: context.isArabic ? 'تيوب' : 'Tube',
+            enableCustomAppBar: true,
+            actions: [_buildWinnerStats(context, state)],
+          ),
+          body: state.status == StarStates.loading &&
+              state.availableTalents.isEmpty?const StarLoadingIndicator():RefreshIndicator(
             onRefresh: () => _handleRefresh(),
             displacement: 40.0,
             strokeWidth: 2.5,
             backgroundColor:
-                context.isDarkMode ? Colors.grey[800] : Colors.white,
+            context.isDarkMode ? Colors.grey[800] : Colors.white,
             color: context.isDarkMode ? Colors.white : Colors.black,
             child: NotificationListener<ScrollNotification>(
               onNotification: (scrollInfo) {
@@ -162,9 +150,9 @@ class _TubeFeedViewState extends State<TubeFeedView>
               },
               child: _buildNestedScrollView(state),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      }
     );
   }
 
@@ -243,9 +231,6 @@ class _TubeFeedViewState extends State<TubeFeedView>
 
   List<Widget> _buildHeaders(BuildContext context, StarState state) {
     return [
-      // AppBar
-      _buildAppBar(context, state),
-
       // Header Section
       if (!isSearching)
         SliverToBoxAdapter(child: BeStarHeaderSection(state: state)),
@@ -335,7 +320,7 @@ class _TubeFeedViewState extends State<TubeFeedView>
                 Text(
                   winnerText,
                   style: Styles.headerText(
-                    color: context.isDarkMode ? Colors.black : Colors.white,
+                    color: Colors.white,
                     fontSize: 28,
                   ),
                 ),
@@ -343,7 +328,7 @@ class _TubeFeedViewState extends State<TubeFeedView>
                 Text(
                   '($displayTotalWinners/$displayTotalVideos)',
                   style: Styles.smallText(
-                    color: context.isDarkMode ? Colors.black : Colors.white,
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(width: 4),
@@ -396,14 +381,21 @@ class _TubeFeedViewState extends State<TubeFeedView>
         return FavoriteContentBuilder.buildSliver(
           context: context,
           cubit: _cubit,
+          scrollController: favoriteController,
         );
       case 2: // History
         return HistoryContentBuilder.buildSliver(
           context: context,
           cubit: _cubit,
+          scrollController: historyController,
         );
       case 3: // My Talents
         return _buildMyTalentContent(state);
+      // return MyTalentContentBuilder.buildSliver(
+      //   context: context,
+      //   cubit: _cubit,
+      //   scrollController: myTalentController,
+      // );
       default:
         return AvailableContentBuilder.buildSliver(
           context: context,
@@ -421,14 +413,11 @@ class _TubeFeedViewState extends State<TubeFeedView>
       return SliverToBoxAdapter(
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.75,
-          child: BlocProvider<StarCubit>.value(
-            value: _cubit,
-            child: VideoDetailsView(
-              talent: selectedVideoTalent!,
-              mediaUrl: selectedVideoUrl!,
-              cubit: _cubit,
-              onBack: onBackFromVideoDetails,
-            ),
+          child: VideoDetailsView(
+            talent: selectedVideoTalent!,
+            mediaUrl: selectedVideoUrl!,
+            cubit: _cubit,
+            onBack: onBackFromVideoDetails,
           ),
         ),
       );

@@ -6,14 +6,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/create_chance_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/widgets/cards/sticky_tab_bar_delegate.dart';
+import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -70,16 +72,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   List<dynamic> _categories = []; // Store fetched categories
   bool _isCategoriesLoading = false;
 
-  // Main scroll controller for the outer NestedScrollView
-  final ScrollController _mainScrollController = ScrollController();
-
   // Individual controllers for each tab content
   final ScrollController _availableController = ScrollController();
   final ScrollController _favoriteController = ScrollController();
   final ScrollController _expireController = ScrollController();
   final ScrollController _myChanceController = ScrollController();
-
-  bool _isSyncing = false;
   @override
   void initState() {
     super.initState();
@@ -87,93 +84,58 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     _tabController.addListener(_onTabChanged);
     _searchController.addListener(_onSearchChanged);
 
-    // Setup scroll synchronization
-    _setupScrollSynchronization();
-
     // Load winner statistics
     context.read<ChanceCubit>().getWinnerStatistics();
   }
 
-  void _setupScrollSynchronization() {
-    // Sync main controller with active tab controller
-    _mainScrollController.addListener(() => _syncFromMain());
+  // void _onTabChanged() {
+  //   // Prevent duplicate calls during animation
+  //   // Only load data when the tab is actually changing, not during animation
+  //   if (!_tabController.indexIsChanging) return;
 
-    // Sync tab controllers with main controller
-    _availableController.addListener(() => _syncToMain(_availableController));
-    _favoriteController.addListener(() => _syncToMain(_favoriteController));
-    _expireController.addListener(() => _syncToMain(_expireController));
-    _myChanceController.addListener(() => _syncToMain(_myChanceController));
-  }
+  //   setState(() {
+  //     _selectedTabIndex = _tabController.index;
+  //     // Clear search when switching tabs
+  //     _isSearching = false;
+  //     _isCategoriesVisible = false;
+  //     _searchController.clear();
+  //     // Reset pagination when switching tabs
+  //     _lastLoadedPage = 1;
+  //   });
 
-  void _syncFromMain() {
-    if (_isSyncing || !mounted) return;
-    _isSyncing = true;
-
-    final activeController = _getActiveTabController();
-    if (activeController != null &&
-        activeController.hasClients &&
-        _mainScrollController.hasClients &&
-        mounted) {
-      activeController.jumpTo(_mainScrollController.offset.clamp(
-        activeController.position.minScrollExtent,
-        activeController.position.maxScrollExtent,
-      ));
-    }
-    _isSyncing = false;
-  }
-
-  void _syncToMain(ScrollController tabController) {
-    if (_isSyncing || !mounted) return;
-    if (tabController != _getActiveTabController()) return;
-    _isSyncing = true;
-
-    if (_mainScrollController.hasClients &&
-        tabController.hasClients &&
-        mounted) {
-      _mainScrollController.jumpTo(tabController.offset.clamp(
-        _mainScrollController.position.minScrollExtent,
-        _mainScrollController.position.maxScrollExtent,
-      ));
-    }
-    _isSyncing = false;
-  }
-
-  ScrollController? _getActiveTabController() {
-    try {
-      switch (_selectedTabIndex) {
-        case 0:
-          return _availableController.hasClients ? _availableController : null;
-        case 1:
-          return _favoriteController.hasClients ? _favoriteController : null;
-        case 2:
-          return _expireController.hasClients ? _expireController : null;
-        case 3:
-          return _myChanceController.hasClients ? _myChanceController : null;
-        default:
-          return null;
-      }
-    } catch (e) {
-      debugPrint('Error getting active tab controller: $e');
-      return null;
-    }
-  }
+  //   // Load data based on selected tab
+  //   switch (_selectedTabIndex) {
+  //     case 1: // Favorite
+  //       context.read<ChanceCubit>().getFavoriteChanceAds();
+  //       break;
+  //     case 2: // Expire
+  //       context.read<ChanceCubit>().getExpiredChanceAds();
+  //       break;
+  //     case 3: // My Talent
+  //       context.read<ChanceCubit>().getMyChanceAds();
+  //       break;
+  //     default:
+  //       // Available tab - data already loaded
+  //       break;
+  //   }
+  // }
 
   void _onTabChanged() {
-    // Prevent duplicate calls during animation
-    // Only load data when the tab is actually changing, not during animation
     if (!_tabController.indexIsChanging) return;
 
     setState(() {
       _selectedTabIndex = _tabController.index;
-      // Clear search when switching tabs
       _isSearching = false;
       _isCategoriesVisible = false;
       _searchController.clear();
-      // Reset pagination when switching tabs
+
+      // Reset pagination for all tabs
       _lastLoadedPage = 1;
+      _lastLoadedFavoritePage = 1;
+      _lastLoadedExpiredPage = 1;
+      _lastLoadedMyChancePage = 1;
     });
 
-    // Load data based on selected tab
     switch (_selectedTabIndex) {
       case 1: // Favorite
         context.read<ChanceCubit>().getFavoriteChanceAds();
@@ -185,7 +147,6 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
         context.read<ChanceCubit>().getMyChanceAds();
         break;
       default:
-        // Available tab - data already loaded
         break;
     }
   }
@@ -276,158 +237,236 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
           builder: (context, state) {
             return CustomScaffold(
               enableCustomAppBar: true,
-              backgroundColor: Colors.grey[50],
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(30),
-                child: BackAppBar(
-                  labelSize: 32,
-                  enableCustomAppBar: true,
-                  label: context.isArabic ? 'فرصة' : 'Chance',
-                  backColor: context.isDarkMode
-                      ? AppColors.Floating_Button_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR,
-                  actions: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: GestureDetector(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          final chanceCubit = context.read<ChanceCubit>();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
-                                value: chanceCubit,
-                                child: const ChanceWinnersView(),
-                              ),
+              appBar: BackAppBar(
+                label: context.isArabic ? 'فرصة' : 'Chance',
+                enableCustomAppBar: true,
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        final chanceCubit = context.read<ChanceCubit>();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: chanceCubit,
+                              child: const ChanceWinnersView(),
                             ),
+                          ),
+                        );
+                      },
+                      child: BlocBuilder<ChanceCubit, ChanceState>(
+                        builder: (context, state) {
+                          int totalWinners = 0;
+                          int totalAds = 0;
+
+                          if (state.winnerStatistics != null) {
+                            totalWinners =
+                                state.winnerStatistics!.totalWinner;
+                            totalAds = state.winnerStatistics!.totalAds;
+                          }
+
+                          final winnerText =
+                              ArabicPluralization.getWinnerText(
+                            totalWinners,
+                            context.isArabic,
+                          );
+
+                          final formatNumbers = FormatNumbers();
+                          final displayTotalWinners = context.isArabic
+                              ? formatNumbers.convertToArabicNumerals(
+                                  totalWinners.toString())
+                              : totalWinners.toString();
+                          final displayTotalAds = context.isArabic
+                              ? formatNumbers.convertToArabicNumerals(
+                                  totalAds.toString())
+                              : totalAds.toString();
+
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '$winnerText ($displayTotalWinners/$displayTotalAds)',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  color:  Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Image.asset(
+                                Assets.cupImage,
+                                // width: 22,
+                                // height: 22,
+                              ),
+                            ],
                           );
                         },
-                        child: BlocBuilder<ChanceCubit, ChanceState>(
-                          builder: (context, state) {
-                            int totalWinners = 0;
-                            int totalAds = 0;
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              body: Column(
+                children: [
+                  // Banner
+                  if (!_isSearching) _buildBanner(),
 
-                            if (state.winnerStatistics != null) {
-                              totalWinners =
-                                  state.winnerStatistics!.totalWinner;
-                              totalAds = state.winnerStatistics!.totalAds;
-                            }
-
-                            final winnerText =
-                                ArabicPluralization.getWinnerText(
-                              totalWinners,
-                              context.isArabic,
-                            );
-
-                            final formatNumbers = FormatNumbers();
-                            final displayTotalWinners = context.isArabic
-                                ? formatNumbers.convertToArabicNumerals(
-                                    totalWinners.toString())
-                                : totalWinners.toString();
-                            final displayTotalAds = context.isArabic
-                                ? formatNumbers.convertToArabicNumerals(
-                                    totalAds.toString())
-                                : totalAds.toString();
-
-                            return Row(
+                  // Search Bar or Tab Bar
+                  Container(
+                    color: context.isDarkMode
+                        ? AppColors.c0B1035
+                        : Colors.grey[50],
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+                    child: _isSearching
+                        ? SingleChildScrollView(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  '$winnerText ($displayTotalWinners/$displayTotalAds)',
-                                  style: TextStyle(
-                                    fontSize: 24.sp,
-                                    color: !context.isDarkMode
+                                // Tabs
+                                SizedBox(
+                                  height: 60.h,
+                                  child: Row(
+                                    children: List.generate(
+                                      4,
+                                      (index) {
+                                        final labels = [
+                                          context.isArabic
+                                              ? 'متاح'
+                                              : 'Available',
+                                          context.isArabic
+                                              ? 'مفضلة'
+                                              : 'Favorite',
+                                          context.isArabic
+                                              ? 'منتهي'
+                                              : 'Expired',
+                                          context.isArabic
+                                              ? 'فرصي'
+                                              : 'My Chance',
+                                        ];
+                                        return Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.w),
+                                            child: TabWidget(
+                                              title: labels[index],
+                                              selected:
+                                                  _tabController.index == index,
+                                              onTap: () {
+                                                _tabController.animateTo(index);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                // Search Field
+                                SizedBox(
+                                  height: 60.h,
+                                  child: TextFormField(
+                                    controller: _searchController,
+                                    autofocus: true,
+                                    decoration: InputDecoration(
+                                      hintText: context.isArabic
+                                          ? 'بحث...'
+                                          : 'Search...',
+                                      prefixIcon: const Icon(Icons.search),
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.close),
+                                        onPressed: () {
+                                          ManageVibration.vibrate();
+                                          _toggleSearch();
+                                        },
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox(
+                            height: 70.h,
+                            child: Row(
+                              children: [
+                                // Search Icon
+
+                                GestureDetector(
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    _toggleSearch();
+                                  },
+                                  child: SvgPicture.asset(
+                                    Assets.searchIcon,
+                                    color: context.isDarkMode
                                         ? Colors.white
-                                        : AppColors.PRIMARY_COLOR,
-                                    fontWeight: FontWeight.bold,
+                                        : Colors.black,
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
-                                Image.asset(
-                                  Assets.cupImage,
-                                  // width: 22,
-                                  // height: 22,
+                                // Tabs
+                                ...List.generate(
+                                  4,
+                                  (index) {
+                                    final labels = [
+                                      context.isArabic ? 'متاح' : 'Available',
+                                      context.isArabic ? 'مفضلة' : 'Favorite',
+                                      context.isArabic ? 'منتهي' : 'Expired',
+                                      context.isArabic ? 'فرصي' : 'My Chance',
+                                    ];
+                                    return Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w),
+                                        child: TabWidget(
+                                          title: labels[index],
+                                          selected:
+                                              _tabController.index == index,
+                                          onTap: () {
+                                            _tabController.animateTo(index);
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
-                            );
-                          },
-                        ),
-                      ),
+                            ),
+                          ),
+                  ),
+
+                  // Categories Section (if visible during search)
+                  if (_isCategoriesVisible && _isSearching)
+                    _buildCategoriesSection(),
+
+                  // Content Area
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildAvailableTab(state),
+                        _buildFavoriteTab(state),
+                        _buildExpireTab(state),
+                        _buildMyChanceTab(state),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              body: NestedScrollView(
-                controller: _mainScrollController,
-                physics: const BouncingScrollPhysics(),
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    // Banner - يختفي مع الـ scroll
-                    if (!_isSearching)
-                      SliverAppBar(
-                        pinned: false,
-                        floating: false,
-                        snap: false,
-                        expandedHeight: 200.h,
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        surfaceTintColor: Colors.transparent,
-                        automaticallyImplyLeading: false,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: _buildBanner(),
-                          collapseMode: CollapseMode.parallax,
-                        ),
-                      ),
-
-                    // Sticky Tabs - Normal state
-                    if (!_isSearching)
-                      SliverPersistentHeader(
-                        pinned: true,
-                        floating: false,
-                        delegate: StickyTabBarDelegate(
-                          tabController: _tabController,
-                          context: context,
-                          onSearchTap: _toggleSearch,
-                          showSearchField: false,
-                          tabTitles: [
-                            context.isArabic ? 'متاح' : 'Available',
-                            context.isArabic ? 'مفضلة' : 'Favorite',
-                            context.isArabic ? 'منتهي' : 'Expire',
-                            context.isArabic ? 'فرصي' : 'My Chance',
-                          ],
-                        ),
-                      ),
-
-                    // Sticky Tabs - Search state
-                    if (_isSearching)
-                      SliverPersistentHeader(
-                        pinned: true,
-                        floating: false,
-                        delegate: StickyTabBarDelegate(
-                          tabController: _tabController,
-                          context: context,
-                          onSearchTap: _toggleSearch,
-                          showSearchField: true,
-                          searchController: _searchController,
-                          tabTitles: [
-                            context.isArabic ? 'متاح' : 'Available',
-                            context.isArabic ? 'مفضلة' : 'Favorite',
-                            context.isArabic ? 'منتهي' : 'Expire',
-                            context.isArabic ? 'فرصي' : 'My Chance',
-                          ],
-                          // onSearchChanged: _onSearchChanged,
-                        ),
-                      ),
-
-                    // Categories Section (if visible during search) - نقلتها لتحت الـ tabs
-                    if (_isCategoriesVisible && _isSearching)
-                      SliverToBoxAdapter(
-                        child: _buildCategoriesSection(),
-                      ),
-                  ];
-                },
-                body: _buildSynchronizedTabContent(state),
+                  ),
+                ],
               ),
               // floatingActionButton: FloatingActionButtonWidget(),
               floatingActionButton: _showFloatingButton
@@ -456,6 +495,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
 
   Widget _buildBanner() {
     return Container(
+      height: 180.h,
       margin: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
@@ -469,15 +509,35 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(
-                'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop',
+        child: Image.network(
+          'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop',
+          fit: BoxFit.cover,
+          width: double.infinity,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              color: Colors.grey[200],
+              width: 100.w,
+              height: 100.h,
+              child: Center(
+                child: CustomLoading(
+                  searchLoading: true,
+                  // value: loadingProgress.expectedTotalBytes != null
+                  //     ? loadingProgress.cumulativeBytesLoaded /
+                  //         loadingProgress.expectedTotalBytes!
+                  //     : null,
+                ),
               ),
-              fit: BoxFit.cover,
-            ),
-          ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: Colors.grey[200],
+              child: const Center(
+                child: Icon(Icons.image_not_supported, size: 40),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -487,8 +547,12 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     if (_isCategoriesLoading) {
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        width: 100.w,
+        height: 100.h,
         child: const Center(
-          child: CircularProgressIndicator(),
+          child: CustomLoading(
+            searchLoading: true,
+          ),
         ),
       );
     }
@@ -498,7 +562,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24.w),
+      margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+      constraints: BoxConstraints(
+        maxHeight: 300.h, // Limit the maximum height
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.r),
@@ -510,17 +577,23 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
           ),
         ],
       ),
-      child: Column(
-        children: _categories.map((category) {
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics:
+            const ClampingScrollPhysics(), // Enable scrolling within constraints
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final category = _categories[index];
           final categoryName =
               context.isArabic ? category.nameAr : category.nameEn;
 
           return ListTile(
             title: Text(
-              categoryName,
+              categoryName ?? '',
               style: TextStyle(
                 fontSize: 24.sp,
                 fontWeight: FontWeight.w600,
+                color: Colors.black87,
               ),
             ),
             onTap: () {
@@ -530,183 +603,260 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
               setState(() {
                 _isCategoriesVisible = false;
                 _isSearching = false;
-                _searchController.text = categoryName;
+                _searchController.text = categoryName ?? '';
               });
             },
           );
-        }).toList(),
+        },
       ),
     );
   }
 
-  Widget _buildSynchronizedTabContent(ChanceState state) {
-    return CustomScrollView(
-      physics: const NeverScrollableScrollPhysics(),
-      slivers: [
-        _buildTabContentSliver(state),
-      ],
-    );
-  }
-
-  Widget _buildTabContentSliver(ChanceState state) {
+  Widget _buildAvailableTab(ChanceState state) {
     if (state.isLoading) {
-      return const SliverFillRemaining(
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (state.isFailure) {
-      return const SliverFillRemaining(
-        child: Center(
-          child: Text(
-            'خطأ في تحميل البيانات',
-            style: TextStyle(fontSize: 16, color: Colors.red),
-          ),
+      return Center(
+          child: SizedBox(
+        width: 100.w,
+        height: 100.h,
+        child: CustomLoading(
+          searchLoading: true,
         ),
-      );
+      ));
     }
 
-    // Return content based on selected tab index (controlled by StickyTabBarDelegate)
-    switch (_selectedTabIndex) {
-      case 0: // Available
-        return _buildAvailableTabSliver(state);
-      case 1: // Favorite
-        return _buildFavoriteTabSliver(state);
-      case 2: // Expire
-        return _buildExpireTabSliver(state);
-      case 3: // My Talent
-        return _buildMyTalentTabSliver(state);
-      default:
-        return _buildAvailableTabSliver(state);
-    }
-  }
-
-  Widget _buildAvailableTabSliver(ChanceState state) {
     final List<ChanceAdEntity> ads =
         _isSearching && _searchController.text.isNotEmpty
             ? (state.searchResults ?? [])
             : (state.chanceAds ?? []);
 
     if (ads.isEmpty) {
-      return SliverFillRemaining(
-        child: Center(
-          child: Text(
-            context.isArabic ? 'لا توجد إعلانات متاحة' : 'No available ads',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
+      return Center(
+        child: Text(
+          context.isArabic ? 'لا توجد إعلانات متاحة' : 'No available ads',
+          style: const TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
     }
 
-    return SliverFillRemaining(
-      hasScrollBody: false,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * .7,
-        child: GlowingOverscrollIndicator(
-          axisDirection: AxisDirection.down,
-          color: AppColors.PRIMARY_COLOR_DARK,
-          child: OlxPaginationWidget(
-            items: ads.map((ad) => _buildChanceCardFromEntity(ad)).toList(),
-            banners: bannersList,
-            loadPage: _loadChanceAdsPage,
-            scrollController:
-                _availableController, // Let it handle its own scrolling
-            itemsPerPage: 5,
-          ),
-        ),
+    return GlowingOverscrollIndicator(
+      axisDirection: AxisDirection.down,
+      color: AppColors.PRIMARY_COLOR_DARK,
+      child: OlxPaginationWidget(
+        items: ads.map((ad) => _buildChanceCardFromEntity(ad)).toList(),
+        banners: bannersList,
+        loadPage: _loadChanceAdsPage,
+        scrollController: _availableController,
+        itemsPerPage: 5,
       ),
     );
   }
 
-  Widget _buildFavoriteTabSliver(ChanceState state) {
+  // Widget _buildFavoriteTab(ChanceState state) {
+  //   if (state.isLoading) {
+  //     return const Center(child: CircularProgressIndicator());
+  //   }
+
+  //   final List<ChanceAdEntity> favoriteAds = state.favoriteChanceAds ?? [];
+
+  //   if (favoriteAds.isEmpty) {
+  //     return const Center(
+  //       child: Text(
+  //         'لا توجد إعلانات مفضلة',
+  //         style: TextStyle(fontSize: 16, color: Colors.grey),
+  //       ),
+  //     );
+  //   }
+
+  //   return GlowingOverscrollIndicator(
+  //     axisDirection: AxisDirection.down,
+  //     color: AppColors.PRIMARY_COLOR_DARK,
+  //     child: ListView.builder(
+  //       controller: _favoriteController,
+  //       itemCount: favoriteAds.length,
+  //       itemBuilder: (context, index) {
+  //         final ad = favoriteAds[index];
+  //         return _buildChanceCardFromEntity(ad, isFavorite: true);
+  //       },
+  //     ),
+  //   );
+  // }
+  Widget _buildFavoriteTab(ChanceState state) {
+    if (state.isLoading) {
+      return Center(
+          child: SizedBox(
+        width: 100.w,
+        height: 100.h,
+        child: CustomLoading(
+          searchLoading: true,
+        ),
+      ));
+    }
+
     final List<ChanceAdEntity> favoriteAds = state.favoriteChanceAds ?? [];
 
     if (favoriteAds.isEmpty) {
-      return const SliverFillRemaining(
-        child: Center(
-          child: Text(
-            'لا توجد إعلانات مفضلة',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات مفضلة',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
     }
 
-    return SliverToBoxAdapter(
-      child: GlowingOverscrollIndicator(
-        axisDirection: AxisDirection.down,
-        color: AppColors.PRIMARY_COLOR_DARK,
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: favoriteAds.length,
-          itemBuilder: (context, index) {
-            final ad = favoriteAds[index];
-            return _buildChanceCardFromEntity(ad, isFavorite: true);
-          },
-        ),
+    return GlowingOverscrollIndicator(
+      axisDirection: AxisDirection.down,
+      color: AppColors.PRIMARY_COLOR_DARK,
+      child: OlxPaginationWidget(
+        items: favoriteAds
+            .map((ad) => _buildChanceCardFromEntity(ad, isFavorite: true))
+            .toList(),
+        banners: bannersList,
+        loadPage: (page) async {
+          // مفيش API call - البيانات موجودة كلها
+          // الويدجت هتقسمها لوحدها
+        },
+        scrollController: _favoriteController,
+        itemsPerPage: 3,
       ),
     );
   }
 
-  Widget _buildExpireTabSliver(ChanceState state) {
+  // Widget _buildExpireTab(ChanceState state) {
+  //   if (state.isLoading) {
+  //     return const Center(child: CircularProgressIndicator());
+  //   }
+
+  //   final List<ChanceAdEntity> expiredAds = state.expiredChanceAds ?? [];
+
+  //   if (expiredAds.isEmpty) {
+  //     return const Center(
+  //       child: Text(
+  //         'لا توجد إعلانات منتهية',
+  //         style: TextStyle(fontSize: 16, color: Colors.grey),
+  //       ),
+  //     );
+  //   }
+
+  //   return GlowingOverscrollIndicator(
+  //     axisDirection: AxisDirection.down,
+  //     color: AppColors.PRIMARY_COLOR_DARK,
+  //     child: ListView.builder(
+  //       controller: _expireController,
+  //       itemCount: expiredAds.length,
+  //       itemBuilder: (context, index) {
+  //         final ad = expiredAds[index];
+  //         return _buildExpiredChanceCard(ad);
+  //       },
+  //     ),
+  //   );
+  // }
+
+  Widget _buildExpireTab(ChanceState state) {
+    if (state.isLoading) {
+      return Center(
+          child: SizedBox(
+        width: 100.w,
+        height: 100.h,
+        child: CustomLoading(
+          searchLoading: true,
+        ),
+      ));
+    }
+
     final List<ChanceAdEntity> expiredAds = state.expiredChanceAds ?? [];
 
     if (expiredAds.isEmpty) {
-      return const SliverFillRemaining(
-        child: Center(
-          child: Text(
-            'لا توجد إعلانات منتهية',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات منتهية',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
     }
 
-    return SliverToBoxAdapter(
-      child: GlowingOverscrollIndicator(
-        axisDirection: AxisDirection.down,
-        color: AppColors.PRIMARY_COLOR_DARK,
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: expiredAds.length,
-          itemBuilder: (context, index) {
-            final ad = expiredAds[index];
-            return _buildExpiredChanceCard(ad);
-          },
-        ),
+    return GlowingOverscrollIndicator(
+      axisDirection: AxisDirection.down,
+      color: AppColors.PRIMARY_COLOR_DARK,
+      child: OlxPaginationWidget(
+        items: expiredAds.map((ad) => _buildExpiredChanceCard(ad)).toList(),
+        banners: bannersList,
+        // loadPage: _loadExpiredAdsPage,
+        loadPage: (page) async {
+          // مفيش API call - البيانات موجودة كلها
+          // الويدجت هتقسمها لوحدها
+        },
+        scrollController: _expireController,
+        itemsPerPage: 3,
       ),
     );
   }
 
-  Widget _buildMyTalentTabSliver(ChanceState state) {
+  // Widget _buildMyChanceTab(ChanceState state) {
+  //   if (state.isLoading) {
+  //     return const Center(child: CircularProgressIndicator());
+  //   }
+
+  //   final List<ChanceAdEntity> myAds = state.myChanceAds ?? [];
+
+  //   if (myAds.isEmpty) {
+  //     return const Center(
+  //       child: Text(
+  //         'لا توجد إعلانات خاصة بك',
+  //         style: TextStyle(fontSize: 16, color: Colors.grey),
+  //       ),
+  //     );
+  //   }
+
+  //   return GlowingOverscrollIndicator(
+  //     axisDirection: AxisDirection.down,
+  //     color: AppColors.PRIMARY_COLOR_DARK,
+  //     child: ListView.builder(
+  //       controller: _myChanceController,
+  //       itemCount: myAds.length,
+  //       itemBuilder: (context, index) {
+  //         final ad = myAds[index];
+  //         return _buildChanceCardFromEntity(ad, isMyChance: true);
+  //       },
+  //     ),
+  //   );
+  // }
+
+  Widget _buildMyChanceTab(ChanceState state) {
+    if (state.isLoading) {
+      return Center(
+          child: SizedBox(
+        width: 100.w,
+        height: 100.h,
+        child: CustomLoading(
+          searchLoading: true,
+        ),
+      ));
+    }
+
     final List<ChanceAdEntity> myAds = state.myChanceAds ?? [];
 
     if (myAds.isEmpty) {
-      return const SliverFillRemaining(
-        child: Center(
-          child: Text(
-            'لا توجد إعلانات خاصة بك',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
+      return const Center(
+        child: Text(
+          'لا توجد إعلانات خاصة بك',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
     }
 
-    return SliverToBoxAdapter(
-      child: GlowingOverscrollIndicator(
-        axisDirection: AxisDirection.down,
-        color: AppColors.PRIMARY_COLOR_DARK,
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: myAds.length,
-          itemBuilder: (context, index) {
-            final ad = myAds[index];
-            return _buildChanceCardFromEntity(ad, isMyChance: true);
-          },
-        ),
+    return GlowingOverscrollIndicator(
+      axisDirection: AxisDirection.down,
+      color: AppColors.PRIMARY_COLOR_DARK,
+      child: OlxPaginationWidget(
+        items: myAds
+            .map((ad) => _buildChanceCardFromEntity(ad, isMyChance: true))
+            .toList(),
+        banners: bannersList,
+        loadPage: (page) async {
+          // مفيش API call - البيانات موجودة كلها
+        },
+        scrollController: _myChanceController,
+        itemsPerPage: 3,
       ),
     );
   }
@@ -725,7 +875,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     return _buildChanceCard(
       title: ad.title,
       price: ad.price.toInt(),
-      endDate: ad.isComplete ? 'Ended' : 'Active',
+      endDate:
+          '${context.isArabic ? 'دورة' : 'Cycle'} ${context.isArabic ? FormatNumbers().convertToArabicNumerals(ad.cycle.toString()) : ad.cycle}',
       progress: progress.clamp(0.0, 1.0),
       participants: ad.contributorsCount ?? ad.contributors,
       views: ad.views,
@@ -762,7 +913,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     return _buildChanceCard(
       title: ad.title,
       price: ad.price.toInt(),
-      endDate: 'Ended',
+      endDate:
+          '${context.isArabic ? 'دورة' : 'Cycle'} ${context.isArabic ? FormatNumbers().convertToArabicNumerals(ad.cycle.toString()) : ad.cycle}',
       progress: progress.clamp(0.0, 1.0),
       participants: ad.contributors,
       views: ad.views,
@@ -870,15 +1022,121 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   ),
                 ),
                 // Favorite Icon
+                // Positioned(
+                //   top: 20.h,
+                //   left: 20.w,
+                //   child: BlocBuilder<ChanceCubit, ChanceState>(
+                //     builder: (context, state) {
+                //       // Get updated favorite status from state
+                //       bool currentFavoriteStatus = isFavorite;
+
+                //       // Get the latest favorite status from state
+                //       if (adId != null) {
+                //         try {
+                //           ChanceAdEntity? updatedAd;
+
+                //           // Search in all lists
+                //           if (state.chanceAds != null) {
+                //             try {
+                //               updatedAd = state.chanceAds!
+                //                   .firstWhere((ad) => ad.id == adId);
+                //             } catch (e) {
+                //               // Continue searching in other lists
+                //             }
+                //           }
+
+                //           if (updatedAd == null &&
+                //               state.favoriteChanceAds != null) {
+                //             try {
+                //               updatedAd = state.favoriteChanceAds!
+                //                   .firstWhere((ad) => ad.id == adId);
+                //             } catch (e) {
+                //               // Continue searching in other lists
+                //             }
+                //           }
+
+                //           if (updatedAd == null &&
+                //               state.expiredChanceAds != null) {
+                //             try {
+                //               updatedAd = state.expiredChanceAds!
+                //                   .firstWhere((ad) => ad.id == adId);
+                //             } catch (e) {
+                //               // Continue searching in other lists
+                //             }
+                //           }
+
+                //           if (updatedAd == null && state.myChanceAds != null) {
+                //             try {
+                //               updatedAd = state.myChanceAds!
+                //                   .firstWhere((ad) => ad.id == adId);
+                //             } catch (e) {
+                //               // Ad not found anywhere
+                //             }
+                //           }
+
+                //           if (updatedAd != null) {
+                //             currentFavoriteStatus = updatedAd.isFavorite;
+                //           }
+                //         } catch (e) {
+                //           // Keep original favorite status
+                //           currentFavoriteStatus = isFavorite;
+                //         }
+                //       }
+
+                //       return GestureDetector(
+                //         onTap: () async {
+                //           ManageVibration.vibrate();
+                //           final cubit = context.read<ChanceCubit>();
+
+                //           if (adId != null && adId.isNotEmpty) {
+                //             await cubit.toggleChanceAdFavorite(adId);
+                //           } else if (chanceAd != null &&
+                //               chanceAd.id.isNotEmpty) {
+                //             // Fallback to using chanceAd.id if adId is empty
+                //             await cubit.toggleChanceAdFavorite(chanceAd.id);
+                //           }
+
+                //           // Refresh favorite list if we're in the favorite tab
+                //           if (_selectedTabIndex == 1) {
+                //             await cubit.getFavoriteChanceAds();
+                //           }
+                //         },
+                //         child: Container(
+                //           padding: EdgeInsets.all(8.w),
+                //           decoration: BoxDecoration(
+                //             color: Colors.white.withOpacity(0.9),
+                //             shape: BoxShape.circle,
+                //           ),
+                //           child: Icon(
+                //             currentFavoriteStatus
+                //                 ? Icons.favorite
+                //                 : Icons.favorite_border,
+                //             color: currentFavoriteStatus
+                //                 ? Colors.red
+                //                 : Colors.grey,
+                //             size: 30.sp,
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
+
+                // Favorite Icon
                 Positioned(
                   top: 20.h,
                   left: 20.w,
                   child: BlocBuilder<ChanceCubit, ChanceState>(
+                    buildWhen: (previous, current) {
+                      // Only rebuild when favorites actually change
+                      return previous.favoriteChanceAds !=
+                              current.favoriteChanceAds ||
+                          previous.chanceAds != current.chanceAds;
+                    },
                     builder: (context, state) {
                       // Get updated favorite status from state
                       bool currentFavoriteStatus = isFavorite;
 
-                      // Get the latest favorite status from state
                       if (adId != null) {
                         try {
                           ChanceAdEntity? updatedAd;
@@ -931,8 +1189,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         }
                       }
 
-                      return GestureDetector(
-                        onTap: () async {
+                      return IconAppButton(
+                        icon: currentFavoriteStatus
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        onPressed: () async {
                           ManageVibration.vibrate();
                           final cubit = context.read<ChanceCubit>();
 
@@ -940,7 +1201,6 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                             await cubit.toggleChanceAdFavorite(adId);
                           } else if (chanceAd != null &&
                               chanceAd.id.isNotEmpty) {
-                            // Fallback to using chanceAd.id if adId is empty
                             await cubit.toggleChanceAdFavorite(chanceAd.id);
                           }
 
@@ -949,26 +1209,21 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                             await cubit.getFavoriteChanceAds();
                           }
                         },
-                        child: Container(
-                          padding: EdgeInsets.all(8.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
-                            shape: BoxShape.circle,
+                        color: AppColors.SECONDARY_COLOR,
+                        size: 60.sp,
+                        shadows: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.8),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
-                          child: Icon(
-                            currentFavoriteStatus
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: currentFavoriteStatus
-                                ? Colors.red
-                                : Colors.grey,
-                            size: 30.sp,
-                          ),
-                        ),
+                        ],
                       );
                     },
                   ),
                 ),
+
                 // Carousel Indicators
                 // if (images.length > 1)
                 //   Positioned(
@@ -1041,7 +1296,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xff0B1035),
+                          color: AppColors.red_Color_DARK,
                         ),
                       ),
                       Spacer(),
@@ -1050,9 +1305,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w400,
-                          color: status == ChanceStatus.available
-                              ? Colors.orange
-                              : Colors.grey[600],
+                          // color: status == ChanceStatus.available
+                          //     ? Colors.orange
+                          //     : Colors.grey[600],
+                          color: AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     ],
@@ -1103,7 +1359,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                           Text(
                             '${context.isArabic ? FormatNumbers().convertToArabicNumerals(_formatViews(views)) : _formatViews(views)} ${context.isArabic ? 'مشاهدة' : 'Views'}',
                             style: TextStyle(
-                              fontSize: 32.sp,
+                              fontSize: 24.sp,
                               color: Colors.black,
                             ),
                           ),
@@ -1204,7 +1460,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
       context: context,
       barrierDismissible: false,
       builder: (context) => const Center(
-        child: CircularProgressIndicator(),
+        child: CustomLoading(
+          searchLoading: true,
+        ),
       ),
     );
 
@@ -1374,6 +1632,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     // Reset pagination when refreshing
     setState(() {
       _lastLoadedPage = 1;
+      _lastLoadedFavoritePage = 1;
+      _lastLoadedExpiredPage = 1;
+      _lastLoadedMyChancePage = 1;
     });
 
     switch (_tabController.index) {
@@ -1395,6 +1656,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
   }
 
   int _lastLoadedPage = 1;
+  int _lastLoadedFavoritePage = 1;
+  int _lastLoadedExpiredPage = 1;
+  int _lastLoadedMyChancePage = 1;
 
   Future<void> _loadChanceAdsPage(int page) async {
     // Prevent loading the same page multiple times
@@ -1405,153 +1669,32 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     _lastLoadedPage = page;
   }
 
-  // void _showJoinDialog(ChanceAdEntity chanceAd) {
-  //   final TextEditingController amountController = TextEditingController();
-  //   final cubit = context.read<ChanceCubit>();
+  Future<void> _loadFavoriteAdsPage(int page) async {
+    if (page == _lastLoadedFavoritePage) return;
 
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.transparent,
-  //     isScrollControlled: true,
-  //     builder: (dialogContext) => BlocProvider.value(
-  //       value: cubit,
-  //       child: Container(
-  //         padding: EdgeInsets.only(
-  //           bottom: MediaQuery.of(dialogContext).viewInsets.bottom,
-  //         ),
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-  //         ),
-  //         child: Padding(
-  //           padding: EdgeInsets.all(28.w),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               // Handle
-  //               Container(
-  //                 width: 40.w,
-  //                 height: 4.h,
-  //                 decoration: BoxDecoration(
-  //                   color: Colors.grey[300],
-  //                   borderRadius: BorderRadius.circular(2.r),
-  //                 ),
-  //               ),
-  //               SizedBox(height: 20.h),
-  //               // Header
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Text(
-  //                     'انضم للفرصة',
-  //                     style: TextStyle(
-  //                       fontSize: 18.sp,
-  //                       fontWeight: FontWeight.w600,
-  //                       color: Colors.black87,
-  //                     ),
-  //                   ),
-  //                   GestureDetector(
-  //                     onTap: () => Navigator.pop(dialogContext),
-  //                     child: Icon(Icons.close,
-  //                         size: 24.sp, color: Colors.grey[600]),
-  //                   ),
-  //                 ],
-  //               ),
-  //               SizedBox(height: 20.h),
-  //               // Chance info
-  //               Text(
-  //                 chanceAd.title,
-  //                 style: TextStyle(
-  //                   fontSize: 16.sp,
-  //                   fontWeight: FontWeight.w500,
-  //                   color: Colors.black87,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //               SizedBox(height: 16.h),
-  //               // Amount Input
-  //               Container(
-  //                 width: double.infinity,
-  //                 padding: EdgeInsets.all(16.w),
-  //                 decoration: BoxDecoration(
-  //                   color: Colors.grey[100],
-  //                   borderRadius: BorderRadius.circular(8.r),
-  //                 ),
-  //                 child: TextField(
-  //                   controller: amountController,
-  //                   keyboardType:
-  //                       const TextInputType.numberWithOptions(decimal: true),
-  //                   decoration: InputDecoration(
-  //                     hintText: 'أدخل المبلغ بالجنيه',
-  //                     border: InputBorder.none,
-  //                     hintStyle: TextStyle(
-  //                       fontSize: 16.sp,
-  //                       color: Colors.grey[500],
-  //                     ),
-  //                   ),
-  //                   style: TextStyle(
-  //                     fontSize: 16.sp,
-  //                     color: Colors.black87,
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(height: 20.h),
-  //               // Confirm Button
-  //               SizedBox(
-  //                 width: double.infinity,
-  //                 child: ElevatedButton(
-  //                   onPressed: () {
-  //                     final inputText = amountController.text.trim();
-  //                     final amount = double.tryParse(inputText);
+    final cubit = context.read<ChanceCubit>();
+    await cubit.getFavoriteChanceAds();
 
-  //                     if (inputText.isEmpty) {
-  //                       ScaffoldMessenger.of(dialogContext).showSnackBar(
-  //                         const SnackBar(content: Text('من فضلك أدخل مبلغ')),
-  //                       );
-  //                     } else if (amount == null) {
-  //                       ScaffoldMessenger.of(dialogContext).showSnackBar(
-  //                         const SnackBar(
-  //                             content: Text('من فضلك أدخل رقم صحيح')),
-  //                       );
-  //                     } else if (amount < 1) {
-  //                       ScaffoldMessenger.of(dialogContext).showSnackBar(
-  //                         const SnackBar(
-  //                             content: Text('الحد الأدنى للمساهمة 1 جنيه')),
-  //                       );
-  //                     } else {
-  //                       Navigator.pop(dialogContext);
-  //                       dialogContext.read<ChanceCubit>().joinChanceAd(
-  //                             JoinChanceAdParams(
-  //                               adId: chanceAd.id,
-  //                               amount: amount,
-  //                             ),
-  //                           );
-  //                     }
-  //                   },
-  //                   style: ElevatedButton.styleFrom(
-  //                     backgroundColor: Colors.red,
-  //                     padding: EdgeInsets.symmetric(vertical: 16.h),
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(8.r),
-  //                     ),
-  //                   ),
-  //                   child: Text(
-  //                     'تأكيد الانضمام',
-  //                     style: TextStyle(
-  //                       fontSize: 16.sp,
-  //                       fontWeight: FontWeight.w600,
-  //                       color: Colors.white,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+    _lastLoadedFavoritePage = page;
+  }
+
+  Future<void> _loadExpiredAdsPage(int page) async {
+    if (page == _lastLoadedExpiredPage) return;
+
+    final cubit = context.read<ChanceCubit>();
+    await cubit.getExpiredChanceAds();
+
+    _lastLoadedExpiredPage = page;
+  }
+
+  Future<void> _loadMyChanceAdsPage(int page) async {
+    if (page == _lastLoadedMyChancePage) return;
+
+    final cubit = context.read<ChanceCubit>();
+    await cubit.getMyChanceAds();
+
+    _lastLoadedMyChancePage = page;
+  }
 
   void _showJoinDialog(ChanceAdEntity chanceAd, ChanceCubit chanceCubit) {
     final TextEditingController amountController = TextEditingController();
@@ -1703,49 +1846,14 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
 
   @override
   void dispose() {
-    try {
-      // Remove listeners first with proper checks
-      _tabController.removeListener(_onTabChanged);
-      _searchController.removeListener(_onSearchChanged);
-
-      // Remove scroll listeners with proper checks
-      if (_mainScrollController.hasClients &&
-          _mainScrollController.hasListeners) {
-        _mainScrollController.removeListener(() => _syncFromMain());
-      }
-
-      if (_availableController.hasClients &&
-          _availableController.hasListeners) {
-        _availableController
-            .removeListener(() => _syncToMain(_availableController));
-      }
-
-      if (_favoriteController.hasClients && _favoriteController.hasListeners) {
-        _favoriteController
-            .removeListener(() => _syncToMain(_favoriteController));
-      }
-
-      if (_expireController.hasClients && _expireController.hasListeners) {
-        _expireController.removeListener(() => _syncToMain(_expireController));
-      }
-
-      if (_myChanceController.hasClients && _myChanceController.hasListeners) {
-        _myChanceController
-            .removeListener(() => _syncToMain(_myChanceController));
-      }
-    } catch (e) {
-      print('Error during controller disposal: $e');
-    }
-
-    // Then dispose controllers
+    _tabController.removeListener(_onTabChanged);
+    _searchController.removeListener(_onSearchChanged);
     _tabController.dispose();
     _searchController.dispose();
-    _mainScrollController.dispose();
     _availableController.dispose();
     _favoriteController.dispose();
     _expireController.dispose();
     _myChanceController.dispose();
-
     super.dispose();
   }
 }

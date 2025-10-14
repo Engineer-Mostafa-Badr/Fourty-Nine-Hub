@@ -40,7 +40,7 @@ class WinnersGridViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4.h),
       decoration: BoxDecoration(
         color: context.isDarkMode
             ? const Color(0xB3FFFFFF)

@@ -520,8 +520,28 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print("fromMarriage$fromMarriage");
 
     await Future.wait([
-      // getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
-      _getGovernorates(),
+      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
+      getGovernorates(),
+    ]);
+    emit(state.copyWith(status: CreateAdStates.success));
+  }
+
+  void loadPropsData(
+      {required String subCategoryId, required bool fromMarriage}) async {
+    emit(state.copyWith(status: CreateAdStates.loading));
+    print("fromMarriage$fromMarriage");
+
+    await Future.wait([
+      getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
+    ]);
+    emit(state.copyWith(status: CreateAdStates.success));
+  }
+
+  void loadGovernorateData() async {
+    emit(state.copyWith(status: CreateAdStates.loading));
+
+    await Future.wait([
+      getGovernorates(),
     ]);
     emit(state.copyWith(status: CreateAdStates.success));
   }
@@ -534,7 +554,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print("fromMarriage$fromMarriage");
     await Future.wait([
       getAdProperties(subCategoryId: subCategoryId, fromMarriage: fromMarriage),
-      _getGovernorates(),
+      getGovernorates(),
       fetchMyAdsById(id: id),
     ]);
     // emit(state.copyWith(status: CreateAdStates.success));
@@ -756,7 +776,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     });
   }
 
-  Future<void> _getGovernorates() async {
+  Future<void> getGovernorates() async {
     final response = await _governoratesUseCase.call(const NoParams());
     response.fold((failure) {
       var currentContext =

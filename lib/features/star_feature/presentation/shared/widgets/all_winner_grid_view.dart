@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
@@ -21,12 +22,12 @@ class AllWinnerGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      // padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16.w),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 12.w,
         mainAxisSpacing: 12.w,
-        childAspectRatio: 0.65,
+        childAspectRatio: 1.12.h,
       ),
       itemBuilder: (context, index) {
         // if (index == starCubit.winners.length) {
@@ -42,10 +43,12 @@ class AllWinnerGridView extends StatelessWidget {
     return Builder(
       builder: (context) {
         return Container(
-          padding: EdgeInsets.only(top: 20.h),
+          padding: EdgeInsets.symmetric(vertical: 20.h),
           decoration: BoxDecoration(
-            color: const Color(0xff4d4c4c),
-            borderRadius: BorderRadius.circular(12.r),
+            color: context.isDarkMode
+                ? const Color(0xB3FFFFFF)
+                : const Color(0xB3000000),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
             children: [
@@ -98,6 +101,7 @@ class AllWinnerGridView extends StatelessWidget {
                             fontSize: 20.sp,
                             color: Colors.white,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         SizedBox(width: 10.w),
                         Text(
@@ -106,6 +110,7 @@ class AllWinnerGridView extends StatelessWidget {
                             fontSize: 20.sp,
                             color: Colors.white,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         Image.asset(
                           Assets.starGold,
