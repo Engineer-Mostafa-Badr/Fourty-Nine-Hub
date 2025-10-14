@@ -1654,5 +1654,6 @@ abstract class  LocaleKeys {
   static const enterYourBid = 'enterYourBid';
   static const timeLeftForAuctionEnd = 'timeLeftForAuctionEnd';
   static const noAuctionAvailable = 'noAuctionAvailable';
+  static const auctionWinners = 'auctionWinners';
 
 }

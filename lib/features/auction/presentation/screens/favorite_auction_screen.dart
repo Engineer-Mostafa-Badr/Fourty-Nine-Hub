@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/common/empty_view.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -99,14 +101,9 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
 
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message");
-          return  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
+          return  Center(child: CustomEmptyWidget(label: LocaleKeys.noAuctionAvailable.localize,));
         }
 
-        // If the list is empty, show LocaleKeys.noAuctionAvailable.localize
-        if (auctions.isEmpty) {
-          print("📭 Showing 'No auctions available' message (duplicate check)");
-          return  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
-        }
 
         // Otherwise, show the auction list
         print("📊 Rendering auction list with ${auctions.length} items");

@@ -140,12 +140,15 @@ class _WinnersAuctionScreenState extends State<WinnersAuctionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(
-        title:LocaleKeys.auction.localize,
+        title:LocaleKeys.winners.localize,
         actions: [
-          Image.asset(
-            Assets.winners,
-            height: 20,
-            width: 20,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Image.asset(
+              Assets.winners,
+              height: 20,
+              width: 20,
+            ),
           ),
         ],
       ),
@@ -185,11 +188,11 @@ class _WinnersAuctionScreenState extends State<WinnersAuctionScreen> {
           return GridView.builder(
             controller: _scrollController,
             padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 12,
-              mainAxisExtent: 280,
+              mainAxisExtent: 270,
             ),
             itemCount: winners.length + (cubit.hasMoreWinnersAuction ? 1 : 0),
             // itemCount: winners.length,
@@ -208,12 +211,13 @@ class _WinnersAuctionScreenState extends State<WinnersAuctionScreen> {
               final auction = winners[index];
               // return AuctionWinnerGridItem(auction: auction);
               return WinnerGridViewWidget(
-                endDate: auction.endAt,
+                date: auction.endAt,
+                title: auction.title,
                 imageUrl: auction.winner?.userProfile?.profilePicture?.mediaKey,
                 lastPrice: auction.lastPrice,
                 name: '${auction.winner?.firstName ?? ''} ${auction.winner?.lastName ?? ''}'.trim(),
                 viewsCount: auction.viewsCount,
-                // rating: 10,
+                // rating: 1000,
 
               );
             },

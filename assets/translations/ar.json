@@ -1662,7 +1662,8 @@
   "placeBid": "تقديم عرض",
   "enterYourBid": "أدخل عرضك",
   "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد",
-  "noAuctionAvailable": "لا توجد مزادات متاحة"
+  "noAuctionAvailable": "لا توجد مزادات متاحة",
+  "auctionWinners": "الفائزين في المزاد"
 
 
 }

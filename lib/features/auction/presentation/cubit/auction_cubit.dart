@@ -934,8 +934,91 @@ class AuctionCubit extends Cubit<AuctionState> {
   }
 
 
+  List<GetAvailableAuctionEntity> myAuctionNonSocketData = [];
+  bool hasMoreMyAuction = true;
+  int currentPageMyAuction = 1;
+  bool isAuctionMoreMyAuction = false;
+  bool isAuctionMyAuction = false;
 
+  void loadInitialMyAuction() async {
+    print("🚀🚀🚀 CUBIT: loadInitialMyAuction() called");
 
+    // Don't emit loading here yet - wait for getMyAuction to handle it
+    isAuctionMyAuction = true;
+    myAuctionNonSocketData.clear();
+    currentPageMyAuction = 1;
+    hasMoreMyAuction = true;
+
+    // Just call getMyAuction - it will handle the loading states
+    await getMyAuction();
+    isAuctionMyAuction = false;
+  }
+
+  Future<void> getMyAuction() async {
+    print("🚀🚀🚀 CUBIT: getMyAuction() called");
+    print("📊 Current state: hasMore=$hasMoreMyAuction, isLoading=$isAuctionMoreMyAuction");
+    print("📊 Current data length: ${myAuctionNonSocketData.length}");
+    print("📊 Current page: $currentPageMyAuction");
+
+    if (!hasMoreMyAuction || isAuctionMoreMyAuction) {
+      print("⚠️ CUBIT: Skipping call - no more data or already loading");
+      return;
+    }
+
+    isAuctionMoreMyAuction = true;
+
+    // ALWAYS emit loading when starting a request
+    print("⏳ CUBIT: Emitting loading state");
+    emit(state.copyWith(status: StateStatus.loading));
+
+    print("📡 CUBIT: Making API call for page $currentPageMyAuction");
+    final response = await getMyAuctionUseCase(
+        GetAuctionParams(
+            page: currentPageMyAuction, limit: 5));
+
+    response.fold(
+          (failure) {
+        print("❌ CUBIT: API call failed: $failure");
+        isAuctionMoreMyAuction = false;
+        emit(state.copyWith(
+            failure: failure,
+            status: StateStatus.error));
+      },
+          (data) {
+        print("✅ CUBIT: API call successful, received ${data.length} items");
+        print("📦 CUBIT: Data received: $data");
+
+        // If it's the first page, replace the data, otherwise add to it
+        if (currentPageMyAuction == 1) {
+          myAuctionNonSocketData = List.from(data);
+          print("🔄 CUBIT: Replaced data for first page");
+        } else {
+          myAuctionNonSocketData.addAll(data);
+          print("➕ CUBIT: Added data to existing list");
+        }
+
+        print("📊 CUBIT: Total items now: ${myAuctionNonSocketData.length}");
+
+        if (data.isEmpty || data.length < 5) {
+          hasMoreMyAuction = false;
+          print("🛑 CUBIT: No more pages my");
+        } else {
+          currentPageMyAuction++;
+          print("➡️ CUBIT: Moving to next page: $currentPageMyAuction");
+        }
+
+        isAuctionMoreMyAuction = false;
+
+        // Emit success state with the data
+        print("✅ CUBIT: Emitting success state");
+        emit(state.copyWith(
+          status: StateStatus.success,
+          getMyAuction: myAuctionNonSocketData,
+        ));
+      },
+    );
+  }
+/*
   List<GetAvailableAuctionEntity> myAuctionNonSocketData = [];
   bool hasMoreMyAuction = true;
   int currentPageMyAuction = 1;
@@ -1021,7 +1104,7 @@ class AuctionCubit extends Cubit<AuctionState> {
       },
     );
   }
-
+*/
 
   List<MyBiddersEntity> myBiddersData = [];
   bool hasMoreMyBidders = true;

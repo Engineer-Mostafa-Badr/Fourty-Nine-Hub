@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
 
@@ -79,49 +80,86 @@ class _MyAuctionScreenState extends State<MyAuctionScreen> {
           );
         }
       },
+      // builder: (context, state) {
+      //   final cubit = context.read<AuctionCubit>();
+      //   final auctions = cubit.myAuctionNonSocketData;
+      //
+      //   if (state.status == StateStatus.loading && auctions.isEmpty) {
+      //     return const Center(child: CustomCircularProgressIndicator());
+      //   }
+      //
+      //   if (auctions.isEmpty) {
+      //     return Center(
+      //       child: Text(
+      //         context.isArabic ? 'لا توجد مزادات خاصة بي' : 'No auctions my',
+      //       ),
+      //     );
+      //
+      //   }
+      //
+      //   return Scaffold(
+      //     floatingActionButton: isFloatingButtonVisible
+      //         ? buildFloatingAction(context,title:   "${LocaleKeys.addAuction.localize} +", () {
+      //       ManageVibration.vibrate();
+      //       _addAuction();
+      //     })
+      //         : null,
+      //     body:  OlxPaginationWidget(
+      //       itemsPerPage: 3,
+      //       scrollController: _scrollController,
+      //       banners: bannersList, // 👉 add banner list if needed
+      //       loadPage: (page) {
+      //         return context.read<AuctionCubit>().getMyAuction();
+      //       },
+      //
+      //       items: List.generate(
+      //         auctions.length,
+      //             (index) {
+      //           final auction = auctions[index];
+      //           return AuctionCard(auction: auction,);
+      //         },
+      //       ),
+      //     ),
+      //   );
+      //
+      // },
       builder: (context, state) {
         final cubit = context.read<AuctionCubit>();
         final auctions = cubit.myAuctionNonSocketData;
 
+        // Combined check - show loading only for initial load with empty data
         if (state.status == StateStatus.loading && auctions.isEmpty) {
           return const Center(child: CustomCircularProgressIndicator());
         }
 
-        if (auctions.isEmpty) {
-          return Center(
-            child: Text(
-              context.isArabic ? 'لا توجد مزادات خاصة بي' : 'No auctions my',
+        // Show content if we have data OR if we're loading more (pagination)
+        if (auctions.isNotEmpty || state.status == StateStatus.loading) {
+          return Scaffold(
+            floatingActionButton: isFloatingButtonVisible
+                ? buildFloatingAction(context,
+                title: "${LocaleKeys.addAuction.localize} +", () {
+                  ManageVibration.vibrate();
+                  _addAuction();
+                })
+                : null,
+            body: OlxPaginationWidget(
+              itemsPerPage: 3,
+              scrollController: _scrollController,
+              banners: bannersList,
+              loadPage: (page) => cubit.getMyAuction(),
+              items: List.generate(
+                auctions.length,
+                    (index) => AuctionCard(auction: auctions[index]),
+              ),
             ),
           );
-
         }
 
-        return Scaffold(
-          floatingActionButton: isFloatingButtonVisible
-              ? buildFloatingAction(context,title:   "${LocaleKeys.addAuction.localize} +", () {
-            ManageVibration.vibrate();
-            _addAuction();
-          })
-              : null,
-          body:  OlxPaginationWidget(
-            itemsPerPage: 3,
-            scrollController: _scrollController,
-            banners: bannersList, // 👉 add banner list if needed
-            loadPage: (page) {
-              return context.read<AuctionCubit>().getMyAuction();
-            },
-
-            items: List.generate(
-              auctions.length,
-                  (index) {
-                final auction = auctions[index];
-                return AuctionCard(auction: auction,);
-              },
-            ),
-          ),
-        );
-
+        // Only show empty state when we're definitely not loading and have no data
+        // return      print("📭 Showing 'No auctions available' message");
+        return  Center(child: CustomEmptyWidget(label: LocaleKeys.noAuctionAvailable.localize,));
       },
+
     );
   }
 }

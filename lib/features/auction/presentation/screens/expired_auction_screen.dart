@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:go_router/go_router.dart';
@@ -63,7 +64,8 @@ class _ExpiredAuctionScreenState extends State<ExpiredAuctionScreen> {
          if (state.status == StateStatus.loading && auctions.isEmpty) {
            body = const Center(child: CustomCircularProgressIndicator());
         } else if (auctions.isEmpty) {
-          body =  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
+          body = Center(child: CustomEmptyWidget(label: LocaleKeys.noAuctionAvailable.localize,));
+          // body =  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
         } else {
            body = OlxPaginationWidget(
              itemsPerPage: 3,

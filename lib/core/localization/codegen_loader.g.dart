@@ -1677,7 +1677,8 @@ class CodegenLoader extends AssetLoader{
   "placeBid": "تقديم عرض",
   "enterYourBid": "أدخل عرضك",
   "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد",
-  "noAuctionAvailable": "لا توجد مزادات متاحة"
+  "noAuctionAvailable": "لا توجد مزادات متاحة",
+  "auctionWinners": "الفائزين في المزاد"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3362,7 +3363,8 @@ static const Map<String,dynamic> _en = {
   "placeBid": "Place Bid",
   "enterYourBid": "Enter your bid",
   "timeLeftForAuctionEnd": "Time left for auction to end",
-  "noAuctionAvailable": "No auctions available"
+  "noAuctionAvailable": "No auctions available",
+  "auctionWinners": "Auction Winners"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

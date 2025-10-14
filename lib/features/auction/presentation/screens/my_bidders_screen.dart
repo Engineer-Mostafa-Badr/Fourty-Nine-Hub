@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
 
@@ -74,12 +75,8 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
         }
 
         if (auctions.isEmpty) {
-          return Center(
-            child: Text(
-              context.isArabic ? 'لا يوجد مزايدون متاحون' : 'No Bidders available',
-            ),
-          );
-
+          print("📭 Showing 'No auctions available' message");
+          return  Center(child: CustomEmptyWidget(label:   context.isArabic ? 'لا يوجد مزايدون متاحون' : 'No Bidders available',));
         }
 
         return ListView.separated(

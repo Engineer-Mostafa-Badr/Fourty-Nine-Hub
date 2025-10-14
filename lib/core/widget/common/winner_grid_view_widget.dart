@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:intl/intl.dart';
 
 import '../../../res/assets/assets.dart';
@@ -9,17 +11,19 @@ import '../../../res/style/styles.dart';
 class WinnerGridViewWidget extends StatelessWidget {
   final String? imageUrl;
   final String? name;
-  final int? viewsCount;
-  final String? endDate;
+  final String? title;
+  final num? viewsCount;
+  final String? date;
   final num? lastPrice;
-  final double? rating;
+  final num? rating;
 
   const WinnerGridViewWidget({
     super.key,
     this.imageUrl,
     this.name,
+    this.title,
     this.viewsCount,
-    this.endDate,
+    this.date,
     this.lastPrice,
     this.rating,
   });
@@ -58,21 +62,27 @@ class WinnerGridViewWidget extends StatelessWidget {
             const SizedBox(height: 12),
             _buildWinnerName(),
           ],
-          if (rating != null) ...[
-            const SizedBox(height: 8),
-            _buildRating(),
+          if (title != null) ...[
+            const SizedBox(height: 6),
+            _buildWinnerTitle(),
           ],
-          if (viewsCount != null) ...[
-            const SizedBox(height: 8),
-            _buildViewsCount(),
-          ],
-          if (endDate != null) ...[
+          if (date != null) ...[
             const SizedBox(height: 6),
             _buildEndDate(context),
           ],
           if (lastPrice != null) ...[
             const SizedBox(height: 6),
             _buildLastPrice(),
+          ],
+          if (viewsCount != null) ...[
+            const SizedBox(height: 8),
+            _buildViewsCount(),
+          ],
+
+
+          if (rating != null) ...[
+            const SizedBox(height: 8),
+            _buildRating(),
           ],
         ],
       ),
@@ -133,6 +143,18 @@ class WinnerGridViewWidget extends StatelessWidget {
       ),
     );
   }
+  Widget _buildWinnerTitle() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Text(
+        title!.isNotEmpty ? title! : 'Unknown Winner',
+        style: Styles.mediumText(color: Colors.white),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
 
   Widget _buildRating() {
     return Container(
@@ -145,7 +167,7 @@ class WinnerGridViewWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Rating',
+            '${LocaleKeys.rating.localize}',
             style: TextStyle(
               fontSize: 12,
               color: Colors.white70,
@@ -154,7 +176,7 @@ class WinnerGridViewWidget extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            rating!.toStringAsFixed(1),
+              _formatNumber(rating!) ,
             style: const TextStyle(
               fontSize: 13,
               color: Colors.white,
@@ -199,7 +221,7 @@ class WinnerGridViewWidget extends StatelessWidget {
 
   Widget _buildEndDate(BuildContext context) {
     return Text(
-      _formatDate(endDate, context),
+      _formatDate(date, context),
       style: Styles.mediumText(color: Colors.white),
     );
   }
@@ -216,7 +238,7 @@ class WinnerGridViewWidget extends StatelessWidget {
         ),
       ),
       child: Text(
-        '${_formatNumber(lastPrice ?? 0)} EGP',
+        '${_formatNumber(lastPrice ?? 0)} ${LocaleKeys.egp.localize}',
         style: Styles.mediumText(color: Colors.white),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
