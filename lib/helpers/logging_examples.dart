@@ -40,7 +40,7 @@ class LoggingExamples {
       RequestOptions(
         method: 'GET',
         path: '/api/v1/settings',
-        baseUrl: 'https://9ad6cb01f298.ngrok-free.app',
+        baseUrl: 'https://49backend.com',
         headers: {
           'Authorization': 'Bearer token123',
           'Content-Type': 'application/json',
