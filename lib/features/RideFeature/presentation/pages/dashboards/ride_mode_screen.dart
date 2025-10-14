@@ -314,9 +314,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                           scrollController: availableScrollController,
                                                         )
                                                       : Center(
-                                                          child: Text(
-                                                            context.isArabic ? 'لا يوجد رحلات متاحة' : 'No Available Trips',
-                                                            style: TextStyle(fontSize: FontSize.s18),
+                                                          child: CustomEmptyWidget(
+                                                            label:context.isArabic ? 'لا يوجد رحلات متاحة' : 'No Available Trips',
                                                           ),
                                                         )
                                               : (state.driverSettingsEntity?.isReady == false)
