@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
+import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -44,231 +48,199 @@ class _AvailableNonSocketLoadingWidgetState extends State<AvailableNonSocketLoad
         "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-          color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
-          borderRadius: BorderRadius.circular(20)
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-              flex: 2,
-              child: Column(children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(shape: BoxShape.circle),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: widget.offers?.clientDetails?.profilePictureUrl == null ||
-                              widget.offers!.clientDetails!.profilePictureUrl!.isEmpty
-                              ? Image.asset(
-                            Assets.maleImagePlaceholder,
-                            fit: BoxFit.cover,
-                          )
-                              : ImageFromInternet(
-                            image: widget.offers!.clientDetails!.profilePictureUrl!,
-                          )
-                      ),
-                    ),
-                    Positioned(
-                        top: 0,
-                        right: -5,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.cF5F5F5,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Row(children: [
-                                  SvgPicture.asset(Assets.star2, width: 8, height: 8),
-                                  const Sizer(width: 4),
-                                  Label(
-                                      text:formatPrice(widget.offers?.clientDetails?.rating?.count  ?? 0,context),
-                                      style: Styles.smallText(color: AppColors.PRIMARY_COLOR))
-                                ])))),
-                    const VerifiedWidget(),
-                  ],
-                ),
-                Label(
-                    text: widget.offers?.clientDetails?.firstName ?? '',
-                    style: Styles.mediumText()),
-              ])),
-          const Sizer(width: 32),
-          Expanded(
-            flex: 8,
-            child: IntrinsicWidth(
-              child: Column(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+      // padding: const EdgeInsets.all(8.0),
+      // decoration: BoxDecoration(
+      //     color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cF5F5F5,
+      //     borderRadius: BorderRadius.circular(20)
+      // ),
+      child: GlobalCard(
+        otherUserId: '',
+        phone: '',
+        reportId: widget.offers?.clientDetails?.id??'',
+        subcategoryId: widget.offers?.subCategory?.id??'',
+        // isButtonEnabled: offers.,
+        subCategoryTitle: context.isArabic?widget.offers?.subCategory?.nameAr??'':widget.offers?.subCategory?.nameEn??'',
+
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                      child: Column(children: [
+                        Row(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              spacing: 5,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Image.asset(Assets.rideFrom, width: 24, height: 24),
-                                ),
-                                Expanded(
-                                    flex: 8,
-                                    child: Label(
-                                        text: widget.offers?.tripDetails?.startLocation?.title ??
-                                            'Cairo International Airport',
-                                        style: Styles.headerText()))
-                              ],
+                            ClickableWidget(
+                              onTap: (){},
+                              child: ProfilePictureWidget(
+                                rating:(widget.offers?.clientDetails?.rating?.average??0).toInt(),
+                                image: '',
+                                firstChar: widget.offers?.clientDetails?.firstName?[0].toUpperCase() ?? '',
+                                hasStories: false,
+                              ),
                             ),
-                            Row(
-                              spacing: 5,
-                              children: [
-                                Expanded(
-                                    flex: 1,
-                                    child: Image.asset(Assets.rideTo, width: 24, height: 24)),
-                                Expanded(
-                                    flex: 8,
-                                    child: Label(
-                                        text: widget.offers?.tripDetails?.targetLocation?.title ??
-                                            'Cairo International Airport',
-                                        style: Styles.mediumText(fontWeight: FontWeight.w300)))
-                              ],
+                            Sizer(),
+                            Expanded(
+                              child: Label(
+                                  text: widget.offers?.clientDetails?.firstName ?? '',
+                                  style: Styles.mediumText()),
                             ),
-                            Label(
-                                text: widget.offers?.tripDetails?.cargoDescription ?? "",
-                                style: Styles.mediumText())
                           ],
                         ),
-                      ),
-                      Expanded(
-                          flex: 3,
-                          child: Column(
-                            children: [
-                              ImageFromInternet(
-                                  image: widget.offers!.subCategory?.pictureUrl ?? "",
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.contain),
-                              Label(
-                                  text: context.isArabic
-                                      ? (widget.offers?.subCategory?.nameAr ?? '')
-                                      : (widget.offers?.subCategory?.nameEn ?? ''),
-                                  style: Styles.mediumText(fontSize: 25))
-                            ],
-                          )),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                        Sizer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TripLocationWidget(isFrom: true, title: widget.offers?.tripDetails?.startLocation
+                                ?.title ??
+                                'From Location',fontSize:28),
+                            TripLocationWidget(isFrom: false, title: widget.offers?.tripDetails?.targetLocation
+                                ?.title ??
+                                'Cairo International Airport',fontSize:28),
+                            Label(
+                              text:
+                              "${context.isArabic?"وصف الحمولة":"Cargo Description"} : ${widget.offers?.tripDetails?.cargoDescription??''} ",
+                              style: Styles.mediumText(),maxLines: 2,),
+                          ],
+                        ),
+                      ])),
+                  const Sizer(width: 32),
+                  Column(
+                    spacing: 4,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Label(
-                          text: "${widget.offers?.tripDetails?.price ?? 300}",
-                          style: Styles.mediumText(fontWeight: FontWeight.w700)),
-                      const Sizer(width: 4),
-                      Label(
-                          text: LocaleKeys.egp.tr(),
-                          style: Styles.mediumText(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Label(
+                            text: formatPrice(
+                                (widget.offers?.tripDetails?.price??0)>0?(widget.offers?.tripDetails?.price??0):(widget.offers?.tripDetails?.price ?? 0), context),
+                            style: Styles.mediumText(fontWeight: FontWeight.w700),
+                          ),
+                          const Sizer(width: 4),
+                          Label(
+                            text: LocaleKeys.egp.tr(),
+                            style: Styles.mediumText(
                               color: AppColors.SECONDARY_COLOR,
-                              fontWeight: FontWeight.w700))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Label(
-                        text: formatTimeOnly(widget.offers!.tripDetails?.pickupTime, context),
-                        // text: formatTimeOnly(widget.offers?.createdAt, context),
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                      Label(
-                        text: formatPickupDate(widget.offers!.tripDetails?.pickupTime, context),
-                        style: Styles.mediumText(fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: AppButton(
-                          height: 30,
-                          radius: 15,
-                          widget: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                  child: Label(
-                                    text: "${LocaleKeys.Accept.tr()} ${widget.offers?.tripDetails?.price ?? 0} ${LocaleKeys.egp.localize}",
-                                    style: Styles.mediumText(color: Colors.white),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                          onPressed: () {
-      ManageVibration.vibrate();
-                            if (!mounted) return; // Check if widget is still mounted
-
-                            final price = widget.offers?.tripDetails?.price ?? 0;
-                            final tripId = widget.offers?.tripDetails?.id ?? '';
-                            print("XXQ $tripId");
-                            print("XXQ ${widget.offers?.tripDetails?.id}");
-
-                            context.read<DashboardsCubit>().createLoadingOffer(
-                                CreateNonTrackOfferParams(
-                                  tripId: tripId,
-                                  priceOffer: price,
-                                ),
-                                context,
-                                widget.offers?.subCategory?.id ?? "",
-                                context.isArabic?widget.offers?.subCategory?.nameAr ?? "":widget.offers?.subCategory?.nameEn ?? "",
-                            );
-                          },
-                          backColor: context.isDarkMode
-                              ? AppColors.ACCENT_COLOR
-                              : AppColors.PRIMARY_COLOR,
-                        ),
+                        ],
                       ),
-                      const Sizer(),
-                      Expanded(
-                        child: AppButton(
-                          radius: 15,
-                          height: 30,
-                          label: LocaleKeys.acceptAnothePrice.tr(),
-                          style: Styles.mediumText(
-                            color: Colors.white,
-                            fontSize: 23,
-                          ),
-                          onPressed: () {
-      ManageVibration.vibrate();
-                            if (!mounted) return; // Check if widget is still mounted
-                            _showOfferFareBottomSheet(context, widget.offers?.tripDetails?.id ?? '');
-                          },
-                          backColor: AppColors.SECONDARY_COLOR_DARK2,
-                        ),
+                      Column(
+                        children: [
+                          ImageFromInternet(
+                              image:
+                              widget.offers?.subCategory?.pictureUrl ?? '',
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.contain),
+                          Label(
+                              text: context.isArabic
+                                  ? (widget.offers?.subCategory?.nameAr ?? '')
+                                  : (widget.offers?.subCategory?.nameEn ?? ''),
+                              style: Styles.mediumText(fontSize: 25))
+                        ],
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
+              Sizer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Label(
+                    text:
+                    formatTimeOnly(widget.offers?.tripDetails?.pickupTime, context),
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Label(
+                    text: formatPickupDate(
+                        widget.offers?.tripDetails?.pickupTime, context),
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              Sizer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: AppButton(
+                      height: 30,
+                      radius: 15,
+                      widget: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Label(
+                                text: "${LocaleKeys.Accept.tr()} ${widget.offers?.tripDetails?.price ?? 0} ${LocaleKeys.egp.localize}",
+                                style: Styles.mediumText(color: Colors.white),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () {
+                        ManageVibration.vibrate();
+                        if (!mounted) return; // Check if widget is still mounted
+
+                        final price = widget.offers?.tripDetails?.price ?? 0;
+                        final tripId = widget.offers?.tripDetails?.id ?? '';
+                        print("XXQ $tripId");
+                        print("XXQ ${widget.offers?.tripDetails?.id}");
+
+                        context.read<DashboardsCubit>().createLoadingOffer(
+                          CreateNonTrackOfferParams(
+                            tripId: tripId,
+                            priceOffer: price,
+                          ),
+                          context,
+                          widget.offers?.subCategory?.id ?? "",
+                          context.isArabic?widget.offers?.subCategory?.nameAr ?? "":widget.offers?.subCategory?.nameEn ?? "",
+                        );
+                      },
+                      backColor: context.isDarkMode
+                          ? AppColors.ACCENT_COLOR
+                          : AppColors.PRIMARY_COLOR,
+                    ),
+                  ),
+                  const Sizer(),
+                  Expanded(
+                    child: AppButton(
+                      radius: 15,
+                      height: 30,
+                      label: LocaleKeys.acceptAnothePrice.tr(),
+                      style: Styles.mediumText(
+                        color: Colors.white,
+                        fontSize: 23,
+                      ),
+                      onPressed: () {
+                        ManageVibration.vibrate();
+                        if (!mounted) return; // Check if widget is still mounted
+                        _showOfferFareBottomSheet(context, widget.offers?.tripDetails?.id ?? '');
+                      },
+                      backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    ),
+                  ),
+                ],
+              ),
+
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

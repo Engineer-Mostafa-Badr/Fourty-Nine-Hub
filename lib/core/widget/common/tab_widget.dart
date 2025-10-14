@@ -6,17 +6,17 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class TabWidget extends StatelessWidget {
-  const TabWidget({super.key, required this.title, this.count, required this.selected, required this.onTap});
+  const TabWidget({super.key, required this.title, this.count, required this.selected, this.onTap});
   final String title;
   final int? count;
   final bool selected;
-  final Function() onTap;
+  final Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap:onTap == null ? null : () {
         ManageVibration.vibrate();
-        onTap.call();
+        onTap!.call();
       },
       child: Stack(
         children: [
@@ -37,6 +37,9 @@ class TabWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: Styles.headerText(
                     fontSize: 24,
                     color: selected

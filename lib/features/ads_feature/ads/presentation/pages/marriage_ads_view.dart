@@ -134,11 +134,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
           return false;
         },
         child: CustomScaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(30),
-            child: BackAppBar(
-              label: context.isArabic ? 'زواج' : 'Marriage',
-            ),
+          enableCustomAppBar: true,
+          appBar: BackAppBar(
+            label: context.isArabic ? 'زواج' : 'Marriage',
           ),
           floatingActionButton: _showFloatingButton && state.subCategories != null && state.subCategories!.isNotEmpty
               ? buildFloatingAction(context,title:

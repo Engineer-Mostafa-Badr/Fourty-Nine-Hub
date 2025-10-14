@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
@@ -37,7 +40,7 @@ class FilterAdsView extends StatefulWidget {
 class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
-    context.read<CreateAdCubit>().loadData(
+    context.read<CreateAdCubit>().loadPropsData(
         subCategoryId:
             widget.filterAdsParams.categorization.fromMarriage == false
                 ? widget.filterAdsParams.categorization.mainCategory.id
@@ -84,11 +87,10 @@ class _FilterAdsViewState extends State<FilterAdsView> {
       }
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
+      print("state.filterAdProperties?.length ${state.filterAdProperties?.length}");
       return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(label: LocaleKeys.filter.localize),
-        ),
+        enableCustomAppBar: true,
+        appBar: BackAppBar(label: LocaleKeys.filter.localize),
         body: Form(
           key: controller.formState,
           child: BlocBuilder<CreateAdCubit, CreateAdState>(
@@ -104,94 +106,98 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                 right: 16.0,
                 bottom: 16.0,
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  // shrinkWrap: true,
-                  // padding: const EdgeInsets.all(16.0),
-                  children: [
-                    CustomHeaderForm(
-                      categorization: widget.filterAdsParams.categorization,
-                      isCreateAd: false,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Divider(
-                      thickness: 2,
-                      height: 0,
-                      color: Color(0xFFD9D9D9),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: state.filterAdProperties?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        final property = state.filterAdProperties![index];
-                        return FilterAdDynamicInputWidget(
-                            property: property,
-                            onChanged: (SelectionEntity v) =>
-                                controller.onChanged(v: v, index: index),
-                            onTextChanged: (String v, bool from, String type) {
-                              // if (context.isArabic) {
-                              //   final englishValue = _convertToEnglishDigits(v);
-                              //   final arabicValue = _convertToArabicDigits(englishValue);
-                              //   v = arabicValue;
-                              // }
-                              print('arabicValue $v');
+              child: Column(
+                // shrinkWrap: true,
+                // padding: const EdgeInsets.all(16.0),
+                children: [
+                  CustomHeaderForm(
+                    categorization: widget.filterAdsParams.categorization,
+                    isCreateAd: false,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Divider(
+                    thickness: 2,
+                    height: 0,
+                    color: Color(0xFFD9D9D9),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Expanded(
+                    child:state.isLoading?const Center(child: CustomCircularProgressIndicator(),): (state.filterAdProperties==null||(state.filterAdProperties?.isEmpty??false))?Center(
+                      child: CustomEmptyWidget(label: context.isArabic?"لا يوجد خصائص":"No Properties"),
+                    ):Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: state.filterAdProperties?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              final property = state.filterAdProperties![index];
+                              return FilterAdDynamicInputWidget(
+                                  property: property,
+                                  onChanged: (SelectionEntity v) =>
+                                      controller.onChanged(v: v, index: index),
+                                  onTextChanged: (String v, bool from, String type) {
+                                    print('arabicValue $v');
 
-                              controller.onTextChanged(
-                                  v: v,
-                                  index: index,
-                                  isNumber: property.type == 'number',
-                                  from: from,
-                                  type: type);
-                            });
-                      },
-                      // separatorBuilder: (context, index) => const Sizer(),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    ClickableWidget(
-                        onTap: () {
-                          ManageVibration.vibrate();
-                          controller.filterAds(
-                              categorize: widget.filterAdsParams.categorization,
-                              userType: widget.filterAdsParams.userType,
-                              context: context);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(10),
-                          decoration: ShapeDecoration(
-                            color: AppColors.getButtonPrimaryColor(context),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            shadows: const [
-                              BoxShadow(
-                                color: Color(0x3F000000),
-                                blurRadius: 4,
-                                offset: Offset(0, 4),
-                                spreadRadius: 0,
-                              )
-                            ],
+                                    controller.onTextChanged(
+                                        v: v,
+                                        index: index,
+                                        isNumber: property.type == 'number',
+                                        from: from,
+                                        type: type);
+                                  });
+                            },
+                            // separatorBuilder: (context, index) => const Sizer(),
                           ),
-                          // decoration: BoxDecoration(
-                          //   color: AppColors.PRIMARY_COLOR,
-                          //   borderRadius: BorderRadius.circular(10),
-                          // ),
-                          child: Label(
-                            text: LocaleKeys.filter.localize,
-                            style: Styles.headerText(
-                                color: AppColors.getReversedTextColor(context)),
-                          ),
-                        )),
-                  ],
-                ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        ClickableWidget(
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              controller.filterAds(
+                                  categorize: widget.filterAdsParams.categorization,
+                                  userType: widget.filterAdsParams.userType,
+                                  context: context);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(10),
+                              decoration: ShapeDecoration(
+                                color: AppColors.getButtonPrimaryColor(context),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                shadows: const [
+                                  BoxShadow(
+                                    color: Color(0x3F000000),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
+                                  )
+                                ],
+                              ),
+                              // decoration: BoxDecoration(
+                              //   color: AppColors.PRIMARY_COLOR,
+                              //   borderRadius: BorderRadius.circular(10),
+                              // ),
+                              child: Label(
+                                text: LocaleKeys.filter.localize,
+                                style: Styles.headerText(
+                                    color: AppColors.getReversedTextColor(context)),
+                              ),
+                            )),
+
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           }),

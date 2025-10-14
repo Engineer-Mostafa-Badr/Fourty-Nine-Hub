@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/ride_non_socket_details_screen.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -112,17 +113,17 @@ class _PastRideOfferScreenState extends State<PastRideOfferScreen> {
                 ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: CustomEmptyWidget(
+                            label: LocaleKeys.errorHappen.localize,
+                            ),
                       )
                     : context
                             .read<ClientTripsCubit>()
                             .clientPastTripsData
                             .isEmpty
                         ? Center(
-                            child: Label(
-                              text: LocaleKeys.youDontHavePastOffer.localize,
+                            child: CustomEmptyWidget(
+                              label: LocaleKeys.youDontHavePastOffer.localize,
                             ),
                           )
                         : Padding(

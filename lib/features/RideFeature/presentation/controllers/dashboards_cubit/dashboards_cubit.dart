@@ -658,7 +658,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
           (data) {
             acceptedLoadingNonSocketData.addAll(data);
-        if ((data.length ?? 0) < 5) {
+        if ((data.length ) < 5) {
           hasMoreAcceptedNonSocketLoading = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));

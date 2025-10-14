@@ -110,8 +110,6 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('Images count: ${widget.images.length}');
-    print('Images: ${widget.images}');
 
     if (widget.images.isEmpty) {
       return SizedBox(
