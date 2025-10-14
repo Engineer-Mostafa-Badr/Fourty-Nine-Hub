@@ -79,11 +79,15 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _createVideoDetailsCubit(),
-      child: BlocBuilder<VideoDetailsCubit, VideoDetailsState>(
-        builder: (context, state) {
-          return FadeTransition(
-            opacity: _fadeAnimation,
-            child: _buildContent(state),
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder<VideoDetailsCubit, VideoDetailsState>(
+            builder: (context, state) {
+              return FadeTransition(
+                opacity: _fadeAnimation,
+                child: _buildContent(context, state),
+              );
+            },
           );
         },
       ),
@@ -108,7 +112,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     )..initialize();
   }
 
-  Widget _buildContent(VideoDetailsState state) {
+  Widget _buildContent(BuildContext context, VideoDetailsState state) {
     final bool isEmbedded = widget.onBack != null;
 
     if (isEmbedded) {
@@ -118,26 +122,26 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
             title: 'My Talent',
             onBack: _handleBack,
           ),
-          Expanded(child: _buildVideoContent(state)),
+          Expanded(child: _buildVideoContent(context, state)),
         ],
       );
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _buildVideoContent(state),
+      body: _buildVideoContent(context, state),
     );
   }
 
-  Widget _buildVideoContent(VideoDetailsState state) {
+  Widget _buildVideoContent(BuildContext context, VideoDetailsState state) {
     // Handle loading state
     if (state is VideoDetailsLoading) {
-      return _buildLoadingState();
+      return _buildLoadingState(context);
     }
 
     // Handle error state
     if (state is VideoDetailsError) {
-      return _buildErrorState(state.message);
+      return _buildErrorState(context, state.message);
     }
 
     // Handle loaded state
@@ -164,8 +168,8 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
             talent: state.talent,
             cubit:
                 widget.cubit ?? GetIt.instance<StarCubit>(), // Provide fallback
-            onViewersPressed: () => _showViewersModal(state.viewers),
-            onCommentsPressed: () => _showCommentsModal(state.comments),
+            onViewersPressed: () => _showViewersModal(context, state.viewers),
+            onCommentsPressed: () => _showCommentsModal(context, state.comments),
             onDeletePressed: _handleDelete,
           ),
         ],
@@ -175,7 +179,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     return const SizedBox();
   }
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
@@ -216,7 +220,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     );
   }
 
-  Widget _buildErrorState(String message) {
+  Widget _buildErrorState(BuildContext context, String message) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
@@ -291,7 +295,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     starCubit.updateRating(widget.talent.id, rating);
   }
 
-  void _showViewersModal(List<ViewerEntity> viewers) {
+  void _showViewersModal(BuildContext context, List<ViewerEntity> viewers) {
     ManageVibration.vibrate();
     ViewersModal.show(
       context: context,
@@ -299,7 +303,7 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
     );
   }
 
-  void _showCommentsModal(List<CommentEntity> comments) {
+  void _showCommentsModal(BuildContext context, List<CommentEntity> comments) {
     ManageVibration.vibrate();
 
     // Enhanced comments modal with all comment actions

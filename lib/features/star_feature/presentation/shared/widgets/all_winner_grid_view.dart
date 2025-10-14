@@ -27,7 +27,7 @@ class AllWinnerGridView extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 12.w,
         mainAxisSpacing: 12.w,
-        childAspectRatio: 0.85.h,
+        childAspectRatio: 1.12.h,
       ),
       itemBuilder: (context, index) {
         // if (index == starCubit.winners.length) {

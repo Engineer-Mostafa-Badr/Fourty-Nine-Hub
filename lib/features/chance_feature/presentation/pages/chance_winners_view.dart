@@ -31,7 +31,7 @@ class _ChanceWinnersViewState extends State<ChanceWinnersView> {
     return CustomScaffold(
       enableCustomAppBar: true,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(45),
+        preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
           labelSize: 32,
           enableCustomAppBar: true,
@@ -111,14 +111,14 @@ class _ChanceWinnersViewState extends State<ChanceWinnersView> {
 
           return WinnersGridView(
             winners: winners,
-            
+
             hasReachedMax: true, // For now, we'll assume no pagination
             paginationOnpressed: () {
               ManageVibration.vibrate();
               // Add pagination logic here if needed
               // context.read<ChanceCubit>().getChanceWinners();
             },
-            mainAxisExtent: 280.h,
+            mainAxisExtent: 315.h,
           );
         },
       ),

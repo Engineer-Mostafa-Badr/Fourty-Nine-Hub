@@ -18,10 +18,13 @@ class CreateChanceView extends StatelessWidget {
     return BlocProvider<ChanceCubit>(
       create: (BuildContext context) => serviceLocator(),
       child: CustomScaffold(
+        enableCustomAppBar: true,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(30),
           child: BackAppBar(
             label: LocaleKeys.CreateChance.localize,
+            textColor: Colors.white,
+            iconColor: Colors.white,
           ),
         ),
         body: BlocBuilder<ChanceCubit, ChanceState>(

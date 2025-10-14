@@ -396,14 +396,21 @@ class _TubeFeedViewState extends State<TubeFeedView>
         return FavoriteContentBuilder.buildSliver(
           context: context,
           cubit: _cubit,
+          scrollController: favoriteController,
         );
       case 2: // History
         return HistoryContentBuilder.buildSliver(
           context: context,
           cubit: _cubit,
+          scrollController: historyController,
         );
       case 3: // My Talents
         return _buildMyTalentContent(state);
+      // return MyTalentContentBuilder.buildSliver(
+      //   context: context,
+      //   cubit: _cubit,
+      //   scrollController: myTalentController,
+      // );
       default:
         return AvailableContentBuilder.buildSliver(
           context: context,
@@ -421,14 +428,11 @@ class _TubeFeedViewState extends State<TubeFeedView>
       return SliverToBoxAdapter(
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.75,
-          child: BlocProvider<StarCubit>.value(
-            value: _cubit,
-            child: VideoDetailsView(
-              talent: selectedVideoTalent!,
-              mediaUrl: selectedVideoUrl!,
-              cubit: _cubit,
-              onBack: onBackFromVideoDetails,
-            ),
+          child: VideoDetailsView(
+            talent: selectedVideoTalent!,
+            mediaUrl: selectedVideoUrl!,
+            cubit: _cubit,
+            onBack: onBackFromVideoDetails,
           ),
         ),
       );

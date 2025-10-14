@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -39,7 +40,7 @@ class VideoInfoSection extends StatelessWidget {
           ),
 
           // Star Rating
-          _buildStarRating(),
+          _buildStarRating(context),
         ],
       ),
     );
@@ -99,26 +100,34 @@ class VideoInfoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStarRating() {
-    return Row(
+  Widget _buildStarRating(BuildContext context) {
+    if (talent.averageRating <= 0) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(5, (index) {
-        return GestureDetector(
-          onTap: onRatingChanged != null
-              ? () {
-                  ManageVibration.vibrate();
-                  onRatingChanged!(index + 1);
-                }
-              : null,
-          child: Icon(
-            index < talent.averageRating ? Icons.star : Icons.star_border,
-            color: index < talent.averageRating
-                ? Colors.amber[600]
-                : Colors.grey[400],
-            size: _getResponsiveIconSize(20),
+      children: [
+        RatingBarIndicator(
+          rating: talent.averageRating.toDouble(),
+          itemBuilder: (context, index) => Icon(
+            Icons.star,
+            color: Colors.amber,
           ),
-        );
-      }),
+          itemCount: 5,
+          itemSize: 14.0,
+          direction: Axis.horizontal,
+        ),
+        SizedBox(height: 2),
+        Text(
+          "${talent.averageRating}".toArabicNumbers(context),
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[700],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 
@@ -146,10 +155,5 @@ class VideoInfoSection extends StatelessWidget {
       return baseFontSize * 1.1;
     }
     return baseFontSize;
-  }
-
-  double _getResponsiveIconSize(double baseSize) {
-    // Could add responsive logic here if needed
-    return baseSize;
   }
 }
