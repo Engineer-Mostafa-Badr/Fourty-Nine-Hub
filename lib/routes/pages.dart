@@ -51,6 +51,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/create_posts_company.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/governorate_filter_ads.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/winners_auction_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -4993,6 +4994,17 @@ class AppPages {
                     create: (_) =>
                         serviceLocator<AuctionCubit>()..getMyAuction(),
                     child: MyAuctionScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.auctionWinnersScreen,
+                name: Routes.auctionWinnersScreen,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (_) =>
+                        serviceLocator<AuctionCubit>(),
+                    child: WinnersAuctionScreen(),
                   );
                 },
               ),

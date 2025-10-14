@@ -11,6 +11,7 @@ import '../features/auction/domain/usecases/bid_winner_auction_use_case.dart';
 import '../features/auction/domain/usecases/create_auction_use_case.dart';
 import '../features/auction/domain/usecases/error_bid_auction_use_case.dart';
 import '../features/auction/domain/usecases/fetch_all_winner_auction_use_case.dart';
+import '../features/auction/domain/usecases/fetch_auction_winners_use_case.dart';
 import '../features/auction/domain/usecases/fetch_available_auction_use_case.dart';
 import '../features/auction/domain/usecases/fetch_expired_auction_use_case.dart';
 import '../features/auction/domain/usecases/fetch_favorite_auction_use_case.dart';
@@ -121,10 +122,14 @@ class AuctionServiceLocator {
    serviceLocator.registerLazySingleton<GetViewerAuctionUseCase >(
         () => GetViewerAuctionUseCase (serviceLocator()));
 
+   serviceLocator.registerLazySingleton<GetAuctionWinnersUseCase >(
+        () => GetAuctionWinnersUseCase (serviceLocator()));
+
 
 
     serviceLocator
         .registerFactory<AuctionCubit>(() => AuctionCubit(
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),

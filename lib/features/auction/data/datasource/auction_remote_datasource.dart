@@ -12,6 +12,7 @@ import '../../../../core/data/datasources/remote/socket/socket_data_source.dart'
 import '../../../../core/error/failure.dart';
 import '../../../../shared_web_socket.dart';
 import '../../domain/entities/add_favorite_auction_entity.dart';
+import '../../domain/entities/all_winner_auction_entity.dart';
 import '../../domain/entities/auction_all_winner_entity.dart';
 import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
@@ -30,6 +31,7 @@ import '../../domain/usecases/fetch_single_auction_use_case.dart';
 import '../../domain/usecases/fetch_sub_category_auction_use_case.dart';
 import '../../domain/usecases/search_auction_use_case.dart';
 import '../models/add_favorite_auction_model.dart';
+import '../models/all_winner_auction_model.dart';
 import '../models/auction_all_winner_model.dart';
 import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
@@ -65,6 +67,7 @@ abstract class AuctionRemoteDataSource {
   Future<Either<Failure, AuctionWinnerDataEntity >> getAllWinnerAuction();
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> searchAuction({required SearchAuctionParams params});
   Future<Either<Failure, List<ViewerEntity>>> getViewerAuction({required FavoriteAuctionParams params});
+  Future<Either<Failure, List<AuctionAllWinnerEntity>>> getAuctionWinners({required GetAuctionParams params});
 
 }
 
@@ -527,6 +530,23 @@ class AuctionRemoteDataSourceImpl
           (data) {
         final rideList = (data['data']['views'] as List)
             .map((e) => ViewerModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<AuctionAllWinnerEntity>>> getAuctionWinners({required GetAuctionParams params}) async{
+    final url = "${EndPoints.auctionWinners}?page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data']['winners'] as List)
+            .map((e) => AuctionAllWinnerModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(rideList);
       },

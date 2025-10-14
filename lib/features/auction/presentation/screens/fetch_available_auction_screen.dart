@@ -7,6 +7,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/common/tab_widget.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -234,18 +237,35 @@ class _AuctionScreenState extends State<AuctionScreen>
             title:LocaleKeys.auction.localize,
             actions: [
               const SizedBox(width: 6),
-              // const Spacer(),
-              Text(
-                "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
-                style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: Colors.white),
+
+              GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate(); // optional if you use it elsewhere
+                  context.push(Routes.auctionWinnersScreen);
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Image.asset(
+                      Assets.winners,
+                      height: 20,
+                      width: 20,
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(width: 6),
-               Image.asset(Assets.winners),
+
               const SizedBox(width: 5),
             ],
+
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

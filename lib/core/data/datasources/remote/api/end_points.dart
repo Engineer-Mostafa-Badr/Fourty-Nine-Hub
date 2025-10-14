@@ -1972,6 +1972,7 @@ class EndPoints {
 
   static String fetchAvailableAuction = '/auctions/available';
   static String searchAuction = '/auctions/search';
+  static String auctionWinners = '/auctions/all-winner';
   static String fetchExpiredAuction = '/auctions/expired';
   static String fetchFavoriteAuction = '/auction-fav';
   static String fetchSingleAuction = '/auctions/';
@@ -1981,14 +1982,15 @@ class EndPoints {
   static String addFavoriteAuction = '/auction-fav/';
   static String fetchMyAuction = '/auctions/my';
   static String createAuction2 = '/auctions';
+
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String getAuctionViewers = '/auctions/last-ten-auction-viewed/';
   static String auctionBanner = '/auctions/banner';
   static String auctionAllWinner = '/auctions/winner-statistics';
-  static String addLikeFind = '/tinder/profile/like/';
-  static String addDisLikeFind = '/tinder/profile/disLike/';
-  static String addLoveFind = '/tinder/profile/love/';
-  static String fetchFind = '/tinder';
+  static String addLikeFind = '/find/profile/like/';
+  static String addDisLikeFind = '/find/profile/disLike/';
+  static String addLoveFind = '/find/profile/love/';
+  static String fetchFind = '/find';
 
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
