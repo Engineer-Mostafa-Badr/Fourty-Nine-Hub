@@ -117,43 +117,45 @@ class _TubeFeedViewState extends State<TubeFeedView>
   Widget build(BuildContext context) {
     return BlocConsumer<StarCubit, StarState>(
         listener: _handleStateListener,
-      builder: (context,state) {
-        return CustomScaffold(
-          enableCustomAppBar: true,
-          floatingActionButton: _showFloatingButton
-              ? buildFloatingAction(context,
-                  title: "${LocaleKeys.addTalent.localize} +", () {
-                  ManageVibration.vibrate();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CreateStar()),
-                  );
-                })
-              : null,
-          appBar: BackAppBar(
-            label: context.isArabic ? 'تيوب' : 'Tube',
+        builder: (context, state) {
+          return CustomScaffold(
             enableCustomAppBar: true,
-            actions: [_buildWinnerStats(context, state)],
-          ),
-          body: state.status == StarStates.loading &&
-              state.availableTalents.isEmpty?const StarLoadingIndicator():RefreshIndicator(
-            onRefresh: () => _handleRefresh(),
-            displacement: 40.0,
-            strokeWidth: 2.5,
-            backgroundColor:
-            context.isDarkMode ? Colors.grey[800] : Colors.white,
-            color: context.isDarkMode ? Colors.white : Colors.black,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (scrollInfo) {
-                _onScrollNotification(scrollInfo);
-                return false;
-              },
-              child: _buildNestedScrollView(state),
+            floatingActionButton: _showFloatingButton
+                ? buildFloatingAction(context,
+                    title: "${LocaleKeys.addTalent.localize} +", () {
+                    ManageVibration.vibrate();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreateStar()),
+                    );
+                  })
+                : null,
+            appBar: BackAppBar(
+              label: context.isArabic ? 'تيوب' : 'Tube',
+              enableCustomAppBar: true,
+              actions: [_buildWinnerStats(context, state)],
             ),
-          ),
-        );
-      }
-    );
+            body: state.status == StarStates.loading &&
+                    state.availableTalents.isEmpty
+                ? const StarLoadingIndicator()
+                : RefreshIndicator(
+                    onRefresh: () => _handleRefresh(),
+                    displacement: 40.0,
+                    strokeWidth: 2.5,
+                    backgroundColor:
+                        context.isDarkMode ? Colors.grey[800] : Colors.white,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (scrollInfo) {
+                        _onScrollNotification(scrollInfo);
+                        return false;
+                      },
+                      child: _buildNestedScrollView(state),
+                    ),
+                  ),
+          );
+        });
   }
 
   void _handleStateListener(BuildContext context, StarState state) {
