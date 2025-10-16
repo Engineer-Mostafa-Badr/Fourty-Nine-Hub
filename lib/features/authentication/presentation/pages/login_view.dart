@@ -252,11 +252,11 @@ class _LoginViewState extends State<LoginView> {
             // Logout while keeping important settings (onboarding, language, dark mode)
             // This also sets ISLOGIN to false
             await CacheManager.logoutKeepingSettings();
-            
+
             // Remove token from API consumer
             final userCubit = serviceLocator<UserCubit>();
             userCubit.removeToken();
-            
+
             // Navigate to home in guest mode
             context.go(Routes.HOME);
           },
@@ -888,6 +888,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         children: [
                           Expanded(
                               child: BadgedLabel(
+                                  hasHighlightColor: true,
+                                  hasSplashColor: true,
                                   onTap: () {
                                     ManageVibration.vibrate();
                                     registerCubit.isMale = true;
@@ -910,6 +912,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           ),
                           Expanded(
                             child: BadgedLabel(
+                              hasHighlightColor: true,
+                              hasSplashColor: true,
                               onTap: () {
                                 ManageVibration.vibrate();
                                 registerCubit.isMale = false;

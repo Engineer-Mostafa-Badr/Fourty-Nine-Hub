@@ -22,6 +22,8 @@ class BadgedLabel extends StatelessWidget {
   final bool isCentered;
   final bool close;
   final MainAxisAlignment? mainAxisAlignment;
+  final bool? hasHighlightColor;
+  final bool? hasSplashColor;
 
   final GestureTapCallback? onRemove;
 
@@ -46,13 +48,19 @@ class BadgedLabel extends StatelessWidget {
       this.iconLeading,
       this.overFlow,
       this.max,
-      this.mainAxisAlignment});
+      this.mainAxisAlignment,
+      this.hasHighlightColor,
+      this.hasSplashColor});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+        splashColor:
+            hasSplashColor! ? Colors.transparent : Colors.grey.shade200,
+        highlightColor:
+            hasHighlightColor! ? Colors.transparent : Colors.grey.shade200,
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           if (onTap != null) {
             onTap!();
           }

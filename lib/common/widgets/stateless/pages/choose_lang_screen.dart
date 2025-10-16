@@ -19,6 +19,8 @@ import '../../dynamic/sizer.dart';
 import '../buttons/default_button.dart';
 import '../labels/label.dart';
 import 'package:flutter/services.dart';
+import '../../../../core/utils/custom_show_dialog.dart';
+import '../../../../core/extensions/context_extension.dart';
 
 class ChooseLangScreen extends StatefulWidget {
   const ChooseLangScreen({super.key});
@@ -30,13 +32,125 @@ class ChooseLangScreen extends StatefulWidget {
 class _ChooseLangScreenState extends State<ChooseLangScreen> {
   bool isChooseLang = false;
 
+  Future<bool> _showExitConfirmationDialog(BuildContext context) async {
+    return await showAnimatedDialog(
+            context,
+            AlertDialog(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              titlePadding: const EdgeInsets.only(top: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              title: Text(
+                LocaleKeys.warning.localize,
+                style: Styles.headerText(
+                    color: Colors.red, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Label(
+                      text: LocaleKeys.ExitApp.localize,
+                      style: Styles.headerText(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Label(
+                    text: LocaleKeys.sureLogoutApp.localize,
+                    style: Styles.mediumText(
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: AppColors.SECONDARY_COLOR,
+                            padding: const EdgeInsets.all(0),
+                            minimumSize: const Size(70, 30),
+                            maximumSize: const Size(200, 30),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            Navigator.of(context).pop(true);
+                            SystemNavigator.pop();
+                          },
+                          child: Label(
+                            text: LocaleKeys.yes.localize,
+                            style: Styles.mediumText(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                            padding: const EdgeInsets.all(0),
+                            minimumSize: const Size(70, 30),
+                            maximumSize: const Size(200, 30),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Label(
+                            text: LocaleKeys.no.localize,
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? AppColors.PRIMARY_COLOR
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<ThemeCubit, ThemeStates>(
-          builder: (BuildContext context, theme) {
-        var themeCubit = context.read<ThemeCubit>();
-        return SafeArea(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          // If on theme selection step, go back to language selection
+          if (isChooseLang) {
+            setState(() {
+              isChooseLang = false;
+            });
+          } else {
+            // If on language selection (first step), show exit dialog
+            bool shouldExit = await _showExitConfirmationDialog(context);
+            if (shouldExit) {
+              SystemNavigator.pop();
+            }
+          }
+        }
+      },
+      child: Scaffold(
+        body: BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, theme) {
+          var themeCubit = context.read<ThemeCubit>();
+          return SafeArea(
           child: Center(
             child: Column(
               children: [
@@ -99,7 +213,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Label(
-                                text: 'اختيار اللغه',
+                                text: 'اختيار اللغة',
                                 style: Styles.mediumText(),
                               ),
                             ),
@@ -165,7 +279,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                                   setState(() {
                                     isChooseLang = true;
                                   });
-                                  context.go(Routes.onBoardingScreen);
+                                  // Don't navigate here, let user click Next button
                                 },
                               ),
                             ),
@@ -235,7 +349,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                       width: double.infinity,
                       onPressed: () {
                         ManageVibration.vibrate();
-                        context.go(Routes.onBoardingScreen);
+                        context.push(Routes.onBoardingScreen);
                       },
                     ),
                   ),
@@ -245,6 +359,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
           ),
         );
       }),
+      ),
     );
   }
 }
