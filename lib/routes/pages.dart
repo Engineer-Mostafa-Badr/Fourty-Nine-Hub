@@ -5018,17 +5018,17 @@ CustomTransitionPage customTransition(
     CustomTransitionPage(
       key: state.pageKey,
       child: child,
-      transitionDuration: const Duration(seconds: 1),
+      transitionDuration: const Duration(milliseconds: 300),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, -1.0);
         const end = Offset.zero;
-        const curve = Curves.ease;
+        const curve = Curves.easeInOut;
+
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        final curvedAnimation =
-            CurvedAnimation(parent: animation, curve: curve);
+
         return SlideTransition(
-          position: tween.animate(curvedAnimation),
+          position: animation.drive(tween),
           child: child,
         );
       },
