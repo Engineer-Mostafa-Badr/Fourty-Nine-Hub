@@ -67,15 +67,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
   dispose() {
     SharedWebSocket.socket!.off("REID:NEW_AVAILABLE_TRIP");
     SharedWebSocket.socket!.off("RIDE:NON_TRACKING_TRIPS_UPDATED");
-    SharedWebSocket.socket!.off("RIDE:REMOVE_TRIP_FROM_LIST");
+    SharedWebSocket.socket!.off("REMOVE_TRIP_FROM_LIST");
     SharedWebSocket.socket!.off("LOADING:NEW_TRIP");
     SharedWebSocket.socket!.off("LOADING:CANCELED_LOADING_TRIP");
     SharedWebSocket.socket!.off("LOADING:ACCEPTED_TRIP_OFFER");
     SharedWebSocket.socket!.off("LOADING:REMOVE_TRIP");
-    SharedWebSocket.socket!.off("RIDE:TRIP_CANCELLED_BY_CLIENT");
     SharedWebSocket.socket!.off("RIDE:UPDATED_TRIP_AUTO_ACCEPT");
     SharedWebSocket.socket!.off("RIDE:UPDATED_TRIP_PRICE");
     SharedWebSocket.socket!.off("RIDE:ACCEPTED_OFFER_FROM_CLIENT");
+    SharedWebSocket.socket!.off("RIDE:TRIP-PARTIAL-PAYMENT");
+    SharedWebSocket.socket!.off("RIDE:CLIENT_ABROACH_DRIVER");
+    SharedWebSocket.socket!.off("RIDE:TRIP_CANCELLED_BY_CLIENT");
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     currentContext.read<MainCategoriesCubit>().listenToNewTrip(currentContext, currentContext.read<MainCategoriesCubit>().state.setting?.data.enableNotificationSound ?? false);
     debugPrint("dispose REID:NEW_AVAILABLE_TRIP");

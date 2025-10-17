@@ -147,7 +147,7 @@ class DI {
     // CliLogger.info('token outside getit $token');
     // socket
     // serviceLocator.registerLazySingleton<Socket>(() => io(
-    //     'https://49backend.com',
+    //     'https://39ce8f47fac5.ngrok-free.app',
     //     OptionBuilder()
     //         .setTransports(['websocket'])
     //         .disableAutoConnect()
@@ -423,7 +423,7 @@ class DI {
   //   CliLogger.info('token outside getit $token');
   //   // socket
   //   serviceLocator.registerFactory<Socket>(() => io(
-  //       'https://49backend.com',
+  //       'https://39ce8f47fac5.ngrok-free.app',
   //       OptionBuilder()
   //           .setTransports(['websocket'])
   //           .disableAutoConnect()

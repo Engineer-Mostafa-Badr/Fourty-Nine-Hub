@@ -217,7 +217,7 @@ class AuthInterceptor extends Interceptor {
     try {
       print('🔄 AuthInterceptor: Calling refresh token API');
       final response = await serviceLocator<Dio>().post(
-        "https://49backend.com/api/v1/auth/refresh-token",
+        "https://39ce8f47fac5.ngrok-free.app/api/v1/auth/refresh-token",
         data: {
           'refreshToken': _token?.refreshToken,
         },

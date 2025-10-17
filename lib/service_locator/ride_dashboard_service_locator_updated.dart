@@ -134,6 +134,7 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<AddRateWithDriverLoadingUseCase>(() => AddRateWithDriverLoadingUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToAcceptLoadingTripOfferUseCase>(() => ListenToAcceptLoadingTripOfferUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRemoveAcceptedLoadingTripOfferUseCase>(() => ListenToRemoveAcceptedLoadingTripOfferUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToClientComingTrackingUseCase>(() => ListenToClientComingTrackingUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 

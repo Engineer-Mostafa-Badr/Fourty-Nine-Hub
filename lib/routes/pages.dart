@@ -4828,8 +4828,7 @@ class AppPages {
                       providers: [
                         BlocProvider(
                           create: (context) =>
-                              serviceLocator<CaptainShareDashboardCubit>()
-                                ..loadInitData(context),
+                              serviceLocator<CaptainShareDashboardCubit>(),
                         ),
                       ],
                       child: const RunningAndPastTripsScreen(),

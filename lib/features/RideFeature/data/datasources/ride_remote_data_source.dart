@@ -1076,12 +1076,13 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   Future<Either<Failure, bool>> listenToUpdateLocation(
       UpdateSocketLocationParams params) async {
     try {
-      CliLogger.info('Listen To Update Location');
+      CliLogger.info('Emit Update Location111');
+      CliLogger.info('Emit Update Location ${SocketIOEvents.updateDriverLocation}');
       SharedWebSocket.socket!.emit(SocketIOEvents.updateDriverLocation, {
         "location": {"longitude": params.longitude, "latitude": params.latitude}
       });
       CliLogger.info(
-          "SocketIOEvents.updateDriverLocation${SocketIOEvents.updateDriverLocation}");
+          "SocketIOEvents.updateDriverLocation ${SocketIOEvents.updateDriverLocation}");
 
       return const Right(true);
     } catch (e) {
@@ -1130,7 +1131,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         // // final decodedData = jsonDecode(data);
         // CliLogger.info("offer data :  $decodedData");
         // params(RideOfferModel.fromJson(decodedData));
-        CliLogger.info("offer data :  $data");
+        CliLogger.info("offer from driver data :  $data");
         params(RideOfferModel.fromJson(data['formattedNewTripOffer']));
       });
     } catch (e) {
