@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/competition_list_view_item.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
@@ -371,15 +373,16 @@ class CompetitionsSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
 
-        // ✅ Responsive grid with 2 columns and dynamic height
+        // ✅ Responsive grid with equal height cards
         LayoutBuilder(
           builder: (context, constraints) {
             return StaggeredGrid.count(
-              crossAxisCount: 2, // always 2 per row
-              mainAxisSpacing: 24,
-              crossAxisSpacing: 24,
+              crossAxisCount: 2,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
               children: [
                 for (final competition in allCompetitions)
+                // ✅ Wrap each card in IntrinsicHeight for equal heights
                   _CompetitionCard(
                     title: context.isArabic
                         ? competition.nameAr ?? ''
@@ -445,7 +448,6 @@ class CompetitionsSection extends StatelessWidget {
   }
 }
 
-// ✅ Your existing _CompetitionCard remains the same
 class _CompetitionCard extends StatefulWidget {
   const _CompetitionCard({
     required this.title,
@@ -490,9 +492,13 @@ class _CompetitionCardState extends State<_CompetitionCard> {
         scale: _hover ? 1.02 : 1.0,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
+          // ✅ Set a minimum height to ensure all cards are the same size
+          constraints: const BoxConstraints(
+            minHeight: 290, // Adjust this value based on your content
+          ),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
             color: bgColor,
             border: Border.all(color: borderColor),
             boxShadow: [
@@ -515,102 +521,511 @@ class _CompetitionCardState extends State<_CompetitionCard> {
             )
                 : null,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min, // ✅ Let content decide height
-            children: [
-              Row(
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: dark
-                          ? Colors.white.withOpacity(0.08)
-                          : Colors.blue.withOpacity(0.08),
+          // ✅ Wrap content in SingleChildScrollView to prevent overflow
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: dark
+                            ? Colors.white.withOpacity(0.08)
+                            : Colors.blue.withOpacity(0.08),
+                      ),
+                      child: Center(
+                        child: widget.svgPath.isEmpty
+                            ? const Icon(Icons.image_not_supported_outlined)
+                            : SvgPicture.asset(widget.svgPath, height: 30),
+                      ),
                     ),
-                    child: Center(
-                      child: widget.svgPath.isEmpty
-                          ? const Icon(Icons.image_not_supported_outlined)
-                          : SvgPicture.asset(widget.svgPath, height: 30),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Label(
+                        text: widget.title,
+                        style: Styles.headerText(fontSize: 20),
+                        maxLines: 2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Label(
-                      text: widget.title,
-                      style: Styles.headerText(fontSize: 20),
-                      maxLines: 2,
-                    ),
-                  ),
-                ],
-              ),
 
-              const SizedBox(height: 12),
-              Label(
-                text: "${widget.value} ${widget.currency}",
-                style: Styles.headerText(
-                  fontSize: 22,
-                  color: dark ? Colors.tealAccent : Colors.blueAccent,
+                  ],
                 ),
-              ),
-
-              const SizedBox(height: 12),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: LinearProgressIndicator(
-                  value: (widget.percentage / 100).clamp(0.0, 1.0),
-                  minHeight: 8,
-                  backgroundColor:
-                  dark ? Colors.white10 : Colors.grey.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    dark ? Colors.tealAccent : Colors.blueAccent,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "${widget.percentage.toStringAsFixed(1)}%",
-                  style: Styles.mediumText(fontSize: 14),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-              Label(
-                text: widget.description,
-                style: Styles.mediumText(fontSize: 20),
-                maxLines: 10, // ✅ Let longer text wrap naturally
-              ),
-              const SizedBox(height: 12),
-
-              CustomButtonWalletAndGiftAndCashback(
-                title: LocaleKeys.requestTransfer.localize,
-                onPressed: widget.onPressed,
-                status: widget.percentage >= 100,
-              ),
-
-              const SizedBox(height: 8),
-              if (widget.secondaryDescription.isNotEmpty)
+                const SizedBox(height: 12),
                 Label(
-                  text: widget.secondaryDescription,
-                  style: Styles.mediumText(
-                    fontSize: 14,
-                    color:
-                    dark ? Colors.white70 : Colors.black.withOpacity(0.7),
+                  text: "${widget.value} ${widget.currency}",
+                  style: Styles.headerText(
+                    fontSize: 22,
+                    color: dark ? Colors.tealAccent : Colors.blueAccent,
                   ),
-                  maxLines: 5,
                 ),
-            ],
+                const SizedBox(height: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    value: (widget.percentage / 100).clamp(0.0, 1.0),
+                    minHeight: 8,
+                    backgroundColor:
+                    dark ? Colors.white10 : Colors.grey.withOpacity(0.2),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      dark ? Colors.tealAccent : Colors.blueAccent,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "${formatNumberAccordingToLocale(widget.percentage.toStringAsFixed(1), context.isArabic)}%",
+                    style: Styles.mediumText(),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+                EllipsisTextWithDialog(
+                  text: widget.description,
+                  style: Styles.mediumText(fontSize: 20),
+                  maxLines: 3,
+                ),
+
+                const SizedBox(height: 12),
+                CustomButtonWalletAndGiftAndCashback(
+                  radius: 8,
+                  title: LocaleKeys.requestTransfer.localize,
+                  onPressed: widget.onPressed,
+                  status: widget.percentage >= 100,
+                ),
+                const SizedBox(height: 8),
+                if (widget.secondaryDescription.isNotEmpty)
+                  EllipsisTextWithDialog(
+                    text: widget.secondaryDescription,
+                    style: Styles.mediumText(
+                      fontSize: 17,
+                      color: dark
+                          ? Colors.white70
+                          : Colors.black.withOpacity(0.7),
+                    ),
+                    maxLines: 2,
+                  ),
+
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+/*
+class EllipsisTextWithDialog extends StatefulWidget {
+  final String text;
+  final TextStyle? style;
+  final int maxLines;
+  final TextAlign? textAlign;
 
+  const EllipsisTextWithDialog({
+    Key? key,
+    required this.text,
+    this.style,
+    this.maxLines = 2,
+    this.textAlign,
+  }) : super(key: key);
+
+  @override
+  State<EllipsisTextWithDialog> createState() => _EllipsisTextWithDialogState();
+}
+
+class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog> {
+  final _textKey = GlobalKey();
+  bool _isOverflowing = false;
+
+  @override
+  void didUpdateWidget(covariant EllipsisTextWithDialog oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  void _checkOverflow() {
+    final renderObject = _textKey.currentContext?.findRenderObject();
+    if (renderObject is RenderParagraph) {
+      final didOverflow = renderObject.didExceedMaxLines;
+      if (didOverflow != _isOverflowing) {
+        setState(() => _isOverflowing = didOverflow);
+      }
+    }
+  }
+
+  void _showDialog() {
+    if (widget.text.trim().isEmpty) return;
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          insetPadding: const EdgeInsets.all(20),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).dialogBackgroundColor,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: SingleChildScrollView(
+              child: Text(
+                widget.text,
+                style:Styles.headerText(),
+                // style: widget.style ?? Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final truncatedText = Text(
+      key: _textKey,
+      widget.text,
+      style: widget.style,
+      maxLines: widget.maxLines,
+      overflow: TextOverflow.ellipsis,
+      textAlign: widget.textAlign,
+    );
+
+    return GestureDetector(
+      onTap: _showDialog,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(child: truncatedText),
+          if (_isOverflowing) ...[
+            const SizedBox(width: 4),
+            InkWell(
+              onTap: _showDialog,
+              borderRadius: BorderRadius.circular(12),
+              child: Icon(
+                Icons.info_outline,
+                size: 18,
+                color: AppColors.PRIMARY_COLOR_DARK,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+ */
+
+String formatNumberAccordingToLocale(String number, bool isArabic) {
+  if (!isArabic) return number; // Just return as-is
+
+  const westernToArabicDigits = {
+    '0': '٠',
+    '1': '١',
+    '2': '٢',
+    '3': '٣',
+    '4': '٤',
+    '5': '٥',
+    '6': '٦',
+    '7': '٧',
+    '8': '٨',
+    '9': '٩',
+    '.': '٫', // Arabic decimal separator
+  };
+
+  return number.split('').map((ch) => westernToArabicDigits[ch] ?? ch).join('');
+}
+
+class EllipsisTextWithDialog extends StatefulWidget {
+  final String text;
+  final TextStyle? style;
+  final int maxLines;
+  final TextAlign? textAlign;
+  final Color? accentColor;
+  final IconData? expandIcon;
+
+  const EllipsisTextWithDialog({
+    Key? key,
+    required this.text,
+    this.style,
+    this.maxLines = 1,
+    this.textAlign,
+    this.accentColor,
+    this.expandIcon,
+  }) : super(key: key);
+
+  @override
+  State<EllipsisTextWithDialog> createState() => _EllipsisTextWithDialogState();
+}
+
+class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
+    with SingleTickerProviderStateMixin {
+  final _textKey = GlobalKey();
+  bool _isOverflowing = false;
+  late AnimationController _animController;
+  late Animation<double> _scaleAnimation;
+  bool _isHovering = false;
+
+  @override
+  void didUpdateWidget(covariant EllipsisTextWithDialog oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeOut),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
+
+  void _checkOverflow() {
+    final renderObject = _textKey.currentContext?.findRenderObject();
+    if (renderObject is RenderParagraph) {
+      final didOverflow = renderObject.didExceedMaxLines;
+      if (didOverflow != _isOverflowing) {
+        setState(() => _isOverflowing = didOverflow);
+      }
+    }
+  }
+
+  void _showDialog() {
+    if (widget.text.trim().isEmpty) return;
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Dismiss',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (ctx, anim1, anim2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, anim1, anim2, child) {
+        final curvedAnim = CurvedAnimation(
+          parent: anim1,
+          curve: Curves.easeOutCubic,
+        );
+
+        return Transform.scale(
+          scale: Tween<double>(begin: 0.8, end: 1.0).evaluate(curvedAnim),
+          child: FadeTransition(
+            opacity: curvedAnim,
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 600),
+                decoration: BoxDecoration(
+                  color: Theme.of(ctx).dialogBackgroundColor,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 40,
+                      offset: const Offset(0, 20),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Header
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(24, 20, 16, 16),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Theme.of(ctx).dividerColor.withOpacity(0.1),
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: (widget.accentColor ?? Theme.of(ctx).primaryColor)
+                                  .withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.article_outlined,
+                              size: 24,
+                              color: widget.accentColor ?? Theme.of(ctx).primaryColor,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                                context.isArabic ? 'المحتوى الكامل' : 'Full Content',
+                                style: Theme.of(ctx).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => Navigator.of(ctx).pop(),
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.close_rounded,
+                                  size: 24,
+                                  color: Theme.of(ctx).iconTheme.color?.withOpacity(0.7),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Content
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(24),
+                        physics: const BouncingScrollPhysics(),
+                        child: SelectableText(
+                          widget.text,
+                          style: Styles.mediumText(),
+                          // style: widget.style?.copyWith(
+                          //   height: 1.6,
+                          //   letterSpacing: 0.2,
+                          // ) ?? Theme.of(ctx).textTheme.bodyLarge?.copyWith(
+                          //   height: 1.6,
+                          //   letterSpacing: 0.2,
+                          // ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final accentColor = widget.accentColor ?? Theme.of(context).primaryColor;
+
+    final truncatedText = Text(
+      key: _textKey,
+      widget.text,
+      style: widget.style,
+      maxLines: widget.maxLines,
+      overflow: TextOverflow.ellipsis,
+      textAlign: widget.textAlign,
+    );
+
+    return MouseRegion(
+      onEnter: (_) {
+        if (_isOverflowing) {
+          setState(() => _isHovering = true);
+          _animController.forward();
+        }
+      },
+      onExit: (_) {
+        setState(() => _isHovering = false);
+        _animController.reverse();
+      },
+      child: GestureDetector(
+        onTap:  _showDialog ,
+        // onTap: _isOverflowing ? _showDialog : null,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(child: truncatedText),
+            if (_isOverflowing) ...[
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: _showDialog,
+
+                child: Icon(
+                  Icons.info_outline,
+                  size: 18,
+                  color: AppColors.PRIMARY_COLOR_DARK,
+                ),
+              ),
+              /*
+              ScaleTransition(
+                scale: _scaleAnimation,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _showDialog,
+                    borderRadius: BorderRadius.circular(20),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: _isHovering
+                            ? accentColor.withOpacity(0.15)
+                            : accentColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: _isHovering
+                              ? accentColor.withOpacity(0.3)
+                              : accentColor.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.info_outline,
+                        size: 18,
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+               */
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 final Map<String, String> competitionIcons = {
   '66bca1717a9c14dbbb053cea': Assets.rideUsageIcon,

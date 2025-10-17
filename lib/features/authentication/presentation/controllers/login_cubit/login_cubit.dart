@@ -89,60 +89,121 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> login(GlobalKey<FormState> formKey) async {
-    String? token = await FirebaseMessaging.instance.getToken();
+    final token = await FirebaseMessaging.instance.getToken();
     log("all tokens before login : ${await CacheManager.getAccessToken()}");
 
-    if (formKey.currentState!.validate()) {
-      Either<Failure, UserTokensEntity> result;
-      emit(LoginLoading());
-      if (_isEmail(emailTextController.text.trim())) {
-        result = await _loginUseCase(
-          LoginParams(
-            email: emailTextController.text.trim(),
-            password: passwordTextController.text.trim(),
-            token: token ?? "",
-          ),
-        );
-      } else {
-        result = await _loginWithPhoneUseCase(
-          LoginWithPhoneParams(
-            phoneNumber: emailTextController.text.trim(),
-            password: passwordTextController.text.trim(),
-            token: token ?? "",
-          ),
-        );
-      }
+    // ✅ Clean and rewrite input
+    final cleanedInput = cleanInput(emailTextController.text);
+    emailTextController.text = cleanedInput;
+    final password = passwordTextController.text.trim();
 
-      result.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          print("getFailureMessage(failure, currentContext) ${getFailureName(failure, currentContext)}");
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(LoginError(failure));
-        },
-        (userToken) async {
-          //_attachToken(userToken); // Attach to dio
-          // _saveTokens(userToken); // Ensure tokens are saved before proceeding
-          // pr('state token is  ${userToken}');
-          log("Token logout ${await CacheManager.getAccessToken()}");
-          log("Token userToken access ${userToken.accessToken}");
-          log("Token userToken refresh ${userToken.refreshToken}");
-          await CacheManager.saveAccessToken(userToken.accessToken);
-          await CacheManager.saveRefreshToken(userToken.refreshToken);
-          await Storage.setRefreshToken(userToken.refreshToken);
+    print("✅ Cleaned input: '$cleanedInput'");
 
-          // await DI.reset();
-          // await DI.execute(token: await CacheManager.getAccessToken());
-          // serviceLocator<Socket>().connect();
-          // ignore: use_build_context_synchronously
-          SharedWebSocket.connect(token: userToken.accessToken);
-          emit(LoginSuccess(userTokensEntity: userToken));
-        },
+    if (!formKey.currentState!.validate()) return;
+
+    emit(LoginLoading());
+    Either<Failure, UserTokensEntity> result;
+
+    if (_isEmail(cleanedInput)) {
+      result = await _loginUseCase(
+        LoginParams(
+          email: cleanedInput,
+          password: password,
+          token: token ?? "",
+        ),
+      );
+    } else {
+      result = await _loginWithPhoneUseCase(
+        LoginWithPhoneParams(
+          phoneNumber: cleanedInput,
+          password: password,
+          token: token ?? "",
+        ),
       );
     }
+
+    result.fold(
+          (failure) {
+        final currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(failure, currentContext));
+        emit(LoginError(failure));
+      },
+          (userToken) async {
+        await CacheManager.saveAccessToken(userToken.accessToken);
+        await CacheManager.saveRefreshToken(userToken.refreshToken);
+        await Storage.setRefreshToken(userToken.refreshToken);
+        SharedWebSocket.connect(token: userToken.accessToken);
+        emit(LoginSuccess(userTokensEntity: userToken));
+      },
+    );
   }
+
+  String cleanInput(String text) {
+    return text
+        .trim()
+        .replaceAll(RegExp(r'[\u00A0\u200B\s]+'), ''); // remove all spaces
+  }
+
+
+  // Future<void> login(GlobalKey<FormState> formKey) async {
+  //   String? token = await FirebaseMessaging.instance.getToken();
+  //   log("all tokens before login : ${await CacheManager.getAccessToken()}");
+  //   print("salomaaaaaa1 ${emailTextController.text.trim()}");
+  //   if (formKey.currentState!.validate()) {
+  //     Either<Failure, UserTokensEntity> result;
+  //     print("salomaaaaaa ${emailTextController.text.trim()}");
+  //     emit(LoginLoading());
+  //     if (_isEmail(emailTextController.text.trim())) {
+  //       result = await _loginUseCase(
+  //         LoginParams(
+  //           email: emailTextController.text.trim(),
+  //           password: passwordTextController.text.trim(),
+  //           token: token ?? "",
+  //         ),
+  //       );
+  //     } else {
+  //       print("salomaaaaaa2 ${emailTextController.text.trim()}");
+  //       result = await _loginWithPhoneUseCase(
+  //         LoginWithPhoneParams(
+  //           phoneNumber:emailTextController.text.trim().replaceAll(' ', ''),
+  //           // phoneNumber: emailTextController.text.trim(),
+  //           password: passwordTextController.text.trim(),
+  //           token: token ?? "",
+  //         ),
+  //       );
+  //     }
+  //
+  //     result.fold(
+  //       (failure) {
+  //         var currentContext =
+  //             AppPages.router.configuration.navigatorKey.currentContext!;
+  //         print("getFailureMessage(failure, currentContext) ${getFailureName(failure, currentContext)}");
+  //         showErrorMessage(
+  //             currentContext, getFailureMessage(failure, currentContext));
+  //         emit(LoginError(failure));
+  //       },
+  //       (userToken) async {
+  //         //_attachToken(userToken); // Attach to dio
+  //         // _saveTokens(userToken); // Ensure tokens are saved before proceeding
+  //         // pr('state token is  ${userToken}');
+  //         log("Token logout ${await CacheManager.getAccessToken()}");
+  //         log("Token userToken access ${userToken.accessToken}");
+  //         log("Token userToken refresh ${userToken.refreshToken}");
+  //         await CacheManager.saveAccessToken(userToken.accessToken);
+  //         await CacheManager.saveRefreshToken(userToken.refreshToken);
+  //         await Storage.setRefreshToken(userToken.refreshToken);
+  //
+  //         // await DI.reset();
+  //         // await DI.execute(token: await CacheManager.getAccessToken());
+  //         // serviceLocator<Socket>().connect();
+  //         // ignore: use_build_context_synchronously
+  //         SharedWebSocket.connect(token: userToken.accessToken);
+  //         emit(LoginSuccess(userTokensEntity: userToken));
+  //       },
+  //     );
+  //   }
+  // }
 
   // تسجيل دخول كـ Guest
   Future<void> signInAsGuest() async {
