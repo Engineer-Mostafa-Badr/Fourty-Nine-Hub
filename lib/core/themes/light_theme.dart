@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
@@ -13,9 +14,16 @@ ThemeData get lightTheme => ThemeData(
       //   seedColor: const Color(0xff0b1035),
       // ),
       useMaterial3: true,
+      // ضيف السطور دي هنا 👇
       appBarTheme: const AppBarTheme(
         color: AppColors.AUTH_CONTAINER_COLOR,
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //   systemNavigationBarColor:
+        //       AppColors.AUTH_CONTAINER_COLOR, // لون أبيض للـ Light Mode
+        //   systemNavigationBarIconBrightness: Brightness.dark, // أيقونات سوداء
+        // ),
       ),
+
       switchTheme: const SwitchThemeData(
         trackColor: WidgetStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
       ),

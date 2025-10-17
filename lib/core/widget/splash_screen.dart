@@ -63,6 +63,12 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     _hasNavigated = true;
     print("🚀 SplashScreen setting _hasNavigated = true");
+
+    // Add minimum delay to show splash and prevent UI freeze
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    if (!mounted) return;
+
     final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
     print("🚀 currentLocation = $currentLocation");
 
@@ -96,16 +102,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
         if(data['data']['isLoggedIn']==true){
           print("No Expiration");
-          context.read<UserCubit>().attachToken();
-          context.read<UserCubit>().getUser();
-          context.read<CreatePostCubit>().loadData();
-          context.read<SecretsCubit>().getAllSecrets();
-          context.read<CustomPageCubit>().fetchActivate();
-          context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-          context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-          context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-          context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-          context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+
+          // Load critical data first, defer non-critical to after navigation
+          await _loadCriticalData();
+
           if (!isShowOnboarding) {
             nextRoute = Routes.ChooseLangScreen;
           } else if (isActivate) {
@@ -118,22 +118,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
           if (mounted&&(currentLocation!=nextRoute)) {
             context.go(nextRoute);
+            // Load non-critical data after navigation
+            _loadNonCriticalDataAfterNavigation();
           }
         }else{
           print("isAccessTokenExpired");
           UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
           print("tokens !=null ${tokens !=null}");
           if(tokens !=null){
-            context.read<UserCubit>().attachToken();
-            context.read<UserCubit>().getUser();
-            context.read<CreatePostCubit>().loadData();
-            context.read<SecretsCubit>().getAllSecrets();
-            context.read<CustomPageCubit>().fetchActivate();
-            context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-            context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-            context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-            context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-            context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+            // Load critical data first
+            await _loadCriticalData();
 
             if (!isShowOnboarding) {
               nextRoute = Routes.ChooseLangScreen;
@@ -147,6 +141,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
             if (mounted&&(currentLocation!=nextRoute)) {
               context.go(nextRoute);
+              // Load non-critical data after navigation
+              _loadNonCriticalDataAfterNavigation();
             }
           }else{
             final prefs = await SharedPreferences.getInstance();
@@ -173,8 +169,30 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       });
     }
+  }
 
+  // Load only critical data that blocks navigation
+  Future<void> _loadCriticalData() async {
+    if (!mounted) return;
+    context.read<UserCubit>().attachToken();
+    context.read<UserCubit>().getUser();
+    context.read<SecretsCubit>().getAllSecrets();
+  }
 
+  // Load non-critical data after navigation
+  void _loadNonCriticalDataAfterNavigation() {
+    if (!mounted) return;
+    // Run these in background without blocking
+    Future.microtask(() {
+      if (!mounted) return;
+      context.read<CreatePostCubit>().loadData();
+      context.read<CustomPageCubit>().fetchActivate();
+      context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+      context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+      context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+      context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+      context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+    });
   }
 
 
@@ -194,10 +212,6 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         ),
       );
-      final newAccessToken = response.data['data']['accessToken'] as String;
-      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer ${newAccessToken??''}';
-      print("serviceLocator<Dio>().options.headers['Authorization']1 ${serviceLocator<Dio>().options.headers['Authorization']}");
-      Future.delayed(Duration(seconds: 4));
 
       if(response.statusCode != 200) {
         print("response.statusCode ${response.statusCode}");
@@ -206,22 +220,14 @@ class _SplashScreenState extends State<SplashScreen> {
         return null;
       }
 
-      if(response.statusCode == 200){
-        print("response.statusCode ${response.statusCode}");
-        final accessToken = response.data['data']['accessToken'] as String;
-        serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
-        print("serviceLocator<Dio>().options.headers['Authorization'] ${serviceLocator<Dio>().options.headers['Authorization']}");
-        Future.delayed(Duration(seconds: 1));
-
-      }
-
-
       final accessToken = response.data['data']['accessToken'] as String;
       final refreshToken = response.data['data']['refreshToken'] as String;
       final newToken = UserTokensEntity(
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
+
+      // Set authorization header once
       serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
@@ -230,22 +236,9 @@ class _SplashScreenState extends State<SplashScreen> {
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
       await Storage.setRefreshToken(refreshToken);
-      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       return newToken;
     } catch (e) {
-      // context.read<UserCubit>().attachToken();
-      // context.read<UserCubit>().getUser();
-      // context.read<CreatePostCubit>().loadData();
-      // context.read<SecretsCubit>().getAllSecrets();
-      // context.read<CustomPageCubit>().fetchActivate();
-      // context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-      // context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-      // context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-      // context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-      // context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
-      // var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
-      // currentContext.push(Routes.LOGIN);
       print('❌ AuthInterceptor: Refresh token API failed: $e');
       return null;
     }

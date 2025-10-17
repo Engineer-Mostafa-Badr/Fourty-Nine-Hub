@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../res/style/app_colors.dart';
@@ -10,6 +11,7 @@ ThemeData get darkTheme => ThemeData(
       //   primary: AppColors.AUTH_CONTAINER_COLOR,
       //   secondary: AppColors.AUTH_CONTAINER_COLOR,
       // ),
+
       colorScheme: const ColorScheme.dark(
         primary: AppColors.AUTH_CONTAINER_COLOR,
         secondary: AppColors.AUTH_CONTAINER_COLOR,
@@ -64,7 +66,8 @@ ThemeData get darkTheme => ThemeData(
         }),
         dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.Floating_Button_COLOR_DARK; // Background color when selected
+            return AppColors
+                .Floating_Button_COLOR_DARK; // Background color when selected
           }
           return Colors.transparent; // Default background
         }),
@@ -80,12 +83,17 @@ ThemeData get darkTheme => ThemeData(
         ),
       ),
       appBarTheme: const AppBarTheme(
-        // color: Color(0xff0E0E0E),
         color: AppColors.Scaffold_Color_DARK,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //   systemNavigationBarColor:
+        //       AppColors.Scaffold_Color_DARK, // لون أسود للـ Dark Mode
+        //   systemNavigationBarIconBrightness: Brightness.light, // أيقونات بيضاء
+        // ),
       ),
+
       // textSelectionTheme: const TextSelectionThemeData(
       //   selectionColor: AppColors.PRIMARY_COLOR,
       //   cursorColor: AppColors.PRIMARY_COLOR,
