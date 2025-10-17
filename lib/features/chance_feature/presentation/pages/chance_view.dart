@@ -263,13 +263,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                           int totalAds = 0;
 
                           if (state.winnerStatistics != null) {
-                            totalWinners =
-                                state.winnerStatistics!.totalWinner;
+                            totalWinners = state.winnerStatistics!.totalWinner;
                             totalAds = state.winnerStatistics!.totalAds;
                           }
 
-                          final winnerText =
-                              ArabicPluralization.getWinnerText(
+                          final winnerText = ArabicPluralization.getWinnerText(
                             totalWinners,
                             context.isArabic,
                           );
@@ -280,8 +278,8 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                                   totalWinners.toString())
                               : totalWinners.toString();
                           final displayTotalAds = context.isArabic
-                              ? formatNumbers.convertToArabicNumerals(
-                                  totalAds.toString())
+                              ? formatNumbers
+                                  .convertToArabicNumerals(totalAds.toString())
                               : totalAds.toString();
 
                           return Row(
@@ -291,7 +289,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                                 '$winnerText ($displayTotalWinners/$displayTotalAds)',
                                 style: TextStyle(
                                   fontSize: 24.sp,
-                                  color:  Colors.white,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -695,9 +693,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     final List<ChanceAdEntity> favoriteAds = state.favoriteChanceAds ?? [];
 
     if (favoriteAds.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'لا توجد إعلانات مفضلة',
+          context.isArabic ? 'لا توجد إعلانات مفضلة' : 'No favorite ads',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
@@ -766,9 +764,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     final List<ChanceAdEntity> expiredAds = state.expiredChanceAds ?? [];
 
     if (expiredAds.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'لا توجد إعلانات منتهية',
+          context.isArabic ? 'لا توجد إعلانات منتهية' : 'No expired ads',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
@@ -836,9 +834,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     final List<ChanceAdEntity> myAds = state.myChanceAds ?? [];
 
     if (myAds.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'لا توجد إعلانات خاصة بك',
+          context.isArabic ? 'لا توجد إعلانات خاصة بك' : 'No ads',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
@@ -1295,7 +1293,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                         context.isArabic ? 'جنيه مصري' : 'EGP',
                         style: TextStyle(
                           fontSize: 24.sp,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.bold,
                           color: AppColors.red_Color_DARK,
                         ),
                       ),

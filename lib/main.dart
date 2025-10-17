@@ -56,10 +56,10 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'routes/pages.dart';
+
 // <-- add this
 // Global key for ToastificationWrapper to prevent recreation during network changes
 final GlobalKey _toastificationKey = GlobalKey();
-
 
 void main() async {
   try {
@@ -141,16 +141,17 @@ void main() async {
     // Start time sync service
     await serviceLocator<TimeSyncService>().start();
     runApp(
-    LocalizationService.rootWidget(
-      child: Phoenix(
-        child: const MyApp(),
+      LocalizationService.rootWidget(
+        child: Phoenix(
+          child: const MyApp(),
+        ),
       ),
-    ),
-  );
+    );
   } catch (e, stackTrace) {
     return; // Exit if final initialization fails
   }
 }
+
 Future<void> requestTrackingPermission() async {
   final status = await AppTrackingTransparency.trackingAuthorizationStatus;
   if (status == TrackingStatus.notDetermined) {
@@ -171,7 +172,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -194,7 +194,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // Navigate to incorrect time screen when detected; back to splash when corrected
     serviceLocator<TimeSyncService>().isTimeIncorrect.addListener(() async {
-      final isIncorrect = serviceLocator<TimeSyncService>().isTimeIncorrect.value;
+      final isIncorrect =
+          serviceLocator<TimeSyncService>().isTimeIncorrect.value;
       if (isIncorrect) {
         AppPages.router.go(Routes.incorrectTime);
       } else {
@@ -221,15 +222,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Future<void> getDevicePushTokenVoIP() async {
     var devicePushTokenVoIP =
-    await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
   }
 
   Future getToken() async {
     var token = await CacheManager.getAccessToken();
     log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -242,8 +241,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
-            create: (context) =>
-                serviceLocator<MainCategoriesCubit>()),
+            create: (context) => serviceLocator<MainCategoriesCubit>()),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(), //..getUser(),
         ),
@@ -334,11 +332,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //           notificationListenerUseCase: serviceLocator(),
         //         )),
         // BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
-        BlocProvider(
-          create: (context) => FloatingNavigatorCubit()),
-        BlocProvider(
-          create: (context) => ChoiceRulerCubit()
-        ),
+        BlocProvider(create: (context) => FloatingNavigatorCubit()),
+        BlocProvider(create: (context) => ChoiceRulerCubit()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(750, 1334),
@@ -351,7 +346,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, themeState) {
-              return BlocListener<NetworkConnectivityCubit, NetworkConnectivityState>(
+              return BlocListener<NetworkConnectivityCubit,
+                  NetworkConnectivityState>(
                 listener: (context, networkState) {
                   // Handle network state changes without rebuilding the widget tree
                   // The network alert banner will update automatically through its own BlocBuilder
@@ -370,18 +366,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                 child: MaterialApp.router(
                                   routerConfig: AppPages.router,
                                   builder:
-                                      (BuildContext context, Widget? child) {
+                                      (BuildContext context, Widget? child) { 
                                     final mediaQuery = MediaQuery.of(context);
                                     return MediaQuery(
                                       data: mediaQuery.copyWith(
                                         textScaler: TextScaler.noScaling,
                                       ),
-                                  child: Stack(
-                                    children: [
-                                      child!,
-                                      const WhatsAppCallScreen(),
-                                    ],
-                                  ),
+                                      child: Stack(
+                                        children: [
+                                          child!,
+                                          const WhatsAppCallScreen(),
+                                        ],
+                                      ),
                                     );
                                   },
                                   themeMode: (snapshot.data ?? false)
@@ -399,23 +395,28 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               ),
                               const MinimizedCallOverlay(),
                               // Network alert banner with its own BlocBuilder to avoid rebuilding the main tree
-                              BlocBuilder<NetworkConnectivityCubit, NetworkConnectivityState>(
+                              BlocBuilder<NetworkConnectivityCubit,
+                                  NetworkConnectivityState>(
                                 builder: (context, networkState) {
                                   return Stack(
                                     children: [
                                       // Network alert banner for connected state
-                                      if (networkState == NetworkConnectivityState.connected)
+                                      if (networkState ==
+                                          NetworkConnectivityState.connected)
                                         Positioned(
                                           bottom: 0,
                                           left: 0,
                                           right: 0,
-                                          child: NetworkAlertBanner(isConnected: true),
+                                          child: NetworkAlertBanner(
+                                              isConnected: true),
                                         ),
                                       // Network error overlay for disconnected state
-                                      if (networkState == NetworkConnectivityState.disconnected)
+                                      if (networkState ==
+                                          NetworkConnectivityState.disconnected)
                                         Positioned.fill(
                                           child: Container(
-                                            color: Colors.black.withOpacity(0.8),
+                                            color:
+                                                Colors.black.withOpacity(0.8),
                                             child: const Center(
                                               child: NetworkErrorScreen(),
                                             ),
@@ -439,5 +440,4 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ),
     );
   }
-
 }
