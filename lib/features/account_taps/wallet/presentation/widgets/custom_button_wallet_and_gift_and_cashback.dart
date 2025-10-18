@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -31,12 +32,12 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppButton(
        // height: 10,
-
+      height: context.isArabic ?  kToolbarHeight * 1.2.h :  kToolbarHeight * 1.3.h,
       radius: radius,
-      label: title,
+      // label: title,
       // style: textStyle ??
       //     Styles.mediumText(
-      //       color: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
+      //       color: context.isDarkMode ? Colors.white : Colors.white,
       //       fontSize: 32,
       //     ),
       widget: Center(
