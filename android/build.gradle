@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.9.25'
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:8.5.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0"
         classpath "com.google.gms:google-services:4.4.2"
         configurations.all {
             exclude group: 'com.mapbox.common', module: 'common'

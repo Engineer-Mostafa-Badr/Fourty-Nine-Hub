@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/helpers/logging_helper.dart';
@@ -214,12 +215,14 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<UserTokensEntity?> _refreshToken() async {
+    String deviceId = await getDeviceId();
     try {
       print('🔄 AuthInterceptor: Calling refresh token API');
       final response = await serviceLocator<Dio>().post(
         "https://49backend.com/api/v1/auth/refresh-token",
         data: {
           'refreshToken': _token?.refreshToken,
+          'deviceId': deviceId
         },
         options: Options(
           headers: {

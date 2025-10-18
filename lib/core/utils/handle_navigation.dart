@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -131,12 +132,14 @@ class HandleNavigation {
 }
 
 Future<UserTokensEntity?> _refreshToken(String token) async {
+  String deviceId = await getDeviceId();
   try {
     print('🔄 AuthInterceptor: Calling refresh token API From Splash');
     final response = await serviceLocator<Dio>().post(
       "https://49backend.com/api/v1/auth/refresh-token",
       data: {
         'refreshToken': token,
+        'deviceId': deviceId
       },
       options: Options(
         headers: {
