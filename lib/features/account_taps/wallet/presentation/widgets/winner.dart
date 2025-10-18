@@ -51,14 +51,14 @@ class WinnersGridViewItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(
-            height: 24,
+            height: 18,
           ),
           Stack(
             clipBehavior: Clip.none,
             children: [
               ImageFromInternet(
-                width: 80.25,
-                height: 80.25,
+                width: 70.25,
+                height: 70.25,
                 image: winner.image,
                 isCircle: true,
                 firstChar: winner.name[0].toUpperCase(),
@@ -76,41 +76,33 @@ class WinnersGridViewItem extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Label(
-                text: winner.name,
-                style: Styles.headerText(
-                  fontSize: 24,
-                  color: context.isDarkMode
-                      ? const Color(0xff0D0D0D)
-                      : Colors.white,
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Label(
+              text: winner.name,
+              style: Styles.headerText(
+                fontSize: 24,
+                color:
+                    context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
               ),
             ),
           ),
-          const SizedBox(height: 3),
+          // const SizedBox(height: 3),
           if (winner.title != null)
-            Flexible(
-              child: Label(
-                text: winner.title!,
-                style: Styles.mediumText(
-                  fontSize: 20,
-                  color: context.isDarkMode
-                      ? const Color(0xff0D0D0D)
-                      : Colors.white,
-                ),
-              ),
-            ),
-          Flexible(
-            child: Label(
-              text: formatDateInWinners(winner.date, context),
+            Label(
+              text: winner.title!,
               style: Styles.mediumText(
                 fontSize: 20,
                 color:
                     context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
               ),
+            ),
+          Label(
+            text: formatDateInWinners(winner.date, context),
+            style: Styles.mediumText(
+              fontSize: 20,
+              color:
+                  context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
             ),
           ),
           Flexible(

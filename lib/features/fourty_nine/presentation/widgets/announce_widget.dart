@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -23,9 +25,9 @@ class AnnounceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SliderCubit, BasicState<List<SliderItemEntity>>>(
+    return BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
         builder: (context, state) {
-      if (state.isLoading) {
+      if (state.status == StateStatus.loadingSliders) {
         return Shimmer.fromColors(
           baseColor: Colors.grey[100]!,
           highlightColor: Colors.white24,
@@ -37,14 +39,14 @@ class AnnounceWidget extends StatelessWidget {
           ),
         );
       } else {
-        if (state.data?.isEmpty ?? false) {
+        if (state.sliders?.isEmpty ?? false) {
           // print('data is empty');
           return const SizedBox();
         } else {
           return CarouselSliderWidget(
               height: 150.h,
               autoPlay: true,
-              widgets: state.data?.map((e) {
+              widgets: state.sliders?.map((e) {
                     return _buildAnnounceItem(item: e, context: context);
                   }).toList() ??
                   []);

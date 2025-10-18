@@ -15,9 +15,9 @@ class TabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap:onTap == null ? null : () {
         ManageVibration.vibrate();
-        onTap.call();
+        onTap!.call();
       },
       child: Stack(
         children: [
@@ -38,6 +38,9 @@ class TabWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: Styles.headerText(
                     fontSize: textSize ?? 24,
                     color: selected

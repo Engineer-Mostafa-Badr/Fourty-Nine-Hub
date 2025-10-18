@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/price_widget.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -157,6 +158,7 @@ class _MyAdCardState extends State<MyAdCard> {
                     dontPop: true,
                     successRequest: () {
                       context.pop();
+                      context.pop();
                       showSuccessMessage(
                           context,
                           context.isArabic
@@ -219,31 +221,10 @@ class _MyAdCardState extends State<MyAdCard> {
           children: [
             Row(
               children: [
-                Row(
-                  children: [
-                    Label(
-                      text:
-                      '${FormatNumbers().formatNumberByComma(widget.item.price.toString(), isArabic: context.isArabic)} ',
-                      style: Styles.headerText(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          color: context.isDarkMode
-                              ? AppColors.whiteColor
-                              : AppColors.PRIMARY_COLOR),
-                      maxLines: 1,
-                    ),
-                    Label(
-                      text:
-                      '${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
-                      style: Styles.headerText(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          color: context.isDarkMode
-                              ? AppColors.whiteColor
-                              : AppColors.SECONDARY_COLOR),
-                      maxLines: 1,
-                    ),
-                  ],
+                if(widget.item.price!=null&&(widget.item.price??0)>0)PriceWidget(
+                  price: widget.item.price??0,
+                  currency: '${context.isArabic ? widget.item.currencyAr : widget.item.currencyEn}',
+
                 ),
                 Sizer(width: 16),
                 if (widget.item.mainCategoryId ==
@@ -498,7 +479,8 @@ class _MyAdCardState extends State<MyAdCard> {
                           .areYouSureAboutDeletingTheAD
                           .localize,
                       action: () {
-                        if (widget.deleteAd != null) {
+                        print("widget.deleteAd ${widget.item.id}");
+                        if(widget.deleteAd != null){
                           widget.deleteAd!(widget.item.id);
                         }
                       },

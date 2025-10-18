@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/common/dots_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/cubit/cubit.dart';
@@ -55,30 +56,31 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       if (!mounted || !controller.hasClients) return;
 
       final cubit = context.read<OnBoardingCubit>();
-      final nextPage = controller.page!.toInt() + 1;
+      final currentPage = controller.page?.toInt() ?? 0;
+      final nextPage = (currentPage + 1) % cubit.images.length; // Loop back to 0
 
-      if (nextPage < cubit.images.length) {
-        controller.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      } else {
-        controller.animateToPage(
-          0,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
+      controller.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: BlocBuilder<ThemeCubit, ThemeStates>(
-          builder: (BuildContext context, theme) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          // When back button is pressed, go back to language selection screen
+          context.go(Routes.ChooseLangScreen);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, theme) {
         var themeCubit = context.read<ThemeCubit>();
         return BlocBuilder<OnBoardingCubit, OnBoardingState>(
           builder: (context, state) {
@@ -106,6 +108,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           },
         );
       }),
+      ),
     );
   }
 
@@ -154,16 +157,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           onPageChanged: (index) {
             _startAutoScroll(); // Reset timer on manual scroll
             if (!cubit.isClosed) {
-              print('controller.page!: ${controller.page!.toInt()}');
-              cubit.changeOnboardingData(controller.page!.toInt() + 1);
-              // cubit.changeOnboardingData(state.currentIndex+1);
-            }
-            if (index >= cubit.images.length) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const Scaffold()),
-                (route) => false,
-              );
+              // Update cubit with the actual current page index
+              cubit.changeOnboardingData(index);
             }
           },
           controller: controller,
@@ -173,32 +168,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   Widget _buildPageIndicator(OnBoardingCubit cubit, OnBoardingState state) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          cubit.images.length,
-          (itemIndex) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2.0),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: itemIndex == state.currentIndex
-                    ? const LinearGradient(
-                        colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
-                        begin: Alignment.topCenter,
-                      )
-                    : null,
-                color:
-                    itemIndex == state.currentIndex ? null : AppColors.GREYBG,
-              ),
-              height: 10,
-              width: 10,
-            ),
-          ),
-        ),
-      ),
-    );
+    int currentIndex = 0;
+
+    if (controller.hasClients && controller.positions.isNotEmpty) {
+      currentIndex = (controller.page ?? controller.initialPage.toDouble()).round();
+    } else {
+      currentIndex = state.currentIndex; // fallback to cubit's current index
+    }
+
+    return DotsWidget(length: cubit.images.length, currentIndex: currentIndex);
   }
 
   Widget _buildNavigationButton(
@@ -210,20 +188,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         onPressed: () {
           ManageVibration.vibrate();
           _startAutoScroll(); // Reset timer on button press
-          final index = state.currentIndex;
-          if (index < cubit.images.length - 1) {
+          final currentIndex = state.currentIndex;
+          if (currentIndex < cubit.images.length - 1) {
+            // Just animate to next page, onPageChanged will handle the state update
             controller.nextPage(
               duration: const Duration(milliseconds: 300),
               curve: Curves.linear,
             );
-            cubit.changeOnboardingData(index + 1);
           } else {
             CacheManager.isShowOnboarding(true);
             context.go(Routes.HOME);
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const FirstLoginScreen()));
           }
         },
         label: (state.currentIndex < cubit.images.length - 1)
@@ -256,6 +230,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         const Spacer(),
         Text(
           context.isArabic ? titleAr[index] : titleEn[index],
+          textAlign: TextAlign.center,
           style: Styles.headerText(
             color: isDarkTheme
                 ? AppColors.AUTH_CONTAINER_COLOR

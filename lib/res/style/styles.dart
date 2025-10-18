@@ -57,7 +57,7 @@ abstract class Styles {
       double? height,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
-      fontSize: fontSize.sp,
+      fontSize: (fontSize??36).sp,
       fontWeight: fontWeight,
       shadows: shadows,
       decorationColor: color,

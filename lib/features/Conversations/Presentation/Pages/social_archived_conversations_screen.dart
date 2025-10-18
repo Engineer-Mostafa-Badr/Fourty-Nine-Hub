@@ -29,6 +29,7 @@ class _SocialArchivedConversationsScreenState extends State<SocialArchivedConver
   late ScrollController scrollController;
   @override
   void initState() {
+    serviceLocator<ConversationsCubit>().initSocialArchivedSockets();
     serviceLocator<ConversationsCubit>().loadInitialSocialArchivedConversations();
     scrollController = ScrollController()
       ..addListener(() {

@@ -4831,8 +4831,7 @@ class AppPages {
                       providers: [
                         BlocProvider(
                           create: (context) =>
-                              serviceLocator<CaptainShareDashboardCubit>()
-                                ..loadInitData(context),
+                              serviceLocator<CaptainShareDashboardCubit>(),
                         ),
                       ],
                       child: const RunningAndPastTripsScreen(),
@@ -5039,18 +5038,29 @@ CustomTransitionPage customTransition(
     CustomTransitionPage(
       key: state.pageKey,
       child: child,
-      transitionDuration: const Duration(seconds: 1),
+      transitionDuration: const Duration(milliseconds: 250),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, -1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        final curvedAnimation =
-            CurvedAnimation(parent: animation, curve: curve);
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
+        // Use a smoother curve that reduces jank
+        const curve = Curves.fastOutSlowIn;
+
+        // Slide from top with smoother animation
+        final slideTween = Tween<Offset>(
+          begin: const Offset(0.0, -1.0),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: curve));
+
+        // Add fade for extra smoothness
+        final fadeTween = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).chain(CurveTween(curve: curve));
+
+        return FadeTransition(
+          opacity: animation.drive(fadeTween),
+          child: SlideTransition(
+            position: animation.drive(slideTween),
+            child: RepaintBoundary(child: child),
+          ),
         );
       },
     );

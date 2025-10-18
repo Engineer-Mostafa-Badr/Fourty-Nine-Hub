@@ -7,8 +7,8 @@ import '../../../../common/widgets/form/text_fields/default_text_form_field.dart
 
 class BirthDatePicker extends StatefulWidget {
   final TextEditingController controller;
-
-  const BirthDatePicker({super.key, required this.controller});
+  final Function(String? date) onDateChanged;
+  const BirthDatePicker({super.key, required this.controller,required this.onDateChanged});
 
   @override
   _BirthDatePickerState createState() => _BirthDatePickerState();
@@ -57,6 +57,7 @@ class _BirthDatePickerState extends State<BirthDatePicker> {
       });
     }
 
+    widget.onDateChanged(selectedDate?.toIso8601String());
     widget.controller.text = dateFormat.format(selectedDate!);
     print("widget.controller.text${widget.controller.text}");
   }

@@ -4,6 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
+import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -25,8 +29,8 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
 
   const AcceptedNonSocketLoadingWidget(
       {super.key,
-      // this.modeType = 'truk',
-      this.offers});
+        // this.modeType = 'truk',
+        this.offers});
 
   @override
   Widget build(BuildContext context) {
@@ -65,249 +69,178 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-            color: context.isDarkMode
-                ? AppColors.PRIMARY_COLOR
-                : AppColors.cF5F5F5,
-            borderRadius: BorderRadius.circular(20)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-                flex: 2,
-                child: Column(children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration:
-                                const BoxDecoration(shape: BoxShape.circle),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: offers?.client?.profilePictureKey == null ||
-                                    offers!.client!.profilePictureKey!.isEmpty
-                                ? Image.asset(
-                                    Assets.maleImagePlaceholder,
-                                    fit: BoxFit.cover,
-                                  )
-                                : ImageFromInternet(
-                                    image: offers!.client!.profilePictureKey!,
-                                  )),
-                      ),
-                      Positioned(
-                          top: 0,
-                          right: -5,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.cF5F5F5,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0),
-                                  child: Row(children: [
-                                    SvgPicture.asset(Assets.star2,
-                                        width: 8, height: 8),
-                                    const Sizer(width: 4),
-                                    Label(
-                                        text: formatPrice(offers?.client?.rating?.count ?? 0,context),
-                                        style: Styles.smallText(
-                                            color: AppColors.PRIMARY_COLOR))
-                                  ])))),
-                      const VerifiedWidget(),
-                    ],
-                  ),
-                  Label(
-                      text: offers?.client?.firstName ?? '',
-                      style: Styles.mediumText()),
-                  // Label(
-                  //     text:
-                  //     '(${offers?.clientDetails?.rating?.average ?? 0})',
-                  //     style: Styles.smallText())
-                ])),
-            const Sizer(width: 32),
-            Expanded(
-              flex: 8,
-              child: IntrinsicWidth(
-                child: Column(
-                  spacing: 4,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: GlobalCard(
+          hasBottomSide: true,
+          otherUserId: '',
+          phone: '',
+          reportId: offers?.client?.id??'',
+          subcategoryId: offers?.tripDetails?.category?.id??'',
+          // isButtonEnabled: offers.,
+          subCategoryTitle: context.isArabic?offers?.tripDetails?.category?.nameAr??'':offers?.tripDetails?.category?.nameEn??'',
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 7,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    Expanded(
+                        child: Column(children: [
+                          Row(
                             children: [
-                              Row(
-                                spacing: 5,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Image.asset(Assets.rideFrom,
-                                        width: 24, height: 24),
-                                  ),
-                                  Expanded(
-                                      flex: 8,
-                                      child: Label(
-                                          text: offers?.tripDetails?.location
-                                                  ?.toTitle ??
-                                              'Cairo International Airport',
-                                          style: Styles.headerText()))
-                                ],
+                              ClickableWidget(
+                                onTap: (){},
+                                child: ProfilePictureWidget(
+                                  rating:(offers?.client?.rating?.averageRating??0).toInt(),
+                                  image: offers?.client?.profilePictureKey??'',
+                                  hasStories: false,
+                                ),
                               ),
-                              Row(
-                                spacing: 5,
-                                children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Image.asset(Assets.rideTo,
-                                          width: 24, height: 24)),
-                                  Expanded(
-                                      flex: 8,
-                                      child: Label(
-                                          text: offers?.tripDetails?.location
-                                                  ?.fromTitle ??
-                                              'Cairo International Airport',
-                                          style: Styles.mediumText(
-                                              fontWeight: FontWeight.w300)))
-                                ],
+                              Sizer(),
+                              Expanded(
+                                child: Label(
+                                    text: offers?.client?.firstName ?? '',
+                                    style: Styles.mediumText()),
                               ),
-                              Label(
-                                  text:
-                                      offers?.tripDetails?.cargoDescription ?? "",
-                                  style: Styles.mediumText())
                             ],
                           ),
-                        ),
-                        Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                // offers?.category?.picture != null
-                                //     ? Image.asset(Assets.rideIcon,
-                                //     width: 40, height: 40, fit: BoxFit.cover)
-                                //     :
-                                ImageFromInternet(
-                                    image: offers!
-                                            .tripDetails!.category?.picture ??
-                                        "",
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.contain),
-                                Label(
-                                    text: context.isArabic
-                                        ? (offers?.tripDetails!.category
-                                                ?.nameAr ??
-                                            '')
-                                        : (offers?.tripDetails!.category
-                                                ?.nameEn ??
-                                            ''),
-                                    style: Styles.mediumText(fontSize: 25))
-                              ],
-                            )),
-                      ],
-                    ),
-                    // Label(
-                    //   text: modeType == 'truk'
-                    //       ? "${LocaleKeys.cargoDescription.tr()} : Car"
-                    //       : '${LocaleKeys.passenger.tr()} : ${offers?.tripDetails?.passengers ?? 0}',
-                    //   style: Styles.mediumText(fontSize: 32),
-                    // ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                          Sizer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location?.fromTitle
+                                  ??
+                                  'From Location',fontSize:28),
+                              TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location?.toTitle
+                                  ??
+                                  'Cairo International Airport',fontSize:28),
+                            ],
+                          ),
+                          Label(
+                              text:
+                              "${context.isArabic?"وصف الحمولة":"Cargo Description"} : ${offers?.tripDetails?.cargoDescription??''} ",
+                              style: Styles.mediumText(),maxLines: 2,),
+                        ])),
+                    const Sizer(width: 32),
+                    Column(
+                      spacing: 4,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Label(
-                            text: formatPrice(offers?.tripDetails?.price ?? 100, context),
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.w700)),
-                        const Sizer(width: 4),
-                        Label(
-                            text: LocaleKeys.egp.tr(),
-                            style: Styles.mediumText(
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   children: [
+                        //     // Expanded(
+                        //     //   flex: 7,
+                        //     //   child: Column(
+                        //     //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     //     children: [
+                        //     //       TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location
+                        //     //           ?.fromTitle ??
+                        //     //           'Cairo International Airport',fontSize:28),
+                        //     //       TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location
+                        //     //           ?.toTitle ??
+                        //     //           'Cairo International Airport',fontSize:28),
+                        //     //       (offers?.tripDetails?.note==null||offers?.tripDetails?.note=='')?Label(
+                        //     //         text:
+                        //     //         '${LocaleKeys.passenger.localize} ${_formatNumber((offers?.tripDetails?.passengers ?? 0).toString(), context)}',
+                        //     //         style: Styles.mediumText(),
+                        //     //       ):Label(
+                        //     //         text:
+                        //     //         '${LocaleKeys.cargoDescription.localize}:\n ${offers?.tripDetails?.note}',
+                        //     //         style: Styles.mediumText(),
+                        //     //         maxLines: 2,
+                        //     //       ),
+                        //     //     ],
+                        //     //   ),
+                        //     // ),
+                        //     Expanded(
+                        //         flex: 3,
+                        //         child: Column(
+                        //           children: [
+                        //             // offers?.category?.picture != null
+                        //             //     ? Image.asset(Assets.rideIcon,
+                        //             //     width: 40, height: 40, fit: BoxFit.cover)
+                        //             //     :
+                        //             ImageFromInternet(
+                        //                 image:
+                        //                 offers?.subCategory?.pictureUrl ?? '',
+                        //                 width: 40,
+                        //                 height: 40,
+                        //                 fit: BoxFit.contain),
+                        //             Label(
+                        //                 text: context.isArabic
+                        //                     ? (offers?.subCategory?.nameAr ?? '')
+                        //                     : (offers?.subCategory?.nameEn ?? ''),
+                        //                 style: Styles.mediumText(fontSize: 25))
+                        //           ],
+                        //         )),
+                        //   ],
+                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Label(
+                              text: formatPrice(
+                                  (offers?.tripDetails?.price??0)>0?(offers?.tripDetails?.price??0):(offers?.tripDetails?.price ?? 0), context),
+                              style: Styles.mediumText(fontWeight: FontWeight.w700),
+                            ),
+                            const Sizer(width: 4),
+                            Label(
+                              text: LocaleKeys.egp.tr(),
+                              style: Styles.mediumText(
                                 color: AppColors.SECONDARY_COLOR,
-                                fontWeight: FontWeight.w700))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Label(
-                          text:  formatTimeOnly(offers?.tripDetails?.date,context) ,
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.w700
-                          ),
-                        ),
-                        Label(
-                          text: formatPickupDate( offers?.tripDetails?.date,context) ,
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 20,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: IconButton(
-                            icon: SvgPicture.asset(
-                              Assets.phoneIconRed,
-                              width: 30.w,
-                              height: 30.h,
-                              color: context.isDarkMode
-                                  ? AppColors.PRIMARY_COLOR_DARK
-                                  : AppColors.PRIMARY_COLOR,
-                            ),
-                            onPressed: () {
-
-      ManageVibration.vibrate();
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: IconButton(
-                              icon: SvgPicture.asset(
-                                Assets.mailIconRed,
-                                width: 25.w,
-                                height: 25.h,
-                                color: context.isDarkMode
-                                    ? AppColors.PRIMARY_COLOR_DARK
-                                    : AppColors.PRIMARY_COLOR,
+                                fontWeight: FontWeight.w700,
                               ),
-                              onPressed: () {
-
-      ManageVibration.vibrate();
-                              }),
-                        ),
-                        Expanded(
-                          child: IconButton(
-                            icon: SvgPicture.asset(
-                              Assets.reportRed,
-                              width: 25.w,
-                              height: 25.h,
-                              color: AppColors.PRIMARY_COLOR_DARK,
                             ),
-                            onPressed: () {
-
-      ManageVibration.vibrate();
-                            },
-                          ),
-                        )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            // offers?.category?.picture != null
+                            //     ? Image.asset(Assets.rideIcon,
+                            //     width: 40, height: 40, fit: BoxFit.cover)
+                            //     :
+                            ImageFromInternet(
+                                image:
+                                offers?.tripDetails?.category?.picture ?? '',
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.contain),
+                            Label(
+                                text: context.isArabic
+                                    ? (offers?.tripDetails?.category?.nameAr ?? '')
+                                    : (offers?.tripDetails?.category?.nameEn ?? ''),
+                                style: Styles.mediumText(fontSize: 25))
+                          ],
+                        ),
                       ],
                     ),
                   ],
                 ),
-              ),
+                Sizer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Label(
+                      text:
+                      formatTimeOnly(offers?.tripDetails?.date, context),
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Label(
+                      text: formatPickupDate(
+                          offers?.tripDetails?.date, context),
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_notification_badge.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/header_button_widget.dart';
@@ -72,24 +76,21 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       children: [
         if (widget.state.mainCategory != null)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: MainCategoryBanner(
+            padding: const EdgeInsets.all(8.0),
+            child: HomeMainCategoryBanner(
               fromHome: false,
               category: context.read<SubcategoriesCubit>().state.mainCategory!,
               onFavorite: () async {
-                // var result =
-                // await controller.toggleFavoriteMedicalService(
-                //     state.data![index].id);
-                // print("result$result");
-                // return result;
+                var result =
+                await widget.controller.toggleFavoriteMedicalService(
+                    context.read<SubcategoriesCubit>().state.mainCategory?.id??'');
+                return result;
               },
+              isFavorite: context.read<SubcategoriesCubit>().state.mainCategory?.isFavorite??false,
             ),
           ),
-        const SizedBox(
-          height: 16,
-        ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               InkWell(
@@ -112,65 +113,59 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                 width: 8,
               ),
               Expanded(
-                child: CustomNotificationBadge(
-                  count: 0,
-                  child: HeaderButtonWidget(
-                    title: context.isArabic ? 'مفضلة' : 'Favourites',
-                    isOpened:
-                        context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
-                    onPressed: () {
-                      ManageVibration.vibrate();
-                      if (!context.isUserLoggedIn) {
-                        return pleaseLoginDialog(context);
-                      } else {
-                        context
-                            .read<SubcategoriesCubit>()
-                            .getRequestsLog('62c8b5b09332225799fe335e');
+                child: TabWidget(
+                  title: context.isArabic ? 'مفضلة' : 'Favourites',
+                  selected:
+                      context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    if (!context.isUserLoggedIn) {
+                      return pleaseLoginDialog(context);
+                    } else {
+                      context
+                          .read<SubcategoriesCubit>()
+                          .getRequestsLog('62c8b5b09332225799fe335e');
 
-                        context
-                            .read<SubcategoriesCubit>()
-                            .toggleMyAds('isFavouriteAdsOpen');
-                      }
-                    },
-                  ),
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isFavouriteAdsOpen');
+                    }
+                  },
                 ),
               ),
               const SizedBox(
                 width: 8,
               ),
               Expanded(
-                child: CustomNotificationBadge(
-                  count: 0,
-                  child: HeaderButtonWidget(
-                    title: LocaleKeys.requestLog.localize,
-                    isOpened:
-                        context.read<SubcategoriesCubit>().isRequestLogOpen,
-                    onPressed: () {
-                      ManageVibration.vibrate();
-                      if (!context.isUserLoggedIn) {
-                        return pleaseLoginDialog(context);
-                      } else {
-                        context
-                            .read<SubcategoriesCubit>()
-                            .getRequestsLog('62c8b5b09332225799fe335e');
-                        context
-                            .read<SubcategoriesCubit>()
-                            .toggleMyAds('isRequestLogOpen');
-                      }
+                child: TabWidget(
+                  title: LocaleKeys.requestLog.localize,
+                  selected:
+                      context.read<SubcategoriesCubit>().isRequestLogOpen,
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    if (!context.isUserLoggedIn) {
+                      return pleaseLoginDialog(context);
+                    } else {
+                      context
+                          .read<SubcategoriesCubit>()
+                          .getRequestsLog('62c8b5b09332225799fe335e');
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isRequestLogOpen');
+                    }
 
-                      // context.read<SubcategoriesCubit>().toggleRequestLog();
-                    },
-                  ),
+                    // context.read<SubcategoriesCubit>().toggleRequestLog();
+                  },
                 ),
               ),
               const SizedBox(
                 width: 8,
               ),
               Expanded(
-                child: HeaderButtonWidget(
+                child: TabWidget(
                   title: LocaleKeys.myAds.localize,
-                  isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
-                  onPressed: () {
+                  selected: context.read<SubcategoriesCubit>().isMyAdsOpen,
+                  onTap: () {
                     ManageVibration.vibrate();
                     // TODO: EDIT THIS
                     context
@@ -208,6 +203,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: InkWell(
                   onTap: () async {
+                    if (widget.state.subCategories == null ||
+                        widget.state.subCategories!.isEmpty) {
+                      return;
+                    }
                     ManageVibration.vibrate();
                     dynamic data = await context.push(
                       Routes.FILTERADS,
@@ -276,6 +275,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: InkWell(
                   onTap: () async {
+                    if (widget.state.subCategories == null ||
+                        widget.state.subCategories!.isEmpty) {
+                      return;
+                    }
                     ManageVibration.vibrate();
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
@@ -340,216 +343,6 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
           ),
         ),
         const Sizer(),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 16),
-        //     child: Row(
-        //       children: [
-        //         InkWell(
-        //           onTap: () async {
-        //             ManageVibration.vibrate();
-        //             dynamic data = await context.push(
-        //               Routes.FILTERADS,
-        //               extra: FilterAdsParams(
-        //                 categorization: CategorizationEntity(
-        //                   mainCategory: widget.state.mainCategory!,
-        //                   fromMarriage: true,
-        //                   subCategory: widget.state.subCategories![
-        //                       widget.state.subCategories?.indexWhere(
-        //                               (element) => element.isSelected == true) ??
-        //                           0],
-        //                 ),
-        //                 userType: '',
-        //               ),
-        //             );
-        //
-        //             if (data != null) {
-        //               print("objectsdaa");
-        //               widget.controller.changeFilterModel(data);
-        //               widget.controller.loadFilterData(
-        //                 model: data,
-        //                 filter: 'user',
-        //               );
-        //             }
-        //           },
-        //           child: Container(
-        //             height: 42,
-        //             padding:
-        //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        //             clipBehavior: Clip.antiAlias,
-        //             decoration: ShapeDecoration(
-        //               color: AppColors.getButtonPrimaryColor(context),
-        //               shape: RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(15),
-        //               ),
-        //             ),
-        //             child: Row(
-        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //               children: [
-        //                 Image.asset(
-        //                   Assets.filter,
-        //                   width: 16,
-        //                   height: 16,
-        //                   color: AppColors.getReversedTextColor(context),
-        //                 ),
-        //                 const Sizer(),
-        //                 Label(
-        //                   text: LocaleKeys.filter.localize,
-        //                   style: Styles.mediumText(
-        //                     color: AppColors.getReversedTextColor(context),
-        //                   ),
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ),
-        //         const Sizer(),
-        //         InkWell(
-        //           onTap: () async {
-        //             ManageVibration.vibrate();
-        //             dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
-        //                 extra: CategorizationEntity(
-        //                     mainCategory: widget.state.mainCategory!,
-        //                     fromMarriage: true,
-        //                     subCategory: widget.state.subCategories![widget
-        //                             .state.subCategories
-        //                             ?.indexWhere((element) =>
-        //                                 element.isSelected == true) ??
-        //                         0]));
-        //             if (data != null) {
-        //               print("data.cityId${data.cityId}");
-        //               print("data.governorateId${data.governorateId}");
-        //               print("objectsdaa");
-        //               widget.controller.state.city = data.cityId;
-        //               widget.controller.state.governorate = data.governorateId;
-        //               widget.controller.changeFilterModel(data);
-        //               await widget.controller
-        //                   .loadFilterData(model: data, filter: 'user');
-        //             }
-        //           },
-        //           child: Container(
-        //             height: 42,
-        //             padding:
-        //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        //             clipBehavior: Clip.antiAlias,
-        //             decoration: ShapeDecoration(
-        //               color: AppColors.getButtonPrimaryColor(context),
-        //               shape: RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(15),
-        //               ),
-        //             ),
-        //             child: Row(
-        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //               children: [
-        //                 Image.asset(
-        //                   Assets.hotelFilter,
-        //                   width: 16,
-        //                   height: 16,
-        //                   color: AppColors.getReversedTextColor(context),
-        //                 ),
-        //                 const Sizer(),
-        //                 Label(
-        //                   text: LocaleKeys.city.localize,
-        //                   style: Styles.mediumText(
-        //                     color: AppColors.getReversedTextColor(context),
-        //                   ),
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ),
-        //         /* Expanded(
-        //           child: FilterButtonItem(
-        //             title: LocaleKeys.filter.localize,
-        //             onTap: () async {
-        //               dynamic data = await context.push(
-        //                 Routes.FILTERADS,
-        //                 extra: CategorizationEntity(
-        //                   mainCategory: widget.state.mainCategory!,
-        //                   fromMarriage: true,
-        //                   subCategory: widget.state.subCategories![
-        //                       widget.state.subCategories?.indexWhere(
-        //                               (element) => element.isSelected == true) ??
-        //                           0],
-        //                 ),
-        //               );
-        //               if (data != null) {
-        //                 print("objectsdaa");
-        //                 widget.controller.changeFilterModel(data);
-        //                 widget.controller.loadFilterData(
-        //                   model: data,
-        //                   filter: 'user',
-        //                 );
-        //               }
-        //             },
-        //           ),
-        //         ),
-        //         const SizedBox(
-        //           width: 8,
-        //         ),
-        //         Expanded(
-        //           child: FilterButtonItem(
-        //             title: LocaleKeys.city.localize,
-        //             onTap: () async {
-        // ManageVibration.vibrate();
-        //               dynamic data = await context.push(
-        //                   Routes.GOVERNORATEFILTERADS,
-        //                   extra: CategorizationEntity(
-        //                       mainCategory: widget.state.mainCategory!,
-        //                       fromMarriage: true,
-        //                       subCategory: widget.state.subCategories![widget
-        //                               .state.subCategories
-        //                               ?.indexWhere((element) =>
-        //                                   element.isSelected == true) ??
-        //                           0]));
-        //               if (data != null) {
-        //                 print("data.cityId${data.cityId}");
-        //                 print("data.governorateId${data.governorateId}");
-        //                 print("objectsdaa");
-        //                 widget.controller.state.city = data.cityId;
-        //                 widget.controller.state.governorate = data.governorateId;
-        //                 widget.controller.changeFilterModel(data);
-        //                 await widget.controller
-        //                     .loadFilterData(model: data, filter: 'user');
-        //               }
-        //             },
-        //           ),
-        //         ),*/
-        //       ],
-        //     ),
-        //   ),
-        // const Sizer(),
-
-        // if (widget.state.subCategories != null)
-        //   SizedBox(
-        //     height: 32,
-        //     child: ListView.separated(
-        //       itemCount: widget.state.subCategories?.length ?? 0,
-        //       scrollDirection: Axis.horizontal,
-        //       itemBuilder: (context, index) {
-        //         return Padding(
-        //           padding: EdgeInsetsDirectional.only(
-        //             start: index == 0 ? 16.0 : 0,
-        //             end: index == widget.state.subCategories!.length - 1
-        //                 ? 16.0
-        //                 : 0,
-        //           ),
-        //           child: ClickableWidget(
-        //             onTap: () async {
-        //               await widget.controller.changeSubCatIndex(index);
-        //             },
-        //             child: SubCategoryListViewItem(
-        //               subCategory: widget.state.subCategories?[index],
-        //             ),
-        //           ),
-        //         );
-        //       },
-        //       separatorBuilder: (BuildContext context, int index) =>
-        //           const SizedBox(
-        //         width: 8,
-        //       ),
-        //     ),
-        //   ),
-        // SizedBox(height: 10.h),
         if (widget.state.subCategories != null)
           SizedBox(
             height: 70.h,
@@ -591,13 +384,25 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       ],
     );
   }
-
+  bool _isFloatVisible = true;
   @override
   void initState() {
     print('state:: ${widget.state.subCategories?.length}');
     _tabController = TabController(
         length: widget.state.subCategories?.length ?? 0, vsync: this);
-    _scrollController = ScrollController();
+    _scrollController = ScrollController()..addListener((){
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isFloatVisible) {
+          setState(() => _isFloatVisible = false);
+        }
+      } else if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!_isFloatVisible) {
+          setState(() => _isFloatVisible = true);
+        }
+      }
+    });
     _searchFocusNode = FocusNode();
 
     _tabController.addListener(() {
@@ -647,7 +452,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
-      if (widget.state.myAds != null) {
+      if (widget.state.myAds == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -657,7 +462,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.myAds?.isEmpty??false) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
 
@@ -694,8 +499,8 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
 
     // Favourite Ads
     if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
-      print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
-      if (widget.state.adsRequestsLog == null) {
+      print('state.myAds ${widget.state.myAds?.length}');
+      if (widget.state.myAds == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -705,10 +510,10 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.adsRequestsLog!.isEmpty) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
-      return MarriageRequest(
+      return MarriageAdsListView(
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,

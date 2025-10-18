@@ -37,6 +37,11 @@ android {
         pickFirst 'lib/x86_64/libc++_shared.so'
         pickFirst 'lib/arm64-v8a/libc++_shared.so'
         pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+        
+        // 16 KB page size support - ensure proper ELF alignment
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
 
     compileOptions {
@@ -67,6 +72,12 @@ android {
         multiDexEnabled true
 
         // Video playback optimization - reduce MediaCodec flush/resume cycles
+        
+        // Native 16 KB page size configuration
+        ndk {
+            cFlags "-D__PAGE_SIZE=16384 -falign-functions=16 -falign-labels=16"
+        }
+        
     }
 
     buildTypes {

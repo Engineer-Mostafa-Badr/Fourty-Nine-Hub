@@ -35,6 +35,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
     widget.scrollController.addListener(_scrollListener);
     // Load initial page if items are empty
     if (widget.items.isEmpty && !_hasLoadedInitialPage) {
+      print("widget.items.isEmpty");
       _hasLoadedInitialPage = true;
       _loadPage(_currentPage);
     }
@@ -45,6 +46,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
     if (widget.scrollController.position.pixels >=
             widget.scrollController.position.maxScrollExtent - 100 &&
         !_isLoading) {
+      print("widget.items.isNotEmpty");
       _loadNextPage();
     }
   }
@@ -130,5 +132,14 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
               ),
           ],
         ));
+  }
+}
+
+
+extension StaticOlxPagination on OlxPaginationWidget {
+  Widget buildAsStaticList() {
+    return Column(
+      children: items,
+    );
   }
 }

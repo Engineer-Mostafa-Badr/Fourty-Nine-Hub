@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/pages/empty.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -14,7 +12,6 @@ import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
@@ -23,10 +20,8 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
-import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/get_client_offer_trips_entity.dart';
@@ -61,24 +56,10 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
     _scrollController = ScrollController();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      if (widget.type == 'ride') {
-        context.read<ClientTripsCubit>().getClientOfferTrips();
-      }
-      if (widget.type == 'shipping') {
-        context.read<ClientTripsCubit>().getClientOfferShippingTrips();
-      }
-    }
-  }
-
   @override
   void dispose() {
     SharedWebSocket.socket!.off(SocketIOListeners.rideUpdateUntrackedTrip);
     SharedWebSocket.socket!.off(SocketIOListeners.rideUpdateOfferShippingClientTrip);
-    // _scrollController.removeListener(_onScroll);
-    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -96,7 +77,7 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                   LocaleKeys.requestSentSuccess.localize,
               Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
             );
-            // Reset showSnackbar so it doesn’t show again
+
             context.read<ClientTripsCubit>().emit(
                   state.copyWith(showSnackbar: false),
                 );
@@ -119,21 +100,16 @@ class _OfferRideOfferScreenState extends State<OfferRideOfferScreen> {
                 ? CustomLoadingSearchWidget()
                 : state.isError
                     ? Center(
-                        child: Label(
-                            text: LocaleKeys.errorHappen.localize,
-                            style: const TextStyle(color: Colors.red)),
+                        child: CustomEmptyWidget(
+                            label: LocaleKeys.errorHappen.localize,
+                            ),
                       )
                     : context
                             .read<ClientTripsCubit>()
                             .clientOfferTripsData
                             .isEmpty
                         ? Center(
-                            child: Label(
-                              text:
-                                  LocaleKeys.youDontHaveAvailableOffer.localize,
-                              // style:
-                              //     TextStyle(color: Colors.red, fontSize: 18)
-                            ),
+                            child: CustomEmptyWidget(label: LocaleKeys.youDontHaveAvailableOffer.localize),
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -235,49 +211,19 @@ class ClientOfferWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-
-    DateTime dateTime =
-        DateTime.parse(offers?.tripDetails?.date ?? '2025-03-11T21:50:21.998Z');
-
-    // Format date with Arabic digits if needed
-    final formattedDate = isArabic
-        ? _formatNumber(
-            "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}",
-            context)
-        : "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-
-    // Format time with Arabic digits if needed
-    final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
-    final period = dateTime.hour < 12 ? 'AM' : 'PM';
-    final formattedTime =
-        "${_formatNumber(hour.toString(), context)} ${isArabic ? (period == 'AM' ? 'ص' : 'م') : period}";
-
-    // Format rating count and average
-    final ratingCount = _formatNumber(
-        offers?.driverDetails?.rating?.count?.toString() ?? '0', context);
-    final ratingAverage = _formatNumber(
-        (offers?.driverDetails?.rating?.average ?? 0).toStringAsFixed(1),
-        context);
-
-    // Format passengers count
-    final passengersCount = _formatNumber(
-        (offers?.tripDetails?.passengers ?? 0).toString(), context);
-
-    // Format price (handle socket price if applicable)
-    final price = offers?.isFromSocket == true
-        ? offers?.newOfferPrice ?? offers?.price ?? 300
-        : offers?.price ?? 300;
-    final priceText = _formatNumber(price.toString(), context);
-
-    final screenWidth = MediaQuery.of(context).size.width;
-    final avatarSize =
-        screenWidth * 0.2; // 20% of screen width, tweak as needed
-    final badgeTopOffset = avatarSize * 0.1; // 10% from top of avatar container
-    final badgeEndOffset =
-        avatarSize * 0.0; // 0% from right edge (or tweak slightly)
-
-    return GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+    print("offers?.isRead ${offers?.driverDetails?.isRead}");
+    return GlobalCard(subcategoryId: '',
+      isView: offers?.driverDetails?.isRead??false,
+      phone: '',
+      reportId: '',
+      otherUserId: '',
+    onTap: (){
+      ManageVibration.vibrate();
+      if((offers?.driverDetails?.isRead??false)==false){
+        if(modeType == 'ride')context.read<ClientTripsCubit>().readNonTrackingOffer(offers?.id??'');
+        if(modeType == 'shipping')context.read<ClientTripsCubit>().readLoadingOffer(offers?.id??'');
+      }
+    },
     body: Container(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -286,107 +232,100 @@ class ClientOfferWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: ClickableWidget(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    context.push(
-                      Routes.allDriverRatingScreen,
-                      extra: offers?.id,
-                    );
-                  },
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                    Row(
-                      children: [
-                        ProfilePictureWidget(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                  Row(
+                    children: [
+                      ClickableWidget(
+                        onTap: (){},
+                        child: ProfilePictureWidget(
                             rating:(offers?.driverDetails?.rating?.average??0).toInt(),
                           image: offers?.driverDetails?.pictureUrl??'',
                           hasStories: false,
-                          // isVerified: offers?.driverDetails.verifiedBadge,
                         ),
-                        Sizer(),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Label(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      text:
-                                      "${_capitalize(offers?.driverDetails?.firstName)} ${_capitalize(offers?.driverDetails?.lastName)}",
-                                      style: Styles.mediumText(),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Label(
-                                    text:
-                                    ' (${_formatNumber(offers?.driverDetails?.countTrips?.toStringAsFixed(0) ?? '0', context)})${context.isArabic?'رحلات': ' Trips'}',
-                                    style: Styles.smallText(),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.star, size: 18, color: Colors.yellow),
-                                      Label(
-                                        text:
-                                        ' (${_formatNumber(offers?.driverDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)}/${_formatNumber(offers?.driverDetails?.rating?.count?.toStringAsFixed(1) ?? '0', context)})',
-                                        style: Styles.smallText(),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Label(
-                                      text: context.isArabic
-                                          ? offers?.driverDetails?.vehicleDetails?.brandAr ?? ''
-                                          : offers?.driverDetails?.vehicleDetails?.brandEn ??
-                                          '',
-                                      style: Styles.mediumText(
-                                          fontSize: 24
-                                      )),
-                                  Label(
-                                      text: ' - ',
-                                      style: Styles.mediumText()),
-                                  Label(
-                                      text: context.isArabic
-                                          ? offers?.driverDetails?.vehicleDetails?.modelAr ?? ''
-                                          : offers?.driverDetails?.vehicleDetails?.modelEn ??
-                                          '',
-                                      style: Styles.mediumText(
-                                          fontSize: 24
-                                      )
-                                  ),
-
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                        Sizer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      Sizer(),
+                      Expanded(
+                        child: Column(
                           children: [
-                            TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location
-                                ?.fromTitle ??
-                                'From Location',fontSize:28),
-                            TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location
-                                ?.toTitle ??
-                                'Cairo International Airport',fontSize:28),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Label(
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    text:
+                                    "${_capitalize(offers?.driverDetails?.firstName)} ${_capitalize(offers?.driverDetails?.lastName)}",
+                                    style: Styles.mediumText(),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Label(
+                                  text:
+                                  ' (${_formatNumber(offers?.driverDetails?.countTrips?.toStringAsFixed(0) ?? '0', context)})${context.isArabic?'رحلات': ' Trips'}',
+                                  style: Styles.smallText(),
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.star, size: 18, color: Colors.yellow),
+                                    Label(
+                                      text:
+                                      ' (${_formatNumber(offers?.driverDetails?.rating?.average?.toStringAsFixed(1) ?? '0', context)}/${_formatNumber(offers?.driverDetails?.rating?.count?.toStringAsFixed(1) ?? '0', context)})',
+                                      style: Styles.smallText(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Label(
+                                    text: context.isArabic
+                                        ? offers?.driverDetails?.vehicleDetails?.brandAr ?? ''
+                                        : offers?.driverDetails?.vehicleDetails?.brandEn ??
+                                        '',
+                                    style: Styles.mediumText(
+                                        fontSize: 24
+                                    )),
+                                Label(
+                                    text: ' - ',
+                                    style: Styles.mediumText()),
+                                Label(
+                                    text: context.isArabic
+                                        ? offers?.driverDetails?.vehicleDetails?.modelAr ?? ''
+                                        : offers?.driverDetails?.vehicleDetails?.modelEn ??
+                                        '',
+                                    style: Styles.mediumText(
+                                        fontSize: 24
+                                    )
+                                ),
+
+                              ],
+                            ),
                           ],
                         ),
+                      ),
+                    ],
+                  ),
+                      Sizer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location
+                              ?.fromTitle ??
+                              'From Location',fontSize:28),
+                          TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location
+                              ?.toTitle ??
+                              'Cairo International Airport',fontSize:28),
+                        ],
+                      ),
 
-                      ]),
-                ),
+                    ]),
               ),
               const Sizer(width: 32),
               Column(
@@ -449,7 +388,7 @@ class ClientOfferWidget extends StatelessWidget {
                     children: [
                       Label(
                         text: formatPrice(
-                            offers?.price ?? 0, context),
+                            (offers?.newOfferPrice??0)>0?(offers?.newOfferPrice??0):(offers?.price ?? 0), context),
                         style: Styles.mediumText(fontWeight: FontWeight.w700),
                       ),
                       const Sizer(width: 4),

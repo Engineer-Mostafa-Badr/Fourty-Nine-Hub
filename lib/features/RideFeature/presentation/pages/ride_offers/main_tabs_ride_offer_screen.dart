@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -10,11 +11,13 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/past_ride_offer_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_offers/pending_ride_offer_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/style/styles.dart';
@@ -31,7 +34,6 @@ class MainTabsRideOffer extends StatefulWidget {
 }
 
 class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
   final List<String> _tabTitles = [LocaleKeys.offers.localize, LocaleKeys.pending.localize,LocaleKeys.accepted.localize,  LocaleKeys.past.localize];
 
   String selectedTap = 'ride';
@@ -50,20 +52,23 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
     if (widget.type == 'shipping') {
       context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
     }
-    _tabController = TabController(length: _tabTitles.length, vsync: this);
+    context.read<ClientTripsCubit>().tabController = TabController(length: _tabTitles.length, vsync: this);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    SharedWebSocket.socket!.off("LOADING:NEW_TRIP_OFFER_UPDATED");
+    SharedWebSocket.socket!.off("RIDE:NON_TRACKING_OFFERS_UPDATE");
+    context.read<ClientTripsCubit>().tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DefaultAppBar(
-        title: context.isArabic ? 'وضع المستخدم' : 'User Mode',
+    return CustomScaffold(
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: context.isArabic ? 'وضع المستخدم' : 'User Mode',
       ),
       body: Column(
         children: [
@@ -81,22 +86,22 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                           selectedTap = 'ride';
                         });
 
-                        if (_tabController.index == 1) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 1) {
                           // if (widget.type == 'ride')
                           context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
                           // if (widget.type == 'shipping') context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
                         }
-                        if (_tabController.index == 2) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 2) {
                           // if (selectedTap == 'ride')
                           context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
                           // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
                         }
-                        if (_tabController.index == 0) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 0) {
                           // if (selectedTap == 'ride')
                           context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
                           // if (selectedTap == 'shipping')context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
                         }
-                        if (_tabController.index == 3) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 3) {
                           print("object");
                           // if (selectedTap == 'ride')
                           context.read<ClientTripsCubit>().loadInitialClientPastTrips();
@@ -118,22 +123,22 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                         setState(() {
                           selectedTap = 'shipping';
                         });
-                        if (_tabController.index == 1) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 1) {
                           // if (selectedTap == 'ride') context.read<ClientTripsCubit>().loadInitialClientPendingTrips();
                           // if (selectedTap == 'shipping')
                           context.read<ClientTripsCubit>().loadInitialClientPendingShippingTrips();
                         }
-                        if (_tabController.index == 2) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 2) {
                           // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientAcceptedTrips();
                           // if (selectedTap == 'shipping')
                           context.read<ClientTripsCubit>().loadInitialClientAcceptedShippingTrips();
                         }
-                        if (_tabController.index == 0) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 0) {
                           // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientOfferTrips();
                           // if (selectedTap == 'shipping')
                           context.read<ClientTripsCubit>().loadInitialClientOfferShippingTrips();
                         }
-                        if (_tabController.index == 3) {
+                        if (context.read<ClientTripsCubit>().tabController.index == 3) {
                           print("object");
                           // if (selectedTap == 'ride')context.read<ClientTripsCubit>().loadInitialClientPastTrips();
                           // if (selectedTap == 'shipping')
@@ -150,7 +155,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
           _buildTabBar(),
           Expanded(
             child: TabBarView(
-              controller: _tabController,
+              controller: context.read<ClientTripsCubit>().tabController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 OfferRideOfferScreen(
@@ -179,7 +184,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
       child: TabBar(
         tabAlignment: TabAlignment.start,
         dividerColor: Colors.transparent,
-        controller: _tabController,
+        controller: context.read<ClientTripsCubit>().tabController,
         isScrollable: true,
         indicator: const BoxDecoration(color: Colors.transparent),
         labelPadding: EdgeInsets.zero,
@@ -187,7 +192,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
 
         },
         tabs: List.generate(_tabTitles.length, (index) {
-          final isSelected = _tabController.index == index;
+          final isSelected = context.read<ClientTripsCubit>().tabController.index == index;
           return Padding(
             padding: EdgeInsetsDirectional.only(end: 12.w),
             child: Tab(
@@ -197,7 +202,7 @@ class _MainTabsRideOfferState extends State<MainTabsRideOffer> with SingleTicker
                   title: _tabTitles[index],
                   selected: isSelected,
                   onTap: () {
-                    _tabController.animateTo(index);
+                    context.read<ClientTripsCubit>().tabController.animateTo(index);
                     if (index == 0) {
                       if (selectedTap == 'ride') {
                         context.read<ClientTripsCubit>().loadInitialClientOfferTrips();

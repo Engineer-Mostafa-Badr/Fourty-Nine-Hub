@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -78,6 +80,106 @@ class _AdRequestsViewState extends State<AdRequestsView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: BackAppBar(label: LocaleKeys.adRequests.localize),
+      body: BlocBuilder<AdRequestsCubit, AdRequestsState>(
+        builder: (context, state) {
+          print("context.read<AdRequestsCubit>().adRequests.length ${context.read<AdRequestsCubit>().adRequests.length}");
+          if (context.read<AdRequestsCubit>().isLoadingRequests) {
+            return const Center(child: CustomCircularProgressIndicator());
+          }
+          if(context.read<AdRequestsCubit>().adRequests.isEmpty){
+            return Center(
+              child: CustomEmptyWidget(label: context.isArabic?"لا يوجد طلبات":'No requests found'),
+            );
+          }
+
+          return ListView.builder(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: context.read<AdRequestsCubit>().adRequests.length,
+            itemBuilder: (context, index) {
+              final adRequest =
+              context.read<AdRequestsCubit>().adRequests[index];
+
+              return AdsRequestLogCard(
+                requestLog: adRequest,
+                // requestLog: RequestsLogByMainCategoryEntity(
+                //   adDesc: adRequest.adDesc,
+                //   adId: adRequest.adId,
+                //   adTitle: adRequest.adTitle,
+                //   createdAt: adRequest.createdAt,
+                //   gender: adRequest.gender,
+                //   firstName: adRequest.firstName,
+                //   lastName: adRequest.lastName,
+                //   userId: adRequest.userId,
+                //   userName: adRequest.userName,
+                //   isPremium: adRequest.isPremium,
+                //   phone: adRequest.phone,
+                //   profilePictureUrl: adRequest.profilePictureUrl,
+                //   subCategoryId: adRequest.subCategoryId,
+                //   subCategoryNameAr: adRequest.subCategoryNameAr,
+                //   subCategoryNameEn: adRequest.subCategoryNameEn,
+                //   views: adRequest.views,
+                // ),
+              );
+              return Container(
+                margin: EdgeInsetsDirectional.all(10.w),
+                padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 15.w, vertical: 10.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.r),
+                  border: Border.all(
+                    color: AppColors.DARK_GRAY_COLOR.withOpacity(0.5),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 100.w,
+                          height: 100.h,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(adRequest.gender == 'male'
+                                  ? Assets.maleImagePlaceholder
+                                  : Assets.femaleImagePlacehlder),
+                              fit: BoxFit.contain,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(adRequest.userName,
+                                  style: Styles.headerText()),
+                              Text(adRequest.sinceTime,
+                                  style: Styles.mediumText()),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Sizer(height: 50.h),
+                    // CallMessageButtons(
+                    //   otherUserId: adRequest.adUserId,
+                    //   clientId: adRequest.requestId,
+                    //   subcategoryId: adRequest.subCategoryId,
+                    //   phone: adRequest.phone,
+                    //   id: adRequest.requestUserId,
+                    //   hasReport: true,
+                    // ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
       // appBar: PreferredSize(
       //   preferredSize: const Size.fromHeight(30),
       //   child: BackAppBar(
@@ -85,128 +187,131 @@ class _AdRequestsViewState extends State<AdRequestsView> {
       //     backColor: AppColors.getTextColor(context),
       //   ),
       // ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 16,
-          ),
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-          //   child: TextFormField(
-          //     controller: context.read<AdRequestsCubit>().searchController,
-          //     decoration: InputDecoration(
-          //       contentPadding:
-          //           EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-          //       hintStyle: Styles.mediumText(),
-          //       hintText: LocaleKeys.searchWithName.localize,
-          //     ),
-          //   ),
-          // ),
-          // const Sizer(),
-          Expanded(
-            child: BlocBuilder<AdRequestsCubit, AdRequestsState>(
-              builder: (context, state) {
-                if (state.isLoading &&
-                    context.read<AdRequestsCubit>().adRequests.isEmpty) {
-                  return const Center(child: CustomCircularProgressIndicator());
-                }
-
-                return ListView.builder(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: context.read<AdRequestsCubit>().adRequests.length +
-                      (context.read<AdRequestsCubit>().isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index ==
-                        context.read<AdRequestsCubit>().adRequests.length) {
-                      return const CustomLoading();
-                    }
-
-                    final adRequest =
-                        context.read<AdRequestsCubit>().adRequests[index];
-                    return AdsRequestLogCard(
-                      requestLog: adRequest,
-                      // requestLog: RequestsLogByMainCategoryEntity(
-                      //   adDesc: adRequest.adDesc,
-                      //   adId: adRequest.adId,
-                      //   adTitle: adRequest.adTitle,
-                      //   createdAt: adRequest.createdAt,
-                      //   gender: adRequest.gender,
-                      //   firstName: adRequest.firstName,
-                      //   lastName: adRequest.lastName,
-                      //   userId: adRequest.userId,
-                      //   userName: adRequest.userName,
-                      //   isPremium: adRequest.isPremium,
-                      //   phone: adRequest.phone,
-                      //   profilePictureUrl: adRequest.profilePictureUrl,
-                      //   subCategoryId: adRequest.subCategoryId,
-                      //   subCategoryNameAr: adRequest.subCategoryNameAr,
-                      //   subCategoryNameEn: adRequest.subCategoryNameEn,
-                      //   views: adRequest.views,
-                      // ),
-                    );
-                    return Container(
-                      margin: EdgeInsetsDirectional.all(10.w),
-                      padding: EdgeInsetsDirectional.symmetric(
-                          horizontal: 15.w, vertical: 10.h),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.r),
-                        border: Border.all(
-                          color: AppColors.DARK_GRAY_COLOR.withOpacity(0.5),
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 100.w,
-                                height: 100.h,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(adRequest.gender == 'male'
-                                        ? Assets.maleImagePlaceholder
-                                        : Assets.femaleImagePlacehlder),
-                                    fit: BoxFit.contain,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(adRequest.userName,
-                                        style: Styles.headerText()),
-                                    Text(adRequest.sinceTime,
-                                        style: Styles.mediumText()),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Sizer(height: 50.h),
-                          // CallMessageButtons(
-                          //   otherUserId: adRequest.adUserId,
-                          //   clientId: adRequest.requestId,
-                          //   subcategoryId: adRequest.subCategoryId,
-                          //   phone: adRequest.phone,
-                          //   id: adRequest.requestUserId,
-                          //   hasReport: true,
-                          // ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+      // body: Expanded(
+      //   child: Column(
+      //     children: [
+      //       // Padding(
+      //       //   padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+      //       //   child: TextFormField(
+      //       //     controller: context.read<AdRequestsCubit>().searchController,
+      //       //     decoration: InputDecoration(
+      //       //       contentPadding:
+      //       //           EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+      //       //       hintStyle: Styles.mediumText(),
+      //       //       hintText: LocaleKeys.searchWithName.localize,
+      //       //     ),
+      //       //   ),
+      //       // ),
+      //       // const Sizer(),
+      //       BlocBuilder<AdRequestsCubit, AdRequestsState>(
+      //         builder: (context, state) {
+      //           print("context.read<AdRequestsCubit>().adRequests.length ${context.read<AdRequestsCubit>().adRequests.length}");
+      //           if (state.isLoading &&
+      //               context.read<AdRequestsCubit>().adRequests.isEmpty) {
+      //             return const Center(child: CustomCircularProgressIndicator());
+      //           }
+      //
+      //           return Expanded(
+      //             child: ListView.builder(
+      //               controller: _scrollController,
+      //               physics: const AlwaysScrollableScrollPhysics(),
+      //               itemCount: context.read<AdRequestsCubit>().adRequests.length,
+      //               itemBuilder: (context, index) {
+      //                 if (context.read<AdRequestsCubit>().isLoadingRequests) {
+      //                   return Center(child: const CustomCircularProgressIndicator());
+      //                 }
+      //                 final adRequest =
+      //                     context.read<AdRequestsCubit>().adRequests[index];
+      //
+      //                 if(context.read<AdRequestsCubit>().adRequests.isEmpty){
+      //                   return Center(
+      //                     child: CustomEmptyWidget(label: context.isArabic?"لا يوجد طلبات":'No requests found'),
+      //                   );
+      //                 }
+      //                 return AdsRequestLogCard(
+      //                   requestLog: adRequest,
+      //                   // requestLog: RequestsLogByMainCategoryEntity(
+      //                   //   adDesc: adRequest.adDesc,
+      //                   //   adId: adRequest.adId,
+      //                   //   adTitle: adRequest.adTitle,
+      //                   //   createdAt: adRequest.createdAt,
+      //                   //   gender: adRequest.gender,
+      //                   //   firstName: adRequest.firstName,
+      //                   //   lastName: adRequest.lastName,
+      //                   //   userId: adRequest.userId,
+      //                   //   userName: adRequest.userName,
+      //                   //   isPremium: adRequest.isPremium,
+      //                   //   phone: adRequest.phone,
+      //                   //   profilePictureUrl: adRequest.profilePictureUrl,
+      //                   //   subCategoryId: adRequest.subCategoryId,
+      //                   //   subCategoryNameAr: adRequest.subCategoryNameAr,
+      //                   //   subCategoryNameEn: adRequest.subCategoryNameEn,
+      //                   //   views: adRequest.views,
+      //                   // ),
+      //                 );
+      //                 return Container(
+      //                   margin: EdgeInsetsDirectional.all(10.w),
+      //                   padding: EdgeInsetsDirectional.symmetric(
+      //                       horizontal: 15.w, vertical: 10.h),
+      //                   decoration: BoxDecoration(
+      //                     borderRadius: BorderRadius.circular(5.r),
+      //                     border: Border.all(
+      //                       color: AppColors.DARK_GRAY_COLOR.withOpacity(0.5),
+      //                       width: 1,
+      //                     ),
+      //                   ),
+      //                   child: Column(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                     children: [
+      //                       Row(
+      //                         children: [
+      //                           Container(
+      //                             width: 100.w,
+      //                             height: 100.h,
+      //                             decoration: BoxDecoration(
+      //                               image: DecorationImage(
+      //                                 image: AssetImage(adRequest.gender == 'male'
+      //                                     ? Assets.maleImagePlaceholder
+      //                                     : Assets.femaleImagePlacehlder),
+      //                                 fit: BoxFit.contain,
+      //                               ),
+      //                               shape: BoxShape.circle,
+      //                             ),
+      //                           ),
+      //                           Expanded(
+      //                             child: Row(
+      //                               mainAxisAlignment:
+      //                                   MainAxisAlignment.spaceBetween,
+      //                               children: [
+      //                                 Text(adRequest.userName,
+      //                                     style: Styles.headerText()),
+      //                                 Text(adRequest.sinceTime,
+      //                                     style: Styles.mediumText()),
+      //                               ],
+      //                             ),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                       Sizer(height: 50.h),
+      //                       // CallMessageButtons(
+      //                       //   otherUserId: adRequest.adUserId,
+      //                       //   clientId: adRequest.requestId,
+      //                       //   subcategoryId: adRequest.subCategoryId,
+      //                       //   phone: adRequest.phone,
+      //                       //   id: adRequest.requestUserId,
+      //                       //   hasReport: true,
+      //                       // ),
+      //                     ],
+      //                   ),
+      //                 );
+      //               },
+      //             ),
+      //           );
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

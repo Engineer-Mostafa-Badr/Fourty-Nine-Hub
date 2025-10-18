@@ -89,13 +89,15 @@ class _TalentMyItemState extends State<TalentMyItem>
 
   @override
   Widget build(BuildContext context) {
-    final mediaUrl =
-        widget.talent.mediaUrl.isNotEmpty ? widget.talent.mediaUrl.first.mediaKey : '';
+    final mediaUrl = widget.talent.mediaUrl.isNotEmpty
+        ? widget.talent.mediaUrl.first.mediaKey
+        : '';
     final createdAt = widget.talent.createdAt ?? DateTime.now();
 
     // Check if it's a TubeVideo to get additional info
-    final tubeVideo =
-        widget.talent is TubeVideoModel ? widget.talent as TubeVideoModel : null;
+    final tubeVideo = widget.talent is TubeVideoModel
+        ? widget.talent as TubeVideoModel
+        : null;
     final thumbnailUrl = tubeVideo?.thumbnail;
 
     return AnimatedBuilder(
@@ -126,268 +128,279 @@ class _TalentMyItemState extends State<TalentMyItem>
                 }
               },
               child: Container(
-        padding: const EdgeInsets.all(12),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: context.isDarkMode ? Colors.grey[900] : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: (context.isDarkMode ? Colors.black : Colors.grey)
-                  .withOpacity(0.1),
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Video thumbnail section
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: context.isDarkMode ? Colors.grey[800] : Colors.grey[200],
-              ),
-              child: Stack(
-                children: [
-                  // Background thumbnail
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: thumbnailUrl != null && thumbnailUrl.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: thumbnailUrl,
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey[300],
-                              child: Icon(
-                                Icons.video_library,
-                                size: 48,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[300],
-                              child: Icon(
-                                Icons.broken_image,
-                                size: 48,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: Icon(
-                              Icons.video_library,
-                              size: 48,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                  ),
-
-                  // Play button overlay
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.play_arrow,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                // padding: const EdgeInsets.all(12),
+                // margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                decoration: BoxDecoration(
+                  color: context.isDarkMode ? Colors.grey[900] : Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: (context.isDarkMode ? Colors.black : Colors.grey)
+                          .withOpacity(0.1),
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
                     ),
-                  ),
-
-                  // Duration badge
-                  if (tubeVideo != null && tubeVideo.duration > 0)
-                    Positioned(
-                      bottom: 8,
-                      right: 8,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          _formatDuration(tubeVideo.duration)
-                              .toArabicNumbers(context),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 12),
-
-            // Video info section
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Profile picture
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: widget.talent.user.image.isNotEmpty
-                      ? NetworkImage(widget.talent.user.image)
-                      : null,
-                  child: widget.talent.user.image.isEmpty
-                      ? Icon(Icons.person, size: 18, color: Colors.grey[600])
-                      : null,
+                  ],
                 ),
-                SizedBox(width: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Video thumbnail section
+                    Container(
+                      height: 180,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: context.isDarkMode
+                            ? Colors.grey[800]
+                            : Colors.grey[200],
+                      ),
+                      child: Stack(
+                        children: [
+                          // Background thumbnail
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: thumbnailUrl != null &&
+                                    thumbnailUrl.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageUrl: thumbnailUrl,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => Container(
+                                      color: Colors.grey[300],
+                                      child: Icon(
+                                        Icons.video_library,
+                                        size: 48,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Container(
+                                      color: Colors.grey[300],
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        size: 48,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    color: Colors.grey[300],
+                                    child: Icon(
+                                      Icons.video_library,
+                                      size: 48,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                          ),
 
-                // Title and info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.talent.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : Colors.black87,
-                          height: 1.2,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                          // Play button overlay
+                          Center(
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.7),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.play_arrow,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                          ),
+
+                          // Duration badge
+                          if (tubeVideo != null && tubeVideo.duration > 0)
+                            Positioned(
+                              bottom: 8,
+                              right: 8,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  _formatDuration(tubeVideo.duration)
+                                      .toArabicNumbers(context),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        "${widget.talent.user.firstName} ${widget.talent.user.lastName}",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: context.isDarkMode
-                              ? Colors.grey[400]
-                              : Colors.grey[600],
-                          fontWeight: FontWeight.w400,
+                    ),
+
+                    SizedBox(height: 12),
+
+                    // Video info section
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Profile picture
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage: widget.talent.user.image.isNotEmpty
+                              ? NetworkImage(widget.talent.user.image)
+                              : null,
+                          child: widget.talent.user.image.isEmpty
+                              ? Icon(Icons.person,
+                                  size: 18, color: Colors.grey[600])
+                              : null,
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      // Stats row
+                        SizedBox(width: 12),
+
+                        // Title and info
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.talent.title,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black87,
+                                  height: 1.2,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "${widget.talent.user.firstName} ${widget.talent.user.lastName}",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: context.isDarkMode
+                                      ? Colors.grey[400]
+                                      : Colors.grey[600],
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              // Stats row
+                              Row(
+                                children: [
+                                  Icon(Icons.visibility,
+                                      size: 14, color: Colors.grey[600]),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text("•",
+                                      style:
+                                          TextStyle(color: Colors.grey[600])),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    timeago
+                                        .format(createdAt,
+                                            locale: context.locale.languageCode)
+                                        .toArabicNumbers(context),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // // More options button
+                        // IconButton(
+                        //   onPressed: () => _showVideoOptions(context),
+                        //   icon: Icon(
+                        //     Icons.more_vert,
+                        //     color: Colors.grey[600],
+                        //     size: 20,
+                        //   ),
+                        //   padding: EdgeInsets.zero,
+                        //   constraints: BoxConstraints(minWidth: 32, minHeight: 32),
+                        // ),
+                      ],
+                    ),
+
+                    // Stats row for tube videos
+                    if (tubeVideo != null) ...[
+                      SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.visibility,
-                              size: 14, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Text(
-                            "${widget.talent.totalViews.toShortScale.toArabicNumbers(context)} ${LocaleKeys.views.localize}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                          if (tubeVideo.likes > 0) ...[
+                            Icon(Icons.thumb_up_outlined,
+                                size: 16, color: Colors.blue),
+                            SizedBox(width: 4),
+                            Text(
+                              tubeVideo.likes.toShortScale
+                                  .toArabicNumbers(context),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Text("•", style: TextStyle(color: Colors.grey[600])),
-                          SizedBox(width: 8),
-                          Text(
-                            timeago
-                                .format(createdAt,
-                                    locale: context.locale.languageCode)
-                                .toArabicNumbers(context),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                            SizedBox(width: 16),
+                          ],
+                          if (tubeVideo.dislikes > 0) ...[
+                            Icon(Icons.thumb_down_outlined,
+                                size: 16, color: Colors.red),
+                            SizedBox(width: 4),
+                            Text(
+                              tubeVideo.dislikes.toShortScale
+                                  .toArabicNumbers(context),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
+                            SizedBox(width: 16),
+                          ],
+                          if (widget.talent.averageRating > 0) ...[
+                            RatingBarIndicator(
+                              rating: widget.talent.averageRating.toDouble(),
+                              itemBuilder: (context, index) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              itemCount: 5,
+                              itemSize: 14.0,
+                              direction: Axis.horizontal,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              "${widget.talent.averageRating}"
+                                  .toArabicNumbers(context),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: context.isDarkMode
+                                    ? Colors.grey[300]
+                                    : Colors.grey[700],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ],
-                  ),
+                  ],
                 ),
-
-                // // More options button
-                // IconButton(
-                //   onPressed: () => _showVideoOptions(context),
-                //   icon: Icon(
-                //     Icons.more_vert,
-                //     color: Colors.grey[600],
-                //     size: 20,
-                //   ),
-                //   padding: EdgeInsets.zero,
-                //   constraints: BoxConstraints(minWidth: 32, minHeight: 32),
-                // ),
-              ],
-            ),
-
-            // Stats row for tube videos
-            if (tubeVideo != null) ...[
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  if (tubeVideo.likes > 0) ...[
-                    Icon(Icons.thumb_up_outlined, size: 16, color: Colors.blue),
-                    SizedBox(width: 4),
-                    Text(
-                      tubeVideo.likes.toShortScale.toArabicNumbers(context),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                  ],
-                  if (tubeVideo.dislikes > 0) ...[
-                    Icon(Icons.thumb_down_outlined,
-                        size: 16, color: Colors.red),
-                    SizedBox(width: 4),
-                    Text(
-                      tubeVideo.dislikes.toShortScale.toArabicNumbers(context),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                  ],
-                  if (widget.talent.averageRating > 0) ...[
-                    RatingBarIndicator(
-                      rating: widget.talent.averageRating.toDouble(),
-                      itemBuilder: (context, index) => Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      itemCount: 5,
-                      itemSize: 14.0,
-                      direction: Axis.horizontal,
-                    ),
-                    SizedBox(width: 4),
-                    Text(
-                      "${widget.talent.averageRating}".toArabicNumbers(context),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: context.isDarkMode
-                            ? Colors.grey[300]
-                            : Colors.grey[700],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ],
               ),
-            ],
-          ],
-        ),
-      ),
             ),
           ),
         );
@@ -465,60 +478,61 @@ class _TalentMyItemState extends State<TalentMyItem>
 
   Future<bool> _showDeleteDialog() async {
     return await showAnimatedDialog(
-      context,
-      AlertDialog(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        titlePadding: const EdgeInsets.only(top: 16),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        title: Text(
-          context.isArabic ? "تنبيه" : "Alert",
-          style: Styles.headerText(
-              color: Colors.red, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Label(
-              text: context.isArabic
-                  ? "هل تريد حذف الفيديو؟"
-                  : "Do you want to delete the video?",
-              style: Styles.mediumText(
-                color: context.isDarkMode ? Colors.white : Colors.black,
-              ),
+          context,
+          AlertDialog(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            titlePadding: const EdgeInsets.only(top: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            title: Text(
+              context.isArabic ? "تنبيه" : "Alert",
+              style: Styles.headerText(
+                  color: Colors.red, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
             ),
-            Row(
-              spacing: 8,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: buildButton(
-                    context,
-                    label: LocaleKeys.yes.localize,
-                    color: AppColors.SECONDARY_COLOR,
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      Navigator.of(context).pop(true);
-                      widget.cubit.deleteMyTubeVideo(widget.talent.id);
-                    },
+                Label(
+                  text: context.isArabic
+                      ? "هل تريد حذف الفيديو؟"
+                      : "Do you want to delete the video?",
+                  style: Styles.mediumText(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
-                Expanded(
-                  child: buildButton(
-                    context,
-                    label: LocaleKeys.no.localize,
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      Navigator.of(context).pop(false);
-                    },
-                  ),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Expanded(
+                      child: buildButton(
+                        context,
+                        label: LocaleKeys.yes.localize,
+                        color: AppColors.SECONDARY_COLOR,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          Navigator.of(context).pop(true);
+                          widget.cubit.deleteMyTubeVideo(widget.talent.id);
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: buildButton(
+                        context,
+                        label: LocaleKeys.no.localize,
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    ) ?? false;
+          ),
+        ) ??
+        false;
   }
 }

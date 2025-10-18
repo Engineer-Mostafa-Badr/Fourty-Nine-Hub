@@ -78,7 +78,7 @@ class _CreateAdViewState extends State<CreateAdView> {
           preferredSize: Size.fromHeight(30),
           child: HomeAppbar(
             isWithBackArrow: true,
-            onBackPressed: ()=>context.pop(),
+            onBackPressed: () => context.pop(),
           ),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
@@ -245,7 +245,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                         // ),
 
                         CreateAdTextFormField(
-                          onChanged: (v) => controller.title = v,
+                          onChanged: (v) {
+                            controller.formState.currentState!.validate();
+                            controller.title = v;
+                          },
                           hintText: widget.categorization.fromMarriage == false
                               ? LocaleKeys.adTitle.localize
                               : LocaleKeys.name.localize,
@@ -253,6 +256,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                           validator: (value) {
                             if ((value == null || value.isEmpty)) {
                               return LocaleKeys.required.localize;
+                            }
+                            // ❌ If the whole input is only digits
+                            if (RegExp(r'^\d+$').hasMatch(value)) {
+                              return context.isArabic? 'لا يمكن أن يكون العنوان فقط من الأرقام' : 'Cannot contain only numbers';
                             }
                             if (_phonePattern.hasMatch(value)) {
                               return context.isArabic
@@ -305,6 +312,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         CreateAdTextFormField(
                           hintText: LocaleKeys.desc.localize,
                           onChanged: (v) {
+                            controller.formState.currentState!.validate();
                             setState(() {
                               controller.description = v;
                             });
@@ -314,8 +322,14 @@ class _CreateAdViewState extends State<CreateAdView> {
                             if ((value == null || value.isEmpty)) {
                               return LocaleKeys.required.localize;
                             }
+                            // ❌ If the whole input is only digits
+                            if (RegExp(r'^\d+$').hasMatch(value)) {
+                              return context.isArabic? 'لا يمكن أن يكون الوصف فقط من الأرقام' : 'Cannot contain only numbers';
+                            }
                             if (_phonePattern.hasMatch(value)) {
-                              return 'Phone numbers are not allowed. Please remove any phone number pattern.';
+                              return context.isArabic
+                                  ? 'غير مسموح بالرقم الهاتف. برجاء حذف الرقم الهاتف الموجود'
+                                  : 'Phone numbers are not allowed. Please remove any phone number pattern.';
                             }
 
                             return null;
@@ -333,7 +347,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                         // ),
                         PickUpTextFormField(
                           controller: phoneController,
-                          onChanged: (v) => controller.phone = v,
+                          onChanged: (v) {
+                            controller.formState.currentState!.validate();
+                            controller.phone = v;
+                          },
                           fillColor: AppColors.getFillColor(context),
                           textColor: AppColors.getTextColor(context),
                           hintText: LocaleKeys.phoneNumber.localize,
@@ -604,7 +621,10 @@ class _CreateAdViewState extends State<CreateAdView> {
                           // ),
                           PickUpTextFormField(
                             controller: priceController,
-                            onChanged: (v) => controller.price = v,
+                            onChanged: (v) {
+                              controller.formState.currentState!.validate();
+                              controller.price = v;
+                            },
                             fillColor: AppColors.getFillColor(context),
                             textColor: AppColors.getTextColor(context),
                             hintText: state.isPrice == true
@@ -679,6 +699,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                             final property = state.adProperties![index];
 
                             return AdDynamicInputWidget(
+                              formKey: controller.formState,
                               property: property,
                               onChanged: (SelectionEntity v) =>
                                   controller.onChanged(v: v, index: index),
@@ -782,7 +803,7 @@ class _CreateAdViewState extends State<CreateAdView> {
 
   @override
   void initState() {
-    print("/v1/ads/PropsByMainCategoryId/62c8bafb8e28a58a3edf589b");
+    print("/v1/ads/PropsByMainCategoryId/62c8be568e28a58a3edf5f1d");
     context.read<CreateAdCubit>().loadData(
         subCategoryId: widget.categorization.fromMarriage == false
             ? widget.categorization.subCategory.id
@@ -803,10 +824,15 @@ class _CreateAdViewState extends State<CreateAdView> {
             InkWell(
               onTap: () {
                 ManageVibration.vibrate();
-                controller.uploadImage(
-                  subCategoryId: widget.categorization.subCategory.id,
-                  context: context,
-                );
+                if((state.images?.length??0)<20){
+                  controller.uploadImage(
+                    subCategoryId: widget.categorization.subCategory.id,
+                    context: context,
+                  );
+                }else{
+                  showErrorMessage(context, context.isArabic?"لا يمكنك إضافة أكثر من 20 صور":"You can not add more than 20 images");
+                }
+
               },
               child: Container(
                 padding: const EdgeInsets.all(16),
@@ -839,10 +865,6 @@ class _CreateAdViewState extends State<CreateAdView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // SvgPicture.asset(
-                        //   Assets.uploadIcon,
-                        //   color: const Color(0xff0B1035),
-                        // ),
                         Icon(
                           Icons.file_upload_outlined,
                           size: 30,
@@ -868,17 +890,6 @@ class _CreateAdViewState extends State<CreateAdView> {
                     const Sizer(
                       height: 8,
                     ),
-                    // BadgedLabel(
-                    //   label: LocaleKeys.addImages.localize,
-                    //   isBordered: true,
-                    //   style: Styles.mediumText(color: AppColors.LIGHT_COLOR),
-                    //   color: AppColors.SECONDARY_COLOR,
-                    //   isCentered: true,
-                    //   close: false,
-                    //   onTap: () => controller.uploadImage(
-                    //       subCategoryId: widget.categorization.subCategory.id,
-                    //       context: context),
-                    // ),
                     IconAndHintWidget(
                       text: LocaleKeys.addImagesDesc.localize,
                       textStyle: Styles.mediumText(

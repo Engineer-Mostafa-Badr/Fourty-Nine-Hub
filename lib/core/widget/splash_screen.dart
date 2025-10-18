@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
-import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
+import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
@@ -13,11 +14,9 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unr
 import 'package:fourtyninehub/features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
@@ -36,6 +35,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   bool _hasNavigated = false;
 
   @override
@@ -89,12 +89,19 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }else
     {
+      var languageData = await serviceLocator<ApiConsumer>().get('/settings');
+
       var result = await serviceLocator<ApiConsumer>().get('/settings');
       result.fold((failure){
       }, (data) async {
         print("data['data']['isLoggedIn'] $data");
 
         if(data['data']['isLoggedIn']==true){
+          var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
+          languageData.fold((failure){
+          }, (data) async {
+            changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: context);
+          });
           print("No Expiration");
           context.read<UserCubit>().attachToken();
           context.read<UserCubit>().getUser();
@@ -124,6 +131,11 @@ class _SplashScreenState extends State<SplashScreen> {
           UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
           print("tokens !=null ${tokens !=null}");
           if(tokens !=null){
+            var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
+            languageData.fold((failure){
+            }, (data) async {
+              changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: context);
+            });
             context.read<UserCubit>().attachToken();
             context.read<UserCubit>().getUser();
             context.read<CreatePostCubit>().loadData();
@@ -160,7 +172,7 @@ class _SplashScreenState extends State<SplashScreen> {
             } else if (isActivate) {
               nextRoute = Routes.HOME;
             } else {
-              nextRoute = Routes.LOGIN;
+              nextRoute = Routes.HOME;
             }
 
             print('Navigating to: $nextRoute');
@@ -179,12 +191,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   Future<UserTokensEntity?> _refreshToken(String token) async {
+    String deviceId = await getDeviceId();
     try {
       print('🔄 AuthInterceptor: Calling refresh token API From Splash');
       final response = await serviceLocator<Dio>().post(
         "https://49backend.com/api/v1/auth/refresh-token",
         data: {
           'refreshToken': token,
+          'deviceId': deviceId
         },
         options: Options(
           headers: {

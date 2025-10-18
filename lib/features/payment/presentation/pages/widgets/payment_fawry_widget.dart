@@ -646,11 +646,11 @@ class _FawryPaymentState extends State<FawryPayment> {
                     color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
-            maxLength: 4,
+            maxLength: 3,
             keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(4),
+              LengthLimitingTextInputFormatter(3),
             ],
             obscureText: true,
           ),

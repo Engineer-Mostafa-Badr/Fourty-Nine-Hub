@@ -4,6 +4,8 @@ class CommentState {
   final List<CommentModel> comments;
   final bool isLoading;
   final bool isCreatingComment;
+  final bool isUpdatingComment;
+  final bool isDeletingComment;
   final bool hasMore;
   final int currentPage;
   final int totalComments;
@@ -13,6 +15,8 @@ class CommentState {
     this.comments = const [],
     this.isLoading = false,
     this.isCreatingComment = false,
+    this.isUpdatingComment = false,
+    this.isDeletingComment = false,
     this.hasMore = true,
     this.currentPage = 1,
     this.totalComments = 0,
@@ -23,6 +27,8 @@ class CommentState {
     List<CommentModel>? comments,
     bool? isLoading,
     bool? isCreatingComment,
+    bool? isUpdatingComment,
+    bool? isDeletingComment,
     bool? hasMore,
     int? currentPage,
     int? totalComments,
@@ -32,6 +38,8 @@ class CommentState {
       comments: comments ?? this.comments,
       isLoading: isLoading ?? this.isLoading,
       isCreatingComment: isCreatingComment ?? this.isCreatingComment,
+      isUpdatingComment: isUpdatingComment ?? this.isUpdatingComment,
+      isDeletingComment: isDeletingComment ?? this.isDeletingComment,
       hasMore: hasMore ?? this.hasMore,
       currentPage: currentPage ?? this.currentPage,
       totalComments: totalComments ?? this.totalComments,

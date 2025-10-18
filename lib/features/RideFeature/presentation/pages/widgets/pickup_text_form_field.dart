@@ -149,11 +149,9 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
             : widget.hintText,
         labelStyle: Styles.mediumText(
             color: widget.textColor ?? AppColors.PRIMARY_COLOR),
-        hintStyle: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-          color: widget.textColor ?? AppColors.PRIMARY_COLOR,
-        ),
+        hintStyle: Styles.mediumText(
+            fontSize: 32,
+            color: context.isDarkMode ? AppColors.whiteColor : Colors.black),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,
@@ -197,11 +195,9 @@ class _PickUpTextFormFieldState extends State<PickUpTextFormField> {
         }
       },
       onFieldSubmitted: widget.onFieldSubmitted,
-      style: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-        color: widget.textColor ?? AppColors.PRIMARY_COLOR,
-      ),
+      style: Styles.mediumText(
+          fontSize: 32,
+          color: context.isDarkMode ? AppColors.whiteColor : Colors.black),
       textInputAction: widget.textInputAction ?? TextInputAction.next,
     );
   }

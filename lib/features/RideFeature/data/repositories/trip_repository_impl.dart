@@ -311,6 +311,16 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params) {
+    return remoteDataSource.listenToAcceptLoadingTripOffer(params);
+  }
+
+  @override
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params) {
+    return remoteDataSource.listenToRemoveAcceptedLoadingTripOffer(params);
+  }
+
+  @override
   void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
   return remoteDataSource.listenToAvailableUntrackedTrip(params);
   }
@@ -379,6 +389,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params) {
     return  remoteDataSource.addRateWithDriverLoading(params);
+
+  }
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params) {
+    return  remoteDataSource.addRateWithClientLoading(params);
 
   }
 

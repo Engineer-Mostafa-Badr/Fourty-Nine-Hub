@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -316,27 +317,44 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           Positioned(
                             top: 12.h,
                             left: 12.w,
-                            child: GestureDetector(
-                              onTap: () {
-                                ManageVibration.vibrate();
-                                _toggleFavorite();
+                            child: BlocBuilder<ChanceCubit, ChanceState>(
+                              buildWhen: (previous, current) {
+                                // Only rebuild when the chanceAdDetails changes
+                                return previous.chanceAdDetails !=
+                                    current.chanceAdDetails;
                               },
-                              child: Container(
-                                padding: EdgeInsets.all(8.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.9),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  isFavorite
+                              builder: (context, state) {
+                                // Get the updated favorite status from state
+                                bool currentFavoriteStatus = isFavorite;
+
+                                if (state.chanceAdDetails != null &&
+                                    state.chanceAdDetails!.id ==
+                                        widget.chanceAd?.id) {
+                                  currentFavoriteStatus =
+                                      state.chanceAdDetails!.isFavorite;
+                                }
+
+                                return IconAppButton(
+                                  icon: currentFavoriteStatus
                                       ? Icons.favorite
                                       : Icons.favorite_border,
-                                  color: isFavorite
-                                      ? Colors.red
-                                      : Colors.grey[600],
-                                  size: 30.sp,
-                                ),
-                              ),
+                                  onPressed: () {
+                                    ManageVibration.vibrate();
+                                    _toggleFavorite();
+                                  },
+                                  color: AppColors.SECONDARY_COLOR,
+                                  size: 60.sp,
+                                  shadows: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.8),
+                                      spreadRadius: 2,
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -741,7 +759,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
-                      hintText: 'أدخل المبلغ بالجنيه',
+                      hintText: context.isArabic
+                          ? 'ادخل المبلغ بالجنه'
+                          : 'Enter the amount in EGP',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 32.sp,
@@ -770,27 +790,27 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
                       if (inputText.isEmpty) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(content: Text('من فضلك أدخل مبلغ')),
+                          SnackBar(content: Text(context.isArabic? 'من فضلك أدخل مبلغ' : 'Please enter an amount')),
                         );
                       } else if (amount == null) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('من فضلك أدخل رقم صحيح')),
+                           SnackBar(
+                              content: Text(context.isArabic? 'من فضلك أدخل رقم صحيح' : 'Please enter a valid number')),
                         );
                       } else if (amount <= 0) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('المبلغ يجب أن يكون أكبر من صفر')),
+                           SnackBar(
+                              content: Text( context.isArabic? 'المبلغ يجب أن يكون أكبر من صفر' : 'Amount must be greater than zero')),
                         );
                       } else if (amount < 1) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('الحد الأدنى للمساهمة 1 جنيه')),
+                           SnackBar(
+                              content: Text( context.isArabic? 'الحد الأدنى للمساهمة 1 جنيه' : 'Minimum contribution is 1 EGP')),
                         );
                       } else if (widget.chanceAd == null) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('خطأ في بيانات الإعلان')),
+                           SnackBar(
+                              content: Text( context.isArabic? 'خطاء في بيانات الإعلان' : 'Error in ad data')),
                         );
                       } else {
                         Navigator.pop(bottomSheetContext);

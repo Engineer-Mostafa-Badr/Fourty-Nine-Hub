@@ -54,7 +54,7 @@ class CreatePostBanner extends StatelessWidget {
               width: double.infinity, // Ensure full width
               height: 38,
               padding: EdgeInsets.symmetric(
-                  vertical: 12.h, horizontal: 12), // Adjust left padding
+                  vertical: 6.h, horizontal: 12), // Adjust left padding
               decoration: BoxDecoration(
                 color: AppColors.getFillColor(context),
                 border: Border.all(color: Colors.grey, width: 1.5),

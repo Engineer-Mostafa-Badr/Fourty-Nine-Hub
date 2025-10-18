@@ -10,6 +10,7 @@ ThemeData get darkTheme => ThemeData(
       //   primary: AppColors.AUTH_CONTAINER_COLOR,
       //   secondary: AppColors.AUTH_CONTAINER_COLOR,
       // ),
+
       colorScheme: const ColorScheme.dark(
         primary: AppColors.AUTH_CONTAINER_COLOR,
         secondary: AppColors.AUTH_CONTAINER_COLOR,
@@ -64,7 +65,8 @@ ThemeData get darkTheme => ThemeData(
         }),
         dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.Floating_Button_COLOR_DARK; // Background color when selected
+            return AppColors
+                .Floating_Button_COLOR_DARK; // Background color when selected
           }
           return Colors.transparent; // Default background
         }),
@@ -80,12 +82,17 @@ ThemeData get darkTheme => ThemeData(
         ),
       ),
       appBarTheme: const AppBarTheme(
-        // color: Color(0xff0E0E0E),
-        color: AppColors.Scaffold_Color_DARK,
+        backgroundColor: AppColors.Scaffold_Color_DARK,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //   systemNavigationBarColor:
+        //       AppColors.Scaffold_Color_DARK, // لون أسود للـ Dark Mode
+        //   systemNavigationBarIconBrightness: Brightness.light, // أيقونات بيضاء
+        // ),
       ),
+
       // textSelectionTheme: const TextSelectionThemeData(
       //   selectionColor: AppColors.PRIMARY_COLOR,
       //   cursorColor: AppColors.PRIMARY_COLOR,
@@ -124,7 +131,7 @@ ThemeData get darkTheme => ThemeData(
         backgroundColor: AppColors.QUANTITY_COLOR,
       ),
       actionIconTheme: const ActionIconThemeData(),
-      bottomAppBarTheme: const BottomAppBarTheme(),
+      bottomAppBarTheme: const BottomAppBarThemeData(),
       canvasColor: Colors.black38,
       bannerTheme: const MaterialBannerThemeData(),
       switchTheme: const SwitchThemeData(
@@ -132,7 +139,7 @@ ThemeData get darkTheme => ThemeData(
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
       cardColor: Colors.white,
-      dialogTheme: const DialogTheme(),
+      dialogTheme: const DialogThemeData(),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.QUANTITY_COLOR,
       ),
@@ -146,5 +153,5 @@ ThemeData get darkTheme => ThemeData(
       textButtonTheme: const TextButtonThemeData(),
       listTileTheme: const ListTileThemeData(),
       dividerTheme: const DividerThemeData(),
-      tabBarTheme: const TabBarTheme(),
+      tabBarTheme: const TabBarThemeData(),
     );

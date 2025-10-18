@@ -8,10 +8,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/service/storage.dart';
+import '../../../core/utils/shared_pref.dart';
+import '../../../features/social_media/reels/presentation/shared/constants.dart';
 import '../../../res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
+import '../../../routes/pages.dart';
+import '../../../routes/routes.dart';
+import '../../../shared_web_socket.dart';
 import '../call_helper/call_with_notification_helper.dart';
 import 'send_notification_params.dart';
 import '../../../service_locator/service_locator.dart';
@@ -271,16 +278,35 @@ Future<String?> _generateAccessKey() async {
 
 @pragma('vm:entry-point')
 Future<void> _onBackgroundMessage(RemoteMessage message) async {
+
+
   if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
       await DI.execute();
+      log('Firebase initialized in background');
     } catch (e) {
       print('Firebase already initialized in background: $e');
     }
   }
+  // if((message.notification?.title?.contains('You have been logged out from all devices') ?? false) || (message.notification?.body?.contains('You have been logged out from all devices') ?? false) || (message.notification?.title?.contains('لقد تم تسجيل خروجك من جميع الأجهزة') ?? false) || (message.notification?.body?.contains('لقد تم تسجيل خروجك من جميع الأجهزة') ?? false)) {
+  //   log('++++++++++++++notification received++ handle log out ${message.notification}');
+  //   await CacheManager.deleteAllTokens();
+  //   await Storage.setLoginValue(false);
+  //   SharedWebSocket.disconnect();
+  //   if(AppPages.router.configuration.navigatorKey.currentContext != null) {
+  //     AppPages.router.configuration.navigatorKey.currentContext?.pushReplacement(Routes.HOME);
+  //   }
+  // }
+  //
+  // if(serviceLocator.isRegistered<ApiConsumer>()) {
+  //   serviceLocator<ApiConsumer>().removeTokenFromHeader();
+  //   log("Removed token from header in background");
+  // }else{
+  //   log("ApiConsumer not registered in background");
+  // }
 
   await _handleNotification(message);
 }
@@ -288,6 +314,22 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
 Future<void> _handleNotification(RemoteMessage message,
     {BuildContext? context}) async {
   log('++++++++++++++notification received++ ${message.data}');
+
+  if((message.notification?.title?.contains('You have been logged out from all devices') ?? false) || (message.notification?.body?.contains('You have been logged out from all devices') ?? false) || (message.notification?.title?.contains('لقد تم تسجيل خروجك من جميع الأجهزة') ?? false) || (message.notification?.body?.contains('لقد تم تسجيل خروجك من جميع الأجهزة') ?? false)) {
+    log('++++++++++++++notification received++ handle log out ${message.notification}');
+    await CacheManager.deleteAllTokens();
+    SharedWebSocket.disconnect();
+    await Storage.setLoginValue(false);
+    if(serviceLocator.isRegistered<ApiConsumer>()) {
+      serviceLocator<ApiConsumer>().removeTokenFromHeader();
+      log("Removed token from header in _handleNotification");
+    }else{
+      log("ApiConsumer not registered in _handleNotification");
+    }
+    if(AppPages.router.configuration.navigatorKey.currentContext != null) {
+      AppPages.router.configuration.navigatorKey.currentContext?.pushReplacement(Routes.HOME);
+    }
+  }
 
   try {
     // Using Future.delayed to ensure the app is more stable when accessing Provider

@@ -28,7 +28,7 @@ class PersonTripWidget extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              ProfilePictureWidget(
+              if(image != null&&image != '')ProfilePictureWidget(
                 image: image,
                 hasStories: false,
                 rating: int.tryParse(rate??'0'),

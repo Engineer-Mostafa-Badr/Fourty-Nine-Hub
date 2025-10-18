@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_marriage_button_sheet.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -34,10 +35,12 @@ class MarriageAdsListViewItem extends StatefulWidget {
     super.key,
     required this.marriageAds,
     required this.state,
+    required this.controller,
   });
 
   final AdModel marriageAds;
   final SubcategoriesState state;
+  final SubcategoriesCubit controller;
 
   @override
   State<MarriageAdsListViewItem> createState() => _MarriageAdsListViewItemState();
@@ -46,122 +49,10 @@ class MarriageAdsListViewItem extends StatefulWidget {
 class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
   @override
   Widget build(BuildContext context) {
-    return GlobalCard(
-      subcategoryId: widget.marriageAds.subCategoryId ?? '',
-      phone: widget.marriageAds.phone ?? "",
-      reportId: widget.marriageAds.user?.id ?? '',
-      otherUserId: '',
-      onTap: () async {
-        ManageVibration.vibrate();
-        context.push(Routes.ADdetails, extra: widget.marriageAds.id);
-      },
-      isButtonEnabled: SubscriptionStatus.notSubscribed.status !=
-              widget.marriageAds.userSubscriptionStatus ||
-          SubscriptionStatus.notSubscribed.status !=
-              widget.marriageAds.ownerSubscriptionStatus,
-      isPremium: SubscriptionStatus.premium.status ==
-          widget.marriageAds.ownerSubscriptionStatus,
-      hasReport: true,
-      hasTopSide: true,
-      hasBottomSide:
-          widget.marriageAds.user?.id != context.read<UserCubit>().state.data?.id,
-      isView: null,
-      subCategoryTitle: context.isArabic
-          ? widget.marriageAds.subCategoryNameAr
-          : widget.marriageAds.subCategoryNameEn,
-      subscriptionType: widget.marriageAds.ownerSubscriptionStatus ==
-              SubscriptionStatus.premium.status
-          ? LocaleKeys.premium2.localize
-          : widget.marriageAds.ownerSubscriptionStatus ==
-                  SubscriptionStatus.regular.status
-              ? LocaleKeys.regular.localize
-              : LocaleKeys.notSubscribed.localize,
-      views: widget.marriageAds.views,
-      onRequest: () {
-        ManageVibration.vibrate();
-        bottomSheet(
-          context: context,
-          widget: CustomMarriageButtonSheet(
-            marriageAds: widget.marriageAds,
-          ),
-        );
-      },
-      // onShowViewers: () {
-      //   if ((marriageAds.lastViewers?.length ?? 0) > 0) {
-      //     ManageVibration.vibrate();
-      //     showModalBottomSheet(
-      //       backgroundColor: context.isDarkMode
-      //           ? AppColors.DARK_BLUE_COLOR.withValues(alpha: 0.95)
-      //           : AppColors.LIGHT_COLOR,
-      //       constraints: BoxConstraints(
-      //         maxHeight: MediaQuery.of(context).size.height * 0.3,
-      //       ),
-      //       context: context,
-      //       shape: const RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.only(
-      //           topLeft: Radius.circular(32.0),
-      //           topRight: Radius.circular(32.0),
-      //         ),
-      //       ),
-      //       isDismissible: true,
-      //       builder: (BuildContext context) {
-      //         return Padding(
-      //           padding: const EdgeInsets.all(8.0),
-      //           child: Column(
-      //             children: [
-      //               Text(
-      //                 context.isArabic ? 'المشاهدون' : 'Viewers',
-      //                 style: Styles.headerText(
-      //                     color: context.isDarkMode
-      //                         ? Colors.white
-      //                         : AppColors.PRIMARY_COLOR),
-      //               ),
-      //               Expanded(
-      //                 child: ListView(
-      //                   shrinkWrap: true,
-      //                   children: List.generate(
-      //                       data.lastViewers?.length ?? 0,
-      //                       (i) => Container(
-      //                             padding: EdgeInsets.only(bottom: 10),
-      //                             child: Row(
-      //                               children: [
-      //                                 ImageFromInternet(
-      //                                     image: '',
-      //                                     isCircle: true,
-      //                                     defaultLogo: false,
-      //                                     isMale: data.lastViewers?[i].gender ==
-      //                                         'male',
-      //                                     width: 40,
-      //                                     height: 40,
-      //                                     firstChar: data
-      //                                         .lastViewers?[i].firstName?[0]
-      //                                         .toUpperCase(),
-      //                                     charPadding: 0),
-      //                                 const Sizer(),
-      //                                 Text(
-      //                                   data.lastViewers?[i].firstName ?? '',
-      //                                   style: Styles.mediumText(
-      //                                       color: context.isDarkMode
-      //                                           ? Colors.white
-      //                                           : AppColors.PRIMARY_COLOR),
-      //                                 ),
-      //                               ],
-      //                             ),
-      //                           )),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         );
-      //       },
-      //     );
-      //   }
-      // },
-      onSubscribe: () {
-        context.pop();
-      },
-      body: _buildBody(context),
-    );
+    return AdCard(item: widget.marriageAds, onFav: (v){}, onRemoveFav: (s){}, onDeleteAd: (String id) {
+      context.pop();
+      widget.controller.deleteAd(id);
+    },);
     // return ClickableWidget(
     //   onTap: () {
     //     ManageVibration.vibrate();

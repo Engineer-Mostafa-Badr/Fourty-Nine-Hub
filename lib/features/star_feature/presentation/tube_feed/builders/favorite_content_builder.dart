@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
+import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 
 import '../../presentation_exports.dart';
 import '../helpers/navigation_helper.dart';
 import '../widgets/cards/talent_card.dart';
 import '../widgets/common/empty_state_widget.dart';
-import '../widgets/common/load_more_widget.dart';
 
 class FavoriteContentBuilder {
   static Widget buildSliver({
     required BuildContext context,
     required StarCubit cubit,
+    ScrollController? scrollController,
   }) {
     return BlocBuilder<StarCubit, StarState>(
       builder: (context, state) {
         if (state.isLoading(TalentCategory.favorites) &&
             state.favoriteTalents.isEmpty) {
-          return SliverToBoxAdapter(
+          return SliverFillRemaining(
+            hasScrollBody: false,
             child: SizedBox(
               height: 200,
               child: const Center(child: CustomCircularProgressIndicator()),
@@ -36,33 +39,33 @@ class FavoriteContentBuilder {
           );
         }
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index == favoriteTalents.length) {
-                return LoadMoreWidget(
-                  state: state,
-                  category: TalentCategory.favorites,
-                  cubit: cubit,
-                );
-              }
+        final controller = scrollController ?? ScrollController();
 
-              final talent = favoriteTalents[index];
-              return TalentCard(
-                talent: talent,
-                cubit: cubit,
-                onVideoTap: (talent, mediaUrl) {
-                  TubeNavigationHelper.handleVideoTap(
-                    context: context,
-                    talent: talent,
-                    mediaUrl: mediaUrl,
-                    cubit: cubit,
-                  );
-                },
-              );
-            },
-            childCount: favoriteTalents.length +
-                (state.hasMore(TalentCategory.favorites) ? 1 : 0),
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).height * .6,
+            child: OlxPaginationWidget(
+              items: List.generate(
+                favoriteTalents.length,
+                (index) => TalentCard(
+                  talent: favoriteTalents[index],
+                  cubit: cubit,
+                  onVideoTap: (talent, mediaUrl) {
+                    TubeNavigationHelper.handleVideoTap(
+                      context: context,
+                      talent: talent,
+                      mediaUrl: mediaUrl,
+                      cubit: cubit,
+                    );
+                  },
+                ),
+              ),
+              banners: bannersList,
+              loadPage: (page) => cubit.loadTalents(TalentCategory.favorites),
+              scrollController: controller,
+              itemsPerPage: 3,
+            ),
           ),
         );
       },

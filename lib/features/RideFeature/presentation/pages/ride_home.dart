@@ -43,6 +43,8 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/to
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:latlong2/latlong.dart';
@@ -62,7 +64,6 @@ import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../new_trip_join/captainshare/screen/custom_map.dart';
 import '../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../domain/entities/get_location_from_address_entity.dart';
 import '../../domain/usecases/rating_driver_by_client.dart';
@@ -75,7 +76,6 @@ import 'widgets/fare_bottom_sheet_widget.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class RideHome extends StatefulWidget {
   const RideHome({super.key});
@@ -108,6 +108,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    SharedWebSocket.socket!.off('RIDE:UPDATED_OFFER');
+    SharedWebSocket.socket!.off('RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP');
+    SharedWebSocket.socket!.off('RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT');
+    SharedWebSocket.socket!.off('RIDE:DRIVER_STARTED_TRIP');
+    SharedWebSocket.socket!.off('RIDE:TRIP_CANCELLED_BY_DRIVER');
+    SharedWebSocket.socket!.off('RIDE:DRIVER_COMPLETED_TRIP');
+
+    SharedWebSocket.socket!.off('RIDE:FINALIZE_DRIVER_TRIP_PRE_START');
+    SharedWebSocket.socket!.off('RIDE:ACCEPTED_AUTO_TRIP');
+    SharedWebSocket.socket!.off('RIDE:VIEWER_TRIPS');
+    SharedWebSocket.socket!.off('RIDE:TRIP_LOCATION_UPDATED');
     _scrollController.dispose();
     super.dispose();
   }
@@ -427,7 +438,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
                     ),
@@ -1437,7 +1448,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3)),
@@ -1506,8 +1517,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 context.push(Routes.rideModeScreen,
                     extra: RideModeParams(
                         modeType: 'truck',
-                        isSocket:
-                            driverInfo?.driverType == 'socket' ? true : false));
+                        isSocket: false));
               }
             }
           },
@@ -1542,7 +1552,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3)),
@@ -1612,19 +1622,31 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3)),
               ],
             ),
             child: Center(
-              child: Text(
-                context.isArabic ? 'وضع المستخدم' : 'User Mode',
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    context.isArabic ? 'وضع المستخدم' : 'User Mode',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    " (${((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString()})",
+                    style: TextStyle(
+                        color: AppColors.SECONDARY_COLOR,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1666,7 +1688,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3)),
@@ -1700,34 +1722,62 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClickableWidget(
-            onTap: () {
-              ManageVibration.vibrate();
-              openDrawer();
-            },
-            child: Container(
-              width: 75.w,
-              height: 35,
-              decoration: BoxDecoration(
-                color: context.isDarkMode
-                    ? AppColors.GREY_DARK_COLOR
-                    : AppColors.whiteColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3)),
-                ],
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ClickableWidget(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  openDrawer();
+                },
+                child: Container(
+                  width: 75.w,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? AppColors.GREY_DARK_COLOR
+                        : AppColors.whiteColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3)),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    Assets.rideMenu,
+                    color: context.isDarkMode ? AppColors.whiteColor : null,
+                  ),
+                ),
               ),
-              padding: const EdgeInsets.all(4),
-              alignment: Alignment.center,
-              child: Image.asset(
-                Assets.rideMenu,
-                color: context.isDarkMode ? AppColors.whiteColor : null,
-              ),
-            ),
+              Visibility(
+                visible: ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)) > 0,
+                child: PositionedDirectional(
+                  top: -10.h,
+                  end: -10.w,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.getRedColor(context)),
+                    child: Center(
+                      child: Text(
+                        ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString(),
+                        style: Styles.smallText(
+                            color: context.isDarkMode
+                                ? Colors.black
+                                : AppColors.whiteColor,
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
           Sizer(),
           Expanded(
@@ -1763,10 +1813,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             RegistrationStatus.approved.status) {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
-                              modeType: 'truk',
-                              isSocket: driverInfo?.driverType == 'socket'
-                                  ? true
-                                  : false));
+                              modeType: 'truck',
+                              isSocket: false));
                     }
                   }
                 },
@@ -1802,7 +1850,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(0, 3)),
@@ -1865,7 +1913,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              showDriverProfileSheet(context, driverId: "688a530b143e1a7ef09e8206");
+                              // showDriverProfileSheet(context, driverId: "688a530b143e1a7ef09e8206");
                             },
                             child: Container(
                               height: 30,
@@ -1878,7 +1926,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
+                                        color: Colors.black.withValues(alpha: 0.3),
                                         spreadRadius: 2,
                                         blurRadius: 5,
                                         offset: const Offset(0, 3)),
@@ -2717,7 +2765,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           border: Border.all(color: AppColors.DARK_BLUE_COLOR),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 spreadRadius: 2,
                 blurRadius: 5,
                 offset: const Offset(0, 3)),
@@ -2849,7 +2897,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.redAccent.withOpacity(0.2)
+              ? Colors.redAccent.withValues(alpha: 0.2)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),

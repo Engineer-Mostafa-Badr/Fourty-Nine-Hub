@@ -13,9 +13,16 @@ ThemeData get lightTheme => ThemeData(
       //   seedColor: const Color(0xff0b1035),
       // ),
       useMaterial3: true,
+      // ضيف السطور دي هنا 👇
       appBarTheme: const AppBarTheme(
-        color: AppColors.AUTH_CONTAINER_COLOR,
+        backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //   systemNavigationBarColor:
+        //       AppColors.AUTH_CONTAINER_COLOR, // لون أبيض للـ Light Mode
+        //   systemNavigationBarIconBrightness: Brightness.dark, // أيقونات سوداء
+        // ),
       ),
+
       switchTheme: const SwitchThemeData(
         trackColor: WidgetStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
       ),
@@ -113,13 +120,13 @@ ThemeData get lightTheme => ThemeData(
       drawerTheme: const DrawerThemeData(
           backgroundColor: AppColors.AUTH_CONTAINER_COLOR),
       actionIconTheme: const ActionIconThemeData(),
-      bottomAppBarTheme: const BottomAppBarTheme(),
+      bottomAppBarTheme: BottomAppBarThemeData(),
       canvasColor: Colors.black38,
       bannerTheme: const MaterialBannerThemeData(),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.transparent),
       cardColor: Colors.white,
-      dialogTheme: const DialogTheme(),
+      dialogTheme: DialogThemeData(),
       bottomSheetTheme: const BottomSheetThemeData(),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(),
       iconButtonTheme: const IconButtonThemeData(),
@@ -131,7 +138,7 @@ ThemeData get lightTheme => ThemeData(
       textButtonTheme: const TextButtonThemeData(),
       listTileTheme: const ListTileThemeData(),
       dividerTheme: const DividerThemeData(),
-      tabBarTheme: const TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         indicatorColor: AppColors.PRIMARY_COLOR,
       ),
     );

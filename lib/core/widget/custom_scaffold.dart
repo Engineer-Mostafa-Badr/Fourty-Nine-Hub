@@ -42,7 +42,7 @@ class CustomScaffold extends StatefulWidget {
     this.showNavBAr = true,
     this.isMenu = false,
     this.resizeToAvoidBottomInset,
-    this.scaffoldBackgroundWithAppBarColor,
+    this.scaffoldBackgroundWithAppBarColor=AppColors.PRIMARY_COLOR,
     this.scaffoldKey,
   });
 
@@ -84,7 +84,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
             child: FloatingDraggableWidget(
               mainScreenWidget: MainScaffold(
                 showNavBAr: widget.showNavBAr,
-                backgroundColor: widget.backgroundColor,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 floatingActionButtonLocation:
                     widget.floatingActionButtonLocation,
                 floatingActionButton: widget.floatingActionButton,
