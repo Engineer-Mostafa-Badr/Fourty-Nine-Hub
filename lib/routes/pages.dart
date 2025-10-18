@@ -283,6 +283,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/us
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/spotlight/presentation/screens/spot_light_screen.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/pages/tube_feed_page.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -1555,6 +1556,7 @@ class AppPages {
                   const GiftView(),
                 ),
               ),
+
               // GoRoute(
               //   path: Paths.GIFT,
               //   name: Routes.GIFT,
@@ -5006,6 +5008,13 @@ class AppPages {
                         serviceLocator<AuctionCubit>(),
                     child: WinnersAuctionScreen(),
                   );
+                },
+              ),
+              GoRoute(
+                path: Paths.spotLightScreen,
+                name: Routes.spotLightScreen,
+                builder: (context, state) {
+                  return SpotLightScreen();
                 },
               ),
             ],
