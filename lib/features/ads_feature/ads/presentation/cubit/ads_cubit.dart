@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -15,8 +14,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_p
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/delete_ad_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../requests_history/domain/entities/trip_entity.dart';
@@ -40,53 +39,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final MakeAdPremiumRequestUsecase _makeAdPremiumRequestUsecase;
   final GetMyAdByIdUseCase _getMyAdByIdUseCase;
   final ViewAdUseCase _viewAdUseCase;
-
-  // filterAds({
-  //   required FilterModel model,
-  //   required int page,
-  //   required String filter,
-  // }) async {
-  //   if (page == 1) {
-  //     adsPagingController.itemList = [];
-  //   }
-  //   // emit(state.copyWith(status: AdsStates.filterLoading));
-  //   print("object");
-  //   print(page);
-  //   print(filter);
-  //   print("objectHiiiiiiiiiiii");
-  //
-  //   FilterModel filterModel = FilterModel(
-  //       price: model.price,
-  //       props: model.props,
-  //       cityId: state.city,
-  //       governorateId: state.governorate,
-  //       limit: 15,
-  //       page: page,
-  //       subCategoryId: model.subCategoryId,
-  //       filter: filter);
-  //   final response = await _filterAdUseCase(filterModel);
-  //   response
-  //       .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
-  //           (data) {
-  //         final isLastPage = data.length < 10;
-  //         if (page == 1) {
-  //           print("page == 1 $page");
-  //           adsPagingController.itemList = [];
-  //         }
-  //         if (isLastPage) {
-  //           print("isLastPage = $isLastPage");
-  //           adsPagingController.appendLastPage(data);
-  //         } else {
-  //           print("isNotLastPage = $isLastPage");
-  //           final nextPageKey = page + 1;
-  //           adsPagingController.appendPage(data, nextPageKey);
-  //         }
-  //         print(data.toString());
-  //       });
-  // }
-
-  // final PagingController<int, AdModel> adsPagingController =
-  // PagingController(firstPageKey: 1);
+  final DeleteAdUseCase _deleteAdUseCase;
 
   List<AdModel> ads = [];
 
@@ -114,6 +67,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
     this._makeAdPremiumRequestUsecase,
     this._getMyAdByIdUseCase,
     this._viewAdUseCase,
+    this._deleteAdUseCase,
   ) : super(AdsState());
   Future<bool> adViewToAds(String id) async {
     bool result = false;
@@ -144,63 +98,32 @@ class AdvertisementCubit extends Cubit<AdsState> {
     phone = v;
     print(phone);
   }
-  // void loadData({required String subCategoryId,required String filter}) async {
-  //   // emit(state.copyWith(status: AdsStates.loading));
-  //   if (getRideServiceEnum(value: subCategoryId) == RideServicesEnum.pickMe) {
-  //     await getPickMeAds();
-  //   } else if (getRideServiceEnum(value: subCategoryId) ==
-  //       RideServicesEnum.comeWithYou) {
-  //     await getComeWithMeAds();
-  //   } else {
-  //     await getAds(subCategoryId: subCategoryId,filter: filter);
-  //   }
-  // }
 
-  // void loadData({required String subCategoryId,
-  //   required String filter,
-  //   required bool fromTab}) async {
-  //   if (fromTab == true) {
-  //     emit(state.copyWith(status: AdsStates.loading));
-  //   }
-  //   await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
-  //   adsPagingController.addPageRequestListener((pageKey) {
-  //     print("initStatePageKey : $pageKey");
-  //     getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
-  //   });
-  //   emit(state.copyWith(status: AdsStates.success));
-  // }
 
-  // void loadMarriageData({required String subCategoryId,
-  //   required String filter,
-  //   required bool fromTab}) async {
-  //   if (fromTab == true) {
-  //     emit(state.copyWith(status: AdsStates.loading));
-  //   }
-  //   await getMarriageAds(subCategoryId: subCategoryId, page: 1);
-  //   adsPagingController.addPageRequestListener((pageKey) {
-  //     print("initStatePageKey : $pageKey");
-  //     getMarriageAds(subCategoryId: subCategoryId, page: pageKey);
-  //   });
-  //   emit(state.copyWith(status: AdsStates.success));
-  // }
-
-  // void loadFilterData({
-  //   required FilterModel model,
-  //   required String filter,
-  // }) async {
-  //   emit(state.copyWith(status: AdsStates.loading));
-  //   await filterAds(model: model, filter: filter, page: 1);
-  //   // adsPagingController.addPageRequestListener((pageKey) {
-  //   //   print("initStatePageKey : $pageKey");
-  //   //   filterAds(model: model, filter: filter, page: pageKey);
-  //   // });
-  //   emit(state.copyWith(status: AdsStates.success));
-  // }
-
-  // void onRefresh() async {
-  //   adsPagingController.refresh();
-  // }
-
+  Future<void> deleteAd(String adId) async {
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await _deleteAdUseCase(adId);
+    response.fold(
+          (failure) {
+            currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+            failure: failure, status: AdsStates.error));
+      },
+          (data) {
+            currentContext.pop();
+        if (ads .isNotEmpty) {
+          ads.removeWhere((element) => element.id == adId);
+        }
+        emit(state.copyWith(
+          status: AdsStates.success,
+        ));
+      },
+    );
+  }
   void changeState(FilterModel model, bool hasFilter) {
     emit(state.copyWith(filterModel: model, hasFilter: hasFilter));
   }

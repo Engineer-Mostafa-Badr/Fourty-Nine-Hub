@@ -47,6 +47,7 @@ class MarriageAdsListView extends StatelessWidget {
               MarriageAdsListViewItem(
                 marriageAds: state.ads![index],
                 state: state,
+                  controller:controller
               ),
             ],
           ),

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cre
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -22,9 +23,11 @@ class AdCard extends StatefulWidget {
       {super.key,
       required this.item,
       required this.onFav,
+        required this.onDeleteAd,
       required this.onRemoveFav});
   final Function(String) onFav;
   final Function(String) onRemoveFav;
+  final Function(String) onDeleteAd;
 
   @override
   State<AdCard> createState() => _AdCardState();
@@ -53,6 +56,9 @@ class _AdCardState extends State<AdCard> {
               .read<AdvertisementCubit>()
               .unFavouriteAd(widget.item.id);
           return result;
+        },
+        deleteAd: (id) async {
+            widget.onDeleteAd(widget.item.id);
         },
       );
       /*return InkWell(

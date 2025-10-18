@@ -16,6 +16,7 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
   TextEditingController searchController = TextEditingController();
   List<RequestsLogByMainCategoryEntity> adRequests = [];
   bool isLoadingMore = false;
+  bool isLoadingRequests = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
@@ -57,10 +58,14 @@ class AdRequestsCubit extends Cubit<AdRequestsState> {
   }
 
   void loadInitialData(String id, String search) async {
+    isLoadingRequests=true;
     adRequests.clear();
     currentPage = 1;
     isLoadingMore = false;
     hasMoreData = true;
+    emit(state.copyWith(status: AdRequestsStates.loading));
     await fetchAdRequests(id, search);
+    isLoadingRequests=false;
+    emit(state.copyWith(status: AdRequestsStates.success));
   }
 }

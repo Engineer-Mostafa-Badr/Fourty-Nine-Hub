@@ -69,6 +69,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     // Check if date is after the 14 years ago mark
     return date.isAfter(fourteenYearsAgo);
   }
+  String birthDate = '';
   Future<void> register() async {
     String? token = await FirebaseMessaging.instance.getToken();
     var currentContext =
@@ -86,7 +87,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             userName: userNameController.text.trim(),
             firstName: firstNameController.text.trim(),
             lastName: lastNameController.text.trim(),
-            birthday: birthDateTextController.text.trim(),
+            birthday: birthDate,
             phoneNumber: emailTextController.text.trim(),
             password: passwordTextController.text.trim(),
             confirmPassword: confirmPasswordTextController.text.trim(),
@@ -129,7 +130,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             userName: userNameController.text.trim(),
             firstName: firstNameController.text.trim(),
             lastName: lastNameController.text.trim(),
-            birthday: birthDateTextController.text.trim(),
+            birthday: birthDate,
             email: emailTextController.text.trim(),
             password: passwordTextController.text.trim(),
             confirmPassword: confirmPasswordTextController.text.trim(),

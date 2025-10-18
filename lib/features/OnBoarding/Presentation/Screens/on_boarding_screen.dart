@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/common/dots_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/cubit/cubit.dart';
@@ -167,32 +168,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   Widget _buildPageIndicator(OnBoardingCubit cubit, OnBoardingState state) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          cubit.images.length,
-          (itemIndex) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2.0),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: itemIndex == state.currentIndex
-                    ? const LinearGradient(
-                        colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
-                        begin: Alignment.topCenter,
-                      )
-                    : null,
-                color:
-                    itemIndex == state.currentIndex ? null : AppColors.GREYBG,
-              ),
-              height: 10,
-              width: 10,
-            ),
-          ),
-        ),
-      ),
-    );
+    int currentIndex = 0;
+
+    if (controller.hasClients && controller.positions.isNotEmpty) {
+      currentIndex = (controller.page ?? controller.initialPage.toDouble()).round();
+    } else {
+      currentIndex = state.currentIndex; // fallback to cubit's current index
+    }
+
+    return DotsWidget(length: cubit.images.length, currentIndex: currentIndex);
   }
 
   Widget _buildNavigationButton(
@@ -246,6 +230,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         const Spacer(),
         Text(
           context.isArabic ? titleAr[index] : titleEn[index],
+          textAlign: TextAlign.center,
           style: Styles.headerText(
             color: isDarkTheme
                 ? AppColors.AUTH_CONTAINER_COLOR

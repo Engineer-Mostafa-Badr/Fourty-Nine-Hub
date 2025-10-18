@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-  final String _baseUrl = 'https://39ce8f47fac5.ngrok-free.app/';
+  final String _baseUrl = 'https://49backend.com/';
 
   final Dio dio;
 

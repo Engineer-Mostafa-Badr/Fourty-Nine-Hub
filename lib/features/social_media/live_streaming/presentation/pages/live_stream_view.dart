@@ -124,11 +124,6 @@ class _LiveStreamViewState extends State<LiveStreamView> {
                 mainAxisAlignment: MainAxisAlignment.center,
               children: [
                   const CircularProgressIndicator(),
-                  const SizedBox(height: 16),
-                  Label(
-                    text: context.isArabic ? 'جاري التحميل...' : 'Loading...',
-                    style: Styles.headerText(),
-                  ),
                 ],
               ),
             ),

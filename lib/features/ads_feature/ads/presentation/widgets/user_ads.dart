@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -113,6 +114,10 @@ class _UserAdsState extends State<UserAds> {
                   .unFavouriteAd(
                       context.read<AdvertisementCubit>().ads[index].id);
               return result;
+            },
+            deleteAd: (id) async {
+              context.pop();
+              context.read<AdvertisementCubit>().deleteAd(id);
             },
           ),
         ),
