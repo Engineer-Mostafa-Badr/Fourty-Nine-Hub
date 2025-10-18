@@ -69,6 +69,7 @@
         android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:vmSafeMode="false"
+        android:extractNativeLibs="false"
         >
         <!-- to use skia engine -->
         <!-- <meta-data
