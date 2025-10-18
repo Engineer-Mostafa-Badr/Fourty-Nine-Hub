@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/support_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
@@ -34,13 +35,19 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import '../dashboards/widgets/ride_details_rating_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+class RideNonSocketDetailsParam{
+  final ClientPastTripEntity tripEntity;
+  final bool isShipping;
+
+  RideNonSocketDetailsParam({required this.tripEntity,required this.isShipping});
+}
 class RideNonSocketDetailsScreen extends StatefulWidget {
   const RideNonSocketDetailsScreen({
     super.key,
-    required this.tripEntity,
+    required this.params,
   });
 
-  final ClientPastTripEntity tripEntity;
+  final RideNonSocketDetailsParam params;
 
   @override
   State<RideNonSocketDetailsScreen> createState() =>
@@ -63,14 +70,14 @@ class _RideNonSocketDetailsScreenState
     context.read<DashboardsCubit>().getEmergencyDetails(
         context,
         SupportRideParams(
-            clientId: 'widget.tripEntity.clientDetails?.id??' '',
-            // clientId: 'widget.tripEntity.clientDetails?.id??''',
-            driverId: 'widget.tripEntity.driverDetails?.id??' '',
-            tripId: widget.tripEntity.tripDetails?.id ?? '',
-            tripType: 'notSpecial',
-            userType: 'driver'));
+            clientId: widget.params.tripEntity.clientDetails?.id?? '',
+            // clientId: 'widget.params.tripEntity.clientDetails?.id??''',
+            driverId: widget.params.tripEntity.driverDetails?.id?? '',
+            tripId: widget.params.tripEntity.tripDetails?.id ?? '',
+            tripType: widget.params.isShipping?'loading':'nonTracking',
+            userType: 'client'));
     currentTripRating =
-        widget.tripEntity.tripDetails?.yourRateDriver?.rate?.toDouble();
+        widget.params.tripEntity.tripDetails?.yourRateDriver?.rate?.toDouble();
     super.initState();
   }
 
@@ -206,7 +213,7 @@ class _RideNonSocketDetailsScreenState
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(
-        widget.tripEntity.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+        widget.params.tripEntity.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
     String formattedDate =
         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
     // String formattedTime =
@@ -215,7 +222,7 @@ class _RideNonSocketDetailsScreenState
         "${(dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12)}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
 
     DateTime dateTimePickUp = DateTime.parse(
-        widget.tripEntity.tripDetails?.pickupTime ??
+        widget.params.tripEntity.tripDetails?.pickupTime ??
             '2025-03-11T21:50:21.998Z');
     String formattedDatePickUp =
         "${dateTimePickUp.day.toString().padLeft(2, '0')}/${dateTimePickUp.month.toString().padLeft(2, '0')}/${dateTimePickUp.year}";
@@ -225,14 +232,7 @@ class _RideNonSocketDetailsScreenState
         "${(dateTimePickUp.hour % 12 == 0 ? 12 : dateTimePickUp.hour % 12)}:${dateTimePickUp.minute.toString().padLeft(2, '0')} ${dateTimePickUp.hour < 12 ? 'AM' : 'PM'}";
 
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          scrolledUnderElevation: 0,
-          leadingWidth: 30,
-          title: Label(
-              text: LocaleKeys.rideDetails.tr(),
-              style:
-                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 20))),
+      appBar:DefaultAppBar(title: context.isArabic ? "تفاصيل الرحلة" : "Ride Details"),
       body: SingleChildScrollView(
         child: BlocBuilder<DashboardsCubit, DashboardsState>(
             builder: (context, state) {
@@ -262,8 +262,8 @@ class _RideNonSocketDetailsScreenState
                               Label(
                                   text: (context.isArabic
                                           ? widget
-                                              .tripEntity.subCategory?.nameAr
-                                          : widget.tripEntity.subCategory
+                                              .params.tripEntity.subCategory?.nameAr
+                                          : widget.params.tripEntity.subCategory
                                               ?.nameEn) ??
                                       LocaleKeys.captainWithYou.tr(),
                                   style: const TextStyle(
@@ -297,7 +297,7 @@ class _RideNonSocketDetailsScreenState
                               ),
                               Label(
                                   text:
-                                      "${widget.tripEntity.tripDetails!.price} ${LocaleKeys.egp.tr()}",
+                                      "${widget.params.tripEntity.tripDetails!.price} ${LocaleKeys.egp.tr()}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 16)),
@@ -308,7 +308,7 @@ class _RideNonSocketDetailsScreenState
                           alignment: Alignment.bottomRight,
                           child: ImageFromInternet(
                             image:
-                                widget.tripEntity.subCategory?.pictureUrl ?? "",
+                                widget.params.tripEntity.subCategory?.pictureUrl ?? "",
                             width: 80,
                             height: 33,
                             fit: BoxFit.contain,
@@ -318,10 +318,10 @@ class _RideNonSocketDetailsScreenState
                     ],
                   ),
                 ),
-                // if (widget.tripEntity.modeType != 'ride')
+                // if (widget.params.tripEntity.modeType != 'ride')
                 Label(
                     text:
-                        "${LocaleKeys.passenger.tr()} : ${widget.tripEntity.tripDetails?.passengers ?? 0}",
+                        "${LocaleKeys.passenger.tr()} : ${widget.params.tripEntity.tripDetails?.passengers ?? 0}",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, fontSize: 16)),
                 Row(
@@ -335,7 +335,7 @@ class _RideNonSocketDetailsScreenState
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Label(
-                            text: widget.tripEntity.tripDetails?.location
+                            text: widget.params.tripEntity.tripDetails?.location
                                     ?.fromTitle ??
                                 "",
                             style: const TextStyle(
@@ -366,7 +366,7 @@ class _RideNonSocketDetailsScreenState
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Label(
-                            text: widget.tripEntity.tripDetails?.location
+                            text: widget.params.tripEntity.tripDetails?.location
                                     ?.toTitle ??
                                 "",
                             style: const TextStyle(
@@ -388,11 +388,11 @@ class _RideNonSocketDetailsScreenState
                 ),
 
                 const SizedBox(height: 30),
-                // Text("${widget.tripEntity.tripDetails?.yourRating?.average}"),
+                // Text("${widget.params.tripEntity.tripDetails?.yourRating?.average}"),
                 RideDetailsRatingNonSocketClientWidget(
                   rate: currentTripRating ?? 0.0,
                   title: LocaleKeys.yourRate.tr(),
-                  tripId: widget.tripEntity.tripDetails?.id ?? '',
+                  tripId: widget.params.tripEntity.tripDetails?.id ?? '',
                   cubit: context.read<ClientTripsCubit>(),
                   onRatingUpdated: (newRating) {
                     setState(() {
@@ -402,13 +402,13 @@ class _RideNonSocketDetailsScreenState
                 ),
 
                 RideDetailsRatingNonSocketClientWidget(
-                  // isRate: widget.tripEntity.tripDetails?.rating?.client?.count != null,
+                  // isRate: widget.params.tripEntity.tripDetails?.rating?.client?.count != null,
                   // rate: 2,
-                  rate: widget.tripEntity.tripDetails?.driverRateYou?.rate
+                  rate: widget.params.tripEntity.tripDetails?.driverRateYou?.rate
                           ?.toDouble() ??
                       0.0,
                   title: LocaleKeys.driverRateYou.tr(),
-                  tripId: widget.tripEntity.tripDetails?.id ?? '',
+                  tripId: widget.params.tripEntity.tripDetails?.id ?? '',
                   cubit: context.read<ClientTripsCubit>(),
                   isClient: true,
                 ),
@@ -470,26 +470,26 @@ class _RideNonSocketDetailsScreenState
                                       if (form.currentState!.validate()) {
                                         cubit.requestEmergencySupport(
                                             context: context,
-                                            clientId: widget.tripEntity
+                                            clientId: widget.params.tripEntity
                                                     .clientDetails?.id ??
                                                 "",
-                                            driverId: widget.tripEntity
+                                            driverId: widget.params.tripEntity
                                                     .driverDetails?.id ??
                                                 '',
-                                            tripId: widget.tripEntity
+                                            tripId: widget.params.tripEntity
                                                     .tripDetails?.id ??
                                                 '',
                                             userType: "client",
-                                            tripType: "nonTracking");
+                                            tripType: widget.params.isShipping?"loading":"nonTracking");
                                         // cubit.requestEmergencySupport(
                                         //     context: context,
-                                        //     clientId: widget.tripEntity
+                                        //     clientId: widget.params.tripEntity
                                         //             .clientDetails?.id ??
                                         //         '',
-                                        //     driverId: widget.tripEntity
+                                        //     driverId: widget.params.tripEntity
                                         //             .driverDetails?.id ??
                                         //         '',
-                                        //     tripId: widget.tripEntity
+                                        //     tripId: widget.params.tripEntity
                                         //             .tripDetails?.id ??
                                         //         '');
                                       }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/playlist_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
@@ -11,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../presentation_exports.dart';
 import 'playlist_details_page.dart';
 import 'playlist_bottom_sheet_constants.dart';
@@ -67,16 +69,19 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      child: Column(
-        children: [
-          _buildHandleBar(),
-          _buildHeader(),
-          Divider(height: 1, color: Colors.grey[200]),
-          _buildVideoInfoSection(),
-          _buildCreateNewPlaylistSection(),
-          Divider(height: 1, color: Colors.grey[200]),
-          Expanded(child: _buildPlaylistsList()),
-        ],
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildHandleBar(),
+            _buildHeader(),
+            Divider(height: 1, color: Colors.grey[200]),
+            _buildVideoInfoSection(),
+            _buildCreateNewPlaylistSection(),
+            Divider(height: 1, color: Colors.grey[200]),
+            Expanded(child: _buildPlaylistsList()),
+          ],
+        ),
       ),
     );
   }
@@ -133,7 +138,10 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
 
   Widget _buildCreateNewPlaylistSection() {
     return _isCreatingPlaylist
-        ? _buildCreatePlaylistForm()
+        ? SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: _buildCreatePlaylistForm())
         : _buildCreatePlaylistButton();
   }
 
@@ -440,20 +448,26 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
         if (mounted) {
           Navigator.pop(context);
           if (showSuccessMessage) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  context.isArabic
-                      ? 'تم إضافة الفيديو إلى "${playlist.name}"'
-                      : 'Added to "${playlist.name}"',
-                ),
-                backgroundColor: Colors.green,
-                action: SnackBarAction(
-                  label: context.isArabic ? 'عرض' : 'View',
-                  textColor: Colors.white,
-                  onPressed: () => _navigateToPlaylist(playlist),
-                ),
-              ),
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text(
+            //       context.isArabic
+            //           ? 'تم إضافة الفيديو إلى "${playlist.name}"'
+            //           : 'Added to "${playlist.name}"',
+            //     ),
+            //     backgroundColor: Colors.green,
+            //     action: SnackBarAction(
+            //       label: context.isArabic ? 'عرض' : 'View',
+            //       textColor: Colors.white,
+            //       onPressed: () => _navigateToPlaylist(playlist),
+            //     ),
+            //   ),
+            // );
+            _showSnackBar(
+              context.isArabic
+                  ? 'تم إضافة الفيديو إلى "${playlist.name}"'
+                  : 'Added to "${playlist.name}"',
+              Colors.green,
             );
           }
         }
@@ -477,12 +491,13 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
 
   void _showSnackBar(String message, Color backgroundColor) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: backgroundColor,
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(message),
+      //     backgroundColor: backgroundColor,
+      //   ),
+      // );
+      showSuccessMessage(context, message, color: backgroundColor);
     }
   }
 
@@ -495,7 +510,17 @@ class _PlaylistBottomSheetState extends State<PlaylistBottomSheet> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PlaylistDetailsPage(playlist: playlist),
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => serviceLocator<PlaylistCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<StarCubit>(),
+            ),
+          ],
+          child: PlaylistDetailsPage(playlist: playlist),
+        ),
       ),
     );
   }

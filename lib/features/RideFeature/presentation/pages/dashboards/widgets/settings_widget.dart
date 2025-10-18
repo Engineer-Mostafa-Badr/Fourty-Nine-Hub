@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/technical_examination_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/vehicle_information_non_socket_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/update_fare_bottom_sheet_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/helpers/responsive/responsive.dart';
@@ -126,7 +127,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   int calculateDaysUntilExpiry(String expiryDateString) {
-    final expiryDate = DateTime.parse(expiryDateString).toUtc();
+    final expiryDate = expiryDateString.isEmpty?DateTime.now().toUtc():DateTime.parse(expiryDateString).toUtc();
     final now = DateTime.now().toUtc();
     return expiryDate.difference(now).inDays;
   }
@@ -136,7 +137,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-      child: ListView(
+      child:widget.settings==null?Center(
+        child: CustomEmptyWidget(label: context.isArabic?'حدث مشكلة':'An error occurred'),
+      ): ListView(
         children: [
 
           switchWidget(

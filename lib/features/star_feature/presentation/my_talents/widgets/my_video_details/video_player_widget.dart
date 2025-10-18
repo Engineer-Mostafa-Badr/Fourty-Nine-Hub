@@ -90,7 +90,7 @@ class VideoPlayerWidget extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  Icons.play_arrow,
+                  !isPlaying ? Icons.pause : Icons.play_arrow,
                   color: Colors.white,
                   size: 48,
                 ),
@@ -127,23 +127,82 @@ class VideoPlayerWidget extends StatelessWidget {
     );
   }
 
+  // Widget _buildBottomControls() {
+  //   return Positioned(
+  //     bottom: 16,
+  //     right: 16,
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //       decoration: BoxDecoration(
+  //         color: Colors.black.withOpacity(0.8),
+  //         borderRadius: BorderRadius.circular(4),
+  //       ),
+  //       child: Text(
+  //         _formatDuration(controller.value.duration),
+  //         style: TextStyle(
+  //           color: Colors.white,
+  //           fontSize: 12,
+  //           fontWeight: FontWeight.w500,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _buildBottomControls() {
     return Positioned(
-      bottom: 16,
-      right: 16,
+      bottom: 0,
+      left: 0,
+      right: 0,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Text(
-          _formatDuration(controller.value.duration),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Colors.black.withOpacity(0.8),
+              Colors.transparent,
+            ],
           ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Progress Bar
+            VideoProgressIndicator(
+              controller,
+              allowScrubbing: true,
+              colors: VideoProgressColors(
+                playedColor: Colors.red,
+                bufferedColor: Colors.grey.withOpacity(0.5),
+                backgroundColor: Colors.white.withOpacity(0.3),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 4),
+            ),
+            SizedBox(height: 4),
+            // Time Display
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _formatDuration(controller.value.position),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  _formatDuration(controller.value.duration),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

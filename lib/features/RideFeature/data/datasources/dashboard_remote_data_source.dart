@@ -132,6 +132,8 @@ abstract class TripRemoteDataSource {
   void listenToRemoveUntrackedTrip(Function(String tripId) params);
 
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params);
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params);
 
   Future<Either<Failure, List<AvailableRideNonSocketTripEntity>>> getAvailableNonSocketTrips(ClientPendingTripParams params);
 
@@ -160,6 +162,7 @@ abstract class TripRemoteDataSource {
   Future<Either<Failure, CreateNonTrackOfferEntity>> updateDriverRateLoadingNonSocket(UpdateClientRateParams params);
 
   Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
+  Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params);
 
 }
 
@@ -433,15 +436,15 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToClientComing(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Client Coming ");
+      CliLogger.info("Listen to Client Coming Tracking");
       log("Listen to Client Coming ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToClientComing, (data) {
-        CliLogger.info("Client Coming data :  $data");
-        log("Client Coming data :  $data");
+        CliLogger.info("Client Coming Tracking data :  $data");
+        log("Client Coming Tracking data :  $data");
         params(data['message']);
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to Client Coming Tracking error $e");
     }
   }
 
@@ -830,15 +833,17 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToRemoveUntrackedTrip(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Remove Trip ");
-      log("Listen to Remove Trip ");
+      CliLogger.info("Listen to Remove Trip Non Tracking");
+      log("Listen to Remove Trip Non Tracking");
       SharedWebSocket.socket!.on(SocketIOListeners.removeUntrackedTrip, (data) {
-        CliLogger.info("Remove Trip data :  $data");
-        log("Remove Trip data :  $data");
-        params(data['tripsCanceled']['ids'][0]);
+        CliLogger.info("Remove Trip Non Tracking data :  $data");
+        log("Remove Non Tracking Trip data :  $data");
+        String removedId = data['tripsCanceled']!=null?
+        data['tripsCanceled']['ids'][0]:data['removedTrip']!=null?data['removedTrip']['id']??'':'';
+        params(removedId);
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to trip Remove Non Tracking error $e");
     }
   }
 
@@ -856,31 +861,61 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToAcceptUntrackedTripOffer(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Remove Trip ");
-      log("Listen to Remove Trip ");
+      CliLogger.info("Listen to Accept Offer By Client");
+      log("Listen to Accept Offer By Client ");
       SharedWebSocket.socket!.on(SocketIOListeners.acceptUntrackedTripOffer, (data) {
-        CliLogger.info("Remove Trip data :  $data");
-        log("Remove Trip data :  $data");
+        CliLogger.info("Accept Offer By Client data :  $data");
+        log("Accept Offer By Client data :  $data");
         params(data['acceptedTripOffer']['tripId']);
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to Accept Offer By Client error $e");
+    }
+  }
+
+  @override
+  void listenToAcceptLoadingTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Accept Loading Offer");
+      log("Listen to Accept Loading Offer ");
+      SharedWebSocket.socket!.on(SocketIOListeners.acceptLoadingOffer, (data) {
+        CliLogger.info("Accept Loading Offer data :  $data");
+        log("Accept Loading Offer data :  $data");
+        params(data['acceptedOffer']['tripId']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Accept Loading Offer error $e");
+    }
+  }
+
+  @override
+  void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Accepted Loading Offer");
+      log("Listen to Remove Accepted Loading Offer ");
+      SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingOffer, (data) {
+        CliLogger.info("Remove Accepted Loading Offer data :  $data");
+        log("Remove Accepted Loading Offer data :  $data");
+        params(data['removedTrip']['id']);
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to Remove Accepted Loading Offer error $e");
     }
   }
 
   @override
   void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params) {
     try {
-      CliLogger.info("Listen to  New Trip Trip ");
-      log("Listen to New Trip Trip ");
+      CliLogger.info("Listen to  New Trip Non Tracking");
+      log("Listen to New Trip Non Tracking ");
       SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateUntrackedTrip, (data) {
-        CliLogger.info(" New Trip Trip data :  $data");
-        log(" New Trip Trip data :  $data");
-        print(" New Trip Trip data :  $data");
-        params(GetAvailableRideNonSocketTripModel.fromJson(data["tripsUpdated"]));
+        CliLogger.info(" New Trip Non Tracking data :  $data");
+        log(" New Trip Non Tracking data :  $data");
+        print(" New Trip Non Tracking data :  $data");
+        params(GetAvailableRideNonSocketTripModel.fromJson(data["formattedTrip"]));
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to New Trip Non Tracking error $e");
     }
   }
 
@@ -1017,12 +1052,12 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToRemoveLoading(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Remove Loading ");
+      CliLogger.info("Listen to Remove Loading ${SocketIOListeners.removeLoadingTrip} ");
       log("Listen to Remove Trip ");
-      SharedWebSocket.socket!.on(SocketIOListeners.removeLoading, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.removeLoadingTrip, (data) {
         CliLogger.info("Remove Loading data :  $data");
         log("Remove Loading data :  $data");
-        params(data['tripsCanceled']['ids'][0]);
+        params(data['tripsCanceled']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
@@ -1038,7 +1073,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info(" New Loading  data :  $data");
         log(" New Loading  data :  $data");
         print(" New Loading  data :  $data");
-        params(GetLoadingAvailableModel.fromJson(data["tripsUpdated"]));
+        params(GetLoadingAvailableModel.fromJson(data["newTrip"]));
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
@@ -1183,6 +1218,21 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params) async{
     final url = "${EndPoints.addRateToClientWithDriverLoadingNonSocket}${params.tripId}/driver";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rateData = RateResponseModel.fromJson(data);
+        return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params) async{
+    final url = "${EndPoints.addRateToClientWithDriverLoadingNonSocket}${params.tripId}/client";
 
     final response = await _apiConsumer.post(url,data: params.toJson());
 

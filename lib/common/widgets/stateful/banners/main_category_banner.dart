@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/widget/common/favorite_icon.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -485,19 +486,9 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
                     top: 10,
                     bottom: 10,
                     start: 10.w,
-                    child: IconAppButton(
-                      icon: widget.category.isFavorite == false
-                          ? Icons.favorite_outline
-                          : Icons.favorite,
-                      shadows: [
-                        BoxShadow(
-                          color: Colors.black,
-                          spreadRadius: 10,
-                          blurRadius: 10,
-                          offset: const Offset(1, 1),
-                        )
-                      ],
-                      onPressed: () async {
+                    child: FavoriteIcon(
+                      isFavourite: widget.category.isFavorite==true,
+                      onPressedFavorite: () async {
                         ManageVibration.vibrate();
                         final result =
                         await widget.onFavorite();
@@ -513,7 +504,6 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
                           });
                         }
                       },
-                      color: AppColors.SECONDARY_COLOR,
                     ),
                   )
                       : const SizedBox.shrink(),
@@ -558,104 +548,150 @@ class _HomeMainCategoryBannerState extends State<HomeMainCategoryBanner> {
               ),
             ),
           )
-        : CachedNetworkImage(
-            imageUrl: widget.category.banner,
-            width: double.infinity,
-            height: 70,
-            imageBuilder: (context, i) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: widget.category.banner.isNotEmpty
-                    ? Colors.transparent
-                    : AppColors.PRIMARY_COLOR,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(
-                    widget.category.banner,
-                  ),
-                ),
-              ),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    color: Colors.black38,
-                    width: double.infinity,
-                  ),
-                  PositionedDirectional(end: 16, child: _buildRegisterButton()),
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.6),
-                          blurRadius: 6,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Label(
-                      text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
-                      style: Styles.headerText(
-                        fontSize: 48,
-                        color: Colors.white,
+        : Stack(
+          children: [
+            CachedNetworkImage(
+                imageUrl: widget.category.banner,
+                width: double.infinity,
+                height: 70,
+                imageBuilder: (context, i) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: widget.category.banner.isNotEmpty
+                        ? Colors.transparent
+                        : AppColors.PRIMARY_COLOR,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: CachedNetworkImageProvider(
+                        widget.category.banner,
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            placeholder: (context, u) => Shimmer.fromColors(
-              baseColor: Colors.grey[100]!,
-              highlightColor: Colors.white24,
-              child: Container(
-                height: MediaQuery.sizeOf(context).height * 0.08,
-                decoration: BoxDecoration(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.grey),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        color: Colors.black38,
+                        width: double.infinity,
+                      ),
+                      PositionedDirectional(end: 16, child: _buildRegisterButton()),
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.6),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Label(
+                          text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
+                          style: Styles.headerText(
+                            fontSize: 48,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                placeholder: (context, u) => Shimmer.fromColors(
+                  baseColor: Colors.grey[100]!,
+                  highlightColor: Colors.white24,
+                  child: Container(
+                    height: MediaQuery.sizeOf(context).height * 0.08,
+                    decoration: BoxDecoration(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: AppColors.PRIMARY_COLOR,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      PositionedDirectional(end: 0, child: _buildRegisterButton()),
+                      Label(
+                        text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 45.sp),
+                      ),
+                      // PositionedDirectional(
+                      //   start: 0,
+                      //   // top: 0,
+                      //   child: Column(
+                      //     children: [
+                      //       context.read<UserCubit>().isLoggedIn
+                      //           ?
+                      //       InkWell(
+                      //               onTap: () async => await widget.onFavorite(),
+                      //               child: const Icon(
+                      //                 Icons.favorite,
+                      //                 color: AppColors.SECONDARY_COLOR,
+                      //               ),
+                      //             )
+                      //           : const SizedBox.shrink(),
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            errorWidget: (context, url, error) => Container(
-              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: AppColors.PRIMARY_COLOR,
-              ),
+            Positioned(
+              right: 0,
+              left: 0,
+              top: 0,
+              bottom: 0,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  PositionedDirectional(end: 0, child: _buildRegisterButton()),
-                  Label(
-                    text: context.isArabic ? widget.category.name??'' : widget.category.nameEn ?? "",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 45.sp),
-                  ),
-                  // PositionedDirectional(
-                  //   start: 0,
-                  //   // top: 0,
-                  //   child: Column(
-                  //     children: [
-                  //       context.read<UserCubit>().isLoggedIn
-                  //           ?
-                  //       InkWell(
-                  //               onTap: () async => await widget.onFavorite(),
-                  //               child: const Icon(
-                  //                 Icons.favorite,
-                  //                 color: AppColors.SECONDARY_COLOR,
-                  //               ),
-                  //             )
-                  //           : const SizedBox.shrink(),
-                  //     ],
-                  //   ),
-                  // ),
+                  PositionedDirectional(
+                      end: 0, child: _buildRegisterButton()),
                 ],
               ),
             ),
-          );
+            context.read<UserCubit>().isLoggedIn
+                ? widget.removeFavorite
+                ? Container()
+                : PositionedDirectional(
+              // top: 10.h,
+              top: 10,
+              bottom: 10,
+              start: 10.w,
+              child: FavoriteIcon(
+                isFavourite: widget.category.isFavorite==true,
+                onPressedFavorite: () async {
+                  ManageVibration.vibrate();
+                  final result =
+                  await widget.onFavorite();
+                  print("resutlt=$result");
+                  if (result == true) {
+                    print(result);
+                    setState(() {
+                      widget.category.isFavorite =
+                      !widget.category.isFavorite!;
+                      print(widget.category.isFavorite);
+                      widget.isFavorite = result;
+                      print("===================$result");
+                    });
+                  }
+                },
+              ),
+            )
+                : const SizedBox.shrink(),
+          ],
+        );
   }
 
   Widget _buildRegisterButton() {

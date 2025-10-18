@@ -643,7 +643,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   ) async {
     final result = await _apiConsumer.post(
       EndPoints.verifyOTP,
-      data: verifyOTPParams.toJson(),
+      data: await verifyOTPParams.toJson(),
     );
     return result.fold(
       (failure) => Left(failure),

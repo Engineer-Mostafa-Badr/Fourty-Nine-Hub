@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/utils/device_id.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/client/unread_offers_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/cost_per_km_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_info_model.dart';
@@ -28,6 +29,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_mod
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread_offers_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
@@ -281,6 +283,9 @@ abstract class RideRemoteDataSource {
   void listenToOfferUpdateUntrackedTrip(Function(ClientOfferTripEntity offer) params);
   void listenToOfferUpdateShippingTrip(Function(ClientOfferTripEntity offer) params);
   Future<Either<Failure, RateResponseEntity>> addRateWithClient(AddRateWithDriverParams params);
+  Future<Either<Failure, bool>> readLoadingOffer(String params);
+  Future<Either<Failure, bool>> readNonTrackingOffer(String params);
+  Future<Either<Failure, UnreadOffersEntity>> getUnreadOffers();
 
   Future<Either<Failure, CreateNonTrackTripEntity>> updateClientRateNonSocket(UpdateClientRateParams params);
   Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
@@ -1071,12 +1076,13 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   Future<Either<Failure, bool>> listenToUpdateLocation(
       UpdateSocketLocationParams params) async {
     try {
-      CliLogger.info('Listen To Update Location');
+      CliLogger.info('Emit Update Location111');
+      CliLogger.info('Emit Update Location ${SocketIOEvents.updateDriverLocation}');
       SharedWebSocket.socket!.emit(SocketIOEvents.updateDriverLocation, {
         "location": {"longitude": params.longitude, "latitude": params.latitude}
       });
       CliLogger.info(
-          "SocketIOEvents.updateDriverLocation${SocketIOEvents.updateDriverLocation}");
+          "SocketIOEvents.updateDriverLocation ${SocketIOEvents.updateDriverLocation}");
 
       return const Right(true);
     } catch (e) {
@@ -1125,7 +1131,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         // // final decodedData = jsonDecode(data);
         // CliLogger.info("offer data :  $decodedData");
         // params(RideOfferModel.fromJson(decodedData));
-        CliLogger.info("offer data :  $data");
+        CliLogger.info("offer from driver data :  $data");
         params(RideOfferModel.fromJson(data['formattedNewTripOffer']));
       });
     } catch (e) {
@@ -1587,16 +1593,16 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   @override
   void listenToOfferUpdateShippingTrip(Function(ClientOfferTripEntity offer) params) {
     try {
-      CliLogger.info("Listen to  Update Offer  Trip  ${SocketIOListeners.rideUpdateOfferShippingClientTrip}");
-      log("Listen to Update Offer Trip Trip ");
+      CliLogger.info("Listen to Loading Update Offer  Trip  ${SocketIOListeners.rideUpdateOfferShippingClientTrip}");
+      log("Listen to Loading Update Offer Trip Trip ");
       SharedWebSocket.socket!.on(SocketIOListeners.rideUpdateOfferShippingClientTrip, (data) {
-        CliLogger.info(" Update Offer Trip data :  $data");
-        log(" Update Offer Trip data :  $data");
-        print(" Update Offer Trip data :  $data");
+        CliLogger.info("Loading Update Offer Trip data :  $data");
+        log("Loading Update Offer Trip data :  $data");
+        print("Loading Update Offer Trip data :  $data");
         params(ClientOfferTripModel.fromJson(data["offersUpdated"]));
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to Loading Update Offer error $e");
     }
   }
 
@@ -1641,6 +1647,47 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (data) {
         final rateData = RateResponseModel.fromJson(data);
         return Right(rateData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> readLoadingOffer(String params)async {
+    final url = EndPoints.readLoadingOffer(params);
+
+    final response = await _apiConsumer.put(url);
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['status']??false);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> readNonTrackingOffer(String params)async {
+    final url = EndPoints.readNonTrackingOffer(params);
+
+    final response = await _apiConsumer.put(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data['status']??false);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UnreadOffersEntity>> getUnreadOffers() async {
+    final url = EndPoints.getUnreadOffers;
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(UnreadOffersModel.fromJson(data['data']));
       },
     );
   }

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
+import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_history_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -48,30 +51,13 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_onScroll);
-    newScrollController = ScrollController()..addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.params.rideCubit.fetchAllHistoryTrips(limit: limit, page: page);
-    });
+    widget.params.rideCubit.loadInitialData();
+    _scrollController = ScrollController();
+    newScrollController = ScrollController();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // });
   }
 
-  void _onScroll() {
-    if (_scrollController.position.extentAfter < 100 && !isFetching) {
-      _fetchMoreTrips();
-    }
-  }
-
-  _fetchMoreTrips() {
-    if (isFetching) return;
-    setState(() => isFetching = true);
-    widget.params.rideCubit
-        .fetchAllHistoryTrips(limit: limit, page: ++page)
-        .then((_) {
-      if (mounted) setState(() => isFetching = false);
-    }).catchError((_) {
-      if (mounted) setState(() => isFetching = false);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,95 +66,70 @@ class _HistoryTripsScreenState extends State<HistoryTripsScreen> {
       child: Builder(
         builder: (context) {
           return CustomScaffold(
-            appBar: AppBar(
-              titleSpacing: 0,
-              centerTitle: false,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: Transform(
-                transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-                child: Text(
-                  context.isArabic ? "الرحلات السابقة" : "Your Past Trips",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 24),
-                ),
-              ),
-            ),
+            appBar: DefaultAppBar(
+          title: context.isArabic ? "الرحلات السابقة" : "Your Past Trips",
+          ),
             body: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
-                if (state.status == RideStates.loading && page == 1) {
+                var cubit = context.read<RideCubit>();
+                if (cubit.isLoadingPastTrips) {
                   return const Center(child: CustomLoadingSearchWidget());
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 }
                 {
-                  if (state.historyTrips?.isEmpty ?? true) {
-                    return Center(
-                        child: Text(context.isArabic
+                  if (cubit.pastTrips.isEmpty ) {
+                    return CustomEmptyWidget(
+                        label: context.isArabic
                             ? "لا يوجد رحلات سابقة"
-                            : "No past trips"));
+                            : "No past trips");
                   }
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      page = 1;
-                      isFetching = false;
-                      await widget.params.rideCubit.fetchAllHistoryTrips(limit: limit, page: page);
+                  return OlxPaginationWidget(
+                    itemsPerPage: 3,
+                    loadPage: (page) {
+                      return cubit.fetchAllHistoryTrips();
                     },
-                    backgroundColor: AppColors.whiteColor,
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                    child: OlxPaginationWidget(
-                      itemsPerPage: 2,
-                      loadPage: (page) {
-                        print('==> page $page');
-                        return _fetchMoreTrips();
-                      },
-                      banners: bannersList,
-                      items:
-                          List.generate(state.historyTrips?.length ?? 0, (index) {
-                        {
-                          if (index == state.historyTrips?.length) {
-                            return const Center(
-                                child: CustomLoadingSearchWidget());
-                          }
-                          final trip = state.historyTrips?[index];
-                          if (trip == null) return const SizedBox.shrink();
-                          // return Padding(
-                          //   padding: const EdgeInsets.all(16),
-                          //   child: Row(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
-                          //       const SizedBox(width: 16),
-                          //       PriceColumn(
-                          //         startAddressTitle: trip.address,
-                          //         date: context.isArabic
-                          //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
-                          //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
-                          //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
-                          //       ),
-                          //       const Spacer(),
-                          //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
-                          //     ],
-                          //   ),
-                          // );
-                          return TripCard(trip: trip);
+                    banners: bannersList,
+                    items:
+                        List.generate(cubit.pastTrips.length, (index) {
+                      {
+                        if (index == cubit.pastTrips.length) {
+                          return const Center(
+                              child: CustomLoadingSearchWidget());
                         }
-                      }),
-                      scrollController: newScrollController,
-                    ),
+                        final trip = cubit.pastTrips[index];
+                        // return Padding(
+                        //   padding: const EdgeInsets.all(16),
+                        //   child: Row(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
+                        //       const SizedBox(width: 16),
+                        //       PriceColumn(
+                        //         startAddressTitle: trip.address,
+                        //         date: context.isArabic
+                        //             ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
+                        //             : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
+                        //         price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
+                        //       ),
+                        //       const Spacer(),
+                        //       RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
+                        //     ],
+                        //   ),
+                        // );
+                        return TripCard(trip: trip);
+                      }
+                    }),
+                    scrollController: newScrollController,
                   );
                   //   return ListView.builder(
                   //     controller: _scrollController,
-                  //     itemCount: (state.historyTrips?.length ?? 0) + (isFetching ? 1 : 0),
+                  //     itemCount: (cubit.pastTrips.length ?? 0) + (isFetching ? 1 : 0),
                   //     itemBuilder: (context, index) {
-                  //       if (index == state.historyTrips?.length) {
+                  //       if (index == cubit.pastTrips.length) {
                   //         return const Center(child: CustomLoadingSearchWidget());
                   //       }
-                  //       final trip = state.historyTrips?[index];
+                  //       final trip = cubit.pastTrips[index];
                   //       if (trip == null) return const SizedBox.shrink();
                   //       // return Padding(
                   //       //   padding: const EdgeInsets.all(16),
@@ -346,6 +307,75 @@ class TripCard extends StatelessWidget {
       clientsAddress.add(trip.wayPointTwoAddressTitle!);
     }
 
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: GlobalCard(subcategoryId: '', phone: '', reportId: '', otherUserId: '',
+        onTap: () {
+          context.push(Routes.RIDEDETAILSTRIPS,
+              extra: RideHistoryDetailsScreenParams(
+                rideCubit: serviceLocator<RideCubit>(),
+                historyTripEntity: trip,
+              ));
+        },
+        body: Column(
+        children: [
+          if (trip.startLocationLat != null &&
+              trip.startLocationLng != null &&
+              trip.targetLocationLat != null &&
+              trip.targetLocationLng != null)
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16)),
+              child: SizedBox(
+                height: 130,
+                child: CustomGoogleMap(
+                  startLocation: gmap.LatLng(
+                      trip.startLocationLng ?? 0, trip.startLocationLat ?? 0),
+                  targetLocation: gmap.LatLng(trip.targetLocationLng ?? 0,
+                      trip.targetLocationLat ?? 0),
+                  clientAddresses: clientsAddress,
+                  clientLocations: clients,
+                  polylinePoints:
+                  _convertPolylineToLatLng(trip.polyline ?? []),
+                ),
+              ),
+            ),
+
+          // Trip Details
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CarContainer(
+                  title: isArabic
+                      ? trip.subCategoryNameAr
+                      : trip.subCategoryNameEn,
+                  image: trip.subCategoryPicture,
+                  date: dateFormat.format(trip.createdAt!),
+                  price:
+                  '${numberFormat.format(trip.price)} ${isArabic ? "ج.م" : "EGP"}',
+                ),
+                const SizedBox(width: 8),
+                PriceColumn(
+                  startAddressTitle: trip.startLocationAddressTitle,
+                  targetAddressTitle: trip.targetLocationAddressTitle,
+                ),
+                const Spacer(),
+                PersonTripWidget(
+                  image: trip.driverProfileUrl,
+                  name: trip.driverFirstName?.split(' ').first,
+                  rate: trip.driverAverageRating?.toString(),
+                  isVerified: trip.verifiedBadge && trip.isDriverVerified,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      ),
+    );
     return GestureDetector(
       onTap: () {
         context.push(Routes.RIDEDETAILSTRIPS,

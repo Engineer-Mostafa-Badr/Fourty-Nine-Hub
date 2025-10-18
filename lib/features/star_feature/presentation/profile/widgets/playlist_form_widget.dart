@@ -37,30 +37,33 @@ class PlaylistFormWidget extends StatelessWidget {
   });
 
   @override
+
   Widget build(BuildContext context) {
     return Container(
       key: ValueKey('create_form_$uniqueId'),
       padding: const EdgeInsets.all(16),
       color: Colors.grey[50],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildFormHeader(context),
-          const SizedBox(height: 12),
-          PlaylistThumbnailSelector(
-            uniqueId: uniqueId,
-            selectedThumbnail: selectedThumbnail,
-            isUploading: isUploadingThumbnail,
-            onPickImage: onPickImage,
-            onRemove: onRemoveThumbnail,
-          ),
-          const SizedBox(height: 16),
-          _buildNameField(context),
-          const SizedBox(height: 12),
-          _buildDescriptionField(context),
-          const SizedBox(height: 12),
-          _buildCreateButton(context),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildFormHeader(context),
+            const SizedBox(height: 12),
+            PlaylistThumbnailSelector(
+              uniqueId: uniqueId,
+              selectedThumbnail: selectedThumbnail,
+              isUploading: isUploadingThumbnail,
+              onPickImage: onPickImage,
+              onRemove: onRemoveThumbnail,
+            ),
+            const SizedBox(height: 16),
+            _buildNameField(context),
+            const SizedBox(height: 12),
+            _buildDescriptionField(context),
+            const SizedBox(height: 12),
+            _buildCreateButton(context),
+          ],
+        ),
       ),
     );
   }
@@ -119,13 +122,16 @@ class PlaylistFormWidget extends StatelessWidget {
           key: ValueKey('create_btn_$uniqueId'),
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: (state.isCreating || isUploadingThumbnail) ? null : onCreatePlaylist,
+            onPressed: (state.isCreating || isUploadingThumbnail)
+                ? null
+                : onCreatePlaylist,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.PRIMARY_COLOR,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 12),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
+                borderRadius: BorderRadius.circular(
+                    PlaylistBottomSheetConstants.borderRadius),
               ),
             ),
             child: (state.isCreating || isUploadingThumbnail)
@@ -150,7 +156,8 @@ class PlaylistFormWidget extends StatelessWidget {
     );
   }
 
-  InputDecoration _buildInputDecoration({required String labelText, required String hintText}) {
+  InputDecoration _buildInputDecoration(
+      {required String labelText, required String hintText}) {
     return InputDecoration(
       labelText: labelText,
       hintText: hintText,
@@ -158,15 +165,18 @@ class PlaylistFormWidget extends StatelessWidget {
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
+        borderRadius:
+            BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
         borderSide: BorderSide(color: Colors.grey[300]!),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
+        borderRadius:
+            BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
         borderSide: BorderSide(color: Colors.grey[300]!),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
+        borderRadius:
+            BorderRadius.circular(PlaylistBottomSheetConstants.borderRadius),
         borderSide: const BorderSide(color: AppColors.PRIMARY_COLOR, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

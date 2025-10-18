@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 
 import '../../../../core/enums/wheel.dart';
 import '../../../../core/widget/custom_scaffold.dart';
@@ -34,13 +35,14 @@ class LuckyWheelView extends StatelessWidget {
   Widget build(BuildContext context) {
     final spinWheelCubit = BlocProvider.of<SpinWheelCubit>(context);
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          centerTitle: false,
-          label: LocaleKeys.luckyWheel.localize,
-        ),
-      ),
+      appBar: DefaultAppBar(title: LocaleKeys.luckyWheel.localize),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(30),
+      //   child: BackAppBar(
+      //     centerTitle: false,
+      //     label: LocaleKeys.luckyWheel.localize,
+      //   ),
+      // ),
       body: BlocConsumer<WheelCubit, BasicState<WheelEntity>>(
         listener: (BuildContext context, BasicState<WheelEntity> state) {
           if (state.status == StateStatus.error) {

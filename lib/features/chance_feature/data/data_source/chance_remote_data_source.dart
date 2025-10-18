@@ -187,7 +187,40 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
     );
     return response.fold(
       (failure) => Left(failure),
-      (response) => Right(ChanceAdModel.fromJson(response['data'])),
+      (response) {
+        // API returns a String message instead of ChanceAdEntity object
+        // So we return a dummy entity with basic info
+        if (response['data'] is String) {
+          return Right(ChanceAdModel(
+            id: '',
+            winnerId: null,
+            images: [],
+            description: params.description,
+            title: params.title,
+            price: params.price,
+            isActive: true,
+            isRejected: false,
+            isBlocked: false,
+            isBanned: false,
+            subCategoryId: params.subCategoryId,
+            mainCategoryId: params.mainCategoryId,
+            userId: '',
+            totalContributions: 0,
+            contributors: 0,
+            isComplete: false,
+            cycleWinner: 0,
+            adPercentage: 0,
+            views: 0,
+            createdAt: DateTime.now().toIso8601String(),
+            updatedAt: DateTime.now().toIso8601String(),
+            contributorsCount: 0,
+            isFavorite: false,
+            userContribution: null,
+            cycle: 0,
+          ));
+        }
+        return Right(ChanceAdModel.fromJson(response['data']));
+      },
     );
   }
 
@@ -268,6 +301,7 @@ class ChanceRemoteDataSourceImpl extends ChanceRemoteDataSource {
       (failure) => Left(failure),
       (response) {
         final list = (response['data'] as List? ?? [])
+            .where((e) => e['chanceAdId'] != null)
             .map((e) => ChanceAdModel.fromJson(e['chanceAdId']))
             .toList();
         return Right(list);

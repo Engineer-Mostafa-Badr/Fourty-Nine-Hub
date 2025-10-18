@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -26,69 +28,11 @@ class PersonTripWidget extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              (image != 'null' && image != null)?
-              ClipOval(
-                child: Container(
-                  width: 45,
-                  height: 45,
-                  color: Colors.grey[300],
-                  child: Image.network(
-                    image!,
-                    fit: BoxFit.scaleDown,
-                    width: 45,
-                    height: 45,
-                  ),
-                ),
-              ): ClipOval(
-                child: Container(
-                  width: 45,
-                  height: 45,
-                  color: Colors.grey[300],
-                  child: Image.asset(
-                    Assets.maleImagePlaceholder,
-                    fit: BoxFit.scaleDown,
-                    width: 45,
-                    height: 45,
-                  ),
-                ),
-              ),
-              if (rate != 'null' && rate != null) PositionedDirectional(
-                top: -5,
-                end: -6,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 40,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: AppColors.cF5F5F5,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 12,
-                      ),
-                      Text(
-                        rate!,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              if (isVerified)
-              PositionedDirectional(
-                bottom: 0,
-                start: 0,
-                child: Icon(Icons.verified, color: Colors.blue, size: 16,),
+              if(image != null&&image != '')ProfilePictureWidget(
+                image: image,
+                hasStories: false,
+                rating: int.tryParse(rate??'0'),
+                  isVerified:isVerified
               ),
             ],
           ),
@@ -99,7 +43,7 @@ class PersonTripWidget extends StatelessWidget {
             SizedBox(
               width: 70,
               child: Text(
-                name!,
+                _capitalize(name??''),
                 style:  TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -113,5 +57,9 @@ class PersonTripWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+  String _capitalize(String? s) {
+    if (s == null || s.isEmpty) return '';
+    return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 }

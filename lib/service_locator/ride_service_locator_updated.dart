@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/get_unread_offers_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/read_loading_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/client_trips/read_non_tracking_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_ratings_usecase.dart';
 
 import '../features/RideFeature/data/repositories/ride_repository_imp.dart';
@@ -229,9 +232,16 @@ class RideServiceLocatorUpdated {
         PartialPaymentInTripUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<GetDriverRatingsUseCase>(() =>
         GetDriverRatingsUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<ReadNonTrackingOfferUseCase>(() =>
+        ReadNonTrackingOfferUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<ReadLoadingOfferUseCase>(() =>
+        ReadLoadingOfferUseCase( serviceLocator()));
+    serviceLocator.registerLazySingleton<GetUnreadOffersUseCase>(() =>
+        GetUnreadOffersUseCase(serviceLocator()));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -293,6 +303,8 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
         ));
     serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

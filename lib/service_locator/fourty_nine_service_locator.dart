@@ -511,11 +511,13 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ),
     );
 
     serviceLocator.registerFactory<AdvertisementCubit>(
       () => AdvertisementCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

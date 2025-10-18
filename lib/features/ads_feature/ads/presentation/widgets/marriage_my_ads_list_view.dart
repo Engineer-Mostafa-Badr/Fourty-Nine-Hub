@@ -32,9 +32,9 @@ class MarriageMyAds extends StatelessWidget {
           model: state.filterModel ?? FilterModel(), filter: ''),
       banners: bannersList,
       items: List.generate(
-        state.myAds!.length,
+        state.myAds?.length ?? 0,
         (index) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

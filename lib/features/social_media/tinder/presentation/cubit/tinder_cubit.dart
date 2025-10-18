@@ -19,7 +19,10 @@ import '../../../../fourty_nine/domain/use_cases/get_main_category_details_useca
 import '../../../../fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../data/models/near_by_model.dart';
+import '../../domain/use_case/add_dis_like_tinder_use_case.dart';
 import '../../domain/use_case/add_favourite_category_use_case.dart';
+import '../../domain/use_case/add_like_tinder_use_case.dart';
+import '../../domain/use_case/add_love_tinder_use_case.dart';
 import '../../domain/use_case/chech_user_nearby_use_case.dart';
 import '../../domain/use_case/delete_tinder_picture_use_case.dart';
 import '../../domain/use_case/fetch_favourites_category_use_case.dart';
@@ -50,7 +53,11 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       _toggleSubCategoryToFavoritesUseCase;
   final DeleteTinderPictureUseCase _deleteTinderPictureUseCase;
 
-  TinderViewCubit(
+  // final AddLikeTinderUseCase addLikeTinderUseCase;
+  // final AddDisLikeTinderUseCase addDisLikeTinderUseCase;
+  // final AddLoveTinderUseCase addLoveTinderUseCase;
+
+  TinderViewCubit( 
       this._getUserDataUseCase,
       this._getTinderProfileUseCase,
       this._getTinderFavouritesUseCase,
@@ -64,8 +71,75 @@ class TinderViewCubit extends Cubit<TinderViewState> {
       this._fetchSubCategoryDataUseCase,
       this._uploadTinderPictureUseCase,
       this._toggleSubCategoryToFavoritesUseCase,
-      this._deleteTinderPictureUseCase)
+      this._deleteTinderPictureUseCase,
+      // this.addLikeTinderUseCase, this.addDisLikeTinderUseCase, this.addLoveTinderUseCase
+      )
       : super(TinderViewState());
+  //
+  // Future<void> addLoveTinder({required String id}) async {
+  //   emit(state.copyWith(status: TinderStates.loading));
+  //
+  //   final response = await addLoveTinderUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: TinderStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: TinderStates.success,
+  //       ));
+  //     },
+  //   );
+  // }
+  // Future<void> addLikeTinder({required String id}) async {
+  //   emit(state.copyWith(status: TinderStates.loading));
+  //
+  //   final response = await addLikeTinderUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: TinderStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: TinderStates.success,
+  //       ));
+  //     },
+  //   );
+  // }
+  // Future<void> addDisLikeTinder({required String id}) async {
+  //   emit(state.copyWith(status: TinderStates.loading));
+  //
+  //   final response = await addDisLikeTinderUseCase(AddLikeParams(id: id));
+  //
+  //   response.fold(
+  //         (failure) {
+  //       emit(state.copyWith(
+  //         failure: failure,
+  //         status: TinderStates.failure,
+  //         tinderLikeData: null,
+  //       ));
+  //     },
+  //         (updatedRestaurant) {
+  //       emit(state.copyWith(
+  //         tinderLikeData: updatedRestaurant,
+  //         status: TinderStates.success,
+  //       ));
+  //     },
+  //   );
+  // }
+
 
   Future<void> addFavoriteCategory({required String categoryId}) async {
     if (!isClosed) {

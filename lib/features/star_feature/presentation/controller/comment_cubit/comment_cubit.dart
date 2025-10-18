@@ -26,13 +26,19 @@ class CommentCubit extends Cubit<CommentState> {
 
   // Get comments for a video
   Future<void> getVideoComments(String videoId, {bool refresh = false}) async {
+    print('💬 CommentCubit: Getting comments for video $videoId, refresh: $refresh');
+
     if (refresh) {
       _resetPagination();
     }
 
-    if (state.isLoading || (!state.hasMore && !refresh)) return;
+    if (state.isLoading || (!state.hasMore && !refresh)) {
+      print('💬 CommentCubit: Skipping - isLoading: ${state.isLoading}, hasMore: ${state.hasMore}');
+      return;
+    }
 
     emit(state.copyWith(isLoading: true));
+    print('💬 CommentCubit: Loading comments - page: ${state.currentPage}');
 
     final response = await _getCommentsUseCase(GetCommentsParams(
       videoId: videoId,
@@ -42,6 +48,7 @@ class CommentCubit extends Cubit<CommentState> {
 
     response.fold(
       (failure) {
+        print('❌ CommentCubit: Failed to load comments - $failure');
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
@@ -53,6 +60,9 @@ class CommentCubit extends Cubit<CommentState> {
         ));
       },
       (commentsResponse) {
+        print('✅ CommentCubit: Loaded ${commentsResponse.comments.length} comments');
+        print('✅ CommentCubit: Total comments: ${commentsResponse.pagination.total}');
+
         final newComments = refresh
             ? commentsResponse.comments
             : [...state.comments, ...commentsResponse.comments];
@@ -66,6 +76,8 @@ class CommentCubit extends Cubit<CommentState> {
           totalComments: commentsResponse.pagination.total,
           error: null,
         ));
+
+        print('💬 CommentCubit: State updated - total comments in state: ${newComments.length}');
       },
     );
   }
@@ -101,6 +113,42 @@ class CommentCubit extends Cubit<CommentState> {
           error: null,
         ));
         // Refresh comments to show the new one
+        getVideoComments(videoId, refresh: true);
+      },
+    );
+  }
+
+  // Reply to a comment
+  Future<void> replyToComment({
+    required String videoId,
+    required String parentCommentId,
+    required String content,
+  }) async {
+    emit(state.copyWith(isCreatingComment: true));
+
+    final response = await _createCommentUseCase(CreateCommentParams(
+      content: content,
+      videoId: videoId,
+      parentCommentId: parentCommentId,
+    ));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(
+          isCreatingComment: false,
+          error: failure.toString(),
+        ));
+      },
+      (success) {
+        emit(state.copyWith(
+          isCreatingComment: false,
+          error: null,
+        ));
+        // Refresh comments to show the new reply
         getVideoComments(videoId, refresh: true);
       },
     );
@@ -175,7 +223,9 @@ class CommentCubit extends Cubit<CommentState> {
   }
 
   // Delete a comment
-  Future<void> deleteComment(String commentId) async {
+  Future<void> deleteComment(String commentId, String videoId) async {
+    emit(state.copyWith(isDeletingComment: true));
+
     final response = await _deleteCommentUseCase(commentId);
 
     response.fold(
@@ -184,22 +234,23 @@ class CommentCubit extends Cubit<CommentState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(state.copyWith(error: failure.toString()));
+        emit(state.copyWith(
+          isDeletingComment: false,
+          error: failure.toString(),
+        ));
       },
       (success) {
-        final updatedComments =
-            state.comments.where((comment) => comment.id != commentId).toList();
-
-        emit(state.copyWith(
-          comments: updatedComments,
-          totalComments: state.totalComments - 1,
-        ));
+        emit(state.copyWith(isDeletingComment: false));
+        // Refresh comments to get updated data from server
+        getVideoComments(videoId, refresh: true);
       },
     );
   }
 
   // Update a comment
-  Future<void> updateComment(String commentId, String newContent) async {
+  Future<void> updateComment(String commentId, String newContent, String videoId) async {
+    emit(state.copyWith(isUpdatingComment: true));
+
     final response = await _updateCommentUseCase(UpdateCommentParams(
       commentId: commentId,
       content: newContent,
@@ -211,14 +262,15 @@ class CommentCubit extends Cubit<CommentState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(state.copyWith(error: failure.toString()));
+        emit(state.copyWith(
+          isUpdatingComment: false,
+          error: failure.toString(),
+        ));
       },
       (success) {
-        _updateCommentLocally(
-            commentId,
-            (comment) => comment.copyWith(
-                  content: newContent,
-                ));
+        emit(state.copyWith(isUpdatingComment: false));
+        // Refresh comments to get updated data from server
+        getVideoComments(videoId, refresh: true);
       },
     );
   }

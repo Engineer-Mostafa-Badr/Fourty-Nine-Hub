@@ -21,6 +21,7 @@ class AuctionState {
   final List<MyBiddersEntity>? myBiddersData;
   final AuctionBannerEntity? auctionBanner;
   final AuctionWinnerDataEntity? auctionWinnerData;
+  final List<ViewerEntity>? auctionViewerData;
   AuctionState({
     this.status,
     this.participantsStatus, // 👈 add
@@ -43,6 +44,7 @@ class AuctionState {
     this.uploadedFiles = const [],
     this.isUploading = false,
     this.isLoading = false,
+    this.auctionViewerData ,
   });
 
   AuctionState copyWith({
@@ -67,6 +69,7 @@ class AuctionState {
     List<MyBiddersEntity>? myBiddersData,
     AuctionBannerEntity? auctionBanner,
     AuctionWinnerDataEntity? auctionWinnerData,
+    List<ViewerEntity>? auctionViewerData,
   }) {
     return AuctionState(
       status: status ?? this.status,
@@ -90,6 +93,7 @@ class AuctionState {
       isLoading: isLoading ?? this.isLoading,
       auctionWinnerData: auctionWinnerData ?? this.auctionWinnerData,
       searchAuction: searchAuction ?? this.searchAuction,
+      auctionViewerData: auctionViewerData ?? this.auctionViewerData,
     );
   }
 }

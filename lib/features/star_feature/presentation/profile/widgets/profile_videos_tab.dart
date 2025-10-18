@@ -6,10 +6,12 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/messages/messages.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../../shared/widgets/common/loading_indicator.dart';
 import '../../presentation_exports.dart';
+import '../../video_player/widgets/talent_video_player.dart';
 
 import 'profile_video_grid.dart';
 
@@ -102,9 +104,7 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
                             ? (context.isArabic
                                 ? 'جاري تحميل فيديوهاتك...'
                                 : 'Loading your videos...')
-                            : (context.isArabic
-                                ? 'جاري تحميل الفيديوهات...'
-                                : 'Loading videos...'),
+                            : null,
                       ),
                     )
                   : videosToShow.isEmpty
@@ -523,17 +523,22 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
     // Check if video is approved/available
     if (!video.isApproved) {
       // Show message that video is not available yet
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic
-                ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
-                : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
-          ),
-          duration: Duration(seconds: 4),
-          backgroundColor: Colors.orange[700],
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       context.isArabic
+      //           ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+      //           : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+      //     ),
+      //     duration: Duration(seconds: 4),
+      //     backgroundColor: Colors.orange[700],
+      //   ),
+      // );
+      showSuccessMessage(
+          context,
+          context.isArabic
+              ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+              : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.');
       return;
     }
 
@@ -541,7 +546,7 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
     final mediaUrl =
         video.mediaUrl.isNotEmpty ? video.mediaUrl.first.mediaKey : '';
 
-  Navigator.push(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => MultiBlocProvider(

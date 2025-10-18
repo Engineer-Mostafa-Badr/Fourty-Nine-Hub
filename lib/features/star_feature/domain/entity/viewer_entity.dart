@@ -1,4 +1,3 @@
-// lib/features/star_feature/domain/entities/viewer_entity.dart
 class ViewerEntity {
   final String id;
   final String name;

@@ -3,14 +3,18 @@ import '../../domain/entities/get_client_accepted_trips_entity.dart';
 class ClientAcceptedTripModel extends ClientAcceptedTripEntity {
   ClientAcceptedTripModel({
     TripDetailsModel? tripDetails,
+    bool? isButtonEnabled,
     DriverDetailsModel? driverDetails,
-  }) : super(tripDetails: tripDetails, driverDetails: driverDetails);
+  }) : super(tripDetails: tripDetails,isButtonEnabled:isButtonEnabled, driverDetails: driverDetails);
 
   factory ClientAcceptedTripModel.fromJson(Map<String, dynamic> json) {
     return ClientAcceptedTripModel(
       tripDetails: json['tripDetails'] != null
           ? TripDetailsModel.fromJson(json['tripDetails'])
           : null,
+      isButtonEnabled: json['state'] != null
+          ? json['state']['isButtonEnabled']??false
+          : false,
       driverDetails: json['driverDetails'] != null
           ? DriverDetailsModel.fromJson(json['driverDetails'])
           : null,
@@ -65,10 +69,11 @@ class LocationModel extends LocationEntity {
 }
 
 class CategoryModel extends CategoryEntity {
-  CategoryModel({super.nameAr, super.nameEn, super.picture});
+  CategoryModel({super.nameAr,super.id, super.nameEn, super.picture});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
+      id: json['id']??'',
       nameAr: json['nameAr']??'',
       nameEn: json['nameEn']??'',
       picture: json['picture']??json['pictureUrl']??'',
@@ -80,16 +85,24 @@ class DriverDetailsModel extends DriverDetailsEntity {
   DriverDetailsModel({
     super.id,
     super.firstName,
+    super.countTrips,
+    super.phoneNumber,
+    super.verifiedBadge,
     super.picture,
+    super.lastName,
     RatingModel? super.rating,
     VehicleDetailsModel? super.vehicleDetails,
   });
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
-      id: json['id'],
-      firstName: json['firstName'],
-      picture: json['picture'],
+      id: json['id']??'',
+      firstName: json['firstName']??'',
+      phoneNumber: json['phoneNumber']??'',
+      countTrips: json['countTrips']??0,
+      verifiedBadge: json['verifiedBadge']??false,
+      picture: json['picture']??'',
+      lastName: json['lastName']??'',
       rating:
       json['rating'] != null ? RatingModel.fromJson(json['rating']) : null,
       vehicleDetails: json['vehicleDetails'] != null

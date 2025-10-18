@@ -79,7 +79,9 @@ abstract class SocketIOListeners {
   static const String listenToComingClient = 'CAPTAIN_SHARE:PASSENGER_IAM_COMING';
   static const String listenToNewRouteDriver = 'captain-share:new-available-trip';
   static const String removeUntrackedTrip = 'RIDE:REMOVE_UNTRACKED_TRIP_FROM_LIST';
-  static const String removeLoading = 'LOADING:REMOVE_TRIP';
+  static const String removeLoadingOffer = 'LOADING:REMOVE_TRIP';
+  static const String acceptLoadingOffer = 'LOADING:ACCEPTED_TRIP_OFFER';
+  static const String removeLoadingTrip = 'LOADING:CANCELED_LOADING_TRIP';
   static const String newLoadingTrip = 'LOADING:NEW_TRIP';
   static const String listenToDriverArrived = 'CAPTAIN_SHARE:ARRIVED_TO_PICKUP_LOCATION';
   static const String listenToTripAccept = 'CAPTAIN_SHARE:TRIP_ACCEPTED';
@@ -97,6 +99,7 @@ abstract class SocketIOListeners {
   static const String leaveAuction = 'leave:auction';
   static const String auctionWinner = 'auction:winner';
   static const String bidAuction = 'auction:add:bid:amount';
+  static const String auctionNewAmountBid = 'auction:new-amount-bid';
 
 }
 

@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/helpers/logging_helper.dart';
-import 'package:fourtyninehub/helpers/ssl_certificate_helper.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';

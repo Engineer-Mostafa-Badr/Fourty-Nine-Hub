@@ -63,7 +63,7 @@ class EndPoints {
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
-
+  //https://49backend.com
   // static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
@@ -1738,7 +1738,12 @@ class EndPoints {
       '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket =
       '/ride/untracked/ratings/client';
+  static readLoadingOffer(String id) =>
+      '/loading/client/trips/offers/$id/read';
+  static readNonTrackingOffer(String id) =>
+      '/ride/non-tracking/offers/$id/read';
   static const updateClientRating = '/ride/untracked/ratings/client';
+  static const getUnreadOffers = '/ride/non-tracking/offers/unread';
   static const updateDriverRatingNonSocket = '/ride/untracked/ratings/driver';
   static const updateDriverLoadingSettings = '/loading/drivers/settings';
   static const getDriverAllRating = '/ride/untracked/ratings/driver';
@@ -1826,7 +1831,8 @@ class EndPoints {
       '/conversations/anonymous?page=$page&limit=$limit';
   static getDeletedSocialConversations({int page = 1, int limit = 10}) =>
       '/conversations/deleted?page=$page&limit=$limit';
-  static getConversationLogs({int page = 1, int limit = 10, required String conversationId}) =>
+  static getConversationLogs(
+          {int page = 1, int limit = 10, required String conversationId}) =>
       '/conversations/$conversationId/logs?page=$page&limit=$limit';
 
   static const String deleteConversations = "/conversations";
@@ -1865,7 +1871,8 @@ class EndPoints {
 
   static String getTubeVideoDetails(String videoId) =>
       '/tube-video/details/$videoId';
-  static String getRecommendedVideos(String videoId, {int page = 1, int limit = 10}) =>
+  static String getRecommendedVideos(String videoId,
+          {int page = 1, int limit = 10}) =>
       '/tube-video/recommended/$videoId/?page=$page&limit=$limit';
   static String likeTubeVideo(String videoId) => '/tube-video/$videoId/like';
   static String dislikeTubeVideo(String videoId) =>
@@ -1910,9 +1917,8 @@ class EndPoints {
   // Create new playlist
   static const String createPlaylist = '/tube-playlist';
 
-  // Get all playlists for owner
-  static String getPlaylists(String ownerId) =>
-      '/tube-playlist?ownerId=$ownerId';
+  // Get all playlists (can filter by ownerId)
+  static const String getPlaylists = '/tube-playlist';
 
   // Get playlist by ID (basic info)
   static String getPlaylistById(String playlistId) =>
@@ -1948,7 +1954,15 @@ class EndPoints {
       '/tube-watch-later/video/$videoId';
 
   // Tube Winner Statistics
-  static const String getTubeWinnerStatistics = '/tube-profile/winner-statistics';
+  static const String getTubeWinnerStatistics =
+      '/tube-profile/winner-statistics';
+
+  // Tube Winner Endpoint
+  static const String getTubeWinner = '/tube-profile/winner';
+
+  // Tube Comment Reply Endpoint
+  static String replyToComment(String commentId) =>
+      '/tube-comment/reply/$commentId';
 
   //! Exchange Currency Endpoints
   static String convertCurrency({
@@ -1972,8 +1986,13 @@ class EndPoints {
   static String fetchMyAuction = '/auctions/my';
   static String createAuction2 = '/auctions';
   static String fetchMyBidders = '/auctions/my-bidders-winner';
+  static String getAuctionViewers = '/auctions/last-ten-auction-viewed/';
   static String auctionBanner = '/auctions/banner';
   static String auctionAllWinner = '/auctions/winner-statistics';
+  static String addLikeFind = '/tinder/profile/like/';
+  static String addDisLikeFind = '/tinder/profile/disLike/';
+  static String addLoveFind = '/tinder/profile/love/';
+  static String fetchFind = '/tinder';
 
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';

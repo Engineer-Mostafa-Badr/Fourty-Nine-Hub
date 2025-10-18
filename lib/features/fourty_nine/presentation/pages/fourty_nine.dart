@@ -231,7 +231,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 height: 40.h,
                 alignment: Alignment.center,
                 child: AutoScrollText(
-                  velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                  // velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
                   "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                   style: Styles.headerText(
                       fontSize: 30,

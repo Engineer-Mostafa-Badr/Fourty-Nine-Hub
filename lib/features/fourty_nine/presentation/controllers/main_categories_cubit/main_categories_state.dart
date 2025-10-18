@@ -7,6 +7,7 @@ class MainCategoriesState {
   final CurrencyEntity? currency;
   final List<MainCategoryEntity>? data;
   final List<MainCategoryEntity>? customPage;
+  final List<SliderItemEntity>? sliders;
   final MainCategoryEntity? marriageMainCategory;
   final WalletHomeEntity? wallet;
   final QuestionEntity? question;
@@ -23,6 +24,7 @@ class MainCategoriesState {
     this.question,
     this.wallet,
     this.setting,
+    this.sliders,
     this.isDriverLady,
   });
 
@@ -35,6 +37,7 @@ class MainCategoriesState {
     QuestionEntity? question,
     MainCategoryEntity? marriageMainCategory,
     List<MainCategoryEntity>? data,
+    List<SliderItemEntity>? sliders,
     List<MainCategoryEntity>? customPage,
     bool? isDriverLady,
     SettingsDashboardEntityResponse? setting,
@@ -51,6 +54,7 @@ class MainCategoriesState {
       question: question ?? this.question,
       marriageMainCategory: marriageMainCategory ?? this.marriageMainCategory,
       setting: setting ?? this.setting,
+      sliders: sliders ?? this.sliders,
     );
   }
 }

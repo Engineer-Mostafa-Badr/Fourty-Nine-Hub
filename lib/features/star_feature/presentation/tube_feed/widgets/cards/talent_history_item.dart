@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:path/path.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -15,6 +16,7 @@ import '../../../../../../service_locator/service_locator.dart';
 import '../../../../data/model/tube_video_models.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
+import '../../../video_player/widgets/talent_video_player.dart';
 
 class TalentHistoryItem extends StatelessWidget {
   final StarEntity talent;
@@ -41,17 +43,23 @@ class TalentHistoryItem extends StatelessWidget {
         // Check if video is approved/available
         if (!talent.isApproved) {
           // Show message that video is not available yet
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                context.isArabic
-                    ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
-                    : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
-              ),
-              duration: Duration(seconds: 4),
-              backgroundColor: Colors.orange[700],
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(
+          //       context.isArabic
+          //           ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+          //           : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.',
+          //     ),
+          //     duration: Duration(seconds: 4),
+          //     backgroundColor: Colors.orange[700],
+          //   ),
+          // );
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تم رفع الفيديو بنجاح!\n\nملاحظة: الفيديو غير متاح حالياً. البث المباشر أو ملف الفيديو غير جاهز بعد. يحتاج وقت ليصبح متاحاً للمستخدمين.'
+                  : 'Video uploaded successfully!\n\nNote: Video is not currently available. The live stream or video file are not yet ready. It takes time before it becomes available to users.');
+
           return;
         }
 

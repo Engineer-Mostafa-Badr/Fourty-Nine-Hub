@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -37,7 +38,9 @@ class _AllWinnerViewState extends State<AllWinnerView> {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    // _cubit.loadInitialDataWinner();
+
+    print("🚀 Calling loadInitialDataWinner...");
+    _cubit.loadInitialDataWinner();
   }
 
   void _onScroll() {
@@ -57,10 +60,17 @@ class _AllWinnerViewState extends State<AllWinnerView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      enableCustomAppBar: true,
+      backgroundColor: Colors.grey[50],
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
+          backColor: context.isDarkMode
+              ? AppColors.Floating_Button_COLOR_DARK
+              : AppColors.PRIMARY_COLOR,
           label: LocaleKeys.winners.localize,
+          iconColor: context.isDarkMode ? Colors.black : Colors.white,
+          textColor: context.isDarkMode ? Colors.black : Colors.white,
           actions: [
             SvgPicture.asset(Assets.cupIcon),
           ],
@@ -73,10 +83,30 @@ class _AllWinnerViewState extends State<AllWinnerView> {
           }
 
           return Padding(
-            padding: EdgeInsets.all(6.w),
-            child: AllWinnerGridView(
-              // winner: state.winners,
-              starCubit: _cubit,
+            padding: EdgeInsets.all(12.w),
+            child: Builder(
+              builder: (context) {
+                print("🔍 State Status: ${state.status}");
+                print("🔍 Winners Count: ${state.winners.length}");
+                print("🔍 Winners Data: ${state.winners}");
+
+                // تحقق لو القائمة فاضية
+                if (state.winners.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'لا يوجد فائزين',
+                      style: Styles.mediumText(
+                        color: AppColors.GREY_NORMAL_COLOR,
+                        fontSize: 60.sp,
+                      ),
+                    ),
+                  );
+                }
+                return AllWinnerGridView(
+                  winner: state.winners,
+                  starCubit: _cubit,
+                );
+              },
             ),
 
             //  ListView.separated(

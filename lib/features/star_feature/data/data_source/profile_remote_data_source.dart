@@ -87,7 +87,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   // NEW: Unsubscribe from channel
   @override
   Future<String> unsubscribeFromChannel(String profileId) async {
-    final response = await apiConsumer.delete(
+    final response = await apiConsumer.post(
       EndPoints.unsubscribeFromChannel(profileId),
     );
 

@@ -43,8 +43,7 @@ import '../features/star_feature/domain/use_case/increment_tube_video_view_use_c
 // Presentation Layer - Cubits
 import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import '../features/star_feature/presentation/playlist/cubit/playlist_cubit.dart';
-import '../features/star_feature/presentation/profile/cubit/profile_cubit.dart';
+import '../features/star_feature/presentation/presentation_exports.dart';
 
 class TubeServiceLocator {
   static void execute({required GetIt serviceLocator}) {

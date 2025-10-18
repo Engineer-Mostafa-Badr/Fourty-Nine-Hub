@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -8,21 +11,25 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_image_slider.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/enums/base_status_enum.dart';
+import '../../../../core/widget/common/profile_picture_widget.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
+import '../../../../shared_web_socket.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';
 import '../cubit/auction_cubit.dart';
 
 import 'dart:async';
-
-
 
 // Replace these with your actual imports
 
@@ -48,8 +55,8 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     String formatted = formatter.format(number);
 
     if (context.isArabic) {
-      const english = ['0','1','2','3','4','5','6','7','8','9'];
-      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
       for (int i = 0; i < english.length; i++) {
         formatted = formatted.replaceAll(english[i], arabic[i]);
@@ -58,6 +65,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
 
     return formatted;
   }
+
   @override
   void initState() {
     super.initState();
@@ -69,7 +77,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
 
     // ✅ Socket listeners - تتنادى مرة واحدة
     Future.microtask(() async {
-       _cubit.joinAuction(widget.auctionId);
+      _cubit.joinAuction(widget.auctionId);
       _cubit.listenToNewBids();
       _cubit.listenToBidErrors();
       _cubit.listenToBidWinner();
@@ -82,13 +90,15 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
   @override
   void dispose() {
     _cubit.leaveAuction(widget.auctionId); // ✅ لازم نسيب الغرفة
+    // _cubit.disposeSocketListeners();        // ✅ clean up listeners
+    SharedWebSocket.socket?.off(SocketIOListeners.auctionNewAmountBid);
     _bidController.dispose();
     super.dispose();
   }
 
   int? _parseBid(String text) {
-    const english = ['0','1','2','3','4','5','6','7','8','9'];
-    const arabic  = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
     String normalized = text;
     for (int i = 0; i < arabic.length; i++) {
@@ -101,9 +111,9 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     final bidAmount = _parseBid(_bidController.text);
     if (bidAmount == null || bidAmount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content:Text(
-            context.isArabic ? "أدخل مبلغ صالح" : "Enter a valid amount"
-        ),
+        SnackBar(
+          content: Text(
+              context.isArabic ? "أدخل مبلغ صالح" : "Enter a valid amount"),
         ),
       );
       return;
@@ -112,7 +122,6 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     _cubit.sendBid(auctionId, bidAmount);
     _bidController.clear();
   }
-
 
   String formatNumber(num number) {
     if (number >= 1000000) {
@@ -125,8 +134,8 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
   }
 
   String _toArabicDigits(String input) {
-    const english = ['0','1','2','3','4','5','6','7','8','9'];
-    const arabic  = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
     var output = input;
     for (int i = 0; i < english.length; i++) {
@@ -153,19 +162,40 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
         ),
         BlocListener<AuctionCubit, AuctionState>(
           listenWhen: (previous, current) =>
-              previous.bidWinner != current.bidWinner &&
+          previous.bidWinner != current.bidWinner &&
               current.bidWinner != null,
           listener: (context, state) {
             final winner = state.bidWinner;
             if (winner != null) {
-              showDialog(
+              showGeneralDialog(
                 context: context,
                 barrierDismissible: true,
-                builder: (_) => _WinnerDialog(winner: winner),
+                barrierLabel: 'WinnerOverlay',
+                barrierColor: Colors.black54, // optional: slight background dim
+                transitionDuration: const Duration(milliseconds: 200),
+                pageBuilder: (context, _, __) {
+                  return WinnerOverlay(
+                    winner: winner,
+                    onClose: () {
+                      Navigator.of(context).pop(); // close overlay
+                    },
+                  );
+                },
+                transitionBuilder: (context, animation, secondaryAnimation, child) {
+                  // optional: fade + scale animation
+                  return FadeTransition(
+                    opacity: animation,
+                    child: ScaleTransition(
+                      scale: Tween(begin: 0.95, end: 1.0).animate(animation),
+                      child: child,
+                    ),
+                  );
+                },
               );
             }
           },
         ),
+
       ],
       child: WillPopScope(
         onWillPop: () async {
@@ -173,7 +203,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
           return true;
         },
         child: Scaffold(
-          appBar: AppBar(title:  Text(LocaleKeys.auction.localize)),
+          appBar: DefaultAppBar(title: LocaleKeys.auction.localize),
           body: BlocBuilder<AuctionCubit, AuctionState>(
             builder: (context, state) {
               if (state.status == StateStatus.loading &&
@@ -182,11 +212,12 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
               }
               if (state.status == StateStatus.error &&
                   state.singleAuction == null) {
-                return  Center(
-                    child: Text(
-                      context.isArabic ? 'حدث خطأ أثناء تحميل المزاد' : 'Error loading auction',
-
-                    style: TextStyle(color: Colors.red)),
+                return Center(
+                  child: Text(
+                      context.isArabic
+                          ? 'حدث خطأ أثناء تحميل المزاد'
+                          : 'Error loading auction',
+                      style: TextStyle(color: Colors.red)),
                 );
               }
 
@@ -197,12 +228,10 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                     context.isArabic ? 'المزاد غير موجود' : 'Auction not found',
                   ),
                 );
-
               }
 
               return Column(
                 children: [
-                  // Combined auction details and participants
                   Expanded(
                     child: _AuctionDetailsWithParticipants(
                       auction: auction,
@@ -239,7 +268,8 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                                       //   _bidController.text = value.toString();
                                       // },
                                       onTap: () {
-                                        final plain = value.toString(); // no formatting
+                                        final plain =
+                                            value.toString(); // no formatting
                                         _bidController.text = context.isArabic
                                             ? _toArabicDigits(plain)
                                             : plain;
@@ -262,8 +292,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                                             // text: "$value",
                                             textAlign: TextAlign.center,
                                             style: Styles.mediumText(
-                                              fontWeight: FontWeight.w400
-                                            ),
+                                                fontWeight: FontWeight.w400),
                                           ),
                                         ),
                                       ),
@@ -274,7 +303,9 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                             );
                           },
                         ),
-                        Sizer(height: 10,),
+                        Sizer(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -283,8 +314,10 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                                 type: TextInputType.number,
                                 hint: LocaleKeys.enterYourBid.localize,
                                 inputFormatters: [
-                                  ArabicEnglishDigitsOnlyFormatter(), // ✅ 1st: Allow only digits
-                                  if (context.isArabic) ArabicDigitsFormatter(), // ✅ 2nd: Convert to Arabic
+                                  ArabicEnglishDigitsOnlyFormatter(),
+                                  // ✅ 1st: Allow only digits
+                                  if (context.isArabic) ArabicDigitsFormatter(),
+                                  // ✅ 2nd: Convert to Arabic
                                   NoPasteFormatterAuction(),
                                 ],
                               ),
@@ -294,15 +327,13 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                               padding: 10,
                               onPressed: () =>
                                   _placeBid(context, widget.auctionId),
-                              label:LocaleKeys.placeBid.localize,
+                              label: LocaleKeys.placeBid.localize,
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-
-
                 ],
               );
             },
@@ -312,12 +343,13 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
     );
   }
 }
+
 class NoPasteFormatterAuction extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // If the new text length is significantly larger than old text + 1,
     // it's likely a paste operation, so reject it
     if (newValue.text.length > oldValue.text.length + 1) {
@@ -326,6 +358,7 @@ class NoPasteFormatterAuction extends TextInputFormatter {
     return newValue;
   }
 }
+
 class _AuctionDetailsWithParticipants extends StatefulWidget {
   final GetAvailableAuctionEntity auction;
   final String auctionId;
@@ -450,7 +483,8 @@ class _AuctionDetailsWithParticipantsState
                             TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "${_formatNumber(context,widget.auction.price ?? 0)} ",
+                                  text:
+                                      "${_formatNumber(context, widget.auction.price ?? 0)} ",
                                   style: Styles.mediumText(
                                       fontWeight: FontWeight.w400),
                                 ),
@@ -475,10 +509,10 @@ class _AuctionDetailsWithParticipantsState
                         Flexible(
                           child: Label(
                             text: "${LocaleKeys.priceNow.localize}:",
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.w500,
-                                color: AppColors.PRIMARY_COLOR_DARK,
-                                ),
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.PRIMARY_COLOR_DARK,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -488,14 +522,19 @@ class _AuctionDetailsWithParticipantsState
                             TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "${_formatNumber(context,currentPrice)} ",
+                                  text:
+                                      "${_formatNumber(context, currentPrice)} ",
                                   style: Styles.mediumText(
-                                      fontWeight: FontWeight.w400,   color: AppColors.PRIMARY_COLOR_DARK,),
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                  ),
                                 ),
                                 TextSpan(
                                   text: LocaleKeys.egp.localize,
                                   style: Styles.mediumText(
-                                      fontWeight: FontWeight.w700,   color: AppColors.PRIMARY_COLOR_DARK,),
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                  ),
                                 ),
                               ],
                             ),
@@ -510,7 +549,7 @@ class _AuctionDetailsWithParticipantsState
                     const SizedBox(height: 16),
                     // Time left countdown
                     Label(
-                      text:LocaleKeys.timeLeftForAuctionEnd.localize,
+                      text: LocaleKeys.timeLeftForAuctionEnd.localize,
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 8),
@@ -518,19 +557,27 @@ class _AuctionDetailsWithParticipantsState
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: _buildTimeBox("${_formatNumber(context, days)}", LocaleKeys.day.localize),
+                          child: _buildTimeBox(
+                              "${_formatNumber(context, days)}",
+                              LocaleKeys.day.localize),
                         ),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: _buildTimeBox("${_formatNumber(context, hours)}", LocaleKeys.hour.localize),
+                          child: _buildTimeBox(
+                              "${_formatNumber(context, hours)}",
+                              LocaleKeys.hour.localize),
                         ),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: _buildTimeBox("${_formatNumber(context, minutes)}", LocaleKeys.minuteLoc.localize),
+                          child: _buildTimeBox(
+                              "${_formatNumber(context, minutes)}",
+                              LocaleKeys.minuteLoc.localize),
                         ),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: _buildTimeBox("${_formatNumber(context, seconds)}", LocaleKeys.timer_seconds.localize),
+                          child: _buildTimeBox(
+                              "${_formatNumber(context, seconds)}",
+                              LocaleKeys.timer_seconds.localize),
                         ),
                       ],
                     ),
@@ -539,11 +586,12 @@ class _AuctionDetailsWithParticipantsState
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(Icons.visibility,
-                             color: Colors.grey),
-                        Sizer(width: 5,),
+                        const Icon(Icons.visibility, color: Colors.grey),
+                        Sizer(
+                          width: 5,
+                        ),
                         Text(
-                          "${_formatNumber(context,auction.views)} ${LocaleKeys.views.localize}",
+                          "${_formatNumber(context, auction.views)} ${LocaleKeys.views.localize}",
                           style: Styles.mediumText(fontWeight: FontWeight.w400),
                         ),
                       ],
@@ -558,13 +606,13 @@ class _AuctionDetailsWithParticipantsState
                           style: Styles.mediumText(fontWeight: FontWeight.w600),
                         ),
                         Label(
-                          text:"${ _formatNumber(
+                          text: "${_formatNumber(
                             context,
-                            state.auctionParticipants?.length ?? auction.numberOfParticipants,
+                            state.auctionParticipants?.length ??
+                                auction.numberOfParticipants,
                           )} ${LocaleKeys.participants.localize}",
                           style: Styles.mediumText(fontWeight: FontWeight.w600),
                         ),
-
                       ],
                     ),
                   ],
@@ -579,6 +627,7 @@ class _AuctionDetailsWithParticipantsState
       },
     );
   }
+
   final formatter = NumberFormat.decimalPattern();
 
   String formatPrice(num? price, bool isArabic) {
@@ -589,6 +638,7 @@ class _AuctionDetailsWithParticipantsState
 
     return formatter.format(number);
   }
+
   String timeAgo(BuildContext context, DateTime? date) {
     if (date == null) return "";
 
@@ -599,29 +649,27 @@ class _AuctionDetailsWithParticipantsState
 
     if (diff.inSeconds < 60) {
       return isArabic
-          ? "${_formatNumber(context, diff.inSeconds)} ث"  // ثواني
+          ? "${_formatNumber(context, diff.inSeconds)} ث" // ثواني
           : "${diff.inSeconds}s";
     } else if (diff.inMinutes < 60) {
       return isArabic
-          ? "${_formatNumber(context, diff.inMinutes)} د"  // دقائق
+          ? "${_formatNumber(context, diff.inMinutes)} د" // دقائق
           : "${diff.inMinutes}m";
     } else if (diff.inHours < 24) {
       return isArabic
-          ? "${_formatNumber(context, diff.inHours)} س"  // ساعات
+          ? "${_formatNumber(context, diff.inHours)} س" // ساعات
           : "${diff.inHours}h";
     } else if (diff.inDays < 7) {
       return isArabic
-          ? "${_formatNumber(context, diff.inDays)} ي"  // أيام
+          ? "${_formatNumber(context, diff.inDays)} ي" // أيام
           : "${diff.inDays}d";
     } else {
       final weeks = (diff.inDays / 7).floor();
       return isArabic
-          ? "${_formatNumber(context, weeks)} أ"  // أسابيع
+          ? "${_formatNumber(context, weeks)} أ" // أسابيع
           : "${weeks}w";
     }
   }
-
-
 
   Widget _buildParticipantsList(
       List<dynamic> participants, AuctionState state) {
@@ -640,14 +688,15 @@ class _AuctionDetailsWithParticipantsState
 
     // 🔹 Case 2: Failed to load and no data
     if (participants.isEmpty && state.participantsStatus == StateStatus.error) {
-      return  SliverToBoxAdapter(
+      return SliverToBoxAdapter(
         child: Center(
           child: Padding(
             padding: EdgeInsets.all(32),
             child: Text(
-              context.isArabic ? 'فشل في تحميل المشاركين' : 'Failed to load participants',
+              context.isArabic
+                  ? 'فشل في تحميل المشاركين'
+                  : 'Failed to load participants',
             ),
-
           ),
         ),
       );
@@ -669,74 +718,79 @@ class _AuctionDetailsWithParticipantsState
 
           final p = participants[index];
           return // Replace your ListTile with this custom widget:
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  // Profile Picture
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.grey.shade300,
-                    backgroundImage: p.profilePicture != null ? NetworkImage(p.profilePicture!) : null,
-                    onBackgroundImageError: p.profilePicture != null
-                        ? (_, __) {
-                      // Optional: log error or fallback
-                      CliLogger.info("Profile image failed to load");
-                    }
-                        : null,
-                    child: p.profilePicture == null
-                        ? const Icon(Icons.person, size: 24, color: Colors.white) // fallback logo
-                        : null,
-                  ),
+              Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                // Profile Picture
+                ProfilePictureWidget(
+                  image: p.profilePicture,
+                  hasStories: false,
+                  isVerified: true,
+                ),
+                // CircleAvatar(
+                //   radius: 24,
+                //   backgroundColor: Colors.grey.shade300,
+                //   backgroundImage: p.profilePicture != null ? NetworkImage(p.profilePicture!) : null,
+                //   onBackgroundImageError: p.profilePicture != null
+                //       ? (_, __) {
+                //     // Optional: log error or fallback
+                //     CliLogger.info("Profile image failed to load");
+                //   }
+                //       : null,
+                //   child: p.profilePicture == null
+                //       ? const Icon(Icons.person, size: 24, color: Colors.white) // fallback logo
+                //       : null,
+                // ),
 
+                const SizedBox(width: 12),
 
-                  const SizedBox(width: 12),
-
-                  // Name and Time Column
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                         text:  p.username ?? "",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            // color: Colors.black87,
-                          ),
+                // Name and Time Column
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Label(
+                        text: p.username ?? "",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          // color: Colors.black87,
                         ),
-                        const SizedBox(height: 4),
-                        Label(
-                          text:  timeAgo(context,p.createdAt?.toLocal()),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Price (Right side)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    // decoration: BoxDecoration(
-                    //   color: Colors.green.shade50,
-                    //   borderRadius: BorderRadius.circular(20),
-                    //   border: Border.all(color: Colors.green.shade200),
-                    // ),
-                    child: Text(
-                      "${_formatNumber(context, p.newPrice)} ${LocaleKeys.egp.localize}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        // color: Colors.green.shade700,
                       ),
+                      const SizedBox(height: 4),
+                      Label(
+                        text: timeAgo(context, p.createdAt?.toLocal()),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Price (Right side)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  // decoration: BoxDecoration(
+                  //   color: Colors.green.shade50,
+                  //   borderRadius: BorderRadius.circular(20),
+                  //   border: Border.all(color: Colors.green.shade200),
+                  // ),
+                  child: Text(
+                    "${_formatNumber(context, p.newPrice)} ${LocaleKeys.egp.localize}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.green.shade700,
                     ),
                   ),
-                ],
-              ),
-            );
+                ),
+              ],
+            ),
+          );
         },
         childCount: participants.length + 1,
       ),
@@ -782,8 +836,8 @@ class _AuctionDetailsWithParticipantsState
     String formatted = formatter.format(number);
 
     if (context.isArabic) {
-      const english = ['0','1','2','3','4','5','6','7','8','9'];
-      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
       for (int i = 0; i < english.length; i++) {
         formatted = formatted.replaceAll(english[i], arabic[i]);
@@ -792,121 +846,23 @@ class _AuctionDetailsWithParticipantsState
 
     return formatted;
   }
-/*
-  String _formatNumber(BuildContext context, num? value) {
-    if (value == null) return '0';
 
-    if (context.isArabic) {
-      const english = ['0','1','2','3','4','5','6','7','8','9'];
-      const arabic  = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-
-      String text = value.toString();
-      for (int i = 0; i < english.length; i++) {
-        text = text.replaceAll(english[i], arabic[i]);
-      }
-      return text;
-    }
-    return value.toString();
-  }
-
-*/
 }
 
-class _WinnerDialog extends StatelessWidget {
-  final BidWinnerEntity winner;
 
-  const _WinnerDialog({required this.winner});
 
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      insetPadding: const EdgeInsets.all(16),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Crown + Name
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.emoji_events, color: Colors.amber, size: 28),
-                // crown
-                const SizedBox(width: 8),
-                Text(
-                  winner.username ?? "",
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
 
-            // Avatar
-            CircleAvatar(
-              radius: 40,
-              // backgroundImage: winner.profilePicture != null
-              //     ? NetworkImage(winner.profilePicture!)
-              //     : null,
-              child: Text(winner.username?[0].toUpperCase() ?? "?",
-                  style: const TextStyle(fontSize: 24)),
-            ),
-            const SizedBox(height: 16),
 
-            // Price + Auction Title
-            Text(
-              "${winner.price?.toStringAsFixed(0)} ${LocaleKeys.egp.localize}",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              winner.auctionTitle ?? "",
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
 
-            // Close button
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-              child: Text(
-                context.isArabic ? 'إغلاق' : 'Close',
-              ),
 
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class ArabicEnglishDigitsOnlyFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
-    final filtered = newValue.text.replaceAll(
-        RegExp(r'[^0-9٠-٩]'),
-        ''
-    );
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final filtered = newValue.text.replaceAll(RegExp(r'[^0-9٠-٩]'), '');
 
     return newValue.copyWith(
       text: filtered,
@@ -916,14 +872,14 @@ class ArabicEnglishDigitsOnlyFormatter extends TextInputFormatter {
 }
 
 class ArabicDigitsFormatter extends TextInputFormatter {
-  static const _english = ['0','1','2','3','4','5','6','7','8','9'];
-  static const _arabic  = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  static const _english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  static const _arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String text = newValue.text;
     for (int i = 0; i < _english.length; i++) {
       text = text.replaceAll(_english[i], _arabic[i]);

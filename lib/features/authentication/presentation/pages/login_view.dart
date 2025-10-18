@@ -252,11 +252,11 @@ class _LoginViewState extends State<LoginView> {
             // Logout while keeping important settings (onboarding, language, dark mode)
             // This also sets ISLOGIN to false
             await CacheManager.logoutKeepingSettings();
-            
+
             // Remove token from API consumer
             final userCubit = serviceLocator<UserCubit>();
             userCubit.removeToken();
-            
+
             // Navigate to home in guest mode
             context.go(Routes.HOME);
           },
@@ -766,7 +766,8 @@ class _LoginWidgetState extends State<LoginWidget> {
 }
 
 class _RegisterWidgetState extends State<RegisterWidget> {
-  bool obsecure = true;
+  bool obscurePassword = true;
+  bool obscureConfirmPassword = true;
   final FocusNode nameFocusNode = FocusNode();
 
   @override
@@ -852,6 +853,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 BirthDatePicker(
                   controller: registerCubit.birthDateTextController,
+                    onDateChanged: (date) {
+                      registerCubit.birthDate = date??'';
+                      setState(() {});
+                      print("registerCubit.birthDate ${registerCubit.birthDate}");
+                      print("registerCubit.birthDate $date");
+                    }
                 ),
 
                 Sizer(
@@ -888,6 +895,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         children: [
                           Expanded(
                               child: BadgedLabel(
+                                  hasHighlightColor: true,
+                                  hasSplashColor: true,
                                   onTap: () {
                                     ManageVibration.vibrate();
                                     registerCubit.isMale = true;
@@ -910,6 +919,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           ),
                           Expanded(
                             child: BadgedLabel(
+                              hasHighlightColor: true,
+                              hasSplashColor: true,
                               onTap: () {
                                 ManageVibration.vibrate();
                                 registerCubit.isMale = false;
@@ -942,16 +953,16 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderColor: Colors.black,
                   currentController: registerCubit.passwordTextController,
                   hint: LocaleKeys.password.localize,
-                  obscureText: obsecure,
+                  obscureText: obscurePassword,
                   prefixIcon: GestureDetector(
                     onTap: () {
                       ManageVibration.vibrate();
                       setState(() {
-                        obsecure = !obsecure;
+                        obscurePassword = !obscurePassword;
                       });
                     },
                     child: Icon(
-                      obsecure ? Icons.visibility_off : Icons.visibility,
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,
                       color: AppColors.GREY_DARK_COLOR,
                       size: 40.w,
                     ),
@@ -973,16 +984,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       registerCubit.confirmPasswordTextController,
                   hint:
                       '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
-                  obscureText: obsecure,
+                  obscureText: obscureConfirmPassword,
                   prefixIcon: GestureDetector(
                     onTap: () {
                       ManageVibration.vibrate();
                       setState(() {
-                        obsecure = !obsecure;
+                        obscureConfirmPassword = !obscureConfirmPassword;
                       });
                     },
                     child: Icon(
-                      obsecure ? Icons.visibility_off : Icons.visibility,
+                      obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                       color: AppColors.GREY_DARK_COLOR,
                       size: 40.w,
                     ),

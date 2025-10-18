@@ -66,7 +66,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               print('Access Token: $accessToken');
               print(serviceLocator<UserCubit>().state.data.toString());
 
-              Navigator.pop(context);
+              context.pop();
               context.push(Routes.HOME);
 
               WidgetsBinding.instance.addPostFrameCallback((_) {

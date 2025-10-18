@@ -1,16 +1,21 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../controller/star_cubit/star_cubit.dart';
 import '../core/video_player_controller_wrapper.dart';
 import '../core/video_player_manager.dart';
 import '../controls/video_thumbnail.dart';
 
+/// Feed video player variant - optimized for feed scrolling
+/// Replaces TalentVideoPlayerWidget with cleaner architecture
 class FeedVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final String? thumbnailUrl;
@@ -49,11 +54,10 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   double _visibilityFraction = 0;
   bool _hasTrackedView = false;
   bool _isDisposed = false;
-  bool _hasCompletedOnce = false; // Track if video completed once
+  double _currentProgress = 0.0;
 
   Timer? _playDelayTimer;
   Timer? _initTimer;
-  Timer? _controlsTimer;
   StreamSubscription? _stateSubscription;
 
   String get videoId => '${widget.talent?.id ?? widget.videoUrl.hashCode}';
@@ -89,6 +93,13 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
           setState(() {
             _isPlaying = state.isPlaying;
             _isInitialized = state.isInitialized;
+
+            // Update progress bar
+            if (state.isPlaying && state.duration.inMilliseconds > 0) {
+              _currentProgress =
+                  state.position.inMilliseconds / state.duration.inMilliseconds;
+              _currentProgress = _currentProgress.clamp(0.0, 1.0);
+            }
           });
 
           if (state.isPlaying && !_hasTrackedView) {
@@ -108,12 +119,16 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
           });
         }
 
-        // Auto-play if configured
-        if (widget.autoPlay && _visibilityFraction > 0.3) {
+        // Auto-play if configured - use centralized control
+        // Using 50% threshold (industry standard - MRC/Active View)
+        if (widget.autoPlay && _visibilityFraction > 0.5) {
           await Future.delayed(const Duration(milliseconds: 100));
           if (mounted && !_isDisposed && _wrapper != null) {
-            await _wrapper!.play();
-            _trackVideoStart();
+            final success =
+                await VideoPlayerManager.instance.requestPlay(videoId);
+            if (success) {
+              _trackVideoStart();
+            }
           }
         }
       }
@@ -136,41 +151,9 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   }
 
   void _handleVideoEnd() {
-    if (_wrapper == null || !_wrapper!.isInitialized || _isDisposed) return;
-
-    _hasCompletedOnce = true;
-
-    // CRITICAL FIX: Don't seekTo(Duration.zero) - this causes MediaCodec FLUSH
-    // Instead, just pause at the end to avoid flush/resume cycles
-    if (mounted && !_isDisposed) {
+    if (_wrapper != null && _wrapper!.isInitialized) {
+      _wrapper!.seekTo(Duration.zero);
       _wrapper!.pause();
-      VideoPlayerManager.instance.markInactive(videoId);
-
-      // Show thumbnail overlay when ended
-      setState(() {
-        _isPlaying = false;
-      });
-    }
-  }
-
-  void _togglePlayPause() {
-    if (_wrapper == null || !_isInitialized || _isDisposed || !mounted) return;
-
-    try {
-      if (_isPlaying) {
-        _wrapper!.pause();
-        VideoPlayerManager.instance.markInactive(videoId);
-      } else {
-        // If video ended, seek to start (only when user explicitly restarts)
-        if (_hasCompletedOnce && _wrapper!.controller.value.position >= _wrapper!.controller.value.duration) {
-          _wrapper!.seekTo(Duration.zero);
-        }
-        _wrapper!.play();
-        VideoPlayerManager.instance.markActive(videoId);
-        _trackVideoStart();
-      }
-    } catch (e) {
-      debugPrint('⚠️ Error toggling play/pause: $e');
     }
   }
 
@@ -185,8 +168,44 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
 
   void _toggleFavorite() {
     if (widget.talent != null && widget.cubit != null) {
+      ManageVibration.vibrate();
       widget.cubit!.toggleFavorite(widget.talent!.id);
     }
+  }
+
+  // Build favorite button with BlocBuilder to prevent excessive rebuilds
+  Widget _buildFavoriteButton() {
+    if (widget.talent == null || widget.cubit == null) {
+      return const SizedBox.shrink();
+    }
+
+    return BlocBuilder<StarCubit, StarState>(
+      bloc: widget.cubit,
+      buildWhen: (previous, current) {
+        // Only rebuild when favorites actually change
+        return previous.favoriteTalents != current.favoriteTalents;
+      },
+      builder: (context, state) {
+        final isFavorite = state.favoriteTalents.any(
+          (fav) => fav.id == widget.talent!.id,
+        );
+
+        return IconAppButton(
+          icon: isFavorite ? Icons.favorite : Icons.favorite_outline,
+          onPressed: _toggleFavorite,
+          color: AppColors.SECONDARY_COLOR,
+          size: 55.sp,
+          shadows: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.8),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _handleVisibilityChanged(VisibilityInfo info) {
@@ -199,38 +218,34 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     _initTimer?.cancel();
 
     if (info.visibleFraction > 0.5) {
-      // Highly visible - initialize if needed
+      // Visible (>50%) - initialize if needed
       if (!_isInitialized && !_isInitializing) {
-        _initTimer = Timer(const Duration(milliseconds: 300), () {
+        _initTimer = Timer(const Duration(milliseconds: 200), () {
           if (mounted && !_isDisposed && _visibilityFraction > 0.5) {
             _initializeVideo();
           }
         });
-      } else if (_isInitialized && widget.autoPlay && !_isPlaying && !_hasCompletedOnce) {
-        // Auto-play with delay (only if video hasn't completed yet)
-        _playDelayTimer = Timer(const Duration(milliseconds: 400), () {
+      } else if (_isInitialized && widget.autoPlay && !_isPlaying) {
+        // Auto-play with delay - use centralized control
+        _playDelayTimer = Timer(const Duration(milliseconds: 300), () async {
           if (mounted && !_isDisposed && _wrapper != null && !_isPlaying) {
-            _wrapper!.play();
-            VideoPlayerManager.instance.markActive(videoId);
-            _trackVideoStart();
+            final success =
+                await VideoPlayerManager.instance.requestPlay(videoId);
+            if (success) {
+              _trackVideoStart();
+            }
           }
         });
       }
-    } else if (info.visibleFraction < 0.3) {
-      // Less visible - pause to save resources
+    } else if (info.visibleFraction < 0.25) {
+      // Not visible - pause using centralized control
       if (_wrapper != null && _isPlaying) {
-        _wrapper!.pause();
-        VideoPlayerManager.instance.markInactive(videoId);
+        VideoPlayerManager.instance.pauseVideo(videoId);
       }
 
-      // Dispose if mostly out of view (changed from == 0 to < 0.1)
-      if (info.visibleFraction < 0.1) {
-        // Delay disposal to avoid rapid dispose/recreate during fast scrolling
-        _playDelayTimer = Timer(const Duration(milliseconds: 500), () {
-          if (mounted && !_isDisposed && _visibilityFraction < 0.1) {
-            _disposeController();
-          }
-        });
+      // Dispose if completely out of view
+      if (info.visibleFraction == 0) {
+        _disposeController();
       }
     }
   }
@@ -253,117 +268,114 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = widget.talent != null && widget.cubit != null
-        ? widget.cubit!.isFavorite(widget.talent!.id)
-        : false;
-
     return RepaintBoundary(
       child: VisibilityDetector(
         key: Key('feed-video-$videoId'),
         onVisibilityChanged: _handleVisibilityChanged,
         child: GestureDetector(
-        onTap: () {
-          ManageVibration.vibrate();
-          if (_isInitialized) {
-            // Auto-hide controls after 3 seconds
-            _controlsTimer?.cancel();
-            setState(() => _showControls = true);
-            _controlsTimer = Timer(const Duration(seconds: 3), () {
-              if (mounted && _isPlaying) {
-                setState(() => _showControls = false);
-              }
-            });
-          }
-          widget.onTap?.call();
-        },
-        child: Container(
-          height: MediaQuery.of(context).size.height * widget.heightFraction,
-          width: double.infinity,
-          color: Colors.black,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Thumbnail (when not playing)
-              if (!_isPlaying)
-                Positioned.fill(
-                  child: VideoThumbnail(
-                    thumbnailUrl: widget.thumbnailUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-              // Video Player (when initialized)
-              if (_isInitialized &&
-                  _wrapper != null &&
-                  !_isDisposed &&
-                  mounted &&
-                  _wrapper!.isInitialized)
-                Opacity(
-                  opacity: _isPlaying ? 1.0 : 0.0,
-                  child: AspectRatio(
-                    aspectRatio: _wrapper!.controller.value.aspectRatio,
-                    child: VideoPlayer(_wrapper!.controller),
-                  ),
-                ),
-
-              // Loading indicator
-              if (_isInitializing)
-                Container(
-                  color: Colors.black54,
-                  child: const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ),
-                ),
-
-              // Favorite button (top left)
-              if (widget.talent != null && widget.cubit != null)
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            ManageVibration.vibrate();
+            if (_isInitialized) {
+              setState(() => _showControls = !_showControls);
+            }
+            widget.onTap?.call();
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height * widget.heightFraction,
+            width: double.infinity,
+            color: Colors.black,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Thumbnail (when not playing)
+                if (!_isPlaying)
+                  Positioned.fill(
+                    child: VideoThumbnail(
+                      thumbnailUrl: widget.thumbnailUrl,
+                      fit: BoxFit.cover,
                     ),
-                    child: IconButton(
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: const Color(0xffFF0000),
-                        size: 20,
+                  ),
+
+                // Video Player (when initialized)
+                if (_isInitialized &&
+                    _wrapper != null &&
+                    !_isDisposed &&
+                    mounted &&
+                    _wrapper!.isInitialized)
+                  Opacity(
+                    opacity: _isPlaying ? 1.0 : 0.0,
+                    child: AspectRatio(
+                      aspectRatio: _wrapper!.controller.value.aspectRatio,
+                      child: VideoPlayer(_wrapper!.controller),
+                    ),
+                  ),
+
+                // Loading indicator
+                if (_isInitializing)
+                  Container(
+                    color: Colors.black54,
+                    child: const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  ),
+
+                // Favorite button (top left) - Only rebuild when favorites change
+                if (widget.talent != null && widget.cubit != null)
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: _buildFavoriteButton(),
+                  ),
+
+                // Mute button (top right, when playing)
+                if (_isInitialized && _isPlaying)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      onPressed: _toggleFavorite,
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(),
-                    ),
-                  ),
-                ),
-
-              // Mute button (top right, when playing)
-              if (_isInitialized && _isPlaying)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        _isMuted ? Icons.volume_off : Icons.volume_up,
-                        color: Colors.white,
-                        size: 20,
+                      child: IconButton(
+                        icon: Icon(
+                          _isMuted ? Icons.volume_off : Icons.volume_up,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onPressed: _toggleMute,
+                        padding: const EdgeInsets.all(8),
+                        constraints: const BoxConstraints(),
                       ),
-                      onPressed: _toggleMute,
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(),
                     ),
                   ),
-                ),
-            ],
+
+                // Progress bar (bottom, when playing)
+                if (_isInitialized && _isPlaying)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                      child: FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: _currentProgress,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -372,22 +384,14 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
   void dispose() {
     _isDisposed = true;
 
-    // Cancel all timers to prevent memory leaks
     _playDelayTimer?.cancel();
     _playDelayTimer = null;
     _initTimer?.cancel();
     _initTimer = null;
-    _controlsTimer?.cancel();
-    _controlsTimer = null;
 
-    // Cancel subscription
     _stateSubscription?.cancel();
     _stateSubscription = null;
 
-    // Mark as inactive before disposing
-    if (_wrapper != null) {
-      VideoPlayerManager.instance.markInactive(videoId);
-    }
     _wrapper = null;
 
     super.dispose();

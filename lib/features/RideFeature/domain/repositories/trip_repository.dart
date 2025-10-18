@@ -72,6 +72,7 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> completeDriverTripWithRemainingMoney(CompleteDriverTripWithRemainingMoneyParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriver(AddRateWithDriverParams params);
    Future<Either<Failure, RateResponseEntity>> addRateWithDriverLoading(AddRateWithDriverLoadingParams params);
+   Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
    void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
@@ -82,6 +83,8 @@ abstract class TripRepository {
    void listenToRemoveLoading(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);
+   void listenToAcceptLoadingTripOffer(Function(String tripId) params);
+   void listenToRemoveAcceptedLoadingTripOffer(Function(String tripId) params);
    void listenToAvailableUntrackedTrip(Function(AvailableRideNonSocketTripEntity trip) params);
    void listenToAvailableLoading(Function(GetLoadingAvailableEntity trip) params);
    void listenToPartialPaymentDriver(Function(num amountPaidCash) params);

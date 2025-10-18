@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -16,6 +17,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../../domain/entity/user_star_entity.dart';
 import '../../presentation_exports.dart';
+import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 class ProfileHeader extends StatefulWidget {
   final ProfileEntity? profile;
@@ -36,10 +38,10 @@ class ProfileHeader extends StatefulWidget {
 }
 
 class _ProfileHeaderState extends State<ProfileHeader> {
-  bool _isSubscribed = false;
   final ImagePicker _imagePicker = ImagePicker();
   bool _isUploadingCover = false;
   bool _isUploadingProfilePicture = false;
+  bool _isSubscribing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -160,12 +162,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       return widget.profile?.user?.isAccountVerified ?? false;
     }
 
-    // للمستخدمين الآخرين - نحتاج للتحقق من نوع UserStarEntity
-    // إذا كان UserStarEntity يحتوي على isAccountVerified
-    // return widget.user?.isAccountVerified ?? false;
-
-    // مؤقتاً حتى نتأكد من بنية UserStarEntity
-    return false;
+    // للمستخدمين الآخرين - من الـ profile المحمل
+    return widget.profile?.user?.isAccountVerified ?? false;
   }
 
   Widget _buildProfileInfoSection(BuildContext context) {
@@ -177,6 +175,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         widget.isCurrentUser && widget.profile?.channelPicture != null
             ? widget.profile!.channelPicture!.mediaKey
             : widget.user?.image ?? '';
+
+    // Determine gender - for current user check profile.user.gender, for others check widget.user.gender
+    final isMale = widget.isCurrentUser
+        ? (widget.profile?.user?.gender.toLowerCase() != 'female')
+        : (widget.user?.gender.toLowerCase() != 'female');
 
     final displayName = widget.isCurrentUser &&
             widget.profile != null &&
@@ -192,43 +195,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           children: [
             Stack(
               children: [
-                Container(
+                ImageFromInternet(
+                  image: profileImageUrl,
                   width: profileSize,
                   height: profileSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.grey[300]!,
-                      width: 2,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: profileImageUrl.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: profileImageUrl,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) => Container(
-                                color: Colors.grey[300],
-                                child: Image.asset(
-                                  Assets.logo,
-                                  fit: BoxFit.contain,
-                                )),
-                          )
-                        : widget.profile!.user!.gender == 'male'
-                            ? Container(
-                                color: Colors.grey[300],
-                                child: Image.asset(
-                                  Assets.manIcon,
-                                  fit: BoxFit.cover,
-                                ))
-                            : Container(
-                                color: Colors.grey[300],
-                                child: Image.asset(
-                                  Assets.womanIcon,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                  ),
+                  isCircle: true,
+                  isMale: isMale,
+                  defaultLogo: profileImageUrl.isEmpty,
+                  fit: BoxFit.cover,
                 ),
 
                 // Profile picture edit button (only for current user)
@@ -292,7 +266,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           ),
                         ),
                       ),
-                      if (!_isAccountVerified()) ...[
+                      if (_isAccountVerified()) ...[
                         SizedBox(width: 6),
                         const Icon(
                           Icons.verified,
@@ -336,99 +310,124 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   }
 
   Widget _buildSubscribeSection(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: _isSubscribed ? Colors.grey[300] : Colors.red,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(25),
-                  onTap: () {
-                    setState(() {
-                      _isSubscribed = !_isSubscribed;
-                    });
+    final profileCubit = context.read<ProfileCubit>();
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          _isSubscribed
-                              ? (context.isArabic
-                                  ? 'تم الاشتراك'
-                                  : 'Subscribed')
-                              : (context.isArabic
-                                  ? 'تم إلغاء الاشتراك'
-                                  : 'Unsubscribed'),
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, profileState) {
+        final isSubscribed = profileState.profile?.isSubscribed ??
+            widget.profile?.isSubscribed ??
+            false;
+
+        return SizedBox(
+          width: double.infinity,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isSubscribed ? Colors.grey[300] : Colors.red,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(25),
+                      onTap: _isSubscribing
+                          ? null
+                          : () async {
+                              if (widget.profile?.id == null) return;
+
+                              ManageVibration.vibrate();
+
+                              setState(() {
+                                _isSubscribing = true;
+                              });
+
+                              // Use userId for subscribe/unsubscribe
+                              await profileCubit.toggleSubscription(
+                                widget.profile!.userId,
+                              );
+
+                              if (mounted) {
+                                setState(() {
+                                  _isSubscribing = false;
+                                });
+                              }
+                            },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (_isSubscribing)
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    isSubscribed ? Colors.black : Colors.white,
+                                  ),
+                                ),
+                              )
+                            else
+                              Icon(
+                                isSubscribed ? Icons.check : Icons.add,
+                                color:
+                                    isSubscribed ? Colors.black : Colors.white,
+                                size: 20,
+                              ),
+                            SizedBox(width: 8),
+                            Text(
+                              isSubscribed
+                                  ? (context.isArabic ? 'مشترك' : 'Subscribed')
+                                  : (context.isArabic ? 'اشتراك' : 'Subscribe'),
+                              style: TextStyle(
+                                color:
+                                    isSubscribed ? Colors.black : Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
-                        backgroundColor:
-                            _isSubscribed ? Colors.green : Colors.orange,
-                        duration: Duration(seconds: 2),
                       ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          _isSubscribed ? Icons.check : Icons.add,
-                          color: _isSubscribed ? Colors.black : Colors.white,
-                          size: 20,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          _isSubscribed
-                              ? (context.isArabic ? 'مشترك' : 'Subscribed')
-                              : (context.isArabic ? 'اشتراك' : 'Subscribe'),
-                          style: TextStyle(
-                            color: _isSubscribed ? Colors.black : Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
               ),
-            ),
+              // if (!isSubscribed) ...[
+              //   SizedBox(width: 12),
+              //   Container(
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[200],
+              //       borderRadius: BorderRadius.circular(25),
+              //     ),
+              //     child: IconButton(
+              //       icon: Icon(
+              //         Icons.notifications_none,
+              //         color: Colors.grey[700],
+              //         size: 24,
+              //       ),
+              //       onPressed: () {
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //           SnackBar(
+              //             content: Text(
+              //               context.isArabic
+              //                   ? 'اشترك أولاً لتفعيل الإشعارات'
+              //                   : 'Subscribe first to enable notifications',
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // ],
+            ],
           ),
-          // if (!_isSubscribed) ...[
-          //   SizedBox(width: 12),
-          //   Container(
-          //     decoration: BoxDecoration(
-          //       color: Colors.grey[200],
-          //       borderRadius: BorderRadius.circular(25),
-          //     ),
-          //     child: IconButton(
-          //       icon: Icon(
-          //         Icons.notifications_none,
-          //         color: Colors.grey[700],
-          //         size: 24,
-          //       ),
-          //       onPressed: () {
-          //         ScaffoldMessenger.of(context).showSnackBar(
-          //           SnackBar(
-          //             content: Text(
-          //               context.isArabic
-          //                   ? 'اشترك أولاً لتفعيل الإشعارات'
-          //                   : 'Subscribe first to enable notifications',
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ],
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -595,14 +594,16 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       }
     } catch (e) {
       print('Error picking image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic ? 'خطأ في اختيار الصورة' : 'Error picking image',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       context.isArabic ? 'خطأ في اختيار الصورة' : 'Error picking image',
+      //     ),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(context,
+          context.isArabic ? 'خطاء في اختيار الصورة' : 'Error picking image');
     } finally {
       if (mounted) {
         setState(() {
@@ -634,29 +635,37 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         // Update profile with new image
         await _updateProfileImage(mediaId!, imageType);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.isArabic
-                  ? 'تم تحديث الصورة بنجاح'
-                  : 'Image updated successfully',
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       context.isArabic
+        //           ? 'تم تحديث الصورة بنجاح'
+        //           : 'Image updated successfully',
+        //     ),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تم تحديث الصورة بنجاح'
+                : 'Image updated successfully');
       } else {
-        throw Exception('Upload failed');
+        throw Exception(
+            context.isArabic ? 'خطأ في رفع الصورة' : 'Error uploading image');
       }
     } catch (e) {
       print('Error uploading image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic ? 'خطأ في رفع الصورة' : 'Error uploading image',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       context.isArabic ? 'خطأ في رفع الصورة' : 'Error uploading image',
+      //     ),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(context,
+          context.isArabic ? 'خطاء في رفع الصورة' : 'Error uploading image');
     }
   }
 
@@ -687,25 +696,29 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           channelPicture: imageType == ImageType.profile ? "" : null,
         );
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.isArabic ? 'تم حذف الصورة' : 'Image removed',
-            ),
-            backgroundColor: Colors.orange,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       context.isArabic ? 'تم حذف الصورة' : 'Image removed',
+        //     ),
+        //     backgroundColor: Colors.orange,
+        //   ),
+        // );
+        showSuccessMessage(context,
+            context.isArabic ? 'تم حذف الصورة' : 'Image removed');
       }
     } catch (e) {
       print('Error removing image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.isArabic ? 'خطأ في حذف الصورة' : 'Error removing image',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       context.isArabic ? 'خطأ في حذف الصورة' : 'Error removing image',
+      //     ),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      showErrorMessage(context,
+          context.isArabic ? 'خطاء في حذف الصورة' : 'Error removing image');
     }
   }
 

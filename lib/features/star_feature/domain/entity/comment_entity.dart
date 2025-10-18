@@ -1,4 +1,3 @@
-// lib/features/star_feature/domain/entities/comment_entity.dart
 class CommentEntity {
   final String id;
   final String username;

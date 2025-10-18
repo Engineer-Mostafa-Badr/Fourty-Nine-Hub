@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -316,27 +317,44 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                           Positioned(
                             top: 12.h,
                             left: 12.w,
-                            child: GestureDetector(
-                              onTap: () {
-                                ManageVibration.vibrate();
-                                _toggleFavorite();
+                            child: BlocBuilder<ChanceCubit, ChanceState>(
+                              buildWhen: (previous, current) {
+                                // Only rebuild when the chanceAdDetails changes
+                                return previous.chanceAdDetails !=
+                                    current.chanceAdDetails;
                               },
-                              child: Container(
-                                padding: EdgeInsets.all(8.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.9),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  isFavorite
+                              builder: (context, state) {
+                                // Get the updated favorite status from state
+                                bool currentFavoriteStatus = isFavorite;
+
+                                if (state.chanceAdDetails != null &&
+                                    state.chanceAdDetails!.id ==
+                                        widget.chanceAd?.id) {
+                                  currentFavoriteStatus =
+                                      state.chanceAdDetails!.isFavorite;
+                                }
+
+                                return IconAppButton(
+                                  icon: currentFavoriteStatus
                                       ? Icons.favorite
                                       : Icons.favorite_border,
-                                  color: isFavorite
-                                      ? Colors.red
-                                      : Colors.grey[600],
-                                  size: 30.sp,
-                                ),
-                              ),
+                                  onPressed: () {
+                                    ManageVibration.vibrate();
+                                    _toggleFavorite();
+                                  },
+                                  color: AppColors.SECONDARY_COLOR,
+                                  size: 60.sp,
+                                  shadows: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.8),
+                                      spreadRadius: 2,
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -525,22 +543,28 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       margin: EdgeInsets.symmetric(horizontal: 20.w),
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          ManageVibration.vibrate();
-                          _showParticipateBottomSheet();
-                        },
+                        onPressed: widget.chanceAd?.isComplete ?? false
+                            ? null // Disable button when chance is complete
+                            : () {
+                                ManageVibration.vibrate();
+                                _showParticipateBottomSheet();
+                              },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: widget.chanceAd?.isComplete ?? false
+                              ? Colors.grey // Grey when disabled
+                              : Colors.red,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                         ),
                         child: Text(
-                          context.isArabic ? 'انضم' : 'Join',
+                          widget.chanceAd?.isComplete ?? false
+                              ? (context.isArabic ? 'مكتمل' : 'Completed')
+                              : (context.isArabic ? 'انضم' : 'Join'),
                           style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
@@ -714,7 +738,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
                 // Question
                 Text(
-                  context.isArabic ? 'هل تريد مشاركة?' : 'One or more shares?',
+                  context.isArabic ? 'هل تريد مشاركة؟' : 'One or more shares?',
                   style: TextStyle(
                     fontSize: 32.sp,
                     color: Colors.black87,
@@ -735,7 +759,9 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
-                      hintText: context.isArabic ?  'أدخل المبلغ بالجنيه' : 'Enter the amount in EGP',
+                      hintText: context.isArabic
+                          ? 'ادخل المبلغ بالجنه'
+                          : 'Enter the amount in EGP',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 32.sp,
@@ -743,7 +769,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                       ),
                     ),
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 32.sp,
                       color: Colors.black87,
                     ),
                   ),

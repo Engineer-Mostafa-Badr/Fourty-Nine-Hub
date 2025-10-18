@@ -21,9 +21,9 @@ class WebSocketIsolateMessage {
   WebSocketIsolateMessage(this.type, this.data);
 
   Map<String, dynamic> toJson() => {
-        'type': type.index,
-        'data': data,
-      };
+    'type': type.index,
+    'data': data,
+  };
 
   factory WebSocketIsolateMessage.fromJson(Map<String, dynamic> json) {
     return WebSocketIsolateMessage(
@@ -202,7 +202,7 @@ void _webSocketIsolateEntry(SendPort mainSendPort) {
 
   receivePort.listen((message) {
     final isolateMessage =
-        WebSocketIsolateMessage.fromJson(jsonDecode(message));
+    WebSocketIsolateMessage.fromJson(jsonDecode(message));
 
     switch (isolateMessage.type) {
       case WebSocketMessageType.connect:

@@ -40,8 +40,9 @@ class PlaylistRemoteDataSourceImpl implements PlaylistRemoteDataSource {
   Future<PlaylistListResponseModel> getPlaylists(
       GetPlaylistsParams params) async {
     final response = await apiConsumer.get(
-      EndPoints.getPlaylists(params.ownerId),
+      EndPoints.getPlaylists,
       queryParameters: {
+        'ownerId': params.ownerId,
         'page': params.page,
         'limit': params.limit,
       },

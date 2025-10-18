@@ -23,6 +23,7 @@ class TubeVideoModel extends StarEntity {
     required super.likes, // Pass to parent class
     required super.dislikes, // Pass to parent class
     required super.isRate, // Pass to parent class
+    super.ownerId, // Pass to parent class
     super.createdAt,
     super.createAt,
     this.userId,
@@ -34,6 +35,7 @@ class TubeVideoModel extends StarEntity {
   });
 
   factory TubeVideoModel.fromJson(Map<String, dynamic> json) {
+    final ownerData = json['owner'] ?? {};
     return TubeVideoModel(
       id: json['id'] ?? '',
       userId: json['userId'],
@@ -45,7 +47,7 @@ class TubeVideoModel extends StarEntity {
           mediaType: 'video',
         )
       ],
-      user: TubeOwnerModel.fromJson(json['owner'] ?? {}),
+      user: TubeOwnerModel.fromJson(ownerData),
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       isApproved: true, // Assuming all fetched videos are approved
@@ -61,6 +63,7 @@ class TubeVideoModel extends StarEntity {
       isRate: json['isRate'] ?? false, // Add isRate from API
       haveStories: false, // Not available in new API
       storyCount: 0, // Not available in new API
+      ownerId: ownerData['id'], // Profile/Channel ID for fetching profile
       createdAt:
           json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );
@@ -81,6 +84,7 @@ class TubeVideoModel extends StarEntity {
     int? likes,
     int? dislikes,
     bool? isRate,
+    String? ownerId,
     DateTime? createdAt,
     String? createAt,
     String? userId,
@@ -104,6 +108,7 @@ class TubeVideoModel extends StarEntity {
         likes: likes ?? this.likes,
         dislikes: dislikes ?? this.dislikes,
         isRate: isRate ?? this.isRate,
+        ownerId: ownerId ?? this.ownerId,
         createdAt: createdAt ?? this.createdAt,
         createAt: createAt ?? this.createAt,
         userId: userId ?? this.userId,
@@ -148,6 +153,7 @@ class TubeOwnerModel extends UserStarEntity {
     required super.image,
     required super.viewNumber,
     required super.averageRating,
+    super.gender,
     required this.channelName,
     required this.channelPicture,
   });
@@ -164,6 +170,7 @@ class TubeOwnerModel extends UserStarEntity {
       image: json['channelPicture'] ?? '',
       viewNumber: 0,
       averageRating: 0,
+      gender: json['gender'] ?? 'male',
     );
   }
 

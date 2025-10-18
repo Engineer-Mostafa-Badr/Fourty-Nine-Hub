@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
@@ -118,23 +119,84 @@ class _TripJoinContentState extends State<TripJoinContent>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: _buildCategory(
+          child: TabWidget(
             title: LocaleKeys.availableTrips,
-            index: 0,
+            selected:tabController.index == 0, onTap: () {
+            ManageVibration.vibrate();
+            tabController.animateTo(0);
+            context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
+            setState(() {
+              _displayedCategory = LocaleKeys.availableTrips;
+              selectedIndex = 0;
+            });
+
+            // Load data for the selected category
+            final cubit = context.read<ViewAllTripJoinCubit>();
+            switch (LocaleKeys.availableTrips) {
+              case LocaleKeys.availableTrips:
+                break;
+              case LocaleKeys.requestLog:
+                break;
+              case LocaleKeys.myAds:
+                cubit.loadInitialMyAds(); // Uncomment and reload when implemented
+                break;
+            }
+          },
           ),
         ),
         const Sizer(width: 10),
         Expanded(
-          child: _buildCategory(
+          child: TabWidget(
             title: LocaleKeys.requestLog,
-            index: 1,
+            selected:tabController.index == 1, onTap: () {
+            ManageVibration.vibrate();
+            tabController.animateTo(1);
+            context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();
+            context.read<ViewAllTripJoinCubit>().getRequestCount();
+            setState(() {
+              _displayedCategory = LocaleKeys.requestLog;
+              selectedIndex = 1;
+            });
+
+            // Load data for the selected category
+            final cubit = context.read<ViewAllTripJoinCubit>();
+            switch (LocaleKeys.requestLog) {
+              case LocaleKeys.availableTrips:
+                break;
+              case LocaleKeys.requestLog:
+                break;
+              case LocaleKeys.myAds:
+                cubit.loadInitialMyAds(); // Uncomment and reload when implemented
+                break;
+            }
+          },
           ),
         ),
         const Sizer(width: 10),
         Expanded(
-          child: _buildCategory(
+          child: TabWidget(
             title: LocaleKeys.myAds,
-            index: 2,
+            selected:tabController.index == 2, onTap: () {
+            ManageVibration.vibrate();
+            tabController.animateTo(2);
+            context.read<ViewAllTripJoinCubit>().loadInitialTripJoin(false,'');
+            setState(() {
+              _displayedCategory = LocaleKeys.myAds;
+              selectedIndex = 2;
+            });
+
+            // Load data for the selected category
+            final cubit = context.read<ViewAllTripJoinCubit>();
+            switch (LocaleKeys.myAds) {
+              case LocaleKeys.availableTrips:
+                break;
+              case LocaleKeys.requestLog:
+                break;
+              case LocaleKeys.myAds:
+                cubit.loadInitialMyAds(); // Uncomment and reload when implemented
+                break;
+            }
+          },
           ),
         ),
       ],

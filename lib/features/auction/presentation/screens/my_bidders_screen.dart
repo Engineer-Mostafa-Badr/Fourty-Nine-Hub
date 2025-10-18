@@ -9,6 +9,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
+import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,8 +27,22 @@ import '../../../authentication/presentation/controllers/user_cubit/user_cubit.d
 import '../cubit/auction_cubit.dart';
 import 'create_auction_screen.dart';
 
-class MyBiddersScreen extends StatelessWidget {
+class MyBiddersScreen extends StatefulWidget {
   const MyBiddersScreen({super.key});
+
+  @override
+  State<MyBiddersScreen> createState() => _MyBiddersScreenState();
+}
+
+class _MyBiddersScreenState extends State<MyBiddersScreen> {
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<AuctionCubit>().loadInitialMyBidders();
+
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +93,7 @@ class MyBiddersScreen extends StatelessWidget {
             return Container(
               margin: EdgeInsets.all(8),
               child: GlobalCard(
+
                 subcategoryId: '',
                 phone: auctions[index].phone??'',
                 reportId: '',
@@ -94,7 +111,63 @@ class MyBiddersScreen extends StatelessWidget {
                     : LocaleKeys.notSubscribed.localize,
 
                 views: auction.views,
-                onShowViewers: (){},
+                onShowViewers: () async {
+                  final cubit = context.read<AuctionCubit>();
+
+                  // Fetch viewers first
+                  if((auction.views??0)>0){
+                    await cubit.fetchViewerEntity(id: auction.auctionId!);
+
+                    final viewers = cubit.state.auctionViewerData;
+
+                    if (viewers != null && viewers.isNotEmpty) {
+                      showModalBottomSheet(
+                        backgroundColor: context.isDarkMode
+                            ? AppColors.DARK_BLUE_COLOR
+                            .withOpacity(0.95)
+                            : AppColors.LIGHT_COLOR,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.32,
+                        ),
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32.0),
+                            topRight: Radius.circular(32.0),
+                          ),
+                        ),
+                        isDismissible: true,
+                        // isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return LastViewersWidget(lastViewers: viewers,);
+                        },
+                      );
+                    } else {
+                      // Handle empty viewers or error
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.isArabic
+                                ? 'لا يوجد مشاهدون متاحون'
+                                : 'No viewers available',
+                          ),
+                        ),
+                      );
+
+                    }
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          context.isArabic
+                              ? 'لا يوجد مشاهدون متاحون'
+                              : 'No viewers available',
+                        ),
+                      ),
+                    );
+
+                  }
+                },
                 onSubscribe: (){
                   context.pop();
                 },
@@ -105,28 +178,33 @@ class MyBiddersScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Image.asset(
-                              auction.gender == 'male'
-                                  ? Assets.maleImagePlaceholder
-                                  : Assets.femaleImagePlacehlder,
-                            ),
+                          ProfilePictureWidget(
+                            isMale: auction.gender ==  'male' ? true : false,
                           ),
+                          // Container(
+                          //   height: 40,
+                          //   width: 40,
+                          //   decoration: const BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //   ),
+                          //   clipBehavior: Clip.antiAlias,
+                          //   child: Image.asset(
+                          //     auction.gender == 'male'
+                          //         ? Assets.maleImagePlaceholder
+                          //         : Assets.femaleImagePlacehlder,
+                          //   ),
+                          // ),
                           SizedBox(width: 16.w),
-                          Label(
-                            text: auction.username ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
-                            style: Styles.headerText(
-                              color: context.isDarkMode
-                                  ? AppColors.whiteColor
-                                  : AppColors.black,
-                              fontSize: 36,
-                              height: 1.60,
+                          Flexible(
+                            child: Label(
+                              text: auction.username ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
+                              style: Styles.headerText(
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.black,
+                                fontSize: 36,
+                                height: 1.60,
+                              ),
                             ),
                           ),
                         ],
@@ -154,68 +232,6 @@ class MyBiddersScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader({
-    required num views,
-    required String? status,
-    required BuildContext context,
-  }) {
-    String label;
-    Color color;
-
-    switch (status) {
-      case "Premium":
-        label = LocaleKeys.premium2.localize;
-        color = AppColors.SECONDARY_COLOR;
-        break;
-      case "Regular":
-        label = LocaleKeys.regular.localize;
-        color = AppColors.PRIMARY_COLOR;
-        break;
-      case "Not subscribe":
-      default:
-        label = LocaleKeys.notSubscribed.localize;
-        color = Colors.grey;
-        break;
-    }
-
-    // ✅ Use helper here
-    final formattedViews = _formatNumber(context, views);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(Assets.adsEyeIcon),
-          const SizedBox(width: 6),
-
-          Label(
-            text: "$formattedViews ${LocaleKeys.views.localize}",
-            style: Styles.mediumText(
-              color: const Color(0xFF6C6C6C),
-              fontSize: 24,
-              height: 1.60,
-            ),
-          ),
-
-          const Spacer(),
-
-          Label(
-            text: label,
-            style: Styles.mediumText(
-              color: color,
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              height: 1.60,
-            ),
-            maxLines: 1,
-          ),
-        ],
-      ),
-    );
-  }
-
-
   String _formatNumber(BuildContext context, num? number) {
     if (number == null) return "0";
 
@@ -235,7 +251,5 @@ class MyBiddersScreen extends StatelessWidget {
 
     return formatted;
   }
-
-
 }
 
