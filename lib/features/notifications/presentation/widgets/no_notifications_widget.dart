@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class NoNotificationsWidget extends StatelessWidget {
@@ -10,7 +11,7 @@ class NoNotificationsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'There are no notifications',
+        context.isArabic ? 'لا يوجد إشعارات' : 'There are no notifications',
         style: Styles.headerText(),
       ),
     );

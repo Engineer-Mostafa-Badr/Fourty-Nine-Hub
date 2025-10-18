@@ -735,7 +735,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
-                      hintText: 'أدخل المبلغ بالجنيه',
+                      hintText: context.isArabic ?  'أدخل المبلغ بالجنيه' : 'Enter the amount in EGP',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 32.sp,
@@ -764,27 +764,27 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
                       if (inputText.isEmpty) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(content: Text('من فضلك أدخل مبلغ')),
+                          SnackBar(content: Text(context.isArabic? 'من فضلك أدخل مبلغ' : 'Please enter an amount')),
                         );
                       } else if (amount == null) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('من فضلك أدخل رقم صحيح')),
+                           SnackBar(
+                              content: Text(context.isArabic? 'من فضلك أدخل رقم صحيح' : 'Please enter a valid number')),
                         );
                       } else if (amount <= 0) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('المبلغ يجب أن يكون أكبر من صفر')),
+                           SnackBar(
+                              content: Text( context.isArabic? 'المبلغ يجب أن يكون أكبر من صفر' : 'Amount must be greater than zero')),
                         );
                       } else if (amount < 1) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('الحد الأدنى للمساهمة 1 جنيه')),
+                           SnackBar(
+                              content: Text( context.isArabic? 'الحد الأدنى للمساهمة 1 جنيه' : 'Minimum contribution is 1 EGP')),
                         );
                       } else if (widget.chanceAd == null) {
                         ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('خطأ في بيانات الإعلان')),
+                           SnackBar(
+                              content: Text( context.isArabic? 'خطاء في بيانات الإعلان' : 'Error in ad data')),
                         );
                       } else {
                         Navigator.pop(bottomSheetContext);

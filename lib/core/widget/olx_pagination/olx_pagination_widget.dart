@@ -125,3 +125,12 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
         ));
   }
 }
+
+
+extension StaticOlxPagination on OlxPaginationWidget {
+  Widget buildAsStaticList() {
+    return Column(
+      children: items,
+    );
+  }
+}

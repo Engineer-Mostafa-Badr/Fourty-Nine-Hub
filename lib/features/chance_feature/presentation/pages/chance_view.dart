@@ -372,9 +372,11 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       SliverPersistentHeader(
                         pinned: true,
                         floating: false,
+
                         delegate: StickyTabBarDelegate(
                           tabController: _tabController,
                           context: context,
+
                           onSearchTap: _toggleSearch,
                           showSearchField: true,
                           searchController: _searchController,
@@ -587,10 +589,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     final List<ChanceAdEntity> favoriteAds = state.favoriteChanceAds ?? [];
 
     if (favoriteAds.isEmpty) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
         child: Center(
           child: Text(
-            'لا توجد إعلانات مفضلة',
+            context.isArabic ? 'لا توجد إعلانات مفضلة' : 'No favorite ads',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ),
@@ -618,10 +620,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     final List<ChanceAdEntity> expiredAds = state.expiredChanceAds ?? [];
 
     if (expiredAds.isEmpty) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
         child: Center(
           child: Text(
-            'لا توجد إعلانات منتهية',
+            context.isArabic ? 'لا توجد إعلانات منتهية' : 'No expired ads',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ),
@@ -649,10 +651,10 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
     final List<ChanceAdEntity> myAds = state.myChanceAds ?? [];
 
     if (myAds.isEmpty) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
         child: Center(
           child: Text(
-            'لا توجد إعلانات خاصة بك',
+            context.isArabic ?'لا توجد إعلانات خاصة بك' : 'No ads for you',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ),
@@ -1530,7 +1532,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'انضم للفرصة',
+                      context.isArabic ? 'انضم للفرصة' : 'Join Chance',
                       style: TextStyle(
                         fontSize: 36.sp,
                         fontWeight: FontWeight.w600,
@@ -1570,7 +1572,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
-                      hintText: 'أدخل المبلغ بالجنيه',
+                      hintText: context.isArabic ? 'أدخل المبلغ بالجنيه' : 'Enter amount in USD',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 32.sp,
