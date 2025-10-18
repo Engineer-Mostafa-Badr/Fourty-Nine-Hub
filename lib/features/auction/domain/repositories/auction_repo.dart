@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entit
 
 import '../../../../core/error/failure.dart';
 import '../entities/add_favorite_auction_entity.dart';
+import '../entities/all_winner_auction_entity.dart';
 import '../entities/auction_all_winner_entity.dart';
 import '../entities/auction_banner_entity.dart';
 import '../entities/auction_main_category_entity.dart';
@@ -28,6 +29,7 @@ abstract class AuctionRepository {
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getExpiredAuction({required GetAuctionParams params});
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getFavoriteAuction({required GetAuctionParams params});
   Future<Either<Failure, List<MyBiddersEntity>>> getMyBidderAuction({required GetAuctionParams params});
+  Future<Either<Failure, List<AuctionAllWinnerEntity>>> getAuctionWinners({required GetAuctionParams params});
   Future<Either<Failure, List<GetAvailableAuctionEntity >>> getMyAuction({required GetAuctionParams params});
   Future<Either<Failure, List<AuctionMainCategoryEntity>>> getAuctionMainCategory({required GetAuctionParams params});
   Future<Either<Failure, List<AuctionSubCategoryEntity>>> getAuctionSubCategory({required GetSubCategoryAuctionParams params});

@@ -46,6 +46,28 @@ class _FindScreenState extends State<FindScreen> {
       if (mounted) setState(() => _showLoveAnimation = false);
     });
   }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   // final userState = context.read<UserCubit>().state;
+  //   // final user = userState.data;
+  //   // isLoggedIn = !(user?.isGuest ?? true);
+  //   // userId = isLoggedIn ? user!.id : "";
+  //
+  //   final userState = context.read<UserCubit>().state;
+  //   final user = userState.data;
+  //   isLoggedIn = !(user?.isGuest ?? true);
+  //   userId = isLoggedIn ? user!.id : "";
+  //   final String gender = isLoggedIn ? (user?.gender ?? "male") : selectedGender;
+  //
+  //   context.read<FindCubit>().loadInitialFindData(
+  //     context,
+  //     gender: gender,
+  //     userId: userId,
+  //     isLoggedIn: isLoggedIn,
+  //   );
+  // }
   @override
   void initState() {
     super.initState();
@@ -54,112 +76,39 @@ class _FindScreenState extends State<FindScreen> {
     final user = userState.data;
     isLoggedIn = !(user?.isGuest ?? true);
     userId = isLoggedIn ? user!.id : "";
+    print("User Name ${user?.firstName ?? ""}");
+    print("User is logged? ${isLoggedIn}");
+    print("User Id ${userId}");
 
-    final String gender = isLoggedIn ? (user?.gender ?? "male") : selectedGender;
+    // ✅ Determine the opposite gender
+    String oppositeGender;
+    if (isLoggedIn) {
+      final userGender = user?.gender?.toLowerCase() ?? "male";
+      oppositeGender = userGender == "male" ? "female" : "male";
+    } else {
+      oppositeGender = selectedGender;
+    }
 
+    // ✅ Load opposite gender profiles
     context.read<FindCubit>().loadInitialFindData(
       context,
-      gender: gender,
+      gender: oppositeGender,
       userId: userId,
       isLoggedIn: isLoggedIn,
     );
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  //   final userState = context.read<UserCubit>().state;
-  //   final user = userState.data; // Assuming your BasicState<UserEntity> has a `.data`
-  //   print("UserX ${user}");
-  //   print("UserX ${user?.isGuest}");
-  //   print("UserX ${user?.username}");
-  //   print("UserX ${user?.gender}");
-  //   // Check if user is logged in
-  //   final bool isLoggedIn = !(user?.isGuest ?? true);
-  //
-  //   // Get gender from user if logged in, otherwise fallback
-  //   final String gender = isLoggedIn
-  //       ? (user?.gender ?? "male")
-  //       : selectedGender;
-  //
-  //   // Get userId (or empty string if guest)
-  //   final String userId = isLoggedIn ? user!.id : "";
-  //
-  //   // Now call your FindCubit
-  //   context.read<FindCubit>().loadInitialFindData(
-  //     context,
-  //     gender: gender,
-  //     userId: userId,
-  //     isLoggedIn: isLoggedIn,
-  //   );
-  // }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<FindCubit>().loadInitialFindData(context, gender: selectedGender);
-  // }
 
   @override
   void dispose() {
     _cardController.dispose();
     super.dispose();
   }
-  //
-  // void _switchGender(String gender) {
-  //   setState(() {
-  //     selectedGender = gender;
-  //     _currentCardIndex = 0;
-  //     _swipeDirection = null;
-  //   });
-  //   context.read<FindCubit>().loadInitialFindData(context, gender: gender);
-  // }
   bool isMaleSelected = true; // Add this to your State class
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*
-      appBar: AppBar(
-        title:  Text("${LocaleKeys.find.localize}"),
-        actions: [
-          Row(
-            children: [
-              Text(
-                isMaleSelected ? '${LocaleKeys.maleUser.localize}' : '${LocaleKeys.femaleUser.localize}', // or Arabic logic if needed
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isMaleSelected = !isMaleSelected;
-                    selectedGender = isMaleSelected ? "male" : "female";
-                    // Reload the data in cubit
-                    _currentCardIndex = 0;
-                    context.read<FindCubit>().loadInitialFindData(
-                      context,
-                      gender: selectedGender,
-                    );
-                  });
-                },
-                icon:  Icon(
-              isMaleSelected!
-              ? FontAwesomeIcons.person
-                  : FontAwesomeIcons.personDress,
-                color: context.isDarkMode
-                    ? Colors.white
-                    : Colors.red, // Optional styling
-              ),
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ],
-      ),
-*/
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(35),
         child: AppBar(
@@ -238,51 +187,6 @@ class _FindScreenState extends State<FindScreen> {
               ),
             ),
 
-            /*
-            GestureDetector(
-              onTap: () {
-                ManageVibration.vibrate();
-                setState(() {
-                  isMaleSelected = !isMaleSelected!;
-
-                  final tinderCubit = context.read<FindCubit>();
-                  _currentCardIndex = 0;
-
-                  // reload gender-based data
-                  context.read<FindCubit>().loadInitialFindData(
-                    context,
-                    gender: selectedGender,
-                  );
-                });
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    isMaleSelected!
-                        ? (context.isArabic ? "ذكر" : "Male")
-                        : (context.isArabic ? "انثى" : "Female"),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: context.isDarkMode
-                          ? AppColors.whiteColor
-                          : Colors.red,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Icon(
-                    isMaleSelected!
-                        ? FontAwesomeIcons.person
-                        : FontAwesomeIcons.personDress,
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : Colors.red,
-                  ),
-                ],
-              ),
-            ),
-*/
 
           ],
         ),
@@ -457,15 +361,6 @@ class _FindScreenState extends State<FindScreen> {
         }
       });
 
-      // Future.microtask(() {
-      //   // Prevent multiple reloads
-      //   if (!cubit.isFindDataInitialLoading) {
-      //     setState(() => _currentCardIndex = 0);
-      //     cubit.loadInitialFindData(context, gender: selectedGender);
-      //   }
-      // });
-
-      // While waiting, show a small loader or message
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -509,9 +404,13 @@ class _FindScreenState extends State<FindScreen> {
           final person = people[actualIndex];
 
           if (direction == CardSwiperDirection.right) {
-            if(isLoggedIn)
-            cubit.addLikeFind(id: person.id!);
-          } else if (direction == CardSwiperDirection.left) {
+            if (isLoggedIn && person.id != null) {
+              cubit.addLikeFind(id: person.id!);
+            } else {
+              debugPrint("⚠️ Cannot add like: user is logged out or person.id is null (${person.id})");
+            }
+          }
+          else if (direction == CardSwiperDirection.left) {
             if(isLoggedIn)
             cubit.addDisLikeFind(id: person.id!);
           }
@@ -703,22 +602,7 @@ class _FindScreenState extends State<FindScreen> {
     );
   }
 
-  // Widget _buildActionButton(
-  //     BuildContext context, Widget child, VoidCallback onPressed,
-  //     {Color? color, bool? isMini}) {
-  //   return FloatingActionButton(
-  //     heroTag: UniqueKey(),
-  //     elevation: .9,
-  //     onPressed: onPressed,
-  //     mini: isMini ?? false,
-  //     backgroundColor: Colors.white,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-  //     child: Padding(
-  //       padding: EdgeInsets.all(isMini == null ? 16.0.h : 8.h),
-  //       child: child,
-  //     ),
-  //   );
-  // }
+
 
 }
 

@@ -51,6 +51,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/pages/create_posts_company.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/governorate_filter_ads.dart';
+import 'package:fourtyninehub/features/auction/presentation/screens/winners_auction_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -282,6 +283,7 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/us
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/features/spotlight/presentation/screens/spot_light_screen.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/pages/tube_feed_page.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
@@ -1554,6 +1556,7 @@ class AppPages {
                   const GiftView(),
                 ),
               ),
+
               // GoRoute(
               //   path: Paths.GIFT,
               //   name: Routes.GIFT,
@@ -4993,6 +4996,24 @@ class AppPages {
                         serviceLocator<AuctionCubit>()..getMyAuction(),
                     child: MyAuctionScreen(),
                   );
+                },
+              ),
+              GoRoute(
+                path: Paths.auctionWinnersScreen,
+                name: Routes.auctionWinnersScreen,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (_) =>
+                        serviceLocator<AuctionCubit>(),
+                    child: WinnersAuctionScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.spotLightScreen,
+                name: Routes.spotLightScreen,
+                builder: (context, state) {
+                  return SpotLightScreen();
                 },
               ),
             ],
