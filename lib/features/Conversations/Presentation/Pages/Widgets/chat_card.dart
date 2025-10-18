@@ -146,6 +146,7 @@ class _ChatCardState extends State<ChatCard> {
       child: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
+          serviceLocator<ConversationsCubit>().leaveConversation(conversationId: widget.chat?.conversationId ?? '');
           // if (widget.chat!.hasStory) {}
           // if (widget.chat!.isAdmin != "admin") {
           //   if (context.isUserLoggedIn) {

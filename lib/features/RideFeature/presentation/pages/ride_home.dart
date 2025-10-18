@@ -1913,7 +1913,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              showDriverProfileSheet(context, driverId: "688a530b143e1a7ef09e8206");
+                              // showDriverProfileSheet(context, driverId: "688a530b143e1a7ef09e8206");
                             },
                             child: Container(
                               height: 30,

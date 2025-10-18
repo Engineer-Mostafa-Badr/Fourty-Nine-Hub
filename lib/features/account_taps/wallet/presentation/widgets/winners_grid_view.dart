@@ -64,7 +64,7 @@ class _WinnersGridViewState extends State<WinnersGridView> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisSpacing: 7,
               mainAxisSpacing: 8,
-              childAspectRatio: 195.w / 260.h,
+              childAspectRatio: 2,
               crossAxisCount: 3,
               mainAxisExtent: widget.mainAxisExtent,
             ),

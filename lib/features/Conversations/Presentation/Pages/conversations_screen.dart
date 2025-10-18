@@ -46,15 +46,15 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
 
   @override
   void initState() {
-    context.read<ConversationsCubit>().initSockets();
-    context.read<ConversationsCubit>().loadInitialSocialConversations();
+    serviceLocator<ConversationsCubit>().initSocialSockets();
+    serviceLocator<ConversationsCubit>().loadInitialSocialConversations();
     tabController =
     TabController(length: 4, vsync: this)
       ..addListener(() {
         if (tabController.previousIndex != tabController.index) {
           if(tabController.index == 0)
             {
-              context.read<ConversationsCubit>().loadInitialSocialConversations();
+              serviceLocator<ConversationsCubit>().loadInitialSocialConversations();
             }
           setState(() {
 
@@ -66,7 +66,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
       ..addListener(() {
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent - 200) {
-          context.read<ConversationsCubit>().getSocialConversations();
+          serviceLocator<ConversationsCubit>().getSocialConversations();
         }
         if (lastOffset > scrollController.offset) {
           // Scrolled down
