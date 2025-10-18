@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/numbers_extensions.dart';
@@ -54,6 +55,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
     required int qtyChange,
     required int currentQty,
   }) async {
+    showLoadingDialog(context);
     setState(() {});
     final newQty = currentQty + qtyChange;
     if (newQty < 0) return;
@@ -65,6 +67,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
           quantity: currentQty,
         );
     await context.read<RestaurantDetailsCubit>().fetchCart();
+    Navigator.pop(context);
   }
 
   Future<void> _removeItem({
@@ -226,7 +229,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                         });
                                       },textColor: AppColors.getReversedTextColor(context),
                                       color: AppColors.getRedColor(context),
-                                      label: LocaleKeys.confirm.localize,
+                                      label: context.isArabic? 'تأكيد' : 'Confirm',
                                     ),
                                     const SizedBox(width: 8),
                                     BadgedLabel(

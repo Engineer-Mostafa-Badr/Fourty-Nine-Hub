@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
-import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
@@ -13,11 +13,9 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unr
 import 'package:fourtyninehub/features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
@@ -36,6 +34,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   bool _hasNavigated = false;
 
   @override
@@ -63,12 +62,6 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     _hasNavigated = true;
     print("🚀 SplashScreen setting _hasNavigated = true");
-
-    // Add minimum delay to show splash and prevent UI freeze
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    if (!mounted) return;
-
     final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
     print("🚀 currentLocation = $currentLocation");
 
@@ -95,17 +88,30 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }else
     {
+      var languageData = await serviceLocator<ApiConsumer>().get('/settings');
+
       var result = await serviceLocator<ApiConsumer>().get('/settings');
       result.fold((failure){
       }, (data) async {
         print("data['data']['isLoggedIn'] $data");
 
         if(data['data']['isLoggedIn']==true){
+          var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
+          languageData.fold((failure){
+          }, (data) async {
+            changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: context);
+          });
           print("No Expiration");
-
-          // Load critical data first, defer non-critical to after navigation
-          await _loadCriticalData();
-
+          context.read<UserCubit>().attachToken();
+          context.read<UserCubit>().getUser();
+          context.read<CreatePostCubit>().loadData();
+          context.read<SecretsCubit>().getAllSecrets();
+          context.read<CustomPageCubit>().fetchActivate();
+          context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+          context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+          context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+          context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+          context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
           if (!isShowOnboarding) {
             nextRoute = Routes.ChooseLangScreen;
           } else if (isActivate) {
@@ -118,16 +124,27 @@ class _SplashScreenState extends State<SplashScreen> {
 
           if (mounted&&(currentLocation!=nextRoute)) {
             context.go(nextRoute);
-            // Load non-critical data after navigation
-            _loadNonCriticalDataAfterNavigation();
           }
         }else{
           print("isAccessTokenExpired");
           UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
           print("tokens !=null ${tokens !=null}");
           if(tokens !=null){
-            // Load critical data first
-            await _loadCriticalData();
+            var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
+            languageData.fold((failure){
+            }, (data) async {
+              changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: context);
+            });
+            context.read<UserCubit>().attachToken();
+            context.read<UserCubit>().getUser();
+            context.read<CreatePostCubit>().loadData();
+            context.read<SecretsCubit>().getAllSecrets();
+            context.read<CustomPageCubit>().fetchActivate();
+            context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+            context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+            context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+            context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+            context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
 
             if (!isShowOnboarding) {
               nextRoute = Routes.ChooseLangScreen;
@@ -141,8 +158,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
             if (mounted&&(currentLocation!=nextRoute)) {
               context.go(nextRoute);
-              // Load non-critical data after navigation
-              _loadNonCriticalDataAfterNavigation();
             }
           }else{
             final prefs = await SharedPreferences.getInstance();
@@ -169,30 +184,8 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       });
     }
-  }
 
-  // Load only critical data that blocks navigation
-  Future<void> _loadCriticalData() async {
-    if (!mounted) return;
-    context.read<UserCubit>().attachToken();
-    context.read<UserCubit>().getUser();
-    context.read<SecretsCubit>().getAllSecrets();
-  }
 
-  // Load non-critical data after navigation
-  void _loadNonCriticalDataAfterNavigation() {
-    if (!mounted) return;
-    // Run these in background without blocking
-    Future.microtask(() {
-      if (!mounted) return;
-      context.read<CreatePostCubit>().loadData();
-      context.read<CustomPageCubit>().fetchActivate();
-      context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
-      context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-      context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
-      context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
-      context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
-    });
   }
 
 
@@ -212,6 +205,10 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         ),
       );
+      final newAccessToken = response.data['data']['accessToken'] as String;
+      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer ${newAccessToken??''}';
+      print("serviceLocator<Dio>().options.headers['Authorization']1 ${serviceLocator<Dio>().options.headers['Authorization']}");
+      Future.delayed(Duration(seconds: 4));
 
       if(response.statusCode != 200) {
         print("response.statusCode ${response.statusCode}");
@@ -220,14 +217,22 @@ class _SplashScreenState extends State<SplashScreen> {
         return null;
       }
 
+      if(response.statusCode == 200){
+        print("response.statusCode ${response.statusCode}");
+        final accessToken = response.data['data']['accessToken'] as String;
+        serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
+        print("serviceLocator<Dio>().options.headers['Authorization'] ${serviceLocator<Dio>().options.headers['Authorization']}");
+        Future.delayed(Duration(seconds: 1));
+
+      }
+
+
       final accessToken = response.data['data']['accessToken'] as String;
       final refreshToken = response.data['data']['refreshToken'] as String;
       final newToken = UserTokensEntity(
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
-
-      // Set authorization header once
       serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
@@ -236,9 +241,22 @@ class _SplashScreenState extends State<SplashScreen> {
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
       await Storage.setRefreshToken(refreshToken);
+      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
 
       return newToken;
     } catch (e) {
+      // context.read<UserCubit>().attachToken();
+      // context.read<UserCubit>().getUser();
+      // context.read<CreatePostCubit>().loadData();
+      // context.read<SecretsCubit>().getAllSecrets();
+      // context.read<CustomPageCubit>().fetchActivate();
+      // context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+      // context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
+      // context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+      // context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
+      // context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
+      // var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+      // currentContext.push(Routes.LOGIN);
       print('❌ AuthInterceptor: Refresh token API failed: $e');
       return null;
     }

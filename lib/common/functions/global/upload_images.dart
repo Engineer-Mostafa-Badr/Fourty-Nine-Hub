@@ -23,18 +23,25 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 class UploadImages {
   Future<Either<Failure, bool>?> uploadImage({
     bool isGallery = true,
+    int limit = 20,
     required String subCategoryId,
     required BuildContext context,
     required Function(UploadImagesEntity) onUploaded,
   }) async {
+    // Step 1️⃣ Pick images
     final uploadedFiles =
     await FilePickerHelper().pickImages(isGallery: isGallery);
 
     if (uploadedFiles == null || uploadedFiles.isEmpty) return null;
 
-    // Step 1️⃣ Crop all images
+    // 🔹 If user selects more than 20 → take only the first 20
+    List<XFile> limitedFiles = uploadedFiles.length > limit
+        ? uploadedFiles.take(limit).toList()
+        : uploadedFiles;
+
+    // Step 2️⃣ Crop all images
     List<CroppedFile> croppedImages = [];
-    for (var file in uploadedFiles) {
+    for (var file in limitedFiles) {
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: file.path,
         uiSettings: [
@@ -53,7 +60,7 @@ class UploadImages {
 
     if (croppedImages.isEmpty) return null;
 
-    // Step 2️⃣ Show Loading Dialog
+    // Step 3️⃣ Show Loading Dialog
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -70,17 +77,7 @@ class UploadImages {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CustomCircularProgressIndicator(),
-                    const SizedBox(height: 20),
-                    Text(
-                      context.isArabic ? 'جاري التحميل...' : 'Loading...',
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+                content: const CustomCircularProgressIndicator(),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 30,
@@ -100,7 +97,7 @@ class UploadImages {
       },
     );
 
-    // Step 3️⃣ Compress all cropped images
+    // Step 4️⃣ Compress all cropped images
     List<File> compressedImages = [];
     final tempDir = await getTemporaryDirectory();
 
@@ -121,7 +118,7 @@ class UploadImages {
       }
     }
 
-    // Step 4️⃣ Prepare image details payload
+    // Step 5️⃣ Prepare image details payload
     final List<Map<String, dynamic>> imageDetails = [];
     for (var file in compressedImages) {
       final bytes = await file.readAsBytes();
@@ -136,7 +133,7 @@ class UploadImages {
 
     final Map<String, dynamic> payload = {"images": imageDetails};
 
-    // Step 5️⃣ Get signed URLs
+    // Step 6️⃣ Get signed URLs
     final signedURLResponse = await serviceLocator<ApiConsumer>()
         .post(EndPoints.bulkMediaUrl, data: payload);
 
@@ -156,7 +153,7 @@ class UploadImages {
         throw Exception("Image count mismatch with signed URLs");
       }
 
-      // Step 6️⃣ Upload each image to its corresponding signed URL
+      // Step 7️⃣ Upload each image to its corresponding signed URL
       for (int i = 0; i < compressedImages.length; i++) {
         final signedUrl = uploadData[i]['signedUrl'];
         final fileToUpload = XFile(compressedImages[i].path);
@@ -168,7 +165,7 @@ class UploadImages {
         await sendBinaryFileData(file: fileToUpload, signedUrl: signedUrl);
       }
 
-      // Step 7️⃣ Confirm upload
+      // Step 8️⃣ Confirm upload
       final List<String> mediaIds = uploadData
           .map<String>((item) => item['mediaId'] as String)
           .toList();
@@ -178,7 +175,7 @@ class UploadImages {
       await serviceLocator<ApiConsumer>()
           .put("/media/confirm", data: payloadMedia);
 
-      // Step 8️⃣ Return success
+      // Step 9️⃣ Return success
       onUploaded(
         UploadImagesEntity(
           mediaIds: mediaIds,

@@ -318,7 +318,7 @@ class _ChooseLangScreenState extends State<ChooseLangScreen> {
                         ),
                         title: themeCubit.isDarkTheme
                             ? Label(
-                                text: LocaleKeys.lightMode.localize,
+                                text: LocaleKeys.darkMode.localize,
                                 style: Styles.mediumText(
                                   // fontSize: 35.sp,
                                   fontWeight: FontWeight.w400,

@@ -8,7 +8,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../ads/native_ad_card.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
@@ -204,7 +206,7 @@ class _ProviderAdsState extends State<ProviderAds> {
   }
 
   Widget _buildAdContent(AdEntity item) {
-    return CategoriesExtension.fromId(widget.params.mainCategory.id ?? '').view(
+    return AdCard(
       item: item,
       onFav: (String id) async {
         var result = await widget.controller.favouriteAd(id);
@@ -213,7 +215,10 @@ class _ProviderAdsState extends State<ProviderAds> {
       onRemoveFav: (String id) async {
         var result = await widget.controller.unFavouriteAd(id);
         return result;
-      },
+      }, onDeleteAd: (String id) {
+        context.pop();
+        widget.controller.deleteAd(id);
+    },
     );
   }
 }

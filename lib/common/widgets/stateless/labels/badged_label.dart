@@ -56,9 +56,9 @@ class BadgedLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         splashColor:
-            hasSplashColor! ? Colors.transparent : Colors.grey.shade200,
+            (hasSplashColor??false) ? Colors.transparent : Colors.grey.shade200,
         highlightColor:
-            hasHighlightColor! ? Colors.transparent : Colors.grey.shade200,
+            (hasHighlightColor??false) ? Colors.transparent : Colors.grey.shade200,
         onTap: () {
           ManageVibration.vibrate();
           if (onTap != null) {

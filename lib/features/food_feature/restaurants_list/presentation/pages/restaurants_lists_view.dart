@@ -467,51 +467,86 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                 .read<RestaurantsCubit>()
                                 .restaurants
                                 .isNotEmpty
-                            ? SizedBox(
-                                height: MediaQuery.sizeOf(context).height * .7,
-                                child: OlxPaginationWidget(
-                                  scrollController: _scrollController,
-                                  itemsPerPage: 2,
-                                  loadPage: (page) async {},
-                                  banners: bannersList,
-                                  items: List.generate(
-                                    context
-                                        .read<RestaurantsCubit>()
-                                        .restaurants
-                                        .length,
-                                    (index) {
-                                      // final request = controller.reqLogs[index];
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0),
-                                        child: SubCategoriesRestaurantCard(
-                                          item: context
-                                              .read<RestaurantsCubit>()
-                                              .restaurants[index],
-                                          mealId: '',
-                                          favouriteRestaurant:
-                                              (String id) async {
-                                            var result = await context
-                                                .read<RestaurantsCubit>()
-                                                .toggleFavoriteRestaurant(id);
-                                            if (result == true) {
-                                              context
-                                                      .read<RestaurantsCubit>()
-                                                      .restaurants[index]
-                                                      .isFavorite =
-                                                  !context
-                                                      .read<RestaurantsCubit>()
-                                                      .restaurants[index]
-                                                      .isFavorite!;
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              )
-                            /*ListView.separated(
+                            // ? SizedBox(
+                            //     height: MediaQuery.sizeOf(context).height * .7,
+                            //     child: OlxPaginationWidget(
+                            //
+                            //       scrollController: _scrollController,
+                            //       itemsPerPage: 2,
+                            //       loadPage: (page) async {},
+                            //       banners: bannersList,
+                            //       items: List.generate(
+                            //         context
+                            //             .read<RestaurantsCubit>()
+                            //             .restaurants
+                            //             .length,
+                            //         (index) {
+                            //           // final request = controller.reqLogs[index];
+                            //           return Padding(
+                            //             padding: const EdgeInsets.symmetric(
+                            //                 vertical: 8.0),
+                            //             child: SubCategoriesRestaurantCard(
+                            //               item: context
+                            //                   .read<RestaurantsCubit>()
+                            //                   .restaurants[index],
+                            //               mealId: '',
+                            //               favouriteRestaurant:
+                            //                   (String id) async {
+                            //                 var result = await context
+                            //                     .read<RestaurantsCubit>()
+                            //                     .toggleFavoriteRestaurant(id);
+                            //                 if (result == true) {
+                            //                   context
+                            //                           .read<RestaurantsCubit>()
+                            //                           .restaurants[index]
+                            //                           .isFavorite =
+                            //                       !context
+                            //                           .read<RestaurantsCubit>()
+                            //                           .restaurants[index]
+                            //                           .isFavorite!;
+                            //                 }
+                            //               },
+                            //             ),
+                            //           );
+                            //         },
+                            //       ),
+                            //     ),
+                            //   )
+                        ? OlxPaginationWidget(
+                      scrollController: ScrollController(), // dummy controller
+                      itemsPerPage: 2,
+                      loadPage: (page) async {},
+                      banners: bannersList,
+                      items: List.generate(
+                        context.read<RestaurantsCubit>().restaurants.length,
+                            (index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: SubCategoriesRestaurantCard(
+                              item: context.read<RestaurantsCubit>().restaurants[index],
+                              mealId: '',
+                              favouriteRestaurant: (String id) async {
+                                var result = await context
+                                    .read<RestaurantsCubit>()
+                                    .toggleFavoriteRestaurant(id);
+                                if (result == true) {
+                                  context
+                                      .read<RestaurantsCubit>()
+                                      .restaurants[index]
+                                      .isFavorite =
+                                  !context
+                                      .read<RestaurantsCubit>()
+                                      .restaurants[index]
+                                      .isFavorite!;
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ).buildAsStaticList()
+
+                    /*ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: context

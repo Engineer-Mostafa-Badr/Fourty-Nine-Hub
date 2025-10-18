@@ -21,6 +21,7 @@ class AdDynamicInputWidget extends StatefulWidget {
   final Function(SelectionEntity) onChanged;
   final Function(String) onTextChanged;
   final String selectedProp;
+  final GlobalKey<FormState> formKey;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
   const AdDynamicInputWidget({
@@ -29,6 +30,7 @@ class AdDynamicInputWidget extends StatefulWidget {
     required this.onChanged,
     required this.onTextChanged,
     required this.selectedProp,
+    required this.formKey,
     this.focusNode,
     this.textInputAction,
   });
@@ -115,7 +117,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           hintText: getLang() == 'ar'
               ? widget.property.nameAr
               : formatText(widget.property.nameEn),
-          onChanged: (v) => widget.onTextChanged(v),
+          onChanged: (v) {
+            widget.formKey.currentState!.validate();
+            widget.onTextChanged(v);
+          },
           keyboardType: TextInputType.text,
           validator: (value) {
             if ((value == null || value.isEmpty)) {
@@ -127,29 +132,6 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           focusNode: widget.focusNode,
           textInputAction: widget.textInputAction ?? TextInputAction.next,
         ),
-        // TextFormField(
-        //   maxLines: null,
-        //   onChanged: (v) => widget.onTextChanged(v),
-        //   style: Styles.headerText(fontSize: 26),
-        //   decoration: InputDecoration(
-        //       fillColor: Colors.white,
-        //       contentPadding: const EdgeInsets.all(5),
-        //       hintText: getLang() == 'ar'
-        //           ? widget.property.nameAr
-        //           : widget.property.nameEn,
-        //       hintStyle: Styles.mediumText(),
-        //       prefix: Sizer(
-        //         width: 20.w,
-        //       )),
-        //   // keyboardType: TextInputType.number,
-        //   validator: (value) {
-        //     if ((value == null || value.isEmpty)) {
-        //       return LocaleKeys.required.localize;
-        //     } else {
-        //       return null;
-        //     }
-        //   },
-        // ),
       ],
     );
   }
@@ -188,6 +170,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                   ))
               .toList(),
           onChange: (SelectionEntity? newValue) {
+            widget.formKey.currentState!.validate();
             if (newValue != null) {
               value = newValue;
               widget.onChanged(newValue);
@@ -196,66 +179,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           },
           value: value,
         ),
-        // InkWell(
-        //   onTap: () {
-        //     bottomSheet(
-        //         context: context,
-        //         isScrollControlled: true,
-        //         widget: _buildOptionsSheet(
-        //             action: (SelectionEntity v) {
-        //               widget.onChanged(v);
-        //               context.pop();
-        //             },
-        //             values: widget.property.values));
-        //   },
-        //   child: Container(
-        //     width: double.infinity,
-        //     padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 5),
-        //     // margin: EdgeInsets.all(5),
-        //     decoration: BoxDecoration(
-        //       border: Border.all(color: Colors.black),
-        //       borderRadius: BorderRadius.circular(5),
-        //     ),
-        //     child: Row(
-        //       children: [
-        //         Expanded(
-        //           child: Label(
-        //               text: getLang() == 'ar'
-        //                   ? value?.nameAr ?? ''
-        //                   : value?.nameEn ?? ''),
-        //         ),
-        //         const Icon(Icons.arrow_drop_down)
-        //       ],
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
 
-  // Widget _buildOptionsSheet({
-  //   required Function(SelectionEntity v) action,
-  //   required List<SelectionEntity> values,
-  // }) {
-  //   return CustomScaffold(
-  //     appBar: BackAppBar(
-  //       label: LocaleKeys.select.localize,
-  //     ),
-  //     body: ListView.builder(
-  //         itemCount: values.length,
-  //         itemBuilder: (context, index) {
-  //           final v = values[index];
-  //           return ListTile(
-  //             onTap: () {
-  //               action(v);
-  //               value = v;
-  //               setState(() {});
-  //             },
-  //             title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn),
-  //           );
-  //         }),
-  //   );
-  // }
 
   Widget _buildNumberFieldWidget() {
     return Column(
@@ -277,7 +204,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           height: 4,
         ),
         CreateAdTextFormField(
-          onChanged: (String v) => widget.onTextChanged(v),
+          onChanged: (String v) {
+            widget.formKey.currentState!.validate();
+            widget.onTextChanged(v);
+          },
           hintText: getLang() == 'ar'
               ? widget.property.nameAr
               : formatText(widget.property.nameEn),
@@ -336,6 +266,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             itemBuilder: (context, index) => ClickableWidget(
                   onTap: () {
                     ManageVibration.vibrate();
+                    widget.formKey.currentState!.validate();
                     widget.onChanged(widget.property.values[index]);
                     value = widget.property.values[index];
                     setState(() {});

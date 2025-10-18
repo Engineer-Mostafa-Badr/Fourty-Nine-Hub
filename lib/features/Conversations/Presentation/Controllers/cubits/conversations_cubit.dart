@@ -78,135 +78,6 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     this.getUnreadConversationsUseCase,
   ) : super(ConversationsState());
 
-  void initSockets(){
-    participantJoined();
-    participantLeft();
-    onlineOfflineSocket();
-    participantStartRecording();
-    participantStopRecording();
-    // Conversation Update List
-    _listenToUpdateSocialList();
-    // Conversation Start Typing
-    _listenToStartTyping();
-    // Conversation Stop Typing
-    _listenToStopTyping();
-  }
-
-  void participantJoined(){
-    try {
-      // Participant Joined
-      SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
-        log("decoded data : \n$data");
-        try {
-          // final decodedData = jsonDecode(data);
-          CliLogger.info("conversation:participant-joined :  $data");
-
-          // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
-          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = true;
-          emit(state.copyWith(
-              status: ConversationsStates.success));
-
-        } catch (e) {
-          CliLogger.error("conversation:participant-joined Error :  $e");
-        }
-      });
-    } catch (e) {
-      CliLogger.error("conversation:participant-joined Error :  $e");
-    }
-  }
-
-  void participantLeft(){
-    // Participant Left
-    try {
-
-      SharedWebSocket.socket?.on('conversation:participant-left', (data) {
-        log("decoded data : \n$data");
-        try {
-          // final decodedData = jsonDecode(data);
-          CliLogger.info("conversation:participant-left :  $data");
-
-          // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
-          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
-          emit(state.copyWith(
-              status: ConversationsStates.success));
-        } catch (e) {
-          CliLogger.error("conversation:participant-left Error :  $e");
-        }
-      });
-    } catch (e) {
-      CliLogger.error("conversation:participant-left Error :  $e");
-    }
-  }
-
-  void onlineOfflineSocket(){
-    // friend:status (online or offline)
-    try {
-      SharedWebSocket.socket?.on('friend:status', (data) {
-        log("decoded data : \n$data");
-        try {
-          // final decodedData = jsonDecode(data);
-          CliLogger.info("friend:status :  $data");
-
-          // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
-          socialConversations.firstWhere((element) => element.profile?.id == data['friendUserId']).isOnline = data['online'] ?? false;
-          emit(state.copyWith(
-              status: ConversationsStates.success));
-
-        } catch (e) {
-          CliLogger.error("friend:status Error :  $e");
-        }
-      });
-    } catch (e) {
-      CliLogger.error("friend:status Error :  $e");
-    }
-  }
-
-  void participantStartRecording(){
-    // Participant Start Recording
-    try {
-
-      SharedWebSocket.socket?.on('conversation:participant-started-recording', (data) {
-        log("decoded data : \n$data");
-        try {
-          // final decodedData = jsonDecode(data);
-          CliLogger.info("conversation:participant-started-recording :  $data");
-
-          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = true;
-          emit(state.copyWith(
-              status: ConversationsStates.success));
-
-        } catch (e) {
-          CliLogger.error("conversation:participant-started-recording Error :  $e");
-        }
-      });
-    } catch (e) {
-      CliLogger.error("conversation:participant-started-recording Error :  $e");
-    }
-  }
-
-  void participantStopRecording(){
-    // Participant Stop Recording
-    try {
-
-      SharedWebSocket.socket?.on('conversation:participant-stop-recording', (data) {
-        log("decoded data : \n$data");
-        try {
-          // final decodedData = jsonDecode(data);
-          CliLogger.info("conversation:participant-stop-recording :  $data");
-
-          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = false;
-          emit(state.copyWith(
-              status: ConversationsStates.success));
-
-        } catch (e) {
-          CliLogger.error("conversation:participant-stop-recording Error :  $e");
-        }
-      });
-    } catch (e) {
-      CliLogger.error("conversation:participant-stop-recording Error :  $e");
-    }
-  }
-
   Future<void> joinConversation({required String conversationId}) async {
     try {
       log("you joining conversation :  $conversationId");
@@ -231,8 +102,215 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     }
   }
 
-  _listenToUpdateSocialList() {
+  Future<void> startTyping(String conversationId) async {
+    final result = await startTypingUseCase(conversationId: conversationId);
+    result.fold((l) => null, (r) => null);
+  }
+
+  Future<void> stopTyping(String conversationId) async {
+    final result = await stopTypingUseCase(conversationId: conversationId);
+    result.fold((l) => null, (r) => null);
+  }
+
+
+  // social sockets
+  initSocialSockets(){
+    onlineOfflineSocial();
+    listenToUpdateSocialList();
+    participantJoinedSocial();
+    participantLeftSocial();
+    participantStartRecordingSocial();
+    participantStopRecordingSocial();
+    listenToStartTypingSocial();
+    listenToStopTypingSocial();
+  }
+
+  onlineOfflineSocial(){
+    // friend:status (online or offline)
+    try {
+      SharedWebSocket.socket?.on('friend:status', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("friend:status :  $data");
+
+          // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
+          socialConversations.firstWhere((element) => element.profile?.id == data['friendUserId']).isOnline = data['online'] ?? false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("friend:status Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("friend:status Error :  $e");
+    }
+  }
+
+  listenToUpdateSocialList() {
     log("listenToUpdateSocialList");
+    listenToUpdateSocialListUseCase((conversation) {
+      log("conversation updated :  $conversation");
+      if(socialConversations.any((element) => element.conversationId == conversation.conversationId)){
+        // update conversation
+        socialConversations[socialConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
+      }
+      else{
+        socialConversations.add(conversation);
+      }
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  participantJoinedSocial(){
+    try {
+      // Participant Joined
+      SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-joined :  $data");
+
+          // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-joined Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-joined Error :  $e");
+    }
+  }
+
+  participantLeftSocial(){
+    // Participant Left
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-left', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-left :  $data");
+
+          // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+        } catch (e) {
+          CliLogger.error("conversation:participant-left Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-left Error :  $e");
+    }
+  }
+
+  participantStartRecordingSocial(){
+    // Participant Start Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-started-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-started-recording :  $data");
+
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-started-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-started-recording Error :  $e");
+    }
+  }
+
+  participantStopRecordingSocial(){
+    // Participant Stop Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-stop-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-stop-recording :  $data");
+
+          socialConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-stop-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-stop-recording Error :  $e");
+    }
+  }
+
+  listenToStartTypingSocial() {
+    listenToStartTypingUseCase((conversationId) {
+      socialConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = true;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  listenToStopTypingSocial(){
+    listenToStopTypingUseCase((conversationId) {
+      socialConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = false;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+
+
+  // anonymous sockets
+  initSocialAnonymousSockets(){
+    onlineOfflineSocialAnonymous();
+    listenToUpdateSocialAnonymousList();
+    participantJoinedSocialAnonymous();
+    participantLeftSocialAnonymous();
+    participantStartRecordingSocialAnonymous();
+    participantStopRecordingSocialAnonymous();
+    listenToStartTypingSocialAnonymous();
+    listenToStopTypingSocialAnonymous();
+  }
+
+  onlineOfflineSocialAnonymous(){
+    // friend:status (online or offline)
+    try {
+      SharedWebSocket.socket?.on('friend:status', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("friend:status :  $data");
+
+          // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
+          socialAnonymousConversations.firstWhere((element) => element.profile?.id == data['friendUserId']).isOnline = data['online'] ?? false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("friend:status Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("friend:status Error :  $e");
+    }
+  }
+
+  listenToUpdateSocialAnonymousList() {
+    log("listenToUpdateSocialAnonymousList");
     try {
       // SharedWebSocket.instance.socket!.connect();
 
@@ -261,49 +339,434 @@ class ConversationsCubit extends Cubit<ConversationsState> {
     }
   }
 
-  listenToUpdateSocialAnonymousList() {
-    log("listenToUpdateSocialAnonymousList");
+  participantJoinedSocialAnonymous(){
+    try {
+      // Participant Joined
+      SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-joined :  $data");
+
+          // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
+          socialAnonymousConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-joined Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-joined Error :  $e");
+    }
+  }
+
+  participantLeftSocialAnonymous(){
+    // Participant Left
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-left', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-left :  $data");
+
+          // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
+          socialAnonymousConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+        } catch (e) {
+          CliLogger.error("conversation:participant-left Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-left Error :  $e");
+    }
+  }
+
+  participantStartRecordingSocialAnonymous(){
+    // Participant Start Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-started-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-started-recording :  $data");
+
+          socialAnonymousConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-started-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-started-recording Error :  $e");
+    }
+  }
+
+  participantStopRecordingSocialAnonymous(){
+    // Participant Stop Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-stop-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-stop-recording :  $data");
+
+          socialAnonymousConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-stop-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-stop-recording Error :  $e");
+    }
+  }
+
+  listenToStartTypingSocialAnonymous() {
+    listenToStartTypingUseCase((conversationId) {
+      socialAnonymousConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = true;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  listenToStopTypingSocialAnonymous(){
+    listenToStopTypingUseCase((conversationId) {
+      socialAnonymousConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = false;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+
+  // social locked sockets
+  initSocialLockedSockets(){
+    onlineOfflineSocialLocked();
+    listenToUpdateSocialLockedList();
+    participantJoinedSocialLocked();
+    participantLeftSocialLocked();
+    participantStartRecordingSocialLocked();
+    participantStopRecordingSocialLocked();
+    listenToStartTypingSocialLocked();
+    listenToStopTypingSocialLocked();
+  }
+
+  onlineOfflineSocialLocked(){
+    // friend:status (online or offline)
+    try {
+      SharedWebSocket.socket?.on('friend:status', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("friend:status :  $data");
+
+          // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
+          socialLockedConversations.firstWhere((element) => element.profile?.id == data['friendUserId']).isOnline = data['online'] ?? false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("friend:status Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("friend:status Error :  $e");
+    }
+  }
+
+  listenToUpdateSocialLockedList() {
+    log("listenToUpdateSocialList");
     listenToUpdateSocialListUseCase((conversation) {
       log("conversation updated :  $conversation");
-      if(socialConversations.any((element) => element.conversationId == conversation.conversationId)){
+      if(socialLockedConversations.any((element) => element.conversationId == conversation.conversationId)){
         // update conversation
-        socialConversations[socialConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
+        socialLockedConversations[socialLockedConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
       }
       else{
-        socialConversations.add(conversation);
+        socialLockedConversations.add(conversation);
       }
       emit(state.copyWith(
           status: ConversationsStates.success));
     });
   }
 
-  Future<void> startTyping(String conversationId) async {
-    final result = await startTypingUseCase(conversationId: conversationId);
-    result.fold((l) => null, (r) => null);
+  participantJoinedSocialLocked(){
+    try {
+      // Participant Joined
+      SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-joined :  $data");
+
+          // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
+          socialLockedConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-joined Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-joined Error :  $e");
+    }
   }
 
-  _listenToStartTyping() {
+  participantLeftSocialLocked(){
+    // Participant Left
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-left', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-left :  $data");
+
+          // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
+          socialLockedConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+        } catch (e) {
+          CliLogger.error("conversation:participant-left Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-left Error :  $e");
+    }
+  }
+
+  participantStartRecordingSocialLocked(){
+    // Participant Start Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-started-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-started-recording :  $data");
+
+          socialLockedConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-started-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-started-recording Error :  $e");
+    }
+  }
+
+  participantStopRecordingSocialLocked(){
+    // Participant Stop Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-stop-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-stop-recording :  $data");
+
+          socialLockedConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-stop-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-stop-recording Error :  $e");
+    }
+  }
+
+  listenToStartTypingSocialLocked() {
     listenToStartTypingUseCase((conversationId) {
-      socialConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = true;
+      socialLockedConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = true;
       emit(state.copyWith(
           status: ConversationsStates.success));
     });
   }
 
-  Future<void> stopTyping(String conversationId) async {
-    final result = await stopTypingUseCase(conversationId: conversationId);
-    result.fold((l) => null, (r) => null);
-  }
-
-  _listenToStopTyping(){
+  listenToStopTypingSocialLocked(){
     listenToStopTypingUseCase((conversationId) {
-      socialConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = false;
+      socialLockedConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = false;
       emit(state.copyWith(
           status: ConversationsStates.success));
     });
   }
 
 
+
+  // Social Archive sockets
+  initSocialArchivedSockets(){
+    onlineOfflineSocialArchived();
+    listenToUpdateSocialArchivedList();
+    participantJoinedSocialArchived();
+    participantLeftSocialArchived();
+    participantStartRecordingSocialArchived();
+    participantStopRecordingSocialArchived();
+    listenToStartTypingSocialArchived();
+    listenToStopTypingSocialArchived();
+  }
+
+  onlineOfflineSocialArchived(){
+    // friend:status (online or offline)
+    try {
+      SharedWebSocket.socket?.on('friend:status', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("friend:status :  $data");
+
+          // friend:status :  {friendUserId: 680a56fa076c551578e1b278, online: true} // profile object (userId)
+          socialArchivedConversations.firstWhere((element) => element.profile?.id == data['friendUserId']).isOnline = data['online'] ?? false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("friend:status Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("friend:status Error :  $e");
+    }
+  }
+
+  listenToUpdateSocialArchivedList() {
+    log("listenToUpdateSocialList");
+    listenToUpdateSocialListUseCase((conversation) {
+      log("conversation updated :  $conversation");
+      if(socialArchivedConversations.any((element) => element.conversationId == conversation.conversationId)){
+        // update conversation
+        socialArchivedConversations[socialArchivedConversations.indexWhere((element) => element.conversationId == conversation.conversationId)] = conversation;
+      }
+      else{
+        socialArchivedConversations.add(conversation);
+      }
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  participantJoinedSocialArchived(){
+    try {
+      // Participant Joined
+      SharedWebSocket.socket?.on('conversation:participant-joined', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-joined :  $data");
+
+          // conversation:participant-joined :  {conversationId: 6891db829fd423658d5c72ff}
+          socialArchivedConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-joined Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-joined Error :  $e");
+    }
+  }
+
+  participantLeftSocialArchived(){
+    // Participant Left
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-left', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-left :  $data");
+
+          // conversation:participant-left :  {conversationId: 6891db829fd423658d5c72ff}
+          socialArchivedConversations.firstWhere((element) => element.conversationId == data['conversationId']).inConversation = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+        } catch (e) {
+          CliLogger.error("conversation:participant-left Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-left Error :  $e");
+    }
+  }
+
+  participantStartRecordingSocialArchived(){
+    // Participant Start Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-started-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-started-recording :  $data");
+
+          socialArchivedConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = true;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-started-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-started-recording Error :  $e");
+    }
+  }
+
+  participantStopRecordingSocialArchived(){
+    // Participant Stop Recording
+    try {
+
+      SharedWebSocket.socket?.on('conversation:participant-stop-recording', (data) {
+        log("decoded data : \n$data");
+        try {
+          // final decodedData = jsonDecode(data);
+          CliLogger.info("conversation:participant-stop-recording :  $data");
+
+          socialArchivedConversations.firstWhere((element) => element.conversationId == data['conversationId']).isRecording = false;
+          emit(state.copyWith(
+              status: ConversationsStates.success));
+
+        } catch (e) {
+          CliLogger.error("conversation:participant-stop-recording Error :  $e");
+        }
+      });
+    } catch (e) {
+      CliLogger.error("conversation:participant-stop-recording Error :  $e");
+    }
+  }
+
+  listenToStartTypingSocialArchived() {
+    listenToStartTypingUseCase((conversationId) {
+      socialArchivedConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = true;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
+
+  listenToStopTypingSocialArchived(){
+    listenToStopTypingUseCase((conversationId) {
+      socialArchivedConversations.firstWhere((element) => element.conversationId == conversationId).isTyping = false;
+      emit(state.copyWith(
+          status: ConversationsStates.success));
+    });
+  }
 
   final int pageSize = 15;
   List<ConversationEntity> socialConversations = [];

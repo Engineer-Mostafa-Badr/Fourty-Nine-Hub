@@ -853,6 +853,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 BirthDatePicker(
                   controller: registerCubit.birthDateTextController,
+                    onDateChanged: (date) {
+                      registerCubit.birthDate = date??'';
+                      setState(() {});
+                      print("registerCubit.birthDate ${registerCubit.birthDate}");
+                      print("registerCubit.birthDate $date");
+                    }
                 ),
 
                 Sizer(

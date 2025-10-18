@@ -158,6 +158,7 @@ class _MyAdCardState extends State<MyAdCard> {
                     dontPop: true,
                     successRequest: () {
                       context.pop();
+                      context.pop();
                       showSuccessMessage(
                           context,
                           context.isArabic
@@ -478,7 +479,8 @@ class _MyAdCardState extends State<MyAdCard> {
                           .areYouSureAboutDeletingTheAD
                           .localize,
                       action: () {
-                        if (widget.deleteAd != null) {
+                        print("widget.deleteAd ${widget.item.id}");
+                        if(widget.deleteAd != null){
                           widget.deleteAd!(widget.item.id);
                         }
                       },

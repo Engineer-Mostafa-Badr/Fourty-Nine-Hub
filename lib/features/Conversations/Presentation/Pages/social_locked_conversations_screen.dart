@@ -29,6 +29,7 @@ class _SocialLockedConversationsScreenState extends State<SocialLockedConversati
   late ScrollController scrollController;
   @override
   void initState() {
+    serviceLocator<ConversationsCubit>().initSocialLockedSockets();
     serviceLocator<ConversationsCubit>().loadInitialSocialLockedConversations();
     scrollController = ScrollController()
       ..addListener(() {

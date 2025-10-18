@@ -4,8 +4,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -80,8 +82,7 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
         final ad = widget.controller.ads[index];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-          child: CategoriesExtension.fromId(widget.params.mainCategory.id ?? '')
-              .view(
+          child: AdCard(
             item: ad,
             onFav: (String id) async {
               var result = await widget.controller.favouriteAd(id);
@@ -90,6 +91,10 @@ class _ProviderFilterAdsState extends State<ProviderFilterAds> {
             onRemoveFav: (String id) async {
               var result = await widget.controller.unFavouriteAd(id);
               return result;
+            },
+            onDeleteAd: (String id) {
+              context.pop();
+              widget.controller.deleteAd(id);
             },
           ),
         );

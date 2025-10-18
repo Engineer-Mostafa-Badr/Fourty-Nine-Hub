@@ -5,8 +5,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 class UserFilterAds extends StatefulWidget {
   const UserFilterAds(
@@ -76,9 +78,7 @@ class _UserFilterAdsState extends State<UserFilterAds> {
             context
                 .read<AdvertisementCubit>()
                 .ads[index];
-            return CategoriesExtension.fromId(
-                widget.params.mainCategory.id ?? '')
-                .view(
+            return AdCard(
               item: ad,
               onFav: (String id) async {
                 var result = await context
@@ -89,6 +89,11 @@ class _UserFilterAdsState extends State<UserFilterAds> {
                 var result = await context
                     .read<AdvertisementCubit>().unFavouriteAd(id);
                 return result;
+              },
+              onDeleteAd: (String id) async {
+                context.pop();
+                await context
+                    .read<AdvertisementCubit>().deleteAd(id);
               },
             );
           },

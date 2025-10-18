@@ -245,6 +245,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
               return ClickableWidget(
                 onTap: () {
+                  if(inNotifications) return;
                   ManageVibration.vibrate();
                   if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
                     return;

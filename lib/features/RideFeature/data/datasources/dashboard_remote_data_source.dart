@@ -436,15 +436,15 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   @override
   void listenToClientComing(Function(String tripId) params) {
     try {
-      CliLogger.info("Listen to Client Coming ");
+      CliLogger.info("Listen to Client Coming Tracking");
       log("Listen to Client Coming ");
       SharedWebSocket.socket!.on(SocketIOListeners.listenToClientComing, (data) {
-        CliLogger.info("Client Coming data :  $data");
-        log("Client Coming data :  $data");
+        CliLogger.info("Client Coming Tracking data :  $data");
+        log("Client Coming Tracking data :  $data");
         params(data['message']);
       });
     } catch (e) {
-      CliLogger.info("can't listen to trip price error $e");
+      CliLogger.info("can't listen to Client Coming Tracking error $e");
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_d
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/past_routes_tab_widget.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/running_route_tab_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import '../../../../res/assets/assets.dart';
 import '../widget/available_routes_tab_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -27,6 +28,7 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
   @override
   void initState() {
     super.initState();
+    context.read<CaptainShareDashboardCubit>().loadInitData(context);
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});
@@ -35,6 +37,8 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
 
   @override
   void dispose() {
+    SharedWebSocket.socket!.off("captain-share:new-available-trip");
+    SharedWebSocket.socket!.off("CAPTAIN_SHARE:PASSENGER_IAM_COMING");
     _tabController.dispose();
     super.dispose();
   }

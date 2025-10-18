@@ -35,10 +35,12 @@ class MarriageAdsListViewItem extends StatefulWidget {
     super.key,
     required this.marriageAds,
     required this.state,
+    required this.controller,
   });
 
   final AdModel marriageAds;
   final SubcategoriesState state;
+  final SubcategoriesCubit controller;
 
   @override
   State<MarriageAdsListViewItem> createState() => _MarriageAdsListViewItemState();
@@ -47,7 +49,10 @@ class MarriageAdsListViewItem extends StatefulWidget {
 class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
   @override
   Widget build(BuildContext context) {
-    return AdCard(item: widget.marriageAds, onFav: (v){}, onRemoveFav: (s){});
+    return AdCard(item: widget.marriageAds, onFav: (v){}, onRemoveFav: (s){}, onDeleteAd: (String id) {
+      context.pop();
+      widget.controller.deleteAd(id);
+    },);
     // return ClickableWidget(
     //   onTap: () {
     //     ManageVibration.vibrate();

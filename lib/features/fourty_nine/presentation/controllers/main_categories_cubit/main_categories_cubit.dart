@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/question_entity.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/slider_item_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/answer_question_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/any_cashback_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_currency_use_case.dart';
@@ -32,6 +33,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_categories_use_case.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_question_usecase.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_slider_items_usecase.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/shared/fourty_nine_shared_data.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/client/listen_to_trip_accepted_use_case.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/delete_favorite_category_use_case.dart';
@@ -70,6 +72,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final ListenToTripAcceptedUseCase listenToTripAcceptedUseCase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
+  final GetSliderItemsUseCase _getSliderItemsUseCase;
 
   MainCategoriesCubit(
       this._getMainCategoriesUseCase,
@@ -88,10 +91,43 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       this.listenToNewTripUseCase,
       this.listenToAcceptOfferUseCase,
       this.listenToTripAcceptedUseCase,
+      this._getSliderItemsUseCase,
       ) : super(MainCategoriesState());
 
+  Future<void> loadSliderData() async {
+    print("objectLSADSALD:AS");
+    emit(state.copyWith(status: StateStatus.loadingSliders));
+    final result = await _getSliderItemsUseCase.call(const NoParams());
+    print("objectLSADSALD:AS");
+
+    emit(
+      result.fold(
+            (failure) {
+          var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+          print("objectLSADSALD:AS");
+          print('there is an error ${failure.toString()}');
+          return state.copyWith(
+            failure: failure,
+            status: StateStatus.error,
+          );
+        },
+            (data) {
+          print("objectLSADSALD:AS");
+          print('data is $data');
+          return state.copyWith(
+            status: StateStatus.success,
+            sliders: data,
+          );
+        },
+      ),
+    );
+  }
   Future<void> loadDataCategory(BuildContext context) async {
     print("loadDataCategory");
+    await loadSliderData();
     await loadData(context);
     await getMainCategoryDetails();
     // await getQuestion();
@@ -120,6 +156,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> loadData(BuildContext context) async {
     print("loadData");
+    loadSliderData();
     initNotification();
     getQuestion();
     getWallet();

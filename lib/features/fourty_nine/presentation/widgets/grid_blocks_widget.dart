@@ -206,18 +206,19 @@ class GridBlocksWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          border: Border.all(color: context.isDarkMode? AppColors.whiteColor : AppColors.GREY_DARK_COLOR, width: 1),
           image: DecorationImage(
             image: AssetImage(image),
             fit: BoxFit.cover,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: shadowColor,
-              spreadRadius: 5,
-              blurRadius: 5,
-              offset: const Offset(1, 1),
-            )
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: shadowColor,
+          //     spreadRadius: 5,
+          //     blurRadius: 5,
+          //     offset: const Offset(1, 1),
+          //   )
+          // ],
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Center(

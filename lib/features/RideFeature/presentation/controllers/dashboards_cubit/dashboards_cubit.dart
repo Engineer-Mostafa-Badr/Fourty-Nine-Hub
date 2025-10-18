@@ -196,7 +196,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToRemoveLoadingUseCase listenToRemoveLoadingUseCase;
 
   final ListenToAvailableLoadingUseCase listenToAvailableLoadingUseCase;
-  final ListenToClientComingUseCase listenToClientComingUseCase;
+  final ListenToClientComingTrackingUseCase listenToClientComingUseCase;
 
 
 
@@ -489,7 +489,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   void listenToClientComing() {
-    CliLogger.info('Listen To Client Coming');
+    CliLogger.info('Listen To Client Coming Tracking');
     // TripsResponseEntity
     listenToClientComingUseCase((trip) async {
       final prefs = await SharedPreferences.getInstance();
@@ -1842,7 +1842,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(context.isArabic?'العميل سيدفع ($amountPaidCash جنيه مصري) فيزا  ${showRemaining?' ,المتبقي ($remaining جنيه مصري) نقدا':''}':'the client will pay ($amountPaidCash EGP) visa ${showRemaining?', the rest ($remaining EGP) cash':''}',
+            Text(context.isArabic?'العميل سيدفع ($amountPaidCash جنيه مصري) فيزا  ${showRemaining?' ,المتبقي ($remaining جنيه مصري) نقدا':''}':'The Client Will Pay ($amountPaidCash EGP) Visa ${showRemaining?', The Rest ($remaining EGP) Cash':''}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -1942,7 +1942,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   void listenToAcceptOffer(BuildContext context, RideModeParams params) {
-    CliLogger.info('Listen To Update Trip Auto Accept');
+    CliLogger.info('Listen To Accept Offer');
     var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
     listenToAcceptOfferUseCase((trip) {
       if(state.currentIndex ==1 ){
