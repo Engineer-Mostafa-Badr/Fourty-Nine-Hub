@@ -359,7 +359,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                             horizontal: 0, vertical: 2),
                         child: HomeMainCategoryBanner(
                           category: state.data![index],
-                          // imageHeight: MediaQuery.sizeOf(context).height * 0.10,
+                          imageHeight: MediaQuery.sizeOf(context).height * 0.10,
                           onFavorite: () async {
                             ManageVibration.vibrate();
                             var result =
