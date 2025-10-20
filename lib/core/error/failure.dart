@@ -58,6 +58,8 @@ class SocialLoginFailure extends Failure {
 }
 
 String getFailureMessage(Failure failure, BuildContext context) {
+  String failureName = getFailureName(failure, context);
+  if(failureName=='EmailNotVerifiedError')return '';
   String localizeMessage(String message) {
     if (message.contains('&&&')) {
       final parts = message.split('&&&');

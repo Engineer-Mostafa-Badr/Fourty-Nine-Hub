@@ -109,15 +109,16 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             InkWell(
               onTap: () async {
                 ManageVibration.vibrate();
-                // await WhatsAppNotificationUtils.showWhatsAppMessage(
-                //   senderName: 'Mohamed',
-                //   message: 'Hello! How are you?',
-                //   senderAvatar: 'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
-                //   useCollapsedIcon: true,
-                // );
+                await WhatsAppNotificationUtils.showWhatsAppMessage(
+                  senderName: 'Mohamed',
+                  message: 'Hello! How are you?',
+                  senderAvatar: 'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
+                  useCollapsedIcon: true,
+                );
                 await WhatsAppNotificationUtils.showNoInternetNotification(
-                  title: 'No Internet Connection',
-                  message: 'You may have new messages',
+                  title: 'No Internet',
+                  message: 'Please check your internet connection',
+                  isPersistent: true
                 );
                 // bool isCustomPage = await CacheManager.getActivation() ?? false;
                 // if (isCustomPage) {

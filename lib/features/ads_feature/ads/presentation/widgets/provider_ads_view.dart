@@ -62,7 +62,7 @@ class ProviderAdsView extends StatelessWidget {
                                 extra: FilterAdsParams(
                                   categorization: CategorizationEntity(
                                       mainCategory: params.mainCategory,
-                                      subCategory: params.subCategory),
+                                      subCategory: params.subCategory,fromMarriage: false),
                                   userType: userType,
                                 ));
                             if (data != null) {

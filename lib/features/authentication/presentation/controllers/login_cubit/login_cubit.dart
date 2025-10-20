@@ -25,8 +25,10 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/signIn_as
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/helpers/social_login_helpers.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -124,8 +126,17 @@ class LoginCubit extends Cubit<LoginState> {
       result.fold(
         (failure) {
           print("getFailureMessage(failure, currentContext) ${getFailureName(failure, currentContext)}");
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+          String failureName = getFailureName(failure, currentContext);
+          if(failureName == 'EmailNotVerifiedError'){
+            currentContext.push(
+              Routes.FORGOTPASSWORDOTP,
+              extra: emailTextController.text.trim(),
+            );
+          }else{
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+          }
+
           emit(LoginError(failure));
         },
         (userToken) async {

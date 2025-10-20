@@ -144,10 +144,10 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
       },
       child: CustomScaffold(
         enableCustomAppBar: true,
-        appBar: const PreferredSize(
+        appBar: PreferredSize(
           preferredSize: Size.fromHeight(30),
           child: BackAppBar(
-            label: 'OTP Verify For Email',
+            label: context.isArabic ? 'التحقق من OTP للبريد الإلكتروني' : 'OTP Verify For Email',
             enableCustomAppBar: true,
           ),
         ),
@@ -176,7 +176,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Label(
-                    text: 'We\'ve sent a code to ',
+                    text: context.isArabic ?'لقد ارسلنا كود ل':'We\'ve sent a code to ',
                     style: Styles.mediumText(color: Colors.black87),
                   ),
                   Label(
@@ -191,7 +191,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                 height: 32,
               ),
               Label(
-                text: 'OTP Code',
+                text: context.isArabic ? 'كود التحقق':'OTP Code',
                 style: Styles.headerText(),
               ),
               const Sizer(),
