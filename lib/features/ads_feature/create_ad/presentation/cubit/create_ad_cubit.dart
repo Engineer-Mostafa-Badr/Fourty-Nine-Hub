@@ -728,7 +728,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         .uploadImage(
             subCategoryId: subCategoryId,
             context: context,
-            limit:state.images==null?20: (20-(state.images?.length ?? 0)),
+            limit:
+                state.images == null ? 20 : (20 - (state.images?.length ?? 0)),
             onUploaded: (UploadImagesEntity media) {
               // context.pop();
               final images = state.images ?? [];

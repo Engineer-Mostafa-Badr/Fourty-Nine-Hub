@@ -417,6 +417,7 @@ import '../features/food_feature/restaurant_details/presentation/cubit/restauran
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/food_feature/restaurants_list/presentation/pages/all_meal_categories_view.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
@@ -2925,6 +2926,19 @@ class AppPages {
                       ),
                     ),
                     GoRoute(
+                      path: Paths.ALLMEALCATEGORIES,
+                      name: Routes.ALLMEALCATEGORIES,
+                      pageBuilder: (context, state) {
+                        // Get the existing RestaurantsCubit from parent context
+                        final restaurantsCubit = context.read<RestaurantsCubit>();
+                        return customTransition(
+                          context,
+                          state,
+                          AllMealCategoriesView(cubit: restaurantsCubit),
+                        );
+                      },
+                    ),
+                    GoRoute(
                         path: Paths.RESTAURANTDETAILS,
                         name: Routes.RESTAURANTDETAILS,
                         pageBuilder: (context, state) => customTransition(
@@ -5003,8 +5017,7 @@ class AppPages {
                 name: Routes.auctionWinnersScreen,
                 builder: (context, state) {
                   return BlocProvider(
-                    create: (_) =>
-                        serviceLocator<AuctionCubit>(),
+                    create: (_) => serviceLocator<AuctionCubit>(),
                     child: WinnersAuctionScreen(),
                   );
                 },

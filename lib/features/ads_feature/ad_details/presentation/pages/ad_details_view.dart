@@ -1080,7 +1080,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                                   ad.mainCategoryId !=
                                       '62c8b5879332225799fe3312' &&
                                   ad.mainCategoryId !=
-                                      '62c8b5a29332225799fe3348') ...[
+                                      '62c8be568e28a58a3edf5f1d') ...[
                                 ImageFromInternet(
                                     image: e.imageUrl, width: 24, height: 24),
                                 const SizedBox(

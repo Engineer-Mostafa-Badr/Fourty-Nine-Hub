@@ -74,56 +74,54 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
               ? const Center(
                   child: CustomCircularProgressIndicator(),
                 )
-              : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Expanded(
-                            child: ListView(
-                              controller: _scrollController,
-                              children: [
-                                RestaurantHeader(restaurant: widget.restaurant),
-                                const Sizer(),
-                                BuildFoodList(
-                                  restaurantId: widget.restaurant.id ?? '',
+              : Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            controller: _scrollController,
+                            children: [
+                              RestaurantHeader(restaurant: widget.restaurant),
+                              const Sizer(),
+                              BuildFoodList(
+                                restaurantId: widget.restaurant.id ?? '',
+                              ),
+                              if (context
+                                      .read<RestaurantDetailsCubit>()
+                                      .isLoadingMore ==
+                                  true)
+                                const Center(
+                                  child: CustomCircularProgressIndicator(),
                                 ),
-                                if (context
-                                        .read<RestaurantDetailsCubit>()
-                                        .isLoadingMore ==
-                                    true)
-                                  const Center(
-                                    child: CustomCircularProgressIndicator(),
-                                  ),
-                              ],
-                            ),
+                            ],
                           ),
-                          _viewCartButton(),
-                        ],
-                      ),
-                      if (state.isAddToCart)
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.7),
-                          ),
-                          child: Center(
-                            child: Container(
-                                height: 200.h,
-                                width: 250.w,
-                                padding: EdgeInsets.all(30.w),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.r)),
-                                child: const CustomCircularProgressIndicator(
-                                  color: AppColors.PRIMARY_COLOR,
-                                )),
-                          ),
-                        )
-                    ],
-                  ),
-              );
+                        ),
+                        _viewCartButton(),
+                      ],
+                    ),
+                    // when add to cart
+                    // if (!state.isAddToCart)
+                    //   Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.black.withOpacity(0.7),
+                    //     ),
+                    //     child: Center(
+                    //       child: Container(
+                    //           height: 300.h,
+                    //           width: 250.w,
+                    //           padding: EdgeInsets.all(30.w),
+                    //           alignment: Alignment.center,
+                    //           decoration: BoxDecoration(
+                    //               color: Colors.white,
+                    //               borderRadius: BorderRadius.circular(15.r)),
+                    //           child: const CustomCircularProgressIndicator(
+                    //             color: AppColors.PRIMARY_COLOR,
+                    //           )),
+                    //     ),
+                    //   )
+                  ],
+                );
         },
       ),
     );

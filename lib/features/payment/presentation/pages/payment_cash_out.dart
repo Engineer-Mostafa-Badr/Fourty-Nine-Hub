@@ -50,7 +50,10 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
       ),
       body: MultiBlocProvider(
         providers: [
-          BlocProvider<PaymentCacheOutCubit>(create: (context) => serviceLocator()..payoutMethod()..getPaymentProvider()),
+          BlocProvider<PaymentCacheOutCubit>(
+              create: (context) => serviceLocator()
+                ..payoutMethod()
+                ..getPaymentProvider()),
           BlocProvider<PaymentCubit>(create: (context) => serviceLocator()),
         ],
         child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
@@ -66,7 +69,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
                           Expanded(
                             child: _buildCustomCard(
                               onTap: () async {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 final cubit = context.read<PaymentCubit>();
                                 final url = cubit.state.paymobData?.data;
                                 if (url != null) {
@@ -160,7 +163,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
   }) {
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         setState(() {
           _selectedPaymentMethod = title;
         });

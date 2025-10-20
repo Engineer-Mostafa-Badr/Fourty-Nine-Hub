@@ -20,17 +20,16 @@ class SubCategoryListViewItem extends StatelessWidget {
       padding: EdgeInsets.all(
         8,
       ),
-     constraints: BoxConstraints(minWidth: 220.w),
+      constraints: BoxConstraints(minWidth: 220.w),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40.h),
-          color: subCategory?.isSelected==true
+          color: subCategory?.isSelected == true
               ? AppColors.getButtonPrimaryColor(context)
               : AppColors.getFillColor(context),
           border: Border.all(
-              color: AppColors.getButtonPrimaryColor(context),
-              width: 2)),
+              color: AppColors.getButtonPrimaryColor(context), width: 2)),
       child: Text(
-         context.isArabic
+        context.isArabic
             ? (subCategory?.nameAr ?? '')
             : (subCategory?.nameEn ?? ''),
         maxLines: 2,
@@ -38,10 +37,10 @@ class SubCategoryListViewItem extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: Styles.headerText(
             fontSize: 24,
-            color: subCategory?.isSelected==true
+            color: subCategory?.isSelected == true
                 ? context.isDarkMode
-                ? Colors.black
-                : Colors.white
+                    ? Colors.black
+                    : Colors.white
                 : AppColors.getTextColor(context)),
       ),
     );

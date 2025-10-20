@@ -23,7 +23,6 @@ import '../../../../social_media/create_post/presentation/cubit/create_post_cubi
 import '../../presentation_exports.dart';
 import '../pages/add_talent_widget.dart';
 
-
 class CreateStar extends StatefulWidget {
   const CreateStar({super.key});
 

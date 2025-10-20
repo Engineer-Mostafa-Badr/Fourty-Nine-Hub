@@ -259,7 +259,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                             }
                             // ❌ If the whole input is only digits
                             if (RegExp(r'^\d+$').hasMatch(value)) {
-                              return context.isArabic? 'لا يمكن أن يكون العنوان فقط من الأرقام' : 'Cannot contain only numbers';
+                              return context.isArabic
+                                  ? 'لا يمكن أن يكون العنوان فقط من الأرقام'
+                                  : 'Cannot contain only numbers';
                             }
                             if (_phonePattern.hasMatch(value)) {
                               return context.isArabic
@@ -324,7 +326,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                             }
                             // ❌ If the whole input is only digits
                             if (RegExp(r'^\d+$').hasMatch(value)) {
-                              return context.isArabic? 'لا يمكن أن يكون الوصف فقط من الأرقام' : 'Cannot contain only numbers';
+                              return context.isArabic
+                                  ? 'لا يمكن أن يكون الوصف فقط من الأرقام'
+                                  : 'Cannot contain only numbers';
                             }
                             if (_phonePattern.hasMatch(value)) {
                               return context.isArabic
@@ -804,6 +808,18 @@ class _CreateAdViewState extends State<CreateAdView> {
   @override
   void initState() {
     print("/v1/ads/PropsByMainCategoryId/62c8be568e28a58a3edf5f1d");
+
+    // Map old fitness category ID to new one
+    // String getCategoryId() {
+    //   String id = widget.categorization.subCategory.id;
+
+    //   // Replace old fitness category ID with new one
+    //   if (id == '62c8b5a29332225799fe3348') {
+    //     return '62c8be568e28a58a3edf5f1d';
+    //   }
+    //   return id;
+    // }
+
     context.read<CreateAdCubit>().loadData(
         subCategoryId: widget.categorization.fromMarriage == false
             ? widget.categorization.subCategory.id
@@ -824,15 +840,18 @@ class _CreateAdViewState extends State<CreateAdView> {
             InkWell(
               onTap: () {
                 ManageVibration.vibrate();
-                if((state.images?.length??0)<20){
+                if ((state.images?.length ?? 0) < 20) {
                   controller.uploadImage(
                     subCategoryId: widget.categorization.subCategory.id,
                     context: context,
                   );
-                }else{
-                  showErrorMessage(context, context.isArabic?"لا يمكنك إضافة أكثر من 20 صور":"You can not add more than 20 images");
+                } else {
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? "لا يمكنك إضافة أكثر من 20 صور"
+                          : "You can not add more than 20 images");
                 }
-
               },
               child: Container(
                 padding: const EdgeInsets.all(16),
