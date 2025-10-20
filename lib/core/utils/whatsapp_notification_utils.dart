@@ -172,6 +172,7 @@ class WhatsAppNotificationUtils {
   /// [isGroup] - Whether this is a group message (default: false)
   /// [groupName] - Group name (required if isGroup is true)
   /// [messageType] - Type of message (text, image, audio, etc.)
+  /// [useCollapsedIcon] - Whether to use collapsed notification icon (default: false)
   static Future<void> showWhatsAppMessage({
     required String senderName,
     required String message,
@@ -179,6 +180,7 @@ class WhatsAppNotificationUtils {
     bool isGroup = false,
     String? groupName,
     MessageType messageType = MessageType.text,
+    bool useCollapsedIcon = false,
   }) async {
     _messageCounter++;
 
@@ -216,7 +218,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white, // WhatsApp green
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: '@mipmap/ic_launcher',
+      icon: useCollapsedIcon ? '@drawable/ic_launcher' : '@drawable/ic_notification_expanded',
       color: Colors.white,
       // channelShowBadge: _messageCounter,
       actions: [
@@ -236,8 +238,8 @@ class WhatsAppNotificationUtils {
           'Mark as Read',
         ),
         const AndroidNotificationAction(
-          'mark_read',
-          'Mark as Read',
+          'mute',
+          'Mute',
         ),
       ],
     );
@@ -386,6 +388,34 @@ class WhatsAppNotificationUtils {
     return null;
   }
 
+  /// Show a WhatsApp-style message notification with smart icon selection
+  /// This method automatically determines whether to use collapsed or expanded icon
+  /// based on the notification state and system preferences
+  static Future<void> showWhatsAppMessageSmart({
+    required String senderName,
+    required String message,
+    String? senderAvatar,
+    bool isGroup = false,
+    String? groupName,
+    MessageType messageType = MessageType.text,
+    bool forceCollapsedIcon = false,
+  }) async {
+    // Determine if we should use collapsed icon
+    // You can implement logic here to detect if notification is collapsed
+    // For now, we'll use the forceCollapsedIcon parameter
+    bool useCollapsedIcon = forceCollapsedIcon;
+    
+    await showWhatsAppMessage(
+      senderName: senderName,
+      message: message,
+      senderAvatar: senderAvatar,
+      isGroup: isGroup,
+      groupName: groupName,
+      messageType: messageType,
+      useCollapsedIcon: useCollapsedIcon,
+    );
+  }
+
   /// Clear all WhatsApp notifications
   static Future<void> clearAllNotifications() async {
     await _notificationsPlugin.cancelAll();
@@ -404,6 +434,7 @@ class WhatsAppNotificationUtils {
     required String callerNumber,
     String? callerAvatar,
     bool isVideoCall = false,
+    bool useCollapsedIcon = false,
   }) async {
     String? avatarPath;
     if (callerAvatar != null && callerAvatar.isNotEmpty) {
@@ -429,6 +460,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white,
       ledOnMs: 1000,
       ledOffMs: 500,
+      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_notification_expanded',
       actions: [
         const AndroidNotificationAction(
           'answer',
@@ -472,6 +504,7 @@ class WhatsAppNotificationUtils {
     String? groupName,
     MessageType messageType = MessageType.text,
     String? customSound,
+    bool useCollapsedIcon = false,
   }) async {
     _messageCounter++;
 
@@ -510,7 +543,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white,
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: '@mipmap/ic_launcher',
+      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_notification_expanded',
       color: Colors.white,
       actions: [
         const AndroidNotificationAction(
@@ -566,6 +599,7 @@ class WhatsAppNotificationUtils {
     required String contactName,
     required String statusText,
     String? contactAvatar,
+    bool useCollapsedIcon = false,
   }) async {
     String? avatarPath;
     if (contactAvatar != null && contactAvatar.isNotEmpty) {
@@ -586,6 +620,7 @@ class WhatsAppNotificationUtils {
       ),
       playSound: false,
       enableVibration: false,
+      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_notification_expanded',
     );
 
     final DarwinNotificationDetails iosDetails = DarwinNotificationDetails(

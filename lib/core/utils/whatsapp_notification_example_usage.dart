@@ -98,6 +98,36 @@ class WhatsAppNotificationExampleUsage {
     );
   }
 
+  /// Show a message notification with collapsed icon
+  static Future<void> showMessageWithCollapsedIcon() async {
+    await WhatsAppNotificationUtils.showWhatsAppMessage(
+      senderName: 'Mohamed',
+      message: 'Hello! How are you?',
+      senderAvatar: 'https://example.com/avatar.jpg',
+      useCollapsedIcon: true, // This will use the collapsed icon
+    );
+  }
+
+  /// Show a message notification with expanded icon
+  static Future<void> showMessageWithExpandedIcon() async {
+    await WhatsAppNotificationUtils.showWhatsAppMessage(
+      senderName: 'Mohamed',
+      message: 'Hello! How are you?',
+      senderAvatar: 'https://example.com/avatar.jpg',
+      useCollapsedIcon: false, // This will use the expanded icon
+    );
+  }
+
+  /// Show a smart notification that automatically chooses the icon
+  static Future<void> showSmartMessage({bool forceCollapsed = false}) async {
+    await WhatsAppNotificationUtils.showWhatsAppMessageSmart(
+      senderName: 'Mohamed',
+      message: 'Hello! How are you?',
+      senderAvatar: 'https://example.com/avatar.jpg',
+      forceCollapsedIcon: forceCollapsed,
+    );
+  }
+
   /// Show a group message notification
   static Future<void> showGroupMessage() async {
     await WhatsAppNotificationUtils.showWhatsAppMessage(
@@ -166,6 +196,45 @@ class _WhatsAppNotificationTestWidgetState extends State<WhatsAppNotificationTes
             
             const SizedBox(height: 10),
             
+            // Collapsed icon message button
+            ElevatedButton(
+              onPressed: () => WhatsAppNotificationExampleUsage.showMessageWithCollapsedIcon(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF128C7E),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text('Message with Collapsed Icon'),
+            ),
+            
+            const SizedBox(height: 10),
+            
+            // Expanded icon message button
+            ElevatedButton(
+              onPressed: () => WhatsAppNotificationExampleUsage.showMessageWithExpandedIcon(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF075E54),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text('Message with Expanded Icon'),
+            ),
+            
+            const SizedBox(height: 10),
+            
+            // Smart message button
+            ElevatedButton(
+              onPressed: () => WhatsAppNotificationExampleUsage.showSmartMessage(forceCollapsed: true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF34B7F1),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text('Smart Message (Collapsed)'),
+            ),
+            
+            const SizedBox(height: 10),
+            
             // Group message button
             ElevatedButton(
               onPressed: () => WhatsAppNotificationExampleUsage.showGroupMessage(),
@@ -199,9 +268,13 @@ class _WhatsAppNotificationTestWidgetState extends State<WhatsAppNotificationTes
             const SizedBox(height: 10),
             const Text(
               '1. Tap a button to show a notification\n'
-              '2. Expand the notification\n'
-              '3. Tap "Reply" to test the reply functionality\n'
-              '4. Check the console for reply logs',
+              '2. Notice the different icons for collapsed vs expanded states\n'
+              '3. Expand the notification to see the full content\n'
+              '4. Tap "Reply" to test the reply functionality\n'
+              '5. Check the console for reply logs\n\n'
+              'Icon Types:\n'
+              '• Collapsed Icon: Simple circular icon with "49" text\n'
+              '• Expanded Icon: WhatsApp-style chat bubble icon',
               style: TextStyle(fontSize: 14),
             ),
           ],

@@ -109,25 +109,26 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             InkWell(
               onTap: () async {
                 ManageVibration.vibrate();
-                // await WhatsAppNotificationUtils.showWhatsAppMessage(
-                //   senderName: 'Mohamed',
-                //   message: 'Hello! How are you?',
-                //   senderAvatar: 'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
-                // );
-                bool isCustomPage = await CacheManager.getActivation() ?? false;
-                if (isCustomPage) {
-                  if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.go(
-                      Routes.HOME,
-                    );
-                  }
-                } else {
-                  if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.go(
-                      Routes.HOME,
-                    );
-                  }
-                }
+                await WhatsAppNotificationUtils.showWhatsAppMessage(
+                  senderName: 'Mohamed',
+                  message: 'Hello! How are you?',
+                  senderAvatar: 'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
+                  useCollapsedIcon: true,
+                );
+                // bool isCustomPage = await CacheManager.getActivation() ?? false;
+                // if (isCustomPage) {
+                //   if (!isCurrentRoute(context, Routes.HOME)) {
+                //     context.go(
+                //       Routes.HOME,
+                //     );
+                //   }
+                // } else {
+                //   if (!isCurrentRoute(context, Routes.HOME)) {
+                //     context.go(
+                //       Routes.HOME,
+                //     );
+                //   }
+                // }
               },
               child: Image.asset(
                 Assets.logoHub,
