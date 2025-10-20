@@ -37,16 +37,11 @@ class _ContactUsViewState extends State<ContactUsView> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(46),
-        child: BackAppBar(
-          label: LocaleKeys.contactUs.localize,
-          subTitle: context.isArabic
-              ? 'فريق ٤٩ هاب جاهز للمساعدة'
-              : LocaleKeys.TeamHelp.localize,
-          enableCustomAppBar: true,
-          textColor: AppColors.getReversedTextColor(context),
-        ),
+      appBar: BackAppBar(
+        label: LocaleKeys.contactUs.localize,
+        subTitle: context.isArabic
+            ? 'فريق ٤٩ هاب جاهز للمساعدة'
+            : LocaleKeys.TeamHelp.localize,
       ),
       enableCustomAppBar: true,
       body: BlocConsumer<ContactUsCubit, ContactUsState>(

@@ -150,6 +150,7 @@ class _FoodCartViewState extends State<FoodCartView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       // backgroundColor: scaffoldDarkColor(context),
+      enableCustomAppBar: true,
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
@@ -169,11 +170,8 @@ class _FoodCartViewState extends State<FoodCartView> {
   }
 
   _buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(30),
-      child: BackAppBar(
-        label: context.isArabic?'السلة':'Cart',
-      ),
+    return BackAppBar(
+      label: context.isArabic?'السلة':'Cart',
     );
   }
 

@@ -2611,6 +2611,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                           .number,
                                                                   isRequired:
                                                                       true,
+                                                                  maxLength: 11,
                                                                   validator:
                                                                       (value) {
                                                                     // تحويل الأرقام العربية إلى إنجليزية قبل الفاليديشن
@@ -2624,6 +2625,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
                                                                     return validatorEgyptPhone(
                                                                         normalized);
+                                                                  },
+                                                                  onChanged: (v){
+                                                                    _phoneNumberFormKey.currentState!.validate();
                                                                   },
                                                                   inputFormatter: [
                                                                     ArabicNumberFormatter(
@@ -2651,8 +2655,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                       if (_phoneNumberFormKey
                                                                           .currentState!
                                                                           .validate()) {
-                                                                        Navigator.of(context)
-                                                                            .pop(true);
+                                                                        context.pop(true);
                                                                       }
                                                                     },
                                                                     style: ElevatedButton

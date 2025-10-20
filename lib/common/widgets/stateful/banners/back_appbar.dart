@@ -73,7 +73,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
         preferredSize: const Size.fromHeight(16.0), // here the desired height
         child: Row(
           children: [
-            const Sizer(width: 40,),
+            const Sizer(width: 100,),
             Label(
                 text: subTitle ?? '',
                 style: Styles.mediumText().copyWith(

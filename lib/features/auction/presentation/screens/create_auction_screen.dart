@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
@@ -232,19 +234,11 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
           }
         }
       },
-  child: Scaffold(
-      appBar: AppBar(
-        title:  Text(LocaleKeys.addAuction.localize,
-            // style: TextStyle(color: Colors.black)
-        ),
-        // centerTitle: true,
-        leading: IconButton(
-          icon:  Icon(Icons.arrow_back_ios, color: context.isDarkMode  ? Colors.white : Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        // backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+  child: CustomScaffold(
+    enableCustomAppBar: true,
+    appBar: BackAppBar(
+      label:LocaleKeys.addAuction.localize,
+    ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

@@ -20,6 +20,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
@@ -262,10 +263,10 @@ class _LoginViewState extends State<LoginView> {
           },
           child: GestureDetector(
             onTap: () {
-              // Dismiss keyboard when tapping outside
               FocusScope.of(context).unfocus();
             },
-            child: Scaffold(
+            child: CustomScaffold(
+              enableCustomAppBar: true,
               resizeToAvoidBottomInset: true,
               appBar: const BackAppBar(),
               body: SingleChildScrollView(

@@ -116,8 +116,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   useCollapsedIcon: true,
                 );
                 await WhatsAppNotificationUtils.showNoInternetNotification(
-                  title: 'No Internet',
-                  message: 'Please check your internet connection',
+                  title: 'CHAT',
+                  message: 'You may have new messages',
                   isPersistent: true
                 );
                 // bool isCustomPage = await CacheManager.getActivation() ?? false;

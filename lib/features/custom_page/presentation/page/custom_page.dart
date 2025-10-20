@@ -37,11 +37,9 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.customPage.localize,
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.customPage.localize,
       ),
       //  drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(

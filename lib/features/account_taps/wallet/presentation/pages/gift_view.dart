@@ -18,20 +18,18 @@ class GiftView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          // backColor:Colors.red,
-          label: LocaleKeys.gift.localize,
-          actions: [
-            CustomWinnerAppbar(
-              onPressed: () {
-                ManageVibration.vibrate();
-                context.push(Routes.WINNERSGift);
-              },
-            ),
-          ],
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        // backColor:Colors.red,
+        label: LocaleKeys.gift.localize,
+        actions: [
+          CustomWinnerAppbar(
+            onPressed: () {
+              ManageVibration.vibrate();
+              context.push(Routes.WINNERSGift);
+            },
+          ),
+        ],
       ),
       body: BlocProvider(
         create: (context) =>
