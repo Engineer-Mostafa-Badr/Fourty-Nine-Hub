@@ -48,6 +48,7 @@ class MarriageAdsListViewItem extends StatefulWidget {
 
 class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
   @override
+
   Widget build(BuildContext context) {
     return AdCard(item: widget.marriageAds, onFav: (v){}, onRemoveFav: (s){}, onDeleteAd: (String id) {
       context.pop();
@@ -273,6 +274,7 @@ class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
     //   ),
     // );
   }
+
 
   Widget _buildBody(BuildContext context) {
     return Padding(

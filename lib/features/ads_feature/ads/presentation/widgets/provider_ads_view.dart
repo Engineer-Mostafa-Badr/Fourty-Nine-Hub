@@ -32,6 +32,7 @@ class ProviderAdsView extends StatelessWidget {
   final Function(bool) onScrollChanged;
 
   @override
+
   Widget build(BuildContext context) {
     print('userType $userType');
 

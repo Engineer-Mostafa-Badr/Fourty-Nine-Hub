@@ -103,25 +103,26 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                         _viewCartButton(),
                       ],
                     ),
-                    if (state.isAddToCart)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.7),
-                        ),
-                        child: Center(
-                          child: Container(
-                              height: 200.h,
-                              width: 250.w,
-                              padding: EdgeInsets.all(30.w),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15.r)),
-                              child: const CustomCircularProgressIndicator(
-                                color: AppColors.PRIMARY_COLOR,
-                              )),
-                        ),
-                      )
+                    // when add to cart
+                    // if (!state.isAddToCart)
+                    //   Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.black.withOpacity(0.7),
+                    //     ),
+                    //     child: Center(
+                    //       child: Container(
+                    //           height: 300.h,
+                    //           width: 250.w,
+                    //           padding: EdgeInsets.all(30.w),
+                    //           alignment: Alignment.center,
+                    //           decoration: BoxDecoration(
+                    //               color: Colors.white,
+                    //               borderRadius: BorderRadius.circular(15.r)),
+                    //           child: const CustomCircularProgressIndicator(
+                    //             color: AppColors.PRIMARY_COLOR,
+                    //           )),
+                    //     ),
+                    //   )
                   ],
                 );
         },

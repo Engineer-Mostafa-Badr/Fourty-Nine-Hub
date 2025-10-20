@@ -92,7 +92,7 @@ class _MutedStoriesState extends State<MutedStories> {
 
                     return InkWell(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         await Navigator.push(
                           context,
                           MaterialPageRoute(

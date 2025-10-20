@@ -800,7 +800,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
             failure: failure, status: SubcategoriesStates.error));
       },
       (data) {
-        searchAdsList = data;
+        searchAdsList.clear();
+        searchAdsList.addAll(data);
         emit(state.copyWith(
           searchAds: data,
           status: SubcategoriesStates.adsSuccess,

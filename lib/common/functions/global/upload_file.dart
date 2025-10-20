@@ -35,111 +35,31 @@ class UploadFile {
       bool? hasLoading,
       required BuildContext context,
       required Function(UploadFileEntity) onUploaded,
-      bool useWeChatPicker =false}) async {
-      if(!useWeChatPicker) {
-        final file = await FilePickerHelper()
-        .pickImage(isGallery: isGallery)
-        .then((file) async {
-      if (file != null) {
-        // Crop the image
-        
-        final CroppedFile? croppedFile = await ImageCropper().cropImage(
-          sourcePath: file.path,
-          uiSettings: [
-            AndroidUiSettings(
-              toolbarTitle: LocaleKeys.cropImage.localize,
-              toolbarColor: AppColors.SECONDARY_COLOR,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false,
-            ),
-            IOSUiSettings(
-              title: 'Crop Image',
-            ),
-          ],
-        );
+      bool useWeChatPicker = false}) async {
+    if (!useWeChatPicker) {
+      final file = await FilePickerHelper()
+          .pickImage(isGallery: isGallery)
+          .then((file) async {
+        if (file != null) {
+          // Crop the image
 
-        XFile finalFile = XFile(croppedFile?.path ?? '');
-        final tempDir = await getTemporaryDirectory();
-        final uniqueFileName =
-            'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
-        final targetPath = '${tempDir.path}/$uniqueFileName';
-        print("finalFile.path${finalFile.path}");
-        print("finalFile.path$targetPath");
-        print("objectUpload2");
-        var result = await FlutterImageCompress.compressAndGetFile(
-          finalFile.path,
-          targetPath,
-          quality: 50,
-          rotate: 360,
-        );
-        if (result == null) {
-          context.pop();
-        }
-
-        final bytes = await result!.readAsBytes();
-        int size = bytes.length;
-        // get signed url
-        final signedURLResponse =
-            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-          "type": "image/${finalFile.mimeType ?? 'png'}",
-          "size": size,
-          "subcategoryId": subCategoryId
-        });
-        // send to w3 storage
-        signedURLResponse.fold((l) {
-          print(l.toString());
-        }, (data) async {
-          if (hasLoading != false) {
-            showGeneralDialog(
-            context: context,
-            barrierDismissible: true,
-            barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-            transitionDuration: const Duration(milliseconds: 400),
-            pageBuilder: (context, _, __) {
-              return PopScope(
-                canPop: false,
-                child: Center(
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CustomCircularProgressIndicator(),
-                          const SizedBox(height: 20),
-                          Text(
-                            context.isArabic?'جاري التحميل...':'Loading...',
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      contentPadding: const EdgeInsets.only(
-                        right: 20,
-                        left: 20,
-                        top: 20,
-                        bottom: 40,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            transitionBuilder: (context, animation, secondaryAnimation, child) {
-              return ScaleTransition(
-                scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
-                ),
-                child: child,
-              );
-            },
+          final CroppedFile? croppedFile = await ImageCropper().cropImage(
+            sourcePath: file.path,
+            uiSettings: [
+              AndroidUiSettings(
+                toolbarTitle: LocaleKeys.cropImage.localize,
+                toolbarColor: AppColors.SECONDARY_COLOR,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false,
+              ),
+              IOSUiSettings(
+                title: 'Crop Image',
+              ),
+            ],
           );
-          }
 
-          log("responseData: ${jsonEncode(data)}");
+          XFile finalFile = XFile(croppedFile?.path ?? '');
           final tempDir = await getTemporaryDirectory();
           final uniqueFileName =
               'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
@@ -153,30 +73,114 @@ class UploadFile {
             quality: 50,
             rotate: 360,
           );
-          await sendBinaryFileData(
-                  file: result!, signedUrl: data['data']['signedUrl'])
-              .then((value) async {
-            print("amdl;maldmaslkd");
-            final mediaId = data['data']['mediaId'];
-            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
-                .put(EndPoints.confirmUpload(mediaId));
-            /* confirmUploadResponse.fold((l) {
+          if (result == null) {
+            context.pop();
+          }
+
+          final bytes = await result!.readAsBytes();
+          int size = bytes.length;
+          // get signed url
+          final signedURLResponse = await serviceLocator<ApiConsumer>()
+              .post(EndPoints.mediaUrl, data: {
+            "type": "image/${finalFile.mimeType ?? 'png'}",
+            "size": size,
+            "subcategoryId": subCategoryId
+          });
+          // send to w3 storage
+          signedURLResponse.fold((l) {
+            print(l.toString());
+          }, (data) async {
+            if (hasLoading != false) {
+              showGeneralDialog(
+                context: context,
+                barrierDismissible: true,
+                barrierLabel:
+                    MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                transitionDuration: const Duration(milliseconds: 400),
+                pageBuilder: (context, _, __) {
+                  return PopScope(
+                    canPop: false,
+                    child: Center(
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const CustomCircularProgressIndicator(),
+                              const SizedBox(height: 20),
+                              Text(
+                                context.isArabic
+                                    ? 'جاري التحميل...'
+                                    : 'Loading...',
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          contentPadding: const EdgeInsets.only(
+                            right: 20,
+                            left: 20,
+                            top: 20,
+                            bottom: 40,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                transitionBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                          parent: animation, curve: Curves.easeInExpo),
+                    ),
+                    child: child,
+                  );
+                },
+              );
+            }
+
+            log("responseData: ${jsonEncode(data)}");
+            final tempDir = await getTemporaryDirectory();
+            final uniqueFileName =
+                'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+            final targetPath = '${tempDir.path}/$uniqueFileName';
+            print("finalFile.path${finalFile.path}");
+            print("finalFile.path$targetPath");
+            print("objectUpload2");
+            var result = await FlutterImageCompress.compressAndGetFile(
+              finalFile.path,
+              targetPath,
+              quality: 50,
+              rotate: 360,
+            );
+            await sendBinaryFileData(
+                    file: result!, signedUrl: data['data']['signedUrl'])
+                .then((value) async {
+              print("amdl;maldmaslkd");
+              final mediaId = data['data']['mediaId'];
+              final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                  .put(EndPoints.confirmUpload(mediaId));
+              /* confirmUploadResponse.fold((l) {
               print("object22222");
               return Left(l);
             }, (data) { */
-            print("object111");
-            onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
+              print("object111");
+              onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
 
-            return const Right(true);
-            // });
+              return const Right(true);
+              // });
+            });
+            if (hasLoading != false) context.pop();
           });
-          if (hasLoading != false) context.pop();
-        });
-      }
-    });
-      }
-      else{
-         try {
+        }
+      });
+    } else {
+      try {
         // 1) فتح شاشة الاختيار (يمكنك تخصيص الإعدادات كما شئت)
         final pickedAssets = await AssetPicker.pickAssets(
           context,
@@ -190,7 +194,8 @@ class UploadFile {
         if (pickedAssets == null || pickedAssets.isEmpty) return null;
 
         final asset = pickedAssets.first;
-        final File? rawFile = await asset.file; // يمكنك الحصول على الـFile عبر PhotoManager
+        final File? rawFile =
+            await asset.file; // يمكنك الحصول على الـFile عبر PhotoManager
         if (rawFile == null) return null;
 
         // قص الصورة
@@ -243,8 +248,8 @@ class UploadFile {
         }
 
         // 2) استدعاء السيرفر لجلب signedUrl
-        final signedURLResponse = await serviceLocator<ApiConsumer>()
-            .post(EndPoints.mediaUrl, data: {
+        final signedURLResponse =
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
           "type": "image/${finalFile.mimeType ?? 'png'}",
           "size": size,
           "subcategoryId": subCategoryId,
@@ -258,7 +263,8 @@ class UploadFile {
           final mediaId = data['data']['mediaId'];
 
           // ارفع البيانات الثنائية
-          await sendBinaryFileData(file: result, signedUrl: signedUrl).then((_) async {
+          await sendBinaryFileData(file: result, signedUrl: signedUrl)
+              .then((_) async {
             // 4) تأكيد الرفع
             final confirmUploadResponse = await serviceLocator<ApiConsumer>()
                 .put(EndPoints.confirmUpload(mediaId));
@@ -281,7 +287,7 @@ class UploadFile {
         print('Error using wechat_assets_picker: $e');
         return null;
       }
-      }
+    }
     return null;
   }
 
@@ -362,7 +368,8 @@ class UploadFile {
         showGeneralDialog(
           context: context,
           barrierDismissible: true,
-          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
           transitionDuration: const Duration(milliseconds: 400),
           pageBuilder: (context, _, __) {
             return PopScope(
@@ -380,7 +387,7 @@ class UploadFile {
                         const CustomCircularProgressIndicator(),
                         const SizedBox(height: 20),
                         Text(
-                          context.isArabic?'جاري التحميل...':'Loading...',
+                          context.isArabic ? 'جاري التحميل...' : 'Loading...',
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -414,13 +421,12 @@ class UploadFile {
         final result = await VideoCompressionService.compressVideo(
           path: '/path/to/input/video.mp4',
           quality: VideoQuality.MediumQuality,
-          onProgress: (p) {
-          },
+          onProgress: (p) {},
         );
         XFile? finalFile;
-        if(result != null){
-          finalFile = XFile(result.file?.path??'');
-        }else{
+        if (result != null) {
+          finalFile = XFile(result.file?.path ?? '');
+        } else {
           finalFile = XFile(file.path);
         }
         final bytes = await finalFile.readAsBytes();
@@ -665,7 +671,6 @@ class UploadFileEntity {
     required this.file,
   });
 }
-
 
 class VideoCompressionService {
   static Future<MediaInfo?> compressVideo({

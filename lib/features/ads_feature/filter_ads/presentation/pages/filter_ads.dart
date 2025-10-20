@@ -40,13 +40,27 @@ class FilterAdsView extends StatefulWidget {
 class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
-    context.read<CreateAdCubit>().loadPropsData(
-        subCategoryId:
-            widget.filterAdsParams.categorization.fromMarriage == false
-                ? widget.filterAdsParams.categorization.mainCategory.id
-                : widget.filterAdsParams.categorization.subCategory.id,
-        fromMarriage:
-            widget.filterAdsParams.categorization.fromMarriage ?? false);
+    // Map old fitness category ID to new one
+    String getCategoryId() {
+      String id = widget.filterAdsParams.categorization.fromMarriage == false
+          ? widget.filterAdsParams.categorization.mainCategory.id
+          : widget.filterAdsParams.categorization.subCategory.id;
+
+      // Replace old fitness category ID with new one
+      if (id == '62c8b5a29332225799fe3348') {
+        return '62c8be568e28a58a3edf5f1d';
+      }
+      return id;
+    }
+
+    // context.read<CreateAdCubit>().loadPropsData(
+    //     subCategoryId:
+    //         widget.filterAdsParams.categorization.fromMarriage == false
+    //             ? widget.filterAdsParams.categorization.mainCategory.id
+    //             : widget.filterAdsParams.categorization.subCategory.id,
+    //     fromMarriage:
+    //         widget.filterAdsParams.categorization.fromMarriage ?? false);
+    getCategoryId();
     super.initState();
   }
 
@@ -87,7 +101,8 @@ class _FilterAdsViewState extends State<FilterAdsView> {
       }
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
-      print("state.filterAdProperties?.length ${state.filterAdProperties?.length}");
+      print(
+          "state.filterAdProperties?.length ${state.filterAdProperties?.length}");
       return CustomScaffold(
         enableCustomAppBar: true,
         appBar: BackAppBar(label: LocaleKeys.filter.localize),
@@ -126,76 +141,97 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     height: 8,
                   ),
                   Expanded(
-                    child:state.isLoading?const Center(child: CustomCircularProgressIndicator(),): (state.filterAdProperties==null||(state.filterAdProperties?.isEmpty??false))?Center(
-                      child: CustomEmptyWidget(label: context.isArabic?"لا يوجد خصائص":"No Properties"),
-                    ):Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: state.filterAdProperties?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              final property = state.filterAdProperties![index];
-                              return FilterAdDynamicInputWidget(
-                                  property: property,
-                                  onChanged: (SelectionEntity v) =>
-                                      controller.onChanged(v: v, index: index),
-                                  onTextChanged: (String v, bool from, String type) {
-                                    print('arabicValue $v');
+                    child: state.isLoading
+                        ? const Center(
+                            child: CustomCircularProgressIndicator(),
+                          )
+                        : (state.filterAdProperties == null ||
+                                (state.filterAdProperties?.isEmpty ?? false))
+                            ? Center(
+                                child: CustomEmptyWidget(
+                                    label: context.isArabic
+                                        ? "لا يوجد خصائص"
+                                        : "No Properties"),
+                              )
+                            : Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          state.filterAdProperties?.length ?? 0,
+                                      itemBuilder: (context, index) {
+                                        final property =
+                                            state.filterAdProperties![index];
+                                        return FilterAdDynamicInputWidget(
+                                            property: property,
+                                            onChanged: (SelectionEntity v) =>
+                                                controller.onChanged(
+                                                    v: v, index: index),
+                                            onTextChanged: (String v, bool from,
+                                                String type) {
+                                              print('arabicValue $v');
 
-                                    controller.onTextChanged(
-                                        v: v,
-                                        index: index,
-                                        isNumber: property.type == 'number',
-                                        from: from,
-                                        type: type);
-                                  });
-                            },
-                            // separatorBuilder: (context, index) => const Sizer(),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        ClickableWidget(
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              controller.filterAds(
-                                  categorize: widget.filterAdsParams.categorization,
-                                  userType: widget.filterAdsParams.userType,
-                                  context: context);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(10),
-                              decoration: ShapeDecoration(
-                                color: AppColors.getButtonPrimaryColor(context),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                shadows: const [
-                                  BoxShadow(
-                                    color: Color(0x3F000000),
-                                    blurRadius: 4,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                  )
+                                              controller.onTextChanged(
+                                                  v: v,
+                                                  index: index,
+                                                  isNumber:
+                                                      property.type == 'number',
+                                                  from: from,
+                                                  type: type);
+                                            });
+                                      },
+                                      // separatorBuilder: (context, index) => const Sizer(),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  ClickableWidget(
+                                      onTap: () {
+                                        ManageVibration.vibrate();
+                                        controller.filterAds(
+                                            categorize: widget
+                                                .filterAdsParams.categorization,
+                                            userType:
+                                                widget.filterAdsParams.userType,
+                                            context: context);
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: ShapeDecoration(
+                                          color:
+                                              AppColors.getButtonPrimaryColor(
+                                                  context),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          shadows: const [
+                                            BoxShadow(
+                                              color: Color(0x3F000000),
+                                              blurRadius: 4,
+                                              offset: Offset(0, 4),
+                                              spreadRadius: 0,
+                                            )
+                                          ],
+                                        ),
+                                        // decoration: BoxDecoration(
+                                        //   color: AppColors.PRIMARY_COLOR,
+                                        //   borderRadius: BorderRadius.circular(10),
+                                        // ),
+                                        child: Label(
+                                          text: LocaleKeys.filter.localize,
+                                          style: Styles.headerText(
+                                              color: AppColors
+                                                  .getReversedTextColor(
+                                                      context)),
+                                        ),
+                                      )),
                                 ],
                               ),
-                              // decoration: BoxDecoration(
-                              //   color: AppColors.PRIMARY_COLOR,
-                              //   borderRadius: BorderRadius.circular(10),
-                              // ),
-                              child: Label(
-                                text: LocaleKeys.filter.localize,
-                                style: Styles.headerText(
-                                    color: AppColors.getReversedTextColor(context)),
-                              ),
-                            )),
-
-                      ],
-                    ),
                   ),
                 ],
               ),
