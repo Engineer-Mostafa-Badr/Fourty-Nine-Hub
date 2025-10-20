@@ -23,9 +23,16 @@ class WhatsAppNotificationUtils {
   // Counter for message notifications
   static int _messageCounter = 0;
   static int _notificationId = 1000;
+  
+  // Callback function for reply handling
+  static Function(String replyText, String senderName, String? groupName)? _onReplyCallback;
 
   /// Initialize the notification service
-  static Future<void> initialize() async {
+  static Future<void> initialize({
+    Function(String replyText, String senderName, String? groupName)? onReply,
+  }) async {
+    // Store the callback function
+    _onReplyCallback = onReply;
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -48,6 +55,95 @@ class WhatsAppNotificationUtils {
     if (Platform.isAndroid) {
       await _createNotificationChannel();
     }
+  }
+
+  /// Handle notification response (including reply actions)
+  static void _onNotificationResponse(NotificationResponse response) {
+    final String actionId = response.actionId ?? '';
+    final String? inputText = response.input;
+    final String? payload = response.payload;
+
+    print('Notification action: $actionId');
+    print('Input text: $inputText');
+    print('Payload: $payload');
+
+    switch (actionId) {
+      case 'reply':
+        if (inputText != null && inputText.isNotEmpty) {
+          _handleReply(inputText, payload);
+        }
+        break;
+      case 'mark_read':
+        _handleMarkAsRead(payload);
+        break;
+      case 'mute':
+        _handleMute(payload);
+        break;
+      case 'answer':
+        _handleAnswerCall(payload);
+        break;
+      case 'decline':
+        _handleDeclineCall(payload);
+        break;
+    }
+  }
+
+  /// Handle reply action
+  static void _handleReply(String replyText, String? payload) {
+    print('User replied: $replyText');
+    
+    // Parse payload to get sender info
+    String senderName = 'Unknown';
+    String? groupName;
+    
+    if (payload != null) {
+      try {
+        // Parse payload format: "sender:Name|group:GroupName|type:message"
+        final parts = payload.split('|');
+        for (final part in parts) {
+          if (part.startsWith('sender:')) {
+            senderName = part.substring(7);
+          } else if (part.startsWith('group:')) {
+            groupName = part.substring(6);
+          }
+        }
+        
+        print('Reply to: $senderName${groupName != null ? ' in $groupName' : ''}');
+        print('Reply message: $replyText');
+        
+        // Call the callback function if provided
+        if (_onReplyCallback != null) {
+          _onReplyCallback!(replyText, senderName, groupName);
+        }
+        
+      } catch (e) {
+        print('Error handling reply: $e');
+      }
+    }
+  }
+
+  /// Handle mark as read action
+  static void _handleMarkAsRead(String? payload) {
+    print('Mark as read: $payload');
+    // Implement mark as read logic
+  }
+
+  /// Handle mute action
+  static void _handleMute(String? payload) {
+    print('Mute conversation: $payload');
+    // Implement mute logic
+  }
+
+  /// Handle answer call action
+  static void _handleAnswerCall(String? payload) {
+    print('Answer call: $payload');
+    // Implement answer call logic
+  }
+
+  /// Handle decline call action
+  static void _handleDeclineCall(String? payload) {
+    print('Decline call: $payload');
+    // Implement decline call logic
   }
 
   /// Create Android notification channel
