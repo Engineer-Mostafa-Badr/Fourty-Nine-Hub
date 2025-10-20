@@ -40,8 +40,6 @@ class FilterAdsView extends StatefulWidget {
 class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
-    debugPrint('MainCatId ${widget.filterAdsParams.categorization.mainCategory.id}');
-    debugPrint('SubCatId ${widget.filterAdsParams.categorization.subCategory.id}');
     context.read<CreateAdCubit>().loadPropsData(
         subCategoryId:
             widget.filterAdsParams.categorization.fromMarriage == false
