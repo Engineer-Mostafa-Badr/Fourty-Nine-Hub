@@ -460,7 +460,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white,
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_launcher',
+      icon: useCollapsedIcon ? '@drawable/ic_launcher' : '@drawable/ic_launcher',
       actions: [
         const AndroidNotificationAction(
           'answer',
@@ -543,7 +543,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white,
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_launcher',
+      icon: useCollapsedIcon ? '@drawable/ic_launcher' : '@drawable/ic_launcher',
       color: Colors.white,
       actions: [
         const AndroidNotificationAction(
@@ -594,6 +594,59 @@ class WhatsAppNotificationUtils {
     }
   }
 
+  /// Show a "no internet" notification similar to WhatsApp's style
+  static Future<void> showNoInternetNotification({
+    String title = 'No Internet Connection',
+    String message = 'You may have new messages',
+    bool isPersistent = true,
+  }) async {
+    final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      _channelId,
+      _channelName,
+      channelDescription: _channelDescription,
+      importance: Importance.low,
+      priority: Priority.low,
+      ongoing: isPersistent, // Makes it persistent like system notifications
+      autoCancel: !isPersistent, // Don't auto-cancel if persistent
+      showWhen: true,
+      when: DateTime.now().millisecondsSinceEpoch,
+      styleInformation: BigTextStyleInformation(
+        message,
+        summaryText: 'CHAT',
+        contentTitle: title,
+      ),
+      category: AndroidNotificationCategory.status,
+      playSound: false,
+      enableVibration: false,
+      icon: '@drawable/ic_launcher', // Use the expanded icon for better visibility
+      color: const Color(0xFFFFFFFF), // WhatsApp green
+    );
+
+    final DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: false,
+      presentSound: false,
+      categoryIdentifier: 'NO_INTERNET_CATEGORY',
+    );
+
+    final NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    await _notificationsPlugin.show(
+      1001, // Fixed ID for no internet notification
+      'Chat',
+      message,
+      notificationDetails,
+    );
+  }
+
+  /// Clear the no internet notification
+  static Future<void> clearNoInternetNotification() async {
+    await _notificationsPlugin.cancel(1001);
+  }
+
   /// Show a WhatsApp-style status update notification
   static Future<void> showStatusNotification({
     required String contactName,
@@ -620,7 +673,7 @@ class WhatsAppNotificationUtils {
       ),
       playSound: false,
       enableVibration: false,
-      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_launcher',
+      icon: useCollapsedIcon ? '@drawable/ic_launcher' : '@drawable/ic_launcher',
     );
 
     final DarwinNotificationDetails iosDetails = DarwinNotificationDetails(

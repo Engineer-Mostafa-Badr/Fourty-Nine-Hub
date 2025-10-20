@@ -148,6 +148,20 @@ class WhatsAppNotificationExampleUsage {
       isVideoCall: false,
     );
   }
+
+  /// Show a no internet notification
+  static Future<void> showNoInternetNotification() async {
+    await WhatsAppNotificationUtils.showNoInternetNotification(
+      title: 'No Internet Connection',
+      message: 'You may have new messages',
+      isPersistent: true,
+    );
+  }
+
+  /// Clear the no internet notification
+  static Future<void> clearNoInternetNotification() async {
+    await WhatsAppNotificationUtils.clearNoInternetNotification();
+  }
 }
 
 /// Widget to test notifications with reply functionality
@@ -259,6 +273,32 @@ class _WhatsAppNotificationTestWidgetState extends State<WhatsAppNotificationTes
               child: const Text('Call Notification'),
             ),
             
+            const SizedBox(height: 10),
+            
+            // No internet notification button
+            ElevatedButton(
+              onPressed: () => WhatsAppNotificationExampleUsage.showNoInternetNotification(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF757575), // Grey for no internet
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text('No Internet Notification'),
+            ),
+            
+            const SizedBox(height: 10),
+            
+            // Clear no internet notification button
+            ElevatedButton(
+              onPressed: () => WhatsAppNotificationExampleUsage.clearNoInternetNotification(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF424242), // Darker grey
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text('Clear No Internet Notification'),
+            ),
+            
             const SizedBox(height: 20),
             
             const Text(
@@ -274,7 +314,10 @@ class _WhatsAppNotificationTestWidgetState extends State<WhatsAppNotificationTes
               '5. Check the console for reply logs\n\n'
               'Icon Types:\n'
               '• Collapsed Icon: Simple circular icon with "49" text\n'
-              '• Expanded Icon: WhatsApp-style chat bubble icon',
+              '• Expanded Icon: WhatsApp-style chat bubble icon\n\n'
+              'No Internet Notification:\n'
+              '• Shows a persistent notification like system notifications\n'
+              '• Use "Clear No Internet Notification" to remove it',
               style: TextStyle(fontSize: 14),
             ),
           ],
