@@ -218,7 +218,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white, // WhatsApp green
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: useCollapsedIcon ? '@drawable/ic_launcher' : '@drawable/ic_notification_expanded',
+      icon: useCollapsedIcon ? '@drawable/ic_launcher' : '@drawable/ic_launcher',
       color: Colors.white,
       // channelShowBadge: _messageCounter,
       actions: [
@@ -460,7 +460,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white,
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_notification_expanded',
+      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_launcher',
       actions: [
         const AndroidNotificationAction(
           'answer',
@@ -543,7 +543,7 @@ class WhatsAppNotificationUtils {
       ledColor: Colors.white,
       ledOnMs: 1000,
       ledOffMs: 500,
-      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_notification_expanded',
+      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_launcher',
       color: Colors.white,
       actions: [
         const AndroidNotificationAction(
@@ -620,7 +620,7 @@ class WhatsAppNotificationUtils {
       ),
       playSound: false,
       enableVibration: false,
-      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_notification_expanded',
+      icon: useCollapsedIcon ? '@drawable/ic_notification_collapsed' : '@drawable/ic_launcher',
     );
 
     final DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
