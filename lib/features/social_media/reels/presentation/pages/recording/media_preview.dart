@@ -124,7 +124,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 _applyFilter(filters[index]);
               },
               child: Container(
@@ -226,7 +226,8 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                                 ),
                               ),
                             )
-                          : const Center(child: CustomCircularProgressIndicator()),
+                          : const Center(
+                              child: CustomCircularProgressIndicator()),
                 ),
                 Padding(
                   padding:
@@ -287,7 +288,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                       Expanded(
                         child: buildContainer(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (!widget.isImage &&
                                 _videoController?.value.isPlaying == true) {
                               _videoController?.pause();
@@ -326,7 +327,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                     children: [
                       IconButton(
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           _showFilterBottomSheet();
                         },
                         icon: Icon(
@@ -336,7 +337,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                       ),
                       IconButton(
                         onPressed: () async {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           // await _cropImage();
                         },
                         icon: Icon(
@@ -349,7 +350,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
                   const Spacer(),
                   IconButton(
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       Navigator.pop(context);
                     },
                     icon: Icon(
@@ -376,7 +377,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
     final user = context.read<UserCubit>().state.data;
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         onTap();
       },
       child: Container(

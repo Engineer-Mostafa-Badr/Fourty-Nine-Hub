@@ -380,7 +380,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   vertical: 16.h,
                 ),
               ),
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               items: _categories.map((category) {
                 return DropdownMenuItem<ActiveCategory>(
                   value: category,

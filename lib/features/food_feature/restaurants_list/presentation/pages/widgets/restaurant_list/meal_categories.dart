@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../ads/interstitial_ad_model.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/extensions/context_extension.dart';
+import '../../all_meal_categories_view.dart';
 import 'meal_category_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../../res/style/styles.dart';
@@ -24,6 +27,7 @@ class MealCategories extends StatefulWidget {
 class _MealCategoriesState extends State<MealCategories> {
   late ScrollController _scrollController;
   bool isFirstSearchListenerCall = true;
+  final Map<String, GlobalKey> _itemKeys = {};
 
   @override
   void initState() {
@@ -36,6 +40,56 @@ class _MealCategoriesState extends State<MealCategories> {
         _scrollController.position.maxScrollExtent) {
       context.read<RestaurantsCubit>().fetchSubCategories();
     }
+  }
+
+  void _scrollToCategory(String categoryId, RestaurantsCubit cubit) {
+    // Find the index of the selected category
+    final index = cubit.subCategories.indexWhere((cat) => cat.id == categoryId);
+
+    if (index == -1) {
+      log('⚠️ Category not found: $categoryId');
+      return;
+    }
+
+    // Wait for the frame to complete, then scroll
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+
+      // Step 1: Calculate approximate position and scroll there first
+      final screenWidth = MediaQuery.of(context).size.width;
+      final approximateItemWidth =
+          0.55 * screenWidth + 16.0; // card width + spacing
+      final approximatePosition = (index * approximateItemWidth) -
+          (screenWidth / 2) +
+          (approximateItemWidth / 2);
+
+      // Clamp to valid range
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final clampedPosition = approximatePosition.clamp(0.0, maxScroll);
+
+      // Scroll to approximate position first (this builds the widget)
+      _scrollController.jumpTo(clampedPosition);
+
+      // Step 2: Use ensureVisible for precise positioning after a short delay
+      Future.delayed(const Duration(milliseconds: 100), () {
+        final key = _itemKeys[categoryId];
+        if (key != null && key.currentContext != null) {
+          try {
+            Scrollable.ensureVisible(
+              key.currentContext!,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOutCubic,
+              alignment: 0.5, // Center alignment
+            );
+            log('✅ Scrolled to category: $categoryId at index $index');
+          } catch (e) {
+            log('❌ Error in ensureVisible: $e');
+          }
+        } else {
+          log('⚠️ Widget not built yet for category: $categoryId');
+        }
+      });
+    });
   }
 
   @override
@@ -59,13 +113,24 @@ class _MealCategoriesState extends State<MealCategories> {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
-                  onTap: () {
-      ManageVibration.vibrate();
-                    _scrollController.animateTo(
-                      _scrollController.position.pixels + 0.8.sw,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeInOut,
+                  onTap: () async {
+                    log("see more");
+                    ManageVibration.vibrate();
+
+                    // Navigate and wait for the selected category ID
+                    final selectedCategoryId = await Navigator.push<String>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AllMealCategoriesView(cubit: controller),
+                      ),
                     );
+
+                    // If a category was selected, scroll to it
+                    if (selectedCategoryId != null &&
+                        selectedCategoryId.isNotEmpty) {
+                      _scrollToCategory(selectedCategoryId, controller);
+                    }
                   },
                   child: Row(
                     children: [
@@ -116,31 +181,40 @@ class _MealCategoriesState extends State<MealCategories> {
                             final subCategory = context
                                 .read<RestaurantsCubit>()
                                 .subCategories[index];
-                            return MealCategoryCard(
-                              onTap: (String id) {
-                                AdInterstitialTop.loadIntersitialAd();
-                                AdInterstitialTop.showInterstitialAd();
-                                context
-                                    .read<RestaurantsCubit>()
-                                    .loadInitialRestaurantsData(id);
-                              },
-                              subCategory: subCategory,
-                              favouriteSubCategory: () async {
-                                var result = await context
-                                    .read<RestaurantsCubit>()
-                                    .toggleFavoriteSubcategory(
-                                        subCategory.id ?? "");
-                                if (result == true) {
+
+                            // Create or get key for this category
+                            final categoryId = subCategory.id ?? '';
+                            _itemKeys.putIfAbsent(
+                                categoryId, () => GlobalKey());
+
+                            return Container(
+                              key: _itemKeys[categoryId],
+                              child: MealCategoryCard(
+                                onTap: (String id) {
+                                  AdInterstitialTop.loadIntersitialAd();
+                                  AdInterstitialTop.showInterstitialAd();
                                   context
                                       .read<RestaurantsCubit>()
-                                      .subCategories[index]
-                                      .isFavorite = !(context
-                                          .read<RestaurantsCubit>()
-                                          .subCategories[index]
-                                          .isFavorite ??
-                                      false);
-                                }
-                              },
+                                      .loadInitialRestaurantsData(id);
+                                },
+                                subCategory: subCategory,
+                                favouriteSubCategory: () async {
+                                  var result = await context
+                                      .read<RestaurantsCubit>()
+                                      .toggleFavoriteSubcategory(
+                                          subCategory.id ?? "");
+                                  if (result == true) {
+                                    context
+                                        .read<RestaurantsCubit>()
+                                        .subCategories[index]
+                                        .isFavorite = !(context
+                                            .read<RestaurantsCubit>()
+                                            .subCategories[index]
+                                            .isFavorite ??
+                                        false);
+                                  }
+                                },
+                              ),
                             );
                           },
                         )),

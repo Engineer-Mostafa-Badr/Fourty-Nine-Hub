@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm \"assets/translations/ar.json~\" \"assets/translations/en.json~\")",
+      "Bash(dart run easy_localization:generate -S assets/translations -O lib/core/localization -o codegen_loader.g.dart -f keys)",
+      "Bash(git grep -n \"62c8b5a29332225799fe3348\")",
+      "Bash(flutter analyze lib/features/food_feature/restaurants_list/presentation/pages/favorite_ads.dart)",
+      "Bash(flutter analyze --no-pub lib/features/food_feature/restaurants_list/presentation/pages/favorite_ads.dart)",
+      "Bash(flutter analyze lib/features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart)",
+      "Bash(flutter analyze lib/core/widget/olx_pagination/olx_pagination_widget.dart)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

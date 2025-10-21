@@ -679,7 +679,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   },
                   // action: (v) {},
                 ),
-
                 Sizer(
                   height: 30.h,
                 ),
@@ -701,7 +700,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     return null;
                   },
                 ),
-
                 Sizer(
                   height: 30.h,
                 ),
@@ -728,15 +726,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 BirthDatePicker(
-                  controller: registerCubit.birthDateTextController,
+                    controller: registerCubit.birthDateTextController,
                     onDateChanged: (date) {
-                      registerCubit.birthDate = date??'';
+                      registerCubit.birthDate = date ?? '';
                       setState(() {});
-                      print("registerCubit.birthDate ${registerCubit.birthDate}");
+                      print(
+                          "registerCubit.birthDate ${registerCubit.birthDate}");
                       print("registerCubit.birthDate $date");
-                    }
-                ),
-
+                    }),
                 Sizer(
                   height: 30.h,
                 ),
@@ -967,5 +964,3 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     });
   }
 }
-
-

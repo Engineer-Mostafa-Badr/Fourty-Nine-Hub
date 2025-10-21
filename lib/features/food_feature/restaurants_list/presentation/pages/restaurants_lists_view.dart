@@ -378,11 +378,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   Widget _buildLoggedInView(RestaurantsListState state) {
     return Padding(
       padding: EdgeInsets.all(10.w),
-      child: GlowingOverscrollIndicator(
-        color: AppColors.SECONDARY_COLOR,
-        axisDirection: AxisDirection.down,
-        child: ListView(
-          children: [
+      child: ListView(
+        children: [
             const MealBanner(),
             _buildRegisterRestaurantPrompt(state),
             _buildSearchAndExpiredRequests(),
@@ -442,7 +439,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     const Sizer(),
                     const Sizer(),
                     const MealCategories(),
-                    const Sizer(),
+                    Sizer(
+                      height: 35.h,
+                    ),
                     Label(
                       text: context.isArabic
                           ? "${state.selectedCategory?.id != '' ? "مطاعم " : ''}${state.selectedCategory?.nameAr}"
@@ -512,41 +511,50 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             //       ),
                             //     ),
                             //   )
-                        ? OlxPaginationWidget(
-                      scrollController: ScrollController(), // dummy controller
-                      itemsPerPage: 2,
-                      loadPage: (page) async {},
-                      banners: bannersList,
-                      items: List.generate(
-                        context.read<RestaurantsCubit>().restaurants.length,
-                            (index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: SubCategoriesRestaurantCard(
-                              item: context.read<RestaurantsCubit>().restaurants[index],
-                              mealId: '',
-                              favouriteRestaurant: (String id) async {
-                                var result = await context
-                                    .read<RestaurantsCubit>()
-                                    .toggleFavoriteRestaurant(id);
-                                if (result == true) {
+                            ? OlxPaginationWidget(
+                                scrollController:
+                                    ScrollController(), // dummy controller
+                                itemsPerPage: 3,
+                                loadPage: (page) async {},
+                                banners: bannersList,
+                                // shrinkWrap: true,
+                                // physics: const NeverScrollableScrollPhysics(),
+                                items: List.generate(
                                   context
                                       .read<RestaurantsCubit>()
-                                      .restaurants[index]
-                                      .isFavorite =
-                                  !context
-                                      .read<RestaurantsCubit>()
-                                      .restaurants[index]
-                                      .isFavorite!;
-                                }
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ).buildAsStaticList()
+                                      .restaurants
+                                      .length,
+                                  (index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: SubCategoriesRestaurantCard(
+                                        item: context
+                                            .read<RestaurantsCubit>()
+                                            .restaurants[index],
+                                        mealId: '',
+                                        favouriteRestaurant: (String id) async {
+                                          var result = await context
+                                              .read<RestaurantsCubit>()
+                                              .toggleFavoriteRestaurant(id);
+                                          if (result == true) {
+                                            context
+                                                    .read<RestaurantsCubit>()
+                                                    .restaurants[index]
+                                                    .isFavorite =
+                                                !context
+                                                    .read<RestaurantsCubit>()
+                                                    .restaurants[index]
+                                                    .isFavorite!;
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
 
-                    /*ListView.separated(
+                            /*ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: context
@@ -590,7 +598,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                 )*/
                             : Center(
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 40.h),
+                                  padding: EdgeInsets.only(top: 70.h),
                                   child: CustomEmptyWidget(
                                     label: context.isArabic
                                         ? "لا توجد مطاعم متوفرة."
@@ -603,8 +611,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               )
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {

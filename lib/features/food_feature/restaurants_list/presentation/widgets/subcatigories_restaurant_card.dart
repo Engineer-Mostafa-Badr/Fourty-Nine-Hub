@@ -16,6 +16,7 @@ import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/numbers_extensions.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/common/global_card.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/assets/assets.dart';
@@ -361,7 +362,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
   }
 }
 
-class PropertyCard extends StatelessWidget {
+class PropertyCard extends StatefulWidget {
   final GetAllRestaurantEntity item;
   final String mealId;
   final bool myRestaurant;
@@ -375,134 +376,204 @@ class PropertyCard extends StatelessWidget {
       required this.myRestaurant});
 
   @override
+  State<PropertyCard> createState() => _PropertyCardState();
+}
+
+class _PropertyCardState extends State<PropertyCard> {
+  @override
   Widget build(BuildContext context) {
-    final hasSubscription = item.isPremium;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          width: 1,
-          color: context.isDarkMode
-              ? AppColors.whiteColor.withOpacity(0.7)
-              : AppColors.black.withOpacity(0.7),
-        ),
-      ),
-      child: Column(
-        // spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return GlobalCard(
+      subcategoryId: widget.item.subcategoryId?.id ?? '',
+      phone: widget.item.phone ?? '',
+      reportId: widget.item.id ?? '',
+      otherUserId: widget.item.userId?.id ?? '',
+      hasTopSide: true,
+      hasBottomSide: !widget.myRestaurant,
+      views: widget.item.totalViews ?? 0,
+      subscriptionType: getSubscriptionType(widget.item.subscriptionType?.en),
+      subCategoryTitle: context.isArabic
+          ? widget.item.subcategoryId?.nameAr
+          : widget.item.subcategoryId?.nameEn,
+      isPremium: widget.item.isPremium,
+      hasReport: true,
+      isButtonEnabled: true,
+      onTap: () {
+        ManageVibration.vibrate();
+        context.push(Routes.RESTAURANTDETAILS, extra: widget.item);
+      },
+      onRequest: !widget.myRestaurant
+          ? () {
+              ManageVibration.vibrate();
+              context.push(Routes.RESTAURANTDETAILS, extra: widget.item);
+            }
+          : null,
+      onShowViewers: () {},
+      onSubscribe: () {
+        context.pop();
+      },
+      body: Column(
         children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: ImagesProfileForRestaurant(
+              heightCarousel: 150,
+              autoPlay: true,
+              restaurantMedia: widget.item.restaurantMedia,
+              isFavorite: widget.item.isFavorite,
+              isMyRestaurant: widget.myRestaurant,
+              onFavoritePressed: context.read<UserCubit>().isLoggedIn
+                  ? () async {
+                      ManageVibration.vibrate();
+                      await widget.favouriteRestaurant(widget.item.id!);
+                      if (mounted) {
+                        setState(() {
+                          widget.item.isFavorite =
+                              !(widget.item.isFavorite ?? false);
+                        });
+                      }
+                    }
+                  : () => pleaseLoginDialog(context),
+            ),
+          ),
+          const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsetsDirectional.symmetric(
-                vertical: 8, horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      Assets.eyeIcon,
-                      color: context.isDarkMode
-                          ? AppColors.whiteColor
-                          : AppColors.PRIMARY_COLOR,
+                    Text(
+                      widget.item.name ?? '',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 32.sp),
                     ),
-                    Label(
-                      text: formatViews(item.totalViews!.toInt())
-                          .toArabicNumbers(context),
-                      style: Styles.mediumText(
-                        // fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        // color: AppColors.c6C6C6C,
-                        color: context.isDarkMode
-                            ? AppColors.whiteColor
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                    ),
-                    Label(
-                      text: (item.totalViews!.toInt() >= 3 &&
-                              item.totalViews!.toInt() <= 9 &&
-                              context.isArabic)
-                          ? 'مشاهدات'
-                          : LocaleKeys.view.localize,
-                      style: Styles.mediumText(
-                        // fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: context.isDarkMode
-                            ? AppColors.whiteColor
-                            : AppColors.PRIMARY_COLOR,
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        "${context.isArabic ? widget.item.subcategoryId?.nameAr : widget.item.subcategoryId?.nameEn ?? ''}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 24.sp),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
-                Label(
-                  text: getSubscriptionType(item.subscriptionType?.en),
-                  textAlign: TextAlign.right,
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.w700,
-                    color: context.isDarkMode
-                        ? AppColors.whiteColor
-                        : AppColors.PRIMARY_COLOR_DARK,
-                    // fontSize: 16,
+                const SizedBox(height: 6),
+                if (!widget.myRestaurant)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        children: [
+                          Label(
+                            text: (context.isArabic
+                                    ? widget.item.rateName?.ar
+                                    : widget.item.rateName?.en) ??
+                                "N/A",
+                            style: Styles.smallText(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Sizer(),
+                          RatingBar(
+                            initialRating:
+                                widget.item.totalRating?.toDouble() ?? 0,
+                            ignoreGestures: true,
+                            allowHalfRating: true,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 3),
+                            ratingWidget: RatingWidget(
+                              full: SvgPicture.asset(Assets.star1),
+                              half: SvgPicture.asset(Assets.halfStar),
+                              empty: SvgPicture.asset(
+                                Assets.starEmpty,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.PRIMARY_COLOR,
+                              ),
+                            ),
+                            itemSize: 13,
+                            onRatingUpdate: (double value) {},
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
+                const SizedBox(height: 6),
+                if (widget.myRestaurant)
+                  Row(
+                    children: [
+                      Text(
+                          textAlign: TextAlign.end,
+                          '${context.isArabic ? widget.item.government?.governorateNameAr ?? '' : widget.item.government?.governorateNameEn ?? ''}, ${context.isArabic ? widget.item.city?.cityNameAr : widget.item.city?.cityNameEn ?? ''}',
+                          style: Styles.mediumText()),
+                      const Spacer(),
+                      const Icon(
+                        Icons.star_rounded,
+                        color: AppColors.ACCENT_COLOR,
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: '${widget.item.totalRating}',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      ),
+                      Label(
+                        text: '(${widget.item.numberOfReviews}+)',
+                        style: Styles.mediumText(),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (!widget.myRestaurant)
+                        Text(
+                          (widget.item.isActive ?? false)
+                              ? LocaleKeys.available.localize
+                              : LocaleKeys.notAvailable.localize,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: AppColors.getRedColor(context),
+                          ),
+                        ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Icon(
+                              Icons.location_on_rounded,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                '${context.isArabic ? widget.item.government?.governorateNameAr ?? '' : widget.item.government?.governorateNameEn ?? ''}, ${context.isArabic ? widget.item.city?.cityNameAr ?? '' : widget.item.city?.cityNameEn ?? ''}'
+                                    .toArabicNumbers(context),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 8),
               ],
             ),
           ),
-          // if (hasSubscription == true)
-          //   EliteBanner(subscriptionType: (context.isArabic ? item.subscriptionType?.ar : item.subscriptionType?.en) ?? ''),
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: ImagesProfileForRestaurant(
-                  heightCarousel: 150,
-                  autoPlay: true,
-                  restaurantMedia: item.restaurantMedia,
-                ),
-              ),
-              if (!myRestaurant && context.read<UserCubit>().isLoggedIn)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: FavoriteButton(
-                    item: item,
-                    mealId: mealId,
-                    favouriteRestaurant: (String id) => favouriteRestaurant(id),
-                  ),
-                ),
-            ],
-          ),
-          DetailsSection(
-            item: item,
-            myRestaurant: myRestaurant,
-          ),
-          // if (!myRestaurant) const SizedBox(height: 4),
-          if (!myRestaurant)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: PremiumAndRequestButtons(item: item),
-                ),
-                Flexible(
-                  child: CallMessageReportButtons(item: item),
-                ),
-              ],
-            )
         ],
       ),
     );
-  }
-
-  String formatViews(int views) {
-    if (views >= 1000000) {
-      return "${(views / 1000000).toStringAsFixed(1)}M";
-    } else if (views >= 1000) {
-      return "${(views / 1000).toStringAsFixed(1)}K";
-    } else {
-      return views.toString();
-    }
   }
 
   String getSubscriptionType(String? subscriptionType) {
