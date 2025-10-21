@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/register_
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/gift_message_entity.dart';
@@ -71,10 +72,10 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
   String birthDate = '';
   Future<void> register() async {
-    String? token = await FirebaseMessaging.instance.getToken();
     var currentContext =
     AppPages.router.configuration.navigatorKey.currentContext!;
-
+    showLoadingDialog(currentContext);
+    String? token = await FirebaseMessaging.instance.getToken();
     log("message");
     if (state is RegisterLoading) return;
     emit(RegisterLoading());
@@ -99,13 +100,13 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(
           result.fold(
                 (failure)  {
-                  var currentContext =
-                  AppPages.router.configuration.navigatorKey.currentContext!;
+                  currentContext.pop();
                   showErrorMessage(
                       currentContext, getFailureMessage(failure, currentContext));
                 return RegisterError(failure);
                 },
                 (data) {
+                  currentContext.pop();
               print("data.isPhoneVerified ${data.isPhoneVerified}");
               print(
                   "data.tokensEntity.accessToken ${data.tokensEntity.accessToken}");
@@ -141,8 +142,14 @@ class RegisterCubit extends Cubit<RegisterState> {
         );
         emit(
           result.fold(
-                (failure) => RegisterError(failure),
-                (_) => OTPSent(),
+                (failure) {
+                  currentContext.pop();
+                  return RegisterError(failure);
+                },
+                (_) {
+                  currentContext.pop();
+                  return OTPSent();
+                },
           ),
         );
       }

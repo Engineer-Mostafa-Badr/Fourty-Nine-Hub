@@ -60,64 +60,9 @@ class _CreateStarState extends State<CreateStar> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(40),
-        child: BackAppBar(
-          label: LocaleKeys.addStar.localize,
-          // actions: [
-          //   Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          //     child: GestureDetector(
-          //       onTap: () {
-          //         ManageVibration.vibrate();
-          //         // Navigator.of(context).push(
-          //         //   MaterialPageRoute(
-          //         //     builder: (context) => BlocProvider(
-          //         //       create: (context) => serviceLocator<StarCubit>(),
-          //         //       child: const AllWinnerView(),
-          //         //     ),
-          //         //   ),
-          //         // );
-          //       },
-          //       child: Row(
-          //         children: [
-          //           GestureDetector(
-          //             onTap: () {
-          //               ManageVibration.vibrate();
-          //               if (!context.read<UserCubit>().isLoggedIn) {
-          //                 pleaseLoginDialog(context);
-          //               } else {
-          //                 Navigator.of(context).push(
-          //                   MaterialPageRoute(
-          //                     builder: (context) => BlocProvider(
-          //                       create: (context) =>
-          //                           serviceLocator<StarCubit>(),
-          //                       child: const AllWinnerView(),
-          //                     ),
-          //                   ),
-          //                 );
-          //               }
-          //             },
-          //             child: Text(
-          //               LocaleKeys.winners.localize,
-          //               style: TextStyle(
-          //                 color:
-          //                     context.isDarkMode ? Colors.white : Colors.black,
-          //                 fontWeight: FontWeight.bold,
-          //                 fontSize: 32.sp,
-          //               ),
-          //             ),
-          //           ),
-          //           const SizedBox(width: 4),
-          //           Image.asset(
-          //             Assets.winners,
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ],
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.addStar.localize,
       ),
       body: BlocProvider(
         create: (BuildContext context) => serviceLocator<CreatePostCubit>(),
@@ -157,7 +102,10 @@ class _CreateStarState extends State<CreateStar> {
                           });
                       }).toList() ??
                       [];
-                  return const AddTalentWidget();
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const AddTalentWidget(),
+                  );
 
                   // return createStar(context, controller, photo, state);
                 },

@@ -20,6 +20,7 @@ import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -408,14 +409,14 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                     child: context.read<ViewAllTripJoinCubit>().isLoadingPickMe == true?const Center(
                       child: CustomLoadingSearchWidget(),
                     ):context.read<ViewAllTripJoinCubit>().pickMeData.isEmpty?
-                    Center(child: Text(LocaleKeys.noData.localize))
+                    Center(child: CustomEmptyWidget(label: LocaleKeys.noTripsAvailable.localize))
                         :OlxPaginationWidget(
                       scrollController: _scrollController,
                       itemsPerPage: 3,
                       loadPage: (page) async {
                         context.read<ViewAllTripJoinCubit>().getPickMe();
                       },
-                      banners: bannersList,
+                      banners: [],
                       items: List.generate(
                         context.read<ViewAllTripJoinCubit>().pickMeData.length,
                             (index) {
@@ -434,6 +435,17 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                       phone: data.phoneNumber ?? "1234",
                                       reportId: context.read<UserCubit>().state.data?.id??'',
                                       otherUserId: '',
+                                      onSubscribe: (bool success){
+                                        context.pop();
+                                        if(success){
+                                          // data.isButtonEnabled?.state = true;
+                                          for (var item in context.read<ViewAllTripJoinCubit>().pickMeData) {
+                                            item.isButtonEnabled?.state = true;
+                                          }
+                                          setState(() {
+                                          });
+                                        }
+                                      },
                                       onTap: (){
                                         print("data.isView ${data.isView} LoggedId ${UserCubit.to.state.data?.id} creatorId ${data.creatorId}");
                                         print ("value ${data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)}");
@@ -451,7 +463,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                       isView: data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId),
                                       subscriptionType: data.formattedOfferType,
                                       views: data.viewerIds??0,
-                                      onRequest:((UserCubit.to.state.data?.id ?? '') == data.creatorId)?null: (){
+                                      onRequest:(((UserCubit.to.state.data?.id ?? '') == data.creatorId)||(data.isNormalRequested==true&&data.isPremiumRequested==true))?null: (){
                                         if (!context.read<UserCubit>().isLoggedIn) {
                                           ManageVibration.vibrate();
                                           pleaseLoginDialog(context);
@@ -544,6 +556,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                                                             .createPickMeRequest(data.id ?? '', false, phoneController.text);
                                                                         if (result == true) {
                                                                           data.isNormalRequested = true;
+                                                                          data.isButtonEnabled?.state=true;
                                                                         }
                                                                       }
                                                                     },
@@ -575,7 +588,9 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                                                                             .createPickMeRequest(data.id ?? '', true, phoneController.text);
                                                                         if (result == true) {
                                                                           data.isPremiumRequested = true;
+                                                                          data.isButtonEnabled?.state=true;
                                                                         }
+                                                                        setState(() {});
                                                                         // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
                                                                       }
                                                                     },

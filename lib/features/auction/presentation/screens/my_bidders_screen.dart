@@ -165,9 +165,9 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
 
                   }
                 },
-                onSubscribe: (){
-                  context.pop();
-                },
+                // onSubscribe: (){
+                //   context.pop();
+                // },
                 body:Container(
                   margin: EdgeInsets.symmetric(
                       horizontal: 15.w, vertical: 10.h),

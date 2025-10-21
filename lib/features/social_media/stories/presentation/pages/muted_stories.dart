@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../cubit/stories_cubit.dart';
 import 'more_stories.dart';
@@ -61,14 +62,10 @@ class _MutedStoriesState extends State<MutedStories> {
     final state = context.watch<StoryCubit>().state;
 
     return CustomScaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.PRIMARY_COLOR,
-        foregroundColor: Colors.white,
-        title: Text(
-          context.isArabic ? "القصص المعطلة" : 'Muted Stories',
-          style: Styles.headerText(color: Colors.white),
-        ),
+      appBar: BackAppBar(
+        label: context.isArabic ? "القصص المعطلة" : 'Muted Stories',
       ),
+      enableCustomAppBar: true,
       body: state.mutedStoriesResponse != null
           ? Column(
               children: [

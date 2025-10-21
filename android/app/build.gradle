@@ -74,10 +74,10 @@ android {
         // Video playback optimization - reduce MediaCodec flush/resume cycles
         
         // Native 16 KB page size configuration
-        ndk {
-            cFlags "-D__PAGE_SIZE=16384 -falign-functions=16 -falign-labels=16"
-        }
-        
+//        ndk {
+//            cFlags "-D__PAGE_SIZE=16384 -falign-functions=16 -falign-labels=16"
+//        }
+
     }
 
     buildTypes {

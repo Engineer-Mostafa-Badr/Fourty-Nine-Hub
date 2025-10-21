@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
@@ -36,6 +38,7 @@ class LoginWithPhoneParams extends Equatable {
         'deviceId': await getDeviceId(),
         'deviceName': await getDeviceName(),
         // 'fcmToken': 'fcmToken',
+        'platform' : Platform.operatingSystem,
       };
 
   @override

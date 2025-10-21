@@ -192,9 +192,9 @@ class AuctionCard extends StatelessWidget {
         },
 
 
-        onSubscribe: (){
-          context.pop();
-        },
+        // onSubscribe: (){
+        //   context.pop();
+        // },
         body:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -209,16 +209,10 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
       ],
       child: CustomScaffold(
         enableCustomAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: context.isArabic ? " الفرصة" : "Chance",
-            enableCustomAppBar: true,
-            textColor: context.isDarkMode
-                ? AppColors.getReversedTextColor(context)
-                : Colors.white,
-          ),
+        appBar: BackAppBar(
+          label: context.isArabic ? " الفرصة" : "Chance",
         ),
+       
         body: Column(
           children: [
             // // Header

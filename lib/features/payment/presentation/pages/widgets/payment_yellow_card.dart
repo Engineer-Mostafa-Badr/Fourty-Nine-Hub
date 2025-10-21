@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -55,16 +56,15 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
+      enableCustomAppBar: true,
       appBar: widget.fromSlider == false
           ? null
-          : PreferredSize(
-              preferredSize: Size.fromHeight(30),
-              child: BackAppBar(
-                label: context.isArabic
-                    ? "عضو البطاقة الصفراء"
-                    : " Yellow Card Member",
-              )),
+          : BackAppBar(
+            label: context.isArabic
+                ? "عضو البطاقة الصفراء"
+                : " Yellow Card Member",
+          ),
       body: BlocProvider(
         create: (BuildContext context) =>
             serviceLocator<PaymentCacheOutCubit>()..loadData(),

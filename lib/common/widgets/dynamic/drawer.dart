@@ -15,6 +15,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/device_id.dart';
@@ -23,6 +24,8 @@ import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/session_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
@@ -1707,6 +1710,86 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 .navigatorKey.currentContext!;
                             currentContext.pop();
                             choiceRulerCubit.changeChoiceRulerEnabled();
+                           if(value==true) {
+                             showCustomDialogTrip(
+                                 context,
+                                 Column(
+                                   spacing: 12,
+                                   mainAxisSize: MainAxisSize.min,
+                                   children: [
+                                     Text(
+                                 context.isArabic?'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
+                                       textAlign: TextAlign.center,
+                                       style: TextStyle(
+                                         fontSize: FontSize.s16,
+                                         color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                                         fontWeight: FontWeight.bold,
+                                       ),
+                                     ),
+                                     Row(
+                                       crossAxisAlignment: CrossAxisAlignment.center,
+                                       mainAxisAlignment: MainAxisAlignment.center,
+                                       children: [
+                                         AppButton(
+                                             width: context.screenWidth / 3.4,
+                                             label: context.isArabic?'حسنا!':'OK!',
+                                             backColor: AppColors.SECONDARY_COLOR_DARK2,
+                                             onPressed: () {
+                                               currentContext.pop();
+                                             }),
+                                         // const SizedBox(width: 16),
+                                         // AppButton(
+                                         //     width: context.screenWidth / 3.4,
+                                         //     label: LocaleKeys.subscribe.localize,
+                                         //     backColor: AppColors.PRIMARY_COLOR,
+                                         //     onPressed: () {
+                                         //       currentContext.pop();
+                                         //     }),
+                                       ],
+                                     ),
+                                     const SizedBox(height: 16),
+                                   ],
+                                 ));                             // showCustomDialogTrip(
+                             //    context,
+                             //    Column(
+                             //      // shrinkWrap: true,
+                             //      children: [
+                             //        Text(
+                             //          context.isArabic?'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
+                             //          textAlign: TextAlign.center,
+                             //          style: const TextStyle(
+                             //            fontSize: FontSize.s16,
+                             //            color: AppColors.PRIMARY_COLOR,
+                             //            fontWeight: FontWeight.bold,
+                             //          ),
+                             //        ),
+                             //        const SizedBox(height: 16),
+                             //        // Row(
+                             //        //   crossAxisAlignment: CrossAxisAlignment.center,
+                             //        //   mainAxisAlignment: MainAxisAlignment.center,
+                             //        //   children: [
+                             //        //     AppButton(
+                             //        //         width: context.screenWidth / 3.4,
+                             //        //         label: 'Close',
+                             //        //         backColor: AppColors.SECONDARY_COLOR_DARK2,
+                             //        //         onPressed: () {
+                             //        //           Navigator.of(context).pop();
+                             //        //         }),
+                             //        //     const SizedBox(width: 16),
+                             //            AppButton(
+                             //                // width: context.screenWidth / 3.4,
+                             //                label: context.isArabic ? 'حسنا' : 'OK!',
+                             //                backColor: AppColors.SECONDARY_COLOR,
+                             //                onPressed: () {
+                             //                  currentContext.pop();
+                             //
+                             //                }),
+                             //        //   ],
+                             //        // ),
+                             //        const SizedBox(height: 16),
+                             //      ],
+                             //    ));
+                           }
                           },
                         );
                       },

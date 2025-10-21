@@ -106,16 +106,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: context.isArabic
-              ? widget.mainCategory.name
-              : widget.mainCategory.nameEn,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          enableCustomAppBar: true,
-        ),
+      appBar: BackAppBar(
+        label: context.isArabic
+            ? widget.mainCategory.name
+            : widget.mainCategory.nameEn,
       ),
       body: BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
         builder: (context, state) {

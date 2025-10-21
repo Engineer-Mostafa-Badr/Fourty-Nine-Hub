@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/common/winner_grid_view_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/auction/domain/entities/all_winner_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/presentation/cubit/auction_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/winners_grid_view.dart';
@@ -138,9 +140,10 @@ class _WinnersAuctionScreenState extends State<WinnersAuctionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DefaultAppBar(
-        title:LocaleKeys.winners.localize,
+    return CustomScaffold(
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label:LocaleKeys.winners.localize,
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -192,7 +195,8 @@ class _WinnersAuctionScreenState extends State<WinnersAuctionScreen> {
               crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 12,
-              mainAxisExtent: 270,
+              // mainAxisExtent: 270,
+              childAspectRatio: 1/1.6,
             ),
             itemCount: winners.length + (cubit.hasMoreWinnersAuction ? 1 : 0),
             // itemCount: winners.length,

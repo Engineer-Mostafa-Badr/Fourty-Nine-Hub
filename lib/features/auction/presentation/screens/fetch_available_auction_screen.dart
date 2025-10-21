@@ -229,44 +229,44 @@ class _AuctionScreenState extends State<AuctionScreen>
       },
   child: BlocBuilder<AuctionCubit, AuctionState>(
     builder: (context,state) {
-      return Scaffold(
+      return CustomScaffold(
           // scaffoldBackgroundWithAppBarColor: AppColors.PRIMARY_COLOR,
           // backgroundColor: AppColors.PRIMARY_COLOR,
           // enableCustomAppBar: true,
-          appBar: DefaultAppBar(
-            title:LocaleKeys.auction.localize,
-            actions: [
-              const SizedBox(width: 6),
+        enableCustomAppBar: true,
+        appBar: BackAppBar(
+          label: LocaleKeys.auction.localize,
+          actions: [
+            const SizedBox(width: 6),
 
-              GestureDetector(
-                onTap: () {
-                  ManageVibration.vibrate(); // optional if you use it elsewhere
-                  context.push(Routes.auctionWinnersScreen);
-                },
-                child: Row(
-                  children: [
-                    Text(
-                      "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+            GestureDetector(
+              onTap: () {
+                ManageVibration.vibrate(); // optional if you use it elsewhere
+                context.push(Routes.auctionWinnersScreen);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "(${state.auctionWinnerData?.winnersCount ?? 0}/${state.auctionWinnerData?.allAuctionCount ?? 0}) ${LocaleKeys.winners.localize}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.white,
                     ),
-                    const SizedBox(width: 6),
-                    Image.asset(
-                      Assets.winners,
-                      height: 20,
-                      width: 20,
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 6),
+                  Image.asset(
+                    Assets.winners,
+                    height: 20,
+                    width: 20,
+                  ),
+                ],
               ),
+            ),
 
-              const SizedBox(width: 5),
-            ],
-
-          ),
+            const SizedBox(width: 5),
+          ],
+        ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

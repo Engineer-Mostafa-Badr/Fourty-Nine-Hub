@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
@@ -165,106 +166,9 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     });
 
     return CustomScaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(40),
-        child: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: AppColors.PRIMARY_COLOR,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          titleSpacing: 0,
-          leading: SizedBox(
-            width: 30,
-            height: 30,
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: Icon(Icons.arrow_back_ios,
-                  color: AppColors.whiteColor, size: 20),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-          title: Text(
-            context.isArabic ? 'تبديل العملات' : 'Exchange',
-            style: TextStyle(
-              color: AppColors.whiteColor,
-              fontSize: 32.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          // actions: [
-          //   // Settings toggle
-          //   BlocBuilder<CurrencyCubit, CurrencyState>(
-          //     builder: (context, state) {
-          //       return IconButton(
-          //         icon: Icon(
-          //           _showSettings ? Icons.close : Icons.settings,
-          //           color: AppColors.PRIMARY_COLOR,
-          //           size: 20,
-          //         ),
-          //         onPressed: () {
-          //           setState(() {
-          //             _showSettings = !_showSettings;
-          //           });
-          //           ManageVibration.vibrate();
-          //         },
-          //       );
-          //     },
-          //   ),
-
-          //   // Auto-refresh status indicator
-          //   BlocBuilder<CurrencyCubit, CurrencyState>(
-          //     builder: (context, state) {
-          //       final cubit = context.read<CurrencyCubit>();
-
-          //       if (state is CurrencyRefreshing) {
-          //         _startRefreshAnimation();
-          //       } else {
-          //         _stopRefreshAnimation();
-          //       }
-
-          //       return AnimatedBuilder(
-          //         animation: _rotationAnimation,
-          //         builder: (context, child) {
-          //           return Transform.rotate(
-          //             angle: _rotationAnimation.value * 2 * 3.14159,
-          //             child: AnimatedBuilder(
-          //               animation: _pulseAnimation,
-          //               builder: (context, child) {
-          //                 return Transform.scale(
-          //                   scale: cubit.autoRefreshEnabled
-          //                       ? _pulseAnimation.value
-          //                       : 1.0,
-          //                   child: IconButton(
-          //                     icon: Icon(
-          //                       cubit.autoRefreshEnabled
-          //                           ? Icons.sync
-          //                           : Icons.sync_disabled,
-          //                       color: cubit.autoRefreshEnabled
-          //                           ? Colors.green
-          //                           : Colors.grey,
-          //                       size: 20,
-          //                     ),
-          //                     onPressed: () {
-          //                       ManageVibration.vibrate();
-          //                       if (cubit.autoRefreshEnabled) {
-          //                         cubit.disableAutoRefresh();
-          //                       } else {
-          //                         cubit.enableAutoRefresh();
-          //                       }
-          //                     },
-          //                   ),
-          //                 );
-          //               },
-          //             ),
-          //           );
-          //         },
-          //       );
-          //     },
-          //   ),
-          // ],
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label:context.isArabic ? 'تبديل العملات' : 'Exchange',
       ),
       body: BlocConsumer<CurrencyCubit, CurrencyState>(
         listener: (context, state) {

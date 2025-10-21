@@ -1370,6 +1370,8 @@ class RideCubit extends Cubit<RideState> {
 
   Future<void> fetchRideExpectedPrice({required String id}) async {
     emit(state.copyWith(status: RideStates.loading));
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
 
     if (state.currentLocation == null || state.toLocation == null) {
       return;
@@ -1404,14 +1406,16 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) {
-        var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (rideExpectedPrice) => emit(state.copyWith(
-          status: RideStates.success, rideExpectedPrice: rideExpectedPrice)),
+      (rideExpectedPrice) {
+        currentContext.pop();
+        emit(state.copyWith(
+          status: RideStates.success, rideExpectedPrice: rideExpectedPrice));
+      },
     );
   }
 

@@ -40,27 +40,13 @@ class FilterAdsView extends StatefulWidget {
 class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
-    // Map old fitness category ID to new one
-    String getCategoryId() {
-      String id = widget.filterAdsParams.categorization.fromMarriage == false
-          ? widget.filterAdsParams.categorization.mainCategory.id
-          : widget.filterAdsParams.categorization.subCategory.id;
-
-      // Replace old fitness category ID with new one
-      if (id == '62c8b5a29332225799fe3348') {
-        return '62c8be568e28a58a3edf5f1d';
-      }
-      return id;
-    }
-
-    // context.read<CreateAdCubit>().loadPropsData(
-    //     subCategoryId:
-    //         widget.filterAdsParams.categorization.fromMarriage == false
-    //             ? widget.filterAdsParams.categorization.mainCategory.id
-    //             : widget.filterAdsParams.categorization.subCategory.id,
-    //     fromMarriage:
-    //         widget.filterAdsParams.categorization.fromMarriage ?? false);
-    getCategoryId();
+    context.read<CreateAdCubit>().loadPropsData(
+        subCategoryId:
+            widget.filterAdsParams.categorization.fromMarriage == false
+                ? widget.filterAdsParams.categorization.subCategory.id
+                : widget.filterAdsParams.categorization.subCategory.id,
+        fromMarriage:
+            widget.filterAdsParams.categorization.fromMarriage ?? false);
     super.initState();
   }
 

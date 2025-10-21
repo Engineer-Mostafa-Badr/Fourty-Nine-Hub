@@ -36,7 +36,7 @@ class ContactsTripButtons extends StatefulWidget {
   final bool? hasReport;
   final bool? isPremium;
   final bool? isButtonEnabled;
-  final Function? onSubscribe;
+  final Function(bool success)? onSubscribe;
   const ContactsTripButtons(
       {super.key,
       required this.otherUserId,
@@ -106,9 +106,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
             SubscriptionMethod().subscribe(
               subscribeId: widget.subcategoryId,
               title: widget.subscriptionTitle,
-              onSubscribe: (){
-
-              }
+              onSubscribe:widget.onSubscribe==null?null: (success)=> widget.onSubscribe!(success),
             );
           }:(){
             ManageVibration.vibrate();
@@ -160,7 +158,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
             SubscriptionMethod().subscribe(
               subscribeId: widget.subcategoryId,
               title: widget.subscriptionTitle,
-              onSubscribe: (){},
+              onSubscribe: widget.onSubscribe==null?null: (success)=> widget.onSubscribe!(success),
             );
           },
         ),

@@ -189,9 +189,9 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         SubscriptionMethod().subscribe(
                           subscribeId: '66bb94c3083de8342c9d4f38',
                           title: context.isArabic?"توثيق الحساب":"Verify Account",
-                          onSubscribe: () {
+                          onSubscribe: (success) {
                             context.pop();
-                            controller.getVerification();
+                            if(success)controller.getVerification();
                           }
                         );
                         return;

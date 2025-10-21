@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
@@ -108,7 +109,7 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
           }
 
           if (context.read<ViewAllTripJoinCubit>().myPickMeAdsData.isEmpty) {
-            return Center(child: Text(LocaleKeys.noData.localize));
+            return Center(child: CustomEmptyWidget(label:LocaleKeys.youHaveNoAds.localize));
           }
           return OlxPaginationWidget(
             scrollController: _scrollController,

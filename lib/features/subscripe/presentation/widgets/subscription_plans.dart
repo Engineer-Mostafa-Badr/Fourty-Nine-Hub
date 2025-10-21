@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../common/widgets/stateless/labels/info_text.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -29,7 +30,7 @@ class SubscriptionPlansWidget extends StatefulWidget {
   final String subCategoryId;
   final String? title;
   final bool? showRegular;
-  final Function? onSubscribe;
+  final Function(bool success)? onSubscribe;
 
   const SubscriptionPlansWidget({
     super.key,
@@ -304,6 +305,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             : Colors.white,
                       ),
                       onPressed: () async {
+                        var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
                         ManageVibration.vibrate();
                         List<num> list = _isPremium
                             ? widget.subscribePlans.premiumPlans
@@ -338,8 +340,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           if (selectedPlanPrice < walletPrice) {
                             print('selectedWallet${selectedWallet!.name}');
                             // print('selectedWallet mainWallet');
-                            showLoadingDialog(context);
-                            await context.read<WalletCubit>().addSubscription(
+                            showLoadingDialog(currentContext);
+                            bool success = await currentContext.read<WalletCubit>().addSubscription(
                                   params: AddSubscriptionParams(
                                     subCategoryId: widget.subCategoryId,
                                     paymentMethod: selectedWallet!.name,
@@ -349,12 +351,13 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                                     periodType: 'days',
                                   ),
                                 );
-                            if (context.mounted) {
+                            if (currentContext.mounted) {
                               if (widget.onSubscribe != null) {
-                                widget.onSubscribe!();
+                                print("widget.onSubscribe");
+                                widget.onSubscribe!(success);
                               } else {
-                                context.pop();
-                                context.pop();
+                                currentContext.pop();
+                                currentContext.pop();
                               }
 
                               // context.pushReplacement(Routes.HOME);
@@ -367,7 +370,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             }
                             // context.pop();
                           } else {
-                            await serviceLocator<SubscriptionController>()
+                            showLoadingDialog(currentContext);
+                            print("widget.onSubscribe");
+                            bool success = await serviceLocator<SubscriptionController>()
                                 .subscribe(
                               subscribeParams: SubscribeParams(
                                 subCategoryId: widget.subCategoryId,
@@ -377,6 +382,16 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                                 days: _groupValue,
                               ),
                             );
+                            if (currentContext.mounted) {
+                              if (widget.onSubscribe != null) {
+                                currentContext.pop();
+                                currentContext.pop();
+                                widget.onSubscribe!(success);
+                              } else {
+                                currentContext.pop();
+                                currentContext.pop();
+                              }
+                            }
                           }
                         }
                         setState(() {});

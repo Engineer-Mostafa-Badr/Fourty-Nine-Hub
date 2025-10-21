@@ -3940,11 +3940,6 @@ class AppPages {
                       BlocProvider(
                         create: (context) =>
                             serviceLocator<ViewAllTripJoinCubit>(),
-
-                        // create: (_) => ViewAllTripJoinCubit(
-                        //   viewAllTripJoinUseCase:
-                        //       serviceLocator<ViewAllTripJoinUseCase>(),
-                        // ),
                       ),
                       BlocProvider(
                         create: (_) => RequestTripJoinCubit(
@@ -3967,11 +3962,6 @@ class AppPages {
                       BlocProvider<GetAllTripsCubit>(
                         create: (context) =>
                             GetAllTripsCubit(apiConsumer: serviceLocator()),
-                      ),
-                      BlocProvider<GetCurrencyCubit>(
-                        create: (context) => GetCurrencyCubit(
-                          serviceLocator(),
-                        ),
                       ),
                       BlocProvider<JoinTripCarPoolCubit>(
                         create: (context) => JoinTripCarPoolCubit(
@@ -4750,6 +4740,15 @@ class AppPages {
                     state,
                     MultiBlocProvider(
                         providers: [
+                          BlocProvider(
+                            create: (_) => ViewAllPickMeCubit(
+                              viewAllPickMeUseCase:
+                              serviceLocator<ViewAllPickMeUseCase>(),
+                            ),
+                          ),
+                          BlocProvider(
+                            create: (_) =>serviceLocator<ViewAllTripJoinCubit>(),
+                          ),
                           BlocProvider<DestGetLatAndLongCubit>(
                             create: (context) => DestGetLatAndLongCubit(
                                 getLatLongFromAddressRemoteDataSource:

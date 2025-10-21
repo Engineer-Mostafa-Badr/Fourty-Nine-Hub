@@ -239,7 +239,6 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
               enableCustomAppBar: true,
               appBar: BackAppBar(
                 label: context.isArabic ? 'فرصة' : 'Chance',
-                enableCustomAppBar: true,
                 actions: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
