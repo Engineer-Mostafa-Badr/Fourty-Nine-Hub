@@ -41,50 +41,74 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color:widget.subCategory?.isSelected == true
-                        ? AppColors.getRedColor(context):
-                    AppColors.getFillColor(context),
+                    color: widget.subCategory?.isSelected == true
+                        ? AppColors.getRedColor(context)
+                        : AppColors.getFillColor(context),
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(width: 0.5, color: AppColors.black),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    // This makes children fill the width
+                  child: Stack(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          15,
-                        ),
-                        // Slightly less than container radius to account for border
-                        child: widget.subCategory?.fromAsset == true
-                            ? Image.asset(
-                                widget.subCategory?.image ?? '',
-                                fit: BoxFit.cover,
-                                // This makes the image fill the space
-                                // height: 300.h,
-                                width: double.infinity, // Takes full width
-                              )
-                            : ImageFromInternet(
-                                image: widget.subCategory?.picture ?? '',
-                                defaultLogo: true,
-                                fit: BoxFit.cover,
-                                height: 300.h,
-                                width: double.infinity,
-                              ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        // Add some padding around the title
-                        child:  Label(
-                          text: (getLang() == "ar"
-                              ? widget.subCategory?.nameAr
-                              : widget.subCategory?.nameEn) ??
-                              "",
-                          style: Styles.headerText(
-                            color: widget.subCategory?.isSelected == true
-                                ?AppColors.getReversedTextColor(context)
-                                : null,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // This makes children fill the width
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              15,
+                            ),
+                            // Slightly less than container radius to account for border
+                            child: widget.subCategory?.fromAsset == true
+                                ? Image.asset(
+                                    widget.subCategory?.image ?? '',
+                                    fit: BoxFit.cover,
+                                    // This makes the image fill the space
+                                    // height: 300.h,
+                                    width: double.infinity, // Takes full width
+                                  )
+                                : ImageFromInternet(
+                                    image: widget.subCategory?.picture ?? '',
+                                    defaultLogo: true,
+                                    fit: BoxFit.cover,
+                                    height: 300.h,
+                                    width: double.infinity,
+                                  ),
                           ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            // Add some padding around the title
+                            child: Label(
+                              text: (getLang() == "ar"
+                                      ? widget.subCategory?.nameAr
+                                      : widget.subCategory?.nameEn) ??
+                                  "",
+                              style: Styles.headerText(
+                                color: widget.subCategory?.isSelected == true
+                                    ? AppColors.getReversedTextColor(context)
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: IconButton(
+                          icon: Icon(
+                            (widget.subCategory?.isFavorite ?? false)
+                                ? Icons.favorite_outlined
+                                : Icons.favorite_border,
+                            color: Colors.red,
+                            size: 55.sp,
+                          ),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            widget.favouriteSubCategory();
+                            setState(() {});
+                          },
+                          visualDensity:
+                              const VisualDensity(horizontal: -4, vertical: -4),
                         ),
                       ),
                     ],

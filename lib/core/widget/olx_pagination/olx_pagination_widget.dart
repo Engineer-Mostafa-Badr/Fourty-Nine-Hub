@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../res/style/app_colors.dart';
 import 'banner.dart';
 
 class OlxPaginationWidget extends StatefulWidget {
@@ -76,65 +75,65 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height * 0.6;
-    // const  = 3;
     final pageCount = (widget.items.length / widget.itemsPerPage).ceil();
 
-    return GlowingOverscrollIndicator(
-        color: AppColors.SECONDARY_COLOR,
-        axisDirection: AxisDirection.down,
-        child: CustomScrollView(
-          controller: widget.scrollController,
-          slivers: [
-            // First page items
-            if (widget.items.isNotEmpty)
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => widget.items[index],
-                  childCount: widget.items.length > widget.itemsPerPage
-                      ? widget.itemsPerPage
-                      : widget.items.length,
-                ),
-              ),
+    // Build the list of widgets to display
+    List<Widget> buildItemsList() {
+      List<Widget> allWidgets = [];
 
-            // Subsequent pages with banners
-            for (int page = 1; page < pageCount; page++) ...[
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                pinned: false,
-                expandedHeight: screenHeight, // Reduced height for banner
-                flexibleSpace: widget.banners.isNotEmpty
-                    ? BannerAdsWidget(
-                  key: Key('banner_$page'),
-                  banner: widget.banners[(page - 1) % widget.banners.length],
-                )
-                    : const SizedBox.shrink(),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final itemIndex = page * widget.itemsPerPage + index;
-                    return itemIndex < widget.items.length
-                        ? widget.items[itemIndex]
-                        : null;
-                  },
-                  childCount: widget.itemsPerPage,
-                ),
-              ),
-            ],
+      // First page items
+      if (widget.items.isNotEmpty) {
+        final firstPageCount = widget.items.length > widget.itemsPerPage
+            ? widget.itemsPerPage
+            : widget.items.length;
+        for (int i = 0; i < firstPageCount; i++) {
+          allWidgets.add(widget.items[i]);
+        }
+      }
 
-            // Loading indicator
-            if (_isLoading)
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Center(child: CircularProgressIndicator()),
-                ),
+      // Subsequent pages with banners
+      for (int page = 1; page < pageCount; page++) {
+        // Add banner
+        if (widget.banners.isNotEmpty) {
+          allWidgets.add(
+            SizedBox(
+              height: screenHeight,
+              child: BannerAdsWidget(
+                key: Key('banner_$page'),
+                banner: widget.banners[(page - 1) % widget.banners.length],
               ),
-          ],
-        ));
+            ),
+          );
+        }
+
+        // Add items for this page
+        for (int i = 0; i < widget.itemsPerPage; i++) {
+          final itemIndex = page * widget.itemsPerPage + i;
+          if (itemIndex < widget.items.length) {
+            allWidgets.add(widget.items[itemIndex]);
+          }
+        }
+      }
+
+      // Loading indicator
+      if (_isLoading) {
+        allWidgets.add(
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        );
+      }
+
+      return allWidgets;
+    }
+
+    // Return a simple Column for embedded usage
+    return Column(
+      children: buildItemsList(),
+    );
   }
 }
-
 
 extension StaticOlxPagination on OlxPaginationWidget {
   Widget buildAsStaticList() {
