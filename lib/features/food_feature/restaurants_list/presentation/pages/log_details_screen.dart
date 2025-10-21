@@ -2,7 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/extensions/context_extension.dart';
@@ -39,7 +42,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
     _currentLogsEntity = widget.logsEntity;
   }
 
-  void _updateRating(double newRating)async {
+  void _updateRating(double newRating) async {
     setState(() {
       // Create a new UserRateRestaurantEntity with the updated rating
       final updatedRate = _currentLogsEntity.userRateRestaurant?.copyWith(
@@ -51,7 +54,6 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         userRateRestaurant: updatedRate, // Replace the old one
       );
     });
-
   }
 
   String getRatingText(int rating) {
@@ -77,10 +79,10 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         Navigator.pop(context, _currentLogsEntity);
         return false;
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(LocaleKeys.orderDetails.localize,
-              style: Styles.headerText(fontWeight: FontWeight.w700)),
+      child: CustomScaffold(
+        enableCustomAppBar: true,
+        appBar: BackAppBar(
+          label: LocaleKeys.orderDetails.localize,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -109,7 +111,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                   ),
                   const Sizer(),
                   _currentLogsEntity.userRateRestaurant == null ||
-                      _currentLogsEntity.userRateRestaurant == 0
+                          _currentLogsEntity.userRateRestaurant == 0
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -127,7 +129,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                             ),
                             InkWell(
                                 onTap: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   final cubit =
                                       context.read<RestaurantsCubit>();
                                   showModalBottomSheet(
@@ -223,7 +225,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                 const Sizer(),
                                 InkWell(
                                     onTap: () {
-      ManageVibration.vibrate();
+                                      ManageVibration.vibrate();
                                       final cubit =
                                           context.read<RestaurantsCubit>();
                                       showModalBottomSheet(
@@ -548,7 +550,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                       .format(DateTime.parse(_currentLogsEntity.createdAt!)))
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
-            // fontSize: 12,
+            fontSize: 24,
             fontWeight: FontWeight.w600,
             color: context.isDarkMode ? AppColors.whiteColor : AppColors.black,
           ),
@@ -559,7 +561,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
           child: Text(
             getSubscriptionType(_currentLogsEntity.subscriptionType?.en),
             style: Styles.smallText(
-              // fontSize: 12,
+              fontSize: 24,
               color: AppColors.SECONDARY_COLOR_DARK,
               fontWeight: FontWeight.w600,
             ),

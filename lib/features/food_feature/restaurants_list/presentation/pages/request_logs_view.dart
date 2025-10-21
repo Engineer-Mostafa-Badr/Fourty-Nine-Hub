@@ -36,8 +36,7 @@ class _RestaurantRequestLogsScreenState
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()
-      ..addListener(_onScroll);
+    _scrollController = ScrollController()..addListener(_onScroll);
   }
 
   void _onScroll() {
@@ -58,59 +57,56 @@ class _RestaurantRequestLogsScreenState
   Widget build(BuildContext context) {
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
-          final controller = context.read<RestaurantsCubit>();
-          if (state.isLoading) {
-            return  const CustomLoadingSearchWidget();
-            // SizedBox(
-            //   height: MediaQuery
-            //       .of(context)
-            //       .size
-            //       .height *
-            //       .65, // Make sure it takes up full height
-            //   child: const Center(
-            //     child: CustomCircularProgressIndicator(),
-            //   ),
-            // );
-          }
-          if (controller.reqLogs.isEmpty) {
-            return Center(
-              child: SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height *
-                    .65, // Make sure it takes up full height
-                child: Center(
-                  // This will center it vertically and horizontally
-                  child: CustomEmptyWidget(
-                    label: LocaleKeys.noResultsFound.tr(),
-                  ),
-                ),
+      final controller = context.read<RestaurantsCubit>();
+      if (state.isLoading) {
+        return const CustomLoadingSearchWidget();
+        // SizedBox(
+        //   height: MediaQuery
+        //       .of(context)
+        //       .size
+        //       .height *
+        //       .65, // Make sure it takes up full height
+        //   child: const Center(
+        //     child: CustomCircularProgressIndicator(),
+        //   ),
+        // );
+      }
+      if (controller.reqLogs.isEmpty) {
+        return Center(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height *
+                .65, // Make sure it takes up full height
+            child: Center(
+              // This will center it vertically and horizontally
+              child: CustomEmptyWidget(
+                label: LocaleKeys.noResultsFound.tr(),
               ),
-            );
-          }
+            ),
+          ),
+        );
+      }
 
-          if (!state.isLoading) {
-            return OlxPaginationWidget(
-              scrollController: _scrollController,
-              itemsPerPage: 2,
-              loadPage: (page) async {},
-              banners: bannersList,
-              items: List.generate(
-                controller.reqLogs.length,
-                    (index) {
-                      final request = controller.reqLogs[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: TripLogRequestCard(
-                          orderData: request,
-                          index: index,
-                        ),
-                      );
-                    },
-              ),
-            );
-           /* return ListView.separated(
+      if (!state.isLoading) {
+        return OlxPaginationWidget(
+          scrollController: _scrollController,
+          itemsPerPage: 2,
+          loadPage: (page) async {},
+          banners: bannersList,
+          items: List.generate(
+            controller.reqLogs.length,
+            (index) {
+              final request = controller.reqLogs[index];
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: TripLogRequestCard(
+                  orderData: request,
+                  index: index,
+                ),
+              );
+            },
+          ),
+        );
+        /* return ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: controller.reqLogs.length,
@@ -128,20 +124,20 @@ class _RestaurantRequestLogsScreenState
                 return const Sizer();
               },
             );*/
-          } else {
-            return  const CustomLoadingSearchWidget();
-            // SizedBox(
-            //   height: MediaQuery
-            //       .of(context)
-            //       .size
-            //       .height *
-            //       .7, // Make sure it takes up full height
-            //   child: const Center(
-            //     child: CustomCircularProgressIndicator(),
-            //   ),
-            // );
-          }
-        });
+      } else {
+        return const CustomLoadingSearchWidget();
+        // SizedBox(
+        //   height: MediaQuery
+        //       .of(context)
+        //       .size
+        //       .height *
+        //       .7, // Make sure it takes up full height
+        //   child: const Center(
+        //     child: CustomCircularProgressIndicator(),
+        //   ),
+        // );
+      }
+    });
   }
 }
 
@@ -161,12 +157,11 @@ class TripLogRequestCard extends StatelessWidget {
           text: orderData.restaurantId?.name ?? "N/A",
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
         ),
-        ...?orderData.orders?.map((order) =>
-            Padding(
+        ...?orderData.orders?.map((order) => Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: InkWell(
                   onTap: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     if (orderData.seen == false) {
                       context
                           .read<RestaurantsCubit>()
@@ -175,12 +170,11 @@ class TripLogRequestCard extends StatelessWidget {
                     final updatedLogsEntity = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            BlocProvider<RestaurantsCubit>(
-                              create: (context) =>
-                                  serviceLocator<RestaurantsCubit>(),
-                              child: LogDetailsScreen(logsEntity: orderData),
-                            ),
+                        builder: (_) => BlocProvider<RestaurantsCubit>(
+                          create: (context) =>
+                              serviceLocator<RestaurantsCubit>(),
+                          child: LogDetailsScreen(logsEntity: orderData),
+                        ),
                       ),
                     );
                     if (updatedLogsEntity != null) {
@@ -188,85 +182,82 @@ class TripLogRequestCard extends StatelessWidget {
                     }
                   },
                   child: Container(
-                    // elevation: context.isDarkMode ? 0 : 2,
+                      // elevation: context.isDarkMode ? 0 : 2,
                       decoration: BoxDecoration(
-                        color: (
-                            orderData.seen == true
-                            ?
-                            AppColors.getButtonPrimaryColor(context)
-                            : AppColors.getRedColor(context)
-                        ),
+                        color: (orderData.seen == true
+                            ? AppColors.getButtonPrimaryColor(context)
+                            : AppColors.getRedColor(context)),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: order.foodId?.picture?.mediaKey !=
-                                  null
-                                  ? Image.network(
-                                order.foodId?.picture?.mediaKey??UIConst.imageBaseUrl,
-                                width: 100,
-                                height: 80,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    width: 100,
-                                    height: 70,
-                                    color: Colors.grey[200],
-                                    child: const Icon(
-                                      Icons.broken_image,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                },
-                              )
-                                  : Container(
-                                width: 100,
-                                height: 70,
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.broken_image,
-                                  size: 40,
-                                  color: Colors.grey,
+                      child: Row(children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: order.foodId?.picture?.mediaKey != null
+                              ? Image.network(
+                                  order.foodId?.picture?.mediaKey ??
+                                      UIConst.imageBaseUrl,
+                                  width: 100,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      width: 100,
+                                      height: 70,
+                                      color: Colors.grey[200],
+                                      child: const Icon(
+                                        Icons.broken_image,
+                                        size: 40,
+                                        color: Colors.grey,
+                                      ),
+                                    );
+                                  },
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 70,
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
+                        ),
+                        const SizedBox(width: 12),
 
-                            // MAIN CONTENT
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    order.foodId?.foodName ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.getReversedTextColor(context)),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    '${
-                              context.isArabic
-                                  ? numAr(order.price ?? 0)
-                                  : order.price.toString()
-                            } ${context.isArabic?orderData.currencyAr:orderData.currencyEn}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.getReversedTextColor(context)),
-                                  ),
-                                ],
+                        // MAIN CONTENT
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                order.foodId?.foodName ??
+                                    (context.isArabic
+                                        ? 'غير معروف'
+                                        : 'Unknown'),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.getReversedTextColor(
+                                        context)),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ]))),
-            ) ),
+                              const SizedBox(height: 8),
+                              Text(
+                                '${context.isArabic ? numAr(order.price ?? 0) : order.price.toString()} ${context.isArabic ? orderData.currencyAr : orderData.currencyEn}',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.getReversedTextColor(
+                                        context)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]))),
+            )),
         // InkWell(
         //   onTap: () async {
         //     if (orderData.seen == false) {
@@ -379,6 +370,7 @@ class TripLogRequestCard extends StatelessWidget {
         //     ),
         //   ),
         // ),
-      ],);
+      ],
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import '../../../../../common/functions/helper/lang_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
@@ -141,39 +142,51 @@ class SearchRestaurantView extends StatelessWidget {
                             return GestureDetector(
                               onTap: () =>
                                   searchCubit.selectSubcategory(category),
-                              child: Row(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: category?.picture ?? "",
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: category?.picture ?? "",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        width: 170.w,
+                                        height: 140.h,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey.shade300,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: AppColors.PRIMARY_COLOR
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 3,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
                                       width: 150.w,
-                                      height: 150.h,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.grey.shade300,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: AppColors.PRIMARY_COLOR
-                                                  .withOpacity(0.5),
-                                              spreadRadius: 2,
-                                              blurRadius: 3,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          )),
                                     ),
-                                    width: 150.w,
-                                  ),
-                                  const Sizer(),
-                                  Text(getLang() == "ar"
-                                      ? (category?.nameAr ?? "")
-                                      : (category?.nameEn ?? "")),
-                                ],
+                                    const Sizer(),
+                                    Label(
+                                      text: getLang() == "ar"
+                                          ? (category?.nameAr ?? "")
+                                          : (category?.nameEn ?? ""),
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.PRIMARY_COLOR,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
@@ -284,9 +297,10 @@ class SearchRestaurantView extends StatelessWidget {
                                       width: 150.w,
                                     ),
                                     const Sizer(),
-                                    Text(getLang() == "ar"
-                                        ? (category?.nameAr ?? "")
-                                        : (category?.nameEn ?? "")),
+                                    Label(
+                                        text: getLang() == "ar"
+                                            ? (category?.nameAr ?? "")
+                                            : (category?.nameEn ?? "")),
                                   ],
                                 ),
                               );

@@ -43,7 +43,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
           width: double.infinity,
-          height: imageHeight,
+          height: imageHeight * 1.2,
           child: Stack(
             fit: StackFit.expand,
             children: [

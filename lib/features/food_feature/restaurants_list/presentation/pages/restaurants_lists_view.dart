@@ -378,11 +378,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   Widget _buildLoggedInView(RestaurantsListState state) {
     return Padding(
       padding: EdgeInsets.all(10.w),
-      child: GlowingOverscrollIndicator(
-        color: AppColors.SECONDARY_COLOR,
-        axisDirection: AxisDirection.down,
-        child: ListView(
-          children: [
+      child: ListView(
+        children: [
             const MealBanner(),
             _buildRegisterRestaurantPrompt(state),
             _buildSearchAndExpiredRequests(),
@@ -517,9 +514,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             ? OlxPaginationWidget(
                                 scrollController:
                                     ScrollController(), // dummy controller
-                                itemsPerPage: 2,
+                                itemsPerPage: 3,
                                 loadPage: (page) async {},
                                 banners: bannersList,
+                                // shrinkWrap: true,
+                                // physics: const NeverScrollableScrollPhysics(),
                                 items: List.generate(
                                   context
                                       .read<RestaurantsCubit>()
@@ -553,7 +552,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                     );
                                   },
                                 ),
-                              ).buildAsStaticList()
+                              )
 
                             /*ListView.separated(
                                 shrinkWrap: true,
@@ -612,8 +611,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               )
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
