@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
@@ -273,7 +274,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                           child: CustomLoadingSearchWidget(),
                         )
                       : context.read<ViewAllTripJoinCubit>().tripJoinData.isEmpty
-                          ? Center(child: Text(LocaleKeys.noData.localize))
+                          ? Center(child: CustomEmptyWidget(label:LocaleKeys.noTripsAvailable.localize))
                           : OlxPaginationWidget(
                               scrollController: _scrollController,
                               itemsPerPage: 3,
@@ -295,6 +296,17 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                       subcategoryId: '62ea00e269ea29c91dfc390c',
                                       phone: data.phoneNumber ?? "1234",
                                       hasReport: true,
+                                      onSubscribe: (bool success){
+                                        context.pop();
+                                        if(success){
+                                          // data.isButtonEnabled?.state = true;
+                                          for (var item in context.read<ViewAllTripJoinCubit>().tripJoinData) {
+                                            item.isButtonEnabled?.state = true;
+                                          }
+                                          setState(() {
+                                          });
+                                        }
+                                      },
                                       reportId: context.read<UserCubit>().state.data?.id ?? '',
                                       onTap: () {
                                         ManageVibration.vibrate();

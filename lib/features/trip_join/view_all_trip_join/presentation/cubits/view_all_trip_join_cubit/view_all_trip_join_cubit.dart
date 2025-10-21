@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
@@ -286,8 +287,21 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         isSuccess=false;
         currentContext.pop();
         currentContext.pop();
-        showErrorMessage(
-            currentContext, getFailureMessage(failure, currentContext));
+        String name = getFailureName(failure, currentContext);
+        if(name == 'SubscribeError'){
+          showSubscribeDialog(currentContext, '62c8ba9f8e28a58a3edf57ee',
+              title: currentContext.isArabic?'اشترك أولا حتي تتمكن من ارسال طلب مميز':'Subscribe first to be able to send a premium request',
+          // onSubscribe: (success){
+          //   print("isPremium==true $isPremium");
+          //   currentContext.pop();
+          //   // if(isPremium==true)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isPremiumRequested=true;
+          //   // if(isPremium==false)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isNormalRequested=true;
+          // }
+          );
+        }else{
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        }
         emit(state.copyWith(
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },

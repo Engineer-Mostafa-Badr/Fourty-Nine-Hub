@@ -411,7 +411,7 @@ void showConfirmDialog(
 }
 
 showSubscribeDialog(BuildContext context, String subCategoryId,
-    {String? title}) {
+    {String? title,Function(bool success)? onSubscribe}) {
   showCustomDialogTrip(
       context,
       Column(
@@ -454,6 +454,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId,
                     SubscriptionMethod().subscribe(
                         subscribeId: subCategoryId,
                         showRegular: true,
+                        onSubscribe: onSubscribe==null?null:(success)=>onSubscribe(success),
                         title: '');
                   }),
             ],

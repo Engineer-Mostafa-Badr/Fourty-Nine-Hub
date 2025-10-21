@@ -109,7 +109,7 @@ class _TripJoinViewState extends State<TripJoinView>
     return SharedScaffold(
       mainCategoryId: 1,
       isWithBackArrow: true,
-
+      onBackPressed: ()=>context.pop(),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(

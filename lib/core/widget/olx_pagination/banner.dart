@@ -53,17 +53,20 @@ class _BannerAdsWidgetState extends State<BannerAdsWidget> {
           )
         : null;
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        if (image != null) image,
-        if (video != null) video,
-        Container(color: Colors.black.withOpacity(0.3)),
-        if (_controller != null && !_controller!.value.isInitialized)
-          const Center(
-            child: CircularProgressIndicator(),
-          ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (image != null) image,
+          if (video != null) video,
+          Container(color: Colors.black.withOpacity(0.3)),
+          if (_controller != null && !_controller!.value.isInitialized)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
     );
   }
 
@@ -91,12 +94,12 @@ class _BannerAdsWidgetState extends State<BannerAdsWidget> {
 
 List<BannerAdsModel> bannersList = [
   BannerAdsModel(imageUrl: 'https://i.imgur.com/QCNbOAo.png'),
-  BannerAdsModel(
-      videoUrl:
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
+  // BannerAdsModel(
+  //     videoUrl:
+  //         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
   BannerAdsModel(
     imageUrl: 'https://i.imgur.com/QCNbOAo.png',
-    videoUrl:
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+    // videoUrl:
+    //     'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
   ),
 ];

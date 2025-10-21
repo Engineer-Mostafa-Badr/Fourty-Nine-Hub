@@ -2180,10 +2180,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                             .selectedCategoryIndex!]
                                                         .subCategoryId ??
                                                     '',
-                                                onSubscribe: () {
-                                                  context.pop();
-                                                  context.pop();
-                                                },
+                                                // onSubscribe: () {
+                                                //   context.pop();
+                                                //   context.pop();
+                                                // },
                                                 showRegular: false,
                                                 title: context.isArabic
                                                     ? state

@@ -47,7 +47,7 @@ class GlobalCard extends StatelessWidget {
   final String? subscriptionType;
   final String? subCategoryTitle;
   final Widget? body;
-  final Function? onSubscribe;
+  final Function(bool success)? onSubscribe;
   final bool? hasTopSide;
   final bool? hasBottomSide;
   final GestureTapCallback? onTap;
@@ -207,9 +207,7 @@ class GlobalCard extends StatelessWidget {
                   SubscriptionMethod().subscribe(
                     subscribeId: subcategoryId,
                     title: subCategoryTitle ?? LocaleKeys.ads.localize,
-                    onSubscribe: onSubscribe != null
-                        ? onSubscribe!()
-                        : () => context.pop(),
+                    onSubscribe: onSubscribe == null?null:(success)=>onSubscribe!(success),
                   );
                 })),
         child: Text(

@@ -120,7 +120,7 @@ class _TripJoinContentState extends State<TripJoinContent>
       children: [
         Expanded(
           child: TabWidget(
-            title: LocaleKeys.availableTrips,
+            title: LocaleKeys.availableTrips.localize,
             selected:tabController.index == 0, onTap: () {
             ManageVibration.vibrate();
             tabController.animateTo(0);
@@ -147,7 +147,7 @@ class _TripJoinContentState extends State<TripJoinContent>
         const Sizer(width: 10),
         Expanded(
           child: TabWidget(
-            title: LocaleKeys.requestLog,
+            title: LocaleKeys.requestLog.localize,
             selected:tabController.index == 1, onTap: () {
             ManageVibration.vibrate();
             tabController.animateTo(1);
@@ -175,7 +175,7 @@ class _TripJoinContentState extends State<TripJoinContent>
         const Sizer(width: 10),
         Expanded(
           child: TabWidget(
-            title: LocaleKeys.myAds,
+            title: LocaleKeys.myAds.localize,
             selected:tabController.index == 2, onTap: () {
             ManageVibration.vibrate();
             tabController.animateTo(2);

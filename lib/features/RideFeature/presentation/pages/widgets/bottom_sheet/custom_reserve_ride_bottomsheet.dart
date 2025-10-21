@@ -350,10 +350,10 @@ class _CustomReserveRideBottomSheetState
                                             if (!isSubscribed) {
                                               SubscriptionMethod().subscribe(
                                                   subscribeId: selectedCategoryId,
-                                                  onSubscribe: () {
-                                                    context.pop();
-                                                    context.pop();
-                                                  },
+                                                  // onSubscribe: (success) {
+                                                    // context.pop();
+                                                    // context.pop();
+                                                  // },
                                                   showRegular: false,
                                                   title: LocaleKeys
                                                       .premiumRequest.localize);

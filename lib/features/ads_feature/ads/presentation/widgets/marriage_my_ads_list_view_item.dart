@@ -97,9 +97,9 @@ class _MarriageMyAdsListViewItemState extends State<MarriageMyAdsListViewItem> {
           await cubit.deleteAd(widget.marriageAds.id);
         }
       },
-      onSubscribe: () {
-        context.pop();
-      },
+      // onSubscribe: () {
+      //   context.pop();
+      // },
       hasBottomSide: true,
       body: _buildBody(context),
     );

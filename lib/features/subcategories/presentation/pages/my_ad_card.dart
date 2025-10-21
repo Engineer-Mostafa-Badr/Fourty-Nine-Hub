@@ -185,9 +185,9 @@ class _MyAdCardState extends State<MyAdCard> {
         }
       },
       onShowViewers: () {},
-      onSubscribe: () {
-        context.pop();
-      },
+      // onSubscribe: (success) {
+      //   // context.pop();
+      // },
       body: Column(children: [
         ImageAdsWidget(
           isMyAd: widget.item.user?.id == userId,

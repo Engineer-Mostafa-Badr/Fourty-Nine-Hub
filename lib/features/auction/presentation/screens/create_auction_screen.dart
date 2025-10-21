@@ -217,10 +217,10 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
           if (response.data?.userSubscription == false) {
             SubscriptionMethod().subscribe(
               subscribeId: response.data?.subCategoryId ?? '',
-              onSubscribe: () {
-                context.pop();
-                context.pop();
-              },
+              // onSubscribe: () {
+              //   context.pop();
+              //   context.pop();
+              // },
               showRegular: false,
               title: "Subscribe",
             );
