@@ -408,9 +408,9 @@ class _PropertyCardState extends State<PropertyCard> {
             }
           : null,
       onShowViewers: () {},
-      onSubscribe: () {
-        context.pop();
-      },
+      // onSubscribe: () {
+      //   context.pop();
+      // },
       body: Column(
         children: [
           ClipRRect(
