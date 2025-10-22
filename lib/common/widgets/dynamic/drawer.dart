@@ -202,10 +202,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 label: LocaleKeys.policies.localize,
                                 onTap: () {
                                   ManageVibration.vibrate();
-                                  AdInterstitialTop.loadIntersitialAd();
-                                  AdInterstitialTop.showInterstitialAd();
+                                  // AdInterstitialTop.loadIntersitialAd();
+                                  // AdInterstitialTop.showInterstitialAd();
                                   context.pop();
-                                  return context.push(Routes.POLICY,
+                                  return context.push(Routes.APPPOLICY,
                                       extra: false);
                                 }),
                             drawerListTile(

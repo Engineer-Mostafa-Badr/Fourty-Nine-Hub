@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -577,9 +578,11 @@ class _LoginWidgetState extends State<LoginWidget> {
               '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
           prefixIcon: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: SvgPicture.asset(
-              Assets.aMailIcon,
+            child: Image.asset(
+              Assets.phoneMail,
               color: AppColors.GREY_DARK_COLOR,
+              width: 14,
+              height: 14,
             ),
           ),
           currentFocusNode: emailFocusNode, // <-- Use this
@@ -653,101 +656,55 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         padding: EdgeInsets.all(8.0.w),
         child: Form(
           key: widget.formKeyRegister,
-          // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                DefaultTextFormField(
-                  currentFocusNode: nameFocusNode,
-
-                  // fillColor: const Color(0xFFEEEEEE),
-                  borderColor: Colors.black,
-                  currentController: registerCubit.userNameController,
-                  hint: LocaleKeys.userName.localize,
-                  prefixIcon: Icon(
-                    Icons.person_2_rounded,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
-                  ),
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.userNameRequired.localize;
-                    }
-                    return null;
-                  },
-                  // action: (v) {},
-                ),
-                Sizer(
-                  height: 30.h,
-                ),
-                DefaultTextFormField(
-                  // fillColor: const Color(0xFFEEEEEE),
-                  borderColor: Colors.black,
-                  currentController: registerCubit.firstNameController,
-                  hint: LocaleKeys.firstName.localize,
-                  prefixIcon: Icon(
-                    Icons.person_2_rounded,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
-                  ),
-                  // action: (v) {},
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.firstNameRequired.localize;
-                    }
-                    return null;
-                  },
-                ),
-                Sizer(
-                  height: 30.h,
-                ),
-                DefaultTextFormField(
-                  // fillColor: const Color(0xFFEEEEEE),
-                  borderColor: Colors.black,
-                  currentController: registerCubit.lastNameController,
-                  // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  // label: 'E-mail or phone number',
-                  hint: LocaleKeys.lastName.localize,
-                  prefixIcon: Icon(
-                    Icons.person_2_rounded,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
-                  ),
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.lastNameRequired.localize;
-                    }
-                    return null;
-                  },
-                ),
-                Sizer(
-                  height: 30.h,
-                ),
-                BirthDatePicker(
-                    controller: registerCubit.birthDateTextController,
-                    onDateChanged: (date) {
-                      registerCubit.birthDate = date ?? '';
-                      setState(() {});
-                      print(
-                          "registerCubit.birthDate ${registerCubit.birthDate}");
-                      print("registerCubit.birthDate $date");
-                    }),
-                Sizer(
-                  height: 30.h,
-                ),
-                EmailOrPhoneTextFormField(
-                  borderColor: Colors.black,
-                  currentController: registerCubit.emailTextController,
-                  hint:
-                      '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: SvgPicture.asset(
-                      Assets.aMailIcon,
-                      color: AppColors.GREY_DARK_COLOR,
+                Row(
+                  children: [
+                    Expanded(
+                      child: DefaultTextFormField(
+                        borderColor: Colors.black,
+                        currentController: registerCubit.firstNameController,
+                        hint: LocaleKeys.firstName.localize,
+                        prefixIcon: Icon(
+                          Icons.person_2_rounded,
+                          color: AppColors.GREY_DARK_COLOR,
+                          size: 40.w,
+                        ),
+                        // action: (v) {},
+                        validator: (v) {
+                          if (v!.isEmpty) {
+                            return LocaleKeys.firstNameRequired.localize;
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                  ),
-                  isRequired: true,
+                    Sizer(
+                      width: 30.h,
+                    ),
+                    Expanded(
+                      child: DefaultTextFormField(
+                        // fillColor: const Color(0xFFEEEEEE),
+                        borderColor: Colors.black,
+                        currentController: registerCubit.lastNameController,
+                        // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                        // label: 'E-mail or phone number',
+                        hint: LocaleKeys.lastName.localize,
+                        prefixIcon: Icon(
+                          Icons.person_2_rounded,
+                          color: AppColors.GREY_DARK_COLOR,
+                          size: 40.w,
+                        ),
+                        validator: (v) {
+                          if (v!.isEmpty) {
+                            return LocaleKeys.lastNameRequired.localize;
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 Sizer(
                   height: 30.h,
@@ -756,11 +713,16 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // crossAxisAlignment: CrossAxisAlignment.,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(
-                        child: Text(LocaleKeys.gender.localize,
-                            style: Styles.mediumText(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400))),
+                    Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(LocaleKeys.gender.localize,
+                                style: Styles.mediumText(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w400)),
+                          ],
+                        )),
                     Flexible(
                       child: Row(
                         children: [
@@ -815,6 +777,66 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       ),
                     ),
                   ],
+                ),
+
+                Sizer(
+                  height: 30.h,
+                ),
+                DefaultTextFormField(
+                  currentFocusNode: nameFocusNode,
+
+                  // fillColor: const Color(0xFFEEEEEE),
+                  borderColor: Colors.black,
+                  currentController: registerCubit.userNameController,
+                  inputFormatter: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+                  ],
+                  hint: 'Example: User123',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset(
+                      Assets.aMailIcon,
+                      color: AppColors.GREY_DARK_COLOR,
+                    ),
+                  ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.userNameRequired.localize;
+                    }
+                    return null;
+                  },
+                  // action: (v) {},
+                ),
+                Sizer(
+                  height: 30.h,
+                ),
+                BirthDatePicker(
+                    controller: registerCubit.birthDateTextController,
+                    onDateChanged: (date) {
+                      registerCubit.birthDate = date ?? '';
+                      setState(() {});
+                      print(
+                          "registerCubit.birthDate ${registerCubit.birthDate}");
+                      print("registerCubit.birthDate $date");
+                    }),
+                Sizer(
+                  height: 30.h,
+                ),
+                EmailOrPhoneTextFormField(
+                  borderColor: Colors.black,
+                  currentController: registerCubit.emailTextController,
+                  hint:
+                      '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Image.asset(
+                      Assets.phoneMail,
+                      // color: AppColors.GREY_DARK_COLOR,
+                      width: 14,
+                      height: 14,
+                    ),
+                  ),
+                  isRequired: true,
                 ),
                 Sizer(
                   height: 30.h,
@@ -922,7 +944,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.POLICY, extra: true);
+                        context.push(Routes.APPPOLICY, extra: true);
                       },
                       child: Text(
                         LocaleKeys.conditions.localize,

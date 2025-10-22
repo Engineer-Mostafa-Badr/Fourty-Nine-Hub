@@ -186,6 +186,7 @@ abstract class Routes {
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
   static const PRIVACY = '/Account/Privacy';
+  static const APPPOLICY = '/Account/APPPOLICY';
   static const POLICY = '/Account/POLICY';
 
   static const Lists = '/Account/Lists';
@@ -496,6 +497,7 @@ abstract class Paths {
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
   static const PRIVACY = 'Privacy';
+  static const APPPOLICY = 'APPPOLICY';
   static const POLICY = 'Policy';
 
   static const Lists = 'Lists';

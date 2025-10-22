@@ -66,9 +66,7 @@ class GridBlocksWidget extends StatelessWidget {
         context,
         onTap: () {
           ManageVibration.vibrate();
-          if (!context.read<UserCubit>().isLoggedIn) {
-            return pleaseLoginDialog(context);
-          }
+
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();

@@ -7,7 +7,7 @@
 //
 // class WebSocketHelper {
 //   static IO.Socket? socket;
-//   static const String _url = 'https://49backend.com';
+//   static const String _url = 'https://1d2f0756d123.ngrok-free.app';
 //   // static const String _url = 'https://a030-2a09-bac1-2200-8-00-3b6-3b.ngrok-free.app';
 //
 //   static bool _isConnecting = false;

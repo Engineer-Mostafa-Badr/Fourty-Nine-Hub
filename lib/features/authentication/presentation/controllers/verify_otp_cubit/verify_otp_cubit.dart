@@ -50,7 +50,7 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     if (state is VerifyOtpLoading) return;
     emit(VerifyOtpLoading());
     final result =
-        await _verifyOTPUseCase(VerifyOTPParams(email: email, otp: otp));
+        await _verifyOTPUseCase(VerifyOTPParams(email: email.trim().toLowerCase(), otp: otp));
     emit(
       result.fold(
         (failure)  {

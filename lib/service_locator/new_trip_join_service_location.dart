@@ -108,6 +108,8 @@ class NewTripJoinServiceLocation {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

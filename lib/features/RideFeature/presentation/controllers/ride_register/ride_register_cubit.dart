@@ -132,6 +132,10 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     'Percentage',
     'Subscribe Package',
   ];
+  List<String> subscriptionPlansAr = [
+    'نظام النسبة',
+    'باقة الاشتراك',
+  ];
   List<RideModelEntity> models = [];
   TextEditingController modelNameController = TextEditingController();
   var modelFormKey = GlobalKey<FormState>();
@@ -205,7 +209,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         showSuccessMessage(
             context,
             context.isArabic
-                ? "تم اضافة الموديل بنجاح"
+                ? "تم اضافة الماركة بنجاح"
                 : "Model added successfully");
         RideBrandModel newBrand = RideBrandModel(
             id: data,
@@ -930,8 +934,8 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         return;
       }
 
-      if (state.selectedModel == null ||
-          (state.selectedModel?.id.isEmpty ?? false)) {
+      if ((state.newModel==null||(state.newModel?.id.isEmpty ?? false))&&(state.selectedModel == null ||
+          (state.selectedModel?.id.isEmpty ?? false))) {
         showErrorMessage(
             context,
             context.isArabic
@@ -984,7 +988,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           smoker: state.isSmoking ?? false,
           vehicleBrand: state.selectedBrand?.id ?? '',
           vehicleColor: state.selectedColors?.id ?? '',
-          vehicleModel: state.selectedModel?.id ?? '',
+          vehicleModel: state.newModel!=null?(state.newModel?.id??''):state.selectedModel?.id ?? '',
           vehicleYear: rideVehicleProductionYearController.text,
           workingType: state.selectedPlan ?? '',
           subcategoryIds: subCategoryIds);
