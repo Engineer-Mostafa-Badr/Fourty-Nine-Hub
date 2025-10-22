@@ -30,14 +30,12 @@ class FavouriteAdsView extends StatefulWidget {
 
 class _FavouriteAdsViewState extends State<FavouriteAdsView> {
   late ScrollController _scrollController;
-  late SubcategoriesCubit _cubit;
   bool isFirstSearchListenerCall = true;
 
   @override
   void initState() {
     print("FavouriteAdsView initState");
     super.initState();
-    _cubit = context.read<SubcategoriesCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
   }
 
@@ -89,25 +87,26 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: MyAdCard(
-                    item: controller.myFavouriteAds[i],
+                    item: controller.myFavouriteAds[i]
+                      ..isFavourite = true, // Force isFavourite to true
                     showSubCategory: true,
                     onFav: (id) async {
+                      // This should not be called in favorite view since all items are favorited
+                      return false;
+                    },
+                    onRemoveFav: (id) async {
+                      // When user clicks favorite icon in favorite view, remove from favorites
                       bool result = await context
                           .read<AdvertisementCubit>()
                           .unFavouriteAd(controller.myFavouriteAds[i].id);
-                      controller.myFavouriteAds
-                          .remove(controller.myFavouriteAds[i]);
-                      setState(() {});
-                      return result;
-                      // bool result = await context
-                      //     .read<AdvertisementCubit>()
-                      //     .favouriteAd(controller.myFavouriteAds[i].id);
-                      // return result;
-                    },
-                    onRemoveFav: (id) async {
-                      bool result = await context
-                          .read<AdvertisementCubit>()
-                          .favouriteAd(controller.myFavouriteAds[i].id);
+                      if (result) {
+                        // Update the favorite status in the main ads list
+                        controller.updateAdFavoriteStatus(
+                            controller.myFavouriteAds[i].id, false);
+                        controller.myFavouriteAds
+                            .remove(controller.myFavouriteAds[i]);
+                        setState(() {});
+                      }
                       return result;
                     },
                   ),

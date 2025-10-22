@@ -35,45 +35,14 @@ class MarriageRequest extends StatelessWidget {
       },
       banners: bannersList,
       items: List.generate(
-        state.adsRequestsLog!.length,
-            (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+        state.requestsLogByMainCategory!.length,
+        (index) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MarriageRequestListViewItem(
-                marriageAds: state.adsRequestsLog![index],
-                state: state,
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10.0),
-                child: Label(
-                  text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
-                  style: Styles.headerText(
-                    fontSize: 28,
-                    color: const Color(0xFFFF3308),
-                    height: 1.57,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: state.adsRequestsLog!.length,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MarriageRequestListViewItem(
-                marriageAds: state.adsRequestsLog![index],
+                marriageAds: state.requestsLogByMainCategory![index],
                 state: state,
               ),
               Padding(

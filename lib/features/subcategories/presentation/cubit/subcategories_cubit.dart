@@ -692,6 +692,19 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
   }
 
+  /// Refresh marriage ads data when returning from ad details view
+  Future<void> refreshMarriageAds() async {
+    print('refreshMarriageAds');
+    currentPage = 1;
+    hasMoreData = true;
+    isLoadingMore = false;
+
+    final subCategoryId = state.selectedSubCatId ?? '62c8be728e28a58a3edf5f55';
+    await getMarriageAds(subCategoryId: subCategoryId);
+    await getMarriageMyAds('62c8b5b09332225799fe335e');
+    await getRequestsLog('62c8b5b09332225799fe335e');
+  }
+
   Future loadMarriageData({required String subCategoryId}) async {
     print("loadMarriageData");
 
@@ -846,12 +859,11 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
-            emit(state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: SubcategoriesStates.initState));
-        });
+        (failure) => emit(state.copyWith(
+            failure: failure, status: SubcategoriesStates.error)), (data) {
+      result = data;
+      emit(state.copyWith(status: SubcategoriesStates.initState));
+    });
     return result;
   }
 
@@ -869,5 +881,17 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       emit(state.copyWith(status: SubcategoriesStates.initState));
     });
     return result;
+  }
+
+  void updateAdFavoriteStatus(String adId, bool isFavourite) {
+    if (state.ads != null) {
+      for (int i = 0; i < state.ads!.length; i++) {
+        if (state.ads![i].id == adId) {
+          state.ads![i].isFavourite = isFavourite;
+          emit(state.copyWith(ads: state.ads));
+          break;
+        }
+      }
+    }
   }
 }

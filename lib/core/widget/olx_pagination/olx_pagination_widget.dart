@@ -129,8 +129,11 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
     }
 
     // Return a simple Column for embedded usage
-    return Column(
-      children: buildItemsList(),
+    return SingleChildScrollView(
+      controller: widget.scrollController,
+      child: Column(
+        children: buildItemsList(),
+      ),
     );
   }
 }

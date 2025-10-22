@@ -1739,8 +1739,7 @@ class EndPoints {
       '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket =
       '/ride/untracked/ratings/client';
-  static readLoadingOffer(String id) =>
-      '/loading/client/trips/offers/$id/read';
+  static readLoadingOffer(String id) => '/loading/client/trips/offers/$id/read';
   static readNonTrackingOffer(String id) =>
       '/ride/non-tracking/offers/$id/read';
   static const updateClientRating = '/ride/untracked/ratings/client';

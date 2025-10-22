@@ -231,21 +231,25 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                         ),
                         Spacer(),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             ManageVibration.vibrate();
                             if (state.ad!.isFavourite == true) {
-                              context
+                              await context
                                   .read<AdvertisementCubit>()
                                   .unFavouriteAd(state.ad!.id);
+                              state.ad!.isFavourite = false;
                             } else {
-                              context
+                              await context
                                   .read<AdvertisementCubit>()
                                   .favouriteAd(state.ad!.id);
+                              state.ad!.isFavourite = true;
                             }
+                            if (mounted) setState(() {});
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: AppColors.getReversedTextColor(context),
+                              //color: AppColors.getReversedTextColor(context),
+                              color: Colors.transparent,
                               shape: BoxShape.circle,
                             ),
                             padding: const EdgeInsets.all(8),
@@ -464,8 +468,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
           //   ),
           // ),
           Container(
-            padding:
-                const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 // if (state.ad?.userSubscriptionStatus ==
