@@ -810,6 +810,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
+
                 BirthDatePicker(
                     controller: registerCubit.birthDateTextController,
                     onDateChanged: (date) {
