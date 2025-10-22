@@ -55,6 +55,7 @@ import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/const.dart';
 import '../../../res/style/styles.dart';
+import '../../../res_icons.dart';
 import '../../../routes/routes.dart';
 import '../../theme/cubit/cubit.dart';
 import '../../theme/cubit/states.dart';
@@ -256,7 +257,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             //       );
                             //     }),
                             drawerListTile(
-                              // icon: Icons.logout,
+                                // icon: Icons.logout,
                                 image: Assets.sign_out_icon,
                                 requireLogin: true,
                                 label: LocaleKeys.logout.localize,
@@ -266,11 +267,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       await Storage.getRefreshToken();
                                   print("refreshToken $refreshToken");
 
+                                  await context
+                                      .read<UserCubit>()
+                                      .getAllSessions();
 
-
-                                  await context.read<UserCubit>().getAllSessions();
-
-                                  if(serviceLocator<UserCubit>().sessions.isEmpty) {
+                                  if (serviceLocator<UserCubit>()
+                                      .sessions
+                                      .isEmpty) {
                                     return;
                                   }
 
@@ -280,32 +283,51 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   showModalBottomSheet(
                                     context: context,
                                     isScrollControlled: true,
-
                                     shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20)),
                                     ),
                                     builder: (context) {
-                                      SessionEntity currentSession = context.read<UserCubit>().sessions.firstWhere((s) => s.deviceId == deviceId, orElse: () => context.read<UserCubit>().sessions.isNotEmpty? context.read<UserCubit>().sessions.first : SessionEntity());
+                                      SessionEntity currentSession = context
+                                          .read<UserCubit>()
+                                          .sessions
+                                          .firstWhere(
+                                              (s) => s.deviceId == deviceId,
+                                              orElse: () => context
+                                                      .read<UserCubit>()
+                                                      .sessions
+                                                      .isNotEmpty
+                                                  ? context
+                                                      .read<UserCubit>()
+                                                      .sessions
+                                                      .first
+                                                  : SessionEntity());
                                       return Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SingleChildScrollView(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Center(
                                                 child: Container(
                                                   width: 40,
                                                   height: 5,
-                                                  margin: const EdgeInsets.only(bottom: 12),
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 12),
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey[400],
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                 ),
                                               ),
-                                               Text(
-                                               context.isArabic?  "هذا الجهاز" : "This device",
+                                              Text(
+                                                context.isArabic
+                                                    ? "هذا الجهاز"
+                                                    : "This device",
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
@@ -314,136 +336,233 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                               const SizedBox(height: 8),
 
                                               ListTile(
-                                                leading: Icon(currentSession.platform == "ios" ? Icons.apple : Icons.android, color: Colors.green),
+                                                leading: Icon(
+                                                    currentSession.platform ==
+                                                            "ios"
+                                                        ? Icons.apple
+                                                        : Icons.android,
+                                                    color: Colors.green),
 
-                                                title:  Text(currentSession.deviceName ?? "", style: TextStyle(fontSize: 16)),
-                                                subtitle:  Text(
+                                                title: Text(
+                                                    currentSession.deviceName ??
+                                                        "",
+                                                    style: TextStyle(
+                                                        fontSize: 16)),
+                                                subtitle: Text(
                                                   "${currentSession.loginAddress ?? ''} | "
-                                                      "${DateFormat("hh:mm").format(currentSession.createdAt!)} "
-                                                      "${context.isArabic ? (currentSession.createdAt!.hour < 12 ? "ص" : "م") : (currentSession.createdAt!.hour < 12 ? "AM" : "PM")}",
+                                                  "${DateFormat("hh:mm").format(currentSession.createdAt!)} "
+                                                  "${context.isArabic ? (currentSession.createdAt!.hour < 12 ? "ص" : "م") : (currentSession.createdAt!.hour < 12 ? "AM" : "PM")}",
                                                 ),
                                                 // subtitle: ,
-                                                trailing:  Text(context.isArabic ? "متصل" : "Connected", style: TextStyle(color: Colors.green)),
+                                                trailing: Text(
+                                                    context.isArabic
+                                                        ? "متصل"
+                                                        : "Connected",
+                                                    style: TextStyle(
+                                                        color: Colors.green)),
                                               ),
 
                                               const Divider(),
 
                                               ListTile(
-                                                leading: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
-                                                title:  Text( context.isArabic ? "انهاء جميع الجلسات" : "End all sessions", style: TextStyle(color: AppColors.PRIMARY_COLOR_DARK, fontSize: 18)),
+                                                leading: const Icon(
+                                                    Icons.logout,
+                                                    color: AppColors
+                                                        .PRIMARY_COLOR_DARK),
+                                                title: Text(
+                                                    context.isArabic
+                                                        ? "انهاء جميع الجلسات"
+                                                        : "End all sessions",
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .PRIMARY_COLOR_DARK,
+                                                        fontSize: 18)),
                                                 onTap: () {
                                                   ManageVibration.vibrate();
                                                   showAnimatedDialog(
                                                     context,
                                                     AlertDialog(
-                                                      backgroundColor: Theme.of(context)
-                                                          .drawerTheme
-                                                          .backgroundColor,
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(20),
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .drawerTheme
+                                                              .backgroundColor,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
                                                       ),
-                                                      content: const LogoutFromAllDevicesWidget(),
+                                                      content:
+                                                          const LogoutFromAllDevicesWidget(),
                                                     ),
                                                   );
                                                 },
                                               ),
 
                                               Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                child: Text( context.isArabic ? "تسجيل الخروج من جميع الأجهزة" : "Logout from all devices", style: TextStyle(color: AppColors.grey, fontSize: 16)),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                child: Text(
+                                                    context.isArabic
+                                                        ? "تسجيل الخروج من جميع الأجهزة"
+                                                        : "Logout from all devices",
+                                                    style: TextStyle(
+                                                        color: AppColors.grey,
+                                                        fontSize: 16)),
                                               ),
 
                                               // const Divider(),
 
                                               const SizedBox(height: 24),
 
-                                               Text(
-                                                context.isArabic?   "الجلسات النشطة" : "Active sessions",
+                                              Text(
+                                                context.isArabic
+                                                    ? "الجلسات النشطة"
+                                                    : "Active sessions",
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
                                               ),
                                               const SizedBox(height: 8),
-                                              context.read<UserCubit>().sessions
-                                                  .where((s) => s.deviceId != deviceId).isEmpty?
-                                              Padding(
-                                                padding: EdgeInsets.only(top:8.0, bottom: 20),
-                                                child: Center(child: Text(context.isArabic ? "لا يوجد جلسات نشطة أخرى" : "No other active sessions",style: TextStyle(color: AppColors.grey, fontSize: 16)),),
-                                              ):
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics: const NeverScrollableScrollPhysics(),
-                                                itemCount: context.read<UserCubit>().sessions
-                                                    .where((s) => s.deviceId != deviceId)
-                                                    .length,
-                                                itemBuilder: (context, index) {
-                                                  final otherSessions = context.read<UserCubit>().sessions
-                                                      .where((s) => s.deviceId != deviceId)
-                                                      .toList();
+                                              context
+                                                      .read<UserCubit>()
+                                                      .sessions
+                                                      .where((s) =>
+                                                          s.deviceId !=
+                                                          deviceId)
+                                                      .isEmpty
+                                                  ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 8.0, bottom: 20),
+                                                      child: Center(
+                                                        child: Text(
+                                                            context.isArabic
+                                                                ? "لا يوجد جلسات نشطة أخرى"
+                                                                : "No other active sessions",
+                                                            style: TextStyle(
+                                                                color: AppColors
+                                                                    .grey,
+                                                                fontSize: 16)),
+                                                      ),
+                                                    )
+                                                  : ListView.builder(
+                                                      shrinkWrap: true,
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount: context
+                                                          .read<UserCubit>()
+                                                          .sessions
+                                                          .where((s) =>
+                                                              s.deviceId !=
+                                                              deviceId)
+                                                          .length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        final otherSessions =
+                                                            context
+                                                                .read<
+                                                                    UserCubit>()
+                                                                .sessions
+                                                                .where((s) =>
+                                                                    s.deviceId !=
+                                                                    deviceId)
+                                                                .toList();
 
-                                                  final session = otherSessions[index];
-                                                  final isIOS = session.platform?.toLowerCase() == "ios";
+                                                        final session =
+                                                            otherSessions[
+                                                                index];
+                                                        final isIOS = session
+                                                                .platform
+                                                                ?.toLowerCase() ==
+                                                            "ios";
 
-                                                  return ListTile(
-                                                    leading: Icon(
-                                                      isIOS ? Icons.apple : Icons.android,
-                                                      color: Colors.green,
-                                                    ),
-                                                    title: Text(
-                                                      session.deviceName ?? "",
-                                                      style: const TextStyle(fontSize: 16),
-                                                    ),
-                                                    subtitle: Text(
-                                                      "${session.loginAddress ?? ''} | "
-                                                          "${DateFormat("hh:mm").format(session.createdAt!)} "
-                                                          "${context.isArabic
-                                                          ? (session.createdAt!.hour < 12 ? "ص" : "م")
-                                                          : (session.createdAt!.hour < 12 ? "AM" : "PM")}",
-                                                    ),
-                                                    isThreeLine: true,
-                                                    trailing: IconButton(
-                                                      icon: const Icon(Icons.logout, color: AppColors.PRIMARY_COLOR_DARK),
-                                                      onPressed: () {
-                                                        ManageVibration.vibrate();
-                                                        showAnimatedDialog(
-                                                          context,
-                                                          AlertDialog(
-                                                            backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(20),
-                                                            ),
-                                                            content: LogoutFromSpecificDeviceWidget(
-                                                              session: session,
-                                                            ),
+                                                        return ListTile(
+                                                          leading: Icon(
+                                                            isIOS
+                                                                ? Icons.apple
+                                                                : Icons.android,
+                                                            color: Colors.green,
+                                                          ),
+                                                          title: Text(
+                                                            session.deviceName ??
+                                                                "",
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16),
+                                                          ),
+                                                          subtitle: Text(
+                                                            "${session.loginAddress ?? ''} | "
+                                                            "${DateFormat("hh:mm").format(session.createdAt!)} "
+                                                            "${context.isArabic ? (session.createdAt!.hour < 12 ? "ص" : "م") : (session.createdAt!.hour < 12 ? "AM" : "PM")}",
+                                                          ),
+                                                          isThreeLine: true,
+                                                          trailing: IconButton(
+                                                            icon: const Icon(
+                                                                Icons.logout,
+                                                                color: AppColors
+                                                                    .PRIMARY_COLOR_DARK),
+                                                            onPressed: () {
+                                                              ManageVibration
+                                                                  .vibrate();
+                                                              showAnimatedDialog(
+                                                                context,
+                                                                AlertDialog(
+                                                                  backgroundColor: Theme.of(
+                                                                          context)
+                                                                      .drawerTheme
+                                                                      .backgroundColor,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                  ),
+                                                                  content:
+                                                                      LogoutFromSpecificDeviceWidget(
+                                                                    session:
+                                                                        session,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
                                                           ),
                                                         );
                                                       },
                                                     ),
-                                                  );
-                                                },
-                                              ),
-
 
                                               AppButton(
                                                 height: 70.h,
-                                                label: context.isArabic ? "تسجيل الخروج من هذا الجهاز" : "Logout from this device",
-                                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                                label: context.isArabic
+                                                    ? "تسجيل الخروج من هذا الجهاز"
+                                                    : "Logout from this device",
+                                                color: AppColors
+                                                    .AUTH_CONTAINER_COLOR,
                                                 onPressed: () async {
                                                   ManageVibration.vibrate();
-                                                  String? refreshToken = await Storage.getRefreshToken();
-                                                  print("refreshToken $refreshToken");
+                                                  String? refreshToken =
+                                                      await Storage
+                                                          .getRefreshToken();
+                                                  print(
+                                                      "refreshToken $refreshToken");
                                                   // context.push(Routes.LOGIN);
                                                   showAnimatedDialog(
                                                     context,
                                                     AlertDialog(
-                                                      backgroundColor: Theme.of(context)
-                                                          .drawerTheme
-                                                          .backgroundColor,
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(20),
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .drawerTheme
+                                                              .backgroundColor,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
                                                       ),
-                                                      content: const LogoutWidget(),
+                                                      content:
+                                                          const LogoutWidget(),
                                                     ),
                                                   );
                                                 },
@@ -454,8 +573,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       );
                                     },
                                   );
-                                }
-                            ),
+                                }),
                             drawerListTile(
                                 // icon: Icons.logout,
                                 image: Assets.deleteAccount,
@@ -1351,10 +1469,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         : HexColor('f9f9f9'),
                                   ),
                                   child: ListTile(
-                                    leading: SvgPicture.asset(
+                                    leading: Icon(
                                       context.isDarkMode
-                                          ? Assets.drawerGalleryIconDark
-                                          : Assets.drawerGalleryIcon,
+                                          ? Res.drawer_gallery_icon
+                                          : Res.drawer_gallery_icon_dark,
                                     ),
                                     title: Label(
                                       text: LocaleKeys.gallery.localize,
@@ -1379,10 +1497,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                   child: ListTile(
                                     // leading: const Icon(Icons.camera_alt),
-                                    leading: SvgPicture.asset(
+                                    leading: Icon(
                                       context.isDarkMode
-                                          ? Assets.drawerCameraIconDark
-                                          : Assets.drawerCameraIcon,
+                                          ? Res.drawer_camera_icon_dark
+                                          : Res.drawer_camera_icon,
                                     ),
                                     title:
                                         Label(text: LocaleKeys.camera.localize),
@@ -1710,86 +1828,95 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 .navigatorKey.currentContext!;
                             currentContext.pop();
                             choiceRulerCubit.changeChoiceRulerEnabled();
-                           if(value==true) {
-                             showCustomDialogTrip(
-                                 context,
-                                 Column(
-                                   spacing: 12,
-                                   mainAxisSize: MainAxisSize.min,
-                                   children: [
-                                     Text(
-                                 context.isArabic?'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
-                                       textAlign: TextAlign.center,
-                                       style: TextStyle(
-                                         fontSize: FontSize.s16,
-                                         color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
-                                         fontWeight: FontWeight.bold,
-                                       ),
-                                     ),
-                                     Row(
-                                       crossAxisAlignment: CrossAxisAlignment.center,
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: [
-                                         AppButton(
-                                             width: context.screenWidth / 3.4,
-                                             label: context.isArabic?'حسنا!':'OK!',
-                                             backColor: AppColors.SECONDARY_COLOR_DARK2,
-                                             onPressed: () {
-                                               currentContext.pop();
-                                             }),
-                                         // const SizedBox(width: 16),
-                                         // AppButton(
-                                         //     width: context.screenWidth / 3.4,
-                                         //     label: LocaleKeys.subscribe.localize,
-                                         //     backColor: AppColors.PRIMARY_COLOR,
-                                         //     onPressed: () {
-                                         //       currentContext.pop();
-                                         //     }),
-                                       ],
-                                     ),
-                                     const SizedBox(height: 16),
-                                   ],
-                                 ));                             // showCustomDialogTrip(
-                             //    context,
-                             //    Column(
-                             //      // shrinkWrap: true,
-                             //      children: [
-                             //        Text(
-                             //          context.isArabic?'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
-                             //          textAlign: TextAlign.center,
-                             //          style: const TextStyle(
-                             //            fontSize: FontSize.s16,
-                             //            color: AppColors.PRIMARY_COLOR,
-                             //            fontWeight: FontWeight.bold,
-                             //          ),
-                             //        ),
-                             //        const SizedBox(height: 16),
-                             //        // Row(
-                             //        //   crossAxisAlignment: CrossAxisAlignment.center,
-                             //        //   mainAxisAlignment: MainAxisAlignment.center,
-                             //        //   children: [
-                             //        //     AppButton(
-                             //        //         width: context.screenWidth / 3.4,
-                             //        //         label: 'Close',
-                             //        //         backColor: AppColors.SECONDARY_COLOR_DARK2,
-                             //        //         onPressed: () {
-                             //        //           Navigator.of(context).pop();
-                             //        //         }),
-                             //        //     const SizedBox(width: 16),
-                             //            AppButton(
-                             //                // width: context.screenWidth / 3.4,
-                             //                label: context.isArabic ? 'حسنا' : 'OK!',
-                             //                backColor: AppColors.SECONDARY_COLOR,
-                             //                onPressed: () {
-                             //                  currentContext.pop();
-                             //
-                             //                }),
-                             //        //   ],
-                             //        // ),
-                             //        const SizedBox(height: 16),
-                             //      ],
-                             //    ));
-                           }
+                            if (value == true) {
+                              showCustomDialogTrip(
+                                  context,
+                                  Column(
+                                    spacing: 12,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        context.isArabic
+                                            ? 'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا'
+                                            : 'You need to press the red button on the right or left side of the screen to be able to see our special apps',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: FontSize.s16,
+                                          color: context.isDarkMode
+                                              ? AppColors.whiteColor
+                                              : AppColors.PRIMARY_COLOR,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          AppButton(
+                                              width: context.screenWidth / 3.4,
+                                              label: context.isArabic
+                                                  ? 'حسنا!'
+                                                  : 'OK!',
+                                              backColor: AppColors
+                                                  .SECONDARY_COLOR_DARK2,
+                                              onPressed: () {
+                                                currentContext.pop();
+                                              }),
+                                          // const SizedBox(width: 16),
+                                          // AppButton(
+                                          //     width: context.screenWidth / 3.4,
+                                          //     label: LocaleKeys.subscribe.localize,
+                                          //     backColor: AppColors.PRIMARY_COLOR,
+                                          //     onPressed: () {
+                                          //       currentContext.pop();
+                                          //     }),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                    ],
+                                  )); // showCustomDialogTrip(
+                              //    context,
+                              //    Column(
+                              //      // shrinkWrap: true,
+                              //      children: [
+                              //        Text(
+                              //          context.isArabic?'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
+                              //          textAlign: TextAlign.center,
+                              //          style: const TextStyle(
+                              //            fontSize: FontSize.s16,
+                              //            color: AppColors.PRIMARY_COLOR,
+                              //            fontWeight: FontWeight.bold,
+                              //          ),
+                              //        ),
+                              //        const SizedBox(height: 16),
+                              //        // Row(
+                              //        //   crossAxisAlignment: CrossAxisAlignment.center,
+                              //        //   mainAxisAlignment: MainAxisAlignment.center,
+                              //        //   children: [
+                              //        //     AppButton(
+                              //        //         width: context.screenWidth / 3.4,
+                              //        //         label: 'Close',
+                              //        //         backColor: AppColors.SECONDARY_COLOR_DARK2,
+                              //        //         onPressed: () {
+                              //        //           Navigator.of(context).pop();
+                              //        //         }),
+                              //        //     const SizedBox(width: 16),
+                              //            AppButton(
+                              //                // width: context.screenWidth / 3.4,
+                              //                label: context.isArabic ? 'حسنا' : 'OK!',
+                              //                backColor: AppColors.SECONDARY_COLOR,
+                              //                onPressed: () {
+                              //                  currentContext.pop();
+                              //
+                              //                }),
+                              //        //   ],
+                              //        // ),
+                              //        const SizedBox(height: 16),
+                              //      ],
+                              //    ));
+                            }
                           },
                         );
                       },

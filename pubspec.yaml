@@ -258,6 +258,9 @@ flutter:
     - family: Tangerine
       fonts:
         - asset: assets/fonts/Tangerine-Regular.ttf
+    - family: Res
+      fonts:
+        - asset: assets/icons/Res.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

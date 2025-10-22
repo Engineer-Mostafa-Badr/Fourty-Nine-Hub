@@ -30,6 +30,7 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   bool _hasLoadedInitialPage = false;
 
   @override
+
   void initState() {
     super.initState();
     widget.scrollController.addListener(_scrollListener);
@@ -104,9 +105,10 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
                 expandedHeight: screenHeight, // Reduced height for banner
                 flexibleSpace: widget.banners.isNotEmpty
                     ? BannerAdsWidget(
-                  key: Key('banner_$page'),
-                  banner: widget.banners[(page - 1) % widget.banners.length],
-                )
+                        key: Key('banner_$page'),
+                        banner:
+                            widget.banners[(page - 1) % widget.banners.length],
+                      )
                     : const SizedBox.shrink(),
               ),
               SliverList(
@@ -134,7 +136,6 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
         ));
   }
 }
-
 
 extension StaticOlxPagination on OlxPaginationWidget {
   Widget buildAsStaticList() {

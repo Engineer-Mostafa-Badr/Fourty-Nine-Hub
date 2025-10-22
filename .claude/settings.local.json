@@ -7,7 +7,9 @@
       "Bash(flutter analyze lib/features/food_feature/restaurants_list/presentation/pages/favorite_ads.dart)",
       "Bash(flutter analyze --no-pub lib/features/food_feature/restaurants_list/presentation/pages/favorite_ads.dart)",
       "Bash(flutter analyze lib/features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart)",
-      "Bash(flutter analyze lib/core/widget/olx_pagination/olx_pagination_widget.dart)"
+      "Bash(flutter analyze lib/core/widget/olx_pagination/olx_pagination_widget.dart)",
+      "Bash(python:*)",
+      "Bash(flutter analyze:*)"
     ],
     "deny": [],
     "ask": []
