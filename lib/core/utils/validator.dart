@@ -136,21 +136,22 @@ String? validateEgyptianPhone(String? value) {
 }
 
 String? validatorEmailOrPhone(String? value) {
+  String email = (value??'').trim().toLowerCase();
   final egyptPhoneRegex = RegExp(r'^(010|011|012|015)\d{8}$');
   final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
 
-  if (value == null || value.isEmpty) {
+  if (email.isEmpty) {
     return LocaleKeys.required.localize;
   }
 
-  if (RegExp(r'^\d+$').hasMatch(value)) {
-    if (!egyptPhoneRegex.hasMatch(value)) {
+  if (RegExp(r'^\d+$').hasMatch(email)) {
+    if (!egyptPhoneRegex.hasMatch(email)) {
       return LocaleKeys.invalidPhoneNumber.localize;
     }
     return null;
   }
 
-  if (!emailRegex.hasMatch(value)) {
+  if (!emailRegex.hasMatch(email)) {
     return LocaleKeys.invalidEmailAddress.localize;
   }
 

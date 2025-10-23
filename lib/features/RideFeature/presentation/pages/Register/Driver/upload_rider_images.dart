@@ -201,8 +201,8 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                   .read<RideRegisterCubit>()
                   .fetchRideDriverInfo(context, false);
         },
-        disableUpload: state.loaderInfo?.isUploadCarLicense == true &&
-            state.loaderInfo?.isUploadCarImage == true,
+        disableUpload: (state.loaderInfo?.isUploadCarLicense == true &&
+            state.loaderInfo?.isUploadCarImage == true),
       ),
     ]);
   }
@@ -301,8 +301,8 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
                   .fetchRideDriverInfo(context, false);
           // context.push(Routes.vehicleInformationScreen);
         },
-        disableUpload: (state.driverInfo?.isUploadCarLicense == true &&
-            state.driverInfo?.isUploadCarImage == true),
+        disableUpload:widget.params?.isSocket==true?(state.driverInfo?.isUploadCarLicense == true &&
+            state.driverInfo?.isUploadCarImage == true):widget.params?.isShipping==true?(state.loaderInfo?.isUploadCarLicense==true&&state.loaderInfo?.isUploadCarImage==true):false,
       ),
       const SizedBox(
         height: 40,

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
@@ -58,12 +59,10 @@ class _PolicyViewState extends State<PolicyView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
-        ),
+    return CustomScaffold(
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
       ),
       body: Center(
         child: _isLoading

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -119,7 +120,7 @@ class _LoginViewState extends State<LoginView> {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
             Routes.VERIFYMAIL,
-            extra: registerCubit.emailTextController.text,
+            extra: registerCubit.emailTextController.text.trim().toLowerCase(),
           );
         } else if (state is OTPPhoneSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
@@ -363,8 +364,7 @@ class _LoginViewState extends State<LoginView> {
                                         .validate()) {
                                       if (registerCubit.isLessThan14YearsOld(
                                           registerCubit
-                                              .birthDateTextController.text
-                                              .trim())) {
+                                              .birthDate)) {
                                         showErrorMessage(
                                             context,
                                             context.isArabic
@@ -419,14 +419,14 @@ class _LoginViewState extends State<LoginView> {
         height: 70.h,
         width: 200.h,
         decoration: BoxDecoration(
-          color: active ? AppColors.PRIMARY_COLOR : const Color(0xFFEEEEEE),
+          color: active ? AppColors.getButtonPrimaryColor(context) : const Color(0xFFEEEEEE),
           borderRadius: borderRadius,
         ),
         child: Center(
           child: Text(
             text,
             style:
-                Styles.mediumText(color: active ? Colors.white : Colors.black),
+                Styles.mediumText(color: context.isDarkMode?AppColors.PRIMARY_COLOR:(active?AppColors.whiteColor:AppColors.PRIMARY_COLOR)),
           ),
         ),
       ),
@@ -577,9 +577,11 @@ class _LoginWidgetState extends State<LoginWidget> {
               '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
           prefixIcon: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: SvgPicture.asset(
-              Assets.aMailIcon,
+            child: Image.asset(
+              Assets.phoneMail,
               color: AppColors.GREY_DARK_COLOR,
+              width: 14,
+              height: 14,
             ),
           ),
           currentFocusNode: emailFocusNode, // <-- Use this
@@ -653,21 +655,168 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         padding: EdgeInsets.all(8.0.w),
         child: Form(
           key: widget.formKeyRegister,
-          // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: 70,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 70,
+                          child: DefaultTextFormField(
+                            borderColor: Colors.black,
+                            currentController: registerCubit.firstNameController,
+                            hint: LocaleKeys.firstName.localize,
+                            prefixIcon: Icon(
+                              Icons.person_2_rounded,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 40.w,
+                            ),
+                            // action: (v) {},
+                            onChanged: (v){
+                              widget.formKeyRegister.currentState!.validate();
+                            },
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return LocaleKeys.firstNameRequired.localize;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      Sizer(
+                        width: 30.h,
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 70,
+                          child: DefaultTextFormField(
+                            // fillColor: const Color(0xFFEEEEEE),
+                            borderColor: Colors.black,
+                            currentController: registerCubit.lastNameController,
+                            // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                            // label: 'E-mail or phone number',
+                            hint: LocaleKeys.lastName.localize,
+                            onChanged: (v){
+                              widget.formKeyRegister.currentState!.validate();
+                            },
+                            prefixIcon: Icon(
+                              Icons.person_2_rounded,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 40.w,
+                            ),
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return LocaleKeys.lastNameRequired.localize;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Sizer(
+                //   height: 30.h,
+                // ),
+                Row(
+                  // crossAxisAlignment: CrossAxisAlignment.,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(LocaleKeys.gender.localize,
+                                style: Styles.mediumText(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w400)),
+                          ],
+                        )),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: BadgedLabel(
+                                  hasHighlightColor: true,
+                                  hasSplashColor: true,
+                                  onTap: () {
+                                    ManageVibration.vibrate();
+                                    registerCubit.isMale = true;
+
+                                    setState(() {});
+                                  },
+                                  height: kToolbarHeight.h,
+                                  isCentered: true,
+                                  close: false,
+                                  isBordered: !registerCubit.isMale,
+                                  borderColor: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                                  color: registerCubit.isMale
+                                      ? (AppColors.getButtonPrimaryColor(context))
+                                      : Colors.transparent,
+                                  textColor: registerCubit.isMale
+                                      ? (context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor)
+                                      : (context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),
+                                  label: 'male'.localize)),
+                          SizedBox(
+                            width: 14.h,
+                          ),
+                          Expanded(
+                            child: BadgedLabel(
+                              hasHighlightColor: true,
+                              hasSplashColor: true,
+                              borderColor: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                registerCubit.isMale = false;
+
+                                setState(() {});
+                              },
+                              height: kToolbarHeight.h,
+                              isCentered: true,
+                              isBordered: true,
+                              close: false,
+                              textColor: !registerCubit.isMale
+                                  ? (context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor)
+                                  : (context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),
+                              color: registerCubit.isMale
+                                  ? Colors.transparent
+                                  : AppColors.getButtonPrimaryColor(context),
+                              label: 'female'.localize,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                Sizer(
+                  height: 30.h,
+                ),
                 DefaultTextFormField(
                   currentFocusNode: nameFocusNode,
 
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController: registerCubit.userNameController,
-                  hint: LocaleKeys.userName.localize,
-                  prefixIcon: Icon(
-                    Icons.person_2_rounded,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
+                  inputFormatter: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+                  ],
+                  hint: context.isArabic ? 'مثال : User123' : 'Example: User123',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: SvgPicture.asset(
+                      Assets.aMailIcon,
+                      color: AppColors.GREY_DARK_COLOR,
+                    ),
                   ),
                   validator: (v) {
                     if (v!.isEmpty) {
@@ -676,49 +825,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     return null;
                   },
                   // action: (v) {},
-                ),
-                Sizer(
-                  height: 30.h,
-                ),
-                DefaultTextFormField(
-                  // fillColor: const Color(0xFFEEEEEE),
-                  borderColor: Colors.black,
-                  currentController: registerCubit.firstNameController,
-                  hint: LocaleKeys.firstName.localize,
-                  prefixIcon: Icon(
-                    Icons.person_2_rounded,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
-                  ),
-                  // action: (v) {},
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.firstNameRequired.localize;
-                    }
-                    return null;
-                  },
-                ),
-                Sizer(
-                  height: 30.h,
-                ),
-                DefaultTextFormField(
-                  // fillColor: const Color(0xFFEEEEEE),
-                  borderColor: Colors.black,
-                  currentController: registerCubit.lastNameController,
-                  // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  // label: 'E-mail or phone number',
-                  hint: LocaleKeys.lastName.localize,
-                  prefixIcon: Icon(
-                    Icons.person_2_rounded,
-                    color: AppColors.GREY_DARK_COLOR,
-                    size: 40.w,
-                  ),
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return LocaleKeys.lastNameRequired.localize;
-                    }
-                    return null;
-                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -738,83 +844,21 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 EmailOrPhoneTextFormField(
                   borderColor: Colors.black,
                   currentController: registerCubit.emailTextController,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   hint:
                       '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: SvgPicture.asset(
-                      Assets.aMailIcon,
+                    padding: const EdgeInsets.all(14.0),
+                    child: Image.asset(
+                      Assets.phoneMail,
                       color: AppColors.GREY_DARK_COLOR,
+                      width: 16,
+                      height: 16,
                     ),
                   ),
                   isRequired: true,
-                ),
-                Sizer(
-                  height: 30.h,
-                ),
-                Row(
-                  // crossAxisAlignment: CrossAxisAlignment.,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                        child: Text(LocaleKeys.gender.localize,
-                            style: Styles.mediumText(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400))),
-                    Flexible(
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: BadgedLabel(
-                                  hasHighlightColor: true,
-                                  hasSplashColor: true,
-                                  onTap: () {
-                                    ManageVibration.vibrate();
-                                    registerCubit.isMale = true;
-
-                                    setState(() {});
-                                  },
-                                  height: kToolbarHeight.h,
-                                  isCentered: true,
-                                  close: false,
-                                  isBordered: !registerCubit.isMale,
-                                  color: registerCubit.isMale
-                                      ? AppColors.PRIMARY_COLOR
-                                      : Colors.transparent,
-                                  textColor: registerCubit.isMale
-                                      ? AppColors.AUTH_CONTAINER_COLOR
-                                      : Theme.of(context).primaryColor,
-                                  label: 'male'.localize)),
-                          SizedBox(
-                            width: 14.h,
-                          ),
-                          Expanded(
-                            child: BadgedLabel(
-                              hasHighlightColor: true,
-                              hasSplashColor: true,
-                              onTap: () {
-                                ManageVibration.vibrate();
-                                registerCubit.isMale = false;
-
-                                setState(() {});
-                              },
-                              height: kToolbarHeight.h,
-                              isCentered: true,
-                              isBordered: true,
-                              close: false,
-                              textColor: registerCubit.isMale
-                                  ? Theme.of(context).primaryColor
-                                  : AppColors.AUTH_CONTAINER_COLOR,
-                              color: registerCubit.isMale
-                                  ? Colors.transparent
-                                  : AppColors.PRIMARY_COLOR,
-                              label: 'female'.localize,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
                 Sizer(
                   height: 30.h,
@@ -825,6 +869,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   currentController: registerCubit.passwordTextController,
                   hint: LocaleKeys.password.localize,
                   obscureText: obscurePassword,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   prefixIcon: GestureDetector(
                     onTap: () {
                       ManageVibration.vibrate();
@@ -853,6 +900,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderColor: Colors.black,
                   currentController:
                       registerCubit.confirmPasswordTextController,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   hint:
                       '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
                   obscureText: obscureConfirmPassword,
@@ -889,6 +939,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // fillColor: const Color(0xFFEEEEEE),
                   currentController: registerCubit.referralId,
                   hint: LocaleKeys.code.localize,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(9),
                     width: 20,
@@ -922,7 +975,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         ManageVibration.vibrate();
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.POLICY, extra: true);
+                        context.push(Routes.APPPOLICY, extra: true);
                       },
                       child: Text(
                         LocaleKeys.conditions.localize,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/trip_join_sliders.dart';
@@ -73,7 +75,9 @@ class RideModeTabs extends StatefulWidget {
 class _RideModeTabsState extends State<RideModeTabs> {
   @override
   initState() {
+    if (context.read<UserCubit>().isLoggedIn) {
     context.read<CaptainShareDashboardCubit>().initData();
+    }
     super.initState();
   }
 
@@ -123,7 +127,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
                   iconColor: AppColors.getButtonPrimaryColor(context),
                 ),
                 TripOptionWidget(
-                  icon: Assets.pickMeIcon,
+                  icon: Assets.pickMeImage,
                   imagePath: Assets.locationTripIcon,
                   title: context.isArabic ? "وصلني معاك" : "Pick me",
                   onTap: () {
@@ -136,7 +140,9 @@ class _RideModeTabsState extends State<RideModeTabs> {
             const SizedBox(
               height: 10,
             ),
-            Expanded(child: TripJoinSliders())
+            Flexible(
+                fit: FlexFit.loose,
+                child: TripJoinSliders())
           ],
         );
       },
@@ -170,7 +176,8 @@ class RideModeButton extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: hasActiveTrip
+          onTap:!context.read<UserCubit>().isLoggedIn?
+    ()=>pleaseLoginDialog(context): hasActiveTrip
               ? () {
                   showErrorMessage(
                       context,
@@ -223,7 +230,7 @@ class RideModeButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(15), // حواف دائرية مثل الصورة
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(2, 4),
                 ),
@@ -265,6 +272,9 @@ class RideModeButton extends StatelessWidget {
           ClickableWidget(
             onTap: () async {
               ManageVibration.vibrate();
+              if (!context.read<UserCubit>().isLoggedIn) {
+                return pleaseLoginDialog(context);
+              }
               if (hasActiveTrip) {
                 showErrorMessage(
                     context,

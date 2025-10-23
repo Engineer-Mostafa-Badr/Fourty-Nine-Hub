@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -61,7 +62,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   bool isLessThan14YearsOld(String inputDate) {
     // Parse the string to DateTime
-    DateTime date = DateFormat("dd/MM/yyyy").parse(inputDate);
+    DateTime date = DateTime.parse(inputDate);
 
     // Today and 14 years ago
     final today = DateTime.now();
@@ -74,6 +75,12 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> register() async {
     var currentContext =
     AppPages.router.configuration.navigatorKey.currentContext!;
+
+    if(passwordTextController.text.trim()!=confirmPasswordTextController.text.trim()){
+      showErrorMessage(currentContext, currentContext.isArabic ? 'كلمة المرور غير متطابقة' : 'Password does not match');
+      return;
+    }
+
     showLoadingDialog(currentContext);
     String? token = await FirebaseMessaging.instance.getToken();
     log("message");
@@ -83,7 +90,8 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(RegisterConfirmPassword());
     }else{
       if (_isPhoneNumber(emailTextController.text.trim())) {// if()
-        final result = await _registerByPhoneUseCase(
+        String? refreshToken;
+        var result = await _registerByPhoneUseCase(
           RegisterByPhoneParams(
             userName: userNameController.text.trim(),
             firstName: firstNameController.text.trim(),
@@ -113,6 +121,7 @@ class RegisterCubit extends Cubit<RegisterState> {
               if (data.isPhoneVerified) {
                 _attachToken(data.tokensEntity); // attach to dio
                 _saveTokens(data.tokensEntity);
+                refreshToken = data.tokensEntity.refreshToken;
                 return RegisterByPhone(
                   userTokensEntity: data.tokensEntity,
                   isPhoneVerified: data.isPhoneVerified,
@@ -124,6 +133,8 @@ class RegisterCubit extends Cubit<RegisterState> {
             },
           ),
         );
+        if(refreshToken!=null&&refreshToken!='')await Storage.setRefreshToken(refreshToken??'');
+
       }
       else if (_isEmail(emailTextController.text.trim())) {
         final result = await _registerUseCase(
@@ -132,7 +143,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             firstName: firstNameController.text.trim(),
             lastName: lastNameController.text.trim(),
             birthday: birthDate,
-            email: emailTextController.text.trim(),
+            email: emailTextController.text.trim().toLowerCase(),
             password: passwordTextController.text.trim(),
             confirmPassword: confirmPasswordTextController.text.trim(),
             isMale: isMale,

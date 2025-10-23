@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/verify_otp_cubit/verify_otp_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/pages/forgot_password/otp_timer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -164,35 +165,42 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Sizer(),
               Label(
                 text: LocaleKeys.checkVerification.localize,
                 style: Styles.headerText(),
+                maxLines: 2,
               ),
               const Sizer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Label(
-                    text: context.isArabic ?'لقد ارسلنا كود ل':'We\'ve sent a code to ',
-                    style: Styles.mediumText(color: Colors.black87),
+                    text: context.isArabic ?'لقد ارسلنا كود إلي':'We\'ve sent a code to ',
+                    style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black87),
                   ),
                   Label(
                     text: widget.email,
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
                   ),
                 ],
               ),
               const Sizer(
                 height: 32,
               ),
-              Label(
-                text: context.isArabic ? 'كود التحقق':'OTP Code',
-                style: Styles.headerText(),
+              Align(
+                alignment: Alignment.center,
+                child: Label(
+                  text: context.isArabic ? 'كود التحقق':'OTP Code',
+                  style: Styles.headerText(),
+                  textAlign: TextAlign.center,
+                ),
               ),
               const Sizer(),
               Directionality(
@@ -244,6 +252,12 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     return true;
                   },
                 ),
+              ),
+              const Sizer(),
+              OTPTimer(
+                onResendPressed: () {
+                  verifyOtpCubit.resendOTP(widget.email, false,fromRegister: true);
+                },
               ),
               const Sizer(),
             ],

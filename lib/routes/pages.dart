@@ -74,7 +74,6 @@ import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubit
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_view.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -278,14 +277,10 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/my_profile.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/spotlight/presentation/screens/spot_light_screen.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/pages/tube_feed_page.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
@@ -407,7 +402,6 @@ import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
-import '../features/chance_feature/presentation/pages/chance_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
 import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
@@ -419,7 +413,6 @@ import '../features/food_feature/restaurants_list/presentation/cubit/restaurants
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/all_meal_categories_view.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
@@ -473,7 +466,6 @@ import '../features/social_media/social_posts/presentation/pages/other_account_v
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
-import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/presentation_exports.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -1693,10 +1685,10 @@ class AppPages {
                           customTransition(context, state, PrivacyView()),
                     ),
                     GoRoute(
-                      path: Paths.POLICY,
-                      name: Routes.POLICY,
-                      pageBuilder: (context, state) => customTransition(context,
-                          state, PolicyView(fromTerms: state.extra as bool)),
+                      path: Paths.APPPOLICY,
+                      name: Routes.APPPOLICY,
+                      pageBuilder: (context, state) =>
+                          customTransition(context, state, PolicyView()),
                     ),
                     GoRoute(
                       path: Paths.Lists,

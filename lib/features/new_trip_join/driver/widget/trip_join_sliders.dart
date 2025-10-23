@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,19 +12,40 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class TripJoinSliders extends StatelessWidget {
+class TripJoinSliders extends StatefulWidget {
   const TripJoinSliders({super.key});
 
   @override
+  State<TripJoinSliders> createState() => _TripJoinSlidersState();
+}
+
+class _TripJoinSlidersState extends State<TripJoinSliders> {
+  final CarouselSliderController _carouselController = CarouselSliderController();
+  bool _isHolding = false;
+
+  @override
   Widget build(BuildContext context) {
-    return CarouselSliderWidget(height: 150.h, autoPlay: true, widgets: [
-      ClickableWidget(
+    return CarouselSlider(
+      carouselController: _carouselController,
+
+    items: [
+      GestureDetector(
+        onLongPressStart: (_) {
+          // المستخدم بدأ يضغط بإيده
+          setState(() => _isHolding = true);
+          _carouselController.stopAutoPlay();
+        },
+        onLongPressEnd: (_) {
+          // المستخدم شال إيده
+          setState(() => _isHolding = false);
+          _carouselController.startAutoPlay();
+        },
         onTap: () {
           ManageVibration.vibrate();
           context.push(Routes.captainShareScreen);
         },
         child: ListView(
-            // crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 context.isArabic ? "مشاركة كابتن!" : "Captain Share!",
@@ -40,12 +62,12 @@ class TripJoinSliders extends StatelessWidget {
               ),
               context.isDarkMode
                   ? Image.asset(
-                      Assets.captainDarkInfoIcon,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      fit: BoxFit.cover,
-                    )
+                Assets.captainDarkInfoIcon,
+                height: MediaQuery.of(context).size.height * 0.2,
+                fit: BoxFit.cover,
+              )
                   : SvgPicture.asset(Assets.captainInfoIcon,
-                      height: MediaQuery.of(context).size.height * 0.2),
+                  height: MediaQuery.of(context).size.height * 0.2),
               const SizedBox(
                 height: 44,
               ),
@@ -63,7 +85,17 @@ class TripJoinSliders extends StatelessWidget {
                       : "Wait for others to share route seats with your captain."),
             ]),
       ),
-      ClickableWidget(
+      GestureDetector(
+        onLongPressStart: (_) {
+          // المستخدم بدأ يضغط بإيده
+          setState(() => _isHolding = true);
+          _carouselController.stopAutoPlay();
+        },
+        onLongPressEnd: (_) {
+          // المستخدم شال إيده
+          setState(() => _isHolding = false);
+          _carouselController.startAutoPlay();
+        },
         onTap: () {
           ManageVibration.vibrate();
           context.push(Routes.AVAILABLE_TRIPS);
@@ -86,12 +118,12 @@ class TripJoinSliders extends StatelessWidget {
             ),
             context.isDarkMode
                 ? Image.asset(
-                    Assets.tripDarkInfoIcon,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    fit: BoxFit.cover,
-                  )
+              Assets.tripDarkInfoIcon,
+              height: MediaQuery.of(context).size.height * 0.25,
+              fit: BoxFit.cover,
+            )
                 : SvgPicture.asset(Assets.tripInfoIcon,
-                    height: MediaQuery.of(context).size.height * 0.25),
+                height: MediaQuery.of(context).size.height * 0.25),
             const SizedBox(
               height: 44,
             ),
@@ -114,7 +146,17 @@ class TripJoinSliders extends StatelessWidget {
           ],
         ),
       ),
-      ClickableWidget(
+      GestureDetector(
+        onLongPressStart: (_) {
+          // المستخدم بدأ يضغط بإيده
+          setState(() => _isHolding = true);
+          _carouselController.stopAutoPlay();
+        },
+        onLongPressEnd: (_) {
+          // المستخدم شال إيده
+          setState(() => _isHolding = false);
+          _carouselController.startAutoPlay();
+        },
         onTap: () {
           ManageVibration.vibrate();
           context.push(Routes.All_PickMe_View);
@@ -137,12 +179,12 @@ class TripJoinSliders extends StatelessWidget {
             ),
             context.isDarkMode
                 ? Image.asset(
-                    Assets.pickMeDarkInfoIcon,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    fit: BoxFit.cover,
-                  )
+              Assets.pickMeDarkInfoIcon,
+              height: MediaQuery.of(context).size.height * 0.25,
+              fit: BoxFit.cover,
+            )
                 : Image.asset(Assets.pickMe,
-                    height: MediaQuery.of(context).size.height * 0.25),
+                height: MediaQuery.of(context).size.height * 0.25),
 
             // Image.asset(Assets.pickMe),
             const SizedBox(
@@ -171,6 +213,13 @@ class TripJoinSliders extends StatelessWidget {
           ],
         ),
       )
-    ]);
+    ],
+    options: CarouselOptions(
+      height: 600,
+      autoPlay: !_isHolding,
+      autoPlayInterval: const Duration(seconds: 3),
+      viewportFraction: 1,
+    ),
+    );
   }
 }

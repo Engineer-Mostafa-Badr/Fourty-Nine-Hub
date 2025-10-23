@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:bottom_picker/bottom_picker.dart';
 
 class BirthDatePicker extends StatefulWidget {
   final TextEditingController controller;
@@ -29,7 +33,7 @@ class _BirthDatePickerState extends State<BirthDatePicker> {
           borderColor: Colors.black,
           currentController: widget.controller,
           hint: LocaleKeys.birthDate.localize,
-          prefixIcon: const Icon(Icons.calendar_today),
+          prefixIcon: const Icon(Icons.calendar_today,size: 22,),
           onTap: () => _selectDate(context),
           validator: (s) {
             return null;
@@ -40,25 +44,66 @@ class _BirthDatePickerState extends State<BirthDatePicker> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    DateTime initialDate = DateTime(2000); // Default year if none is selected
-    DateTime firstDate = DateTime(1900); // Minimum selectable date
-    DateTime lastDate = DateTime.now(); // Maximum selectable date (today)
-
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-
-    widget.onDateChanged(selectedDate?.toIso8601String());
-    widget.controller.text = dateFormat.format(selectedDate!);
-    print("widget.controller.text${widget.controller.text}");
+    BottomPicker.date(
+      headerBuilder: (context) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              context.isArabic?'تحديد تاريخ الميلاد':'Set your Birthday',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+              ),
+            ),
+          ],
+        );
+      },
+      buttonSingleColor: AppColors.PRIMARY_COLOR,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      buttonContent: Text(
+        context.isArabic?'تحديد':'Select',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: AppColors.whiteColor,
+        ),
+      ),
+      initialDateTime: DateTime(1996, 10, 22),
+      maxDateTime: DateTime(2012),
+      minDateTime: DateTime(1980),
+      onChange: (index) {
+        debugPrint("onChange $index");
+      },
+      pickerThemeData: CupertinoTextThemeData(
+        primaryColor: AppColors.PRIMARY_COLOR,
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+        ),
+        dateTimePickerTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+        )
+      ) ,
+      onSubmit: (index) {
+        debugPrint("onSubmit $index");
+        debugPrint("onSubmit ${DateFormat('dd/MM/yyyy', context.isArabic?'ar':'en').format(index)}");
+        widget.onDateChanged(index?.toIso8601String());
+        String formattedDate = DateFormat('dd/MM/yyyy', context.isArabic?'ar':'en').format(index);
+        widget.controller.text =formattedDate;
+        // widget.controller.text = dateFormat.format(index);
+        debugPrint("widget.controller.text${widget.controller.text}");
+      },
+      onDismiss: (p0) {
+        debugPrint('onDismiss $p0');
+      },
+      // bottomPickerTheme: BottomPickerTheme.plumPlate,
+    ).show(context);
   }
 }
