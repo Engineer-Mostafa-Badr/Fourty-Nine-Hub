@@ -841,6 +841,36 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
           ),
+          BlocBuilder<ThemeCubit, ThemeStates>(
+            builder: (BuildContext context, theme) {
+              var themeCubit = context.read<ThemeCubit>();
+              return Row(
+                children: [
+                  CustomSwitchButton(
+                    value: themeCubit.isDarkTheme,
+                    onChanged: (value) {
+                      if (theme is LightThemeModeStates) {
+                        ThemeCubit.get(context).darkThemeMode();
+                      }
+                      if (theme is DarkThemeModeStates) {
+                        ThemeCubit.get(context).lightThemeMode();
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    width: 4.w,
+                  ),
+                  themeCubit.isDarkTheme
+                      ? Label(
+                    text: context.isArabic ? "فاتح" : "Light",
+                  )
+                      : Label(
+                    text: context.isArabic ? "غامق" : "Dark",
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -1854,7 +1884,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
-          )
+          ),
+
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/gift_message_entity.dart';
@@ -48,19 +49,21 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
 
   void verifyOTP(String email) async {
     if (state is VerifyOtpLoading) return;
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
     emit(VerifyOtpLoading());
     final result =
         await _verifyOTPUseCase(VerifyOTPParams(email: email.trim().toLowerCase(), otp: otp));
     emit(
       result.fold(
         (failure)  {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
+          currentContext.pop();
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
         return   VerifyOtpError(failure);
         },
         (data) {
+          currentContext.pop();
           _attachToken(data.userTokensEntity);
           _saveTokens(data.userTokensEntity);
           return VerifyOtpSuccess(userTokensEntity: data.userTokensEntity,giftMessageEntity: data.giftMessageEntity);
@@ -96,11 +99,11 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     emit(ResendOtpEnabled());
   }
 
-  void resendOTP(String email, bool forVerification) async {
+  void resendOTP(String email, bool forVerification, {bool? fromRegister}) async {
     if (state is VerifyOtpLoading) return;
     emit(ResendOtpLoading());
 
-    final result = await _resendOTPUseCase(ResendOTPParams(email: email, forVerification: forVerification));
+    final result = await _resendOTPUseCase(ResendOTPParams(email: email, forVerification: forVerification,fromRegister:fromRegister));
     result.fold(
       (l) {
         emit(ResendOtpError(l));

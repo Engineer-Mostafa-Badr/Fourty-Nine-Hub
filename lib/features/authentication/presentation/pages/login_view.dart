@@ -120,7 +120,7 @@ class _LoginViewState extends State<LoginView> {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
             Routes.VERIFYMAIL,
-            extra: registerCubit.emailTextController.text,
+            extra: registerCubit.emailTextController.text.trim().toLowerCase(),
           );
         } else if (state is OTPPhoneSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
@@ -364,8 +364,7 @@ class _LoginViewState extends State<LoginView> {
                                         .validate()) {
                                       if (registerCubit.isLessThan14YearsOld(
                                           registerCubit
-                                              .birthDateTextController.text
-                                              .trim())) {
+                                              .birthDate)) {
                                         showErrorMessage(
                                             context,
                                             context.isArabic
@@ -420,14 +419,14 @@ class _LoginViewState extends State<LoginView> {
         height: 70.h,
         width: 200.h,
         decoration: BoxDecoration(
-          color: active ? AppColors.PRIMARY_COLOR : const Color(0xFFEEEEEE),
+          color: active ? AppColors.getButtonPrimaryColor(context) : const Color(0xFFEEEEEE),
           borderRadius: borderRadius,
         ),
         child: Center(
           child: Text(
             text,
             style:
-                Styles.mediumText(color: active ? Colors.white : Colors.black),
+                Styles.mediumText(color: context.isDarkMode?AppColors.PRIMARY_COLOR:(active?AppColors.whiteColor:AppColors.PRIMARY_COLOR)),
           ),
         ),
       ),
@@ -659,56 +658,71 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: DefaultTextFormField(
-                        borderColor: Colors.black,
-                        currentController: registerCubit.firstNameController,
-                        hint: LocaleKeys.firstName.localize,
-                        prefixIcon: Icon(
-                          Icons.person_2_rounded,
-                          color: AppColors.GREY_DARK_COLOR,
-                          size: 40.w,
+                SizedBox(
+                  height: 70,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 70,
+                          child: DefaultTextFormField(
+                            borderColor: Colors.black,
+                            currentController: registerCubit.firstNameController,
+                            hint: LocaleKeys.firstName.localize,
+                            prefixIcon: Icon(
+                              Icons.person_2_rounded,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 40.w,
+                            ),
+                            // action: (v) {},
+                            onChanged: (v){
+                              widget.formKeyRegister.currentState!.validate();
+                            },
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return LocaleKeys.firstNameRequired.localize;
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        // action: (v) {},
-                        validator: (v) {
-                          if (v!.isEmpty) {
-                            return LocaleKeys.firstNameRequired.localize;
-                          }
-                          return null;
-                        },
                       ),
-                    ),
-                    Sizer(
-                      width: 30.h,
-                    ),
-                    Expanded(
-                      child: DefaultTextFormField(
-                        // fillColor: const Color(0xFFEEEEEE),
-                        borderColor: Colors.black,
-                        currentController: registerCubit.lastNameController,
-                        // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                        // label: 'E-mail or phone number',
-                        hint: LocaleKeys.lastName.localize,
-                        prefixIcon: Icon(
-                          Icons.person_2_rounded,
-                          color: AppColors.GREY_DARK_COLOR,
-                          size: 40.w,
+                      Sizer(
+                        width: 30.h,
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 70,
+                          child: DefaultTextFormField(
+                            // fillColor: const Color(0xFFEEEEEE),
+                            borderColor: Colors.black,
+                            currentController: registerCubit.lastNameController,
+                            // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                            // label: 'E-mail or phone number',
+                            hint: LocaleKeys.lastName.localize,
+                            onChanged: (v){
+                              widget.formKeyRegister.currentState!.validate();
+                            },
+                            prefixIcon: Icon(
+                              Icons.person_2_rounded,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 40.w,
+                            ),
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return LocaleKeys.lastNameRequired.localize;
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        validator: (v) {
-                          if (v!.isEmpty) {
-                            return LocaleKeys.lastNameRequired.localize;
-                          }
-                          return null;
-                        },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                Sizer(
-                  height: 30.h,
-                ),
+                // Sizer(
+                //   height: 30.h,
+                // ),
                 Row(
                   // crossAxisAlignment: CrossAxisAlignment.,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -740,12 +754,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   isCentered: true,
                                   close: false,
                                   isBordered: !registerCubit.isMale,
+                                  borderColor: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                                   color: registerCubit.isMale
-                                      ? AppColors.PRIMARY_COLOR
+                                      ? (AppColors.getButtonPrimaryColor(context))
                                       : Colors.transparent,
                                   textColor: registerCubit.isMale
-                                      ? AppColors.AUTH_CONTAINER_COLOR
-                                      : Theme.of(context).primaryColor,
+                                      ? (context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor)
+                                      : (context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),
                                   label: 'male'.localize)),
                           SizedBox(
                             width: 14.h,
@@ -754,6 +769,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             child: BadgedLabel(
                               hasHighlightColor: true,
                               hasSplashColor: true,
+                              borderColor: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
                               onTap: () {
                                 ManageVibration.vibrate();
                                 registerCubit.isMale = false;
@@ -764,12 +780,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               isCentered: true,
                               isBordered: true,
                               close: false,
-                              textColor: registerCubit.isMale
-                                  ? Theme.of(context).primaryColor
-                                  : AppColors.AUTH_CONTAINER_COLOR,
+                              textColor: !registerCubit.isMale
+                                  ? (context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor)
+                                  : (context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR),
                               color: registerCubit.isMale
                                   ? Colors.transparent
-                                  : AppColors.PRIMARY_COLOR,
+                                  : AppColors.getButtonPrimaryColor(context),
                               label: 'female'.localize,
                             ),
                           ),
@@ -788,12 +804,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController: registerCubit.userNameController,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   inputFormatter: [
                     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
                   ],
-                  hint: 'Example: User123',
+                  hint: context.isArabic ? 'مثال : User123' : 'Example: User123',
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(14.0),
                     child: SvgPicture.asset(
                       Assets.aMailIcon,
                       color: AppColors.GREY_DARK_COLOR,
@@ -810,7 +829,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
-
                 BirthDatePicker(
                     controller: registerCubit.birthDateTextController,
                     onDateChanged: (date) {
@@ -826,15 +844,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 EmailOrPhoneTextFormField(
                   borderColor: Colors.black,
                   currentController: registerCubit.emailTextController,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   hint:
                       '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(14.0),
                     child: Image.asset(
                       Assets.phoneMail,
-                      // color: AppColors.GREY_DARK_COLOR,
-                      width: 14,
-                      height: 14,
+                      color: AppColors.GREY_DARK_COLOR,
+                      width: 16,
+                      height: 16,
                     ),
                   ),
                   isRequired: true,
@@ -848,6 +869,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   currentController: registerCubit.passwordTextController,
                   hint: LocaleKeys.password.localize,
                   obscureText: obscurePassword,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   prefixIcon: GestureDetector(
                     onTap: () {
                       ManageVibration.vibrate();
@@ -876,6 +900,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   borderColor: Colors.black,
                   currentController:
                       registerCubit.confirmPasswordTextController,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   hint:
                       '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
                   obscureText: obscureConfirmPassword,
@@ -912,6 +939,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // fillColor: const Color(0xFFEEEEEE),
                   currentController: registerCubit.referralId,
                   hint: LocaleKeys.code.localize,
+                  onChanged: (v){
+                    widget.formKeyRegister.currentState!.validate();
+                  },
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(9),
                     width: 20,
