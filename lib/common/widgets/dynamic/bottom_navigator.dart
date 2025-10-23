@@ -631,20 +631,20 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       route: Routes.Tinder,
     ),
     BottomItemModel(
-      icon: FontAwesomeIcons.bowlFood,
-      localeKey: LocaleKeys.ride,
-      index: 11,
-      cacheKey: 'rideCount',
-      image: Assets.rideIcon1,
-      route: Routes.RIDE_HOME,
-    ),
-    BottomItemModel(
       icon: FontAwesomeIcons.plus,
       localeKey: LocaleKeys.tripJoin,
       cacheKey: 'tripJoinCount',
       image: Assets.tripJoinIcon2,
       index: 12,
       route: Routes.newRideModeScreen,
+    ),
+    BottomItemModel(
+      icon: FontAwesomeIcons.bowlFood,
+      localeKey: LocaleKeys.ride,
+      index: 11,
+      cacheKey: 'rideCount',
+      image: Assets.rideIcon1,
+      route: Routes.RIDE_HOME,
     ),
   ];
 
@@ -764,8 +764,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 0),
+    return Container(
+      // duration: const Duration(milliseconds: 0),
       height: bottomNavBarHeight,
       color: Colors.transparent,
       child: CustomPaint(

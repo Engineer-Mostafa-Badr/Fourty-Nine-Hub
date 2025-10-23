@@ -182,7 +182,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
         floatingActionButton: _isScrollingDown
             ? null
             : Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 16),
                 child: const FloatingButton(
                   changeView: 1,
                   icon: Icons.person,
