@@ -178,13 +178,18 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 mainCategory: 1,
                 index: 2,
               ),
+
         floatingActionButton: _isScrollingDown
             ? null
-            : const FloatingButton(
-                changeView: 1,
-                icon: Icons.person,
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: const FloatingButton(
+                  changeView: 1,
+                  icon: Icons.person,
+                ),
               ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterDocked,
         // drawer: const DrawerWidget(),
         body: ListView(
           controller: scrollController,
