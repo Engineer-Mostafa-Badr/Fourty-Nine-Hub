@@ -16,7 +16,7 @@ class GetMyAdByIdUseCase extends UseCase<List<AdModel>, GetMyAdByIdParams> {
   }
 }
 
-class GetMyAdByIdParams{
+class GetMyAdByIdParams {
   final String mainCategoryId;
   final int page;
 

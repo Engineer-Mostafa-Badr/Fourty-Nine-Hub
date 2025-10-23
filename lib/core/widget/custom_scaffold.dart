@@ -43,7 +43,7 @@ class CustomScaffold extends StatefulWidget {
     this.showNavBAr = true,
     this.isMenu = false,
     this.resizeToAvoidBottomInset,
-    this.scaffoldBackgroundWithAppBarColor=AppColors.PRIMARY_COLOR,
+    this.scaffoldBackgroundWithAppBarColor = AppColors.PRIMARY_COLOR,
     this.scaffoldKey,
   });
 
@@ -78,7 +78,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
       builder: (context, state) {
         var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
         if (floatingNavigatorCubit.floatingNavigatorEnable &&
-            widget.showNavBAr&&UserCubit.to.isLoggedIn) {
+            widget.showNavBAr &&
+            UserCubit.to.isLoggedIn) {
           return SizedBox(
             width: double.infinity,
             height: double.infinity,
@@ -123,22 +124,21 @@ class _CustomScaffoldState extends State<CustomScaffold>
                     Container(
                       width: 32,
                       height: 28,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ]
-                      ),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]),
                       child: FittedBox(
                         child: Label(
                           text: LocaleKeys.move.localize,
                           style: TextStyle(
-                            color: context.isDarkMode?Colors.white:Colors.black,
-                            fontSize: FontSize.s12
-                          ),
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: FontSize.s12),
                         ),
                       ),
                     ),
@@ -148,9 +148,13 @@ class _CustomScaffoldState extends State<CustomScaffold>
               floatingWidgetHeight: 60,
               floatingWidgetWidth: 50,
               // Center the floating widget vertically on the screen
-              dy: MediaQuery.sizeOf(navigatorKey.currentState!.context).height / (3.5) - 30, // 30 is half of floatingWidgetHeight
+              dy: MediaQuery.sizeOf(navigatorKey.currentState!.context).height /
+                      (3.5) -
+                  50, // 30 is half of floatingWidgetHeight
               // Center horizontally as well
-              dx: MediaQuery.sizeOf(navigatorKey.currentState!.context).width / 2 - 25, // 25 is half of floatingWidgetWidth
+              dx: MediaQuery.sizeOf(navigatorKey.currentState!.context).width /
+                      2 -
+                  25, // 25 is half of floatingWidgetWidth
               autoAlign: true,
             ),
           );
