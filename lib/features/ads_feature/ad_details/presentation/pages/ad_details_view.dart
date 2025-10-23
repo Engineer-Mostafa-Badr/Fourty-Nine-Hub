@@ -183,16 +183,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
               List<AdDetailsPropEntity>? details = state.ad?.details
                   .where((e) => e.nameAr != 'الراتب' && e.nameAr != 'السعر')
                   .toList();
-              print(
-                  "state.ad?.user${context.read<AdDetailsCubit>().state.ad?.user?.id}");
-              print("state.ad!.images.length ${state.ad!.images.length}");
-
               return Stack(
                 children: [
                   ListView.separated(
                     itemBuilder: (context, index) => ImageFromInternet(
                       width: double.infinity,
-                      height: 300.h,
+                      height: 600.h, // Reduced from 600.h for better UX
                       image: state.ad!.images[index],
                       defaultLogo: true,
                       fit: BoxFit.cover,
@@ -200,9 +196,9 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                     separatorBuilder: (context, index) => const SizedBox(
                       height: 8,
                     ),
-                    itemCount: state.ad!.images.length ?? 0,
+                    itemCount: state.ad!.images.length,
                     padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).padding.top * 2),
+                        top: MediaQuery.of(context).padding.top * 3),
                   ),
                   Padding(
                     padding: EdgeInsets.only(

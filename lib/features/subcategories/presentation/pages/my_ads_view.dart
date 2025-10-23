@@ -7,6 +7,7 @@ import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/messages/messages.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import '../cubit/subcategories_cubit.dart';
 import 'my_ad_card.dart';
@@ -19,10 +20,14 @@ import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 
 class MyAdsView extends StatefulWidget {
   const MyAdsView(
-      {super.key, required this.id, required this.isFloatingButtonVisible});
+      {super.key,
+      required this.id,
+      required this.isFloatingButtonVisible,
+      this.selectedSubCategoryId});
 
   final String id;
   final void Function(bool) isFloatingButtonVisible;
+  final String? selectedSubCategoryId;
 
   @override
   State<MyAdsView> createState() => _MyAdsViewState();
@@ -74,10 +79,28 @@ class _MyAdsViewState extends State<MyAdsView> {
       if (controller.isLoadingMyAds == true) {
         return const CustomLoadingSearchWidget();
       }
-      if (controller.myAds.isEmpty) {
+
+      // Filter my ads by selected subcategory if provided
+      List<AdEntity> filteredMyAds = controller.myAds;
+      if (widget.selectedSubCategoryId != null &&
+          widget.selectedSubCategoryId!.isNotEmpty) {
+        filteredMyAds = controller.myAds
+            .where((ad) => ad.subCategoryId == widget.selectedSubCategoryId)
+            .toList();
+      }
+
+      if (filteredMyAds.isEmpty) {
+        // Show different message based on whether filtering by subcategory
+        String emptyMessage = widget.selectedSubCategoryId != null &&
+                widget.selectedSubCategoryId!.isNotEmpty
+            ? LocaleKeys.youHaveNoAds
+                .localize // "لا توجد إعلانات" when filtered by subcategory
+            : LocaleKeys
+                .youHaveNoAds.localize; // "لا توجد إعلانات" when no ads at all
+
         return Center(
           child: Label(
-            text: LocaleKeys.youHaveNoAds.localize,
+            text: emptyMessage,
             style: Styles.headerText(
               fontSize: 40,
               color: context.isDarkMode
@@ -96,22 +119,22 @@ class _MyAdsViewState extends State<MyAdsView> {
             context.read<SubcategoriesCubit>().getMyAds(widget.id),
         banners: bannersList,
         items: List.generate(
-          controller.myAds.length,
+          filteredMyAds.length,
           (i) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: MyAdCard(
               showSubCategory: true,
-              item: controller.myAds[i],
+              item: filteredMyAds[i],
               onFav: (id) async {
                 bool result = await context
                     .read<AdvertisementCubit>()
-                    .favouriteAd(controller.myAds[i].id);
+                    .favouriteAd(filteredMyAds[i].id);
                 return result;
               },
               onRemoveFav: (id) async {
                 bool result = await context
                     .read<AdvertisementCubit>()
-                    .unFavouriteAd(controller.myAds[i].id);
+                    .unFavouriteAd(filteredMyAds[i].id);
                 return result;
               },
               deleteAd: (adId) async {

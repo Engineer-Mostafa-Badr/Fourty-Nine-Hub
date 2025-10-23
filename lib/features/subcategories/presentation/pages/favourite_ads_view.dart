@@ -5,6 +5,7 @@ import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import '../cubit/subcategories_cubit.dart';
 import 'my_ad_card.dart';
@@ -19,10 +20,12 @@ class FavouriteAdsView extends StatefulWidget {
     super.key,
     required this.id,
     required this.isFloatingButtonVisible,
+    this.selectedSubCategoryId,
   });
 
   final String id;
   final void Function(bool) isFloatingButtonVisible;
+  final String? selectedSubCategoryId;
 
   @override
   State<FavouriteAdsView> createState() => _FavouriteAdsViewState();
@@ -61,7 +64,17 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
       if (controller.isLoadingMyFavouriteAds == true) {
         return const CustomLoadingSearchWidget();
       }
-      if (controller.myFavouriteAds.isEmpty) {
+
+      // Filter favorite ads by selected subcategory if provided
+      List<AdEntity> filteredFavouriteAds = controller.myFavouriteAds;
+      if (widget.selectedSubCategoryId != null &&
+          widget.selectedSubCategoryId!.isNotEmpty) {
+        filteredFavouriteAds = controller.myFavouriteAds
+            .where((ad) => ad.subCategoryId == widget.selectedSubCategoryId)
+            .toList();
+      }
+
+      if (filteredFavouriteAds.isEmpty) {
         return Center(
           child: Label(
             text: LocaleKeys.noFavouriteAds.localize,
@@ -82,12 +95,12 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
             context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
         banners: bannersList,
         items: List.generate(
-            controller.myFavouriteAds.length,
+            filteredFavouriteAds.length,
             (i) => Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: MyAdCard(
-                    item: controller.myFavouriteAds[i]
+                    item: filteredFavouriteAds[i]
                       ..isFavourite = true, // Force isFavourite to true
                     showSubCategory: true,
                     onFav: (id) async {
@@ -98,13 +111,13 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
                       // When user clicks favorite icon in favorite view, remove from favorites
                       bool result = await context
                           .read<AdvertisementCubit>()
-                          .unFavouriteAd(controller.myFavouriteAds[i].id);
+                          .unFavouriteAd(filteredFavouriteAds[i].id);
                       if (result) {
                         // Update the favorite status in the main ads list
                         controller.updateAdFavoriteStatus(
-                            controller.myFavouriteAds[i].id, false);
+                            filteredFavouriteAds[i].id, false);
                         controller.myFavouriteAds
-                            .remove(controller.myFavouriteAds[i]);
+                            .remove(filteredFavouriteAds[i]);
                         setState(() {});
                       }
                       return result;

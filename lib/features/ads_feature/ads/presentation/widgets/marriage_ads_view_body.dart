@@ -487,6 +487,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,
+        selectedSubCategoryId: widget.state.selectedSubCatId,
       );
     }
 
@@ -512,6 +513,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,
+        selectedSubCategoryId: widget.state.selectedSubCatId,
       );
     }
 
@@ -522,6 +524,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         child: FavouriteAdsView(
           id: widget.state.mainCategory?.id ?? '',
           isFloatingButtonVisible: (_) {},
+          selectedSubCategoryId: widget.state.selectedSubCatId,
         ),
       );
     }
