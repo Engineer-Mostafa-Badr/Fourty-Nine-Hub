@@ -1,5 +1,6 @@
 abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
+  static String phoneMail = 'assets/icons/phoneMail.png';
   static String spinWheelDark = 'assets/images/spin_dark.png';
   static String drawerGalleryIcon =
       'assets/icons/drawer_gallery_icon.svg'; //existing

@@ -76,7 +76,7 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                   children: [
                     Label(
                       text: FormatNumbers().formatNumber(
-                        balance.toInt,
+                        int.tryParse(balance??'0')??0,
                         useArabicNumerals: context.isArabic,
                         // isArabic: context.isArabic,
                       ),

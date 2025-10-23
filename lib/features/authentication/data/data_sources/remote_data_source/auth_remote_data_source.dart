@@ -425,7 +425,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params) async {
     final result = await _apiConsumer.put(
-      params.forVerification
+      params.fromRegister==true?
+      EndPoints.resendRegisterationOTP
+          :params.forVerification
           ? EndPoints.resendVerificationOTP
           : EndPoints.resendOTP,
       data: params.toJson(),
@@ -647,7 +649,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     );
     return result.fold(
       (failure) => Left(failure),
-      (response) {
+      (response) async {
+        UserTokensEntity userTokens = VerifyOtpModel.fromJson(
+          response['data'],
+        ).userTokensEntity;
+        _apiConsumer.attachToken(UserTokensModel(
+          refreshToken: userTokens.refreshToken,
+          accessToken: userTokens.accessToken
+        ));
+        await Storage.setRefreshToken(userTokens.refreshToken);
         return Right(VerifyOtpModel.fromJson(
           response['data'],
         ));

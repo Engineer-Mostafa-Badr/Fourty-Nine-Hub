@@ -150,10 +150,10 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
             ),
           );
         },
-        child: const Icon(
+        child: Icon(
           Icons.close,
           // size: ,
-          color: AppColors.PRIMARY_COLOR,
+          color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
         ),
       ),
     ],

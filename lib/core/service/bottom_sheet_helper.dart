@@ -94,28 +94,28 @@ class BottomSheetHelper {
                           await serviceLocator<FcmNotificationHelper>()
                               .getFcmUserToken();
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SendWhatsappCallScreen(
-                            isRealCall: true,
-                            callType: CallType.audio,
-                            receiver: UserModel(
-                              id: receiverId,
-                              firstName: receiverName,
-                              lastName: '',
-                              firebaseToken:
-                                  'f8pcALRKSje_HWSPy865gD:APA91bGFQy7NEKUePDgiMRynntFkkZdW66G7k48gfQH5GgHU70fOg_7cxDPjagL25qzT35GA1fU2zrvd5ltKyEkAb0_tYMPktfn8tmg0r8pa9D3u17lnqQQ',
-                            ),
-                            sender: UserModel(
-                              id: senderId,
-                              firstName: senderFirstName,
-                              lastName: senderLastName,
-                              firebaseToken: fcmToken,
-                            ),
-                          ),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => SendWhatsappCallScreen(
+                      //       isRealCall: true,
+                      //       callType: CallType.audio,
+                      //       receiver: UserModel(
+                      //         id: receiverId,
+                      //         firstName: receiverName,
+                      //         lastName: '',
+                      //         firebaseToken:
+                      //             'f8pcALRKSje_HWSPy865gD:APA91bGFQy7NEKUePDgiMRynntFkkZdW66G7k48gfQH5GgHU70fOg_7cxDPjagL25qzT35GA1fU2zrvd5ltKyEkAb0_tYMPktfn8tmg0r8pa9D3u17lnqQQ',
+                      //       ),
+                      //       sender: UserModel(
+                      //         id: senderId,
+                      //         firstName: senderFirstName,
+                      //         lastName: senderLastName,
+                      //         firebaseToken: fcmToken,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // );
                     },
                   ),
                 ),

@@ -9,6 +9,7 @@ class SharedScaffold extends StatelessWidget {
   final Widget body;
   final bool extendBody;
   final bool isWithBackArrow;
+  final bool? resizeToAvoidBottomInset;
   final Color? backgroundColor;
   final Widget? floatingActionButton;
   final Function? onBackPressed;
@@ -21,6 +22,7 @@ class SharedScaffold extends StatelessWidget {
     this.onBackPressed,
     this.backgroundColor,
     this.floatingActionButton,
+    this.resizeToAvoidBottomInset,
   });
 
   @override
@@ -31,6 +33,7 @@ class SharedScaffold extends StatelessWidget {
       backgroundColor: backgroundColor,
       drawer: const DrawerWidget(),
       body: body,
+        resizeToAvoidBottomInset:resizeToAvoidBottomInset,
       appBar: PreferredSize(
         
         preferredSize: const Size.fromHeight(30),

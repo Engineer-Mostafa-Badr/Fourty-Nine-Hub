@@ -5,7 +5,6 @@
 import FlutterMacOS
 import Foundation
 
-import agora_rtc_engine
 import app_settings
 import audio_service
 import audio_session
@@ -24,7 +23,6 @@ import flutter_local_notifications
 import flutter_secure_storage_macos
 import geolocator_apple
 import google_sign_in_ios
-import iris_method_channel
 import just_audio
 import local_auth_darwin
 import open_file_mac
@@ -42,11 +40,8 @@ import video_compress
 import video_player_avfoundation
 import wakelock_plus
 import webview_flutter_wkwebview
-import zego_express_engine
-import zego_zim
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  AgoraRtcNgPlugin.register(with: registry.registrar(forPlugin: "AgoraRtcNgPlugin"))
   AppSettingsPlugin.register(with: registry.registrar(forPlugin: "AppSettingsPlugin"))
   AudioServicePlugin.register(with: registry.registrar(forPlugin: "AudioServicePlugin"))
   AudioSessionPlugin.register(with: registry.registrar(forPlugin: "AudioSessionPlugin"))
@@ -65,7 +60,6 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FlutterSecureStoragePlugin.register(with: registry.registrar(forPlugin: "FlutterSecureStoragePlugin"))
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))
   FLTGoogleSignInPlugin.register(with: registry.registrar(forPlugin: "FLTGoogleSignInPlugin"))
-  IrisMethodChannelPlugin.register(with: registry.registrar(forPlugin: "IrisMethodChannelPlugin"))
   JustAudioPlugin.register(with: registry.registrar(forPlugin: "JustAudioPlugin"))
   FLALocalAuthPlugin.register(with: registry.registrar(forPlugin: "FLALocalAuthPlugin"))
   OpenFilePlugin.register(with: registry.registrar(forPlugin: "OpenFilePlugin"))
@@ -83,6 +77,4 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FVPVideoPlayerPlugin.register(with: registry.registrar(forPlugin: "FVPVideoPlayerPlugin"))
   WakelockPlusMacosPlugin.register(with: registry.registrar(forPlugin: "WakelockPlusMacosPlugin"))
   WebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "WebViewFlutterPlugin"))
-  ZegoExpressEnginePlugin.register(with: registry.registrar(forPlugin: "ZegoExpressEnginePlugin"))
-  ZegoZimPlugin.register(with: registry.registrar(forPlugin: "ZegoZimPlugin"))
 }

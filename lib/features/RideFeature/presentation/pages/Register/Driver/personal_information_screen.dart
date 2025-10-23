@@ -1,14 +1,18 @@
+import 'package:bottom_picker/bottom_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/core/utils/validator.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -36,18 +40,14 @@ class RideFeatureRegisterParams {
   final bool isShipping;
   final List<String> subCategoriesId;
 
-  RideFeatureRegisterParams(
-      {required this.isSocket,
-      required this.isShipping,
-      required this.subCategoriesId});
+  RideFeatureRegisterParams({required this.isSocket, required this.isShipping, required this.subCategoriesId});
 }
 
 class PersonalInformationScreen extends StatefulWidget {
   const PersonalInformationScreen({super.key, required this.params});
   final RideFeatureRegisterParams params;
   @override
-  State<PersonalInformationScreen> createState() =>
-      _PersonalInformationScreenState();
+  State<PersonalInformationScreen> createState() => _PersonalInformationScreenState();
 }
 
 class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
@@ -57,8 +57,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   void initState() {
     print("widget.params.subCategoriesId: ${widget.params.subCategoriesId}");
     context.read<RideRegisterCubit>().loadRegisterData(context, widget.params);
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _firstNameFocusNode.requestFocus());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _firstNameFocusNode.requestFocus());
     super.initState();
   }
 
@@ -70,20 +69,89 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RideRegisterCubit, RideRegisterState>(
-        builder: (context, state) {
-          print("state.newModel ${state.newModel?.id}");
-          print("state.selectedModel ${state.selectedModel?.id}");
+    return BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
+      print("state.newModel ${state.newModel?.id}");
+      print("state.selectedModel ${state.selectedModel?.id}");
       var cubit = context.read<RideRegisterCubit>();
       final DateTime now = DateTime.now();
       final DateTime earliestDate = DateTime(now.year - 65, now.month, now.day);
       final DateTime latestDate = DateTime(now.year - 21, now.month, now.day);
       return PopScope(
         canPop: false,
+        onPopInvoked: (v) {
+          ManageVibration.vibrate();
+          showAnimatedDialog(
+            context,
+            AlertDialog(
+              backgroundColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.AUTH_CONTAINER_COLOR,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Label(
+                    text: LocaleKeys.areYouSureYouWantToCloseThisWindow.localize,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Sizer(),
+                  const Sizer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                          label: LocaleKeys.cancel.localize,
+                          style: Styles.headerText(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                          ),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+
+                            // Navigator.popAndPushNamed(
+                            //     context, Routes.welcomeRideRegister);
+                          },
+                          radius: 15,
+                          backColor: AppColors.PRIMARY_COLOR.withValues(alpha: .75),
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Sizer(),
+                      Expanded(
+                        child: AppButton(
+                          label: LocaleKeys.close.localize,
+                          style: Styles.headerText(
+                            color: AppColors.AUTH_CONTAINER_COLOR,
+                          ),
+                          onPressed: () {
+                            if (widget.params.isShipping == true) {
+                              cubit.onRemoveLoaderData(context);
+                            } else {
+                              if (widget.params.isSocket == false) {
+                                cubit.onRemoveNoSocketData(context);
+                              } else {
+                                cubit.onRemoveDriverData(context);
+                              }
+                            }
+                          },
+                          radius: 15,
+                          backColor: AppColors.PRIMARY_COLOR,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
         child: CustomScaffold(
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: HomeAppbar(),
+          enableCustomAppBar: true,
+          appBar: BackAppBar(
+            label: widget.params.isShipping==true?(context.isArabic?'تسجيل سائق نقل':'Truck Register'):(context.isArabic?'تسجيل سائق سيارة':'Ride Register'),
           ),
           body: cubit.loadingRegister == true
               ? const Center(child: CircularProgressIndicator())
@@ -103,20 +171,17 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               spacing: 4,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Sizer(),
                                 closeWidget(
                                     context: context,
                                     onAcceptSaveData: () {
                                       if (widget.params.isShipping == true) {
-                                        cubit.onSaveRegisterLoaderData(context,
-                                            widget.params.subCategoriesId);
+                                        cubit.onSaveRegisterLoaderData(context, widget.params.subCategoriesId);
                                       } else {
                                         if (widget.params.isSocket == false) {
-                                          cubit.onSaveRegisterNoSocketData(
-                                              context,
-                                              widget.params.subCategoriesId);
+                                          cubit.onSaveRegisterNoSocketData(context, widget.params.subCategoriesId);
                                         } else {
-                                          cubit.onSaveRegisterData(context,
-                                              widget.params.subCategoriesId);
+                                          cubit.onSaveRegisterData(context, widget.params.subCategoriesId);
                                         }
                                       }
                                     },
@@ -133,16 +198,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                     }),
                                 Label(
                                   text: LocaleKeys.personalInformation.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 32),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 32),
                                 ),
                                 // if (state.registerType == 'socket') ...[
                                 const Sizer(),
                                 UploadFileWidget(
                                   title: LocaleKeys.personalPicture.localize,
                                   onTap: () {
-      ManageVibration.vibrate();
+                                    ManageVibration.vibrate();
                                     cubit.onUploadPersonalPicture(context);
                                   },
                                   imageUrl: state.personalPicture,
@@ -151,18 +214,13 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.firstName.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 DefaultTextFormField(
                                   currentController: cubit.rideNameController,
-                                  fillColor: context.isDarkMode
-                                      ? AppColors.GREY_DARK_COLOR
-                                      : AppColors.GREYBG,
+                                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  onChanged: (v) =>
-                                      cubit.formKey.currentState?.validate(),
+                                  onChanged: (v) => cubit.formKey.currentState?.validate(),
                                   hint: '',
                                   // label: LocaleKeys.firstName.localize,
                                   validator: (v) {
@@ -176,20 +234,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.surname.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 DefaultTextFormField(
-                                  currentController:
-                                      cubit.rideSurNameController,
-                                  fillColor: context.isDarkMode
-                                      ? AppColors.GREY_DARK_COLOR
-                                      : AppColors.GREYBG,
+                                  currentController: cubit.rideSurNameController,
+                                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
                                   hint: '',
-                                  onChanged: (v) =>
-                                      cubit.formKey.currentState?.validate(),
+                                  onChanged: (v) => cubit.formKey.currentState?.validate(),
                                   // label: LocaleKeys.surname.localize,
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
@@ -201,23 +253,21 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 const Sizer(),
                                 if (state.isShipping != true) ...[
                                   Label(
-                                    text: LocaleKeys
-                                        .user_info_date_of_birth.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 30),
+                                    text: LocaleKeys.user_info_date_of_birth.localize,
+                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                   ),
                                   DatePickerTextField(
-                                    color: context.isDarkMode
-                                        ? AppColors.GREY_DARK_COLOR
-                                        : AppColors.GREYBG,
+                                    color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     initialDate: latestDate,
-                                    minDate: earliestDate,
-                                    maxDate: latestDate,
+                                    // minDate: earliestDate,
+                                    // maxDate: latestDate,
                                     onDateSelected: (date) {
-                                      cubit.rideDateOfBirthController.text =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(date ?? DateTime.now());
+                                      // widget.onDateChanged(index?.toIso8601String());
+                                      String formattedDate = DateFormat('yyyy-MM-dd', context.isArabic?'ar':'en').format(date!);
+                                      cubit.rideDateOfBirthController.text =formattedDate;
+                                      // widget.controller.text = dateFormat.format(index);
+                                      debugPrint("widget.controller.text${cubit.rideDateOfBirthController.text}");
+                                      // cubit.rideDateOfBirthController.text = DateFormat('yyyy-MM-dd').format(date ?? DateTime.now());
                                     },
                                     controller: cubit.rideDateOfBirthController,
                                     hintText: '',
@@ -226,54 +276,38 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 ],
                                 Label(
                                   text: LocaleKeys.phoneNumber.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 DefaultTextFormField(
-                                    currentController:
-                                        cubit.ridePhoneNumberController,
-                                    fillColor: context.isDarkMode
-                                        ? AppColors.GREY_DARK_COLOR
-                                        : AppColors.GREYBG,
+                                    currentController: cubit.ridePhoneNumberController,
+                                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
                                     hint: '',
                                     maxLength: 11,
                                     // label: LocaleKeys.idNumber.localize,
                                     keyboardType: TextInputType.number,
-                                    onChanged: (v) =>
-                                        cubit.formKey.currentState?.validate(),
-                                    inputFormatter: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
+                                    onChanged: (v) => cubit.formKey.currentState?.validate(),
+                                    inputFormatter: [FilteringTextInputFormatter.digitsOnly],
                                     validator: (v) => validateEgyptianPhone(v)),
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.idNumber.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 DefaultTextFormField(
-                                  currentController:
-                                      cubit.ridePersonalDocIdNumController,
-                                  fillColor: context.isDarkMode
-                                      ? AppColors.GREY_DARK_COLOR
-                                      : AppColors.GREYBG,
+                                  currentController: cubit.ridePersonalDocIdNumController,
+                                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
                                   hint: '',
                                   maxLength: 14,
-                                  onChanged: (v) =>
-                                      cubit.formKey.currentState?.validate(),
+                                  onChanged: (v) => cubit.formKey.currentState?.validate(),
                                   // label: LocaleKeys.idNumber.localize,
                                   keyboardType: TextInputType.number,
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
                                       return LocaleKeys.required.localize;
                                     } else if (v.length < 14) {
-                                      return context.isArabic
-                                          ? 'رقم الهوية غير صحيح'
-                                          : 'Id number is not valid';
+                                      return context.isArabic ? 'رقم الهوية غير صحيح' : 'Id number is not valid';
                                     }
                                     return null;
                                   },
@@ -282,30 +316,22 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 if (state.isShipping != true) ...[
                                   Label(
                                     text: LocaleKeys.licenseNumber.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 30),
+                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                   ),
                                   DefaultTextFormField(
-                                    currentController: cubit
-                                        .ridePersonalDocLicenseNumController,
-                                    fillColor: context.isDarkMode
-                                        ? AppColors.GREY_DARK_COLOR
-                                        : AppColors.GREYBG,
+                                    currentController: cubit.ridePersonalDocLicenseNumController,
+                                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     borderColor: Colors.transparent,
                                     hint: '',
                                     maxLength: 14,
-                                    onChanged: (v) =>
-                                        cubit.formKey.currentState?.validate(),
+                                    onChanged: (v) => cubit.formKey.currentState?.validate(),
                                     // label: LocaleKeys.licenseNumber.localize,
                                     keyboardType: TextInputType.number,
                                     validator: (v) {
                                       if (v == null || v.isEmpty) {
                                         return LocaleKeys.required.localize;
                                       } else if (v.length < 14) {
-                                        return context.isArabic
-                                            ? 'رقم الهوية غير صحيح'
-                                            : 'Id number is not valid';
+                                        return context.isArabic ? 'رقم الهوية غير صحيح' : 'Id number is not valid';
                                       }
                                       return null;
                                     },
@@ -313,14 +339,11 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   const Sizer()
                                 ],
                                 Label(
-                                  text: LocaleKeys.vehicleColor.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  text: context.isArabic?'لون السيارة':'Vehicle Color',
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 RegisterExpansionTile(
-                                  initialTitle: (state.color != null ||
-                                          (state.color?.id.isNotEmpty ?? false))
+                                  initialTitle: (state.color != null || (state.color?.id.isNotEmpty ?? false))
                                       ? Row(
                                           children: [
                                             Container(
@@ -328,25 +351,17 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                               height: 16,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: HexColor(
-                                                    state.color?.code ?? ''),
+                                                color: HexColor(state.color?.code ?? ''),
                                               ),
                                             ),
                                             const Sizer(),
                                             Label(
-                                              text: context.isArabic
-                                                  ? state.color?.nameAr ?? ''
-                                                  : state.color?.nameEn ?? '',
+                                              text: context.isArabic ? state.color?.nameAr ?? '' : state.color?.nameEn ?? '',
                                             )
                                           ],
                                         )
-                                      : Label(
-                                          text:
-                                              LocaleKeys.vehicleColor.localize),
-                                  title: (state.selectedColors != null ||
-                                          (state.selectedColors?.id
-                                                  .isNotEmpty ??
-                                              false))
+                                      : Label(text: context.isArabic?'لون السيارة':'Vehicle Color'),
+                                  title: (state.selectedColors != null || (state.selectedColors?.id.isNotEmpty ?? false))
                                       ? Row(
                                           children: [
                                             Container(
@@ -354,29 +369,18 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                               height: 16,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: HexColor(state
-                                                        .selectedColors?.code ??
-                                                    ''),
+                                                color: HexColor(state.selectedColors?.code ?? ''),
                                               ),
                                             ),
                                             const Sizer(),
                                             Label(
-                                              text: context.isArabic
-                                                  ? state.selectedColors
-                                                          ?.nameAr ??
-                                                      ''
-                                                  : state.selectedColors
-                                                          ?.nameEn ??
-                                                      '',
+                                              text: context.isArabic ? state.selectedColors?.nameAr ?? '' : state.selectedColors?.nameEn ?? '',
                                             )
                                           ],
                                         )
-                                      : Label(
-                                          text:
-                                              LocaleKeys.vehicleColor.localize),
+                                      : Label(text: context.isArabic?'لون السيارة':'Vehicle Color'),
                                   onChange: (Widget selectedItem) {},
-                                  onSelect: (i) =>
-                                      cubit.onSelectColor(state.colors![i]),
+                                  onSelect: (i) => cubit.onSelectColor(state.colors![i]),
                                   length: state.colors?.length ?? 0,
                                   children: List.generate(
                                       state.colors?.length ?? 0,
@@ -387,80 +391,54 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 height: 16,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: HexColor(state
-                                                          .colors?[index]
-                                                          .code ??
-                                                      ''),
+                                                  color: HexColor(state.colors?[index].code ?? ''),
                                                 ),
                                               ),
                                               const Sizer(),
-                                              Label(
-                                                  text: context.isArabic
-                                                      ? (state.colors?[index]
-                                                              .nameAr ??
-                                                          '')
-                                                      : state.colors?[index]
-                                                              .nameEn ??
-                                                          ''),
+                                              Label(text: context.isArabic ? (state.colors?[index].nameAr ?? '') : state.colors?[index].nameEn ?? ''),
                                             ],
                                           )),
                                 ),
                                 const Sizer(),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Label(
-                                      text: context.isArabic
-                                          ? 'ماركة السيارة'
-                                          : 'Vehicle Brand',
-                                      style: Styles.headerText(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 30),
+                                      text: context.isArabic ? 'ماركة السيارة' : 'Vehicle Brand',
+                                      style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                     ),
                                     ClickableWidget(
                                       onTap: () {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         showAddNewBrandDialog(
                                             context: context,
                                             onBrandAdded: (String brandName) {
-                                              cubit.addNewBrand(
-                                                  context: context,
-                                                  brandName: brandName);
+                                              cubit.addNewBrand(context: context, brandName: brandName);
                                             });
                                       },
                                       child: Text(
-                                        context.isArabic
-                                            ? 'إضافة جديد'
-                                            : 'Add New',
+                                        context.isArabic ? 'إضافة جديد' : 'Add New',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w300,
                                           fontSize: 13.ts,
                                           color: AppColors.SECONDARY_COLOR,
                                           decoration: TextDecoration.underline,
-                                          decorationColor:
-                                              AppColors.SECONDARY_COLOR,
+                                          decorationColor: AppColors.SECONDARY_COLOR,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                if (state.newBrand != null &&
-                                    (state.newBrand?.id.isNotEmpty ?? false))
+                                if (state.newBrand != null && (state.newBrand?.id.isNotEmpty ?? false))
                                   Row(
                                     children: [
                                       Expanded(
                                         child: DefaultTextFormField(
-                                          currentController:
-                                              cubit.newBrandAddedController,
-                                          fillColor: context.isDarkMode
-                                              ? AppColors.GREY_DARK_COLOR
-                                              : AppColors.GREYBG,
+                                          currentController: cubit.newBrandAddedController,
+                                          fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                           borderColor: Colors.transparent,
                                           hint: '',
-                                          onChanged: (v) => cubit
-                                              .formKey.currentState
-                                              ?.validate(),
+                                          onChanged: (v) => cubit.formKey.currentState?.validate(),
                                           maxLength: 14,
                                           // label: LocaleKeys.licenseNumber.localize,
                                           keyboardType: TextInputType.number,
@@ -470,62 +448,35 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       Sizer(),
                                       ClickableWidget(
                                         onTap: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           cubit.removeNewBrand();
                                         },
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.close,
                                           // size: ,
-                                          color: AppColors.PRIMARY_COLOR,
+                                          color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
                                         ),
                                       ),
                                     ],
                                   ),
-                                if (state.newBrand == null ||
-                                    (state.newBrand?.id.isEmpty ?? false))
+                                if (state.newBrand == null || (state.newBrand?.id.isEmpty ?? false))
                                   RegisterExpansionTile(
-                                    initialTitle:
-                                        (state.selectedBrand != null ||
-                                                (state.selectedBrand?.id
-                                                        .isNotEmpty ??
-                                                    false))
-                                            ? Label(
-                                                text: context.isArabic
-                                                    ? state.selectedBrand
-                                                            ?.brandNameAr ??
-                                                        ''
-                                                    : state.selectedBrand
-                                                            ?.brandNameEn ??
-                                                        '',
-                                              )
-                                            : Label(
-                                                text: context.isArabic
-                                                    ? 'ماركة السيارة'
-                                                    : 'Vehicle Brand'),
-                                    title: (state.selectedBrand != null ||
-                                            (state.selectedBrand?.id
-                                                    .isNotEmpty ??
-                                                false))
+                                    initialTitle: (state.selectedBrand != null || (state.selectedBrand?.id.isNotEmpty ?? false))
                                         ? Label(
-                                            text: context.isArabic
-                                                ? state.selectedBrand
-                                                        ?.brandNameAr ??
-                                                    ''
-                                                : state.selectedBrand
-                                                        ?.brandNameEn ??
-                                                    '',
+                                            text: context.isArabic ? state.selectedBrand?.brandNameAr ?? '' : state.selectedBrand?.brandNameEn ?? '',
                                           )
-                                        : Label(
-                                            text: context.isArabic
-                                                ? 'ماركة السيارة'
-                                                : 'Vehicle Brand'),
+                                        : Label(text: context.isArabic ? 'ماركة السيارة' : 'Vehicle Brand'),
+                                    title: (state.selectedBrand != null || (state.selectedBrand?.id.isNotEmpty ?? false))
+                                        ? Label(
+                                            text: context.isArabic ? state.selectedBrand?.brandNameAr ?? '' : state.selectedBrand?.brandNameEn ?? '',
+                                          )
+                                        : Label(text: context.isArabic ? 'ماركة السيارة' : 'Vehicle Brand'),
                                     onChange: (Widget selectedItem) {},
                                     onSelect: (i) {
                                       if (state.brands?[i].id == 'other') {
                                         return;
                                       }
-                                      cubit.onSelectBrand(
-                                          state.brands?[i].id ?? '', context,
+                                      cubit.onSelectBrand(state.brands?[i].id ?? '', context,
                                           type: widget.params.isSocket == true
                                               ? 'socket'
                                               : widget.params.isShipping == true
@@ -533,105 +484,55 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                   : 'nonSocket');
                                     },
                                     length: state.brands?.length ?? 0,
-                                    children: List.generate(
-                                        state.brands?.length ?? 0,
-                                        (index) => Label(
-                                            text: context.isArabic
-                                                ? (state.brands?[index]
-                                                        .brandNameAr ??
-                                                    '')
-                                                : state.brands?[index]
-                                                        .brandNameEn ??
-                                                    '')),
+                                    children: List.generate(state.brands?.length ?? 0,
+                                        (index) => Label(text: context.isArabic ? (state.brands?[index].brandNameAr ?? '') : state.brands?[index].brandNameEn ?? '')),
                                   ),
                                 const Sizer(),
                                 if (state.isLoadingModels)
-                                  const Center(
-                                      child: CircularProgressIndicator())
+                                  const Center(child: CircularProgressIndicator())
                                 else
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Label(
-                                            text: LocaleKeys
-                                                .vehicleModel.localize,
-                                            style: Styles.headerText(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 30),
+                                            text: LocaleKeys.vehicleModel.localize,
+                                            style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                           ),
                                           ClickableWidget(
                                             onTap: () {
-      ManageVibration.vibrate();
-                                              if (state.newBrand == null ||
-                                                  (state.newBrand?.id.isEmpty ??
-                                                      true)) {
-                                                if (state.selectedBrand ==
-                                                        null ||
-                                                    (state.selectedBrand?.id
-                                                            .isEmpty ??
-                                                        true)) {
-                                                  showErrorMessage(
-                                                      context,
-                                                      context.isArabic
-                                                          ? 'يرجى اختيار ماركة سيارة'
-                                                          : 'Please select a car brand');
+                                              ManageVibration.vibrate();
+                                              if (state.newBrand == null || (state.newBrand?.id.isEmpty ?? true)) {
+                                                if (state.selectedBrand == null || (state.selectedBrand?.id.isEmpty ?? true)) {
+                                                  showErrorMessage(context, context.isArabic ? 'يرجى اختيار ماركة سيارة' : 'Please select a car brand');
                                                   return;
                                                 } else {
                                                   showAddNewModelDialog(
                                                       context: context,
-                                                      brandId: state
-                                                              .selectedBrand
-                                                              ?.id ??
-                                                          '',
-                                                      onModelAdded:
-                                                          (String modelName) {
-                                                        cubit.addNewModel(
-                                                            context: context,
-                                                            modelName:
-                                                                modelName,
-                                                            brandId: state
-                                                                    .selectedBrand
-                                                                    ?.id ??
-                                                                '',
-                                                            params:
-                                                                widget.params);
+                                                      brandId: state.selectedBrand?.id ?? '',
+                                                      onModelAdded: (String modelName) {
+                                                        cubit.addNewModel(context: context, modelName: modelName, brandId: state.selectedBrand?.id ?? '', params: widget.params);
                                                       });
                                                   return;
                                                 }
                                               }
                                               showAddNewModelDialog(
                                                   context: context,
-                                                  brandId:
-                                                      state.newBrand?.id ?? '',
-                                                  onModelAdded:
-                                                      (String modelName) {
-                                                    cubit.addNewModel(
-                                                        context: context,
-                                                        modelName: modelName,
-                                                        brandId: state
-                                                                .newBrand?.id ??
-                                                            '',
-                                                        params: widget.params);
+                                                  brandId: state.newBrand?.id ?? '',
+                                                  onModelAdded: (String modelName) {
+                                                    cubit.addNewModel(context: context, modelName: modelName, brandId: state.newBrand?.id ?? '', params: widget.params);
                                                   });
                                             },
                                             child: Text(
-                                              context.isArabic
-                                                  ? 'إضافة موديل'
-                                                  : 'Add New',
+                                              context.isArabic ? 'إضافة طراز' : 'Add New',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w300,
                                                 fontSize: 13.ts,
-                                                color:
-                                                    AppColors.SECONDARY_COLOR,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                decorationColor:
-                                                    AppColors.SECONDARY_COLOR,
+                                                color: AppColors.SECONDARY_COLOR,
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: AppColors.SECONDARY_COLOR,
                                               ),
                                             ),
                                           ),
@@ -640,117 +541,68 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       SizedBox(
                                         height: 4.hs,
                                       ),
-                                      if (state.newModel != null &&
-                                          (state.newModel?.id.isNotEmpty ??
-                                              false))
+                                      if (state.newModel != null && (state.newModel?.id.isNotEmpty ?? false))
                                         Row(
                                           children: [
                                             Expanded(
                                               child: DefaultTextFormField(
-                                                currentController: cubit
-                                                    .newModelAddedController,
-                                                fillColor: context.isDarkMode
-                                                    ? AppColors.GREY_DARK_COLOR
-                                                    : AppColors.GREYBG,
+                                                currentController: cubit.newModelAddedController,
+                                                fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                                 borderColor: Colors.transparent,
-                                                onChanged: (v) => cubit
-                                                    .formKey.currentState
-                                                    ?.validate(),
+                                                onChanged: (v) => cubit.formKey.currentState?.validate(),
                                                 hint: '',
                                                 maxLength: 14,
                                                 // label: LocaleKeys.licenseNumber.localize,
-                                                keyboardType:
-                                                    TextInputType.number,
+                                                keyboardType: TextInputType.number,
                                                 enabled: false,
                                               ),
                                             ),
                                             Sizer(),
                                             ClickableWidget(
                                               onTap: () {
-      ManageVibration.vibrate();
+                                                ManageVibration.vibrate();
                                                 cubit.removeNewModel();
                                               },
-                                              child: const Icon(
+                                              child: Icon(
                                                 Icons.close,
                                                 // size: ,
-                                                color: AppColors.PRIMARY_COLOR,
+                                                color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
                                               ),
                                             ),
                                           ],
                                         ),
-                                      if (state.newModel == null ||
-                                          (state.newModel?.id.isEmpty ?? false))
+                                      if (state.newModel == null || (state.newModel?.id.isEmpty ?? false))
                                         RegisterExpansionTile(
-                                          initialTitle:
-                                              (state.selectedModel != null ||
-                                                      (state.selectedModel?.id
-                                                              .isNotEmpty ??
-                                                          false))
-                                                  ? Label(
-                                                      text: context.isArabic
-                                                          ? state.selectedModel
-                                                                  ?.modelAr ??
-                                                              ''
-                                                          : state.selectedModel
-                                                                  ?.modelEn ??
-                                                              '',
-                                                    )
-                                                  : Label(
-                                                      text: context.isArabic
-                                                          ? 'موديل السيارة'
-                                                          : 'Vehicle Model'),
-                                          title: (state.selectedModel != null ||
-                                                  (state.selectedModel?.id
-                                                          .isNotEmpty ??
-                                                      false))
+                                          initialTitle: (state.selectedModel != null || (state.selectedModel?.id.isNotEmpty ?? false))
                                               ? Label(
-                                                  text: context.isArabic
-                                                      ? state.selectedModel
-                                                              ?.modelAr ??
-                                                          ''
-                                                      : state.selectedModel
-                                                              ?.modelEn ??
-                                                          '',
+                                                  text: context.isArabic ? state.selectedModel?.modelAr ?? '' : state.selectedModel?.modelEn ?? '',
                                                 )
-                                              : Label(
-                                                  text: context.isArabic
-                                                      ? 'موديل السيارة'
-                                                      : 'Vehicle Model'),
+                                              : Label(text: context.isArabic ? 'طراز السيارة' : 'Vehicle Model'),
+                                          title: (state.selectedModel != null || (state.selectedModel?.id.isNotEmpty ?? false))
+                                              ? Label(
+                                                  text: context.isArabic ? state.selectedModel?.modelAr ?? '' : state.selectedModel?.modelEn ?? '',
+                                                )
+                                              : Label(text: context.isArabic ? 'طراز السيارة' : 'Vehicle Model'),
                                           onChange: (Widget selectedItem) {},
                                           onSelect: (i) {
-                                            cubit.onSelectModel(
-                                                state.models?[i].id ?? '');
+                                            cubit.onSelectModel(state.models?[i].id ?? '');
                                           },
                                           length: state.models?.length ?? 0,
-                                          children: List.generate(
-                                              state.models?.length ?? 0,
-                                              (index) => Label(
-                                                  text: context.isArabic
-                                                      ? (state.models?[index]
-                                                              .modelAr ??
-                                                          '')
-                                                      : state.models?[index]
-                                                              .modelEn ??
-                                                          '')),
+                                          children: List.generate(state.models?.length ?? 0,
+                                              (index) => Label(text: context.isArabic ? (state.models?[index].modelAr ?? '') : state.models?[index].modelEn ?? '')),
                                         ),
                                     ],
                                   ),
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.yearOfProduction.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 DefaultTextFormField(
-                                  currentController:
-                                      cubit.rideVehicleProductionYearController,
-                                  fillColor: context.isDarkMode
-                                      ? AppColors.GREY_DARK_COLOR
-                                      : AppColors.GREYBG,
+                                  currentController: cubit.rideVehicleProductionYearController,
+                                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  onChanged: (v) =>
-                                      cubit.formKey.currentState?.validate(),
+                                  onChanged: (v) => cubit.formKey.currentState?.validate(),
                                   hint: '',
                                   // label: LocaleKeys.yearOfProduction.localize,
                                   keyboardType: TextInputType.number,
@@ -764,22 +616,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 const Sizer(),
                                 Label(
                                   text: LocaleKeys.plateInformation.localize,
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 30),
+                                  style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                 ),
                                 DefaultTextFormField(
-                                  currentController:
-                                      cubit.rideVehiclePlateNumberController,
+                                  currentController: cubit.rideVehiclePlateNumberController,
                                   hint: '',
-                                  fillColor: context.isDarkMode
-                                      ? AppColors.GREY_DARK_COLOR
-                                      : AppColors.GREYBG,
+                                  fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                   borderColor: Colors.transparent,
-                                  onChanged: (v)=>cubit.formKey.currentState?.validate(),
-                                  inputFormatter: [
-
-                                  ],
+                                  onChanged: (v) => cubit.formKey.currentState?.validate(),
+                                  inputFormatter: [],
                                   validator: (v) {
                                     if (v == null || v.isEmpty) {
                                       return LocaleKeys.required.localize;
@@ -788,50 +633,40 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
                                     final plateRegExp = RegExp(r'^([\u0621-\u064A]\s?){1,3}[٠-٩0-9]{1,4}$');
                                     if (!plateRegExp.hasMatch(normalized)) {
-                                      return context.isArabic?'رقم اللوحة غير صحيح (مثال: س ب ١٢٣)':'Invalid plate number (e.g. س ب 123)';
+                                      return context.isArabic ? 'رقم اللوحة غير صحيح (مثال: س ب ١٢٣)' : 'Invalid plate number (e.g. س ب 123)';
                                     }
 
                                     return null;
                                   },
                                 ),
-                                if (state.registerType == 'socket' ||
-                                    state.isShipping == true) ...[
+                                if (state.registerType == 'socket' || state.isShipping == true) ...[
                                   const Sizer(),
                                   Label(
-                                    text: LocaleKeys.favoriteCity.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 30),
+                                    text: context.isArabic ? 'المدينة المفضلة' : 'Favorite City',
+                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                   ),
                                   RegisterExpansionTile(
                                     title: Label(
-                                      text: (state.selectedGov != null &&
-                                              (state.selectedGov?.isNotEmpty ??
-                                                  false))
+                                      text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false))
                                           ? state.selectedGov ?? ''
-                                          : LocaleKeys.favoriteCity.localize,
+                                          : context.isArabic
+                                              ? 'المدينة المفضلة'
+                                              : 'Favorite City',
                                     ),
                                     initialTitle: Label(
-                                      text: (state.selectedGov != null &&
-                                              (state.selectedGov?.isNotEmpty ??
-                                                  false))
+                                      text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false))
                                           ? state.selectedGov ?? ''
-                                          : LocaleKeys.favoriteCity.localize,
+                                          : context.isArabic
+                                              ? 'المدينة المفضلة'
+                                              : 'Favorite City',
                                     ),
                                     onChange: (Widget selectedItem) {
-                                      cubit.onSelectGov(
-                                          (selectedItem as Label).text);
+                                      cubit.onSelectGov((selectedItem as Label).text);
                                       // print("Selected Item: ${(selectedItem as Label).text}");
                                     },
                                     length: state.govs?.length ?? 0,
                                     children: List.generate(
-                                        state.govs?.length ?? 0,
-                                        (index) => Label(
-                                            text: context.isArabic
-                                                ? (state.govs?[index].nameAr ??
-                                                    '')
-                                                : state.govs?[index].nameEn ??
-                                                    '')),
+                                        state.govs?.length ?? 0, (index) => Label(text: context.isArabic ? (state.govs?[index].nameAr ?? '') : state.govs?[index].nameEn ?? '')),
                                   )
                                 ],
                                 if (state.registerType == 'socket') ...[
@@ -853,67 +688,46 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   // const Sizer(),
                                   Label(
                                     text: LocaleKeys.subscriptionPlan.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 30),
+                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                   ),
                                   RegisterExpansionTile(
                                     initialTitle: Label(
-                                        text: (state.selectedPlan != null ||
-                                                (state.selectedPlan
-                                                        ?.isNotEmpty ??
-                                                    false))
+                                        text: (state.selectedPlan != null || (state.selectedPlan?.isNotEmpty ?? false))
                                             ? state.selectedPlan == 'percentage'
-                                                ? 'Percentage'
-                                                : 'Subscribe Package'
+                                                ? context.isArabic
+                                                    ? 'نظام النسبة'
+                                                    : 'Percentage'
+                                                : context.isArabic
+                                                    ? 'باقة الاشتراك'
+                                                    : 'Subscribe Package'
                                             : ''),
                                     title: Label(
-                                        text: (state.selectedPlan != null ||
-                                                (state.selectedPlan
-                                                        ?.isNotEmpty ??
-                                                    false))
+                                        text: (state.selectedPlan != null || (state.selectedPlan?.isNotEmpty ?? false))
                                             ? state.selectedPlan ?? ''
-                                            : LocaleKeys
-                                                .subscriptionPlan.localize),
+                                            : LocaleKeys.subscriptionPlan.localize),
                                     onChange: (Widget selectedItem) {
-                                      cubit.onSelectPlan(
-                                          (selectedItem as Label).text);
+                                      cubit.onSelectPlan((selectedItem as Label).text);
                                       // print("Selected Item: ${(selectedItem as Label).text}");
                                     },
                                     length: cubit.subscriptionPlans.length,
-                                    children: List.generate(
-                                        cubit.subscriptionPlans.length,
-                                        (index) => Label(
-                                            text: cubit
-                                                .subscriptionPlans[index])),
+                                    children: List.generate(cubit.subscriptionPlans.length, (index) => Label(text: context.isArabic? cubit.subscriptionPlansAr[index]: cubit.subscriptionPlans[index])),
                                   ),
                                   Label(
                                     text: LocaleKeys.pricingPerKm.localize,
-                                    style: Styles.headerText(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 30),
+                                    style: Styles.headerText(fontWeight: FontWeight.w500, fontSize: 30),
                                   ),
                                   const Sizer(),
                                   DefaultTextFormField(
-                                    currentController:
-                                        cubit.ridePricingPerKmController,
+                                    currentController: cubit.ridePricingPerKmController,
                                     hint: '',
                                     // label: LocaleKeys.pricingPerKm.localize,
-                                    onChanged: (v) =>
-                                        cubit.formKey.currentState?.validate(),
+                                    onChanged: (v) => cubit.formKey.currentState?.validate(),
                                     keyboardType: TextInputType.number,
                                     validator: (v) {
                                       if (v == null || v.isEmpty) {
                                         return LocaleKeys.required.localize;
                                       } else {
-                                        if ((num.tryParse(v) ?? 0) >
-                                                (state.costPerKm
-                                                        ?.highCostPerKm ??
-                                                    0) ||
-                                            (num.tryParse(v) ?? 0) <
-                                                (state.costPerKm
-                                                        ?.lowCostPerKm ??
-                                                    0)) {
+                                        if ((num.tryParse(v) ?? 0) > (state.costPerKm?.highCostPerKm ?? 0) || (num.tryParse(v) ?? 0) < (state.costPerKm?.lowCostPerKm ?? 0)) {
                                           return context.isArabic
                                               ? "يجب ان يكون السعر للكيلومتر بين ${state.costPerKm?.lowCostPerKm} و ${state.costPerKm?.highCostPerKm}"
                                               : 'Must be between ${state.costPerKm?.lowCostPerKm} and ${state.costPerKm?.highCostPerKm}';
@@ -926,12 +740,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   CustomSwitchListTile(
                                     title: Text(
                                       LocaleKeys.nonSmokerDriver.localize,
-                                      style: Styles.mediumText(
-                                          fontSize: 65.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: context.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black),
+                                      style: Styles.mediumText(fontSize: 65.sp, fontWeight: FontWeight.w400, color: context.isDarkMode ? Colors.white : Colors.black),
                                     ),
                                     value: state.isSmoking ?? false,
                                     onChanged: (value) async {
@@ -940,15 +749,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                                   CustomSwitchListTile(
                                     title: Text(
-                                      context.isArabic
-                                          ? "مكيف هواء"
-                                          : "Air Conditioner",
-                                      style: Styles.mediumText(
-                                          fontSize: 65.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: context.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black),
+                                      context.isArabic ? "مكيف هواء" : "Air Conditioner",
+                                      style: Styles.mediumText(fontSize: 65.sp, fontWeight: FontWeight.w400, color: context.isDarkMode ? Colors.white : Colors.black),
                                     ),
                                     value: state.hasAirCondition ?? false,
                                     onChanged: (value) async {
@@ -989,29 +791,16 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             // const Sizer(),
                             InkWell(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 state.isShipping == true
-                                    ? cubit.onLoadingRegister(
-                                        context,
-                                        widget.params.subCategoriesId[0],
-                                        widget.params.isSocket,
-                                        widget.params.isShipping)
+                                    ? cubit.onLoadingRegister(context, widget.params.subCategoriesId[0], widget.params.isSocket, widget.params.isShipping)
                                     : state.registerType == 'socket'
-                                        ? cubit.onRegister(
-                                            context,
-                                            widget.params.subCategoriesId,
-                                            widget.params.isSocket,
-                                            widget.params.isShipping)
-                                        : cubit.onNoSocketRegister(
-                                            context,
-                                            widget.params.subCategoriesId[0],
-                                            widget.params.isSocket,
-                                            widget.params.isShipping);
+                                        ? cubit.onRegister(context, widget.params.subCategoriesId, widget.params.isSocket, widget.params.isShipping)
+                                        : cubit.onNoSocketRegister(context, widget.params.subCategoriesId[0], widget.params.isSocket, widget.params.isShipping);
                               },
                               child: Container(
                                 height: 44,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
                                   color: AppColors.PRIMARY_COLOR,
                                   borderRadius: BorderRadius.circular(12),
@@ -1054,8 +843,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         context,
         BlocProvider.value(
           value: serviceLocator<RideRegisterCubit>(),
-          child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
-              builder: (context, state) {
+          child: BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
             var cubit = context.read<RideRegisterCubit>();
             return Form(
               key: cubit.modelFormKey,
@@ -1063,9 +851,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    context.isArabic
-                        ? 'سيتم اضافة الموديل للمراجعة'
-                        : 'The model will be added for review',
+                    context.isArabic ? 'سيتم اضافة الطراز للمراجعة' : 'The model will be added for review',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.red,
@@ -1076,13 +862,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                   const SizedBox(height: 20),
                   DefaultTextFormField(
                     currentController: cubit.modelNameController,
-                    fillColor: context.isDarkMode
-                        ? AppColors.GREY_DARK_COLOR
-                        : AppColors.GREYBG,
+                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                     borderColor: Colors.transparent,
-                    hint: context.isArabic
-                        ? 'اكتب اسم الموديل'
-                        : 'Write Model Name',
+                    hint: context.isArabic ? 'اكتب اسم الطراز' : 'Write Model Name',
                     // label: LocaleKeys.firstName.localize,
                     validator: (v) {
                       if (v == null || v.isEmpty) {
@@ -1101,7 +883,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'الغاء' : 'Close',
                           backColor: AppColors.SECONDARY_COLOR_DARK2,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.pop();
                             // cubit
                           }),
@@ -1111,7 +893,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'تأكيد' : 'Confirm',
                           backColor: AppColors.PRIMARY_COLOR,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (cubit.modelFormKey.currentState!.validate()) {
                               context.pop();
                               onModelAdded(cubit.modelNameController.text);
@@ -1135,8 +917,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         context,
         BlocProvider.value(
           value: serviceLocator<RideRegisterCubit>(),
-          child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
-              builder: (context, state) {
+          child: BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
             var cubit = context.read<RideRegisterCubit>();
             return Form(
               key: cubit.modelFormKey,
@@ -1144,9 +925,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    context.isArabic
-                        ? 'سيتم اضافة البراند للمراجعة'
-                        : 'The brand will be added for review',
+                    context.isArabic ? 'سيتم اضافة الماركة للمراجعة' : 'The brand will be added for review',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.red,
@@ -1157,13 +936,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                   const SizedBox(height: 20),
                   DefaultTextFormField(
                     currentController: cubit.brandNameController,
-                    fillColor: context.isDarkMode
-                        ? AppColors.GREY_DARK_COLOR
-                        : AppColors.GREYBG,
+                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                     borderColor: Colors.transparent,
-                    hint: context.isArabic
-                        ? 'اكتب اسم البراند'
-                        : 'Write Brand Name',
+                    hint: context.isArabic ? 'اكتب اسم الماركة' : 'Write Brand Name',
                     // label: LocaleKeys.firstName.localize,
                     validator: (v) {
                       if (v == null || v.isEmpty) {
@@ -1182,7 +957,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'الغاء' : 'Close',
                           backColor: AppColors.SECONDARY_COLOR_DARK2,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.pop();
                             // cubit
                           }),
@@ -1192,7 +967,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           label: context.isArabic ? 'تأكيد' : 'Confirm',
                           backColor: AppColors.PRIMARY_COLOR,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (cubit.modelFormKey.currentState!.validate()) {
                               context.pop();
                               onBrandAdded(cubit.brandNameController.text);

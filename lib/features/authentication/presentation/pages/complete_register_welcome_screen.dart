@@ -20,89 +20,95 @@ class CompleteRegisterWelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Spacer(
-            flex: 2,
-          ),
-          Expanded(
-            flex: 5,
-            child: Image.asset(
-              context.isDarkMode ? Assets.logo : Assets.logoWithBlackText,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (v){
+        context.go(Routes.HOME);
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            const Spacer(
+              flex: 2,
             ),
-          ),
-          const Spacer(
-            flex: 2,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(
-                color: context.isDarkMode
-                    ? AppColors.whiteColor
-                    : AppColors.PRIMARY_COLOR,
-                width: context.isDarkMode ? 2 : 0,
+            Expanded(
+              flex: 5,
+              child: Image.asset(
+                context.isDarkMode ? Assets.logo : Assets.logoWithBlackText,
               ),
             ),
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Container(
+            const Spacer(
+              flex: 2,
+            ),
+            Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: context.isDarkMode
+                      ? AppColors.whiteColor
+                      : AppColors.PRIMARY_COLOR,
+                  width: context.isDarkMode ? 2 : 0,
+                ),
               ),
-              // margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Image.asset(
-                Assets.loginGIF,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                // margin: const EdgeInsets.symmetric(horizontal: 16),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: Image.asset(
+                  Assets.loginGIF,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const Spacer(
+              flex: 2,
+            ),
+            Text(
+              LocaleKeys.congratulations.localize,
+              style: Styles.headerText(
+                color: AppColors.SECONDARY_COLOR,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              giftMessageEntity,
+              textAlign: TextAlign.center,
+              style: Styles.mediumText(),
+            ),
+            const Spacer(
+              flex: 2,
+            ),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * .4,
+              height: 50,
+              child: DefaultButton(
+                backgroundColor: context.isDarkMode
+                    ? AppColors.whiteColor
+                    : AppColors.PRIMARY_COLOR,
                 width: double.infinity,
-                fit: BoxFit.cover,
+                label: LocaleKeys.next.localize,
+                labelStyle: TextStyle(
+                  fontSize: 32.sp,
+                  color: context.isDarkMode
+                      ? AppColors.PRIMARY_COLOR
+                      : AppColors.AUTH_CONTAINER_COLOR,
+                ),
+                onPressed: () {
+                  ManageVibration.vibrate();
+                  context.go(Routes.HOME);
+                },
               ),
             ),
-          ),
-          const Spacer(
-            flex: 2,
-          ),
-          Text(
-            LocaleKeys.congratulations.localize,
-            style: Styles.headerText(
-              color: AppColors.SECONDARY_COLOR,
+            const Spacer(
+              flex: 2,
             ),
-          ),
-          const Spacer(),
-          Text(
-            giftMessageEntity,
-            textAlign: TextAlign.center,
-            style: Styles.mediumText(),
-          ),
-          const Spacer(
-            flex: 2,
-          ),
-          SizedBox(
-            width: MediaQuery.sizeOf(context).width * .4,
-            height: 50,
-            child: DefaultButton(
-              backgroundColor: context.isDarkMode
-                  ? AppColors.whiteColor
-                  : AppColors.PRIMARY_COLOR,
-              width: double.infinity,
-              label: LocaleKeys.next.localize,
-              labelStyle: TextStyle(
-                fontSize: 32.sp,
-                color: context.isDarkMode
-                    ? AppColors.PRIMARY_COLOR
-                    : AppColors.AUTH_CONTAINER_COLOR,
-              ),
-              onPressed: () {
-                ManageVibration.vibrate();
-                context.go(Routes.HOME);
-              },
-            ),
-          ),
-          const Spacer(
-            flex: 2,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

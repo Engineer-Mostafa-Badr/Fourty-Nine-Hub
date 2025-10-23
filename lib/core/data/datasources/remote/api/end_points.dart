@@ -81,6 +81,7 @@ class EndPoints {
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/oauth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
+  static const resendRegisterationOTP = '/auth/verify/resend-email';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh-token';

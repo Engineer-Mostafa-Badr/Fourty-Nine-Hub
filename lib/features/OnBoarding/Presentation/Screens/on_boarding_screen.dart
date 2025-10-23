@@ -116,23 +116,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return Row(
       children: [
         const Spacer(),
-        InkWell(
-          onTap: () {
-            ManageVibration.vibrate();
-            CacheManager.isShowOnboarding(true);
-            context.go(Routes.HOME);
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const FirstLoginScreen()));
-          },
-          child: Label(
-            text: LocaleKeys.skip.localize,
-            style: Styles.headerText(
-              color: isDarkMode
-                  ? AppColors.AUTH_CONTAINER_COLOR
-                  : AppColors.PRIMARY_COLOR,
-            ),
+        Label(
+          text: '',
+          style: Styles.headerText(
+            color: isDarkMode
+                ? AppColors.AUTH_CONTAINER_COLOR
+                : AppColors.PRIMARY_COLOR,
           ),
         ),
       ],
@@ -183,30 +172,56 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       OnBoardingCubit cubit, OnBoardingState state, bool isDarkTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: AppButton(
-        backColor: isDarkTheme ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-        onPressed: () {
-          ManageVibration.vibrate();
-          _startAutoScroll(); // Reset timer on button press
-          final currentIndex = state.currentIndex;
-          if (currentIndex < cubit.images.length - 1) {
-            // Just animate to next page, onPageChanged will handle the state update
-            controller.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-            );
-          } else {
-            CacheManager.isShowOnboarding(true);
-            context.go(Routes.HOME);
-          }
-        },
-        label: (state.currentIndex < cubit.images.length - 1)
-            ? LocaleKeys.next.localize
-            : LocaleKeys.start.localize,
-        style: Styles.headerText(
-            color: isDarkTheme
-                ? AppColors.PRIMARY_COLOR
-                : AppColors.AUTH_CONTAINER_COLOR),
+      child: Column(
+        children: [
+          AppButton(
+            backColor: isDarkTheme ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+            onPressed: () {
+              ManageVibration.vibrate();
+              _startAutoScroll(); // Reset timer on button press
+              final currentIndex = state.currentIndex;
+              if (currentIndex < cubit.images.length - 1) {
+                // Just animate to next page, onPageChanged will handle the state update
+                controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                );
+              } else {
+                CacheManager.isShowOnboarding(true);
+                context.go(Routes.HOME);
+              }
+            },
+            label: (state.currentIndex < cubit.images.length - 1)
+                ? LocaleKeys.next.localize
+                : LocaleKeys.start.localize,
+            style: Styles.headerText(
+                color: isDarkTheme
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.AUTH_CONTAINER_COLOR),
+          ),
+          if( (state.currentIndex < cubit.images.length - 1)) SizedBox(height: 25,),
+         if( (state.currentIndex < cubit.images.length - 1)) InkWell(
+            onTap: () {
+              ManageVibration.vibrate();
+              CacheManager.isShowOnboarding(true);
+              context.go(Routes.HOME);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const FirstLoginScreen()));
+            },
+            child: Label(
+              text: LocaleKeys.skip.localize,
+              style: Styles.headerText(
+                color: context.isDarkMode
+                    ? AppColors.AUTH_CONTAINER_COLOR
+                    : AppColors.PRIMARY_COLOR,
+                decoration: TextDecoration.underline,
+                decorationThickness: 1
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

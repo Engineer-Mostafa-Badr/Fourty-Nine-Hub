@@ -67,7 +67,7 @@ class AuthInterceptor extends Interceptor {
     });
 
     // Handle 504 Gateway Timeout - Show maintenance screen
-    if (err.response?.statusCode == 504) {
+    if (err.response?.statusCode == 504||err.response?.statusCode==502) {
       LoggingHelper.warning(
           '🔐 AuthInterceptor: 504 Gateway Timeout detected - Server maintenance mode');
       // The error will be passed to the caller, which will handle showing maintenance screen
