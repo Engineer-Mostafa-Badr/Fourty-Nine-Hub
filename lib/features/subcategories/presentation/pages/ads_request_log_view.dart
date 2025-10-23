@@ -6,6 +6,7 @@ import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../ads_feature/ad_requests/domain/entities/requests_log_by_main_category_entity.dart';
 import '../cubit/subcategories_cubit.dart';
 import 'ads_request_log_card.dart';
 import '../../../../res/style/styles.dart';
@@ -18,10 +19,12 @@ class AdsRequestLogView extends StatefulWidget {
     super.key,
     required this.mainCategoryId,
     required this.isFloatingButtonVisible,
+    this.selectedSubCategoryId,
   });
 
   final String mainCategoryId;
   final void Function(bool) isFloatingButtonVisible;
+  final String? selectedSubCategoryId;
 
   @override
   State<AdsRequestLogView> createState() => _AdsRequestLogViewState();
@@ -64,10 +67,30 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
       if (controller.isLoadingRequestsLogByMainCategory == true) {
         return const CustomLoadingSearchWidget();
       }
-      if (controller.requestsLogByMainCategory.isEmpty) {
+
+      // Filter request logs by selected subcategory if provided
+      List<RequestsLogByMainCategoryEntity> filteredRequestLogs =
+          controller.requestsLogByMainCategory;
+      if (widget.selectedSubCategoryId != null &&
+          widget.selectedSubCategoryId!.isNotEmpty) {
+        filteredRequestLogs = controller.requestsLogByMainCategory
+            .where((requestLog) =>
+                requestLog.subCategoryId == widget.selectedSubCategoryId)
+            .toList();
+      }
+
+      if (filteredRequestLogs.isEmpty) {
+        // Show different message based on whether filtering by subcategory
+        String emptyMessage = widget.selectedSubCategoryId != null &&
+                widget.selectedSubCategoryId!.isNotEmpty
+            ? LocaleKeys.noRequests
+                .localize // "لا توجد طلبات" when filtered by subcategory
+            : LocaleKeys
+                .noRequests.localize; // "لا توجد طلبات" when no requests at all
+
         return Center(
           child: Label(
-            text: LocaleKeys.noRequests.localize,
+            text: emptyMessage,
             style: Styles.headerText(
               fontSize: 40,
               color: context.isDarkMode
@@ -87,11 +110,10 @@ class _AdsRequestLogViewState extends State<AdsRequestLogView> {
             .getRequestsLogByMainCategory(widget.mainCategoryId),
         banners: bannersList,
         items: List.generate(
-          controller.requestsLogByMainCategory.length,
+          filteredRequestLogs.length,
           (i) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: AdsRequestLogCard(
-                requestLog: controller.requestsLogByMainCategory[i]),
+            child: AdsRequestLogCard(requestLog: filteredRequestLogs[i]),
           ),
         ),
       );

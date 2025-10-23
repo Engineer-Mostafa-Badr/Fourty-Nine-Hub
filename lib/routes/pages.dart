@@ -1035,7 +1035,7 @@ class AppPages {
                                       serviceLocator<AdvertisementCubit>(),
                                 ),
                               ],
-                              child: AdDetailsView(payload: state.extra),
+                              child: AdDetailsView(id: state.extra.toString()),
                             )),
                       ),
                       GoRoute(
@@ -2922,7 +2922,8 @@ class AppPages {
                       name: Routes.ALLMEALCATEGORIES,
                       pageBuilder: (context, state) {
                         // Get the existing RestaurantsCubit from parent context
-                        final restaurantsCubit = context.read<RestaurantsCubit>();
+                        final restaurantsCubit =
+                            context.read<RestaurantsCubit>();
                         return customTransition(
                           context,
                           state,
@@ -4735,11 +4736,12 @@ class AppPages {
                           BlocProvider(
                             create: (_) => ViewAllPickMeCubit(
                               viewAllPickMeUseCase:
-                              serviceLocator<ViewAllPickMeUseCase>(),
+                                  serviceLocator<ViewAllPickMeUseCase>(),
                             ),
                           ),
                           BlocProvider(
-                            create: (_) =>serviceLocator<ViewAllTripJoinCubit>(),
+                            create: (_) =>
+                                serviceLocator<ViewAllTripJoinCubit>(),
                           ),
                           BlocProvider<DestGetLatAndLongCubit>(
                             create: (context) => DestGetLatAndLongCubit(

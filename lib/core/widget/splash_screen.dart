@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/device_id.dart';
+import 'package:fourtyninehub/core/widget/maintenance_screen.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
@@ -25,6 +26,7 @@ import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../routes/routes.dart';
+import '../error/failure.dart';
 import '../utils/shared_pref.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -35,8 +37,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   bool _hasNavigated = false;
+  bool _showMaintenanceScreen = false;
 
   @override
   void initState() {
@@ -63,7 +65,8 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     _hasNavigated = true;
     print("🚀 SplashScreen setting _hasNavigated = true");
-    final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+    final currentLocation =
+        GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
     print("🚀 currentLocation = $currentLocation");
 
     String? accessToken = await CacheManager.getAccessToken();
@@ -71,9 +74,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final isActivate = await CacheManager.getActivation() ?? false;
     final isShowOnboarding = await CacheManager.getShowOnboarding();
     String nextRoute;
-    serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
+    serviceLocator<Dio>().options.headers['Authorization'] =
+        'Bearer $accessToken';
 
-    if(context.isUserLoggedIn!=true){
+    if (context.isUserLoggedIn != true) {
       print("context.isUserLoggedIn1 ${context.isUserLoggedIn}");
       if (!isShowOnboarding) {
         nextRoute = Routes.ChooseLangScreen;
@@ -83,24 +87,32 @@ class _SplashScreenState extends State<SplashScreen> {
 
       print('Navigating to: $nextRoute');
 
-      if (mounted&&(currentLocation!=nextRoute)) {
+      if (mounted && (currentLocation != nextRoute)) {
         context.go(nextRoute);
       }
       return;
-    }else
-    {
-      var languageData = await serviceLocator<ApiConsumer>().get('/settings');
-
+    } else {
       var result = await serviceLocator<ApiConsumer>().get('/settings');
-      result.fold((failure){
+      result.fold((failure) {
+        // Check if it's a 504 error
+        if (failure is ServerFailure && failure.statusCode == 504) {
+          setState(() {
+            _showMaintenanceScreen = true;
+          });
+          return;
+        }
       }, (data) async {
         print("data['data']['isLoggedIn'] $data");
 
-        if(data['data']['isLoggedIn']==true){
-          var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
-          languageData.fold((failure){
-          }, (data) async {
-            changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: context);
+        if (data['data']['isLoggedIn'] == true) {
+          var languageData =
+              await serviceLocator<ApiConsumer>().get('/users/settings/app');
+          languageData.fold((failure) {}, (data) async {
+            changeLang(
+                locale: data['data']['appLanguage'] == 'en'
+                    ? Locales.english
+                    : Locales.arabic,
+                context: context);
           });
           print("No Expiration");
           context.read<UserCubit>().attachToken();
@@ -108,9 +120,13 @@ class _SplashScreenState extends State<SplashScreen> {
           context.read<CreatePostCubit>().loadData();
           context.read<SecretsCubit>().getAllSecrets();
           context.read<CustomPageCubit>().fetchActivate();
-          context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+          context
+              .read<GetUnreadNotificationsCountCubit>()
+              .getUnreadNotificationsCount();
           context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-          context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+          context
+              .read<FloatingNavigatorCubit>()
+              .getEnableFloatingNavigatorStatus();
           context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
           context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
           if (!isShowOnboarding) {
@@ -123,27 +139,35 @@ class _SplashScreenState extends State<SplashScreen> {
 
           print('Navigating to: $nextRoute');
 
-          if (mounted&&(currentLocation!=nextRoute)) {
+          if (mounted && (currentLocation != nextRoute)) {
             context.go(nextRoute);
           }
-        }else{
+        } else {
           print("isAccessTokenExpired");
-          UserTokensEntity? tokens = await _refreshToken(refreshToken??'');
-          print("tokens !=null ${tokens !=null}");
-          if(tokens !=null){
-            var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
-            languageData.fold((failure){
-            }, (data) async {
-              changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: context);
+          UserTokensEntity? tokens = await _refreshToken(refreshToken ?? '');
+          print("tokens !=null ${tokens != null}");
+          if (tokens != null) {
+            var languageData =
+                await serviceLocator<ApiConsumer>().get('/users/settings/app');
+            languageData.fold((failure) {}, (data) async {
+              changeLang(
+                  locale: data['data']['appLanguage'] == 'en'
+                      ? Locales.english
+                      : Locales.arabic,
+                  context: context);
             });
             context.read<UserCubit>().attachToken();
             context.read<UserCubit>().getUser();
             context.read<CreatePostCubit>().loadData();
             context.read<SecretsCubit>().getAllSecrets();
             context.read<CustomPageCubit>().fetchActivate();
-            context.read<GetUnreadNotificationsCountCubit>().getUnreadNotificationsCount();
+            context
+                .read<GetUnreadNotificationsCountCubit>()
+                .getUnreadNotificationsCount();
             context.read<FloatingNavigatorCubit>().getFloatingNavigatorStatus();
-            context.read<FloatingNavigatorCubit>().getEnableFloatingNavigatorStatus();
+            context
+                .read<FloatingNavigatorCubit>()
+                .getEnableFloatingNavigatorStatus();
             context.read<ChoiceRulerCubit>().getChoiceRulerStatus();
             context.read<ChoiceRulerCubit>().getChoiceRulerEnabledStatus();
 
@@ -157,10 +181,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
             print('Navigating to: $nextRoute');
 
-            if (mounted&&(currentLocation!=nextRoute)) {
+            if (mounted && (currentLocation != nextRoute)) {
               context.go(nextRoute);
             }
-          }else{
+          } else {
             final prefs = await SharedPreferences.getInstance();
             await prefs.setBool("ISLOGIN", false);
 
@@ -177,18 +201,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
             print('Navigating to: $nextRoute');
 
-            if (mounted&&(currentLocation!=nextRoute)) {
+            if (mounted && (currentLocation != nextRoute)) {
               context.go(nextRoute);
             }
           }
-
         }
       });
     }
-
-
   }
-
 
   Future<UserTokensEntity?> _refreshToken(String token) async {
     String deviceId = await getDeviceId();
@@ -196,39 +216,38 @@ class _SplashScreenState extends State<SplashScreen> {
       print('🔄 AuthInterceptor: Calling refresh token API From Splash');
       final response = await serviceLocator<Dio>().post(
         "https://49backend.com/api/v1/auth/refresh-token",
-        data: {
-          'refreshToken': token,
-          'deviceId': deviceId
-        },
+        data: {'refreshToken': token, 'deviceId': deviceId},
         options: Options(
           headers: {
             "x-api-key":
-            "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
+                "2c5381952acd7c2d530e6c656d2f6d94142f4f3e84c1c7d2b48dabdd976b0e06",
             "Content-Type": "application/json",
           },
         ),
       );
       final newAccessToken = response.data['data']['accessToken'] as String;
-      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer ${newAccessToken??''}';
-      print("serviceLocator<Dio>().options.headers['Authorization']1 ${serviceLocator<Dio>().options.headers['Authorization']}");
+      serviceLocator<Dio>().options.headers['Authorization'] =
+          'Bearer ${newAccessToken ?? ''}';
+      print(
+          "serviceLocator<Dio>().options.headers['Authorization']1 ${serviceLocator<Dio>().options.headers['Authorization']}");
       Future.delayed(Duration(seconds: 4));
 
-      if(response.statusCode != 200) {
+      if (response.statusCode != 200) {
         print("response.statusCode ${response.statusCode}");
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool("ISLOGIN", false);
         return null;
       }
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         print("response.statusCode ${response.statusCode}");
         final accessToken = response.data['data']['accessToken'] as String;
-        serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
-        print("serviceLocator<Dio>().options.headers['Authorization'] ${serviceLocator<Dio>().options.headers['Authorization']}");
+        serviceLocator<Dio>().options.headers['Authorization'] =
+            'Bearer $accessToken';
+        print(
+            "serviceLocator<Dio>().options.headers['Authorization'] ${serviceLocator<Dio>().options.headers['Authorization']}");
         Future.delayed(Duration(seconds: 1));
-
       }
-
 
       final accessToken = response.data['data']['accessToken'] as String;
       final refreshToken = response.data['data']['refreshToken'] as String;
@@ -236,15 +255,18 @@ class _SplashScreenState extends State<SplashScreen> {
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
-      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
+      serviceLocator<Dio>().options.headers['Authorization'] =
+          'Bearer $accessToken';
 
-      print('🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
+      print(
+          '🔐 AuthInterceptor: New tokens received - Access: ${accessToken.substring(0, 10)}..., Refresh: ${refreshToken.substring(0, 10)}...');
 
       // Save both tokens to cache
       await CacheManager.saveAccessToken(accessToken);
       await CacheManager.saveRefreshToken(refreshToken);
       await Storage.setRefreshToken(refreshToken);
-      serviceLocator<Dio>().options.headers['Authorization'] = 'Bearer $accessToken';
+      serviceLocator<Dio>().options.headers['Authorization'] =
+          'Bearer $accessToken';
 
       return newToken;
     } catch (e) {
@@ -265,9 +287,13 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    // Show maintenance screen if 504 error occurred
+    if (_showMaintenanceScreen) {
+      return const MaintenanceScreen();
+    }
+
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -278,67 +304,68 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         body: BlocBuilder<ThemeCubit, ThemeStates>(
-            builder: (BuildContext context, theme) {
-          var themeCubit = context.read<ThemeCubit>();
-          return SafeArea(
-            child: Center(
-              child: Column(
-                children: [
-                  const Spacer(),
-                  Expanded(
-                    flex: 5,
-                    child: Image.asset(
-                      themeCubit.isDarkTheme
-                          ? Assets.logo
-                          : Assets.logoWithBlackText,
+          builder: (BuildContext context, theme) {
+            var themeCubit = context.read<ThemeCubit>();
+            return SafeArea(
+              child: Center(
+                child: Column(
+                  children: [
+                    const Spacer(),
+                    Expanded(
+                      flex: 5,
+                      child: Image.asset(
+                        themeCubit.isDarkTheme
+                            ? Assets.logo
+                            : Assets.logoWithBlackText,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'Welcome to 49 HUB Super App',
-                    style: TextStyle(
-                      color: themeCubit.isDarkTheme
-                          ? AppColors.whiteColor
-                          : AppColors.PRIMARY_COLOR,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Tangerine',
+                    const Spacer(),
+                    Text(
+                      'Welcome to 49 HUB Super App',
+                      style: TextStyle(
+                        color: themeCubit.isDarkTheme
+                            ? AppColors.whiteColor
+                            : AppColors.PRIMARY_COLOR,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Tangerine',
+                      ),
                     ),
-                  ),
-                  const Text(
-                    'A L L   Y O U   N E E D',
-                    style: TextStyle(
-                      color: AppColors.SECONDARY_COLOR,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Tangerine',
+                    const Text(
+                      'A L L   Y O U   N E E D',
+                      style: TextStyle(
+                        color: AppColors.SECONDARY_COLOR,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Tangerine',
+                      ),
                     ),
-                  ),
-                  const Spacer(flex: 3),
-                  Label(
-                    text: '© 49 HUB FOR PROGRAMMING',
-                    style: Styles.mediumText(
-                      color: themeCubit.isDarkTheme
-                          ? AppColors.whiteColor
-                          : AppColors.PRIMARY_COLOR,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24,
+                    const Spacer(flex: 3),
+                    Label(
+                      text: '© 49 HUB FOR PROGRAMMING',
+                      style: Styles.mediumText(
+                        color: themeCubit.isDarkTheme
+                            ? AppColors.whiteColor
+                            : AppColors.PRIMARY_COLOR,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                      ),
                     ),
-                  ),
-                  Label(
-                    text: 'V1.0.5 - All rights reserved 2025',
-                    style: Styles.mediumText(
-                      color: AppColors.GREY_DARK_COLOR,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
+                    Label(
+                      text: 'V1.0.5 - All rights reserved 2025',
+                      style: Styles.mediumText(
+                        color: AppColors.GREY_DARK_COLOR,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  const Spacer(flex: 2),
-                ],
+                    const Spacer(flex: 2),
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }

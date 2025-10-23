@@ -19,11 +19,9 @@ import '../../../ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import '../../../ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import '../../../ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import '../../../ads_feature/ads/presentation/widgets/request_button.dart';
-import '../../../ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../widgets/are_you_sure_delete_ad_widget.dart';
-import '../widgets/build_tag_ads_widget.dart';
 import '../widgets/image_ads_widget.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../service_locator/service_locator.dart';
@@ -47,12 +45,14 @@ class MyAdCard extends StatefulWidget {
     required this.onRemoveFav,
     this.deleteAd,
     this.showSubCategory = true,
+    this.onRefresh,
   });
 
   final Function(String) onFav;
   final Function(String) onRemoveFav;
   final Function(String)? deleteAd;
   final bool showSubCategory;
+  final VoidCallback? onRefresh;
 
   @override
   State<MyAdCard> createState() => _MyAdCardState();
@@ -64,9 +64,6 @@ class _MyAdCardState extends State<MyAdCard> {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
     print(userId);
     print(widget.item.userId);
-    List<CreateAdEntity> details = widget.item.details
-        .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
-        .toList();
     return GlobalCard(
       subcategoryId: widget.item.subCategoryId ?? '',
       phone: widget.item.phone ?? "",
@@ -81,12 +78,17 @@ class _MyAdCardState extends State<MyAdCard> {
             setState(() {
               widget.item.views = (widget.item.views ?? 0) + 1;
             });
-            context.push(Routes.ADdetails, extra: widget.item.id);
+            await context.push(Routes.ADdetails, extra: widget.item.id);
           } else {
-            context.push(Routes.ADdetails, extra: widget.item.id);
+            await context.push(Routes.ADdetails, extra: widget.item.id);
           }
         } else {
-          context.push(Routes.ADdetails, extra: widget.item.id);
+          await context.push(Routes.ADdetails, extra: widget.item.id);
+        }
+
+        // Refresh data when returning from ad details view
+        if (widget.onRefresh != null) {
+          widget.onRefresh!();
         }
       },
       isButtonEnabled: SubscriptionStatus.notSubscribed.status !=

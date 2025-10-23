@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/requests_log_by_main_category_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_request_list_view_item.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -16,14 +18,44 @@ class MarriageRequest extends StatelessWidget {
     required ScrollController scrollController,
     required this.controller,
     required this.state,
+    this.selectedSubCategoryId,
   }) : _scrollController = scrollController;
 
   final ScrollController _scrollController;
   final SubcategoriesCubit controller;
   final SubcategoriesState state;
+  final String? selectedSubCategoryId;
 
   @override
   Widget build(BuildContext context) {
+    // Filter request logs by selected subcategory if provided
+    List<RequestsLogByMainCategoryEntity> filteredRequestLogs =
+        state.requestsLogByMainCategory ?? [];
+    if (selectedSubCategoryId != null && selectedSubCategoryId!.isNotEmpty) {
+      filteredRequestLogs = (state.requestsLogByMainCategory ?? [])
+          .where(
+              (requestLog) => requestLog.subCategoryId == selectedSubCategoryId)
+          .toList();
+    }
+
+    // Show empty state if filtered list is empty
+    if (filteredRequestLogs.isEmpty &&
+        selectedSubCategoryId != null &&
+        selectedSubCategoryId!.isNotEmpty) {
+      return Center(
+        child: Label(
+          text: LocaleKeys.noRequests.localize,
+          style: Styles.headerText(
+            fontSize: 40,
+            color: context.isDarkMode
+                ? Colors.white.withValues(alpha: 178)
+                : Colors.black.withValues(alpha: 178),
+            height: 1.60,
+          ),
+        ),
+      );
+    }
+
     return OlxPaginationWidget(
       scrollController: _scrollController,
       itemsPerPage: 2,
@@ -35,45 +67,14 @@ class MarriageRequest extends StatelessWidget {
       },
       banners: bannersList,
       items: List.generate(
-        state.adsRequestsLog!.length,
-            (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+        filteredRequestLogs.length,
+        (index) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MarriageRequestListViewItem(
-                marriageAds: state.adsRequestsLog![index],
-                state: state,
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10.0),
-                child: Label(
-                  text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
-                  style: Styles.headerText(
-                    fontSize: 28,
-                    color: const Color(0xFFFF3308),
-                    height: 1.57,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: state.adsRequestsLog!.length,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MarriageRequestListViewItem(
-                marriageAds: state.adsRequestsLog![index],
+                marriageAds: filteredRequestLogs[index],
                 state: state,
               ),
               Padding(

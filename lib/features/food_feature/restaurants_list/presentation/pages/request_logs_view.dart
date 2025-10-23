@@ -87,23 +87,25 @@ class _RestaurantRequestLogsScreenState
       }
 
       if (!state.isLoading) {
-        return OlxPaginationWidget(
-          scrollController: _scrollController,
-          itemsPerPage: 2,
-          loadPage: (page) async {},
-          banners: bannersList,
-          items: List.generate(
-            controller.reqLogs.length,
-            (index) {
-              final request = controller.reqLogs[index];
-              return Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: TripLogRequestCard(
-                  orderData: request,
-                  index: index,
-                ),
-              );
-            },
+        return Expanded(
+          child: OlxPaginationWidget(
+            scrollController: _scrollController,
+            itemsPerPage: 2,
+            loadPage: (page) async {},
+            banners: bannersList,
+            items: List.generate(
+              controller.reqLogs.length,
+              (index) {
+                final request = controller.reqLogs[index];
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: TripLogRequestCard(
+                    orderData: request,
+                    index: index,
+                  ),
+                );
+              },
+            ),
           ),
         );
         /* return ListView.separated(
