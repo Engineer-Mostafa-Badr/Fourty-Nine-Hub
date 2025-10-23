@@ -58,16 +58,40 @@ post_install do |installer|
       ]
       # Exclude arm64 for simulator (optional, fixes Apple Silicon sim issues)
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      # Exclude arm64 for DeepAR framework on simulator
+      if target.name == 'deepar_flutter_plus'
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      end
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
 
-      # Optional: skip embedding if needed
-#       if target.name == 'deepar_flutter_plus'
-#         config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -framework "DeepAR"'
-#         config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
-#           '$(inherited)',
-#           '$(PODS_ROOT)/deepar_flutter_plus/ios'
-#         ]
-#       end
+      # Fix DeepAR framework linking
+      if target.name == 'deepar_flutter_plus'
+        config.build_settings['OTHER_LDFLAGS'] = '$(inherited) -framework "DeepAR"'
+        config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
+          '$(inherited)',
+          '$(PODS_ROOT)/deepar_flutter_plus/ios'
+        ]
+        config.build_settings['LD_RUNPATH_SEARCH_PATHS'] = [
+          '$(inherited)',
+          '@executable_path/Frameworks',
+          '@loader_path/Frameworks'
+        ]
+        config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
+      end
+      
+      # Fix Mantle framework header inclusion issues
+      if target.name == 'Mantle'
+        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+      end
+      
+      # Ensure frameworks are properly embedded for all targets
+      if target.name == 'Runner'
+        config.build_settings['LD_RUNPATH_SEARCH_PATHS'] = [
+          '$(inherited)',
+          '@executable_path/Frameworks',
+          '@loader_path/Frameworks'
+        ]
+      end
     end
 
     # Prevent duplicate-embed from deepar_flutter (your original intent)

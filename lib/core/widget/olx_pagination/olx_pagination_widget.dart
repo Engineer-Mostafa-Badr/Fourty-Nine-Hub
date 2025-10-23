@@ -132,8 +132,39 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
                   child: Center(child: CircularProgressIndicator()),
                 ),
               ),
-          ],
-        ));
+            ),
+          );
+        }
+
+        // Add items for this page
+        for (int i = 0; i < widget.itemsPerPage; i++) {
+          final itemIndex = page * widget.itemsPerPage + i;
+          if (itemIndex < widget.items.length) {
+            allWidgets.add(widget.items[itemIndex]);
+          }
+        }
+      }
+
+      // Loading indicator
+      if (_isLoading) {
+        allWidgets.add(
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        );
+      }
+
+      return allWidgets;
+    }
+
+    // Return a simple Column for embedded usage
+    return SingleChildScrollView(
+      controller: widget.scrollController,
+      child: Column(
+        children: buildItemsList(),
+      ),
+    );
   }
 }
 

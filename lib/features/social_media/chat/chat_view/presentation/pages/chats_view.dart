@@ -43,25 +43,48 @@ import '../widgets/new_chat_card.dart';
 import 'archived_chats_view.dart';
 
 Future<bool?> showDialogConfirmDeleted(BuildContext context) async {
-  return await showAnimatedDialog(context, CupertinoAlertDialog(
-    title:  Text(context.isArabic ? "حذف محادثات" : "Delete Chats", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-    content: Text( context.isArabic ? "هل تريد حذف هذه المحادثات؟" : "Do you want to delete these chats?", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey),),
-    actions: [
-      TextButton(
-          onPressed: () {
-            ManageVibration.vibrate();
-            context.pop();
+  return await showAnimatedDialog(
+    context,
+    CupertinoAlertDialog(
+      title: Text(
+        context.isArabic ? "حذف محادثات" : "Delete Chats",
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      ),
+      content: Text(
+        context.isArabic
+            ? "هل تريد حذف هذه المحادثات؟"
+            : "Do you want to delete these chats?",
+        style: const TextStyle(
+            fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              ManageVibration.vibrate();
+              context.pop();
             },
-          child: Text(context.isArabic ? "لا" : "No", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.grey),)),
-      TextButton(
-          onPressed: () {
-            ManageVibration.vibrate();
-            context.pop();
-            serviceLocator<ConversationsCubit>().deleteConversations();
-          },
-          child: Text(context.isArabic ? "نعم" : "Yes", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.PRIMARY_COLOR_DARK),)),
-    ],
-  ),
+            child: Text(
+              context.isArabic ? "لا" : "No",
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey),
+            )),
+        TextButton(
+            onPressed: () {
+              ManageVibration.vibrate();
+              context.pop();
+              serviceLocator<ConversationsCubit>().deleteConversations();
+            },
+            child: Text(
+              context.isArabic ? "نعم" : "Yes",
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.PRIMARY_COLOR_DARK),
+            )),
+      ],
+    ),
   );
 }
 
@@ -78,18 +101,27 @@ selectedChatAppBar() {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    serviceLocator<ConversationsCubit>().selectedSocialConversation.isNotEmpty
+                    serviceLocator<ConversationsCubit>()
+                            .selectedSocialConversation
+                            .isNotEmpty
                         ? IconButton(
                             onPressed: () {
                               ManageVibration.vibrate();
-                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
+                              serviceLocator<ConversationsCubit>()
+                                  .clearSelectedSocialConversations();
                             },
                             icon: const Icon(Icons.arrow_back))
                         : const SizedBox(),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(
-                        FormatNumbers().convertNumberToLocalizedString(context.read<ConversationsCubit>().selectedSocialConversation.length.toString(), isArabic: context.isArabic),
+                        FormatNumbers().convertNumberToLocalizedString(
+                            context
+                                .read<ConversationsCubit>()
+                                .selectedSocialConversation
+                                .length
+                                .toString(),
+                            isArabic: context.isArabic),
                         style: Styles.mediumText(
                             fontSize: 40,
                             color: context.isDarkMode
@@ -104,9 +136,12 @@ selectedChatAppBar() {
                           onPressed: () async {
                             // await context.read<ConversationsCubit>().pinAndUnpinChat();
                             ManageVibration.vibrate();
-                            await serviceLocator<ConversationsCubit>().togglePinnedSocialConversations();
+                            await serviceLocator<ConversationsCubit>()
+                                .togglePinnedSocialConversations();
                             final archivedChatsCount =
-                                serviceLocator<ConversationsCubit>().selectedSocialConversation.length;
+                                serviceLocator<ConversationsCubit>()
+                                    .selectedSocialConversation
+                                    .length;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: const Color(0xff1A1A1A),
@@ -129,7 +164,8 @@ selectedChatAppBar() {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
+                                              text:
+                                                  "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
                                               // العدد
                                               style: const TextStyle(
                                                 color: Colors.white,
@@ -159,7 +195,8 @@ selectedChatAppBar() {
                                   // Set "Undo" text color to gray
                                   onPressed: () async {
                                     ManageVibration.vibrate();
-                                    await serviceLocator<ConversationsCubit>().togglePinnedSocialConversations();
+                                    await serviceLocator<ConversationsCubit>()
+                                        .togglePinnedSocialConversations();
                                   },
                                 ),
                                 duration: const Duration(seconds: 3),
@@ -167,11 +204,14 @@ selectedChatAppBar() {
                             );
 
                             Future.delayed(const Duration(seconds: 3), () {
-                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
+                              serviceLocator<ConversationsCubit>()
+                                  .clearSelectedSocialConversations();
                             });
                           },
                           icon: const Icon(Icons.push_pin_outlined),
-                          color: context.isDarkMode ? Colors.white : AppColors.grey,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.grey,
                         ),
                         IconButton(
                           onPressed: () async {
@@ -181,16 +221,21 @@ selectedChatAppBar() {
                           },
                           icon: Icon(
                             Icons.delete_forever_outlined,
-                            color: context.isDarkMode ? Colors.white : AppColors.grey,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.grey,
                           ),
                         ),
                         IconButton(
                           onPressed: () async {
                             // await context.read<ConversationsCubit>().changeMuteChat();
                             ManageVibration.vibrate();
-                            await serviceLocator<ConversationsCubit>().toggleMuteSocialConversations();
+                            await serviceLocator<ConversationsCubit>()
+                                .toggleMuteSocialConversations();
                             final archivedChatsCount =
-                                serviceLocator<ConversationsCubit>().selectedSocialConversation.length;
+                                serviceLocator<ConversationsCubit>()
+                                    .selectedSocialConversation
+                                    .length;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: const Color(0xff1A1A1A),
@@ -213,7 +258,8 @@ selectedChatAppBar() {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
+                                              text:
+                                                  "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
                                               // العدد
                                               style: const TextStyle(
                                                 color: Colors.white,
@@ -243,7 +289,8 @@ selectedChatAppBar() {
                                   // Set "Undo" text color to gray
                                   onPressed: () async {
                                     ManageVibration.vibrate();
-                                    await serviceLocator<ConversationsCubit>().toggleMuteSocialConversations();
+                                    await serviceLocator<ConversationsCubit>()
+                                        .toggleMuteSocialConversations();
                                   },
                                 ),
                                 duration: const Duration(seconds: 3),
@@ -251,20 +298,26 @@ selectedChatAppBar() {
                             );
 
                             Future.delayed(const Duration(seconds: 3), () {
-                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
+                              serviceLocator<ConversationsCubit>()
+                                  .clearSelectedSocialConversations();
                             });
                           },
                           icon: Icon(
                             Icons.notifications_off_outlined,
-                            color: context.isDarkMode ? Colors.white : AppColors.grey,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.grey,
                           ),
                         ),
                         IconButton(
                           onPressed: () async {
                             ManageVibration.vibrate();
-                            await serviceLocator<ConversationsCubit>().archiveSocialConversations();
+                            await serviceLocator<ConversationsCubit>()
+                                .archiveSocialConversations();
                             final archivedChatsCount =
-                                serviceLocator<ConversationsCubit>().selectedSocialConversation.length;
+                                serviceLocator<ConversationsCubit>()
+                                    .selectedSocialConversation
+                                    .length;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: const Color(0xff1A1A1A),
@@ -287,7 +340,8 @@ selectedChatAppBar() {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
+                                              text:
+                                                  "${FormatNumbers().convertNumberToLocalizedString(archivedChatsCount.toString(), isArabic: context.isArabic)} ",
                                               // العدد
                                               style: const TextStyle(
                                                 color: Colors.white,
@@ -317,7 +371,8 @@ selectedChatAppBar() {
                                   // Set "Undo" text color to gray
                                   onPressed: () async {
                                     ManageVibration.vibrate();
-                                    await serviceLocator<ConversationsCubit>().unArchiveSocialConversations();
+                                    await serviceLocator<ConversationsCubit>()
+                                        .unArchiveSocialConversations();
                                   },
                                 ),
                                 duration: const Duration(seconds: 3),
@@ -325,12 +380,15 @@ selectedChatAppBar() {
                             );
 
                             Future.delayed(const Duration(seconds: 3), () {
-                              serviceLocator<ConversationsCubit>().clearSelectedSocialConversations();
+                              serviceLocator<ConversationsCubit>()
+                                  .clearSelectedSocialConversations();
                             });
                           },
                           icon: Icon(
                             Icons.archive_outlined,
-                            color: context.isDarkMode ? Colors.white : AppColors.grey,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.grey,
                           ),
                         ),
                       ],
@@ -338,7 +396,8 @@ selectedChatAppBar() {
                     PopupMenuButton(
                       icon: Icon(
                         Icons.more_vert,
-                        color: context.isDarkMode ? Colors.white : AppColors.grey,
+                        color:
+                            context.isDarkMode ? Colors.white : AppColors.grey,
                       ),
                       color: context.isDarkMode
                           ? AppColors.PRIMARY_COLOR
