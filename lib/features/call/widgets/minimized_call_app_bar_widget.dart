@@ -163,7 +163,7 @@ class MinimizedCallAppBar extends StatelessWidget
                     icon: const Icon(Icons.call_end, color: Colors.red),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      context.read<CallCubit>().endCall();
+                      // context.read<CallCubit>().endCall();
                       context.read<MinimizeCubit>().endCall();
                     },
                   ),

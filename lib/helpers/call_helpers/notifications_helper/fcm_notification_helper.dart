@@ -280,17 +280,17 @@ Future<String?> _generateAccessKey() async {
 Future<void> _onBackgroundMessage(RemoteMessage message) async {
 
 
-  if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-    try {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      await DI.execute();
-      log('Firebase initialized in background');
-    } catch (e) {
-      print('Firebase already initialized in background: $e');
-    }
-  }
+  // if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+  //   try {
+  //     await Firebase.initializeApp(
+  //       options: DefaultFirebaseOptions.currentPlatform,
+  //     );
+  //     await DI.execute();
+  //     log('Firebase initialized in background');
+  //   } catch (e) {
+  //     print('Firebase already initialized in background: $e');
+  //   }
+  // }
   // if((message.notification?.title?.contains('You have been logged out from all devices') ?? false) || (message.notification?.body?.contains('You have been logged out from all devices') ?? false) || (message.notification?.title?.contains('لقد تم تسجيل خروجك من جميع الأجهزة') ?? false) || (message.notification?.body?.contains('لقد تم تسجيل خروجك من جميع الأجهزة') ?? false)) {
   //   log('++++++++++++++notification received++ handle log out ${message.notification}');
   //   await CacheManager.deleteAllTokens();
@@ -405,24 +405,24 @@ Future<void> _handleNotification(RemoteMessage message,
       );
     }
 
-    if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-      try {
-        await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        );
-        await DI.execute();
-      } catch (e) {
-        print('Firebase already initialized in notification handler: $e');
-      }
-    }
+    // if (!serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+    //   try {
+    //     await Firebase.initializeApp(
+    //       options: DefaultFirebaseOptions.currentPlatform,
+    //     );
+    //     await DI.execute();
+    //   } catch (e) {
+    //     print('Firebase already initialized in notification handler: $e');
+    //   }
+    // }
 
-    if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
-      print('+++++ CallWithNotificationHelper +++++++++');
-      serviceLocator<CallWithNotificationHelper>()
-          .handleIncomingCallNotification(message.data);
-    } else {
-      log('Warning: CallWithNotificationHelper not registered in serviceLocator');
-    }
+    // if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+    //   print('+++++ CallWithNotificationHelper +++++++++');
+    //   serviceLocator<CallWithNotificationHelper>()
+    //       .handleIncomingCallNotification(message.data);
+    // } else {
+    //   log('Warning: CallWithNotificationHelper not registered in serviceLocator');
+    // }
   } catch (e, stackTrace) {
     // Prevent app crashes by handling the exception
     log('Error handling notification: $e');

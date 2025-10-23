@@ -9,7 +9,7 @@ environment:
   sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
-  agora_rtc_engine: ^6.5.2 # Real-time audio/video via Agora — requires native SDK, not replaceable
+#  agora_rtc_engine: ^6.5.2 # Real-time audio/video via Agora — requires native SDK, not replaceable
   animated_cards_carousel: ^1.0.2 # Animated card carousel — can be replaced using PageView + AnimatedBuilder
   animated_custom_dropdown: ^3.1.1 # Custom animated dropdown — replaceable with Overlay + AnimatedContainer + GestureDetector
   animated_notch_bottom_bar: ^1.0.3 # Animated bottom bar with notch — replaceable with BottomNavigationBar + ClipPath/animations
@@ -166,9 +166,9 @@ dependencies:
   widget_and_text_animator: null # Text/Widget animation — replaceable manually
   widgetbook: ^3.12.0 # Widget catalog/dev tool — replaceable manually
   widgetbook_annotation: ^3.5.0 # Annotation for widgetbook — replaceable manually
-  zego_express_engine: ^3.16.2 # Real-time video/audio — requires native SDK
-  zego_uikit_prebuilt_call: ^4.16.22 # Prebuilt UI for calls — requires native SDK
-  zego_uikit_signaling_plugin: ^2.8.8 # Signaling plugin — requires native SDK
+#  zego_express_engine: ^3.16.2 # Real-time video/audio — requires native SDK
+#  zego_uikit_prebuilt_call: ^4.16.22 # Prebuilt UI for calls — requires native SDK
+#  zego_uikit_signaling_plugin: ^2.8.8 # Signaling plugin — requires native SDK
   better_player_plus: ^1.0.8 # Advanced video player — replaceable using video_player + custom controls
   ntp: ^2.0.0 # Network time — replaceable via HTTP NTP requests
   app_settings: ^5.1.1 # Open system settings — native only

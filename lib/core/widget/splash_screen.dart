@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> {
       var result = await serviceLocator<ApiConsumer>().get('/settings');
       result.fold((failure) {
         // Check if it's a 504 error
-        if (failure is ServerFailure && failure.statusCode == 504) {
+        if (failure is ServerFailure && (failure.statusCode == 504||failure.statusCode==502)) {
           setState(() {
             _showMaintenanceScreen = true;
           });

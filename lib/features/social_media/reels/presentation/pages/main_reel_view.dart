@@ -132,12 +132,12 @@ class ReelsScreenState extends State<ReelsScreen>
                 },
               ),
             ),
-            const Positioned(
-              top: 57,
-              right: 16,
-              left: 16,
-              child: AdvancedTikTokTabBar(),
-            ),
+            // const Positioned(
+            //   top: 57,
+            //   right: 16,
+            //   left: 16,
+            //   child: AdvancedTikTokTabBar(),
+            // ),
           ],
         );
       },

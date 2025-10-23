@@ -240,7 +240,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     );
 
                     if (data != null) {
-                      print("objectsdaa");
+                      debugPrint("objectsdaa");
                       widget.controller.changeFilterModel(data);
                       widget.controller.loadFilterData(
                         model: data,
@@ -306,9 +306,9 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                                         element.isSelected == true) ??
                                 0]));
                     if (data != null) {
-                      print("data.cityId${data.cityId}");
-                      print("data.governorateId${data.governorateId}");
-                      print("objectsdaa");
+                      debugPrint("data.cityId${data.cityId}");
+                      debugPrint("data.governorateId${data.governorateId}");
+                      debugPrint("objectsdaa");
                       widget.controller.state.city = data.cityId;
                       widget.controller.state.governorate = data.governorateId;
                       widget.controller.changeFilterModel(data);
@@ -403,7 +403,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
   bool _isFloatVisible = true;
   @override
   void initState() {
-    print('state:: ${widget.state.subCategories?.length}');
+    debugPrint('state:: ${widget.state.subCategories?.length}');
     _tabController = TabController(
         length: widget.state.subCategories?.length ?? 0, vsync: this);
     _scrollController = ScrollController()
@@ -493,7 +493,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
 
     // Requests Log
     if (context.read<SubcategoriesCubit>().isRequestLogOpen) {
-      print(
+      debugPrint(
           'state.requestsLogByMainCategory ${widget.state.requestsLogByMainCategory?.length}');
       if (widget.state.requestsLogByMainCategory == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
@@ -530,7 +530,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     }
 
     // Ads
-    print('state.adds ${widget.state.ads}');
+    debugPrint('state.adds ${widget.state.ads}');
     if (widget.state.ads == null) {
       return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       // const SizedBox();

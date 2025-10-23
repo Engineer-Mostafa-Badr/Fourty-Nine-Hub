@@ -169,7 +169,7 @@ class BaseApiConsumer extends ApiConsumer {
       final data = e.response?.data;
 
       // Handle 504 Gateway Timeout - return specific failure type
-      if (statusCode == 504) {
+      if (statusCode == 504||statusCode==502) {
         return ServerFailure(
           message: 'Server is temporarily unavailable. Please try again later.',
           name: 'Service Unavailable',
