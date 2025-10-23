@@ -347,11 +347,10 @@ class _LoginViewState extends State<LoginView> {
                         //           : 100.h
                         //       : 0,
                         // ),
-                        const Sizer(
-                          height: 50,
-                        ),
+
                         widget.authType == AuthType.REGISTER
                             ? DefaultButton(
+                          margin: EdgeInsets.zero,
                                 labelStyle: TextStyle(
                                     fontSize: 35.sp,
                                     color: AppColors.AUTH_CONTAINER_COLOR),
@@ -799,8 +798,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   height: 30.h,
                 ),
                 DefaultTextFormField(
-                  currentFocusNode: nameFocusNode,
-
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController: registerCubit.userNameController,
@@ -958,7 +955,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                 ),
                 Sizer(
-                  height: 60.h,
+                  height: 15,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -996,7 +993,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ],
                 ),
                 SizedBox(
-                  height: 80.h,
+                  height: 20,
                 )
               ],
             ),

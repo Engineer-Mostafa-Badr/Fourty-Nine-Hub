@@ -7,11 +7,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ad_card.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -23,11 +21,13 @@ class AdCard extends StatefulWidget {
       {super.key,
       required this.item,
       required this.onFav,
-        required this.onDeleteAd,
-      required this.onRemoveFav});
+      required this.onDeleteAd,
+      required this.onRemoveFav,
+      this.onRefresh});
   final Function(String) onFav;
   final Function(String) onRemoveFav;
   final Function(String) onDeleteAd;
+  final VoidCallback? onRefresh;
 
   @override
   State<AdCard> createState() => _AdCardState();
@@ -39,9 +39,6 @@ class _AdCardState extends State<AdCard> {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
     print(userId);
     print(widget.item.userId);
-    List<CreateAdEntity> details = widget.item.details
-        .where((e) => e.value.nameAr != 'السعر' && e.value.nameAr != 'المرتب')
-        .toList();
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
       return MyAdCard(
         item: widget.item,
@@ -58,8 +55,9 @@ class _AdCardState extends State<AdCard> {
           return result;
         },
         deleteAd: (id) async {
-            widget.onDeleteAd(widget.item.id);
+          widget.onDeleteAd(widget.item.id);
         },
+        onRefresh: widget.onRefresh,
       );
       /*return InkWell(
         splashColor: Colors.transparent,

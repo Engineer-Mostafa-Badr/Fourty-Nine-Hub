@@ -120,7 +120,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                       ?.pause();
                 }
                 if (context.isUserLoggedIn) {
-                  showTiktokOption(context, generateRandom9DigitNumber);
+                  // showTiktokOption(context, generateRandom9DigitNumber);
                 } else {
                   pleaseLoginDialog(context);
                   // context.go(Routes.LOGIN);

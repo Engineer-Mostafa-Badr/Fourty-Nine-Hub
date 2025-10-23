@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -29,17 +33,30 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.872417805780-6ul51c5nsnl1nnahs9diudi7msr140cf</string>
-				<string>fb892486282359942</string>
+				<string>com.googleusercontent.apps.872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a</string>
+				<string>fb660212443761468</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>660212443761468</string>
+	<key>FacebookClientToken</key>
+	<string>255815a3e684d4212c43e057a063712a</string>
+	<key>FacebookDisplayName</key>
+	<string>Fourtyninehub</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~3347511713</string>
 	<key>GIDClientID</key>
 	<string>872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a.apps.googleusercontent.com</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -47,12 +64,21 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Need Apple ID for authentication</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+		<string>_flutter._tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) Camera Usage!</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Reason we need access to the contact list</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Why is my app authenticating using face id?</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Allows debugging with Flutter tools</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to your location to show your current position.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -63,6 +89,8 @@
 	<string>We need access to your photo library to save the videos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to save the videos.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -82,45 +110,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocalNetworkUsageDescription</key>
-    <string>Allows debugging with Flutter tools</string>
-    <key>NSBonjourServices</key>
-    <array>
-        <string>_dartobservatory._tcp</string>
-        <string>_flutter._tcp</string>
-    </array>
-    <key>BGTaskSchedulerPermittedIdentifiers</key>
-    <array>
-        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    </array>
-    <key>NSUserTrackingUsageDescription</key>
-    <string>This identifier will be used to deliver personalized ads to you.</string>
-<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-    <key>CFBundleTypeRole</key>
-    <string>Editor</string>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>com.googleusercontent.apps.872417805780-t1al5p42cijc089v9o8ijhhqbcc69i0a</string>
-      <string>fb660212443761468</string>
-    </array>
-  </dict>
-</array>
-<key>NSAppleMusicUsageDescription</key>
-<string>Need Apple ID for authentication</string>
-    <key>FacebookAppID</key>
-    <string>660212443761468</string>
-    <key>FacebookClientToken</key>
-    <string>255815a3e684d4212c43e057a063712a</string>
-    <key>FacebookDisplayName</key>
-    <string>Fourtyninehub</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>fbapi</string>
-      <string>fb-messenger-share-api</string>
-      <string>fbauth2</string>
-      <string>fbshareextension</string>
-    </array>
 </dict>
 </plist>

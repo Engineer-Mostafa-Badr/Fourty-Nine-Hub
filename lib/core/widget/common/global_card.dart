@@ -207,7 +207,9 @@ class GlobalCard extends StatelessWidget {
                   SubscriptionMethod().subscribe(
                     subscribeId: subcategoryId,
                     title: subCategoryTitle ?? LocaleKeys.ads.localize,
-                    onSubscribe: onSubscribe == null?null:(success)=>onSubscribe!(success),
+                    onSubscribe: onSubscribe == null
+                        ? null
+                        : (success) => onSubscribe!(success),
                   );
                 })),
         child: Text(

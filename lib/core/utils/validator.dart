@@ -124,12 +124,12 @@ String? validatorPhone(String? phone) {
 
 String? validateEgyptianPhone(String? value) {
   if (value == null || value.isEmpty) {
-    return 'رقم الهاتف مطلوب';
+    return LocaleKeys.phoneIsRequired.localize;
   }
 
   final RegExp phoneRegex = RegExp(r'^(01[0125])[0-9]{8}$');
   if (!phoneRegex.hasMatch(value)) {
-    return 'رقم الهاتف غير صالح';
+    return LocaleKeys.invalidPhoneNumber.localize;
   }
 
   return null;

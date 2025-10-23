@@ -67,79 +67,85 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
               print('Access Token: $accessToken');
               print(serviceLocator<UserCubit>().state.data.toString());
 
-              context.pop();
-              context.push(Routes.HOME);
-
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0.r),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                LocaleKeys.congratulations.localize,
-                                style: Styles.headerText(
-                                  color: AppColors.SECONDARY_COLOR,
-                                ),
-                              ),
-                              Sizer(),
-                              Text(
-                                context.isArabic
-                                    ? state.giftMessageEntity.ar
-                                    : state.giftMessageEntity.en,
-                                textAlign: TextAlign.center,
-                                style: Styles.mediumText(),
-                              ),
-                              SizedBox(height: 40.h),
-                              SizedBox(
-                                height: 40,
-                                width: double.infinity,
-                                child: Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        ManageVibration.vibrate();
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            AppColors.SECONDARY_COLOR,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0.r),
-                                        ),
-                                      ),
-                                      child: Label(
-                                        text: LocaleKeys.close.localize,
-                                        style: Styles.mediumText(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              });
+              // context.pop();
+              context.go(
+                Routes.CompleteRegisterWelcomeScreen,
+                extra: context.isArabic
+                    ? state.giftMessageEntity.ar
+                    : state.giftMessageEntity.en,
+              );
+              // context.push(Routes.HOME);
+              //
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   if (mounted) {
+              //     showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return Dialog(
+              //           backgroundColor:
+              //               Theme.of(context).scaffoldBackgroundColor,
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(24.0.r),
+              //           ),
+              //           child: Container(
+              //             padding: const EdgeInsets.all(16),
+              //             child: Column(
+              //               mainAxisSize: MainAxisSize.min,
+              //               children: <Widget>[
+              //                 Text(
+              //                   LocaleKeys.congratulations.localize,
+              //                   style: Styles.headerText(
+              //                     color: AppColors.SECONDARY_COLOR,
+              //                   ),
+              //                 ),
+              //                 Sizer(),
+              //                 Text(
+              //                   context.isArabic
+              //                       ? state.giftMessageEntity.ar
+              //                       : state.giftMessageEntity.en,
+              //                   textAlign: TextAlign.center,
+              //                   style: Styles.mediumText(),
+              //                 ),
+              //                 SizedBox(height: 40.h),
+              //                 SizedBox(
+              //                   height: 40,
+              //                   width: double.infinity,
+              //                   child: Expanded(
+              //                     child: Padding(
+              //                       padding: const EdgeInsets.symmetric(
+              //                           horizontal: 8),
+              //                       child: ElevatedButton(
+              //                         onPressed: () {
+              //                           ManageVibration.vibrate();
+              //                           Navigator.of(context).pop();
+              //                         },
+              //                         style: ElevatedButton.styleFrom(
+              //                           backgroundColor:
+              //                               AppColors.SECONDARY_COLOR,
+              //                           shape: RoundedRectangleBorder(
+              //                             borderRadius:
+              //                                 BorderRadius.circular(16.0.r),
+              //                           ),
+              //                         ),
+              //                         child: Label(
+              //                           text: LocaleKeys.close.localize,
+              //                           style: Styles.mediumText(
+              //                             color: Theme.of(context)
+              //                                 .scaffoldBackgroundColor,
+              //                           ),
+              //                         ),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     );
+              //   }
+              // });
             });
         }
       },

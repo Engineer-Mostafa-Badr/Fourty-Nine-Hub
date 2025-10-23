@@ -79,31 +79,31 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                             fontSize: 30,
                           ),
                         ),
-                        const TextSpan(
-                          text: "  ",
-                        ),
-                        TextSpan(
-                          text: widget.title ?? '',
-                          style: Styles.headerText(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 40,
-                          ),
-                        ),
+                        // const TextSpan(
+                        //   text: "  ",
+                        // ),
+                        // TextSpan(
+                        //   text: widget.title ?? '',
+                        //   style: Styles.headerText(
+                        //     fontWeight: FontWeight.w800,
+                        //     fontSize: 40,
+                        //   ),
+                        // ),
                       ]),
                     )
                   : Text.rich(
                       textAlign: TextAlign.center,
                       TextSpan(children: [
-                        TextSpan(
-                          text: widget.title ?? '',
-                          style: Styles.headerText(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 40,
-                          ),
-                        ),
-                        const TextSpan(
-                          text: "  ",
-                        ),
+                        // TextSpan(
+                        //   text: widget.title ?? '',
+                        //   style: Styles.headerText(
+                        //     fontWeight: FontWeight.w800,
+                        //     fontSize: 40,
+                        //   ),
+                        // ),
+                        // const TextSpan(
+                        //   text: "  ",
+                        // ),
                         TextSpan(
                           text: LocaleKeys.subscription.localize,
                           style: Styles.headerText(

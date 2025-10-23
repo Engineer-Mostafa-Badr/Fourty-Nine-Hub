@@ -45,10 +45,9 @@ class MarriageAdsListView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MarriageAdsListViewItem(
-                marriageAds: state.ads![index],
-                state: state,
-                  controller:controller
-              ),
+                  marriageAds: state.ads![index],
+                  state: state,
+                  controller: controller),
             ],
           ),
         ),

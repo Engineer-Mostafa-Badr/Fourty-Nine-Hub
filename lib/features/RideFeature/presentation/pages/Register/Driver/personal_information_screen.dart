@@ -1,4 +1,6 @@
+import 'package:bottom_picker/bottom_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -257,10 +259,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   DatePickerTextField(
                                     color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
                                     initialDate: latestDate,
-                                    minDate: earliestDate,
-                                    maxDate: latestDate,
+                                    // minDate: earliestDate,
+                                    // maxDate: latestDate,
                                     onDateSelected: (date) {
-                                      cubit.rideDateOfBirthController.text = DateFormat('yyyy-MM-dd').format(date ?? DateTime.now());
+                                      // widget.onDateChanged(index?.toIso8601String());
+                                      String formattedDate = DateFormat('yyyy-MM-dd', context.isArabic?'ar':'en').format(date!);
+                                      cubit.rideDateOfBirthController.text =formattedDate;
+                                      // widget.controller.text = dateFormat.format(index);
+                                      debugPrint("widget.controller.text${cubit.rideDateOfBirthController.text}");
+                                      // cubit.rideDateOfBirthController.text = DateFormat('yyyy-MM-dd').format(date ?? DateTime.now());
                                     },
                                     controller: cubit.rideDateOfBirthController,
                                     hintText: '',
