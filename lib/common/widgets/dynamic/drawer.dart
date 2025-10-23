@@ -718,18 +718,30 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             context.push(Routes.availableAuctionScreen);
                           },
                         ),
-                        // drawerRollWidget(
-                        //   label: context.isArabic ? 'تحت الأضواء' : "Spotlight",
-                        //   image: Assets.spotlight,
-                        //   onTap: () {
-                        //     ManageVibration.vibrate();
-                        //     // if (!context.read<UserCubit>().isLoggedIn) {
-                        //     //   return pleaseLoginDialog(context);
-                        //     // }
-                        //     context.pop();
-                        //     context.push(Routes.spotLightScreen);
-                        //   },
-                        // ),
+                        drawerRollWidget(
+                          label: context.isArabic ? 'تحت الأضواء' : "Spotlight",
+                          image: Assets.spotlight,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            if (!context.read<UserCubit>().isLoggedIn) {
+                              return pleaseLoginDialog(context);
+                            }
+                            context.pop();
+                            context.push(Routes.spotLightScreen);
+                          },
+                        ),
+                        drawerRollWidget(
+                          label: "Tube",
+                          image: Assets.spotlight,
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            // if (!context.read<UserCubit>().isLoggedIn) {
+                            //   return pleaseLoginDialog(context);
+                            // }
+                            context.pop();
+                            context.push(Routes.tubeScreens);
+                          },
+                        ),
                         SizedBox(
                           height: 8.h,
                         ),

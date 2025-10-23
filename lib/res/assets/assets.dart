@@ -15,6 +15,7 @@ abstract class Assets {
   static String bedroomIcon = 'assets/49-New-icons/bedroom.png';
   // static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
+  static String waving = 'assets/images/waving.png';
   static String icon = 'assets/images/icon.png';
   static String logoHub = 'assets/icons/logoHub.png';
   static String logoWithoutText = 'assets/icons/logoWithoutText.png';
@@ -747,4 +748,5 @@ abstract class Assets {
   static String auctionBanner = 'assets/images/auction.jpg';
 
   static String winnerCrown = 'assets/icons/crown.svg';
+  static String colorArrow = 'assets/images/color_arrow.png';
 }

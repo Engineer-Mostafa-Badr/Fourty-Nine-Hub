@@ -1997,6 +1997,10 @@ class EndPoints {
   static String addLoveFind = '/find/profile/love/';
   static String fetchFind = '/find';
 
+  static String getMyProfileSpotlight = '/spotlight/profile/me';
+
+  static String getAllTubeVideos = '/tube-video';
+
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
