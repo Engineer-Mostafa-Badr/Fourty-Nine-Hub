@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
@@ -71,11 +72,10 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
         buildWhen: (prev, curr) =>
             prev.userSearch != curr.userSearch || prev.status != curr.status,
         builder: (context, state) {
+          final profileSearch = _cubit.reelsSearch;
           // If no search has been initiated, show "No Data"
           if (_cubit.searchController.text.trim().isEmpty) {
-            return CustomEmptyWidget(
-              label: LocaleKeys.noData.localize,
-            );
+            return CustomEmptyWidget.searchInitial(context: context);
           }
 
           // Loading during search
@@ -84,6 +84,12 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
               // child: CustomCircularProgressIndicator(
               // ),
               child: CustomLoadingSearchWidget(),
+            );
+          }
+          // ✅ Check if data is empty after loading
+          if (profileSearch.isEmpty && state.status == SearchStates.success) {
+            return CustomEmptyWidget(
+              label: LocaleKeys.noResultsFound.localize,
             );
           }
           return OlxPaginationWidget(

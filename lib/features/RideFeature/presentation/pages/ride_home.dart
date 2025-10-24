@@ -565,8 +565,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         driverName: state.requestedTrip?.driverFirstName ?? "",
                         onDriverImageClick: () {
                           if (state.requestedTrip?.driverUserId != null) {
-                            showDriverProfileSheet(context, driverId: state
-                                .requestedTrip?.driverUserId ?? "");
+                            showDriverProfileSheet(context,
+                                driverId:
+                                    state.requestedTrip?.driverUserId ?? "");
                           }
                         },
                         onContactDriver: () {
@@ -1515,9 +1516,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         isShipping: true, isSocket: false));
               } else {
                 context.push(Routes.rideModeScreen,
-                    extra: RideModeParams(
-                        modeType: 'truck',
-                        isSocket: false));
+                    extra: RideModeParams(modeType: 'truck', isSocket: false));
               }
             }
           },
@@ -1640,7 +1639,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    " (${((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString()})",
+                    " (${((context.read<RideCubit>().state.unreadOffers?.loading ?? 0) + (context.read<RideCubit>().state.unreadOffers?.nonTracking ?? 0)).toString()})",
                     style: TextStyle(
                         color: AppColors.SECONDARY_COLOR,
                         fontSize: 20,
@@ -1755,7 +1754,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 ),
               ),
               Visibility(
-                visible: ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)) > 0,
+                visible:
+                    ((context.read<RideCubit>().state.unreadOffers?.loading ??
+                                0) +
+                            (context
+                                    .read<RideCubit>()
+                                    .state
+                                    .unreadOffers
+                                    ?.nonTracking ??
+                                0)) >
+                        0,
                 child: PositionedDirectional(
                   top: -10.h,
                   end: -10.w,
@@ -1766,7 +1774,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         color: AppColors.getRedColor(context)),
                     child: Center(
                       child: Text(
-                        ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString(),
+                        ((context
+                                        .read<RideCubit>()
+                                        .state
+                                        .unreadOffers
+                                        ?.loading ??
+                                    0) +
+                                (context
+                                        .read<RideCubit>()
+                                        .state
+                                        .unreadOffers
+                                        ?.nonTracking ??
+                                    0))
+                            .toString(),
                         style: Styles.smallText(
                             color: context.isDarkMode
                                 ? Colors.black
@@ -1813,8 +1833,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             RegistrationStatus.approved.status) {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
-                              modeType: 'truck',
-                              isSocket: false));
+                              modeType: 'truck', isSocket: false));
                     }
                   }
                 },
@@ -1926,7 +1945,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.3),
+                                        color:
+                                            Colors.black.withValues(alpha: 0.3),
                                         spreadRadius: 2,
                                         blurRadius: 5,
                                         offset: const Offset(0, 3)),
@@ -2302,7 +2322,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic
-                                                                    ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                                                                    ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                                                                     : "Please enter a direct contact number for the service provider.",
                                                               ),
                                                               // const SizedBox(height: 20),
@@ -2346,7 +2366,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic
-                                                                    ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                                                                    ? "كتابة رقم عميل آخر على مسؤوليتك و يعرض للمسائله القانونيه."
                                                                     : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                               ),
                                                               const SizedBox(
@@ -2598,7 +2618,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 // const SizedBox(height: 20),
                                                                 Text(
                                                                   context.isArabic
-                                                                      ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                                                                      ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                                                                       : "Please enter a direct contact number for the service provider.",
                                                                 ),
                                                                 // const SizedBox(height: 20),
@@ -2626,8 +2646,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     return validatorEgyptPhone(
                                                                         normalized);
                                                                   },
-                                                                  onChanged: (v){
-                                                                    _phoneNumberFormKey.currentState!.validate();
+                                                                  onChanged:
+                                                                      (v) {
+                                                                    _phoneNumberFormKey
+                                                                        .currentState!
+                                                                        .validate();
                                                                   },
                                                                   inputFormatter: [
                                                                     ArabicNumberFormatter(
@@ -2638,7 +2661,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 // const SizedBox(height: 20),
                                                                 Text(
                                                                   context.isArabic
-                                                                      ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                                                                      ? "كتابة رقم عميل آخر على مسؤوليتك و يعرض للمسائله القانونيه."
                                                                       : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                                 ),
                                                                 const SizedBox(
@@ -2655,7 +2678,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                       if (_phoneNumberFormKey
                                                                           .currentState!
                                                                           .validate()) {
-                                                                        context.pop(true);
+                                                                        context.pop(
+                                                                            true);
                                                                       }
                                                                     },
                                                                     style: ElevatedButton

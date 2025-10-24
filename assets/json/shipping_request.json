@@ -14,8 +14,8 @@
                 "started":false,
                 "ended":false,
                 "distance":"20 km",
-                "more_from_address_details":"-تفاصيل اخري",
-                "more_to_address_details":"تفاصيل اخري-",
+                "more_from_address_details":"-تفاصيل آخري",
+                "more_to_address_details":"تفاصيل آخري-",
                 "sender_phone":"+201010727610",
                 "receiver_phone":"+201148337372",
                 "calls":[

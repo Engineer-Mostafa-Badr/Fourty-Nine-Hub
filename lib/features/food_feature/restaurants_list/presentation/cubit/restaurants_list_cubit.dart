@@ -157,9 +157,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         isLoadingUserOrdersMore = false;
         emit(state.copyWith(
             failure: failure,
@@ -201,11 +201,12 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
-          failure: failure, status: RestaurantsListStates.error));},
+            failure: failure, status: RestaurantsListStates.error));
+      },
       (data) {
         restaurants.addAll(data);
 
@@ -246,11 +247,12 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
-          failure: failure, status: RestaurantsListStates.error));},
+            failure: failure, status: RestaurantsListStates.error));
+      },
       (data) {
         subCategories.addAll(data);
         if (currentPage == 1) subCategories.insert(0, allRestaurants);
@@ -271,14 +273,13 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
 
   Future<void> getBannerById() async {
     final response = await _getBannerByIdUseCase.call(id: service.id);
-    response.fold(
-      (failure) {
-        var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
-        showErrorMessage(
-            currentContext, getFailureMessage(failure, currentContext));
-        emit(state.copyWith(status: RestaurantsListStates.error));},
-        (data) => emit(state.copyWith(banner: data)));
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(status: RestaurantsListStates.error));
+    }, (data) => emit(state.copyWith(banner: data)));
   }
 
   Future<void> getExpiredOrders() async {

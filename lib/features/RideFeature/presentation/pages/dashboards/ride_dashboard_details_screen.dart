@@ -432,7 +432,7 @@ class _RideDashboardDetailsScreenState
                           validator: (String? value) {
                             if (value!.isEmpty) {
                               return context.isArabic
-                                  ? 'الرجاء ادخال المشكلة'
+                                  ? 'الرجاء إدخال المشكلة'
                                   : 'Please enter your problem';
                             }
                             return null;
@@ -451,7 +451,7 @@ class _RideDashboardDetailsScreenState
                           validator: (String? value) {
                             if (value!.isEmpty) {
                               return context.isArabic
-                                  ? 'الرجاء ادخال رقم الهاتف'
+                                  ? 'الرجاء إدخال رقم الهاتف'
                                   : 'Please enter your phone number';
                             }
                             return null;

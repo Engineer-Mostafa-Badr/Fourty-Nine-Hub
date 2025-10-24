@@ -801,7 +801,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           height: 8.h,
                         ),
                         drawerRollWidget(
-                          label: context.isArabic ? 'العاب' : "Games",
+                          label: LocaleKeys.games.localize,
                           image: Assets.gamesIcon,
                           onTap: () {
                             ManageVibration.vibrate();
@@ -980,11 +980,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ),
                   themeCubit.isDarkTheme
                       ? Label(
-                    text: context.isArabic ? "فاتح" : "Light",
-                  )
+                          text: context.isArabic ? "فاتح" : "Light",
+                        )
                       : Label(
-                    text: context.isArabic ? "غامق" : "Dark",
-                  ),
+                          text: context.isArabic ? "غامق" : "Dark",
+                        ),
                 ],
               );
             },
@@ -1867,7 +1867,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     children: [
                                       Text(
                                         context.isArabic
-                                            ? 'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا'
+                                            ? 'علىك بالضغط على الزر باللون الاحمر على يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا'
                                             : 'You need to press the red button on the right or left side of the screen to be able to see our special apps',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
@@ -1912,7 +1912,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               //      // shrinkWrap: true,
                               //      children: [
                               //        Text(
-                              //          context.isArabic?'عليك بالضغط علي الزر باللون الاحمر علي يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
+                              //          context.isArabic?'علىك بالضغط على الزر باللون الاحمر على يمين او يسار الشاشه للتمكن من رؤية المسطره الخاصه بأهم التطبيقات لدينا':'You need to press the red button on the right or left side of the screen to be able to see our special apps',
                               //          textAlign: TextAlign.center,
                               //          style: const TextStyle(
                               //            fontSize: FontSize.s16,
@@ -2012,7 +2012,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Label(text: context.isArabic ? "اهتزاز" : "Vibration"),
             ],
           ),
-
         ],
       ),
     );

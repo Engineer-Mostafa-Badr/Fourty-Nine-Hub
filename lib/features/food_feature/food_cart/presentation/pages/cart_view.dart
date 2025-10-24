@@ -271,7 +271,7 @@ class _FoodCartViewState extends State<FoodCartView> {
 
   _buildAppBar() {
     return BackAppBar(
-      label: context.isArabic?'السلة':'Cart',
+      label: context.isArabic ? 'السلة' : 'Cart',
     );
   }
 
@@ -636,7 +636,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                     Expanded(
                       child: Label(
                         text: context.isArabic
-                            ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                            ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                             : "Please enter a direct contact number for the service provider.",
                         style: Styles.mediumText(
                           color: AppColors.c717171,
@@ -667,7 +667,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                 SizedBox(height: 16.h),
                 Label(
                   text: context.isArabic
-                      ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                      ? "كتابة رقم عميل آخر علي مسؤوليتك و يعرض للمسائله القانونيه."
                       : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                   style: Styles.mediumText(
                     color: AppColors.c717171,

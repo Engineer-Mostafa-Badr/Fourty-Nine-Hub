@@ -7,12 +7,28 @@ class CustomEmptyWidget extends StatelessWidget {
   const CustomEmptyWidget({
     super.key,
     required this.label,
+    this.icon,
+    this.context,
   });
 
-  final String label;
+  const CustomEmptyWidget.searchInitial({
+    super.key,
+    required BuildContext context,
+  })  : label = null,
+        icon = Icons.search,
+        context = context;
+
+  final String? label;
+  final IconData? icon;
+  final BuildContext? context;
 
   @override
   Widget build(BuildContext context) {
+    final displayLabel = label ??
+        (context.isArabic ?? context.isArabic
+            ? 'ابدأ الكتابة للبحث'
+            : 'Start typing to search');
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -20,12 +36,12 @@ class CustomEmptyWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
-            Icons.warning_amber_rounded,
+            icon ?? Icons.warning_amber_rounded,
             size: 70,
             color: context.isDarkMode ? Colors.white : Colors.grey,
           ),
           Label(
-            text: label,
+            text: displayLabel,
             style: Styles.headerText(
               fontWeight: FontWeight.bold,
               color: context.isDarkMode ? Colors.white : Colors.grey,

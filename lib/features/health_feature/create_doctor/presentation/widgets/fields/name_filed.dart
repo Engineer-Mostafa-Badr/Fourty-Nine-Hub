@@ -75,7 +75,7 @@ class CreateDoctorNameField extends StatelessWidget {
     //               //   validator: (value) {
     //               //     if (value == null || value.isEmpty) {
     //               //       return context.isArabic
-    //               //           ? 'برجاء ادخال الاسم الاول'
+    //               //           ? 'برجاء إدخال الاسم الاول'
     //               //           : 'Please enter first name';
     //               //     }
     //               //     return null;
@@ -142,7 +142,7 @@ class CreateDoctorNameField extends StatelessWidget {
     //                 validator: (value) {
     //                   if (value == null || value.isEmpty) {
     //                     return context.isArabic
-    //                         ? 'برجاء ادخال اللقب'
+    //                         ? 'برجاء إدخال اللقب'
     //                         : 'Please enter last name';
     //                   }
     //                   return null;
@@ -210,7 +210,7 @@ class CreateDoctorNameField extends StatelessWidget {
     //           validator: (value) {
     //             if (value == null || value.isEmpty) {
     //               return context.isArabic
-    //                   ? 'برجاء ادخال رقم الهاتف'
+    //                   ? 'برجاء إدخال رقم الهاتف'
     //                   : 'Please enter phone number';
     //             }
     //             return null;

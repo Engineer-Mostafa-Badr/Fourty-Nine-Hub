@@ -10,7 +10,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class PhoneNumberBottomSheet {
   /// Shows a bottom sheet for entering phone number.
-  /// 
+  ///
   /// Returns:
   /// - `true` if form was submitted successfully.
   /// - `false` if user closed the sheet.
@@ -31,9 +31,8 @@ class PhoneNumberBottomSheet {
           child: Container(
             padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
-              color: context.isDarkMode
-                  ? AppColors.QUANTITY_COLOR
-                  : Colors.white,
+              color:
+                  context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(20.0),
               ),
@@ -67,7 +66,7 @@ class PhoneNumberBottomSheet {
                   ),
                   Text(
                     context.isArabic
-                        ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                        ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                         : "Please enter a direct contact number for the service provider.",
                   ),
                   NewPhoneNumberTextFormField(
@@ -77,10 +76,10 @@ class PhoneNumberBottomSheet {
                     maxLength: 11,
                     validator: (value) {
                       String normalized = value?.replaceAllMapped(
-                        RegExp(r'[٠-٩]'),
+                            RegExp(r'[٠-٩]'),
                             (match) => (match.group(0)!.codeUnitAt(0) - 0x0660)
-                            .toString(),
-                      ) ??
+                                .toString(),
+                          ) ??
                           '';
                       return validatorEgyptPhone(normalized);
                     },
@@ -94,7 +93,7 @@ class PhoneNumberBottomSheet {
                   ),
                   Text(
                     context.isArabic
-                        ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                        ? "كتابة رقم عميل آخر علي مسؤوليتك و يعرض للمسائله القانونيه."
                         : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                   ),
                   const SizedBox(height: 20),
@@ -109,8 +108,7 @@ class PhoneNumberBottomSheet {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.PRIMARY_COLOR,
-                        padding:
-                        const EdgeInsets.symmetric(vertical: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

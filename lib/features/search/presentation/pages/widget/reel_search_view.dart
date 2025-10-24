@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/entity/reels_search_entity.dart';
@@ -74,9 +75,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
         builder: (context, state) {
           final reels = _cubit.reelsSearch;
           if (_cubit.searchController.text.trim().isEmpty) {
-            return CustomEmptyWidget(
-              label: LocaleKeys.noData.localize,
-            );
+            return CustomEmptyWidget.searchInitial(context: context);
           }
           if (state.status == SearchStates.loading) {
             return const Center(

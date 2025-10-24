@@ -222,7 +222,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                 // Increased space between reactions and text
                 Label(
                   text:widget.postEntity.totalCount.toString().toArabicNumbers(context)??'',
-                     // "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'اخرين' : 'Others'}",
+                     // "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'آخرين' : 'Others'}",
                   style: TextStyle(
                     color: context.isDarkMode
                         ? Colors.grey[300]

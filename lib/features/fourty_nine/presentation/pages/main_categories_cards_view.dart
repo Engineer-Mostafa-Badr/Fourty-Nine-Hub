@@ -12,7 +12,6 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/localization/locales.dart';
 import '../../../subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -32,7 +31,7 @@ class MainCategoriesFlipCardsView extends StatefulWidget {
   const MainCategoriesFlipCardsView({
     super.key,
     this.isAppBarShow = true,
-    required this.mainCategoriesCardsParams, // custom
+    required this.mainCategoriesCardsParams,
   });
 
   final bool isAppBarShow;
@@ -47,51 +46,71 @@ class _MainCategoriesFlipCardsViewState
     extends State<MainCategoriesFlipCardsView> {
   late MainCategoriesCubit mainCategoriesCubit;
 
+  // ✅ إضافة Controller للكارد
+  final CardSwiperController _cardController = CardSwiperController();
+
   String labelName = "";
+  bool _hasShownHint = false; // ✅ للتأكد من عرض الحركة مرة واحدة فقط
 
   @override
   void initState() {
     super.initState();
     mainCategoriesCubit = context.read<MainCategoriesCubit>();
+
+    // ✅ تحريك الكارد بشكل بسيط بعد ثانية من الدخول
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted && !_hasShownHint) {
+        _showSwipeHint();
+      }
+    });
+  }
+
+  // ✅ دالة لتحريك الكارد قليلاً ثم إرجاعها
+  void _showSwipeHint() async {
+    _hasShownHint = true;
+
+    // تحريك الكارد قليلاً لليمين
+    _cardController.swipe(CardSwiperDirection.right);
+
+    // الانتظار قليلاً
+    await Future.delayed(const Duration(milliseconds: 200));
+
+    // إرجاع الكارد لمكانها
+    if (mounted) {
+      _cardController.undo();
+    }
+  }
+
+  @override
+  void dispose() {
+    _cardController.dispose();
+    super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // if (widget.data != null) {
-    //   labelName = context.locale == Locales.english
-    //       ? mainCategoriesCubit.state.customPage != null
-    //       ? mainCategoriesCubit.state.customPage![0].nameEn.toString()
-    //       : widget.data![0].nameEn.toString()
-    //       : mainCategoriesCubit.state.customPage != null
-    //       ? mainCategoriesCubit.state.customPage![0].name.toString()
-    //       : widget.data![0].name.toString();
-    // }
 
-    // print('data is ${widget.data}');
     if (widget.mainCategoriesCardsParams.data != null) {
       labelName = context.isArabic
-          ? (widget.mainCategoriesCardsParams.data != null&&widget.mainCategoriesCardsParams.data!.isNotEmpty)?widget.mainCategoriesCardsParams.data![0].name??'':''
-          :(widget.mainCategoriesCardsParams.data != null&&widget.mainCategoriesCardsParams.data!.isNotEmpty)? widget.mainCategoriesCardsParams.data![0].nameEn??'':'';
+          ? (widget.mainCategoriesCardsParams.data != null &&
+                  widget.mainCategoriesCardsParams.data!.isNotEmpty)
+              ? widget.mainCategoriesCardsParams.data![0].name ?? ''
+              : ''
+          : (widget.mainCategoriesCardsParams.data != null &&
+                  widget.mainCategoriesCardsParams.data!.isNotEmpty)
+              ? widget.mainCategoriesCardsParams.data![0].nameEn ?? ''
+              : '';
     }
     if (mainCategoriesCubit.state.customPage != null) {
       labelName = context.isArabic
           ? mainCategoriesCubit.state.customPage![0].name.toString()
           : mainCategoriesCubit.state.customPage![0].nameEn.toString();
     }
-    // labelName = context.locale == Locales.english
-    //     ? mainCategoriesCubit.state.customPage != null
-    //     ? mainCategoriesCubit.state.customPage![0].nameEn.toString()
-    //     : widget.data![0].nameEn.toString()
-    //     : mainCategoriesCubit.state.customPage != null
-    //     ? mainCategoriesCubit.state.customPage![0].name.toString()
-    //     : widget.data![0].name.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    // var mainCategories = mainCategoriesCubit.state.customPage ?? [];
-    // var mainCategories = widget.data!;
     var mainCategories = <MainCategoryEntity>[];
     print(
         'BuildContext data is ${widget.mainCategoriesCardsParams.data?.first.nameEn}');
@@ -100,6 +119,7 @@ class _MainCategoriesFlipCardsViewState
     } else if (mainCategoriesCubit.state.customPage != null) {
       mainCategories = mainCategoriesCubit.state.customPage!;
     }
+
     return Scaffold(
       appBar: widget.isAppBarShow
           ? PreferredSize(
@@ -124,21 +144,27 @@ class _MainCategoriesFlipCardsViewState
                     ),
                   )
                 : CardSwiper(
+                    controller: _cardController, // ✅ إضافة الـ controller
                     padding:
                         EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
                     cardsCount: mainCategories.length,
+                    isLoop: false, // ✅ لمنع التكرار اللانهائي
+                    allowedSwipeDirection: const AllowedSwipeDirection.all(),
                     onSwipe: (previousIndex, currentIndex, direction) {
-                      // setState(() {
-                      //   labelName = context.locale == Locales.english
-                      //       ? mainCategoriesCubit
-                      //           .state.customPage![currentIndex!].nameEn
-                      //           .toString()
-                      //       : mainCategoriesCubit
-                      //           .state.customPage![currentIndex!].name
-                      //           .toString();
-                      // });
                       if (currentIndex != null &&
                           currentIndex >= 0 &&
+                          currentIndex < mainCategories.length) {
+                        setState(() {
+                          labelName = (context.locale == Locales.english
+                              ? mainCategories[currentIndex].nameEn
+                              : mainCategories[currentIndex].name)!;
+                        });
+                      }
+                      return true;
+                    },
+                    onUndo: (previousIndex, currentIndex, direction) {
+                      // ✅ للتعامل مع حالة الـ undo
+                      if (currentIndex >= 0 &&
                           currentIndex < mainCategories.length) {
                         setState(() {
                           labelName = (context.locale == Locales.english
@@ -155,7 +181,6 @@ class _MainCategoriesFlipCardsViewState
                           ManageVibration.vibrate();
                           final item = mainCategories[index];
                           print('item id is ${item.id}');
-                          // print('item id is ${item}');
                           if (item.id == '62c8b5b09332225799fe335e') {
                             context.push(Routes.MARRIAGESUBCATEGORIES,
                                 extra: item);
@@ -251,6 +276,13 @@ class _MainCategoriesFlipCardsViewState
                     },
                   ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+
 
           // Expanded(
           //   child: CardSwiper(
@@ -356,8 +388,3 @@ class _MainCategoriesFlipCardsViewState
           //     },
           //   ),
           // ),
-        ],
-      ),
-    );
-  }
-}
