@@ -64,6 +64,7 @@ class EndPoints {
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49backend.com';
   //https://49backend.com
+
   // static const developmentWebSocketBaseUrl = 'https://49backend.com';
   static const developmentBaseUrl = 'https://49backend.com/api/v1';
   static const productionBaseUrl = 'https://49backend.com/api/v1';
@@ -80,6 +81,7 @@ class EndPoints {
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/oauth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
+  static const resendRegisterationOTP = '/auth/verify/resend-email';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh-token';
@@ -1738,8 +1740,7 @@ class EndPoints {
       '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket =
       '/ride/untracked/ratings/client';
-  static readLoadingOffer(String id) =>
-      '/loading/client/trips/offers/$id/read';
+  static readLoadingOffer(String id) => '/loading/client/trips/offers/$id/read';
   static readNonTrackingOffer(String id) =>
       '/ride/non-tracking/offers/$id/read';
   static const updateClientRating = '/ride/untracked/ratings/client';
@@ -1976,6 +1977,7 @@ class EndPoints {
 
   static String fetchAvailableAuction = '/auctions/available';
   static String searchAuction = '/auctions/search';
+  static String auctionWinners = '/auctions/all-winner';
   static String fetchExpiredAuction = '/auctions/expired';
   static String fetchFavoriteAuction = '/auction-fav';
   static String fetchSingleAuction = '/auctions/';
@@ -1985,14 +1987,15 @@ class EndPoints {
   static String addFavoriteAuction = '/auction-fav/';
   static String fetchMyAuction = '/auctions/my';
   static String createAuction2 = '/auctions';
+
   static String fetchMyBidders = '/auctions/my-bidders-winner';
   static String getAuctionViewers = '/auctions/last-ten-auction-viewed/';
   static String auctionBanner = '/auctions/banner';
   static String auctionAllWinner = '/auctions/winner-statistics';
-  static String addLikeFind = '/tinder/profile/like/';
-  static String addDisLikeFind = '/tinder/profile/disLike/';
-  static String addLoveFind = '/tinder/profile/love/';
-  static String fetchFind = '/tinder';
+  static String addLikeFind = '/find/profile/like/';
+  static String addDisLikeFind = '/find/profile/disLike/';
+  static String addLoveFind = '/find/profile/love/';
+  static String fetchFind = '/find';
 
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';

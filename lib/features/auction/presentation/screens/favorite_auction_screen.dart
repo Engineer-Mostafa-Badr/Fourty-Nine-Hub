@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/enums/base_status_enum.dart';
+import '../../../../core/error/failure.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/common/empty_view.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
@@ -53,7 +56,21 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
   Widget build(BuildContext context) {
     print("🏗️ FavoriteAuctionScreen: Building widget");
 
-    return BlocBuilder<AuctionCubit, AuctionState>(
+    return BlocListener<AuctionCubit, AuctionState>(
+  listener: (context, state) {
+    if (state.status == StateStatus.error) {
+      final errorMessage =
+          getFailureMessage(state.failure!, context) ?? "Something went wrong";
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  },
+  child: BlocBuilder<AuctionCubit, AuctionState>(
       builder: (context, state) {
         print("🔄 BlocBuilder: State changed - Status: ${state.status}");
 
@@ -66,15 +83,15 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
         print("   - State Status: ${state.status}");
 
         // Show error if state is error
-        if (state.status == StateStatus.error) {
-          print("❌ Showing error state");
-          return  Center(
-            child: Text(
-                "${LocaleKeys.somethingWentWrong.localize}",
-              style: TextStyle(color: Colors.red),
-            ),
-          );
-        }
+        // if (state.status == StateStatus.error) {
+        //   print("❌ Showing error state");
+        //   return  Center(
+        //     child: Text(
+        //         "${LocaleKeys.somethingWentWrong.localize}",
+        //       style: TextStyle(color: Colors.red),
+        //     ),
+        //   );
+        // }
 
         // Show loading only if state is loading AND auctions list is not yet fetched (null or empty initially)
         if (state.status == StateStatus.loading && auctions.isEmpty) {
@@ -84,14 +101,9 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
 
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message");
-          return  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
+          return  Center(child: CustomEmptyWidget(label: LocaleKeys.noAuctionAvailable.localize,));
         }
 
-        // If the list is empty, show LocaleKeys.noAuctionAvailable.localize
-        if (auctions.isEmpty) {
-          print("📭 Showing 'No auctions available' message (duplicate check)");
-          return  Center(child: Text(LocaleKeys.noAuctionAvailable.localize));
-        }
 
         // Otherwise, show the auction list
         print("📊 Rendering auction list with ${auctions.length} items");
@@ -120,6 +132,7 @@ class _FavoriteAuctionScreenState extends State<FavoriteAuctionScreen> {
           ),
         );
       },
-    );
+    ),
+);
   }
 }

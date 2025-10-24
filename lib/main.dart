@@ -6,7 +6,7 @@ import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
+// import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
@@ -210,19 +210,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<dynamic> getCurrentCall() async {
-    var calls = await FlutterCallkitIncoming.activeCalls();
-    if (calls is List) {
-      if (calls.isNotEmpty) {
-        return calls[0];
-      } else {
-        return null;
-      }
-    }
+    // var calls = await FlutterCallkitIncoming.activeCalls();
+    // if (calls is List) {
+    //   if (calls.isNotEmpty) {
+    //     return calls[0];
+    //   } else {
+    //     return null;
+    //   }
+    // }
   }
 
   Future<void> getDevicePushTokenVoIP() async {
-    var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    // var devicePushTokenVoIP =
+    //     await FlutterCallkitIncoming.getDevicePushTokenVoIP();
   }
 
   Future getToken() async {
@@ -239,7 +239,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             create: (context) =>
                 NetworkConnectivityCubit(navigatorKey: navigatorKey)),
         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
-        BlocProvider(create: (context) => serviceLocator<CallCubit>()),
+        // BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
             create: (context) => serviceLocator<MainCategoriesCubit>()),
         BlocProvider(
@@ -375,7 +375,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                       child: Stack(
                                         children: [
                                           child!,
-                                          const WhatsAppCallScreen(),
+                                          // const WhatsAppCallScreen(),
                                         ],
                                       ),
                                     );
@@ -393,7 +393,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                   locale: context.locale,
                                 ),
                               ),
-                              const MinimizedCallOverlay(),
+                              // const MinimizedCallOverlay(),
                               // Network alert banner with its own BlocBuilder to avoid rebuilding the main tree
                               BlocBuilder<NetworkConnectivityCubit,
                                   NetworkConnectivityState>(

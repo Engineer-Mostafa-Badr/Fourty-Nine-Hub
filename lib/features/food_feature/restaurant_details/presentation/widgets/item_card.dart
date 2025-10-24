@@ -32,12 +32,13 @@ class ItemCard extends StatefulWidget {
 
 class _ItemCardState extends State<ItemCard> {
   int qty = 0;
+  bool isAddingToCart = false;
 
   @override
   Widget build(BuildContext context) {
     context.read<RestaurantDetailsCubit>();
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.getFillColor(context),
@@ -88,6 +89,7 @@ class _ItemCardState extends State<ItemCard> {
                     top: 8), // Align with quantity controls
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       widget.meal.foodName ?? 'Unknown',
@@ -95,13 +97,25 @@ class _ItemCardState extends State<ItemCard> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Text(
                       '${_formatPrice(widget.meal.price ?? 0.0).toArabicNumbers(context)} ${context.isArabic ? 'ج.م' : 'EGP'}',
                       style: Styles.mediumText(
                         fontWeight: FontWeight.w600,
+                        color: qty > 0 ? Colors.grey : null,
                       ),
                     ),
+                    // Total Price (shown when quantity > 0)
+                    if (qty > 0) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        '${LocaleKeys.total.localize}: ${_formatPrice((widget.meal.price ?? 0.0) * qty).toArabicNumbers(context)} ${context.isArabic ? 'ج.م' : 'EGP'}',
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getRedColor(context),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -136,7 +150,7 @@ class _ItemCardState extends State<ItemCard> {
                           },
 
                           child: Icon(Icons.remove,
-                              size: 20.sp,
+                              size: 25.sp,
                               color: context.isDarkMode
                                   ? AppColors.whiteColor
                                   : AppColors.black),
@@ -145,7 +159,7 @@ class _ItemCardState extends State<ItemCard> {
                         Label(
                           text: '$qty'.toArabicNumbers(context),
                           style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 16,
                               color: context.isDarkMode
                                   ? AppColors.whiteColor
                                   : AppColors.black),
@@ -159,7 +173,7 @@ class _ItemCardState extends State<ItemCard> {
                                 : _increaseQuantity();
                           },
                           child: Icon(Icons.add,
-                              size: 20.sp,
+                              size: 25.sp,
                               color: context.isDarkMode
                                   ? AppColors.whiteColor
                                   : AppColors.black),
@@ -176,51 +190,44 @@ class _ItemCardState extends State<ItemCard> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 0),
                         child: GestureDetector(
-                          onTap: () {
-                            ManageVibration.vibrate();
-                            if (context.isUserLoggedIn) {
-                              _addToCart();
-                            } else {
-                              return pleaseLoginDialog(context);
-
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   SnackBar(
-                              //     content: Text(
-                              //       LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
-                              //       style: Styles.smallText(
-                              //         color: AppColors.whiteColor
-                              //       ),
-                              //     ),
-                              //     backgroundColor: Colors.red,
-                              //     duration: Duration(seconds: 4),
-                              //     action: SnackBarAction(
-                              //       label: LocaleKeys.login.localize,
-                              //       textColor: Colors.white,
-                              //       onPressed: () {
-                              ManageVibration.vibrate();
-                              //        // context.push(Routes.LOGIN);
-                              //       },
-                              //     ),
-                              //   ),
-                              // );
-                              // context.push(Routes.LOGIN);
-                            }
-                          },
+                          onTap: isAddingToCart
+                              ? null
+                              : () {
+                                  ManageVibration.vibrate();
+                                  if (context.isUserLoggedIn) {
+                                    _addToCart();
+                                  } else {
+                                    return pleaseLoginDialog(context);
+                                  }
+                                },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.getRedColor(context),
+                              color: isAddingToCart
+                                  ? AppColors.getRedColor(context)
+                                      .withValues(alpha: 0.6)
+                                  : AppColors.getRedColor(context),
                               borderRadius: BorderRadius.circular(15),
-                              // border: Border.all(color: AppColors.LIGHT_COLOR),
                             ),
-                            child: Text(
-                              LocaleKeys.addToCart.localize,
-                              style: Styles.smallText(
-                                  fontWeight: FontWeight.w500,
-                                  color:
-                                      AppColors.getReversedTextColor(context)),
-                            ),
+                            child: isAddingToCart
+                                ? SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.getReversedTextColor(context),
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    LocaleKeys.addToCart.localize,
+                                    style: Styles.smallText(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.getReversedTextColor(
+                                            context)),
+                                  ),
                           ),
                         ),
                       ),
@@ -246,15 +253,23 @@ class _ItemCardState extends State<ItemCard> {
   }
 
   void _addToCart() async {
+    setState(() {
+      isAddingToCart = true;
+    });
+
     await context.read<RestaurantDetailsCubit>().addToCart(
           context,
           restaurantId: widget.restaurantId,
           foodId: widget.meal.id ?? "",
           quantity: qty,
         );
-    setState(() {
-      qty = 0;
-    });
+
+    if (mounted) {
+      setState(() {
+        qty = 0;
+        isAddingToCart = false;
+      });
+    }
   }
 
   void _decreaseQuantity() async {

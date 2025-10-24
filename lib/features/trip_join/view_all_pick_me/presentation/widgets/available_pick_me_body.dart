@@ -101,7 +101,7 @@ class AvailablePickMeBody extends StatelessWidget {
               children: [
                 ProfilePictureWidget(
                   image: '',
-                  firstChar: firstName[0].toUpperCase(),
+                  firstChar: firstName.isEmpty?'':firstName[0].toUpperCase(),
                   hasStories: false,
                   isMale: isMale,
                   isVerified: isVerified,

@@ -36,6 +36,7 @@ class GiftViewBody extends StatelessWidget {
             final gift = state.giftAndCompetitionEntity!;
             return GlowingOverscrollIndicator(
               color: AppColors.SECONDARY_COLOR,
+              // color: AppColors.SECONDARY_COLOR,
               axisDirection: AxisDirection.down,
               child: SingleChildScrollView(
                 child: Column(

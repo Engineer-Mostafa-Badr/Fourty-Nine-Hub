@@ -25,7 +25,7 @@ import '../enums/wallet_types_enums.dart';
 import '../utils/custom_show_dialog.dart';
 
 showErrorMessage(BuildContext context, String message) {
-  if (message == 'Unauthorized' || message == 'Unknown Error') return;
+  if (message == 'Unauthorized' || message == 'Unknown Error'|| message == '') return;
 
   // Log the error message for debugging
   log('🚨 showErrorMessage: $message');
@@ -411,7 +411,7 @@ void showConfirmDialog(
 }
 
 showSubscribeDialog(BuildContext context, String subCategoryId,
-    {String? title}) {
+    {String? title,Function(bool success)? onSubscribe}) {
   showCustomDialogTrip(
       context,
       Column(
@@ -454,6 +454,7 @@ showSubscribeDialog(BuildContext context, String subCategoryId,
                     SubscriptionMethod().subscribe(
                         subscribeId: subCategoryId,
                         showRegular: true,
+                        onSubscribe: onSubscribe==null?null:(success)=>onSubscribe(success),
                         title: '');
                   }),
             ],

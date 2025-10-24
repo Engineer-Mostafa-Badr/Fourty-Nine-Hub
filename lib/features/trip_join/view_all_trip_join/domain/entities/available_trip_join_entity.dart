@@ -18,7 +18,7 @@ class AvailableTripJoinEntity {
   final bool? isPremium;
   final String? phoneNumber; // ✅ Added
   final List<ViewerEntity>? lastViewers; // ✅ Added
-  final IsButtonEnabledEntity? isButtonEnabled;
+  IsButtonEnabledEntity? isButtonEnabled;
   final VehicleDetailsEntity? vehicleDetails;
   final LocationEntity? location;
 
@@ -49,7 +49,7 @@ class AvailableTripJoinEntity {
 }
 
 class IsButtonEnabledEntity {
-  final bool? state;
+  bool? state;
 
   IsButtonEnabledEntity({this.state});
 }

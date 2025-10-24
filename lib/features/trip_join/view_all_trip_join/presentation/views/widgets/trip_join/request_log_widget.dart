@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
@@ -203,320 +204,328 @@ class _RequestLogTripJoinWidgetState extends State<RequestLogTripJoinWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: isFloatingButtonVisible
-          ? buildFloatingAction(context,child: Padding(
-        padding: const EdgeInsetsDirectional.only(start: 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {
-                context.push(Routes.tripJoinInfoScreen);
-              },
-              child: Container(
-                height: 48.h,
-                width: 48.h,
-                decoration: BoxDecoration(
-                    color: AppColors.getButtonPrimaryColor(context),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Icon(
-                  size: 19,
-                  Icons.question_mark,
-                  color: context.isDarkMode
-                      ? AppColors.black
-                      : Colors.white,
+    return RefreshIndicator(
+      color: AppColors.whiteColor,
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      onRefresh: () async {
+        context.read<ViewAllTripJoinCubit>().loadInitialRequestTripJoin();
+        context.read<ViewAllTripJoinCubit>().getRequestCount();
+      },
+      child: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: isFloatingButtonVisible
+            ? buildFloatingAction(context,child: Padding(
+          padding: const EdgeInsetsDirectional.only(start: 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  context.push(Routes.tripJoinInfoScreen);
+                },
+                child: Container(
+                  height: 48.h,
+                  width: 48.h,
+                  decoration: BoxDecoration(
+                      color: AppColors.getButtonPrimaryColor(context),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Icon(
+                    size: 19,
+                    Icons.question_mark,
+                    color: context.isDarkMode
+                        ? AppColors.black
+                        : Colors.white,
+                  ),
                 ),
               ),
-            ),
-            CustomElevatedButton(
-                onPressed: () {
-                  ManageVibration.vibrate();
-                  context.push(Routes.TRIP_JOIN, extra: false);
-                },
-                backgoundColor: AppColors.getButtonPrimaryColor(context),
-                child: Label(
-                  text: context.isArabic ? "أعلن عن سيارنك +" : "Advertise your car +",
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.getReversedTextColor(context),
-                  ),
-                ))
-          ],
-        ),
-      ), () {
-        ManageVibration.vibrate();
-        context.push(Routes.TRIP_JOIN, extra: false);
-      })
-          : null,
-      body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
-        builder: (context, state) {
-          if (context.read<ViewAllTripJoinCubit>().isLoadingRequestTripJoin ==
-              true) {
-            return const Center(
-              child: CustomLoadingSearchWidget(),
-            );
-          }
+              CustomElevatedButton(
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    context.push(Routes.TRIP_JOIN, extra: false);
+                  },
+                  backgoundColor: AppColors.getButtonPrimaryColor(context),
+                  child: Label(
+                    text: context.isArabic ? "أعلن عن سيارنك +" : "Advertise your car +",
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getReversedTextColor(context),
+                    ),
+                  ))
+            ],
+          ),
+        ), () {
+          ManageVibration.vibrate();
+          context.push(Routes.TRIP_JOIN, extra: false);
+        })
+            : null,
+        body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
+          builder: (context, state) {
+            if (context.read<ViewAllTripJoinCubit>().isLoadingRequestTripJoin ==
+                true) {
+              return const Center(
+                child: CustomLoadingSearchWidget(),
+              );
+            }
 
-          if (context
-              .read<ViewAllTripJoinCubit>()
-              .requestTripJoinData
-              .isEmpty) {
-            return Center(child: Text(LocaleKeys.noData.localize));
-          }
-          return OlxPaginationWidget(
-            scrollController: _scrollController,
-            itemsPerPage: 3,
-            loadPage: (page) async {
-              context.read<ViewAllTripJoinCubit>().getRequestTripJoin();
-            },
-            banners: bannersList,
-            items: List.generate(
-              context
-                  .read<ViewAllTripJoinCubit>()
-                  .requestTripJoinData.length,
-                  (index) {
-                GetRequestTripJoinEntity data = context
+            if (context
+                .read<ViewAllTripJoinCubit>()
+                .requestTripJoinData
+                .isEmpty) {
+              return Center(child: CustomEmptyWidget(label:LocaleKeys.noRequests.localize));
+            }
+            return OlxPaginationWidget(
+              scrollController: _scrollController,
+              itemsPerPage: 3,
+              loadPage: (page) async {
+                context.read<ViewAllTripJoinCubit>().getRequestTripJoin();
+              },
+              banners: bannersList,
+              items: List.generate(
+                context
                     .read<ViewAllTripJoinCubit>()
-                    .requestTripJoinData[index];
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.h,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              ManageVibration.vibrate();
-                              context
-                                  .read<ViewAllTripJoinCubit>()
-                                  .applyReadRequestTrip(data.id!);
-                            },
-                            child: CustomCard(
-                              // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
-                              color: data.isRead == true
-                                  ? (context.isDarkMode
-                                  ? Colors.transparent
-                                  : AppColors.whiteColor)
-                                  : (context.isDarkMode
-                                  ? AppColors.grey
-                                  : AppColors.grey.shade300),
+                    .requestTripJoinData.length,
+                    (index) {
+                  GetRequestTripJoinEntity data = context
+                      .read<ViewAllTripJoinCubit>()
+                      .requestTripJoinData[index];
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                context
+                                    .read<ViewAllTripJoinCubit>()
+                                    .applyReadRequestTrip(data.id!);
+                              },
+                              child: CustomCard(
+                                // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
+                                color: data.isRead == true
+                                    ? (context.isDarkMode
+                                    ? Colors.transparent
+                                    : AppColors.whiteColor)
+                                    : (context.isDarkMode
+                                    ? AppColors.grey
+                                    : AppColors.grey.shade300),
 
-                              radius: 20,
-                              children: [
-                                // Text("${data.read}"),
-                                const Sizer(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 32.0.h),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: ClickableWidget(
-                                          onTap: () {
-                                            if((data.lastViewers?.length??0)>0) {
-                                              ManageVibration.vibrate();
-                                              showModalBottomSheet(
-                                                backgroundColor: context.isDarkMode
-                                                    ? AppColors.DARK_BLUE_COLOR
-                                                    .withOpacity(0.95)
-                                                    : AppColors.LIGHT_COLOR,
-                                                constraints: BoxConstraints(
-                                                  maxHeight: MediaQuery.of(context).size.height * 0.3,
-                                                ),
-                                                context: context,
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(32.0),
-                                                    topRight: Radius.circular(32.0),
+                                radius: 20,
+                                children: [
+                                  // Text("${data.read}"),
+                                  const Sizer(),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 32.0.h),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: ClickableWidget(
+                                            onTap: () {
+                                              if((data.lastViewers?.length??0)>0) {
+                                                ManageVibration.vibrate();
+                                                showModalBottomSheet(
+                                                  backgroundColor: context.isDarkMode
+                                                      ? AppColors.DARK_BLUE_COLOR
+                                                      .withOpacity(0.95)
+                                                      : AppColors.LIGHT_COLOR,
+                                                  constraints: BoxConstraints(
+                                                    maxHeight: MediaQuery.of(context).size.height * 0.3,
                                                   ),
-                                                ),
-                                                isDismissible: true,
-                                                // isScrollControlled: true,
-                                                builder: (BuildContext context) {
-                                                  return Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                        Expanded(
-                                                          child: ListView(
-                                                            shrinkWrap: true,
-                                                            children: List.generate(data.lastViewers?.length??0, (i)=>Container(
-                                                              padding: EdgeInsets.only(bottom: 10),
-                                                              child: Row(
-                                                                children: [
-                                                                  ImageFromInternet(
-                                                                      image: '',
-                                                                      isCircle: true,
-                                                                      defaultLogo: false,
-                                                                      isMale: data.lastViewers?[i].gender=='male',
-                                                                      width: 40,
-                                                                      height: 40,
-                                                                      firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
-                                                                      charPadding: 0),
-                                                                  const Sizer(),
-                                                                  Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                                ],
-                                                              ),
-                                                            )),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                  context: context,
+                                                  shape: const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(32.0),
+                                                      topRight: Radius.circular(32.0),
                                                     ),
-                                                  );
-                                                },
-                                              );
-                                            }
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.remove_red_eye_sharp,
-                                                color: context.isDarkMode
-                                                    ? AppColors.whiteColor
-                                                    : AppColors
-                                                    .DARK_GRAY_COLOR,
-                                              ),
-                                              const Sizer(),
-                                              Label(
-                                                // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
-                                                text:
-                                                '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
-                                                style: Styles.mediumText(
-                                                  fontSize: 24,
+                                                  ),
+                                                  isDismissible: true,
+                                                  // isScrollControlled: true,
+                                                  builder: (BuildContext context) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Column(
+                                                        children: [
+                                                          Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                          Expanded(
+                                                            child: ListView(
+                                                              shrinkWrap: true,
+                                                              children: List.generate(data.lastViewers?.length??0, (i)=>Container(
+                                                                padding: EdgeInsets.only(bottom: 10),
+                                                                child: Row(
+                                                                  children: [
+                                                                    ImageFromInternet(
+                                                                        image: '',
+                                                                        isCircle: true,
+                                                                        defaultLogo: false,
+                                                                        isMale: data.lastViewers?[i].gender=='male',
+                                                                        width: 40,
+                                                                        height: 40,
+                                                                        firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
+                                                                        charPadding: 0),
+                                                                    const Sizer(),
+                                                                    Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                                  ],
+                                                                ),
+                                                              )),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              }
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.remove_red_eye_sharp,
                                                   color: context.isDarkMode
                                                       ? AppColors.whiteColor
                                                       : AppColors
                                                       .DARK_GRAY_COLOR,
                                                 ),
-                                              ),
-                                            ],
+                                                const Sizer(),
+                                                Label(
+                                                  // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
+                                                  text:
+                                                  '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                                  style: Styles.mediumText(
+                                                    fontSize: 24,
+                                                    color: context.isDarkMode
+                                                        ? AppColors.whiteColor
+                                                        : AppColors
+                                                        .DARK_GRAY_COLOR,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      // Text(
-                                      //   "${data.status ?? ""}",
-                                      //   style: Styles.headerText(
-                                      //       color: AppColors.getRedColor(context), fontSize: 32),
-                                      // ),
-                                    ],
+                                        // Text(
+                                        //   "${data.status ?? ""}",
+                                        //   style: Styles.headerText(
+                                        //       color: AppColors.getRedColor(context), fontSize: 32),
+                                        // ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Divider(),
-                                TripCardInfoWidget(
-                                  price: formatPrice(
-                                      data.pricePerSeat?.round() ?? 10,
-                                      context),
-                                  title: data.firstName ?? "",
-                                  icon: data.gender == "male"
-                                      ? Assets.maleUser
-                                      : Assets.femaleUser,
-                                  seats: LocaleKeys.eachSeat.localize,
-                                  isMale: data.gender == "male",
-                                  // icon:   Assets.maleUser,
-                                  //
-                                  // // : Assets.femaleUser,
-                                  // seats: "1"
-                                ),
-                                const Sizer(
-                                  height: 30,
-                                ),
-                                _locationWidget(
-                                    title:
-                                    data.location?.start?.address ?? "",
-                                    iconColor: AppColors.LIGHT_BLUE),
-                                const Sizer(),
-                                _locationWidget(
-                                    title: data.location?.target?.address ??
-                                        "",
-                                    iconColor: AppColors.CHECK_MARK_COLOR),
-                                const Sizer(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 32.0.h,
+                                  const Divider(),
+                                  TripCardInfoWidget(
+                                    price: formatPrice(
+                                        data.pricePerSeat?.round() ?? 10,
+                                        context),
+                                    title: data.firstName ?? "",
+                                    icon: data.gender == "male"
+                                        ? Assets.maleUser
+                                        : Assets.femaleUser,
+                                    seats: LocaleKeys.eachSeat.localize,
+                                    isMale: data.gender == "male",
+                                    // icon:   Assets.maleUser,
+                                    //
+                                    // // : Assets.femaleUser,
+                                    // seats: "1"
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        formatTimestamp12(
-                                            data.createdAt!, context),
-                                        style: Styles.headerText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        // data.trip.passengers == 1
-                                        //     ? '${data.trip.passengers} ${LocaleKeys.seat.localize}'
-                                        //     :
-                                        // '${data.passengers} ${LocaleKeys.seat.localize}',
-                                        "${formatPrice(data.totalPassengers ?? 1, context)}  ${LocaleKeys.seat.localize}",
+                                  const Sizer(
+                                    height: 30,
+                                  ),
+                                  _locationWidget(
+                                      title:
+                                      data.location?.start?.address ?? "",
+                                      iconColor: AppColors.LIGHT_BLUE),
+                                  const Sizer(),
+                                  _locationWidget(
+                                      title: data.location?.target?.address ??
+                                          "",
+                                      iconColor: AppColors.CHECK_MARK_COLOR),
+                                  const Sizer(),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 32.0.h,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          formatTimestamp12(
+                                              data.createdAt!, context),
+                                          style: Styles.headerText(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          // data.trip.passengers == 1
+                                          //     ? '${data.trip.passengers} ${LocaleKeys.seat.localize}'
+                                          //     :
+                                          // '${data.passengers} ${LocaleKeys.seat.localize}',
+                                          "${formatPrice(data.totalPassengers ?? 1, context)}  ${LocaleKeys.seat.localize}",
 
-                                        style: Styles.headerText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        // data.isRepeat ? LocaleKeys.repeated.localize :
-                                        LocaleKeys.oneTime.localize,
-                                        // widget.status,
-                                        style: Styles.headerText(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                          style: Styles.headerText(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          // data.isRepeat ? LocaleKeys.repeated.localize :
+                                          LocaleKeys.oneTime.localize,
+                                          // widget.status,
+                                          style: Styles.headerText(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Divider(),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 32.0.h,
+                                  const Divider(),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 32.0.h,
+                                    ),
+                                    child: ContactsTripButtons(
+                                      // isPremium: false,
+                                      subscriptionTitle:LocaleKeys.tripJoin.localize,
+                                      isPremium: data.isPremium == true ||
+                                          data.isButtonEnabled!.state ==
+                                              true
+                                          ? true
+                                          : false,
+                                      otherUserId: '2',
+                                      subcategoryId: '2',
+                                      phone: data.phoneNumber ?? "123",
+                                      id: '2',
+                                      hasReport: true,
+                                    ),
+                                    // TripJoinButtonsSection(
+                                    //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
+                                    //   isRequestButton: false,
+                                    //   buttonTitle:LocaleKeys.requests.localize,
+                                    //   // buttonTitle:" widget.buttonTitle",
+                                    //   onTap: (){},
+                                    // ),
                                   ),
-                                  child: ContactsTripButtons(
-                                    // isPremium: false,
-                                    subscriptionTitle:LocaleKeys.tripJoin.localize,
-                                    isPremium: data.isPremium == true ||
-                                        data.isButtonEnabled!.state ==
-                                            true
-                                        ? true
-                                        : false,
-                                    otherUserId: '2',
-                                    subcategoryId: '2',
-                                    phone: data.phoneNumber ?? "123",
-                                    id: '2',
-                                    hasReport: true,
-                                  ),
-                                  // TripJoinButtonsSection(
-                                  //   isContactInfo: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
-                                  //   isRequestButton: false,
-                                  //   buttonTitle:LocaleKeys.requests.localize,
-                                  //   // buttonTitle:" widget.buttonTitle",
-                                  //   onTap: (){},
-                                  // ),
-                                ),
-                                const Sizer(),
-                              ],
+                                  const Sizer(),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      data.isPremium == true ||
-                          data.isButtonEnabled!.state == true
-                          ? SizedBox()
-                          : TripCardSubscribeText(),
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
-        },
+                          ],
+                        ),
+                        data.isPremium == true ||
+                            data.isButtonEnabled!.state == true
+                            ? SizedBox()
+                            : TripCardSubscribeText(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

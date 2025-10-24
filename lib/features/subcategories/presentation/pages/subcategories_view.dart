@@ -106,16 +106,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: context.isArabic
-              ? widget.mainCategory.name
-              : widget.mainCategory.nameEn,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          enableCustomAppBar: true,
-        ),
+      appBar: BackAppBar(
+        label: context.isArabic
+            ? widget.mainCategory.name
+            : widget.mainCategory.nameEn,
       ),
       body: BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
         builder: (context, state) {
@@ -159,7 +153,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                       child: CustomNotificationBadge(
                         count: 0,
                         child: HeaderButtonWidget(
-                          title: !context.isArabic?'Favourites':'المفضلة',
+                          title: !context.isArabic ? 'Favourites' : 'المفضلة',
                           isOpened: context
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
@@ -270,16 +264,21 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                       isFloatingButtonVisible = value;
                       setState(() {});
                     },
+                    selectedSubCategoryId:
+                        null, // No subcategory filtering in regular subcategories view
                   ),
                 )),
               if (context.read<SubcategoriesCubit>().isRequestLogOpen)
                 Expanded(
                     child: AdsRequestLogView(
-                        mainCategoryId: widget.mainCategory.id,
-                        isFloatingButtonVisible: (value) {
-                          isFloatingButtonVisible = value;
-                          setState(() {});
-                        })),
+                  mainCategoryId: widget.mainCategory.id,
+                  isFloatingButtonVisible: (value) {
+                    isFloatingButtonVisible = value;
+                    setState(() {});
+                  },
+                  selectedSubCategoryId:
+                      null, // No subcategory filtering in regular subcategories view
+                )),
               if (context.read<SubcategoriesCubit>().isMyAdsOpen)
                 Expanded(
                     child: BlocProvider(
@@ -290,6 +289,8 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                       isFloatingButtonVisible = value;
                       setState(() {});
                     },
+                    selectedSubCategoryId:
+                        null, // No subcategory filtering in regular subcategories view
                   ),
                 )),
               if (context.read<SubcategoriesCubit>().isSearchAdsOpen)

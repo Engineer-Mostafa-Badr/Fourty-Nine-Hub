@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/register_floating_action_button.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -26,12 +27,12 @@ class WelcomeRideRegister extends StatefulWidget {
 class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
   @override
   void initState() {
-    if(widget.isShipping) {
-      context.read<RideRegisterCubit>().fetchShippingCategories(UserCubit.to.state.data?.id ?? "",false);
-      context.read<RideRegisterCubit>().fetchShippingCategories(UserCubit.to.state.data?.id ?? "",true);
-    }else{
-      context.read<RideRegisterCubit>().fetchRideCategories(UserCubit.to.state.data?.id ?? "",false);
-      context.read<RideRegisterCubit>().fetchRideCategories(UserCubit.to.state.data?.id ?? "",true);
+    if (widget.isShipping) {
+      context.read<RideRegisterCubit>().fetchShippingCategories(UserCubit.to.state.data?.id ?? "", false);
+      context.read<RideRegisterCubit>().fetchShippingCategories(UserCubit.to.state.data?.id ?? "", true);
+    } else {
+      context.read<RideRegisterCubit>().fetchRideCategories(UserCubit.to.state.data?.id ?? "", false);
+      context.read<RideRegisterCubit>().fetchRideCategories(UserCubit.to.state.data?.id ?? "", true);
     }
     super.initState();
   }
@@ -43,111 +44,158 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
         preferredSize: Size.fromHeight(30),
         child: HomeAppbar(),
       ),
-      body: BlocBuilder<RideRegisterCubit, RideRegisterState>(
-        builder: (context,state) {
-          var cubit = context.read<RideRegisterCubit>();
-          return Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-                  child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
-                    builder: (context,state) {
-                      var cubit = context.read<RideRegisterCubit>();
-                      if(state.isLoading){
-                        return const Center(child: CustomCircularProgressIndicator(),);
-                      }
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Label(
-                            text: LocaleKeys.welcomeToRideRegister.localize,
-                            style: Styles.headerText(
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.SECONDARY_COLOR),
-                          ),
-                          const Sizer(),
-                          const Sizer(),
-                          Expanded(
-                            child: GridView.count(
-                              crossAxisCount: 3,
-                              childAspectRatio: 1.3,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
-                              children: List.generate(
-                                widget.isShipping==true?state.shippingSubCategories?.where((e)=>e.isEnabled==true).toList().length??0:state.rideSubCategories?.where((e)=>e.isEnabled==true).toList().length??0,
-                                (index) {
-                                  var list = widget.isShipping==true?state.shippingSubCategories?.where((e)=>e.isEnabled==true).toList():state.rideSubCategories?.where((e)=>e.isEnabled==true).toList();
-                                  var subCategory = list?[index];
-                                  return  InkWell(
-                                    onTap: () {
-      ManageVibration.vibrate();
-                                      if(widget.isShipping==true){
-                                        cubit.onSelectShippingSubCategory(subCategory?.subCategoryId??'',context);
-                                      }else{
-                                        cubit.onSelectSubCategory(subCategory?.subCategoryId??'',context);
-                                      }
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
-                                          color: subCategory?.isSelected==true
-                                              ?context.isDarkMode?AppColors.GREY_DARK_COLOR: AppColors.GREYBG
-                                              : Colors.transparent),
-                                      child: Column(
+      body: BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
+        var cubit = context.read<RideRegisterCubit>();
+        return Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 32,
+                  left: 16,
+                  right: 16,
+                ),
+                child: BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
+                  var cubit = context.read<RideRegisterCubit>();
+                  if (state.isLoading) {
+                    return const Center(
+                      child: CustomCircularProgressIndicator(),
+                    );
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Label(
+                        text: LocaleKeys.welcomeToRideRegister.localize,
+                        style: Styles.headerText(fontWeight: FontWeight.w500, color: AppColors.SECONDARY_COLOR),
+                      ),
+                      const Sizer(),
+                      const Sizer(),
+                      Expanded(
+                        child: GridView.count(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1.3,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                          children: List.generate(
+                            widget.isShipping == true
+                                ? state.shippingSubCategories?.where((e) => e.isEnabled == true).toList().length ?? 0
+                                : state.rideSubCategories?.where((e) => e.isEnabled == true).toList().length ?? 0,
+                            (index) {
+                              var list = widget.isShipping == true
+                                  ? state.shippingSubCategories?.where((e) => e.isEnabled == true).toList()
+                                  : state.rideSubCategories?.where((e) => e.isEnabled == true).toList();
+                              var subCategory = list?[index];
+                              return InkWell(
+                                onTap: () {
+                                  ManageVibration.vibrate();
+                                  if (widget.isShipping == true) {
+                                    cubit.onSelectShippingSubCategory(subCategory?.subCategoryId ?? '', context);
+                                  } else {
+                                    cubit.onSelectSubCategory(subCategory?.subCategoryId ?? '', context);
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: subCategory?.isSelected == true
+                                          ? context.isDarkMode
+                                              ? AppColors.GREY_DARK_COLOR
+                                              : AppColors.GREYBG
+                                          : Colors.transparent),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           // ImageFromInternet(image: subCategory?.picture??'',height: 50,width: 50,fit: BoxFit.cover,),
                                           Image.network(
-                                            subCategory?.picture??'',
+                                            subCategory?.picture ?? '',
                                             width: 50,
                                           ),
                                           const Sizer(),
                                           Label(
-                                            text: context.isArabic?subCategory?.subCategoryNameAr??'':subCategory?.subCategoryNameEn??'',
+                                            text: context.isArabic ? subCategory?.subCategoryNameAr ?? '' : subCategory?.subCategoryNameEn ?? '',
                                             style: Styles.mediumText(
                                               fontWeight: FontWeight.w400,
-                                              color: context.isDarkMode?Colors.white:Colors.black,
+                                              color: context.isDarkMode ? Colors.white : Colors.black,
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                                      PositionedDirectional(
+                                        top: 4,
+                                        end: 4,
+                                        child: Container(
+                                          height: 12,
+                                          width: 12,
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border:Border.all(color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR),
+                                          ),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: context.isDarkMode ? (subCategory?.isSelected==true?AppColors.whiteColor:Colors.transparent) : (subCategory?.isSelected==true?AppColors.PRIMARY_COLOR:Colors.transparent),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      );
-                    }
-                  ),
-                ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ),
-              RegisterNextRow(
-                onTap: () {
-      ManageVibration.vibrate();
-                  if(widget.isShipping==true){
-                    if(state.shippingSubCategories?.where((e)=>e.isSelected==true).toList().isEmpty??false){
-                      showErrorMessage(context, context.isArabic?'يجب اختيار صنف واحد على الاقل':'Please select at least one category');
-                      return;
-                    }else{
-                      cubit.onSubmitSelectShippingSubCategories(context);
-                    }
-                  }else{
-                    if(state.rideSubCategories?.where((e)=>e.isSelected==true).toList().isEmpty??false){
-                      showErrorMessage(context, context.isArabic?'يجب اختيار صنف واحد على الاقل':'Please select at least one category');
-                      return;
-                    }else{
-                      cubit.onSubmitSelectSubCategories(context);
-                    }
+            ),
+            RegisterNextRow(
+              onPop: () {
+                ManageVibration.vibrate();
+                if (widget.isShipping == true) {
+                  if (state.shippingSubCategories?.any((e) => e.isSelected == true) ?? false) {
+                    cubit.onRemoveSelectionShipping();
+                  } else {
+                    context.pop();
                   }
-                },
-              )
-            ],
-          );
-        }
-      ),
+                } else {
+                  if (state.rideSubCategories?.any((e) => e.isSelected == true) ?? false) {
+                    cubit.onRemoveSelectionRide();
+                  } else {
+                    context.pop();
+                  }
+                }
+              },
+              onTap: () {
+                ManageVibration.vibrate();
+                if (widget.isShipping == true) {
+                  if (state.shippingSubCategories?.where((e) => e.isSelected == true).toList().isEmpty ?? false) {
+                    showErrorMessage(context, context.isArabic ? 'يجب اختيار صنف واحد على الاقل' : 'Please select at least one category');
+                    return;
+                  } else {
+                    cubit.onSubmitSelectShippingSubCategories(context);
+                  }
+                } else {
+                  if (state.rideSubCategories?.where((e) => e.isSelected == true).toList().isEmpty ?? false) {
+                    showErrorMessage(context, context.isArabic ? 'يجب اختيار صنف واحد على الاقل' : 'Please select at least one category');
+                    return;
+                  } else {
+                    cubit.onSubmitSelectSubCategories(context);
+                  }
+                }
+              },
+            )
+          ],
+        );
+      }),
     );
   }
 }

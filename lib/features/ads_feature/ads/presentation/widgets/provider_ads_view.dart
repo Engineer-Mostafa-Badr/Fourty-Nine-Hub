@@ -32,6 +32,7 @@ class ProviderAdsView extends StatelessWidget {
   final Function(bool) onScrollChanged;
 
   @override
+
   Widget build(BuildContext context) {
     print('userType $userType');
 
@@ -62,7 +63,7 @@ class ProviderAdsView extends StatelessWidget {
                                 extra: FilterAdsParams(
                                   categorization: CategorizationEntity(
                                       mainCategory: params.mainCategory,
-                                      subCategory: params.subCategory),
+                                      subCategory: params.subCategory,fromMarriage: false),
                                   userType: userType,
                                 ));
                             if (data != null) {

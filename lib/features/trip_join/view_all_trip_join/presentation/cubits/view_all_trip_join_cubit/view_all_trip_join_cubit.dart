@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:collection/collection.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
@@ -6,6 +8,11 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_model.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_read_request_pick_me_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_view_pick_me_use_case.dart';
@@ -67,6 +74,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   final GetRequestCountPickMeUseCase getRequestCountPickMeUseCase;
   final CreateTripJoinRequestUseCase createTripJoinRequestUseCase;
   final CreatePickMeRequestUseCase createPickMeRequestUseCase;
+  final AddCarBrandUseCase addCarBrandUseCase;
+  final AddCarModelUseCase addCarModelUseCase;
 
   List<MyAdsTripDocEntity> myAdsData = [];
   List<MyAdsTripDocEntity> myPickMeAdsData = [];
@@ -126,7 +135,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   List<TripJoinCardEntity> tripJoinCards = [];
 
   bool noMoreDataInDatabase = false;
-
+  TextEditingController brandNameController = TextEditingController();
+  TextEditingController modelNameController = TextEditingController();
+  var modelFormKey = GlobalKey<FormState>();
   ViewAllTripJoinCubit(
       this.getCarBrandUseCase,
       this.viewAllTripJoinUseCase,
@@ -149,6 +160,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       this.createPickMeRequestUseCase,
       this.getRequestCountPickMeUseCase,
       this.getRequestPickMeUseCase,
+      this.addCarBrandUseCase,
+      this.addCarModelUseCase,
       this.getRequestCountTripJoinUseCase)
       : super(ViewAllTripJoinState());
 
@@ -286,8 +299,21 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
         isSuccess=false;
         currentContext.pop();
         currentContext.pop();
-        showErrorMessage(
-            currentContext, getFailureMessage(failure, currentContext));
+        String name = getFailureName(failure, currentContext);
+        if(name == 'SubscribeError'){
+          showSubscribeDialog(currentContext, '62c8ba9f8e28a58a3edf57ee',
+              title: currentContext.isArabic?'اشترك أولا حتي تتمكن من ارسال طلب مميز':'Subscribe first to be able to send a premium request',
+          // onSubscribe: (success){
+          //   print("isPremium==true $isPremium");
+          //   currentContext.pop();
+          //   // if(isPremium==true)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isPremiumRequested=true;
+          //   // if(isPremium==false)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isNormalRequested=true;
+          // }
+          );
+        }else{
+          showErrorMessage(
+              currentContext, getFailureMessage(failure, currentContext));
+        }
         emit(state.copyWith(
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
@@ -341,24 +367,26 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
   Future<void> createTripJoinOffer(
       CreateTripJoinParams params, BuildContext context) async {
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
-
+    showLoadingDialog(currentContext);
     final response = await createTripJoinOfferUseCase(params);
     response.fold(
       (failure) {
-        var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
+        currentContext.pop();
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) {
+        currentContext.pop();
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
         ));
-        showSuccessMessage(context, tripData.message ?? "Success");
+        showSuccessMessage(currentContext, currentContext.isArabic?'تم انشاء الرحلة بنجاح':'Your Trip has been created successfully');
       },
     );
   }
@@ -368,22 +396,24 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     var currentContext =
     AppPages.router.configuration.navigatorKey.currentContext!;
-
+    showLoadingDialog(currentContext);
     final response = await createPickMeOfferUseCase(params);
     response.fold(
       (failure) {
+        currentContext.pop();
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) {
+        currentContext.pop();
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
         ));
-        showSuccessMessage(context, tripData.message ?? "Success");
-        currentContext.pop();
+        showSuccessMessage(currentContext, currentContext.isArabic?'تم انشاء الرحلة بنجاح':'Your Trip has been created successfully');
+        currentContext.pop(true);
       },
     );
   }
@@ -1034,4 +1064,94 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
+
+  Future<void> addNewBrand(
+      {required BuildContext context, required String brandName}) async {
+    //addCarModelUseCase
+    showLoadingDialog(context);
+    emit(state.copyWith(
+        status: ViewAllTripJoinStatus.loading,
+        // selectedBrand: RideBrandEntity(
+        //     id: '', brandNameEn: '', brandNameAr: '', logoUrl: '')
+    ));
+    final Either<Failure, String> result = await addCarBrandUseCase(brandName);
+
+    result.fold(
+          (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        context.pop();
+        emit(
+            state.copyWith(status: ViewAllTripJoinStatus.failure, failure: failure));
+      },
+          (data) async {
+        context.pop();
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? "تم اضافة الماركة بنجاح"
+                : "Model added successfully");
+        RideBrandModel newBrand = RideBrandModel(
+            id: data,
+            brandNameAr: brandName,
+            brandNameEn: brandName,
+            logoUrl: '');
+        // newBrandAddedController.text = brandName;
+        emit(state.copyWith(
+            status: ViewAllTripJoinStatus.success, newBrand: newBrand));
+      },
+    );
+  }
+
+  onRemoveBrand(){
+    emit(state.copyWith(
+        status: ViewAllTripJoinStatus.loading,
+        newBrand: RideBrandModel(
+            id: '', brandNameEn: '', brandNameAr: '', logoUrl: '')
+    ));
+  }
+
+  Future<void> addNewModel(
+      {required BuildContext context,
+        required String modelName,
+        required String brandId}) async {
+    showLoadingDialog(context);
+    emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
+    final Either<Failure, String> result =
+    await addCarModelUseCase(AddCarModelParams(
+        modelName: modelName,
+        type: "car",
+        carBrandId: brandId));
+
+    result.fold(
+          (failure) {
+        var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        context.pop();
+        emit(
+            state.copyWith(status: ViewAllTripJoinStatus.failure, failure: failure));
+      },
+          (data) async {
+        context.pop();
+        showSuccessMessage(
+            context,
+            context.isArabic
+                ? "تم اضافة الموديل بنجاح"
+                : "Model added successfully");
+        RideCarModelModel newModel = RideCarModelModel(
+          id: data,
+          modelAr: modelName,
+          modelEn: modelName,
+        );
+        emit(state.copyWith(
+            status: ViewAllTripJoinStatus.success, newModel: newModel));
+      },
+    );
+  }
+
 }

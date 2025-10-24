@@ -44,7 +44,7 @@ class _DotsWidgetState extends State<DotsWidget> {
     bool isActive = index == widget.currentIndex;
 
     // تحديد حجم النقطة بناءً على المسافة من النقطة النشطة
-    double dotSize = 8.0;
+    double dotSize = 6.0;
     double dotScale = 1.0;
 
     if (isActive) {

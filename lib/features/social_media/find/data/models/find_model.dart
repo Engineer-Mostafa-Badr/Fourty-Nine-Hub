@@ -30,7 +30,7 @@ class FindModel extends FindEntity {
 
   factory FindModel.fromJson(Map<String, dynamic> json) {
     return FindModel(
-      id: json['_id'] as String?,
+      id: json['id'] ?? json['_id'], // ✅ FIXED
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
       birthday: json['birthday'] as String?,
@@ -47,6 +47,7 @@ class FindModel extends FindEntity {
       hasStory: json['hasStory'] as bool?,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {

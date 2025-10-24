@@ -15,10 +15,10 @@ abstract class Styles {
     return TextStyle(
       fontSize: fontSize.sp,
       color: color,
-      decorationThickness: decorationThickness,
+      decorationThickness: decoration != null ? decorationThickness : null,
       decoration: decoration,
       shadows: shadows,
-      decorationColor: color ?? AppColors.PRIMARY_COLOR,
+      decorationColor: decoration != null ? (color ?? AppColors.PRIMARY_COLOR) : null,
       fontWeight: fontWeight,
       height: height,
     );
@@ -39,9 +39,9 @@ abstract class Styles {
       fontStyle: fontStyle,
       // overflow: TextOverflow.ellipsis,
       shadows: shadows,
-      decorationThickness: decorationThickness,
+      decorationThickness: decoration != null ? decorationThickness : null,
       decoration: decoration,
-      decorationColor: color,
+      decorationColor: decoration != null ? color : null,
       fontWeight: fontWeight,
       height: height,
     );
@@ -60,10 +60,10 @@ abstract class Styles {
       fontSize: (fontSize??36).sp,
       fontWeight: fontWeight,
       shadows: shadows,
-      decorationColor: color,
+      decorationColor: decoration != null ? color : null,
       decoration: decoration,
       color: color,
-      decorationThickness: decorationThickness,
+      decorationThickness: decoration != null ? decorationThickness : null,
       height: height,
     );
   }

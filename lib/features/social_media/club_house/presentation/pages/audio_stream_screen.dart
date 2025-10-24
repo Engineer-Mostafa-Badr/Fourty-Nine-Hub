@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../controller/club_voice_bloc.dart';
 import '../widgets/zego_audio_room_widget.dart';
-import '../../../live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
+// import '../../../live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -164,11 +164,11 @@ class AudioStreamScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                ZegoAudioRoomWidget(
-                  isHost: isHost,
-                  roomId: liveId,
-                  roomSubject: roomSubject,
-                ),
+                // ZegoAudioRoomWidget(
+                //   isHost: isHost,
+                //   roomId: liveId,
+                //   roomSubject: roomSubject,
+                // ),
               ],
             ),
           ),
@@ -178,10 +178,10 @@ class AudioStreamScreen extends StatelessWidget {
   }
 
   void _endRoom(BuildContext context) async {
-    final users = ZegoUIKit().getAllUsers();
-    for (var user in users) {
-      await ZegoUIKit().removeUserFromRoom([user.id]);
-    }
-    context.read<ClubVoiceCubit>().endRoom(liveId);
+    // final users = ZegoUIKit().getAllUsers();
+    // for (var user in users) {
+    //   await ZegoUIKit().removeUserFromRoom([user.id]);
+    // }
+    // context.read<ClubVoiceCubit>().endRoom(liveId);
   }
 }

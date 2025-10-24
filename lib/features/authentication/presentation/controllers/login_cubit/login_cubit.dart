@@ -7,12 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -23,8 +25,10 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/signIn_as
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/helpers/social_login_helpers.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -93,6 +97,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> login(GlobalKey<FormState> formKey) async {
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
     String? token = await FirebaseMessaging.instance.getToken();
     log("all tokens before login : ${await CacheManager.getAccessToken()}");
 
@@ -119,11 +125,18 @@ class LoginCubit extends Cubit<LoginState> {
 
       result.fold(
         (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
           print("getFailureMessage(failure, currentContext) ${getFailureName(failure, currentContext)}");
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+          String failureName = getFailureName(failure, currentContext);
+          if(failureName == 'EmailNotVerifiedError'){
+            currentContext.push(
+              Routes.FORGOTPASSWORDOTP,
+              extra: emailTextController.text.trim(),
+            );
+          }else{
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+          }
+
           emit(LoginError(failure));
         },
         (userToken) async {
@@ -136,9 +149,15 @@ class LoginCubit extends Cubit<LoginState> {
           await CacheManager.saveAccessToken(userToken.accessToken);
           await CacheManager.saveRefreshToken(userToken.refreshToken);
           await Storage.setRefreshToken(userToken.refreshToken);
-          await serviceLocator<ApiConsumer>().put('/users/settings/change-language',data: {
-            'language':LocaleKeys.lang.localize == 'En'?'en':'ar'
+          // await serviceLocator<ApiConsumer>().put('/users/settings/change-language',data: {
+          //   'language':LocaleKeys.lang.localize == 'En'?'en':'ar'
+          // });
+          var languageData = await serviceLocator<ApiConsumer>().get('/users/settings/app');
+          languageData.fold((failure){
+          }, (data) async {
+            changeLang(locale: data['data']['appLanguage']=='en'?Locales.english:Locales.arabic, context: currentContext);
           });
+
           // await DI.reset();
           // await DI.execute(token: await CacheManager.getAccessToken());
           // serviceLocator<Socket>().connect();

@@ -61,16 +61,13 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: BackAppBar(
-          label: LocaleKeys.restaurantMenu.tr(),
-          backColor: context.theme.appBarTheme.backgroundColor,
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.restaurantMenu.tr(),
       ),
       // backgroundColor: scaffoldDarkColor(context),
-      extendBody: true,
-      extendBodyBehindAppBar: true,
+      // extendBody: true,
+      // extendBodyBehindAppBar: true,
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
           return state.isLoading
@@ -103,25 +100,26 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
                         _viewCartButton(),
                       ],
                     ),
-                    if (state.isAddToCart)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.7),
-                        ),
-                        child: Center(
-                          child: Container(
-                              height: 200.h,
-                              width: 250.w,
-                              padding: EdgeInsets.all(30.w),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15.r)),
-                              child: const CustomCircularProgressIndicator(
-                                color: AppColors.PRIMARY_COLOR,
-                              )),
-                        ),
-                      )
+                    // when add to cart
+                    // if (!state.isAddToCart)
+                    //   Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.black.withOpacity(0.7),
+                    //     ),
+                    //     child: Center(
+                    //       child: Container(
+                    //           height: 300.h,
+                    //           width: 250.w,
+                    //           padding: EdgeInsets.all(30.w),
+                    //           alignment: Alignment.center,
+                    //           decoration: BoxDecoration(
+                    //               color: Colors.white,
+                    //               borderRadius: BorderRadius.circular(15.r)),
+                    //           child: const CustomCircularProgressIndicator(
+                    //             color: AppColors.PRIMARY_COLOR,
+                    //           )),
+                    //     ),
+                    //   )
                   ],
                 );
         },
@@ -136,7 +134,7 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
           width: double.infinity,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.only(top: 8.0),
             child: ElevatedButton(
               onPressed: () {
                 ManageVibration.vibrate();

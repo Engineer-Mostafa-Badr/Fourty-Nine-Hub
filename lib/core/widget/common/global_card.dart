@@ -47,7 +47,7 @@ class GlobalCard extends StatelessWidget {
   final String? subscriptionType;
   final String? subCategoryTitle;
   final Widget? body;
-  final Function? onSubscribe;
+  final Function(bool success)? onSubscribe;
   final bool? hasTopSide;
   final bool? hasBottomSide;
   final GestureTapCallback? onTap;
@@ -74,8 +74,12 @@ class GlobalCard extends StatelessWidget {
           child: CustomCard(
             radius: 20,
             color: ((isView == null || isView == true)
-                ? (context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.whiteColor)
-                : (context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.BG_GRAY_COLOR)),
+                ? (context.isDarkMode
+                    ? AppColors.GREY_DARK_COLOR
+                    : AppColors.whiteColor)
+                : (context.isDarkMode
+                    ? AppColors.GREY_DARK_COLOR
+                    : AppColors.BG_GRAY_COLOR)),
             children: [
               if (hasTopSide == true) ...[
                 const Sizer(
@@ -92,14 +96,19 @@ class GlobalCard extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.remove_red_eye_sharp,
-                                color: context.isDarkMode ? AppColors.whiteColor : AppColors.DARK_GRAY_COLOR,
+                                color: context.isDarkMode
+                                    ? AppColors.whiteColor
+                                    : AppColors.DARK_GRAY_COLOR,
                               ),
                               const Sizer(),
                               Label(
-                                text: '${formatPrice(formatViews(views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                text:
+                                    '${formatPrice(formatViews(views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
                                 style: Styles.mediumText(
                                   fontSize: 24,
-                                  color: context.isDarkMode ? AppColors.whiteColor : AppColors.DARK_GRAY_COLOR,
+                                  color: context.isDarkMode
+                                      ? AppColors.whiteColor
+                                      : AppColors.DARK_GRAY_COLOR,
                                 ),
                               ),
                             ],
@@ -108,7 +117,9 @@ class GlobalCard extends StatelessWidget {
                       ),
                       Text(
                         subscriptionType ?? '',
-                        style: Styles.headerText(color: AppColors.getRedColor(context), fontSize: 32),
+                        style: Styles.headerText(
+                            color: AppColors.getRedColor(context),
+                            fontSize: 32),
                       ),
                     ],
                   ),
@@ -134,14 +145,15 @@ class GlobalCard extends StatelessWidget {
                       horizontal: 32.0.h,
                     ),
                     child: Row(
-                      spacing: 15,
+                      spacing: 20,
                       children: [
                         if (onRequest != null)
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.only(top: 8.h, bottom: 8.h),
                               child: TripJoinCardButton(
-                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
                                 title: LocaleKeys.request.localize,
                                 color: AppColors.getRedColor(context),
                                 onTap: onRequest,
@@ -151,7 +163,8 @@ class GlobalCard extends StatelessWidget {
                           ),
                         Expanded(
                           child: ContactsTripButtons(
-                            subscriptionTitle: subCategoryTitle ?? LocaleKeys.ads.localize,
+                            subscriptionTitle:
+                                subCategoryTitle ?? LocaleKeys.ads.localize,
                             onSubscribe: onSubscribe,
                             // isPremium: false,
                             isPremium: isPremium,
@@ -172,7 +185,10 @@ class GlobalCard extends StatelessWidget {
             ],
           ),
         ),
-        ((isPremium == null || isPremium == true) || (isButtonEnabled == null || isButtonEnabled == true)) ? SizedBox() : tripCardSubscribeText(context),
+        ((isPremium == null || isPremium == true) ||
+                (isButtonEnabled == null || isButtonEnabled == true))
+            ? SizedBox()
+            : tripCardSubscribeText(context),
       ],
     );
   }
@@ -191,7 +207,9 @@ class GlobalCard extends StatelessWidget {
                   SubscriptionMethod().subscribe(
                     subscribeId: subcategoryId,
                     title: subCategoryTitle ?? LocaleKeys.ads.localize,
-                    onSubscribe: onSubscribe != null ? onSubscribe!() : () => context.pop(),
+                    onSubscribe: onSubscribe == null
+                        ? null
+                        : (success) => onSubscribe!(success),
                   );
                 })),
         child: Text(

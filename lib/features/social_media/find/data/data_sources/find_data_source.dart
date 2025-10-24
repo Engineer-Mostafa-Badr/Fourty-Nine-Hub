@@ -81,10 +81,14 @@ class FindRemoteDataSourceImpl implements FindRemoteDataSource {
     return response.fold(
           (l) => Left(l),
           (data) {
-        final rideList = (data['data'] as List)
-            .map((e) => FindModel.fromJson(e as Map<String, dynamic>))
-            .toList();
-        return Right(rideList);
+        // final rideList = (data['data'] as List)
+        //     .map((e) => FindModel.fromJson(e as Map<String, dynamic>))
+        //     .toList();
+            final rideList = (data['data']?['data'] as List<dynamic>? ?? [])
+                .map((e) => FindModel.fromJson(e as Map<String, dynamic>))
+                .toList();
+
+            return Right(rideList);
       },
     );
   }

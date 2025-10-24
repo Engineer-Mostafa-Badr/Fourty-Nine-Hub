@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -107,6 +108,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   int currentPageSearchAds = 1;
   List<AdModel> searchAdsList = [];
   bool initalSearchAds = true;
+
+  // Debouncing for search
+  Timer? _searchDebounceTimer;
   SubcategoriesCubit(
     this._getSubcategoriesUsecase,
     this._toggleSubCategoryToFavoritesUseCase,
@@ -145,6 +149,21 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
             limit: 15, page: 1, subCategoryId: marriageSubCategories[index].id),
         filter: "user");
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+
+    // Update favorite ads view if it's open
+    if (isFavouriteAdsOpen) {
+      updateFavoriteAdsForSubcategory();
+    }
+
+    // Update request log view if it's open
+    if (isRequestLogOpen) {
+      updateRequestLogForSubcategory();
+    }
+
+    // Update my ads view if it's open
+    if (isMyAdsOpen) {
+      updateMyAdsForSubcategory();
+    }
     // loadInitialData(subCategoryId:widget.mainCategory.id);
   }
 
@@ -692,6 +711,19 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
   }
 
+  /// Refresh marriage ads data when returning from ad details view
+  Future<void> refreshMarriageAds() async {
+    print('refreshMarriageAds');
+    currentPage = 1;
+    hasMoreData = true;
+    isLoadingMore = false;
+
+    final subCategoryId = state.selectedSubCatId ?? '62c8be728e28a58a3edf5f55';
+    await getMarriageAds(subCategoryId: subCategoryId);
+    await getMarriageMyAds('62c8b5b09332225799fe335e');
+    await getRequestsLog('62c8b5b09332225799fe335e');
+  }
+
   Future loadMarriageData({required String subCategoryId}) async {
     print("loadMarriageData");
 
@@ -744,6 +776,24 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     isLoadingMyFavouriteAds = false;
   }
 
+  /// Update favorite ads when subcategory changes in marriage view
+  void updateFavoriteAdsForSubcategory() {
+    // This will trigger a rebuild of the FavouriteAdsView with filtered data
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+  }
+
+  /// Update request log when subcategory changes in marriage view
+  void updateRequestLogForSubcategory() {
+    // This will trigger a rebuild of the RequestLogView with filtered data
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+  }
+
+  /// Update my ads when subcategory changes in marriage view
+  void updateMyAdsForSubcategory() {
+    // This will trigger a rebuild of the MyAdsView with filtered data
+    emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
+  }
+
   loadRequestsLog({
     required String id,
   }) async {
@@ -773,24 +823,42 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     isLoadingRequestsLogByMainCategory = false;
   }
 
-  Future<void> searchAds({
+  void searchAds({
     required String value,
     required String mainCategoryId,
-  }) async {
+  }) {
+    // Cancel previous timer if exists
+    _searchDebounceTimer?.cancel();
+
     if (value.isEmpty) {
       initalSearchAds = true;
       emit(state.copyWith());
       return;
     }
+
+    // Set up debounced search
+    _searchDebounceTimer = Timer(const Duration(milliseconds: 400), () {
+      _performSearch(value, mainCategoryId);
+    });
+  }
+
+  Future<void> _performSearch(String value, String mainCategoryId) async {
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     initalSearchAds = false;
-    final response = await _searchAdsUseCase(
+
+    // Try multiple search approaches to work around server case sensitivity
+    final List<AdModel> allResults = [];
+    final Set<String> seenIds = {};
+
+    // Search with original case
+    final response1 = await _searchAdsUseCase(
       SearchAdsParams(
         searchText: value,
         mainCategoryId: mainCategoryId,
       ),
     );
-    response.fold(
+
+    response1.fold(
       (failure) {
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
@@ -798,15 +866,103 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             failure: failure, status: SubcategoriesStates.error));
+        return;
       },
       (data) {
-        searchAdsList = data;
-        emit(state.copyWith(
-          searchAds: data,
-          status: SubcategoriesStates.adsSuccess,
-        ));
+        for (var ad in data) {
+          if (!seenIds.contains(ad.id)) {
+            allResults.add(ad);
+            seenIds.add(ad.id);
+          }
+        }
       },
     );
+
+    // Search with lowercase
+    if (value != value.toLowerCase()) {
+      final response2 = await _searchAdsUseCase(
+        SearchAdsParams(
+          searchText: value.toLowerCase(),
+          mainCategoryId: mainCategoryId,
+        ),
+      );
+
+      response2.fold(
+        (failure) {
+          // Ignore failure for second search
+        },
+        (data) {
+          for (var ad in data) {
+            if (!seenIds.contains(ad.id)) {
+              allResults.add(ad);
+              seenIds.add(ad.id);
+            }
+          }
+        },
+      );
+    }
+
+    // Search with uppercase
+    if (value != value.toUpperCase()) {
+      final response3 = await _searchAdsUseCase(
+        SearchAdsParams(
+          searchText: value.toUpperCase(),
+          mainCategoryId: mainCategoryId,
+        ),
+      );
+
+      response3.fold(
+        (failure) {
+          // Ignore failure for third search
+        },
+        (data) {
+          for (var ad in data) {
+            if (!seenIds.contains(ad.id)) {
+              allResults.add(ad);
+              seenIds.add(ad.id);
+            }
+          }
+        },
+      );
+    }
+
+    // If no results found, try a broader search and filter locally
+    if (allResults.isEmpty) {
+      final broadResponse = await _searchAdsUseCase(
+        SearchAdsParams(
+          searchText: '', // Empty search to get all ads
+          mainCategoryId: mainCategoryId,
+        ),
+      );
+
+      broadResponse.fold(
+        (failure) {
+          // If broad search fails, just use empty results
+        },
+        (data) {
+          // Filter locally for case-insensitive search
+          final filteredData = data.where((ad) {
+            final searchTerm = value.toLowerCase();
+            final adTitle = ad.title.toLowerCase();
+            final adDescription = ad.description.toLowerCase();
+            final adUserName = ad.user?.fullName.toLowerCase() ?? '';
+
+            return adTitle.contains(searchTerm) ||
+                adDescription.contains(searchTerm) ||
+                adUserName.contains(searchTerm);
+          }).toList();
+
+          allResults.addAll(filteredData);
+        },
+      );
+    }
+
+    searchAdsList.clear();
+    searchAdsList.addAll(allResults);
+    emit(state.copyWith(
+      searchAds: allResults,
+      status: SubcategoriesStates.adsSuccess,
+    ));
   }
 
   void toggleMyAds(String openThis) {
@@ -845,12 +1001,11 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
     bool result = false;
     response.fold(
-            (failure) =>
-            emit(state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: SubcategoriesStates.initState));
-        });
+        (failure) => emit(state.copyWith(
+            failure: failure, status: SubcategoriesStates.error)), (data) {
+      result = data;
+      emit(state.copyWith(status: SubcategoriesStates.initState));
+    });
     return result;
   }
 
@@ -868,5 +1023,23 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       emit(state.copyWith(status: SubcategoriesStates.initState));
     });
     return result;
+  }
+
+  void updateAdFavoriteStatus(String adId, bool isFavourite) {
+    if (state.ads != null) {
+      for (int i = 0; i < state.ads!.length; i++) {
+        if (state.ads![i].id == adId) {
+          state.ads![i].isFavourite = isFavourite;
+          emit(state.copyWith(ads: state.ads));
+          break;
+        }
+      }
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _searchDebounceTimer?.cancel();
+    return super.close();
   }
 }

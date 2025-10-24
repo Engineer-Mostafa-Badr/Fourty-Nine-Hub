@@ -125,10 +125,6 @@ class _EditProfileViewState extends State<EditProfileView> {
         return CustomScaffold(
           appBar: BackAppBar(
             label: LocaleKeys.editProfile.localize,
-            textColor: context.isDarkMode ? Colors.black : Colors.white,
-            iconColor: context.isDarkMode ? Colors.black : Colors.white,
-            // enableCustomAppBar: true,
-            automaticallyImplyLeading: false,
           ),
           enableCustomAppBar: true,
           body: SingleChildScrollView(

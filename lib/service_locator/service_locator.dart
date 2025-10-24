@@ -370,7 +370,7 @@ class DI {
     // trip join
     TripJoinServiceLocator.execute(serviceLocator: serviceLocator);
     //live
-    LiveServiceLocator.execute(serviceLocator: serviceLocator);
+    // LiveServiceLocator.execute(serviceLocator: serviceLocator);
     //secrets
     SecretsServiceLocator.execute(serviceLocator: serviceLocator);
     // notifications
@@ -433,7 +433,7 @@ class DI {
 
   static void _callFeatureInjector() {
     serviceLocator.registerLazySingleton(() => SendCallCubit());
-    serviceLocator.registerLazySingleton(() => CallCubit());
+    // serviceLocator.registerLazySingleton(() => CallCubit());
     serviceLocator.registerLazySingleton<FcmNotificationHelper>(
         () => FcmNotificationHelperImpl(serviceLocator()));
     serviceLocator.registerLazySingleton(() => FirebaseMessaging.instance);
@@ -444,10 +444,10 @@ class DI {
     serviceLocator.registerLazySingleton<CallRemoteDatasource>(
         () => CallRemoteDatasourceImpl());
 
-    serviceLocator
-        .registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());
-    serviceLocator.registerLazySingleton<CallWithNotificationHelper>(() =>
-        CallWithNotificationHelper(
-            serviceLocator(), serviceLocator(), serviceLocator()));
+    // serviceLocator
+    //     .registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());
+    // serviceLocator.registerLazySingleton<CallWithNotificationHelper>(() =>
+    //     CallWithNotificationHelper(
+    //         serviceLocator(), serviceLocator(), serviceLocator()));
   }
 }

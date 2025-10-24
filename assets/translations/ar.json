@@ -61,7 +61,7 @@
   "arabic": "اللغه العربيه",
   "english": "اللغه الانجليزيه",
   "newMeeting": "اجتماع جديد",
-  "meal": "اكله",
+  "meal": "أكلة",
   "darkMode": "الوضع الداكن",
   "lightMode": "الوضع الفاتح",
   "voice": "صوت",
@@ -123,7 +123,7 @@
   "reels": "ريلز",
   "chat": "دردشة",
   "find": "اكتشف",
-  "health": "صحه",
+  "health": "صحة",
   "ship": "تحميله",
   "ride": "توصيله",
   "lang": "En",
@@ -932,7 +932,7 @@
   "sendReviewApproval": "إرسال للمراجعة والموافقة",
   "youWin": "لقد فزت!",
   "shipping": "شحن",
-  "food": "اكله",
+  "food": "أكلة",
   "thereNoItems": "لا يوجد أي عناصر",
   "areDeleteThisAd": "هل أنت متأكد من أنك تريد حذف هذا الإعلان!",
   "offers": "عروض",
@@ -1241,7 +1241,7 @@
   "uploadAtLeastOneBill": "قم بتحميل على الاقل فاتورة واحدة",
   "home": "الرئيسية",
   "mutualFriends": "صديقا مشترك",
-  "choosePreferredAppStyle": "اختار الان الشكل المفضل للتطبيق بما يتناسب مع اهتماماتك !!!",
+  "choosePreferredAppStyle": " اختر الآن الشكل المفضل للتطبيق بما يتناسب مع اهتماماتك !!!",
   "enterYourAnswer": "ادخل اجابتك",
   "yourAnswer": "إجابتك",
   "enterSomething": "ادخل شيئًا...",
@@ -1662,7 +1662,8 @@
   "placeBid": "تقديم عرض",
   "enterYourBid": "أدخل عرضك",
   "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد",
-  "noAuctionAvailable": "لا توجد مزادات متاحة"
+  "noAuctionAvailable": "لا توجد مزادات متاحة",
+  "auctionWinners": "الفائزين في المزاد"
 
 
 }

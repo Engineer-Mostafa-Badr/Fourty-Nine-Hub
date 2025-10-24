@@ -447,7 +447,7 @@ extension CategoriesExtension on Categories {
         return Categories.computersCameras;
       case "62c8b59f9332225799fe333e":
         return Categories.musicalInstruments;
-      case "62c8b5a29332225799fe3348":
+      case "62c8be568e28a58a3edf5f1d":
         return Categories.fitness;
       case "62c8b5a49332225799fe334a":
         return Categories.libraries;

@@ -1682,7 +1682,7 @@
   "placeBid": "Place Bid",
   "enterYourBid": "Enter your bid",
   "timeLeftForAuctionEnd": "Time left for auction to end",
-  "noAuctionAvailable": "No auctions available"
-
+  "noAuctionAvailable": "No auctions available",
+  "auctionWinners": "Auction Winners"
 
 }

@@ -131,7 +131,11 @@ class PersonalDocumentsScreen extends StatelessWidget {
                           ),
 
                           const Sizer(),
-                          DatePickerTextField(color:context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                          DatePickerTextField(color:context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,initialDate: DateTime.now(),
+                            minDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day+7),
+                            maxDate: DateTime(2090),
+                            pickerTitle: context.isArabic?'تاريخ انتهاء الصلاحية':'Expire Date',
+                            onDateSelected: (date){
                             cubit.ridePersonalDocExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
                           }, controller:cubit.ridePersonalDocExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                         ],

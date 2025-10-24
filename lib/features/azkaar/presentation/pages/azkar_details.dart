@@ -30,7 +30,6 @@ class _AzkarDetailsState extends State<AzkarDetails> {
       child: CustomScaffold(
         appBar: BackAppBar(
           label: widget.category,
-          enableCustomAppBar: true,
         ),
         enableCustomAppBar: true,
         body: BlocBuilder<AzkarCubit, AzkarState>(

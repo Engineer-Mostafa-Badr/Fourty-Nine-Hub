@@ -10,7 +10,7 @@ class LoadingInfoModel extends LoadingInfoEntity{
       isUploadDriverId: json['documentsStatus']!=null?json['documentsStatus']['isUploadDriverId']??false:false,
     isUploadDriverImage: json['documentsStatus']!=null?json['documentsStatus']['isUploadDriverImage']??false:false,
       isUploadDriverLicense: json['documentsStatus']!=null?json['documentsStatus']['isUploadDriverLicense'] ?? false:false,
-      isUploadCarImage: json['documentsStatus']!=null?json['documentsStatus']['isUploadCarLicense'] ?? false:false,
-      isUploadCarLicense: json['documentsStatus']!=null?json['documentsStatus']['isCarLicenseUploaded'] ?? false:false,
+      isUploadCarImage: json['documentsStatus']!=null?json['documentsStatus']['isUploadCarPictures'] ?? false:false,
+      isUploadCarLicense: json['documentsStatus']!=null?json['documentsStatus']['isUploadCarLicense'] ?? false:false,
   );
 }

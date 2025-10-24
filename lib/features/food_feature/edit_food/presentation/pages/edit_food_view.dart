@@ -211,7 +211,7 @@ class _EditFoodViewState extends State<EditFoodView>
                       ),
                     ),
                     onPressed: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -258,7 +258,7 @@ class _EditFoodViewState extends State<EditFoodView>
                                   ),
                                 ),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   onDelete(meal.id ?? '');
                                   // Navigator.of(context).pop();
                                 },
@@ -312,7 +312,7 @@ class _EditFoodViewState extends State<EditFoodView>
                 flex: 2,
                 child: GestureDetector(
                   onTap: () async {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     await context.read<EditFoodCubit>().uploadProfileImage(
                           context: context,
                           subcategoryId: '62c8babb8e28a58a3edf581d',

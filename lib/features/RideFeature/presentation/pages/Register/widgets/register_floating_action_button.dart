@@ -8,11 +8,12 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class RegisterNextRow extends StatelessWidget {
-  const RegisterNextRow({super.key, this.index, this.onTap});
+  const RegisterNextRow({super.key, this.index, this.onTap,this.onPop});
 
   final int? index;
 
   final void Function()? onTap;
+  final void Function()? onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class RegisterNextRow extends StatelessWidget {
           Row(
             children: [
               InkWell(
-                onTap: () => Navigator.pop(context),
+                onTap: onPop??() => Navigator.pop(context),
                 child: Container(
                   height: 44,
                   padding: const EdgeInsets.symmetric(horizontal: 8),

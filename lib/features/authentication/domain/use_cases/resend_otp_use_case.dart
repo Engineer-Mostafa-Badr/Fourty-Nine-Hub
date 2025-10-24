@@ -18,8 +18,9 @@ class ResendOTPUseCase extends UseCase<void, ResendOTPParams> {
 class ResendOTPParams extends Equatable {
   final String email;
   final bool forVerification;
+  final bool? fromRegister;
 
-  const ResendOTPParams( {required this.email,required this.forVerification});
+  const ResendOTPParams( {required this.email,required this.forVerification,this.fromRegister});
 
   Map<String, dynamic> toJson() => {
         'email': email,

@@ -52,37 +52,33 @@ class _EditPageState extends State<EditPage> {
           return CustomScaffold(
             enableCustomAppBar: true,
             // backgroundColor: Colors.transparent,
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(45),
-              child: BackAppBar(
-                labelSize: 32,
-                enableCustomAppBar: true,
-                leading: Builder(builder: (context) {
-                  return IconButton(
-                      onPressed: () {
-                        ManageVibration.vibrate();
-                        if (BlocProvider.of<EditPageCubit>(context)
-                                .currentIndex >
-                            0) {
-                          BlocProvider.of<EditPageCubit>(context).changePage(
-                              BlocProvider.of<EditPageCubit>(context)
-                                      .currentIndex -
-                                  1);
-                        } else {
-                          log("index ${BlocProvider.of<EditPageCubit>(context).currentIndex}");
+            appBar: BackAppBar(
+              enableCustomAppBar: true,
+              leading: Builder(builder: (context) {
+                return IconButton(
+                    onPressed: () {
+                      ManageVibration.vibrate();
+                      if (BlocProvider.of<EditPageCubit>(context)
+                              .currentIndex >
+                          0) {
+                        BlocProvider.of<EditPageCubit>(context).changePage(
+                            BlocProvider.of<EditPageCubit>(context)
+                                    .currentIndex -
+                                1);
+                      } else {
+                        log("index ${BlocProvider.of<EditPageCubit>(context).currentIndex}");
 
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        size: 40.w,
-                        color: AppColors.getReversedTextColor(context),
-                      ));
-                }),
-                label: appBarTitle[
-                    BlocProvider.of<EditPageCubit>(context).currentIndex],
-              ),
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      size: 40.w,
+                      color: AppColors.getReversedTextColor(context),
+                    ));
+              }),
+              label: appBarTitle[
+                  BlocProvider.of<EditPageCubit>(context).currentIndex],
             ),
             body: pages[BlocProvider.of<EditPageCubit>(context).currentIndex],
           );

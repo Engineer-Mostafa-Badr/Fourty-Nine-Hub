@@ -30,13 +30,8 @@ class _ChanceWinnersViewState extends State<ChanceWinnersView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          labelSize: 32,
-          enableCustomAppBar: true,
-          label: context.isArabic ? 'الفائزون' : 'Winners',
-        ),
+      appBar: BackAppBar(
+        label: context.isArabic ? 'الفائزون' : 'Winners',
       ),
       body: BlocBuilder<ChanceCubit, ChanceState>(
         builder: (context, state) {

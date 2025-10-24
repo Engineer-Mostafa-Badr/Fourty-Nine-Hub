@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../res/style/app_colors.dart';
@@ -83,7 +82,7 @@ ThemeData get darkTheme => ThemeData(
         ),
       ),
       appBarTheme: const AppBarTheme(
-        color: AppColors.Scaffold_Color_DARK,
+        backgroundColor: AppColors.Scaffold_Color_DARK,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
@@ -132,7 +131,7 @@ ThemeData get darkTheme => ThemeData(
         backgroundColor: AppColors.QUANTITY_COLOR,
       ),
       actionIconTheme: const ActionIconThemeData(),
-      bottomAppBarTheme: const BottomAppBarTheme(),
+      bottomAppBarTheme: const BottomAppBarThemeData(),
       canvasColor: Colors.black38,
       bannerTheme: const MaterialBannerThemeData(),
       switchTheme: const SwitchThemeData(
@@ -140,7 +139,7 @@ ThemeData get darkTheme => ThemeData(
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
       cardColor: Colors.white,
-      dialogTheme: const DialogTheme(),
+      dialogTheme: const DialogThemeData(),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.QUANTITY_COLOR,
       ),
@@ -154,5 +153,5 @@ ThemeData get darkTheme => ThemeData(
       textButtonTheme: const TextButtonThemeData(),
       listTileTheme: const ListTileThemeData(),
       dividerTheme: const DividerThemeData(),
-      tabBarTheme: const TabBarTheme(),
+      tabBarTheme: const TabBarThemeData(),
     );

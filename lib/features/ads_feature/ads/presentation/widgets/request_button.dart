@@ -338,7 +338,6 @@ class _RequestNumberBottomSheetState extends State<RequestNumberBottomSheet> {
 
   @override
   void dispose() {
-    widget.textController.dispose();
     focusNode.dispose();
     super.dispose();
   }

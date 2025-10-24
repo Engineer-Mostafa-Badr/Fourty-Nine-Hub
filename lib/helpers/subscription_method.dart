@@ -7,7 +7,7 @@ class SubscriptionMethod {
     required String subscribeId,
     required String title,
     bool? showRegular,
-    final Function? onSubscribe,
+    final Function(bool success)? onSubscribe,
   }) {
     serviceLocator<SubscriptionController>().showSubscriptionPlans(
       showRegular: showRegular,

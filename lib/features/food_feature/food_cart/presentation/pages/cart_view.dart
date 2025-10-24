@@ -19,14 +19,24 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
 import '../../../../../helpers/manage_vibration.dart';
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/utils/validator.dart';
+import '../../../../RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../ads_feature/ads/presentation/widgets/request_button.dart';
 
 // Helper functions (assuming these are defined elsewhere in your project)
 Color scaffoldDarkColor(BuildContext context) {
   return context.isDarkMode ? Colors.white.withOpacity(0.09) : Colors.white;
 }
 
-Color cardDarkColor(BuildContext context,{bool isRestruantItem=false}) {
-  return context.isDarkMode ? Colors.white.withOpacity(0.04) :isRestruantItem? AppColors.PRIMARY_COLOR:Colors.white;
+Color cardDarkColor(BuildContext context, {bool isRestruantItem = false}) {
+  return context.isDarkMode
+      ? Colors.white.withOpacity(0.04)
+      : isRestruantItem
+          ? AppColors.PRIMARY_COLOR
+          : Colors.white;
 }
 
 class FoodCartView extends StatefulWidget {
@@ -37,10 +47,19 @@ class FoodCartView extends StatefulWidget {
 }
 
 class _FoodCartViewState extends State<FoodCartView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _phoneController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     context.read<RestaurantDetailsCubit>().fetchCart(first: true);
+  }
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    super.dispose();
   }
 
   // Future<void> _updateQuantity({
@@ -105,7 +124,16 @@ class _FoodCartViewState extends State<FoodCartView> {
     required String foodId,
   }) async {
     if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
-        1&&context.read<RestaurantDetailsCubit>().state.cart?.allItems.first.restaurantItems.length==1) {
+            1 &&
+        context
+                .read<RestaurantDetailsCubit>()
+                .state
+                .cart
+                ?.allItems
+                .first
+                .restaurantItems
+                .length ==
+            1) {
       await context.read<RestaurantDetailsCubit>().deleteFromCart(
             context,
             restaurantId: restaurantId,
@@ -131,15 +159,83 @@ class _FoodCartViewState extends State<FoodCartView> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      builder: (context) {
+      isDismissible: true,
+      builder: (buildContext) {
         return BlocProvider.value(
           value: serviceLocator<RestaurantDetailsCubit>(),
-          child: FoodRequestBottomSheet(
-            cartId: cartId,
-            orderType: orderType,
+          child: BlocConsumer<RestaurantDetailsCubit, RestaurantDetailsState>(
+            listener: (context, state) {
+              if (state.status == RestaurantDetailsStates.success) {
+                Navigator.pop(buildContext);
+                _phoneController.clear();
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text(
+                //       context.isArabic
+                //           ? 'تم إرسال الطلب بنجاح'
+                //           : 'Order sent successfully',
+                //     ),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+              } else if (state.status == RestaurantDetailsStates.error) {
+                Navigator.pop(buildContext);
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //     content: Text(
+                //       context.isArabic
+                //           ? 'حدث خطأ، حاول مرة أخرى'
+                //           : 'An error occurred, please try again',
+                //     ),
+                //     backgroundColor: Colors.red,
+                //   ),
+                // );
+              }
+            },
+            builder: (context, state) {
+              return RequestNumberBottomSheet(
+                formKey: _formKey,
+                textController: _phoneController,
+                onChanged: (value) {},
+                isLoading: state.status == RestaurantDetailsStates.loading,
+                onTap: () async {
+                  ManageVibration.vibrate();
+                  if (_formKey.currentState!.validate()) {
+                    // Clean the phone number before sending
+                    final phone = _phoneController.text
+                        .trim()
+                        .replaceAll(' ', '')
+                        .replaceAll('-', '')
+                        .replaceAll('+20', '')
+                        .replaceAll('(', '')
+                        .replaceAll(')', '');
+
+                    if (orderType == 'premium') {
+                      await context
+                          .read<RestaurantDetailsCubit>()
+                          .createPremiumOrder(
+                            context,
+                            cartId: cartId,
+                            phone: phone,
+                            address: '',
+                          );
+                    } else if (orderType == 'normal') {
+                      await context
+                          .read<RestaurantDetailsCubit>()
+                          .createNormalOrder(
+                            context,
+                            cartId: cartId,
+                            phone: phone,
+                            address: '',
+                          );
+                    }
+                  }
+                },
+              );
+            },
           ),
         );
       },
@@ -150,6 +246,7 @@ class _FoodCartViewState extends State<FoodCartView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       // backgroundColor: scaffoldDarkColor(context),
+      enableCustomAppBar: true,
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {
@@ -161,7 +258,11 @@ class _FoodCartViewState extends State<FoodCartView> {
             // return Text("hi wwwwwwwwwwwwwwwwwwwwwwwwwwww");
             return _buildCartContent(state.cart!);
           } else {
-            return CustomEmptyWidget(label:context.isArabic?'السلة فارغة': LocaleKeys.your_cart_empty.tr(),);
+            return CustomEmptyWidget(
+              label: context.isArabic
+                  ? 'السلة فارغة'
+                  : LocaleKeys.your_cart_empty.tr(),
+            );
           }
         },
       ),
@@ -169,11 +270,8 @@ class _FoodCartViewState extends State<FoodCartView> {
   }
 
   _buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(30),
-      child: BackAppBar(
-        label: context.isArabic?'السلة':'Cart',
-      ),
+    return BackAppBar(
+      label: context.isArabic?'السلة':'Cart',
     );
   }
 
@@ -182,7 +280,7 @@ class _FoodCartViewState extends State<FoodCartView> {
       children: [
         Expanded(
           child: ListView.builder(
-            padding:  EdgeInsets.symmetric(horizontal: 16.0.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.0.w),
             itemCount: cart.allItems.length,
             itemBuilder: (context, index) {
               final cartItem = cart.allItems[index];
@@ -219,7 +317,8 @@ class _FoodCartViewState extends State<FoodCartView> {
                     width: 40,
                     height: 40,
                     color: Colors.grey[300],
-                    child: const Icon(Icons.image_not_supported, size: 20, color: Colors.grey),
+                    child: const Icon(Icons.image_not_supported,
+                        size: 20, color: Colors.grey),
                   );
                 },
               ),
@@ -241,11 +340,12 @@ class _FoodCartViewState extends State<FoodCartView> {
           },
         ),
         Align(
-          alignment:context.isArabic?Alignment.centerRight:Alignment.centerLeft,
+          alignment:
+              context.isArabic ? Alignment.centerRight : Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic?(cartItem.total).toLocalizedArabic(context):(cartItem.total).toStringAsFixed(0)} $currency',
+              '${LocaleKeys.restaurant_total.tr()} ${context.isArabic ? (cartItem.total).toLocalizedArabic(context) : (cartItem.total).toStringAsFixed(0)} $currency',
               style: Styles.headerText(),
             ),
           ),
@@ -282,7 +382,7 @@ class _FoodCartViewState extends State<FoodCartView> {
               backgroundColor: AppColors.getRedColor(context),
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label:context.isArabic?'تأكيد المسح؟': 'Confirm Delete?',
+              label: context.isArabic ? 'تأكيد المسح؟' : 'Confirm Delete?',
             ),
           ],
         ),
@@ -327,13 +427,15 @@ class _FoodCartViewState extends State<FoodCartView> {
         Row(
           children: [
             Text(
-              context.isArabic?(subTotal ?? 0.0).toLocalizedArabic(context):(subTotal ?? 0.0).toStringAsFixed(0),
+              context.isArabic
+                  ? (subTotal ?? 0.0).toLocalizedArabic(context)
+                  : (subTotal ?? 0.0).toStringAsFixed(0),
               style: Styles.headerText(),
             ),
             Text(
               ' $currency',
               style: Styles.mediumText(
-                  color:AppColors.getRedColor(context),
+                  color: AppColors.getRedColor(context),
                   fontWeight: FontWeight.bold),
             ),
           ],
@@ -348,7 +450,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               _showFoodRequestBottomSheet(
                 cartId: cartId,
                 orderType: 'premium',
@@ -364,7 +466,8 @@ class _FoodCartViewState extends State<FoodCartView> {
             child: FittedBox(
               child: Text(
                 LocaleKeys.premium_request.tr(),
-                style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
+                style: Styles.headerText(
+                    color: AppColors.getReversedTextColor(context)),
               ),
             ),
           ),
@@ -373,7 +476,7 @@ class _FoodCartViewState extends State<FoodCartView> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               _showFoodRequestBottomSheet(
                 cartId: cartId,
                 orderType: 'normal',
@@ -389,7 +492,8 @@ class _FoodCartViewState extends State<FoodCartView> {
             child: FittedBox(
               child: Text(
                 LocaleKeys.request.tr(),
-                style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
+                style: Styles.headerText(
+                    color: AppColors.getReversedTextColor(context)),
               ),
             ),
           ),
@@ -416,10 +520,27 @@ class FoodRequestBottomSheet extends StatefulWidget {
 class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
   final TextEditingController _phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _focusNode = FocusNode();
+  bool? isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
 
   Future<void> _submitOrder() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final phone = _phoneController.text.trim();
+      // Clean the phone number before sending
+      final phone = _phoneController.text
+          .trim()
+          .replaceAll(' ', '')
+          .replaceAll('-', '')
+          .replaceAll('+20', '')
+          .replaceAll('(', '')
+          .replaceAll(')', '');
 
       if (widget.orderType == 'premium') {
         await context.read<RestaurantDetailsCubit>().createPremiumOrder(
@@ -444,6 +565,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
   @override
   void dispose() {
     _phoneController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -454,99 +576,126 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
         // Handle state changes if necessary
       },
       builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 24,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          ),
-          child: Form(
-            key: _formKey,
+        return AnimatedPadding(
+          padding: MediaQuery.of(context).viewInsets,
+          duration: const Duration(milliseconds: 50),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 16,
+            ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextFormField(
-                  controller: _phoneController,
-                  decoration: InputDecoration(
-                    fillColor: AppColors.getFillColor(context),
-
-                    hintStyle: Styles.mediumText(
-                      fontWeight: FontWeight.w600
-                    ),
-                    labelText: LocaleKeys.your_phone_number.tr(),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: InkWell(
+                    onTap: () {
+                      ManageVibration.vibrate();
+                      _focusNode.unfocus();
+                      context.pop();
+                    },
+                    child: Container(
+                      height: 24,
+                      width: 24,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFD9D9D9),
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.red, // border color on error
-                        width: 2,
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.black,
+                        size: 20,
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.redAccent, // border color when focused and invalid
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    errorStyle: const TextStyle(
-                      color: Colors.red, // error text color
-                      fontSize: 14,
                     ),
                   ),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return LocaleKeys.please_enter_phone_number.tr();
-                    }
-                    final regex = RegExp(r'^(010|011|012|015)\d{8}$');
-                    if (!regex.hasMatch(value)) {
-                      return LocaleKeys.invalidPhoneNumber.tr();
-                    }
-
-                    return null;
-                  },
                 ),
-
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: SizedBox(
+                        width: 24.w,
+                        height: 24.h,
+                        child: Checkbox(
+                          checkColor: Colors.white,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          value: isChecked ?? false,
+                          activeColor: AppColors.PRIMARY_COLOR,
+                          onChanged: (value) {
+                            setState(() {
+                              isChecked = value ?? true;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Label(
+                        text: context.isArabic
+                            ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                            : "Please enter a direct contact number for the service provider.",
+                        style: Styles.mediumText(
+                          color: AppColors.c717171,
+                          fontSize: 40.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Sizer(height: 16.h),
+                Container(
+                  constraints: BoxConstraints(maxHeight: 180.h),
+                  child: Form(
+                    key: _formKey,
+                    child: PickUpTextFormField(
+                      controller: _phoneController,
+                      focusNode: _focusNode,
+                      onChanged: (value) {},
+                      fillColor: AppColors.getFillColor(context),
+                      textColor: AppColors.getTextColor(context),
+                      hintText: LocaleKeys.phoneNumber.localize,
+                      fieldType: FieldType.phone,
+                      validator: (value) => validatorPhone(value),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Label(
+                  text: context.isArabic
+                      ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                      : "Entering another customer's number is at your own risk and may subject you to legal liability.",
+                  style: Styles.mediumText(
+                    color: AppColors.c717171,
+                    fontSize: 40.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
+                ),
                 const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: state.status != RestaurantDetailsStates.loading
-                        ? _submitOrder
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      backgroundColor: AppColors.getRedColor(context),
-                    ),
-                    child: state.status == RestaurantDetailsStates.loading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CustomCircularProgressIndicator(
-                              strokeWidth: 2.0,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(
-                            LocaleKeys.submit_order.tr(),
-                            style: Styles.headerText(color: AppColors.getReversedTextColor(context)),
+                state.status == RestaurantDetailsStates.loading
+                    ? const CustomCircularProgressIndicator()
+                    : InkWell(
+                        onTap: _submitOrder,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.getButtonPrimaryColor(context),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                  ),
-                ),
+                          alignment: Alignment.center,
+                          child: Label(
+                            text: LocaleKeys.submit_order.localize,
+                            style: Styles.headerText(
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),

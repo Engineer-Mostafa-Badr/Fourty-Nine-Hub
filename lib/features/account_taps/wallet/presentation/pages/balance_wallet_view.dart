@@ -60,11 +60,9 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: LocaleKeys.balance.localize,
-          ),
+        enableCustomAppBar: true,
+        appBar: BackAppBar(
+          label: LocaleKeys.balance.localize,
         ),
         body: BlocConsumer<BalanceCubit, BalanceState>(
           listener: (BuildContext context, BalanceState state) {

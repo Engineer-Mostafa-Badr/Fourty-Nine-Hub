@@ -132,6 +132,10 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     'Percentage',
     'Subscribe Package',
   ];
+  List<String> subscriptionPlansAr = [
+    'نظام النسبة',
+    'باقة الاشتراك',
+  ];
   List<RideModelEntity> models = [];
   TextEditingController modelNameController = TextEditingController();
   var modelFormKey = GlobalKey<FormState>();
@@ -205,7 +209,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         showSuccessMessage(
             context,
             context.isArabic
-                ? "تم اضافة الموديل بنجاح"
+                ? "تم اضافة الماركة بنجاح"
                 : "Model added successfully");
         RideBrandModel newBrand = RideBrandModel(
             id: data,
@@ -258,7 +262,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         showSuccessMessage(
             context,
             context.isArabic
-                ? "تم اضافة الموديل بنجاح"
+                ? "تم اضافة الطراز بنجاح"
                 : "Model added successfully");
         RideCarModelModel newModel = RideCarModelModel(
           id: data,
@@ -772,14 +776,14 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         firstName: rideNameController.text,
         lastName: rideSurNameController.text,
         categoryId: categoryId,
-        vehicleBrand: state.selectedBrand?.id ?? '',
+        vehicleBrand:(state.newBrand?.id.isNotEmpty ?? false)?
+        state.newBrand?.id??'':state.selectedBrand?.id ?? '',
         vehicleColor: state.selectedColors?.id ?? '',
         vehicleModel: (state.newModel?.id.isNotEmpty ?? false)
             ? state.newModel?.id ?? ''
             : state.selectedModel?.id ?? '',
         vehicleYear: rideVehicleProductionYearController.text,
       );
-      showLoadingDialog(context);
       final Either<Failure, bool> result = await loadingRegisterUseCase(params);
 
       result.fold(
@@ -791,13 +795,17 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
               status: RideRegisterStates.error, failure: failure));
         },
         (data) async {
+
           await LoadingMethodHelper().uploadDriverImage(
               driverImage: state.personalPicture!,
               onSuccessUploaded: (bool isSuccess) async {
                 if (isSuccess) {
+                  await fetchLoaderInfo(context, false);
+                  context.pop();
                   context.pop();
                   emit(state.copyWith(status: RideRegisterStates.success));
                 } else {
+                  context.pop();
                   context.pop();
                   showErrorMessage(
                       context,
@@ -807,8 +815,6 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                 }
               });
           isLoadingSubmitRegister = false;
-          context.pop();
-          await fetchLoaderInfo(context, false);
           emit(state.copyWith(status: RideRegisterStates.success));
           showSuccessMessage(
               context,
@@ -920,8 +926,8 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       return;
     }
     if (formKey.currentState!.validate()) {
-      if (state.selectedBrand == null ||
-          (state.selectedBrand?.id.isEmpty ?? false)) {
+      if ((state.newBrand==null||(state.newBrand?.id.isEmpty ?? false))&&(state.selectedBrand == null ||
+          (state.selectedBrand?.id.isEmpty ?? false))) {
         showErrorMessage(
             context,
             context.isArabic
@@ -930,8 +936,8 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         return;
       }
 
-      if (state.selectedModel == null ||
-          (state.selectedModel?.id.isEmpty ?? false)) {
+      if ((state.newModel==null||(state.newModel?.id.isEmpty ?? false))&&(state.selectedModel == null ||
+          (state.selectedModel?.id.isEmpty ?? false))) {
         showErrorMessage(
             context,
             context.isArabic
@@ -982,9 +988,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           plateInfo: rideVehiclePlateNumberController.text,
           pricingPerKm: ridePricingPerKmController.text,
           smoker: state.isSmoking ?? false,
-          vehicleBrand: state.selectedBrand?.id ?? '',
           vehicleColor: state.selectedColors?.id ?? '',
-          vehicleModel: state.selectedModel?.id ?? '',
+          vehicleModel: state.newModel!=null?(state.newModel?.id??''):state.selectedModel?.id ?? '',
+          vehicleBrand: state.newBrand!=null?(state.newBrand?.id??''):state.selectedBrand?.id ?? '',
           vehicleYear: rideVehicleProductionYearController.text,
           workingType: state.selectedPlan ?? '',
           subcategoryIds: subCategoryIds);
@@ -1186,6 +1192,20 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         selectedPlan: selectedPlan, status: RideRegisterStates.success));
   }
 
+  onRemoveSelectionShipping(){
+    List<SubCategoryEntityUpdated> subCategories = [];
+    subCategories.addAll(state.shippingSubCategories ?? []);
+    subCategories.where((e)=>e.isSelected=false).toList();
+    subCategories.where((e)=>e.isEnabled=true).toList();
+    emit(state.copyWith(shippingSubCategories: subCategories));
+  }
+  onRemoveSelectionRide(){
+    List<SubCategoryEntityUpdated> subCategories = [];
+    subCategories.addAll(state.rideSubCategories?? []);
+    subCategories.where((e)=>e.isSelected=false).toList();
+    subCategories.where((e)=>e.isEnabled=true).toList();
+    emit(state.copyWith(rideSubCategories: subCategories));
+  }
   onSelectShippingSubCategory(String id, BuildContext context) {
     List<SubCategoryEntityUpdated> subCategories = [];
     subCategories.addAll(state.shippingSubCategories ?? []);
@@ -1564,6 +1584,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                           ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                           : "Successfully uploaded images, please wait for the approval of all data.");
                 }
+                await Future.delayed(const Duration(seconds: 1));
                 context.pop();
                 context.pop();
                 emit(state.copyWith(
@@ -1601,6 +1622,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                           ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                           : "Successfully uploaded images, please wait for the approval of all data.");
                 }
+                await Future.delayed(const Duration(seconds: 1));
                 context.pop();
                 context.pop();
                 emit(state.copyWith(status: RideRegisterStates.success));
@@ -1642,6 +1664,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                         ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                         : "Successfully uploaded images, please wait for the approval of all data.");
               }
+              await Future.delayed(const Duration(seconds: 1));
               context.pop();
               context.pop();
               emit(state.copyWith(status: RideRegisterStates.success));
@@ -1704,6 +1727,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                       context.isArabic
                           ? 'تم رفع الصور بنجاح'
                           : "Successfully uploaded images");
+                  await Future.delayed(const Duration(seconds: 1));
                   context.pop();
                   context.pop();
                 } else {
@@ -1778,6 +1802,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                     context.isArabic
                         ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                         : "Successfully uploaded images, please wait for the approval of all data.");
+                await Future.delayed(const Duration(seconds: 1));
                 context.pop();
                 context.pop();
                 emit(state.copyWith(status: RideRegisterStates.success));
@@ -1821,6 +1846,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                         ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                         : "Successfully uploaded images, please wait for the approval of all data.");
               }
+              await Future.delayed(const Duration(seconds: 1));
               context.pop();
               context.pop();
               emit(state.copyWith(status: RideRegisterStates.success));
@@ -1876,6 +1902,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                       context.isArabic
                           ? 'تم رفع الصور بنجاح'
                           : "Successfully uploaded images");
+                  await Future.delayed(const Duration(seconds: 1));
                   context.pop();
                   context.pop();
                 } else {
@@ -1915,6 +1942,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                       context.isArabic
                           ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                           : "Successfully uploaded images, please wait for the approval of all data.");
+                  await Future.delayed(const Duration(seconds: 1));
                   context.pop();
                   context.pop();
                   emit(state.copyWith(status: RideRegisterStates.success));
@@ -1927,7 +1955,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                           : 'An error occurred while uploading images. Please try again.');
                 }
               });
-      Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 3));
       driverInfo?.isUploadDriverId = true;
     }
   }
@@ -2045,6 +2073,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
                         ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                         : "Successfully uploaded images, please wait for the approval of all data.");
               }
+              await Future.delayed(const Duration(seconds: 1));
               context.pop();
               context.pop();
               emit(state.copyWith(status: RideRegisterStates.success));

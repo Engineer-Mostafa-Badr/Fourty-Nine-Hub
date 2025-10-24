@@ -134,11 +134,9 @@ class WalletView extends StatelessWidget {
     //   return const NormalWalletView();
     // }
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.wallet.localize,
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.wallet.localize,
       ),
       body: const WalletViewBody(),
     );

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:go_router/go_router.dart';
@@ -124,7 +125,12 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
               },
             ),
           );
-        } else {
+        }else if (auctions.isEmpty){
+
+          print("📭 Showing 'No auctions available' message");
+          return  Center(child: CustomEmptyWidget(label: LocaleKeys.noAuctionAvailable.localize,));
+
+      } else {
           body =  Center(child: Text("${LocaleKeys.somethingWentWrong.localize}"));
         }
 
