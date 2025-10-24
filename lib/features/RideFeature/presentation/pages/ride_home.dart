@@ -3091,14 +3091,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     children: [
                       Text(LocaleKeys.egp.tr(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
+                              fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.PRIMARY_COLOR_DARK)),
+                      Spacer(),
                       state.rideExpectedPrice != null
                           ? Text(FormatNumbers().convertNumberToLocalizedString(
                               serviceLocator<RideCubit>()
                                   .getTotalPrice(selectedCategoryPrice)
                                   .toInt()
                                   .toString(),
-                              isArabic: context.isArabic))
+                              isArabic: context.isArabic), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: AppColors.PRIMARY_COLOR))
                           : Text(LocaleKeys.offerYourFare.tr()),
                       const Spacer(),
                       Icon(
