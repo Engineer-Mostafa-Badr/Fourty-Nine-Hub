@@ -563,6 +563,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   void onChanged({required SelectionEntity v, required int index}) {
     values[index] = v;
     print(values.length);
+    // Emit state to trigger UI rebuild
+    emit(state.copyWith(selections: values));
   }
 
   void onChangedd({required SelectionEntity v, required int index}) {
@@ -601,6 +603,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     }
     print(values[index].nameAr);
     print(values[index].nameEn);
+    // Emit state to trigger UI rebuild
+    emit(state.copyWith(selections: values));
   }
 
   pickImage(

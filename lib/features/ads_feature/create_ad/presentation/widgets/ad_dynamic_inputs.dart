@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widgets/create_ad_text_form_field.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -53,29 +55,73 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     super.initState();
   }
 
+  // Check if this field should be hidden based on other field selections
+  bool _shouldHideField(CreateAdState state) {
+    // Check if this is a polygamy field and if religion is Christian
+    final isPolygamyField =
+        widget.property.nameAr.toLowerCase().contains('تعدد') ||
+            widget.property.nameAr.toLowerCase().contains('زواج') ||
+            widget.property.nameEn.toLowerCase().contains('polygamy') ||
+            widget.property.nameEn.toLowerCase().contains('marriage');
+
+    if (isPolygamyField &&
+        state.adProperties != null &&
+        state.selections != null) {
+      // Find religion field and check if it's Christian
+      for (int i = 0; i < state.adProperties!.length; i++) {
+        final property = state.adProperties![i];
+        final isReligionField = property.nameAr.toLowerCase().contains('دين') ||
+            property.nameAr.toLowerCase().contains('ديانة') ||
+            property.nameEn.toLowerCase().contains('religion');
+
+        if (isReligionField && i < state.selections!.length) {
+          final religionSelection = state.selections![i];
+          final isChristian =
+              religionSelection.nameAr.toLowerCase().contains('مسيحي') ||
+                  religionSelection.nameEn.toLowerCase().contains('christian');
+
+          if (isChristian) {
+            return true; // Hide polygamy field for Christians
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 4,
-      children: [
-        if (widget.property.adPropertyType.isText) ...[
-          const Sizer(),
-          _buildTextFieldWidget()
-        ],
-        if (widget.property.adPropertyType.isSelect) ...[
-          const Sizer(),
-          _buildSelectFieldWidget()
-        ],
-        if (widget.property.adPropertyType.isNumber) ...[
-          const Sizer(),
-          _buildNumberFieldWidget()
-        ],
-        if (widget.property.adPropertyType.isDropDown) ...[
-          const Sizer(),
-          _buildDropDownWidget()
-        ],
-      ],
+    return BlocBuilder<CreateAdCubit, CreateAdState>(
+      builder: (context, state) {
+        // Hide the field if conditions are met
+        if (_shouldHideField(state)) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 4,
+          children: [
+            if (widget.property.adPropertyType.isText) ...[
+              const Sizer(),
+              _buildTextFieldWidget()
+            ],
+            if (widget.property.adPropertyType.isSelect) ...[
+              const Sizer(),
+              _buildSelectFieldWidget()
+            ],
+            if (widget.property.adPropertyType.isNumber) ...[
+              const Sizer(),
+              _buildNumberFieldWidget()
+            ],
+            if (widget.property.adPropertyType.isDropDown) ...[
+              const Sizer(),
+              _buildDropDownWidget()
+            ],
+          ],
+        );
+      },
     );
   }
 
@@ -85,7 +131,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       RegExp(r'([a-z])([A-Z])'),
       (match) => '${match.group(1)} ${match.group(2)}',
     );
-    
+
     // Split by dash, underscore, or space
     return processedInput
         .split(RegExp(r'[-_\s]+'))
@@ -93,6 +139,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
         .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
         .join(' ');
   }
+
   Widget _buildTextFieldWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +213,8 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           items: widget.property.values
               .map<DropdownMenuItem<SelectionEntity>>((e) => DropdownMenuItem(
                     value: e,
-                    child: Text(context.isArabic ? e.nameAr : formatText(e.nameEn)),
+                    child: Text(
+                        context.isArabic ? e.nameAr : formatText(e.nameEn)),
                   ))
               .toList(),
           onChange: (SelectionEntity? newValue) {
@@ -182,7 +230,6 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       ],
     );
   }
-
 
   Widget _buildNumberFieldWidget() {
     return Column(
@@ -217,6 +264,63 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;
             } else {
+              // Check if this is an age field and validate age limits
+              final isAgeField =
+                  widget.property.nameAr.toLowerCase().contains('العمر') ||
+                      widget.property.nameEn.toLowerCase().contains('age');
+
+              if (isAgeField) {
+                final age = int.tryParse(value);
+                if (age == null) {
+                  return context.isArabic
+                      ? 'يرجى إدخال عمر صحيح'
+                      : 'Please enter a valid age';
+                }
+                if (age > 100) {
+                  return context.isArabic
+                      ? 'العمر لا يمكن أن يكون أكثر من 100 سنة'
+                      : 'Age cannot be more than 100 years';
+                }
+                if (age < 1) {
+                  return context.isArabic
+                      ? 'العمر لا يمكن أن يكون أقل من سنة واحدة'
+                      : 'Age cannot be less than 1 year';
+                }
+              }
+
+              // Check if this is a height or weight field and validate limits
+              final isHeightField =
+                  widget.property.nameAr.toLowerCase().contains('الطول') ||
+                      widget.property.nameEn.toLowerCase().contains('height');
+              final isWeightField =
+                  widget.property.nameAr.toLowerCase().contains('الوزن') ||
+                      widget.property.nameEn.toLowerCase().contains('weight');
+
+              if (isHeightField || isWeightField) {
+                final numericValue = int.tryParse(value);
+                if (numericValue == null) {
+                  return context.isArabic
+                      ? 'يرجى إدخال قيمة صحيحة'
+                      : 'Please enter a valid value';
+                }
+                if (numericValue > 200) {
+                  final fieldName = isHeightField
+                      ? (context.isArabic ? 'الطول' : 'Height')
+                      : (context.isArabic ? 'الوزن' : 'Weight');
+                  return context.isArabic
+                      ? '$fieldName لا يمكن أن يكون أكثر من 200'
+                      : '$fieldName cannot be more than 200';
+                }
+                if (numericValue < 1) {
+                  final fieldName = isHeightField
+                      ? (context.isArabic ? 'الطول' : 'Height')
+                      : (context.isArabic ? 'الوزن' : 'Weight');
+                  return context.isArabic
+                      ? '$fieldName لا يمكن أن يكون أقل من 1'
+                      : '$fieldName cannot be less than 1';
+                }
+              }
+
               return null;
             }
           },
