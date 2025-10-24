@@ -315,6 +315,7 @@ abstract class Routes {
   static const allClientRatingScreen = '/allClientRatingScreen';
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
   static const conversationsScreen = '/ConversationsScreen';
+  static const conversationScreen = '/ConversationScreen';
   static const socialArchivedScreen = '/SocialArchivedScreen';
   static const socialGreetScreen = '/SocialGreetScreen';
   static const socialLockedScreen = '/SocialLockedScreen';
@@ -626,6 +627,7 @@ abstract class Paths {
   static const followersScreen = 'FollowersScreen';
   static const allClientRatingScreen = 'allClientRatingScreen';
   static const conversationsScreen = 'ConversationsScreen';
+  static const conversationScreen = 'ConversationScreen';
   static const socialArchivedScreen = 'SocialArchivedScreen';
   static const socialGreetScreen = 'SocialGreetScreen';
   static const socialLockedScreen = 'SocialLockedScreen';
