@@ -443,6 +443,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> emitDriverLocation(
       {required double lat, required double long}) async {
+    print("emitDriverLocation");
     final result = await updateSocketLocationUseCase(
         UpdateSocketLocationParams(latitude: lat, longitude: long));
     result.fold(
