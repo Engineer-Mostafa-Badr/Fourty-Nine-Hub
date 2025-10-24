@@ -7,18 +7,15 @@ import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
 import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import '../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import '../../main.dart';
 import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';

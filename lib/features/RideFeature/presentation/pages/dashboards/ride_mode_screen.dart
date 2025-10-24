@@ -104,7 +104,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
       // if (!dashboardCubit.isClosed) {
       widget.params.isSocket == true && widget.params.modeType == "ride"
           ? [
-              dashboardCubit.changeIndex(widget.params.currentIndex ?? 0, context, widget.params),
+              dashboardCubit.changeIndex( 0, context, widget.params),
               // if (widget.params.currentIndex == null || widget.params.currentIndex == 0) dashboardCubit.loadAvailableRideTrips(context),
               dashboardCubit.listenToUpdateTripAutoAccept(),
               dashboardCubit.listenToUpdateTripPrice(),
@@ -117,7 +117,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
             ]
           : widget.params.isSocket == false && widget.params.modeType == "ride"
               ? [
-                  dashboardCubit.loadInitialAvailableNonSocketTrips(),
+                  dashboardCubit.changeIndex(0, context, widget.params),
+                  // dashboardCubit.loadInitialAvailableNonSocketTrips(),
                   dashboardCubit.listenToRemoveUntrackedTrip(),
                   dashboardCubit.listenToNewTripNonSocket(widget.params),
                   dashboardCubit.listenToAcceptTripOfferTrip(4, context, widget.params),
@@ -125,7 +126,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
                 ]
               : widget.params.modeType == "truck"
                   ? [
-                      dashboardCubit.loadInitialAvailableNonSocketLoading(),
+                      dashboardCubit.changeIndex(0, context, widget.params),
+                      // dashboardCubit.loadInitialAvailableNonSocketLoading(),
                       dashboardCubit.listenToRemoveLoading(),
                       dashboardCubit.listenToNewLoading(),
                       dashboardCubit.listenToAcceptTripOfferLoading(4, context, widget.params),

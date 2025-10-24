@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -845,11 +846,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       showLoadingDialog(context);
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
       print("state.selectedModel cubit ${state.selectedModel?.id}");
+      String dateString = rideDateOfBirthController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
 
       RegisterRideNotSpecialEntity params = RegisterRideNotSpecialEntity(
           driverFirstName: rideNameController.text,
           driverLastName: rideSurNameController.text,
-          birthday: rideDateOfBirthController.text,
+          birthday: formattedDate,
           driverLicenseNumber: ridePersonalDocLicenseNumController.text,
           idNumber: ridePersonalDocIdNumController.text,
           phone: ridePhoneNumberController.text,
@@ -912,6 +917,14 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     }
   }
 
+  String convertArabicToEnglishNumbers(String input) {
+    const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    const english = ['0','1','2','3','4','5','6','7','8','9'];
+    for (int i = 0; i < arabic.length; i++) {
+      input = input.replaceAll(arabic[i], english[i]);
+    }
+    return input;
+  }
   onRegister(BuildContext context, List<String> subCategoryIds, bool isSocket,
       bool isShipping) async {
     DriverInfoEntity? driverInfo = state.driverInfo;
@@ -975,12 +988,16 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       isLoadingSubmitRegister = true;
       showLoadingDialog(context);
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
+      String dateString = rideDateOfBirthController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
 
       RegisterRideSpecialEntity params = RegisterRideSpecialEntity(
           driverFirstName: rideNameController.text,
           driverLastName: rideSurNameController.text,
           airConditioner: state.hasAirCondition ?? false,
-          birthday: rideDateOfBirthController.text,
+          birthday: formattedDate,
           city: state.selectedGov ?? '',
           driverLicenseNumber: ridePersonalDocLicenseNumController.text,
           idNumber: ridePersonalDocIdNumController.text,

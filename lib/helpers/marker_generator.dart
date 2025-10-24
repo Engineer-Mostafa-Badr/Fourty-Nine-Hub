@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:typed_data';
-import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 /// This just adds overlay and builds [_MarkerHelper] on that overlay.
 /// [_MarkerHelper] does all the heavy work of creating and getting bitmaps

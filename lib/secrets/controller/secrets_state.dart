@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../../core/error/failure.dart';
 
+import '../../core/error/failure.dart';
 import '../domain/entities/secrets.dart';
 
 enum SecretsStateStatus {

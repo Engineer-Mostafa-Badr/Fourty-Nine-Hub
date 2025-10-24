@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:story_view/controller/story_controller.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart' as vibrate;
+import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
@@ -11,7 +11,6 @@ import '../../../../features/social_media/tinder/data/shared/shared.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../dialogs/please_login_dialog.dart';
 import '../../dynamic/sizer.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ProfileImageWithStories extends StatelessWidget {
   const ProfileImageWithStories({super.key});

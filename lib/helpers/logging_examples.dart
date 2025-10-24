@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 
 import 'logging_helper.dart';
-import 'ssl_certificate_helper.dart';
 import 'network_logging_helper.dart';
+import 'ssl_certificate_helper.dart';
 
 /// Examples of how to use the logging helpers
 class LoggingExamples {
