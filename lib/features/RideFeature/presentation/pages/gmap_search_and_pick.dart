@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geo;
@@ -33,6 +35,8 @@ class RideGoogleMapSearchAndPickParams {
   final latlong.LatLng? minDistanceReferencePoint;
   final String? allowedCountryCode;
   final String baseUri;
+  final LatLng? initialPosition;
+  final String? initialAddress;
 
   const RideGoogleMapSearchAndPickParams({
     required this.onPicked,
@@ -40,6 +44,8 @@ class RideGoogleMapSearchAndPickParams {
     this.minDistanceReferencePoint,
     this.allowedCountryCode = 'EG',
     this.baseUri = 'https://nominatim.openstreetmap.org',
+    this.initialPosition,
+    this.initialAddress,
   });
 }
 
@@ -57,10 +63,10 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   late GoogleMapController _controller;
 
   LatLng? _selectedLatLng;
-  String _address = '';
+  String? _address;
   bool _isLoading = false;
 
-  LatLng _initialPosition = const LatLng(30.0444, 31.2357); // Cairo default
+  LatLng? _initialPosition; // Cairo default
 
   // Map to store country names in English and Arabic
   static const Map<String, Map<String, String>> _countryNames = {
@@ -74,7 +80,18 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   @override
   void initState() {
     super.initState();
-    fetchUserLocation();
+    _initialPosition = widget.params.initialPosition ?? const LatLng(30.0444, 31.2357);
+    _selectedLatLng = widget.params.initialPosition ?? const LatLng(30.0444, 31.2357);
+    _address = widget.params.initialAddress;
+    _searchController.text = widget.params.initialAddress ?? '';
+    if(widget.params.initialPosition == null) {
+      log("initial position is null");
+       fetchUserLocation();
+    }else{
+      log("initial position is not null");
+      _moveToLocation(widget.params.initialPosition!.latitude, widget.params.initialPosition!.longitude);
+      // _onMapTap(LatLng(widget.params.initialPosition!.latitude, widget.params.initialPosition!.longitude));
+    }
   }
 
   String _getCountryName(String? countryCode, BuildContext context) {
@@ -127,6 +144,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   }
 
   Future<void> fetchUserLocation() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingDialog(context, canPop: false));
     try {
       Position position = await _determinePosition();
       List<Placemark> placemarks =
@@ -148,6 +166,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
     } catch (e) {
       log('_fetchUserLocation ${e.toString()}');
     }
+    context.pop();
   }
 
   Future<Position> _determinePosition() async {
@@ -212,8 +231,9 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
   Future<void> _onMapTap(LatLng latLng) async {
     setState(() {
       _selectedLatLng = latLng;
-      _isLoading = true;
+      // _isLoading = true;
     });
+    showLoadingDialog(context);
 
     try {
       List<geo.Placemark> places = await geo.placemarkFromCoordinates(
@@ -230,9 +250,11 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
       }
     } catch (_) {}
 
-    setState(() {
-      _isLoading = false;
-    });
+    // setState(() {
+    //   _isLoading = false;
+    // });
+
+    Navigator.pop(context);
   }
 
   bool _isWithinMinDistance() {
@@ -251,7 +273,10 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
     final GoogleMapController controller = await _mapController.future;
     final position = LatLng(lat, lng);
     controller.animateCamera(CameraUpdate.newLatLng(position));
-    _onMapTap(position);
+    if(widget.params.initialAddress == null) {
+      _searchController.text = widget.params.initialAddress!;
+      _onMapTap(position);
+    }
   }
 
   Future<void> _applyMapStyle(BuildContext context) async {
@@ -386,7 +411,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
 
     widget.params.onPicked(
       PickedData(
-        address: _address,
+        address: _address?? '',
         latitude: lat,
         longitude: lon,
       ),
@@ -415,7 +440,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                     _mapController.complete(controller);
                     _applyMapStyle(context);
                   },
-                  initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 14),
+                  initialCameraPosition: CameraPosition(target: _initialPosition!, zoom: 14),
                   onTap: _onMapTap,
                   markers: _selectedLatLng != null
                       ? {
@@ -436,6 +461,7 @@ class _RideMapPickerState extends State<RideGoogleMapSearchAndPick> {
                 ),
 
                 // Search Bar
+                // _selectedLatLng == null ? const SizedBox() :
                 Positioned(
                   top: 16,
                   left: 16,
