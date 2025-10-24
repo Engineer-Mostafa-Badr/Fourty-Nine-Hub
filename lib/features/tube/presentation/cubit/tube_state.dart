@@ -1,70 +1,81 @@
 part of 'tube_cubit.dart';
-class TubeState {
-  final StateStatus? status;
-  final Failure? failure;
-  final List<GetAllTubeVideosEntity>? getAllTubeVideosData;
 
+
+class TubeState {
+  final StateStatus status;
+  final List<GetAllTubeVideosEntity>? getAllTubeVideosData;
+  final List<GetAllTubeVideosEntity>? searchTubeVideosData;
   final GetAllTubeVideosEntity? currentVideo;
-  /// Videos controller
-  // final Video? currentVideo;
   final VideoPlayerController? videoPlayerController;
   final ChewieController? chewieController;
-  final bool isMinimized;
   final bool isPlaying;
-  final bool isLoading; // New flag to indicate loading state
+  final bool isMinimized;
+  final bool isLoading;
+  final String? errorMessage; // New field
   final bool showForwardIndicator;
   final bool showBackwardIndicator;
-  ///  Videos Controller
-  final bool isBackgroundMode;
+  final bool clearCurrentVideo;
+  final bool clearControllers;
+  final Failure? failure;
+  final AddFavoriteTubeEntity? addFavoriteTubeData;
+  final List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData;
   TubeState({
-    this.status,
-    this.failure,
+    this.status = StateStatus.initial,
+    this.getAllTubeVideosData = const [],
+    this.currentVideo,
     this.videoPlayerController,
     this.chewieController,
-    this.isMinimized = false,
     this.isPlaying = false,
+    this.isMinimized = false,
     this.isLoading = false,
+    this.errorMessage,
     this.showForwardIndicator = false,
     this.showBackwardIndicator = false,
-    this.isBackgroundMode = false, // default value
-    this.getAllTubeVideosData ,
-    this.currentVideo ,
+    this.clearCurrentVideo = false,
+    this.clearControllers = false,
+    this.failure,
+    this.addFavoriteTubeData,
+    this.searchTubeVideosData,
+    this.getFavoriteTubeVideosData,
   });
 
   TubeState copyWith({
     StateStatus? status,
-    Failure? failure,
+    List<GetAllTubeVideosEntity>? getAllTubeVideosData,
+    GetAllTubeVideosEntity? currentVideo,
     VideoPlayerController? videoPlayerController,
     ChewieController? chewieController,
-    bool? isMinimized,
     bool? isPlaying,
+    bool? isMinimized,
     bool? isLoading,
+    String? errorMessage,
     bool? showForwardIndicator,
     bool? showBackwardIndicator,
-    GetAllTubeVideosEntity? currentVideo,
-    List<GetAllTubeVideosEntity>? getAllTubeVideosData,
-    bool clearCurrentVideo = false,
-    bool clearControllers = false,
-    bool? isBackgroundMode,
+    bool? clearCurrentVideo,
+    bool? clearControllers,
+    Failure? failure,
+    AddFavoriteTubeEntity? addFavoriteTubeData,
+    List<GetAllTubeVideosEntity>? searchTubeVideosData,
+    List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData,
   }) {
     return TubeState(
       status: status ?? this.status,
-      failure: failure ?? this.failure,
-      videoPlayerController: clearControllers
-          ? null
-          : videoPlayerController ?? this.videoPlayerController,
-      chewieController: clearControllers
-          ? null
-          : chewieController ?? this.chewieController,
-      isMinimized: isMinimized ?? this.isMinimized,
+      getAllTubeVideosData: getAllTubeVideosData ?? this.getAllTubeVideosData,
+      currentVideo: currentVideo ?? this.currentVideo,
+      videoPlayerController: videoPlayerController ?? this.videoPlayerController,
+      chewieController: chewieController ?? this.chewieController,
       isPlaying: isPlaying ?? this.isPlaying,
+      isMinimized: isMinimized ?? this.isMinimized,
       isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage ?? this.errorMessage,
       showForwardIndicator: showForwardIndicator ?? this.showForwardIndicator,
       showBackwardIndicator: showBackwardIndicator ?? this.showBackwardIndicator,
-      getAllTubeVideosData: getAllTubeVideosData ?? this.getAllTubeVideosData,
-      currentVideo: clearCurrentVideo ? null : currentVideo ?? this.currentVideo,
-      isBackgroundMode: isBackgroundMode ?? this.isBackgroundMode,
+      clearCurrentVideo: clearCurrentVideo ?? this.clearCurrentVideo,
+      clearControllers: clearControllers ?? this.clearControllers,
+      failure: failure ?? this.failure,
+      addFavoriteTubeData: addFavoriteTubeData ?? this.addFavoriteTubeData,
+      searchTubeVideosData: searchTubeVideosData ?? this.searchTubeVideosData,
+      getFavoriteTubeVideosData: getFavoriteTubeVideosData ?? this.getFavoriteTubeVideosData,
     );
   }
-
 }

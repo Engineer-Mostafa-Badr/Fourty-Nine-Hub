@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/tube/presentation/screens/tube_favorites_videos_screen.dart';
+import 'package:fourtyninehub/features/tube/presentation/screens/tube_home_videos_screen.dart';
 import 'package:fourtyninehub/features/tube/presentation/screens/tube_video_player_screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -10,9 +12,77 @@ import '../../../../core/enums/base_status_enum.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../cubit/tube_cubit.dart';
+import '../widgets/video_card_widget.dart';
 import '../widgets/video_mini_player.dart';
 
 // ==================== TUBE SCREEN WITH TABS ====================
+// class TubeScreen extends StatefulWidget {
+//   const TubeScreen({super.key});
+//
+//   @override
+//   State<TubeScreen> createState() => _TubeScreenState();
+// }
+//
+// class _TubeScreenState extends State<TubeScreen>
+//     with SingleTickerProviderStateMixin {
+//   late final TabController _tabController;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _tabController = TabController(length: 3, vsync: this);
+//   }
+//
+//   @override
+//   void dispose() {
+//     _tabController.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<TubeCubit, TubeState>(
+//       builder: (context, state) {
+//         return Scaffold(
+//           appBar: AppBar(
+//             backgroundColor: Colors.black,
+//             title: const Text('Tube', style: TextStyle(color: Colors.white)),
+//             bottom: TabBar(
+//               controller: _tabController,
+//               labelColor: Colors.white,
+//               unselectedLabelColor: Colors.grey,
+//               indicatorColor: Colors.red,
+//               tabs: const [
+//                 Tab(text: 'All'),
+//                 Tab(text: 'Subscribed'),
+//                 Tab(text: 'Favorites'),
+//               ],
+//             ),
+//           ),
+//           body: Stack(
+//             children: [
+//               TabBarView(
+//                 controller: _tabController,
+//                 children: const [
+//                   HomeVideosTubeScreen(),
+//                   SubscribedTab(),
+//                   TubeFavoriteScreen(),
+//                 ],
+//               ),
+//               if (state.isMinimized &&
+//                   state.currentVideo != null &&
+//                   !state.isLoading)
+//                 const MiniPlayer(),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
+// ==================== TUBE SCREEN WITH SEARCH ====================
+// ==================== TUBE SCREEN WITH SEARCH ====================
 class TubeScreen extends StatefulWidget {
   const TubeScreen({super.key});
 
@@ -23,142 +93,223 @@ class TubeScreen extends StatefulWidget {
 class _TubeScreenState extends State<TubeScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-  }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => serviceLocator<TubeCubit>(),
-      child: BlocBuilder<TubeCubit, TubeState>(
-        builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Colors.black,
-            appBar: AppBar(
-              backgroundColor: Colors.black,
-              title: const Text('Tube', style: TextStyle(color: Colors.white)),
-              bottom: TabBar(
-                controller: _tabController,
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.grey,
-                indicatorColor: Colors.red,
-                tabs: const [
-                  Tab(text: 'All'),
-                  Tab(text: 'Subscribed'),
-                  Tab(text: 'Favorites'),
-                ],
-              ),
-            ),
-            body: Stack(
-              children: [
-                TabBarView(
-                  controller: _tabController,
-                  children: const [
-                    AllVideosTab(),
-                    SubscribedTab(),
-                    FavoritesTab(),
-                  ],
-                ),
-                if (state.isMinimized &&
-                    state.currentVideo != null &&
-                    !state.isLoading)
-                  const MiniPlayer(),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ==================== ALL VIDEOS TAB ====================
-class AllVideosTab extends StatefulWidget {
-  const AllVideosTab({super.key});
-
-  @override
-  State<AllVideosTab> createState() => _AllVideosTabState();
-}
-
-class _AllVideosTabState extends State<AllVideosTab> {
-  late final ScrollController _scrollController;
-  late final TubeCubit _cubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _cubit = context.read<TubeCubit>();
-    _scrollController = ScrollController();
-    _cubit.loadInitialAllTubeVideos();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        _cubit.getAllTubeVideos();
+    // ✅ Removed unnecessary favorite loader to prevent double API calls
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging && !_isSearching) {
+        final cubit = context.read<TubeCubit>();
+        switch (_tabController.index) {
+          case 0:
+          // cubit.loadInitialAllTubeVideos();
+            break;
+          case 1:
+          // cubit.loadInitialSubscribedVideos();
+            break;
+          case 2:
+          // ✅ No call here anymore
+            break;
+        }
       }
     });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _tabController.dispose();
+    _searchController.dispose();
     super.dispose();
+  }
+
+  // Toggle between search bar and tabs
+  void _toggleSearch() {
+    setState(() {
+      _isSearching = !_isSearching;
+      final cubit = context.read<TubeCubit>();
+
+      if (_isSearching) {
+        cubit.searchTubeVideos.clear();
+        cubit.currentSearchTubeQuery = '';
+      } else {
+        _searchController.clear();
+        cubit.currentSearchTubeQuery = '';
+        // Reload current tab when exiting search
+        switch (_tabController.index) {
+          case 0:
+          // cubit.loadInitialAllTubeVideos();
+            break;
+          case 1:
+          // cubit.loadInitialSubscribedVideos();
+            break;
+          case 2:
+          // ✅ Removed reload call here too
+            break;
+        }
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TubeCubit, TubeState>(
       builder: (context, state) {
-        if (_cubit.isTubeVideosInitialLoading &&
-            state.status == StateStatus.loading) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.red),
-          );
-        }
-
-        final videos = _cubit.allTubeVideos;
-
-        if (videos.isEmpty) {
-          return const Center(
-              child: Text('No videos yet',
-                  style: TextStyle(color: Colors.white70, fontSize: 16)));
-        }
-
-        return RefreshIndicator(
-          color: Colors.red,
+        return Scaffold(
           backgroundColor: Colors.black,
-          onRefresh: _cubit.loadInitialAllTubeVideos,
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: videos.length + (_cubit.hasMoreTubeVideos ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index >= videos.length) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Center(
-                    child: CircularProgressIndicator(color: Colors.red),
-                  ),
-                );
-              }
-              final video = videos[index];
-              return GestureDetector(
-                onTap: () => _cubit.playVideo(video),
-                child: _VideoCard(video: video),
-              );
-            },
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            title: const Text('Tube', style: TextStyle(color: Colors.white)),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  _isSearching ? Icons.close : Icons.search,
+                  color: Colors.white,
+                ),
+                onPressed: _toggleSearch,
+              ),
+            ],
+            bottom: !_isSearching
+                ? TabBar(
+              controller: _tabController,
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.red,
+              tabs: const [
+                Tab(text: 'All'),
+                Tab(text: 'Subscribed'),
+                Tab(text: 'Favorites'),
+              ],
+            )
+                : null,
+          ),
+          body: _isSearching
+              ? _buildSearchField(context, state)
+              : Stack(
+            children: [
+              TabBarView(
+                controller: _tabController,
+                children: const [
+                  HomeVideosTubeScreen(),
+                  SubscribedTab(),
+                  TubeFavoriteScreen(),
+                ],
+              ),
+              if (state.isMinimized &&
+                  state.currentVideo != null &&
+                  !state.isLoading)
+                const MiniPlayer(),
+            ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSearchField(BuildContext context, TubeState state) {
+    final cubit = context.read<TubeCubit>();
+    final searchResults = cubit.searchTubeVideos;
+
+    return Container(
+      color: Colors.black,
+      child: Column(
+        children: [
+          // 🔍 Search Bar
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              autofocus: true,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "Search videos...",
+                hintStyle: const TextStyle(color: Colors.white54),
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                filled: true,
+                fillColor: Colors.grey[900],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (value) {
+                if (value.trim().isNotEmpty) {
+                  cubit.loadInitialSearchTubeVideos(context, value);
+                }
+              },
+            ),
+          ),
+
+          // 🧠 Results List
+          Expanded(
+            child: BlocBuilder<TubeCubit, TubeState>(
+              builder: (context, state) {
+                if (state.status == StateStatus.loading &&
+                    cubit.isSearchTubeInitialLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.red),
+                  );
+                }
+
+                if (searchResults.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "No videos found",
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                  );
+                }
+
+                return RefreshIndicator(
+                  color: Colors.red,
+                  backgroundColor: const Color(0xFF0F0F0F),
+                  onRefresh: () async {
+                    await cubit.loadInitialSearchTubeVideos(
+                      context,
+                      cubit.currentSearchTubeQuery,
+                    );
+                  },
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification.metrics.pixels >=
+                          notification.metrics.maxScrollExtent - 200 &&
+                          cubit.hasMoreSearchTubeVideos &&
+                          !cubit.isSearchTubeLoadingMore) {
+                        cubit.getSearchTubeVideos(context);
+                      }
+                      return false;
+                    },
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: searchResults.length +
+                          (cubit.hasMoreSearchTubeVideos ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index >= searchResults.length) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            child: Center(
+                              child: CircularProgressIndicator(color: Colors.red),
+                            ),
+                          );
+                        }
+                        final video = searchResults[index];
+                        return VideoCardTube(
+                          video: video,
+                          videoList: searchResults,
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -194,114 +345,4 @@ class _SubscribedTabState extends State<SubscribedTab> {
   }
 }
 
-class FavoritesTab extends StatefulWidget {
-  const FavoritesTab({super.key});
-
-  @override
-  State<FavoritesTab> createState() => _FavoritesTabState();
-}
-
-class _FavoritesTabState extends State<FavoritesTab> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    // TODO: implement your own pagination method for favorite videos
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-        child: Text('Favorite videos',
-            style: TextStyle(color: Colors.white70, fontSize: 16)));
-  }
-}
-
-
-
-
-class _VideoCard extends StatelessWidget {
-  final GetAllTubeVideosEntity video;
-
-  const _VideoCard({required this.video});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        final cubit = context.read<TubeCubit>();
-        cubit.playVideo(video);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: cubit, // ✅ use the existing cubit instance
-              child: VideoPlayerPage(video: video),
-            ),
-          ),
-        );
-      },
-
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Image.network(
-              video.thumbnail ?? '',
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                color: Colors.grey.shade800,
-                child: const Center(
-                    child: Icon(Icons.videocam_off, color: Colors.white70)),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(video.owner?.channelPicture ?? ''),
-                    radius: 18,
-                    backgroundColor: Colors.grey),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(video.title ?? '',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15)),
-                      const SizedBox(height: 4),
-                      Text(
-                          '${video.owner?.channelName ?? ''} • ${video.views ?? 0} views',
-                          style: const TextStyle(
-                              color: Colors.grey, fontSize: 13)),
-                    ],
-                  ),
-                ),
-                IconButton(
-                    icon: const Icon(Icons.more_vert, color: Colors.white),
-                    onPressed: () {}),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 

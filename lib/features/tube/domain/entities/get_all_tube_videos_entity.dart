@@ -19,7 +19,52 @@ class GetAllTubeVideosEntity {
   final String? createdAt;
   final String? updatedAt;
   final bool? isFavorite;
-
+  /// ✅ Add this `copyWith` method
+  GetAllTubeVideosEntity copyWith({
+    String? id,
+    String? userId,
+    OwnerEntity? owner,
+    String? title,
+    String? description,
+    String? videoUrl,
+    String? thumbnail,
+    int? duration,
+    String? category,
+    int? views,
+    int? likes,
+    int? dislikes,
+    bool? isRate,
+    double? averageRating,
+    bool? isLike,
+    bool? isDislike,
+    bool? isSubscribed,
+    String? createdAt,
+    String? updatedAt,
+    bool? isFavorite,
+  }) {
+    return GetAllTubeVideosEntity(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      owner: owner ?? this.owner,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      videoUrl: videoUrl ?? this.videoUrl,
+      thumbnail: thumbnail ?? this.thumbnail,
+      duration: duration ?? this.duration,
+      category: category ?? this.category,
+      views: views ?? this.views,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      isRate: isRate ?? this.isRate,
+      averageRating: averageRating ?? this.averageRating,
+      isLike: isLike ?? this.isLike,
+      isDislike: isDislike ?? this.isDislike,
+      isSubscribed: isSubscribed ?? this.isSubscribed,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
   const GetAllTubeVideosEntity({
     this.id,
     this.userId,

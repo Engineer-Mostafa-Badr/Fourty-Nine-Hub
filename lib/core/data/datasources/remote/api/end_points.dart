@@ -1999,8 +1999,10 @@ class EndPoints {
 
   static String getMyProfileSpotlight = '/spotlight/profile/me';
 
-  static String getAllTubeVideos = '/tube-video';
-
+   static String getTubeFavorites = '/tube-favorite';
+ static String getTubeHomeVideos = '/tube-video/recommended-home';
+ static String addTubeFavorite = '/tube-favorite/video/';
+ static String searchTubeVideo = '/tube-video/search';
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';
