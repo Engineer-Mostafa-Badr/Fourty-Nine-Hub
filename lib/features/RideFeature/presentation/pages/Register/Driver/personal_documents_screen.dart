@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -32,11 +33,8 @@ class PersonalDocumentsScreen extends StatelessWidget {
       builder: (context,state) {
         var cubit = context.read<RideRegisterCubit>();
         return CustomScaffold(
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: HomeAppbar(),
-          ),
-
+          enableCustomAppBar: true,
+          appBar: BackAppBar(),
           body: Column(
             children: [
               Expanded(

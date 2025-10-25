@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -29,10 +30,8 @@ class DragAnalyticsScreen extends StatelessWidget {
       LocaleKeys.aSelfieWithTheLicense.localize,
     ];
     return CustomScaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(30),
-        child: HomeAppbar(),
-      ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(),
       body: Column(
         children: [
           Expanded(

@@ -1740,7 +1740,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
       dateString = convertArabicToEnglishNumbers(dateString);
       DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
       String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
-
+      print("formattedDate $formattedDate");
       showLoadingDialog(context, canPop: false);
       params.isShipping == true
           ? await LoadingMethodHelper().uploadDriverLicense(
