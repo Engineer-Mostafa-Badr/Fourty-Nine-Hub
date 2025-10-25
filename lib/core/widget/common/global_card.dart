@@ -184,10 +184,16 @@ class GlobalCard extends StatelessWidget {
             ],
           ),
         ),
-        ((isPremium == null || isPremium == true) ||
-                (isButtonEnabled == null || isButtonEnabled == true))
-            ? SizedBox()
-            : tripCardSubscribeText(context),
+        (() {
+          final shouldShowMessage =
+              !((isPremium == null || isPremium == true) ||
+                  (isButtonEnabled == null || isButtonEnabled == true));
+          print(
+              'GlobalCard - isPremium: $isPremium, isButtonEnabled: $isButtonEnabled, shouldShowMessage: $shouldShowMessage');
+          return shouldShowMessage
+              ? tripCardSubscribeText(context)
+              : SizedBox();
+        })(),
       ],
     );
   }

@@ -30,6 +30,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
     _cubit = context.read<SearchCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
   }
+
   void _onScroll() async {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
@@ -80,13 +81,12 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       buildWhen: (prev, curr) =>
-      prev.searchSubCategory != curr.searchSubCategory || prev.status != curr.status,
+          prev.searchSubCategory != curr.searchSubCategory ||
+          prev.status != curr.status,
       builder: (context, state) {
         final subCategories = _cubit.subCategoriesSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
-          return CustomEmptyWidget(
-            label: LocaleKeys.noData.localize,
-          );
+          return CustomEmptyWidget.searchInitial(context: context);
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {
@@ -106,8 +106,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
           physics: _cubit.searchController.text.trim().isEmpty
               ? const NeverScrollableScrollPhysics()
               : const AlwaysScrollableScrollPhysics(),
-          gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             childAspectRatio: .65,
             mainAxisSpacing: 16,
@@ -124,7 +123,13 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
             }
             final subCategory = _cubit.subCategoriesSearch[index];
             return SubCategoryCard(
-              mainCategory: MainCategoryEntity(id: 'id', nameEn: 'nameEn', image: 'image', banner: 'banner', cover: 'cover', total: 5),
+              mainCategory: MainCategoryEntity(
+                  id: 'id',
+                  nameEn: 'nameEn',
+                  image: 'image',
+                  banner: 'banner',
+                  cover: 'cover',
+                  total: 5),
               item: subCategory,
               onFav: () async {
                 // var result = await controller
@@ -158,9 +163,7 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
             // );
           },
         );
-
       },
     );
   }
-
 }

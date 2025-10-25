@@ -75,7 +75,7 @@ Future<dynamic> SubmitBottomSheet(context,
                               activeColor: AppColors.getButtonPrimaryColor(context),
                             ),
                             const Sizer(),
-                            Label(text: context.isArabic?'انا احجز بالنيابة عن شخص اخر':'I am booking on behalf of another Client',
+                            Label(text: context.isArabic?'انا احجز بالنيابة عن شخص آخر':'I am booking on behalf of another Client',
 
                             ),
                           ],

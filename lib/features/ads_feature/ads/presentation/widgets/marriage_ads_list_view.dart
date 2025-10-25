@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_list_view_item.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 
-import '../../../../../common/functions/global/button_availability.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 
 class MarriageAdsListView extends StatelessWidget {
@@ -26,7 +20,13 @@ class MarriageAdsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('state.ads! ${state.ads!.length}');
+    // Add null check for ads
+    if (state.ads == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    print('MarriageAdsListView: Displaying ${state.ads!.length} ads');
+    print('MarriageAdsListView: Filter model: ${state.filterModel}');
     return OlxPaginationWidget(
       scrollController: ScrollController(),
       itemsPerPage: 2,

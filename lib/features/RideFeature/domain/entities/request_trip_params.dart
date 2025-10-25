@@ -22,6 +22,7 @@ class RequestTripUseCaseParams {
   final bool isPremium;
   final List<List<double>> polyline;
   final String phoneNumber;
+  final String? description;
 
   RequestTripUseCaseParams({
     required this.subcategoryId,
@@ -45,6 +46,7 @@ class RequestTripUseCaseParams {
     required this.isPremium,
     required this.polyline,
     required this.phoneNumber,
+    required this.description,
   });
 
   //toJson
@@ -70,6 +72,7 @@ class RequestTripUseCaseParams {
     "polyline" : polyline,
     "riderPhone": phoneNumber,
     "clientDeviceId": await getDeviceId(),
+    if(description != null) "description": description,
     "clientCurrentLocation": {
       "latitude": startLocation[1],
       "longitude": startLocation[0],

@@ -52,13 +52,43 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
     //   }
     // });
     try {
-      return response.fold(
-          (failure) => Left(failure),
-          (response) => Right((response['data']['allAds']['ads'] as List)
-              .map((e) => AdModel.fromJson(e))
-              .toList()));
+      return response.fold((failure) => Left(failure), (response) {
+        print('Filter response structure: $response');
+
+        // Check if response has the expected structure
+        if (response['data'] == null) {
+          print('Response data is null');
+          return Left(UnknownFailure('Response data is null'));
+        }
+
+        // Try different possible response structures
+        List<dynamic> adsList = [];
+
+        // Check for response['data']['allAds']['ads'] structure
+        if (response['data']['allAds'] != null &&
+            response['data']['allAds']['ads'] != null) {
+          adsList = response['data']['allAds']['ads'] as List;
+        }
+        // Check for response['data']['ads'] structure
+        else if (response['data']['ads'] != null) {
+          adsList = response['data']['ads'] as List;
+        }
+        // Check for response['data'] being a list directly
+        else if (response['data'] is List) {
+          adsList = response['data'] as List;
+        }
+        // Check for response['ads'] structure
+        else if (response['ads'] != null) {
+          adsList = response['ads'] as List;
+        } else {
+          print('No ads found in response structure');
+          return Left(UnknownFailure('No ads found in response structure'));
+        }
+
+        return Right(adsList.map((e) => AdModel.fromJson(e)).toList());
+      });
     } catch (e) {
-      print(e);
+      print('Error in filterAd: $e');
       return Left(UnknownFailure(e.toString()));
     }
   }

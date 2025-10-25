@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -11,6 +12,7 @@ import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/build_gradient_border.dart';
@@ -49,7 +51,8 @@ class _ChatCardState extends State<ChatCard> {
             ManageVibration.vibrate();
             if (serviceLocator<ConversationsCubit>().selectedSocialConversation.isEmpty) {
               // context.read<ChatsCubit>().selectChat = widget.chat!;
-              // context.push(Routes.CHATROOM, extra: widget.chatsCubit);
+              serviceLocator<ConversationsCubit>().setSelectedConversation(widget.chat);
+              context.push(Routes.conversationScreen, extra: widget.chat?.conversationId ?? '');
               serviceLocator<ConversationsCubit>().joinConversation(conversationId: widget.chat?.conversationId ?? '');
             } else {
               setState(() {
@@ -146,7 +149,7 @@ class _ChatCardState extends State<ChatCard> {
       child: GestureDetector(
         onTap: () {
           ManageVibration.vibrate();
-          serviceLocator<ConversationsCubit>().leaveConversation(conversationId: widget.chat?.conversationId ?? '');
+          // serviceLocator<ConversationsCubit>().leaveConversation(conversationId: widget.chat?.conversationId ?? '');
           // if (widget.chat!.hasStory) {}
           // if (widget.chat!.isAdmin != "admin") {
           //   if (context.isUserLoggedIn) {
@@ -483,38 +486,80 @@ class _ChatCardState extends State<ChatCard> {
               //             ],
               //           ),
               ,
+              if(widget.chat?.isRecording == true)
               Expanded(
                 child: Label(
                   text:
-                      widget.chat?.inConversation == true? context.isArabic? "...يقرأ" : "reading..." :
-                  widget.chat?.isRecording == true? context.isArabic? "...يسجل" : "recording..." :
-                  widget.chat?.isTyping == true? context.isArabic? "...يكتب" : "typing..." :
-                  widget.chat?.lastMessage?.content == null
-                      ? context.isArabic
-                      ? "لا توجد رسائل حتي الان"
-                      : "No messages until now"
-                      : '${widget.chat?.lastMessage?.content}',
-                  // widget.chat?.lastMessage?.text == null
-                  //     ? context.isArabic
-                  //     ? "لا توجد رسائل حتي الان"
-                  //     : "No messages until now"
-                  //     : '${widget.chat?.lastMessage?.text}',
+                  context.isArabic? "...يسجل" : "recording...",
                   style: Styles.mediumText(
                     fontWeight: FontWeight.bold,
                     color:(widget.chat?.isTyping == true || widget.chat?.isRecording == true || widget.chat?.inConversation == true)? AppColors.PRIMARY_COLOR_DARK : context.isDarkMode
                         ? Colors.white54
                         : AppColors.DARK_GRAY_COLOR,
                   ),
-                  // style: Styles.mediumText(
-                  //   fontSize: 28,
-                  //   color: context.isDarkMode
-                  //       ? Colors.white54
-                  //       : AppColors.DARK_GRAY_COLOR,
-                  // ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
               ),
+              if(widget.chat?.isTyping == true)
+                Expanded(
+                  child: Label(
+                    text:
+                     context.isArabic? "...يكتب" : "typing..." ,
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color:(widget.chat?.isTyping == true || widget.chat?.isRecording == true || widget.chat?.inConversation == true)? AppColors.PRIMARY_COLOR_DARK : context.isDarkMode
+                          ? Colors.white54
+                          : AppColors.DARK_GRAY_COLOR,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              if(widget.chat?.inConversation == true && (widget.chat?.isTyping == false && widget.chat?.isRecording == false))
+                Expanded(
+                  child: Label(
+                    text: context.isArabic? "...يقرأ" : "reading...",
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color:(widget.chat?.isTyping == true || widget.chat?.isRecording == true || widget.chat?.inConversation == true)? AppColors.PRIMARY_COLOR_DARK : context.isDarkMode
+                          ? Colors.white54
+                          : AppColors.DARK_GRAY_COLOR,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              if(widget.chat?.lastMessage?.content == null && (widget.chat?.isTyping == false && widget.chat?.isRecording == false && widget.chat?.inConversation == false))
+                Expanded(
+                  child: Label(
+                    text: context.isArabic
+                        ? "لا توجد رسائل حتي الان"
+                        : "No messages until now",
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color:(widget.chat?.isTyping == true || widget.chat?.isRecording == true || widget.chat?.inConversation == true)? AppColors.PRIMARY_COLOR_DARK : context.isDarkMode
+                          ? Colors.white54
+                          : AppColors.DARK_GRAY_COLOR,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              if(widget.chat?.lastMessage?.content != null && (widget.chat?.isTyping == false && widget.chat?.isRecording == false && widget.chat?.inConversation == false))
+                Expanded(
+                  child: Label(
+                    text: '${widget.chat?.lastMessage?.content}',
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.bold,
+                      color:(widget.chat?.isTyping == true || widget.chat?.isRecording == true || widget.chat?.inConversation == true)? AppColors.PRIMARY_COLOR_DARK : context.isDarkMode
+                          ? Colors.white54
+                          : AppColors.DARK_GRAY_COLOR,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
               GestureDetector(
                 onTap: () {
                   ManageVibration.vibrate();

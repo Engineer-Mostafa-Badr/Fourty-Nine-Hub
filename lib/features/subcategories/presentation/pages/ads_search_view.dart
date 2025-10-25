@@ -70,7 +70,7 @@ class _AdsSearchViewState extends State<AdsSearchView> {
             Label(
                 text: context.isArabic
                     ? 'ابحث عن اي اعلان داخل ${widget.mainCategoryNameAr}'
-                    : 'Search for any ad inside ${widget.mainCategoryNameEn}',
+                    : 'Search for any ad in ${widget.mainCategoryNameEn}',
                 style: Styles.headerText(
                   fontSize: 40,
                   color: context.isDarkMode

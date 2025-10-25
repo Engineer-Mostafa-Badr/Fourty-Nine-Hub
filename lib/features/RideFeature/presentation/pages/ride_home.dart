@@ -94,6 +94,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final GlobalKey<FormState> _partialPaymentFormKey = GlobalKey<FormState>();
   final TextEditingController _controller = TextEditingController();
   bool _isPhoneNumberValidated = false;
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -565,8 +566,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         driverName: state.requestedTrip?.driverFirstName ?? "",
                         onDriverImageClick: () {
                           if (state.requestedTrip?.driverUserId != null) {
-                            showDriverProfileSheet(context, driverId: state
-                                .requestedTrip?.driverUserId ?? "");
+                            showDriverProfileSheet(context,
+                                driverId:
+                                    state.requestedTrip?.driverUserId ?? "");
                           }
                         },
                         onContactDriver: () {
@@ -615,7 +617,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                       : "Report Driver")),
                             )),
                       ),
-
                       BottomRideStatusWidget(
                         price: state.requestedTrip?.price?.toInt() ?? 0,
                         isStarted: state.requestedTrip?.status ==
@@ -1515,9 +1516,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         isShipping: true, isSocket: false));
               } else {
                 context.push(Routes.rideModeScreen,
-                    extra: RideModeParams(
-                        modeType: 'truck',
-                        isSocket: false));
+                    extra: RideModeParams(modeType: 'truck', isSocket: false));
               }
             }
           },
@@ -1640,7 +1639,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    " (${((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString()})",
+                    " (${((context.read<RideCubit>().state.unreadOffers?.loading ?? 0) + (context.read<RideCubit>().state.unreadOffers?.nonTracking ?? 0)).toString()})",
                     style: TextStyle(
                         color: AppColors.SECONDARY_COLOR,
                         fontSize: 20,
@@ -1755,7 +1754,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 ),
               ),
               Visibility(
-                visible: ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)) > 0,
+                visible:
+                    ((context.read<RideCubit>().state.unreadOffers?.loading ??
+                                0) +
+                            (context
+                                    .read<RideCubit>()
+                                    .state
+                                    .unreadOffers
+                                    ?.nonTracking ??
+                                0)) >
+                        0,
                 child: PositionedDirectional(
                   top: -10.h,
                   end: -10.w,
@@ -1766,7 +1774,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         color: AppColors.getRedColor(context)),
                     child: Center(
                       child: Text(
-                        ((context.read<RideCubit>().state.unreadOffers?.loading??0)+(context.read<RideCubit>().state.unreadOffers?.nonTracking??0)).toString(),
+                        ((context
+                                        .read<RideCubit>()
+                                        .state
+                                        .unreadOffers
+                                        ?.loading ??
+                                    0) +
+                                (context
+                                        .read<RideCubit>()
+                                        .state
+                                        .unreadOffers
+                                        ?.nonTracking ??
+                                    0))
+                            .toString(),
                         style: Styles.smallText(
                             color: context.isDarkMode
                                 ? Colors.black
@@ -1813,8 +1833,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             RegistrationStatus.approved.status) {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
-                              modeType: 'truck',
-                              isSocket: false));
+                              modeType: 'truck', isSocket: false));
                     }
                   }
                 },
@@ -1893,6 +1912,56 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     });
   }
 
+  Widget _buildStepperLine(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Stepper Line Container
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.green,
+                radius: 6,
+                child: const CircleAvatar(
+                    backgroundColor: Colors.white, radius: 3),
+              ),
+              SizedBox(
+                height: 4.h,
+              ),
+              ...List.generate(
+                4,
+                (index) => Container(
+                  margin: const EdgeInsets.symmetric(vertical: 2),
+                  width: 4,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? Colors.grey[600]
+                        : Colors.grey[400],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 4.h,
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.blue,
+                radius: 6,
+                child: const CircleAvatar(
+                    backgroundColor: Colors.white, radius: 3),
+              ),
+            ],
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+    );
+  }
+
   Widget _buildBottomSheet() {
     return Positioned(
       bottom: !serviceLocator<RideCubit>().selectedCategoryIsSocket ? null : 0,
@@ -1926,7 +1995,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.3),
+                                        color:
+                                            Colors.black.withValues(alpha: 0.3),
                                         spreadRadius: 2,
                                         blurRadius: 5,
                                         offset: const Offset(0, 3)),
@@ -2041,77 +2111,208 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     .state
                                     .selectedType ??
                                 'ride'),
+                      // serviceLocator<RideCubit>().selectedCategoryIsSocket
+                      //     ? _customLocationField(
+                      //         isTo: false,
+                      //         color: Colors.green,
+                      //         text: state.currentLocation?.address,
+                      //         onPressed: () async {
+                      //           ManageVibration.vibrate();
+                      //           if (context.isUserLoggedIn) {
+                      //             context.push(
+                      //               Routes.GoogleMapsSearchAndPick,
+                      //               extra: RideGoogleMapSearchAndPickParams(
+                      //                 minDistanceReferencePoint:
+                      //                     state.toLocation == null
+                      //                         ? null
+                      //                         : LatLng(state.toLocation!.lat!,
+                      //                             state.toLocation!.lng!),
+                      //                 onPicked: (pickedData) async {
+                      //                   ManageVibration.vibrate();
+                      //                   serviceLocator<RideCubit>()
+                      //                       .updateFromLocation(
+                      //                     lat: pickedData.latitude,
+                      //                     lng: pickedData.longitude,
+                      //                     address: pickedData.address,
+                      //                   );
+                      //                   await serviceLocator<RideCubit>()
+                      //                       .fetchRideExpectedPrice(id: 'id');
+                      //                   context.pop();
+                      //                 },
+                      //               ),
+                      //             );
+                      //           } else {
+                      //             context.push(Routes.FirstLoginScreen);
+                      //           }
+                      //         },
+                      //       )
+                      //     : const SizedBox(),
+                      // serviceLocator<RideCubit>().selectedCategoryIsSocket
+                      //     ? _customLocationField(
+                      //         isTo: true,
+                      //         color: Colors.blue,
+                      //         text: state.toLocation?.address,
+                      //         onPressed: () async {
+                      //           ManageVibration.vibrate();
+                      //           if (context.isUserLoggedIn) {
+                      //             context.push(
+                      //               Routes.GoogleMapsSearchAndPick,
+                      //               extra: RideGoogleMapSearchAndPickParams(
+                      //                 minDistanceReferencePoint:
+                      //                     state.currentLocation == null
+                      //                         ? null
+                      //                         : LatLng(
+                      //                             state.currentLocation!.lat!,
+                      //                             state.currentLocation!.lng!),
+                      //                 onPicked: (pickedData) async {
+                      //                   ManageVibration.vibrate();
+                      //                   serviceLocator<RideCubit>()
+                      //                       .updateToLocation(
+                      //                     lat: pickedData.latitude,
+                      //                     lng: pickedData.longitude,
+                      //                     address: pickedData.address,
+                      //                   );
+                      //                   await serviceLocator<RideCubit>()
+                      //                       .fetchRideExpectedPrice(id: 'id');
+                      //                   context.pop();
+                      //                 },
+                      //               ),
+                      //             );
+                      //           } else {
+                      //             context.push(Routes.FirstLoginScreen);
+                      //           }
+                      //         },
+                      //       )
+                      //     : const SizedBox(),
+
                       serviceLocator<RideCubit>().selectedCategoryIsSocket
-                          ? _customLocationField(
-                              isTo: false,
-                              color: Colors.green,
-                              text: state.currentLocation?.address,
-                              onPressed: () async {
-                                ManageVibration.vibrate();
-                                if (context.isUserLoggedIn) {
-                                  context.push(
-                                    Routes.GoogleMapsSearchAndPick,
-                                    extra: RideGoogleMapSearchAndPickParams(
-                                      minDistanceReferencePoint:
-                                          state.toLocation == null
-                                              ? null
-                                              : LatLng(state.toLocation!.lat!,
-                                                  state.toLocation!.lng!),
-                                      onPicked: (pickedData) async {
-                                        ManageVibration.vibrate();
-                                        serviceLocator<RideCubit>()
-                                            .updateFromLocation(
-                                          lat: pickedData.latitude,
-                                          lng: pickedData.longitude,
-                                          address: pickedData.address,
-                                        );
-                                        await serviceLocator<RideCubit>()
-                                            .fetchRideExpectedPrice(id: 'id');
-                                        context.pop();
-                                      },
+                          ? Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Column(
+                                  children: [
+                                    // From Location Field
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 48.w),
+                                      child: _customLocationField(
+                                        isTo: false,
+                                        color: Colors.green,
+                                        text: state.currentLocation?.address,
+                                        onPressed: () async {
+                                          ManageVibration.vibrate();
+                                          if (context.isUserLoggedIn) {
+                                            context.push(
+                                              Routes.GoogleMapsSearchAndPick,
+                                              extra:
+                                                  RideGoogleMapSearchAndPickParams(
+                                                    initialPosition: state.currentLocation == null
+                                                        ? null
+                                                        : gmap.LatLng(
+                                                      state.currentLocation!.lat!,
+                                                      state.currentLocation!.lng!,
+                                                    ),
+                                                initialAddress: state.currentLocation?.address,
+                                                minDistanceReferencePoint: state
+                                                            .toLocation ==
+                                                        null
+                                                    ? null
+                                                    : LatLng(
+                                                        state.toLocation!.lat!,
+                                                        state.toLocation!.lng!),
+                                                onPicked: (pickedData) async {
+                                                  ManageVibration.vibrate();
+
+                                                  serviceLocator<RideCubit>()
+                                                      .updateFromLocation(
+                                                    lat: pickedData.latitude,
+                                                    lng: pickedData.longitude,
+                                                    address: pickedData.address,
+                                                  );
+                                                  // if(state.toLocation != null && state.currentLocation != null){
+                                                  await serviceLocator<
+                                                          RideCubit>()
+                                                      .fetchRideExpectedPrice(
+                                                          id: 'id');
+                                                  // }
+                                                  context.pop();
+                                                },
+                                              ),
+                                            );
+                                          } else {
+                                            context
+                                                .push(Routes.FirstLoginScreen);
+                                          }
+                                        },
+                                      ),
                                     ),
-                                  );
-                                } else {
-                                  context.push(Routes.FirstLoginScreen);
-                                }
-                              },
-                            )
-                          : const SizedBox(),
-                      serviceLocator<RideCubit>().selectedCategoryIsSocket
-                          ? _customLocationField(
-                              isTo: true,
-                              color: Colors.blue,
-                              text: state.toLocation?.address,
-                              onPressed: () async {
-                                ManageVibration.vibrate();
-                                if (context.isUserLoggedIn) {
-                                  context.push(
-                                    Routes.GoogleMapsSearchAndPick,
-                                    extra: RideGoogleMapSearchAndPickParams(
-                                      minDistanceReferencePoint:
-                                          state.currentLocation == null
-                                              ? null
-                                              : LatLng(
-                                                  state.currentLocation!.lat!,
-                                                  state.currentLocation!.lng!),
-                                      onPicked: (pickedData) async {
-                                        ManageVibration.vibrate();
-                                        serviceLocator<RideCubit>()
-                                            .updateToLocation(
-                                          lat: pickedData.latitude,
-                                          lng: pickedData.longitude,
-                                          address: pickedData.address,
-                                        );
-                                        await serviceLocator<RideCubit>()
-                                            .fetchRideExpectedPrice(id: 'id');
-                                        context.pop();
-                                      },
+                                    SizedBox(
+                                      height: 10.h,
                                     ),
-                                  );
-                                } else {
-                                  context.push(Routes.FirstLoginScreen);
-                                }
-                              },
+                                    // To Location Field
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 48.w),
+                                      child: _customLocationField(
+                                        isTo: true,
+                                        color: Colors.blue,
+                                        text: state.toLocation?.address,
+                                        onPressed: () async {
+                                          ManageVibration.vibrate();
+                                          if (context.isUserLoggedIn) {
+                                            context.push(
+                                              Routes.GoogleMapsSearchAndPick,
+                                              extra:
+                                                  RideGoogleMapSearchAndPickParams(
+                                                    initialPosition: state.toLocation == null
+                                                        ? null
+                                                        : gmap.LatLng(
+                                                      state.toLocation!.lat!,
+                                                      state.toLocation!.lng!,
+                                                    ),
+                                                initialAddress: state.toLocation?.address,
+                                                minDistanceReferencePoint: state
+                                                            .currentLocation ==
+                                                        null
+                                                    ? null
+                                                    : LatLng(
+                                                        state.currentLocation!
+                                                            .lat!,
+                                                        state.currentLocation!
+                                                            .lng!),
+                                                onPicked: (pickedData) async {
+                                                  ManageVibration.vibrate();
+
+                                                  serviceLocator<RideCubit>()
+                                                      .updateToLocation(
+                                                    lat: pickedData.latitude,
+                                                    lng: pickedData.longitude,
+                                                    address: pickedData.address,
+                                                  );
+                                                  // if(state.currentLocation != null && state.toLocation != null){
+                                                  await serviceLocator<
+                                                          RideCubit>()
+                                                      .fetchRideExpectedPrice(
+                                                          id: 'id');
+                                                  // }
+                                                  context.pop();
+                                                },
+                                              ),
+                                            );
+                                          } else {
+                                            context
+                                                .push(Routes.FirstLoginScreen);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // Stepper Line with Dots
+                                Positioned(
+                                    left: context.isArabic ? -18 : -10,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: _buildStepperLine(context)),
+                              ],
                             )
                           : const SizedBox(),
                       serviceLocator<RideCubit>().selectedCategoryIsSocket
@@ -2302,7 +2503,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic
-                                                                    ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                                                                    ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                                                                     : "Please enter a direct contact number for the service provider.",
                                                               ),
                                                               // const SizedBox(height: 20),
@@ -2346,11 +2547,61 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic
-                                                                    ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                                                                    ? "كتابة رقم عميل آخر على مسؤوليتك و يعرض للمسائله القانونيه."
                                                                     : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                               ),
                                                               const SizedBox(
                                                                   height: 20),
+                                                              Theme(
+                                                                data: ThemeData(
+                                                                  inputDecorationTheme: InputDecorationTheme(
+                                                                    border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(12.0),
+                                                                      borderSide: const BorderSide(
+                                                                          color: AppColors.PRIMARY_COLOR),
+                                                                    ),
+
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(12.0),
+                                                                      borderSide: const BorderSide(
+                                                                          color: AppColors.PRIMARY_COLOR),
+                                                                    ),
+                                                                  )
+                                                                ),
+                                                                child: TextField(
+                                                                  controller: _descriptionController,
+                                                                  maxLines: 5,
+                                                                  minLines: 3,
+                                                                  cursorColor: AppColors.PRIMARY_COLOR,
+                                                                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                                                  decoration:
+                                                                       InputDecoration(
+
+                                                                    border:
+                                                                        OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12.0),
+                                                                          borderSide: const BorderSide(
+                                                                              color: AppColors.PRIMARY_COLOR),
+
+                                                                        ),
+
+                                                                         enabledBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12.0),
+                                                                          borderSide: const BorderSide(
+                                                                              color: AppColors.PRIMARY_COLOR),
+                                                                         ),
+
+                                                                         focusedBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12.0),
+                                                                          borderSide: const BorderSide(
+                                                                              color: AppColors.PRIMARY_COLOR),
+                                                                         ),
+                                                                         hintText: context.isArabic? "أكتب تعليق للسائق..." : "Write a comment for the driver...",
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                  height: 60),
                                                               SizedBox(
                                                                 width: double
                                                                     .infinity,
@@ -2360,6 +2611,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                       () {
                                                                     ManageVibration
                                                                         .vibrate();
+
                                                                     if (_phoneNumberFormKey
                                                                         .currentState!
                                                                         .validate()) {
@@ -2446,6 +2698,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         .subCategoryId ??
                                                     '',
                                                 isPremium: true,
+                                                    description: _descriptionController.text.trim() == '' ? null : _descriptionController.text.trim(),
                                               ),
                                             );
                                           },
@@ -2598,7 +2851,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 // const SizedBox(height: 20),
                                                                 Text(
                                                                   context.isArabic
-                                                                      ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                                                                      ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                                                                       : "Please enter a direct contact number for the service provider.",
                                                                 ),
                                                                 // const SizedBox(height: 20),
@@ -2626,8 +2879,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                     return validatorEgyptPhone(
                                                                         normalized);
                                                                   },
-                                                                  onChanged: (v){
-                                                                    _phoneNumberFormKey.currentState!.validate();
+                                                                  onChanged:
+                                                                      (v) {
+                                                                    _phoneNumberFormKey
+                                                                        .currentState!
+                                                                        .validate();
                                                                   },
                                                                   inputFormatter: [
                                                                     ArabicNumberFormatter(
@@ -2638,11 +2894,61 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 // const SizedBox(height: 20),
                                                                 Text(
                                                                   context.isArabic
-                                                                      ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                                                                      ? "كتابة رقم عميل آخر على مسؤوليتك و يعرض للمسائله القانونيه."
                                                                       : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                                 ),
                                                                 const SizedBox(
                                                                     height: 20),
+                                                                Theme(
+                                                                  data: ThemeData(
+                                                                      inputDecorationTheme: InputDecorationTheme(
+                                                                        border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12.0),
+                                                                          borderSide: const BorderSide(
+                                                                              color: AppColors.PRIMARY_COLOR),
+                                                                        ),
+
+                                                                        enabledBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12.0),
+                                                                          borderSide: const BorderSide(
+                                                                              color: AppColors.PRIMARY_COLOR),
+                                                                        ),
+                                                                      )
+                                                                  ),
+                                                                  child: TextField(
+                                                                    controller: _descriptionController,
+                                                                    maxLines: 5,
+                                                                    minLines: 3,
+                                                                    cursorColor: AppColors.PRIMARY_COLOR,
+                                                                    onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                                                    decoration:
+                                                                    InputDecoration(
+
+                                                                      border:
+                                                                      OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12.0),
+                                                                        borderSide: const BorderSide(
+                                                                            color: AppColors.PRIMARY_COLOR),
+
+                                                                      ),
+
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12.0),
+                                                                        borderSide: const BorderSide(
+                                                                            color: AppColors.PRIMARY_COLOR),
+                                                                      ),
+
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12.0),
+                                                                        borderSide: const BorderSide(
+                                                                            color: AppColors.PRIMARY_COLOR),
+                                                                      ),
+                                                                      hintText: context.isArabic? "أكتب تعليق للسائق..." : "Write a comment for the driver...",
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 60),
                                                                 SizedBox(
                                                                   width: double
                                                                       .infinity,
@@ -2655,7 +2961,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                       if (_phoneNumberFormKey
                                                                           .currentState!
                                                                           .validate()) {
-                                                                        context.pop(true);
+                                                                        context.pop(
+                                                                            true);
                                                                       }
                                                                     },
                                                                     style: ElevatedButton
@@ -2739,6 +3046,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                             .subCategoryId ??
                                                         '',
                                                     isPremium: false,
+                                                        description: _descriptionController.text.trim() == '' ? null : _descriptionController.text.trim(),
                                                   ),
                                                 );
                                               },
@@ -2946,14 +3254,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           ),
           child: Row(
             children: [
-              CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: CircleAvatar(
-                  backgroundColor: color,
-                  radius: 10,
-                  child: const CircleAvatar(
-                      backgroundColor: Colors.white, radius: 5),
-                ),
+              // CircleAvatar(
+              //   backgroundColor: Colors.transparent,
+              //   child: CircleAvatar(
+              //     backgroundColor: color,
+              //     radius: 10,
+              //     child: const CircleAvatar(
+              //         backgroundColor: Colors.white, radius: 5),
+              //   ),
+              // ),
+              SizedBox(
+                width: 16,
               ),
               Expanded(
                 child: Text(
@@ -2969,6 +3280,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+              ),
+              SizedBox(
+                width: 16,
               ),
               if (isTo == true && text != 'To')
                 GestureDetector(
@@ -3074,12 +3388,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         child: SizedBox(
           height: 40,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 flex: 8,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  height: 40,
                   decoration: BoxDecoration(
                     color: context.isDarkMode
                         ? AppColors.GREY_DARK_COLOR
@@ -3088,17 +3403,26 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                   child: Row(
                     spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(LocaleKeys.egp.tr(),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: AppColors.PRIMARY_COLOR_DARK)),
+                      Spacer(),
                       state.rideExpectedPrice != null
-                          ? Text(FormatNumbers().convertNumberToLocalizedString(
-                              serviceLocator<RideCubit>()
-                                  .getTotalPrice(selectedCategoryPrice)
-                                  .toInt()
-                                  .toString(),
-                              isArabic: context.isArabic))
+                          ? Text(
+                              FormatNumbers().convertNumberToLocalizedString(
+                                  serviceLocator<RideCubit>()
+                                      .getTotalPrice(selectedCategoryPrice)
+                                      .toInt()
+                                      .toString(),
+                                  isArabic: context.isArabic),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 32,
+                                  color: AppColors.PRIMARY_COLOR))
                           : Text(LocaleKeys.offerYourFare.tr()),
                       const Spacer(),
                       Icon(

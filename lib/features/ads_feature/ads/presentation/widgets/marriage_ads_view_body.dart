@@ -223,17 +223,23 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       return;
                     }
                     ManageVibration.vibrate();
+
+                    // Find the selected subcategory index safely
+                    final selectedIndex = widget.state.subCategories!
+                        .indexWhere((element) => element.isSelected == true);
+
+                    if (selectedIndex == -1) {
+                      return; // No selected subcategory found
+                    }
+
                     dynamic data = await context.push(
                       Routes.FILTERADS,
                       extra: FilterAdsParams(
                         categorization: CategorizationEntity(
                           mainCategory: widget.state.mainCategory!,
                           fromMarriage: true,
-                          subCategory: widget.state.subCategories![widget
-                                  .state.subCategories
-                                  ?.indexWhere((element) =>
-                                      element.isSelected == true) ??
-                              0],
+                          subCategory:
+                              widget.state.subCategories![selectedIndex],
                         ),
                         userType: '',
                       ),
@@ -295,16 +301,22 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       return;
                     }
                     ManageVibration.vibrate();
+
+                    // Find the selected subcategory index safely
+                    final selectedIndex = widget.state.subCategories!
+                        .indexWhere((element) => element.isSelected == true);
+
+                    if (selectedIndex == -1) {
+                      return; // No selected subcategory found
+                    }
+
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
                         extra: CategorizationEntity(
                             mainCategory: widget.state.mainCategory!,
                             fromMarriage: true,
-                            subCategory: widget.state.subCategories![widget
-                                    .state.subCategories
-                                    ?.indexWhere((element) =>
-                                        element.isSelected == true) ??
-                                0]));
+                            subCategory:
+                                widget.state.subCategories![selectedIndex]));
                     if (data != null) {
                       debugPrint("data.cityId${data.cityId}");
                       debugPrint("data.governorateId${data.governorateId}");
@@ -533,7 +545,6 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
     debugPrint('state.adds ${widget.state.ads}');
     if (widget.state.ads == null) {
       return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
-      // const SizedBox();
     }
     if (widget.state.ads!.isEmpty) {
       return CustomEmptyWidget(

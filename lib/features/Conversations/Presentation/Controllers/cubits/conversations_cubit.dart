@@ -55,6 +55,17 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
   List<ConversationEntity> selectedSocialConversation = [];
   int unreadConversationsCount = 0;
+  ConversationEntity? selectedConversation;
+
+  setSelectedConversation(ConversationEntity? conversation) {
+    selectedConversation = conversation;
+    emit(state);
+  }
+
+  resetSelectedConversation() {
+    selectedConversation = null;
+    emit(state);
+  }
 
 
   ConversationsCubit(
@@ -104,12 +115,45 @@ class ConversationsCubit extends Cubit<ConversationsState> {
 
   Future<void> startTyping(String conversationId) async {
     final result = await startTypingUseCase(conversationId: conversationId);
-    result.fold((l) => null, (r) => null);
+    result.fold((l) {
+      log("can't start typing $l");
+    }, (r) {
+      log("started typing");
+    });
   }
 
   Future<void> stopTyping(String conversationId) async {
     final result = await stopTypingUseCase(conversationId: conversationId);
     result.fold((l) => null, (r) => null);
+  }
+
+  Future<void> startRecording(String conversationId) async {
+    try {
+      // serviceLocator<Socket>().connect();
+      CliLogger.info('start recording : $conversationId');
+
+      SharedWebSocket.socket?.emit(
+        'conversation:recording-started',
+        conversationId,
+      );
+      log("you started recording :  $conversationId");
+    } catch (e) {
+      CliLogger.error(' can\'t start recording $e');
+    }
+  }
+
+  Future<void> stopRecording (String conversationId) async {
+    try {
+      // serviceLocator<Socket>().connect();
+      CliLogger.info('stop recording : $conversationId');
+      SharedWebSocket.socket?.emit(
+        'conversation:recording-stopped',
+        conversationId,
+      );
+      log("you stopped recording :  $conversationId");
+    } catch (e) {
+      CliLogger.error(' can\'t stop recording $e');
+    }
   }
 
 

@@ -138,7 +138,7 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.pink.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
-        title: context.isArabic ? 'عملات' : 'Exchange',
+        title: context.isArabic ? 'عملات' : 'Currencies',
       ),
       _buildStarWidget(
         context,
@@ -163,7 +163,7 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.brown.withValues(alpha: 0.9),
         image: Assets.gamesImage,
-        title: context.isArabic ? 'العاب' : 'Games',
+        title: context.isArabic ? 'ألعاب' : 'Games',
       ),
     ];
 

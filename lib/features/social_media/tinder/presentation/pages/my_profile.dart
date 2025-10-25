@@ -233,7 +233,7 @@ class _FindMyProfileScreenState extends State<FindMyProfileScreen> {
                                     ),
                                     Label(
                                       text: context.isArabic
-                                          ? 'امتيازات اخري'
+                                          ? 'امتيازات آخري'
                                           : 'See All Features',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.w900,

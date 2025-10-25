@@ -159,9 +159,8 @@ class ConversationsRemoteDataSourceImpl
 
       SharedWebSocket.socket?.emit(
           'conversation:typing-started',
-          jsonEncode({
-            "conversationId": conversationId,
-          }));
+           conversationId,
+          );
       return const Right(true);
     } catch (e) {
       CliLogger.error(' can\'t start typing $e');
@@ -197,9 +196,8 @@ class ConversationsRemoteDataSourceImpl
 
       SharedWebSocket.socket?.emit(
           'conversation:typing-stopped',
-          jsonEncode({
-            "conversationId": conversationId,
-          }));
+             conversationId,
+          );
       return const Right(true);
     } catch (e) {
       CliLogger.error(' can\'t stop typing $e');

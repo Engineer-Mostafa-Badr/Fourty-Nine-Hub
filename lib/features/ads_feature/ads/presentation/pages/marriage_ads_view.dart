@@ -1,4 +1,4 @@
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +6,6 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_floating_button_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_view_body.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
@@ -38,6 +37,7 @@ class MarriageSubCategoriesView extends StatefulWidget {
 class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   late ScrollController _scrollController;
   bool _isFabVisible = true;
+  Timer? _scrollTimer;
 
   @override
   void initState() {
@@ -47,6 +47,13 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
     _scrollController = ScrollController()..addListener(_onScroll);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _scrollTimer?.cancel();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -99,21 +106,27 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   bool _showFloatingButton = true;
   void _onScrollNotification(ScrollNotification scrollInfo) {
     if (scrollInfo is UserScrollNotification) {
-      if (scrollInfo.direction == ScrollDirection.reverse) {
-        if (_showFloatingButton) {
-          setState(() {
-            _showFloatingButton = false;
-          });
-        }
-      } else if (scrollInfo.direction == ScrollDirection.forward) {
-        if (!_showFloatingButton) {
+      // إخفاء الزر فوراً عند بدء التمرير
+      if (_showFloatingButton) {
+        setState(() {
+          _showFloatingButton = false;
+        });
+      }
+
+      // إلغاء أي timer سابق
+      _scrollTimer?.cancel();
+
+      // إنشاء timer جديد لإظهار الزر بعد التوقف عن التمرير
+      _scrollTimer = Timer(const Duration(milliseconds: 500), () {
+        if (mounted && !_showFloatingButton) {
           setState(() {
             _showFloatingButton = true;
           });
         }
-      }
+      });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
@@ -138,29 +151,35 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
           appBar: BackAppBar(
             label: context.isArabic ? 'زواج' : 'Marriage',
           ),
-          floatingActionButton: _showFloatingButton && state.subCategories != null && state.subCategories!.isNotEmpty
-              ? buildFloatingAction(context,title:
-          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
+          floatingActionButton: _showFloatingButton &&
+                  state.subCategories != null &&
+                  state.subCategories!.isNotEmpty
+              ? buildFloatingAction(context,
+                  title:
+                      "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
                   () {
-                    ManageVibration.vibrate();
-                    if (AuthHelper().isLoggedIn()) {
-                      context.push(
-                        Routes.CREATEAD,
-                        extra: CategorizationEntity(
-                          mainCategory: state.mainCategory!,
-                          // mainCategory: widget.mainCategory,
-                          subCategory: state.subCategories![
-                          state.subCategories?.indexWhere((element) =>
-                          element.isSelected == true) ??
-                              0],
-                          fromMarriage: true,
-                        ),
-                      );
-                    } else {
-                      return pleaseLoginDialog(context);
-                      // context.push(Routes.LOGIN);
+                  ManageVibration.vibrate();
+                  if (AuthHelper().isLoggedIn()) {
+                    // Find the selected subcategory index safely
+                    final selectedIndex = state.subCategories!
+                        .indexWhere((element) => element.isSelected == true);
+
+                    if (selectedIndex == -1) {
+                      return; // No selected subcategory found
                     }
-          })
+
+                    context.push(
+                      Routes.CREATEAD,
+                      extra: CategorizationEntity(
+                        mainCategory: state.mainCategory!,
+                        subCategory: state.subCategories![selectedIndex],
+                        fromMarriage: true,
+                      ),
+                    );
+                  } else {
+                    return pleaseLoginDialog(context);
+                  }
+                })
               : null,
           // floatingActionButton: AnimatedSlide(
           //   duration: const Duration(milliseconds: 300),
@@ -195,7 +214,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
           //               },
           //             )),
           // ),
-          body: state.isLoading || state.subCategories == null || state.subCategories!.isEmpty
+          body: state.isLoading ||
+                  state.subCategories == null ||
+                  state.subCategories!.isEmpty
               ? CustomLoadingSearchWidget()
               : MarriageAdsViewBody(
                   controller: controller,

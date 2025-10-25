@@ -72,17 +72,22 @@ class MarriageMyAds extends StatelessWidget {
                 marriageAds: filteredMyAds[index],
                 state: state,
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10.0),
-                child: Label(
-                  text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
-                  style: Styles.headerText(
-                    fontSize: 28,
-                    color: AppColors.getRedColor(context),
-                    height: 1.57,
+              // Only show subscription message if user is not subscribed
+              if (filteredMyAds[index].userSubscriptionStatus ==
+                      'not subscribed' &&
+                  filteredMyAds[index].ownerSubscriptionStatus ==
+                      'not subscribed')
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 10.0),
+                  child: Label(
+                    text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
+                    style: Styles.headerText(
+                      fontSize: 28,
+                      color: AppColors.getRedColor(context),
+                      height: 1.57,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -103,17 +108,20 @@ class MarriageMyAds extends StatelessWidget {
                 marriageAds: state.myAds![index],
                 state: state,
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10.0),
-                child: Label(
-                  text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
-                  style: Styles.headerText(
-                    fontSize: 28,
-                    color: AppColors.getRedColor(context),
-                    height: 1.57,
+              // Only show subscription message if user is not subscribed
+              if (state.myAds![index].userSubscriptionStatus == 'not subscribed' &&
+                  state.myAds![index].ownerSubscriptionStatus == 'not subscribed')
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 10.0),
+                  child: Label(
+                    text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
+                    style: Styles.headerText(
+                      fontSize: 28,
+                      color: AppColors.getRedColor(context),
+                      height: 1.57,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

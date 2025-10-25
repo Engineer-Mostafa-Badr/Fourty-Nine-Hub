@@ -141,7 +141,7 @@ class BottomSheetHelper {
     //   showErrorMessage(
     //       context,
     //       context.isArabic
-    //           ? 'حدث حطأ حاول مرة اخري.'
+    //           ? 'حدث حطأ حاول مرة آخري.'
     //           : 'Unable to start chat.');
     // }
   }
