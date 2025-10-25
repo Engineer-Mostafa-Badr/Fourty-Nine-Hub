@@ -38,6 +38,7 @@ class RideGoogleMapSearchAndPickParams {
   final LatLng? initialPosition;
   final String? initialAddress;
 
+
   const RideGoogleMapSearchAndPickParams({
     required this.onPicked,
     this.minAllowedDistanceKm = 1.5,
