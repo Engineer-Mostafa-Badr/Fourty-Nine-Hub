@@ -2003,6 +2003,9 @@ class EndPoints {
  static String getTubeHomeVideos = '/tube-video/recommended-home';
  static String addTubeFavorite = '/tube-favorite/video/';
  static String searchTubeVideo = '/tube-video/search';
+ static String tubeRelatedVideos = '/tube-video/recommended/';
+ static String getTubeCommentVideo = '/tube-comment/video/';
+ static String addTubeComment = '/tube-comment';
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';

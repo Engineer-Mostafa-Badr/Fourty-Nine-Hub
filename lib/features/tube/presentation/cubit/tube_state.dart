@@ -5,6 +5,7 @@ class TubeState {
   final StateStatus status;
   final List<GetAllTubeVideosEntity>? getAllTubeVideosData;
   final List<GetAllTubeVideosEntity>? searchTubeVideosData;
+  final List<GetAllTubeVideosEntity>? relatedTubeVideosData;
   final GetAllTubeVideosEntity? currentVideo;
   final VideoPlayerController? videoPlayerController;
   final ChewieController? chewieController;
@@ -19,6 +20,8 @@ class TubeState {
   final Failure? failure;
   final AddFavoriteTubeEntity? addFavoriteTubeData;
   final List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData;
+  final bool areControllersInitialized; // ✅ ADD
+  final List<TubeCommentEntity>? tubeVideoCommentsData;
   TubeState({
     this.status = StateStatus.initial,
     this.getAllTubeVideosData = const [],
@@ -36,12 +39,17 @@ class TubeState {
     this.failure,
     this.addFavoriteTubeData,
     this.searchTubeVideosData,
+
+    this.areControllersInitialized = false, // ✅ ADD THIS
     this.getFavoriteTubeVideosData,
+    this.relatedTubeVideosData = const [],
+    this.tubeVideoCommentsData = const [],
   });
 
   TubeState copyWith({
     StateStatus? status,
     List<GetAllTubeVideosEntity>? getAllTubeVideosData,
+    List<GetAllTubeVideosEntity>? relatedTubeVideosData,
     GetAllTubeVideosEntity? currentVideo,
     VideoPlayerController? videoPlayerController,
     ChewieController? chewieController,
@@ -57,6 +65,9 @@ class TubeState {
     AddFavoriteTubeEntity? addFavoriteTubeData,
     List<GetAllTubeVideosEntity>? searchTubeVideosData,
     List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData,
+    bool? areControllersInitialized,
+    List<TubeCommentEntity>? tubeVideoCommentsData,
+
   }) {
     return TubeState(
       status: status ?? this.status,
@@ -76,6 +87,9 @@ class TubeState {
       addFavoriteTubeData: addFavoriteTubeData ?? this.addFavoriteTubeData,
       searchTubeVideosData: searchTubeVideosData ?? this.searchTubeVideosData,
       getFavoriteTubeVideosData: getFavoriteTubeVideosData ?? this.getFavoriteTubeVideosData,
+      relatedTubeVideosData: relatedTubeVideosData ?? this.relatedTubeVideosData,
+      areControllersInitialized: areControllersInitialized ?? this.areControllersInitialized,
+      tubeVideoCommentsData: tubeVideoCommentsData ?? this.tubeVideoCommentsData,
     );
   }
 }

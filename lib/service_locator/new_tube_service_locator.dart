@@ -11,9 +11,16 @@ import '../features/tube/data/datasource/tube_remote_datasource.dart';
 import '../features/tube/data/repositories/tube_repo_impl.dart';
 import '../features/tube/domain/repositories/tube_repo.dart';
 import '../features/tube/domain/usecases/add_favorite_tube_use_case.dart';
+import '../features/tube/domain/usecases/create_comment_tube_video_use_case.dart';
+import '../features/tube/domain/usecases/delete_tube_comment_use_case.dart';
+import '../features/tube/domain/usecases/dislike_tube_video_use_case.dart';
+import '../features/tube/domain/usecases/get_related_tube_videos_use_case.dart';
 import '../features/tube/domain/usecases/get_tube_favorite_videos_use_case.dart';
+import '../features/tube/domain/usecases/get_tube_video_comments_use_case.dart';
+import '../features/tube/domain/usecases/like_tube_video_use_case.dart';
 import '../features/tube/domain/usecases/remove_favorite_tube_use_case.dart';
 import '../features/tube/domain/usecases/search_tube_use_case.dart';
+import '../features/tube/domain/usecases/update_comment_tube_video_use_case.dart';
 import '../features/tube/presentation/cubit/tube_cubit.dart';
 
 
@@ -41,18 +48,63 @@ class NewTubeServiceLocator {
               serviceLocator(),
             ));
 
+   serviceLocator.registerLazySingleton<GetRelatedTubeVideosUseCase>(
+        () => GetRelatedTubeVideosUseCase(
+              serviceLocator(),
+            ));
+
+
+
     serviceLocator.registerLazySingleton<GetTubeFavoriteVideosUseCase>(
         () => GetTubeFavoriteVideosUseCase(
               serviceLocator(),
             ));
+
+
+
+    serviceLocator.registerLazySingleton<GetTubeVideoCommentsUseCase>(
+        () => GetTubeVideoCommentsUseCase(
+              serviceLocator(),
+            ));
+
+
     serviceLocator.registerLazySingleton<TubeRepository>(
         () => TubeRepoImpl(serviceLocator()));
+
+
+
+    serviceLocator.registerLazySingleton<CreateCommentTubeVideoUseCase>(
+        () => CreateCommentTubeVideoUseCase(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<UpdateCommentTubeVideoUseCase>(
+        () => UpdateCommentTubeVideoUseCase(serviceLocator()));
+
+
+    serviceLocator.registerLazySingleton<LikeTubeVideoUseCase >(
+        () => LikeTubeVideoUseCase (serviceLocator()));
+
+
+
+    serviceLocator.registerLazySingleton<DislikeTubeVideoUseCase  >(
+        () => DislikeTubeVideoUseCase  (serviceLocator()));
+
+
+
+    serviceLocator.registerLazySingleton<DeleteTubeCommentUseCase   >(
+        () => DeleteTubeCommentUseCase   (serviceLocator()));
 
 
 
 
     serviceLocator
         .registerFactory<TubeCubit>(() => TubeCubit(
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
+              serviceLocator(),
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
