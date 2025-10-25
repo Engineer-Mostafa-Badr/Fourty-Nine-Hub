@@ -140,6 +140,26 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
         .join(' ');
   }
 
+  String _getDisplayLabel() {
+    // Check if this is a gold grams field and customize the label
+    final isGoldGramsField =
+        widget.property.nameAr.toLowerCase().contains('جرامات') ||
+            widget.property.nameAr.toLowerCase().contains('جرام') ||
+            widget.property.nameAr.toLowerCase().contains('دهب') ||
+            widget.property.nameAr.toLowerCase().contains('ذهب') ||
+            widget.property.nameEn.toLowerCase().contains('grams') ||
+            widget.property.nameEn.toLowerCase().contains('gold');
+
+    if (isGoldGramsField) {
+      return getLang() == 'ar' ? 'عدد جرامات الذهب' : 'Number of Gold Grams';
+    }
+
+    // Default behavior for other fields
+    return getLang() == 'ar'
+        ? widget.property.nameAr
+        : formatText(widget.property.nameEn);
+  }
+
   Widget _buildTextFieldWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,9 +258,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
         Padding(
           padding: const EdgeInsetsDirectional.only(start: 16),
           child: Label(
-            text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : formatText(widget.property.nameEn),
+            text: _getDisplayLabel(),
             style: Styles.mediumText(
                 fontSize: 32,
                 color:
@@ -340,6 +358,34 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                   return context.isArabic
                       ? 'عدد حالات النجاح لا يمكن أن يكون سالباً'
                       : 'Number of success cases cannot be negative';
+                }
+              }
+
+              // Check if this is a gold grams field and validate limits
+              final isGoldGramsField =
+                  widget.property.nameAr.toLowerCase().contains('جرامات') ||
+                      widget.property.nameAr.toLowerCase().contains('جرام') ||
+                      widget.property.nameAr.toLowerCase().contains('دهب') ||
+                      widget.property.nameAr.toLowerCase().contains('ذهب') ||
+                      widget.property.nameEn.toLowerCase().contains('grams') ||
+                      widget.property.nameEn.toLowerCase().contains('gold');
+
+              if (isGoldGramsField) {
+                final goldGrams = int.tryParse(value);
+                if (goldGrams == null) {
+                  return context.isArabic
+                      ? 'يرجى إدخال عدد جرامات صحيح'
+                      : 'Please enter a valid number of grams';
+                }
+                if (goldGrams > 1000) {
+                  return context.isArabic
+                      ? 'عدد جرامات الذهب لا يمكن أن يكون أكثر من 1000 جرام'
+                      : 'Number of gold grams cannot be more than 1000 grams';
+                }
+                if (goldGrams < 1) {
+                  return context.isArabic
+                      ? 'عدد جرامات الذهب لا يمكن أن يكون أقل من 1 جرام'
+                      : 'Number of gold grams cannot be less than 1 gram';
                 }
               }
 
