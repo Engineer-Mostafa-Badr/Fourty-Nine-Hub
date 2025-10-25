@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +37,7 @@ class MarriageSubCategoriesView extends StatefulWidget {
 class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   late ScrollController _scrollController;
   bool _isFabVisible = true;
+  Timer? _scrollTimer;
 
   @override
   void initState() {
@@ -45,6 +47,13 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
     _scrollController = ScrollController()..addListener(_onScroll);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _scrollTimer?.cancel();
+    super.dispose();
   }
 
   void _onScroll() {
@@ -97,19 +106,24 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   bool _showFloatingButton = true;
   void _onScrollNotification(ScrollNotification scrollInfo) {
     if (scrollInfo is UserScrollNotification) {
-      if (scrollInfo.direction == ScrollDirection.reverse) {
-        if (_showFloatingButton) {
-          setState(() {
-            _showFloatingButton = false;
-          });
-        }
-      } else if (scrollInfo.direction == ScrollDirection.forward) {
-        if (!_showFloatingButton) {
+      // إخفاء الزر فوراً عند بدء التمرير
+      if (_showFloatingButton) {
+        setState(() {
+          _showFloatingButton = false;
+        });
+      }
+
+      // إلغاء أي timer سابق
+      _scrollTimer?.cancel();
+
+      // إنشاء timer جديد لإظهار الزر بعد التوقف عن التمرير
+      _scrollTimer = Timer(const Duration(milliseconds: 500), () {
+        if (mounted && !_showFloatingButton) {
           setState(() {
             _showFloatingButton = true;
           });
         }
-      }
+      });
     }
   }
 

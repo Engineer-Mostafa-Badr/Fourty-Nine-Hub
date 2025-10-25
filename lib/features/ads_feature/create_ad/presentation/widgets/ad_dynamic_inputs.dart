@@ -315,6 +315,34 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                 }
               }
 
+              // Check if this is a success cases field and validate limits
+              final isSuccessCasesField = widget.property.nameAr
+                      .toLowerCase()
+                      .contains('حالات') ||
+                  widget.property.nameAr.toLowerCase().contains('نجاح') ||
+                  widget.property.nameAr.toLowerCase().contains('نجح') ||
+                  widget.property.nameEn.toLowerCase().contains('success') ||
+                  widget.property.nameEn.toLowerCase().contains('cases');
+
+              if (isSuccessCasesField) {
+                final successCases = int.tryParse(value);
+                if (successCases == null) {
+                  return context.isArabic
+                      ? 'يرجى إدخال عدد حالات صحيح'
+                      : 'Please enter a valid number of cases';
+                }
+                if (successCases > 150) {
+                  return context.isArabic
+                      ? 'عدد حالات النجاح لا يمكن أن يكون أكثر من 150 حالة'
+                      : 'Number of success cases cannot be more than 150 cases';
+                }
+                if (successCases < 0) {
+                  return context.isArabic
+                      ? 'عدد حالات النجاح لا يمكن أن يكون سالباً'
+                      : 'Number of success cases cannot be negative';
+                }
+              }
+
               // Check if this is a height or weight field and validate limits
               final isHeightField =
                   widget.property.nameAr.toLowerCase().contains('الطول') ||
