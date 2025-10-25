@@ -64,15 +64,19 @@ class _PostsSearchViewState extends State<PostsSearchView> {
       builder: (context, state) {
         final posts = _cubit.postsSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
-          return CustomEmptyWidget(
-            label: LocaleKeys.noData.localize,
-          );
+          return CustomEmptyWidget.searchInitial(context: context);
         }
         // Handle loading state
         if (state.status == SearchStates.loading) {
           return const Center(
             // child: CustomCircularProgressIndicator(),
             child: CustomLoadingSearchWidget(),
+          );
+        }
+
+        if (posts.isEmpty) {
+          return CustomEmptyWidget(
+            label: LocaleKeys.noResultsFound.localize,
           );
         }
 

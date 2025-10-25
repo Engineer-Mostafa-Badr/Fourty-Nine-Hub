@@ -179,7 +179,7 @@
   "photo": "Photo",
   "video": "Video",
   "advertiseYourCompany": "Company Ads",
-  "quraan": "Quraan",
+  "quraan": "qur'an",
   "azkar": "Azkar",
   "favouriteCategories": "Favourite Categories",
   "favouriteSubCategories": "Favourite Sub Categories",
@@ -1683,6 +1683,6 @@
   "enterYourBid": "Enter your bid",
   "timeLeftForAuctionEnd": "Time left for auction to end",
   "noAuctionAvailable": "No auctions available",
-  "auctionWinners": "Auction Winners"
-
+  "auctionWinners": "Auction Winners",
+  "games": "Games"
 }

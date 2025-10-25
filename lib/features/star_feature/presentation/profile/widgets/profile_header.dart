@@ -50,7 +50,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     debugPrint('ProfileHeader - user: ${widget.user?.firstName}');
 
     return Container(
-      color: Colors.white,
+      // color: Colors.white,
       padding: EdgeInsets.symmetric(
         horizontal: _getResponsivePadding(context, 20),
       ),
@@ -704,8 +704,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         //     backgroundColor: Colors.orange,
         //   ),
         // );
-        showSuccessMessage(context,
-            context.isArabic ? 'تم حذف الصورة' : 'Image removed');
+        showSuccessMessage(
+            context, context.isArabic ? 'تم حذف الصورة' : 'Image removed');
       }
     } catch (e) {
       print('Error removing image: $e');

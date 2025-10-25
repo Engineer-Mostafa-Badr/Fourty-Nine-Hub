@@ -266,7 +266,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               height: 8,
             ),
             Text(
-              context.isArabic ? 'سبب اخر' : 'Other reason',
+              context.isArabic ? 'سبب آخر' : 'Other reason',
               style: Styles.mediumText(color: Colors.red),
             ),
           ],
@@ -304,7 +304,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               style: Styles.mediumText(color:AppColors.getReversedTextColor(context))),
         ),
         label: Text(
-          context.isArabic ? 'مشاهدة 2 اخرين' : "view 2 more",
+          context.isArabic ? 'مشاهدة 2 آخرين' : "view 2 more",
           style: Styles.mediumText(
               fontWeight: FontWeight.w500,
               color: context.isDarkMode ? Colors.white : Colors.black),

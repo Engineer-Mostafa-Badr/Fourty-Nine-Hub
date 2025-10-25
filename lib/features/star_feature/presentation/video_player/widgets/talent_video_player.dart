@@ -22,6 +22,7 @@ import 'comments_modal.dart';
 import 'floating_video_player.dart';
 import 'related_videos_section.dart';
 import 'video_info_section.dart' as video_info;
+import '../../profile/widgets/play_next_queue_manager.dart';
 
 class TalentVideoPlayer extends StatefulWidget {
   final String videoUrl;
@@ -355,9 +356,20 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     if (duration.inSeconds > 0 &&
         position.inSeconds >= duration.inSeconds - 1 &&
         _isPlaying) {
-      // Video ended, pause and reset icon
+      // Video ended, check if there's a next video in queue
       setState(() {
         _isPlaying = false;
+      });
+
+      // Auto-play next video from queue after a short delay
+      Future.delayed(Duration(milliseconds: 500), () {
+        if (mounted) {
+          final queueManager = PlayNextQueueManager();
+          if (queueManager.hasNext) {
+            debugPrint('🎵 Video ended, auto-playing next from queue');
+            _playNextVideo();
+          }
+        }
       });
     }
   }
@@ -377,20 +389,29 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     });
   }
 
-  // Play next video from recommended list
+  // Play next video - check queue first, then recommended list
   void _playNextVideo() {
+    final queueManager = PlayNextQueueManager();
+
+    // Check if there's a video in the play next queue
+    if (queueManager.hasNext) {
+      final nextVideo = queueManager.getNextVideo();
+      if (nextVideo != null) {
+        debugPrint('🎵 Playing next from queue: ${nextVideo.title}');
+        _navigateToVideo(nextVideo);
+        return;
+      }
+    }
+
+    // If no queue, play from recommended videos
     if (_recommendedVideos.isEmpty) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //       content: Text(
-      //           context.isArabic ? 'لا توجد فيديوهات أخرى' : 'No more videos')),
-      // );
       showSuccessMessage(context,
           context.isArabic ? 'لا توجد فيديوهات أخرى' : 'No more videos');
       return;
     }
 
     final nextVideo = _recommendedVideos.first;
+    debugPrint('🎵 Playing next from recommended: ${nextVideo.title}');
     _navigateToVideo(nextVideo);
   }
 
@@ -532,7 +553,7 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      // backgroundColor:  Colors.transparent,
       builder: (context) => BlocProvider.value(
         value: _commentCubit,
         child: CommentsModal(
@@ -1088,33 +1109,49 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
         },
       ),
       OptionItem(
+        icon: Icons.playlist_play,
+        title: context.isArabic ? 'تشغيل التالي' : 'Play next in queue',
+        onTap: () {
+          Navigator.pop(context);
+          PlayNextQueueManager().addToPlayNext(talent);
+          showSuccessMessage(
+            context,
+            context.isArabic
+                ? 'تمت إضافة الفيديو لقائمة التشغيل التالي'
+                : 'Video added to play next queue',
+          );
+        },
+      ),
+      OptionItem(
         icon: Icons.watch_later_outlined,
         title: 'Save to Watch Later',
         onTap: () {
+          ManageVibration.vibrate();
+          _starCubit.watchLaterTalents;
           Navigator.pop(context);
         },
       ),
-      OptionItem(
-        icon: Icons.download_outlined,
-        title: 'Download',
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-      OptionItem(
-        icon: Icons.share_outlined,
-        title: 'Share',
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-      OptionItem(
-        icon: Icons.block,
-        title: 'Not interested',
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
+      // OptionItem(
+      //   icon: Icons.download_outlined,
+      //   title: 'Download',
+      //   onTap: () {
+      //     Navigator.pop(context);
+      //   },
+      // ),
+      // OptionItem(
+      //   icon: Icons.share_outlined,
+      //   title: 'Share',
+      //   onTap: () {
+      //     Navigator.pop(context);
+      //   },
+      // ),
+      // OptionItem(
+      //   icon: Icons.block,
+      //   title: 'Not interested',
+      //   onTap: () {
+      //     Navigator.pop(context);
+      //   },
+      // ),
       OptionItem(
         icon: Icons.report_outlined,
         title: 'Report',

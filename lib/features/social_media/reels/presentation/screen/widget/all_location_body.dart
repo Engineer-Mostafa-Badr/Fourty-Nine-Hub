@@ -69,7 +69,7 @@ class AllLocationBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                context.isArabic ? 'المنشورات من الاخرين' : 'Posts from others',
+                context.isArabic ? 'المنشورات من الآخرين' : 'Posts from others',
                 style: TextStyle(
                   fontSize: 36.sp,
                   fontWeight: FontWeight.w700,

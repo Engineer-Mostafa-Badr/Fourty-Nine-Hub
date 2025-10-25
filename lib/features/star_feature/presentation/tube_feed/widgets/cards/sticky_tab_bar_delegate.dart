@@ -77,7 +77,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
                         width: size.width * 0.1,
                         height: size.width * 0.1,
                         decoration: BoxDecoration(
-                          color: Colors.transparent,
+                          // color:  Colors.transparent,
                           borderRadius:
                               BorderRadius.circular(size.width * 0.05),
                         ),
@@ -172,7 +172,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
             text: text,
             style: TextStyle(
               color: isSelected
-                  ? (context.isDarkMode ? Colors.black : Colors.white)
+                  ? (context.isDarkMode ? Colors.white : Colors.black)
                   : (context.isDarkMode ? Colors.white : Colors.black),
               fontSize:
                   context.isArabic ? size.width * 0.03 : size.width * 0.025,

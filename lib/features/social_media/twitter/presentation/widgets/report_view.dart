@@ -44,7 +44,7 @@ class _ReportViewState extends State<ReportView> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         FocusScope.of(context).unfocus();
       },
       child: BlocProvider<TwitterCubit>(
@@ -137,7 +137,7 @@ class _ReportViewState extends State<ReportView> {
       BuildContext context, ReportsEnum report, double screenWidth) {
     return GestureDetector(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         setState(() {
           selectedReport = report;
         });
@@ -152,7 +152,9 @@ class _ReportViewState extends State<ReportView> {
           border: Border.all(
             color: selectedReport == report
                 ? AppColors.SECONDARY_COLOR
-                : context.isDarkMode?Colors.grey[300]!:Colors.grey[500]!,
+                : context.isDarkMode
+                    ? Colors.grey[300]!
+                    : Colors.grey[500]!,
             width: 1,
           ),
         ),
@@ -189,8 +191,16 @@ class _ReportViewState extends State<ReportView> {
     );
   }
 
+  bool _isValidReportText(String text) {
+    // Remove whitespace and check if text is empty or too short
+    final trimmedText = text.trim();
+    return trimmedText.isNotEmpty && trimmedText.length >= 5;
+  }
+
   Widget _buildTextFieldWithSendButton(BuildContext context, double screenWidth,
       TwitterCubit controller, TwitterState state) {
+    final isValid = _isValidReportText(reportTextController.text);
+
     return Row(
       children: [
         Expanded(
@@ -256,7 +266,7 @@ class _ReportViewState extends State<ReportView> {
         ),
         const SizedBox(width: 8),
         AnimatedOpacity(
-          opacity: reportTextController.text.isNotEmpty ? 1.0 : 0.5,
+          opacity: isValid ? 1.0 : 0.5,
           duration: const Duration(milliseconds: 300),
           child: IconButton(
             color: AppColors.getButtonPrimaryWhiteColor(context),
@@ -264,18 +274,21 @@ class _ReportViewState extends State<ReportView> {
               Icons.send,
               color: AppColors.getButtonPrimaryWhiteColor(context),
             ),
-            onPressed: reportTextController.text.isNotEmpty
+            onPressed: isValid
                 ? () async {
                     if (selectedReport == null) {
                       showErrorMessage(
                           context, LocaleKeys.pleaseSelectReason.localize);
                       context.pop();
                     } else {
+                      // Trim the text before sending
+                      final trimmedContent = reportTextController.text.trim();
+
                       var response = await controller.onReport(
                         TwitterReportParams(
                           userId: widget.id,
                           category: selectedReport!.name,
-                          content: reportTextController.text,
+                          content: trimmedContent,
                           categoryId: widget.categoryId,
                           reason: selectedReport!.name,
                         ),

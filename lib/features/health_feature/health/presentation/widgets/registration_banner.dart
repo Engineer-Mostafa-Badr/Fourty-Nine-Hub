@@ -53,7 +53,7 @@ class RegistrationBanner extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               context.isArabic
-                  ? 'ساعد العملاء بالضغط علي تسجيل '
+                  ? 'ساعد العملاء بالضغط على تسجيل '
                   : 'Serve clients by click Register',
               style: Styles.mediumText(color: Colors.white),
             ),

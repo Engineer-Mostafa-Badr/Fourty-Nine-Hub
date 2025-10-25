@@ -25,7 +25,14 @@ import '../enums/wallet_types_enums.dart';
 import '../utils/custom_show_dialog.dart';
 
 showErrorMessage(BuildContext context, String message) {
-  if (message == 'Unauthorized' || message == 'Unknown Error'|| message == '') return;
+  // if (message == 'Unauthorized' || message == 'Unknown Error'|| message == '') return;
+  if (message == 'Unauthorized') {
+    message = context.isArabic
+        ? 'انتهت جلستك، يرجى تسجيل الدخول مرة أخرى'
+        : 'Your session has expired. Please login again';
+  } else if (message == 'Unknown Error' || message.trim().isEmpty) {
+    return;
+  }
 
   // Log the error message for debugging
   log('🚨 showErrorMessage: $message');
@@ -411,7 +418,7 @@ void showConfirmDialog(
 }
 
 showSubscribeDialog(BuildContext context, String subCategoryId,
-    {String? title,Function(bool success)? onSubscribe}) {
+    {String? title, Function(bool success)? onSubscribe}) {
   showCustomDialogTrip(
       context,
       Column(
@@ -454,7 +461,9 @@ showSubscribeDialog(BuildContext context, String subCategoryId,
                     SubscriptionMethod().subscribe(
                         subscribeId: subCategoryId,
                         showRegular: true,
-                        onSubscribe: onSubscribe==null?null:(success)=>onSubscribe(success),
+                        onSubscribe: onSubscribe == null
+                            ? null
+                            : (success) => onSubscribe(success),
                         title: '');
                   }),
             ],

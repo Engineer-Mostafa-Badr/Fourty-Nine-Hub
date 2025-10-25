@@ -182,7 +182,7 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         border: Border(
           bottom: BorderSide(
             color: Colors.grey[200]!,
@@ -212,7 +212,8 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                        color:
+                            context.isDarkMode ? Colors.white : Colors.black87,
                       ),
                     ),
                     if (!isLoading && videos.isNotEmpty) ...[
@@ -227,7 +228,9 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
                                 : 'This user\'s videos'),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: context.isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[600],
                         ),
                       ),
                     ],
@@ -357,16 +360,26 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
         child: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.blue[50] : Colors.transparent,
+            color: isSelected
+                ? context.isDarkMode
+                    ? Colors.blue[900]
+                    : Colors.blue[50]
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: isSelected
-                ? Border.all(color: Colors.blue[200]!, width: 1)
+                ? Border.all(
+                    color: context.isDarkMode ? Colors.blue[200]! : Colors.blue,
+                    width: 1)
                 : null,
           ),
           child: Icon(
             icon,
             size: 20,
-            color: isSelected ? Colors.blue[600] : Colors.grey[600],
+            color: isSelected
+                ? context.isDarkMode
+                    ? Colors.white
+                    : Colors.blue[600]
+                : Colors.grey[600],
           ),
         ),
       ),
@@ -376,7 +389,7 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -446,7 +459,8 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
     VoidCallback onTap,
   ) {
     return ListTile(
-      leading: Icon(icon, color: Colors.grey[600]),
+      leading: Icon(icon,
+          color: context.isDarkMode ? Colors.white : Colors.grey[600]),
       title: Text(title),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
@@ -456,7 +470,7 @@ class _ProfileVideosTabState extends State<ProfileVideosTab>
   void _showFilterOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
