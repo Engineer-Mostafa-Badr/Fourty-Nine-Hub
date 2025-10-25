@@ -84,9 +84,9 @@
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
-        
+
         <!-- Media button receiver -->
-        <receiver 
+        <receiver
             android:name="com.ryanheise.audioservice.MediaButtonReceiver"
             android:exported="true">
             <intent-filter>
@@ -132,7 +132,7 @@
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
-        
+
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                     "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
