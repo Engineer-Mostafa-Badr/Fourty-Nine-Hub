@@ -200,8 +200,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
               const Divider(height: 1, color: Color(0xFF272727)),
 
-              // 🎯 Related Videos Section
-              RelatedVideosScreen(videoId: widget.video.id!),
 
               const SizedBox(height: 80),
             ],
@@ -217,102 +215,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 // ---------------------------------------------------------------
 // ✅ RelatedVideosScreen
 // ---------------------------------------------------------------
-class RelatedVideosScreen extends StatefulWidget {
-  final String videoId;
-
-  const RelatedVideosScreen({super.key, required this.videoId});
-
-  @override
-  State<RelatedVideosScreen> createState() => _RelatedVideosScreenState();
-}
-
-class _RelatedVideosScreenState extends State<RelatedVideosScreen> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-
-    final cubit = context.read<TubeCubit>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.loadInitialRelatedTubeVideos(context, widget.videoId);
-    });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        cubit.getRelatedTubeVideos(context);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TubeCubit, TubeState>(
-      builder: (context, state) {
-        final cubit = context.read<TubeCubit>();
-        final relatedVideos = state.relatedTubeVideosData ?? [];
-
-        if (cubit.isRelatedTubeInitialLoading && relatedVideos.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 32),
-            child: Center(child: CircularProgressIndicator(color: Colors.red)),
-          );
-        }
-
-        if (relatedVideos.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(16),
-            child: Center(
-              child: Text('No related videos available',
-                  style: TextStyle(color: Colors.grey, fontSize: 14)),
-            ),
-          );
-        }
-
-        return ListView.builder(
-          controller: _scrollController,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: relatedVideos.length + 1,
-          itemBuilder: (context, index) {
-            if (index < relatedVideos.length) {
-              final video = relatedVideos[index];
-              return VideoCardTube(video: video, videoList: relatedVideos);
-            } else {
-              if (cubit.isRelatedTubeLoadingMore) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Center(
-                    child: CircularProgressIndicator(color: Colors.red),
-                  ),
-                );
-              } else if (!cubit.hasMoreRelatedTubeVideos &&
-                  relatedVideos.isNotEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Center(
-                    child: Text('No more related videos',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  ),
-                );
-              }
-            }
-            return const SizedBox.shrink();
-          },
-        );
-      },
-    );
-  }
-}
 
 
 // ---------------------------------------------------------------
