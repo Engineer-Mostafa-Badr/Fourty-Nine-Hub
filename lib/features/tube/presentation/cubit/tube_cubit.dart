@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/delete_tube_comment_use_case.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 
 import 'package:video_player/video_player.dart';
 import '../../../../core/enums/base_status_enum.dart';
