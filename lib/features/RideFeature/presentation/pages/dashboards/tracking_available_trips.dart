@@ -189,12 +189,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
 
   Future<void> _setMarkerWidgets() async {
     if (_filteredPeople.isEmpty) {
-      setState(() {
-        _markers = {};
-        _polylines = {};
-        _isLoading = false;
-      });
-      _fitBounds(_calculateBounds([]));
+      // ... (rest of your empty check is fine)
       return;
     }
 
@@ -202,7 +197,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
 
     MarkerGenerator(markerWidgets(_filteredPeople), (bitmaps) {
       final markersList = mapBitmapsToMarkers(bitmaps, _filteredPeople);
-      final bounds = _calculateBounds(_filteredPeople);
+      final bounds = _calculateBounds(_filteredPeople); // Bounds for ALL markers
 
       if (mounted) {
         setState(() {
@@ -210,15 +205,21 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
           _isLoading = false;
         });
 
-        if (_selectedPerson != null) {
+        // --- FIXED LOGIC ---
+        // Check if a person is selected AND they have a polyline to show
+        if (_selectedPerson != null && _selectedPerson!.polyline.isNotEmpty) {
+          // If yes, create the polyline. This function will also
+          // handle fitting the camera bounds to the route.
           _createPolyline(_selectedPerson!);
+        } else {
+          // Otherwise (no person selected, or person has no route),
+          // just fit the camera to show all the markers.
+          _fitBounds(bounds);
         }
-
-        _fitBounds(bounds);
+        // --- END FIXED LOGIC ---
       }
     }).generate(context);
   }
-
   List<Widget> markerWidgets(List<Person> courierList) {
     return courierList.map((c) => _getMarkerWidget(c)).toList();
   }
@@ -257,7 +258,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
               initialCameraPosition: _initialCameraPosition!,
               onMapCreated: _onMapCreated,
               markers: _markers,
-              // polylines: _polylines,
+              polylines: _polylines,
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               zoomControlsEnabled: true,

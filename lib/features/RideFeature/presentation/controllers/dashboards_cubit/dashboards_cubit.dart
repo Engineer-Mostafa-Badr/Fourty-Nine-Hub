@@ -49,6 +49,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/listen_to_accept_loading_trip_offer_use_case.dart';
@@ -179,6 +180,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       listenToAcceptUntrackedTripOfferUseCase;
   final ListenToEndTripUseCase listenToEndTripUseCase;
   final ListenToPartialPaymentDriverUseCase listenToPartialPaymentDriverUseCase;
+  final ListenToRemoveOfferUseCase listenToRemoveOfferUseCase;
   final AddRateWithDriverUseCase addRateWithDriverUseCase;
   final terminalExaminationFormKey = GlobalKey<FormState>();
   final GetRideGovernoratesUseCase getRideGovernoratesUseCase;
@@ -266,6 +268,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToRemoveLoadingUseCase,
       this.listenToAvailableLoadingUseCase,
       this.updateDriverRateLoadingNonSocketUseCase,
+      this.listenToRemoveOfferUseCase,
       this.addRateWithDriverLoadingUseCase)
       : super(const DashboardsState());
   TextEditingController rideVehicleExpireDateController =
@@ -1871,8 +1874,24 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           currentContext,
           currentContext.isArabic
               ? 'تم إلغاء الرحلة من قبل العميل'
-              : 'Trip has been canceled by the customer');
+              : 'Trip has been canceled by the client');
       changeIndex(0, currentContext, params);
+      emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+    });
+  }
+
+  void listenToRemoveOffer() {
+    CliLogger.info('Remove Offer');
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    // TripsResponseEntity
+    listenToRemoveOfferUseCase((tripId) {
+      log("removeOfferId $tripId");
+      showErrorMessage(
+          currentContext,
+          currentContext.isArabic
+              ? 'تم إلغاء العرض من قبل العميل'
+              : 'Offer has been canceled by the client');
       emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
     });
   }
@@ -2719,13 +2738,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       required Function() onSuccess,
       required String subCategoryId}) async {
     showLoadingDialog(context);
-    Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    // Position currentPosition = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
     final response = await createRiderOfferUseCase(CreateRiderOfferParams(
         tripId: tripId,
         price: price,
-        lat: currentPosition.latitude,
-        lng: currentPosition.longitude));
+        lat: 31.2802521,
+        lng: 31.6774589));
     response.fold((l) {
       final currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;

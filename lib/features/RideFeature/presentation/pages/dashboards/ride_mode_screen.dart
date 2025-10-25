@@ -112,6 +112,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
               dashboardCubit.listenToNewTrip(widget.params),
               dashboardCubit.listenToRemoveTrip(),
               dashboardCubit.listenToClientComing(),
+              dashboardCubit.listenToRemoveOffer(),
               dashboardCubit.listenToEndTrip(context, widget.params),
               dashboardCubit.listenToPartialPaymentDriver(context),
             ]
