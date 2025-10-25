@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -395,15 +394,15 @@ class _TalentCardState extends State<TalentCard> {
           },
         ),
         if (_isTubeVideo()) ...[
-          OptionItem(
-            icon: Icons.share,
-            title: context.isArabic ? 'مشاركة' : 'Share',
-            onTap: () {
-              ManageVibration.vibrate();
-              Navigator.pop(context);
-              _shareVideo(context, talent);
-            },
-          ),
+          // OptionItem(
+          //   icon: Icons.share,
+          //   title: context.isArabic ? 'مشاركة' : 'Share',
+          //   onTap: () {
+          //     ManageVibration.vibrate();
+          //     Navigator.pop(context);
+          //     _shareVideo(context, talent);
+          //   },
+          // ),
           (() {
             final isWatchLater = cubit.isWatchLater(talent.id);
             return OptionItem(
@@ -494,4 +493,3 @@ class _TalentCardState extends State<TalentCard> {
         url.toLowerCase().contains('.m3u8');
   }
 }
-

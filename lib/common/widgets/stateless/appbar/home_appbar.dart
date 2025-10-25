@@ -112,14 +112,14 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 await WhatsAppNotificationUtils.showWhatsAppMessage(
                   senderName: 'Mohamed',
                   message: 'Hello! How are you?',
-                  senderAvatar: 'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
+                  senderAvatar:
+                      'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
                   useCollapsedIcon: true,
                 );
                 await WhatsAppNotificationUtils.showNoInternetNotification(
-                  title: 'CHAT',
-                  message: 'You may have new messages',
-                  isPersistent: true
-                );
+                    title: 'CHAT',
+                    message: 'You may have new messages',
+                    isPersistent: true);
                 // bool isCustomPage = await CacheManager.getActivation() ?? false;
                 // if (isCustomPage) {
                 //   if (!isCurrentRoute(context, Routes.HOME)) {

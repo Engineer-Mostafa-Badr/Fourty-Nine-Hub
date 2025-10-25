@@ -165,7 +165,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
       builder: (bottomSheetContext) => BlocProvider.value(
         value: _profileCubit,
         child: EditProfileSheet(
@@ -201,7 +201,8 @@ class _ProfilePageViewState extends State<ProfilePageView>
     super.build(context);
 
     return CustomScaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      enableCustomAppBar: true,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, profileState) {
           return _buildContent(profileState, widget.isCurrentUser);

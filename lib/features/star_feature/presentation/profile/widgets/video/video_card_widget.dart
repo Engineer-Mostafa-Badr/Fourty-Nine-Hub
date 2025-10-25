@@ -21,6 +21,7 @@ import '../../../controller/star_cubit/star_cubit.dart';
 import '../../../presentation_exports.dart';
 import '../../../video_player/widgets/talent_video_player.dart';
 import '../playlist_bottom_sheet.dart';
+import '../play_next_queue_manager.dart';
 
 class VideoCardWidget extends StatefulWidget {
   final TubeVideoModel video;
@@ -595,11 +596,20 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
             _showPlaylistBottomSheet(context, widget.video);
           },
         ),
-        // OptionItem(
-        //   icon: Icons.play_arrow,
-        //   title: context.isArabic ? 'تشغيل التالي' : 'Play next in queue',
-        //   onTap: () => Navigator.pop(context),
-        // ),
+        OptionItem(
+          icon: Icons.playlist_play,
+          title: context.isArabic ? 'تشغيل التالي' : 'Play next in queue',
+          onTap: () {
+            Navigator.pop(context);
+            PlayNextQueueManager().addToPlayNext(widget.video);
+            showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تمت إضافة الفيديو لقائمة التشغيل التالي'
+                  : 'Video added to play next queue',
+            );
+          },
+        ),
         // OptionItem(
         //   icon: Icons.block,
         //   title: context.isArabic ? 'غير مهتم' : 'Not interested',

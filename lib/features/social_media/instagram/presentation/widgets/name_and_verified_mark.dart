@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
@@ -25,7 +26,8 @@ class NameAndVerifiedMark extends StatelessWidget {
           style: Styles.headerText(
             fontSize: 32,
             height: 1.12,
-            color: isReel ? Colors.white : Colors.black,
+            color:
+                (!context.isDarkMode && isReel) ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(
@@ -34,7 +36,6 @@ class NameAndVerifiedMark extends StatelessWidget {
         if (isVerified)
           SvgPicture.asset(
             Assets.verifiedAccountMarkIcon,
-
           ),
       ],
     );
