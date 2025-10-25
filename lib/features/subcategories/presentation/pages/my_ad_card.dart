@@ -62,8 +62,14 @@ class _MyAdCardState extends State<MyAdCard> {
   @override
   Widget build(BuildContext context) {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
-    print(userId);
-    print(widget.item.userId);
+    print('🔥🔥🔥 MyAdCard Debug 🔥🔥🔥');
+    print('Current userId: $userId');
+    print('Ad userId: ${widget.item.userId}');
+    print('Ad user?.id: ${widget.item.user?.id}');
+    print('Is owner: ${userId == widget.item.user?.id}');
+    print('userSubscriptionStatus: ${widget.item.userSubscriptionStatus}');
+    print('ownerSubscriptionStatus: ${widget.item.ownerSubscriptionStatus}');
+    print('🔥🔥🔥 End MyAdCard Debug 🔥🔥🔥');
     return GlobalCard(
       subcategoryId: widget.item.subCategoryId ?? '',
       phone: widget.item.phone ?? "",
@@ -91,12 +97,26 @@ class _MyAdCardState extends State<MyAdCard> {
           widget.onRefresh!();
         }
       },
-      isButtonEnabled: SubscriptionStatus.notSubscribed.status !=
-              widget.item.userSubscriptionStatus ||
-          SubscriptionStatus.notSubscribed.status !=
-              widget.item.ownerSubscriptionStatus,
-      isPremium: SubscriptionStatus.premium.status ==
-          widget.item.ownerSubscriptionStatus,
+      isButtonEnabled: () {
+        final isOwner = userId == widget.item.user?.id;
+        final result = isOwner
+            ? true
+            : (SubscriptionStatus.notSubscribed.status !=
+                    widget.item.userSubscriptionStatus ||
+                SubscriptionStatus.notSubscribed.status !=
+                    widget.item.ownerSubscriptionStatus);
+        print('isButtonEnabled: $result (isOwner: $isOwner)');
+        return result;
+      }(),
+      isPremium: () {
+        final isOwner = userId == widget.item.user?.id;
+        final result = isOwner
+            ? true
+            : (SubscriptionStatus.premium.status ==
+                widget.item.ownerSubscriptionStatus);
+        print('isPremium: $result (isOwner: $isOwner)');
+        return result;
+      }(),
       hasReport: true,
       hasTopSide: true,
       hasBottomSide: widget.item.user?.id != userId,
@@ -104,13 +124,26 @@ class _MyAdCardState extends State<MyAdCard> {
       subCategoryTitle: context.isArabic
           ? widget.item.subCategoryNameAr
           : widget.item.subCategoryNameEn,
-      subscriptionType: widget.item.ownerSubscriptionStatus ==
-              SubscriptionStatus.premium.status
-          ? LocaleKeys.premium2.localize
-          : widget.item.ownerSubscriptionStatus ==
-                  SubscriptionStatus.regular.status
-              ? LocaleKeys.regular.localize
-              : LocaleKeys.notSubscribed.localize,
+      subscriptionType: () {
+        // If current user is the owner, show their subscription status
+        if (userId == widget.item.user?.id) {
+          return widget.item.userSubscriptionStatus ==
+                  SubscriptionStatus.premium.status
+              ? LocaleKeys.premium2.localize
+              : widget.item.userSubscriptionStatus ==
+                      SubscriptionStatus.regular.status
+                  ? LocaleKeys.regular.localize
+                  : LocaleKeys.notSubscribed.localize;
+        }
+        // If viewing someone else's ad, show their subscription status
+        return widget.item.ownerSubscriptionStatus ==
+                SubscriptionStatus.premium.status
+            ? LocaleKeys.premium2.localize
+            : widget.item.ownerSubscriptionStatus ==
+                    SubscriptionStatus.regular.status
+                ? LocaleKeys.regular.localize
+                : LocaleKeys.notSubscribed.localize;
+      }(),
       views: widget.item.views,
       onRequest: () {
         ManageVibration.vibrate();
@@ -152,6 +185,10 @@ class _MyAdCardState extends State<MyAdCard> {
                     subscriptionStatus:
                         widget.item.userSubscriptionStatus ?? '',
                     dontPop: true,
+                    onSubscriptionSuccess: () {
+                      // إغلاق الديالوج الحالي عند نجاح الاشتراك
+                      context.pop();
+                    },
                   ),
                   const SizedBox(
                     height: 8,
