@@ -29,12 +29,14 @@ class CustomReserveRideBottomSheet extends StatefulWidget {
   final RideCubit rideCubit;
   final bool isPremium;
   final String selectedCategoryId;
+  final String? description;
 
   const CustomReserveRideBottomSheet(
       {super.key,
       required this.rideCubit,
       required this.selectedCategoryId,
-      required this.isPremium});
+      required this.isPremium,
+      required this.description});
 
   @override
   State<CustomReserveRideBottomSheet> createState() =>
@@ -392,6 +394,7 @@ class _CustomReserveRideBottomSheetState
                                                     polyline: widget.rideCubit.state.rideExpectedPrice?.polyline ?? [],
                                                     wayPointOneTitle: widget.rideCubit.state.wayPointOne?.address,
                                                     wayPointTwoTitle: widget.rideCubit.state.wayPointTwo?.address,
+                                                    description: widget.description,
                                                   );
 
                                                 }
@@ -420,6 +423,7 @@ class _CustomReserveRideBottomSheetState
                                                   polyline: widget.rideCubit.state.rideExpectedPrice?.polyline ?? [],
                                                   wayPointOneTitle: widget.rideCubit.state.wayPointOne?.address,
                                                   wayPointTwoTitle: widget.rideCubit.state.wayPointTwo?.address,
+                                                  description: widget.description,
                                                 );
                                               }
                                             }
@@ -538,6 +542,7 @@ class _CustomReserveRideBottomSheetState
                                                       .state
                                                       .wayPointTwo
                                                       ?.address,
+                                                  description: widget.description,
                                                 );
                                               }
                                             } else {
@@ -617,6 +622,7 @@ class _CustomReserveRideBottomSheetState
                                                     .state.wayPointOne?.address,
                                                 wayPointTwoTitle: widget.rideCubit
                                                     .state.wayPointTwo?.address,
+                                                description: widget.description,
                                               );
                                             }
                                           }
