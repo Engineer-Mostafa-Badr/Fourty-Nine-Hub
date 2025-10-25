@@ -321,6 +321,7 @@ import 'package:go_router/go_router.dart';
 
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
+import '../features/Conversations/Presentation/Pages/conversation_screen.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/socail_greet_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_anonymous_conversations_screen.dart';
@@ -2435,6 +2436,22 @@ class AppPages {
                   BlocProvider.value(
                     value: serviceLocator<ConversationsCubit>(),
                     child: const ConversationsScreen(),
+                  ),
+                ),
+              ),
+
+
+              GoRoute(
+                path: Paths.conversationScreen,
+                name: Routes.conversationScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider.value(
+                    value: serviceLocator<ConversationsCubit>(),
+                    child: ConversationScreen(
+                      conversationId: state.extra as String,
+                    ),
                   ),
                 ),
               ),
