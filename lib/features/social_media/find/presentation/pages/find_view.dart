@@ -502,7 +502,7 @@ class _FindScreenState extends State<FindScreen> {
       right: 8,
       left: 8,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32.0.h, vertical: 8.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -314,6 +314,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_create_ad_view.dart';
+import 'package:fourtyninehub/features/tube/presentation/cubit/tube_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/main.dart';
@@ -467,10 +468,13 @@ import '../features/social_media/social_posts/presentation/pages/other_account_v
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
+import '../features/spotlight/presentation/cubit/spotlight_cubit.dart';
+import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/presentation_exports.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/trip_join/view_all_trip_join/presentation/views/trip_join_view.dart';
+import '../features/tube/presentation/screens/tube_screen.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
@@ -5036,7 +5040,20 @@ class AppPages {
                 path: Paths.spotLightScreen,
                 name: Routes.spotLightScreen,
                 builder: (context, state) {
-                  return SpotLightScreen();
+                  return BlocProvider(
+                    create: (context) => serviceLocator<SpotlightCubit>()..fetchMyProfileSpotlight(),
+                    child: SpotLightScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.tubeScreens,
+                name: Routes.tubeScreens,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (context) => serviceLocator<TubeCubit>(),
+                    child: TubeScreen(),
+                  );
                 },
               ),
             ],
