@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +5,6 @@ import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_floating_button_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_view_body.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
@@ -114,6 +112,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
@@ -138,29 +137,35 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
           appBar: BackAppBar(
             label: context.isArabic ? 'زواج' : 'Marriage',
           ),
-          floatingActionButton: _showFloatingButton && state.subCategories != null && state.subCategories!.isNotEmpty
-              ? buildFloatingAction(context,title:
-          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
+          floatingActionButton: _showFloatingButton &&
+                  state.subCategories != null &&
+                  state.subCategories!.isNotEmpty
+              ? buildFloatingAction(context,
+                  title:
+                      "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? (context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr ?? '') : context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn ?? ''}",
                   () {
-                    ManageVibration.vibrate();
-                    if (AuthHelper().isLoggedIn()) {
-                      context.push(
-                        Routes.CREATEAD,
-                        extra: CategorizationEntity(
-                          mainCategory: state.mainCategory!,
-                          // mainCategory: widget.mainCategory,
-                          subCategory: state.subCategories![
-                          state.subCategories?.indexWhere((element) =>
-                          element.isSelected == true) ??
-                              0],
-                          fromMarriage: true,
-                        ),
-                      );
-                    } else {
-                      return pleaseLoginDialog(context);
-                      // context.push(Routes.LOGIN);
+                  ManageVibration.vibrate();
+                  if (AuthHelper().isLoggedIn()) {
+                    // Find the selected subcategory index safely
+                    final selectedIndex = state.subCategories!
+                        .indexWhere((element) => element.isSelected == true);
+
+                    if (selectedIndex == -1) {
+                      return; // No selected subcategory found
                     }
-          })
+
+                    context.push(
+                      Routes.CREATEAD,
+                      extra: CategorizationEntity(
+                        mainCategory: state.mainCategory!,
+                        subCategory: state.subCategories![selectedIndex],
+                        fromMarriage: true,
+                      ),
+                    );
+                  } else {
+                    return pleaseLoginDialog(context);
+                  }
+                })
               : null,
           // floatingActionButton: AnimatedSlide(
           //   duration: const Duration(milliseconds: 300),
@@ -195,7 +200,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
           //               },
           //             )),
           // ),
-          body: state.isLoading || state.subCategories == null || state.subCategories!.isEmpty
+          body: state.isLoading ||
+                  state.subCategories == null ||
+                  state.subCategories!.isEmpty
               ? CustomLoadingSearchWidget()
               : MarriageAdsViewBody(
                   controller: controller,

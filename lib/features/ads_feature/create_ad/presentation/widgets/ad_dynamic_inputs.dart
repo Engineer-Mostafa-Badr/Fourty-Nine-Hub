@@ -288,6 +288,33 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
                 }
               }
 
+              // Check if this is a years of experience field and validate limits
+              final isExperienceField = widget.property.nameAr
+                      .toLowerCase()
+                      .contains('سنوات') ||
+                  widget.property.nameAr.toLowerCase().contains('خبرة') ||
+                  widget.property.nameEn.toLowerCase().contains('experience') ||
+                  widget.property.nameEn.toLowerCase().contains('years');
+
+              if (isExperienceField) {
+                final experienceYears = int.tryParse(value);
+                if (experienceYears == null) {
+                  return context.isArabic
+                      ? 'يرجى إدخال عدد سنوات صحيح'
+                      : 'Please enter a valid number of years';
+                }
+                if (experienceYears > 50) {
+                  return context.isArabic
+                      ? 'عدد سنوات الخبرة لا يمكن أن يكون أكثر من 50 سنة'
+                      : 'Years of experience cannot be more than 50 years';
+                }
+                if (experienceYears < 0) {
+                  return context.isArabic
+                      ? 'عدد سنوات الخبرة لا يمكن أن يكون سالباً'
+                      : 'Years of experience cannot be negative';
+                }
+              }
+
               // Check if this is a height or weight field and validate limits
               final isHeightField =
                   widget.property.nameAr.toLowerCase().contains('الطول') ||
