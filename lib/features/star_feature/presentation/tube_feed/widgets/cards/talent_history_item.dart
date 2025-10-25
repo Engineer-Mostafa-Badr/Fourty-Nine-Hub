@@ -17,6 +17,7 @@ import '../../../../data/model/tube_video_models.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
 import '../../../video_player/widgets/talent_video_player.dart';
+import '../../../profile/widgets/play_next_queue_manager.dart';
 
 class TalentHistoryItem extends StatelessWidget {
   final StarEntity talent;
@@ -260,15 +261,15 @@ class TalentHistoryItem extends StatelessWidget {
     OptionsBottomSheet.showOptions(
       context: context,
       options: [
-        OptionItem(
-          icon: Icons.delete_outline,
-          title:
-              context.isArabic ? 'حذف من التاريخ' : 'Remove from watch history',
-          onTap: () {
-            Navigator.pop(context);
-            // Add remove from history logic
-          },
-        ),
+        // OptionItem(
+        //   icon: Icons.delete_outline,
+        //   title:
+        //       context.isArabic ? 'حذف من التاريخ' : 'Remove from watch history',
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     // Add remove from history logic
+        //   },
+        // ),
         OptionItem(
           icon: Icons.playlist_play_rounded,
           title: context.isArabic
@@ -276,7 +277,14 @@ class TalentHistoryItem extends StatelessWidget {
               : 'Play next in queue',
           onTap: () {
             Navigator.pop(context);
-            // Add play next logic
+            // Add to play next queue
+            PlayNextQueueManager().addToPlayNext(talent);
+            showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تمت إضافة الفيديو لقائمة التشغيل التالي'
+                  : 'Video added to play next queue',
+            );
           },
         ),
         OptionItem(

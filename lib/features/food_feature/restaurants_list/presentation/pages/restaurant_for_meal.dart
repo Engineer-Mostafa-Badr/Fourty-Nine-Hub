@@ -31,7 +31,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      backgroundColor: scaffoldDarkColor(context),
+      backgroundColor: Colors.redAccent,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(

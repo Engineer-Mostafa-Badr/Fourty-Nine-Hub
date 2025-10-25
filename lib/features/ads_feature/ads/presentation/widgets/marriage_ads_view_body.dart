@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +10,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_notification_badge.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_list_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_my_ads_list_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_request.dart';
@@ -33,6 +29,9 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../filter_ads/presentation/pages/filter_ads.dart';
 import '../../../../subcategories/presentation/widgets/search_bar_widget.dart';
 import '../../../../subcategories/presentation/pages/ads_search_view.dart';
+import '../../../../subcategories/presentation/pages/favourite_ads_view.dart';
+import '../../../../../../service_locator/service_locator.dart';
+import '../../presentation/cubit/ads_cubit.dart';
 
 class MarriageAdsViewBody extends StatefulWidget {
   final SubcategoriesCubit controller;
@@ -81,12 +80,21 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               fromHome: false,
               category: context.read<SubcategoriesCubit>().state.mainCategory!,
               onFavorite: () async {
-                var result =
-                await widget.controller.toggleFavoriteMedicalService(
-                    context.read<SubcategoriesCubit>().state.mainCategory?.id??'');
+                var result = await widget.controller
+                    .toggleFavoriteMedicalService(context
+                            .read<SubcategoriesCubit>()
+                            .state
+                            .mainCategory
+                            ?.id ??
+                        '');
                 return result;
               },
-              isFavorite: context.read<SubcategoriesCubit>().state.mainCategory?.isFavorite??false,
+              isFavorite: context
+                      .read<SubcategoriesCubit>()
+                      .state
+                      .mainCategory
+                      ?.isFavorite ??
+                  false,
             ),
           ),
         Padding(
@@ -122,10 +130,11 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                     if (!context.isUserLoggedIn) {
                       return pleaseLoginDialog(context);
                     } else {
+                      final mainCategoryId =
+                          widget.state.mainCategory?.id ?? '';
                       context
                           .read<SubcategoriesCubit>()
-                          .getRequestsLog('62c8b5b09332225799fe335e');
-
+                          .loadMyFavouriteAds(id: mainCategoryId);
                       context
                           .read<SubcategoriesCubit>()
                           .toggleMyAds('isFavouriteAdsOpen');
@@ -139,16 +148,20 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
               Expanded(
                 child: TabWidget(
                   title: LocaleKeys.requestLog.localize,
-                  selected:
-                      context.read<SubcategoriesCubit>().isRequestLogOpen,
+                  selected: context.read<SubcategoriesCubit>().isRequestLogOpen,
                   onTap: () {
                     ManageVibration.vibrate();
                     if (!context.isUserLoggedIn) {
                       return pleaseLoginDialog(context);
                     } else {
-                      context
-                          .read<SubcategoriesCubit>()
-                          .getRequestsLog('62c8b5b09332225799fe335e');
+                      final mainCategoryId =
+                          widget.state.mainCategory?.id ?? '';
+                      if (mainCategoryId.isNotEmpty) {
+                        context
+                            .read<SubcategoriesCubit>()
+                            .loadRequestsLogByMainCategory(
+                                mainCategoryId: mainCategoryId);
+                      }
                       context
                           .read<SubcategoriesCubit>()
                           .toggleMyAds('isRequestLogOpen');
@@ -167,10 +180,12 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                   selected: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onTap: () {
                     ManageVibration.vibrate();
-                    // TODO: EDIT THIS
-                    context
-                        .read<SubcategoriesCubit>()
-                        .getMarriageMyAds('62c8b5b09332225799fe335e');
+                    final mainCategoryId = widget.state.mainCategory?.id ?? '';
+                    if (mainCategoryId.isNotEmpty) {
+                      context
+                          .read<SubcategoriesCubit>()
+                          .loadMyAds(id: mainCategoryId);
+                    }
                     context
                         .read<SubcategoriesCubit>()
                         .toggleMyAds('isMyAdsOpen');
@@ -208,24 +223,30 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       return;
                     }
                     ManageVibration.vibrate();
+
+                    // Find the selected subcategory index safely
+                    final selectedIndex = widget.state.subCategories!
+                        .indexWhere((element) => element.isSelected == true);
+
+                    if (selectedIndex == -1) {
+                      return; // No selected subcategory found
+                    }
+
                     dynamic data = await context.push(
                       Routes.FILTERADS,
                       extra: FilterAdsParams(
                         categorization: CategorizationEntity(
                           mainCategory: widget.state.mainCategory!,
                           fromMarriage: true,
-                          subCategory: widget.state.subCategories![widget
-                                  .state.subCategories
-                                  ?.indexWhere((element) =>
-                                      element.isSelected == true) ??
-                              0],
+                          subCategory:
+                              widget.state.subCategories![selectedIndex],
                         ),
                         userType: '',
                       ),
                     );
 
                     if (data != null) {
-                      print("objectsdaa");
+                      debugPrint("objectsdaa");
                       widget.controller.changeFilterModel(data);
                       widget.controller.loadFilterData(
                         model: data,
@@ -280,20 +301,26 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
                       return;
                     }
                     ManageVibration.vibrate();
+
+                    // Find the selected subcategory index safely
+                    final selectedIndex = widget.state.subCategories!
+                        .indexWhere((element) => element.isSelected == true);
+
+                    if (selectedIndex == -1) {
+                      return; // No selected subcategory found
+                    }
+
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
                         extra: CategorizationEntity(
                             mainCategory: widget.state.mainCategory!,
                             fromMarriage: true,
-                            subCategory: widget.state.subCategories![widget
-                                    .state.subCategories
-                                    ?.indexWhere((element) =>
-                                        element.isSelected == true) ??
-                                0]));
+                            subCategory:
+                                widget.state.subCategories![selectedIndex]));
                     if (data != null) {
-                      print("data.cityId${data.cityId}");
-                      print("data.governorateId${data.governorateId}");
-                      print("objectsdaa");
+                      debugPrint("data.cityId${data.cityId}");
+                      debugPrint("data.governorateId${data.governorateId}");
+                      debugPrint("objectsdaa");
                       widget.controller.state.city = data.cityId;
                       widget.controller.state.governorate = data.governorateId;
                       widget.controller.changeFilterModel(data);
@@ -384,25 +411,27 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
       ],
     );
   }
+
   bool _isFloatVisible = true;
   @override
   void initState() {
-    print('state:: ${widget.state.subCategories?.length}');
+    debugPrint('state:: ${widget.state.subCategories?.length}');
     _tabController = TabController(
         length: widget.state.subCategories?.length ?? 0, vsync: this);
-    _scrollController = ScrollController()..addListener((){
-      if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (_isFloatVisible) {
-          setState(() => _isFloatVisible = false);
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.reverse) {
+          if (_isFloatVisible) {
+            setState(() => _isFloatVisible = false);
+          }
+        } else if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (!_isFloatVisible) {
+            setState(() => _isFloatVisible = true);
+          }
         }
-      } else if (_scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (!_isFloatVisible) {
-          setState(() => _isFloatVisible = true);
-        }
-      }
-    });
+      });
     _searchFocusNode = FocusNode();
 
     _tabController.addListener(() {
@@ -470,13 +499,15 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,
+        selectedSubCategoryId: widget.state.selectedSubCatId,
       );
     }
 
     // Requests Log
     if (context.read<SubcategoriesCubit>().isRequestLogOpen) {
-      print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
-      if (widget.state.adsRequestsLog == null) {
+      debugPrint(
+          'state.requestsLogByMainCategory ${widget.state.requestsLogByMainCategory?.length}');
+      if (widget.state.requestsLogByMainCategory == null) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
         //   SizedBox(
         //   child: Label(
@@ -486,7 +517,7 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         // );
       }
 
-      if (widget.state.adsRequestsLog!.isEmpty) {
+      if (widget.state.requestsLogByMainCategory!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
       }
 
@@ -494,37 +525,26 @@ class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
         scrollController: widget._scrollController,
         controller: widget.controller,
         state: widget.state,
+        selectedSubCategoryId: widget.state.selectedSubCatId,
       );
     }
 
     // Favourite Ads
     if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
-      print('state.myAds ${widget.state.myAds?.length}');
-      if (widget.state.myAds == null) {
-        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
-        //   SizedBox(
-        //   child: Label(
-        //     text: LocaleKeys.noAds.localize,
-        //     style: Styles.headerText(),
-        //   ),
-        // );
-      }
-
-      if (widget.state.myAds!.isEmpty) {
-        return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
-      }
-      return MarriageAdsListView(
-        scrollController: widget._scrollController,
-        controller: widget.controller,
-        state: widget.state,
+      return BlocProvider(
+        create: (context) => serviceLocator<AdvertisementCubit>(),
+        child: FavouriteAdsView(
+          id: widget.state.mainCategory?.id ?? '',
+          isFloatingButtonVisible: (_) {},
+          selectedSubCategoryId: widget.state.selectedSubCatId,
+        ),
       );
     }
 
     // Ads
-    print('state.adds ${widget.state.ads}');
+    debugPrint('state.adds ${widget.state.ads}');
     if (widget.state.ads == null) {
       return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
-      // const SizedBox();
     }
     if (widget.state.ads!.isEmpty) {
       return CustomEmptyWidget(

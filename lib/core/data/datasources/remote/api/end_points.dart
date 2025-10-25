@@ -81,6 +81,7 @@ class EndPoints {
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/oauth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
+  static const resendRegisterationOTP = '/auth/verify/resend-email';
   static const resendVerificationOTP = '/auth/resend-verification-code';
   static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh-token';
@@ -1739,8 +1740,7 @@ class EndPoints {
       '/ride/untracked/ratings/driver';
   static const addRateToDriverWithClientNonSocket =
       '/ride/untracked/ratings/client';
-  static readLoadingOffer(String id) =>
-      '/loading/client/trips/offers/$id/read';
+  static readLoadingOffer(String id) => '/loading/client/trips/offers/$id/read';
   static readNonTrackingOffer(String id) =>
       '/ride/non-tracking/offers/$id/read';
   static const updateClientRating = '/ride/untracked/ratings/client';

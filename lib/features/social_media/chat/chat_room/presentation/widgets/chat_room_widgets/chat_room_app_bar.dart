@@ -410,7 +410,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                     null)
                                                   Label(
                                                     text: context.isArabic
-                                                        ? " اخر ظهور في ${chatsCubit.selectedChat.lastSeen}"
+                                                        ? " آخر ظهور في ${chatsCubit.selectedChat.lastSeen}"
                                                         : "Last seen at ${chatsCubit.selectedChat.lastSeen}",
                                                     style: Styles.mediumText(
                                                       fontSize: 24,
@@ -484,31 +484,31 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                         FcmNotificationHelper>()
                                                     .getFcmUserToken();
 
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SendWhatsappCallScreen(
-                                                  isRealCall: true,
-                                                  callType: CallType.video,
-                                                  receiver: UserModel(
-                                                      id: chat.userId,
-                                                      firstName: chat.name,
-                                                      lastName: '',
-                                                      firebaseToken:
-                                                          chat.fcmToken),
-                                                  sender: UserModel(
-                                                    id: userStateEntity
-                                                        .data!.id,
-                                                    firstName: userStateEntity
-                                                        .data!.firstName,
-                                                    lastName: userStateEntity
-                                                        .data!.lastName,
-                                                    firebaseToken: fcmToken,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         SendWhatsappCallScreen(
+                                            //       isRealCall: true,
+                                            //       callType: CallType.video,
+                                            //       receiver: UserModel(
+                                            //           id: chat.userId,
+                                            //           firstName: chat.name,
+                                            //           lastName: '',
+                                            //           firebaseToken:
+                                            //               chat.fcmToken),
+                                            //       sender: UserModel(
+                                            //         id: userStateEntity
+                                            //             .data!.id,
+                                            //         firstName: userStateEntity
+                                            //             .data!.firstName,
+                                            //         lastName: userStateEntity
+                                            //             .data!.lastName,
+                                            //         firebaseToken: fcmToken,
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // );
                                           },
                                         ),
                                         IconButton(
@@ -550,37 +550,37 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                           .PRIMARY_COLOR_DARK));
                                               return;
                                             }
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SendWhatsappCallScreen(
-                                                          isRealCall: true,
-                                                          callType:
-                                                              CallType.audio,
-                                                          receiver: UserModel(
-                                                            id: chat.userId,
-                                                            firstName:
-                                                                chat.name,
-                                                            lastName: '',
-                                                            firebaseToken:
-                                                                chat.fcmToken,
-                                                          ),
-                                                          sender: UserModel(
-                                                            id: userStateEntity
-                                                                .data!.id,
-                                                            firstName:
-                                                                userStateEntity
-                                                                    .data!
-                                                                    .firstName,
-                                                            lastName:
-                                                                userStateEntity
-                                                                    .data!
-                                                                    .lastName,
-                                                            firebaseToken:
-                                                                fcmToken,
-                                                          ),
-                                                        )));
+                                            // Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //         builder: (context) =>
+                                            //             SendWhatsappCallScreen(
+                                            //               isRealCall: true,
+                                            //               callType:
+                                            //                   CallType.audio,
+                                            //               receiver: UserModel(
+                                            //                 id: chat.userId,
+                                            //                 firstName:
+                                            //                     chat.name,
+                                            //                 lastName: '',
+                                            //                 firebaseToken:
+                                            //                     chat.fcmToken,
+                                            //               ),
+                                            //               sender: UserModel(
+                                            //                 id: userStateEntity
+                                            //                     .data!.id,
+                                            //                 firstName:
+                                            //                     userStateEntity
+                                            //                         .data!
+                                            //                         .firstName,
+                                            //                 lastName:
+                                            //                     userStateEntity
+                                            //                         .data!
+                                            //                         .lastName,
+                                            //                 firebaseToken:
+                                            //                     fcmToken,
+                                            //               ),
+                                            //             )));
                                           },
                                         ),
                                         PopupMenuButton(

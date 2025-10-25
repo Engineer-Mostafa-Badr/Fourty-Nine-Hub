@@ -12,7 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class IdentityConfirmationCardRegisterWidget extends StatefulWidget {
-  const IdentityConfirmationCardRegisterWidget({super.key, this.onChange, this.initImage});
+  const IdentityConfirmationCardRegisterWidget(
+      {super.key, this.onChange, this.initImage});
   final Function(File image)? onChange;
   final String? initImage;
   @override
@@ -58,7 +59,7 @@ class _IdentityConfirmationCardRegisterWidgetState
                   Align(
                     child: Text(
                       context.isArabic
-                          ? "تاكيد الهوية"
+                          ? "تأكيد الهوية"
                           : "Identity Verification",
                       style: Styles.headerText(
                           fontWeight: FontWeight.w500, fontSize: 40),
@@ -72,7 +73,11 @@ class _IdentityConfirmationCardRegisterWidgetState
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10),
                         image: image == null
-                            ? widget.initImage == null? null: DecorationImage(image: NetworkImage(widget.initImage??""), fit: BoxFit.cover)
+                            ? widget.initImage == null
+                                ? null
+                                : DecorationImage(
+                                    image: NetworkImage(widget.initImage ?? ""),
+                                    fit: BoxFit.cover)
                             : DecorationImage(
                                 image: FileImage(image!),
                                 fit: BoxFit.cover,
@@ -114,7 +119,7 @@ class _IdentityConfirmationCardRegisterWidgetState
                   Align(
                     child: GestureDetector(
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         var pickedImage = await ImagePicker()
                             .pickImage(source: ImageSource.gallery);
                         if (pickedImage != null) {

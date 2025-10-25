@@ -305,7 +305,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     const maxZoom = 20.0;
     final clampedZoom = zoom.clamp(minZoom, maxZoom);
     final normalized = (clampedZoom - minZoom) / (maxZoom - minZoom);
-    return 20 + (normalized * (35 - 20));
+    return 35 + (normalized * (50 - 30));
   }
 
   // Highly optimized marker creation using Canvas instead of Widget rendering

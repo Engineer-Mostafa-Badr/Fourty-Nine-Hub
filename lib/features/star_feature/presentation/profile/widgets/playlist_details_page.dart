@@ -8,10 +8,12 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../presentation_exports.dart';
+import 'play_next_queue_manager.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
   final PlaylistEntity playlist;
@@ -87,8 +89,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return CustomScaffold(
+      enableCustomAppBar: true,
+      // backgroundColor: Colors.white,
       body: BlocBuilder<PlaylistCubit, PlaylistState>(
         builder: (context, state) {
           if (state.isLoading && state.selectedPlaylist == null) {
@@ -290,7 +293,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -303,7 +306,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                       : '${playlist.videos.length} videos • ${timeago.format(playlist.createdAt, locale: 'en')}',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: context.isDarkMode ? Colors.white : Colors.grey[600],
                   ),
                 ),
 
@@ -313,7 +316,8 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                     playlist.description,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[700],
+                      color:
+                          context.isDarkMode ? Colors.white : Colors.grey[700],
                       height: 1.4,
                     ),
                     maxLines: 3,
@@ -489,7 +493,8 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: videos.isNotEmpty ? Colors.black : Colors.grey,
+                backgroundColor:
+                    !videos.isNotEmpty ? Colors.black : Colors.grey,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
@@ -604,7 +609,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : Colors.black87,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -614,7 +621,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                         "${video.user.firstName} ${video.user.lastName}",
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.grey[600],
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : Colors.grey[600],
                         ),
                       ),
                       SizedBox(height: 2),
@@ -622,7 +631,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                         "${_formatNumber(video.totalViews)} views • ${_formatTimeAgo(video.createdAt ?? DateTime.now())}",
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey[500],
+                          color: context.isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[500],
                         ),
                       ),
                     ],
@@ -634,7 +645,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   onPressed: () => _showVideoOptions(video, index, playlist),
                   icon: Icon(
                     Icons.more_vert,
-                    color: Colors.grey[600],
+                    color: context.isDarkMode ? Colors.white : Colors.grey[600],
                     size: 20,
                   ),
                   padding: EdgeInsets.zero,
@@ -740,17 +751,23 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           title: context.isArabic ? 'تشغيل التالي' : 'Play next',
           onTap: () {
             Navigator.pop(context);
-            // Implement play next logic
+            PlayNextQueueManager().addToPlayNext(video);
+            showSuccessMessage(
+              context,
+              context.isArabic
+                  ? 'تمت إضافة الفيديو لقائمة التشغيل التالي'
+                  : 'Video added to play next queue',
+            );
           },
         ),
-        OptionItem(
-          icon: Icons.share,
-          title: context.isArabic ? 'مشاركة' : 'Share',
-          onTap: () {
-            Navigator.pop(context);
-            // Implement share logic
-          },
-        ),
+        // OptionItem(
+        //   icon: Icons.share,
+        //   title: context.isArabic ? 'مشاركة' : 'Share',
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     // Implement share logic
+        //   },
+        // ),
         if (widget.isCurrentUser)
           OptionItem(
             icon: Icons.remove_circle_outline,

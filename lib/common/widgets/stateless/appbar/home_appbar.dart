@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
+import 'package:fourtyninehub/core/utils/whatsapp_notification_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
@@ -108,20 +109,31 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             InkWell(
               onTap: () async {
                 ManageVibration.vibrate();
-                bool isCustomPage = await CacheManager.getActivation() ?? false;
-                if (isCustomPage) {
-                  if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.go(
-                      Routes.HOME,
-                    );
-                  }
-                } else {
-                  if (!isCurrentRoute(context, Routes.HOME)) {
-                    context.go(
-                      Routes.HOME,
-                    );
-                  }
-                }
+                await WhatsAppNotificationUtils.showWhatsAppMessage(
+                  senderName: 'Mohamed',
+                  message: 'Hello! How are you?',
+                  senderAvatar:
+                      'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
+                  useCollapsedIcon: true,
+                );
+                await WhatsAppNotificationUtils.showNoInternetNotification(
+                    title: 'CHAT',
+                    message: 'You may have new messages',
+                    isPersistent: true);
+                // bool isCustomPage = await CacheManager.getActivation() ?? false;
+                // if (isCustomPage) {
+                //   if (!isCurrentRoute(context, Routes.HOME)) {
+                //     context.go(
+                //       Routes.HOME,
+                //     );
+                //   }
+                // } else {
+                //   if (!isCurrentRoute(context, Routes.HOME)) {
+                //     context.go(
+                //       Routes.HOME,
+                //     );
+                //   }
+                // }
               },
               child: Image.asset(
                 Assets.logoHub,
@@ -140,7 +152,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: Icon(
               Icons.search,
               size: 25,
-              color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
           // if (showLanguage)
@@ -181,7 +194,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: TextAppButton(
                   label: LocaleKeys.lang.localize,
-                  style: Styles.headerText(color: AppColors.getRedColor(context)),
+                  style:
+                      Styles.headerText(color: AppColors.getRedColor(context)),
                   onPressed: () {
                     ManageVibration.vibrate();
                     HandleCashback.setCount('langCount', context);
@@ -204,7 +218,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () {
                     ManageVibration.vibrate();
                   },
-                  child: Label(text: LocaleKeys.register.localize, style: Styles.mediumText())),
+                  child: Label(
+                      text: LocaleKeys.register.localize,
+                      style: Styles.mediumText())),
             ),
           // if (language)
           // if(inChat != null)
@@ -242,36 +258,46 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           //     ),
           Builder(
             builder: (context) {
-              final getUnreadNotificationsCountCubit = context.watch<GetUnreadNotificationsCountCubit>();
+              final getUnreadNotificationsCountCubit =
+                  context.watch<GetUnreadNotificationsCountCubit>();
               return ClickableWidget(
                 onTap: () {
-                  if(inNotifications) return;
+                  if (inNotifications) return;
                   ManageVibration.vibrate();
                   if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
                     return;
                   }
                   HandleCashback.setCount('notificationCount', context);
                   context.push(
-                    context.read<UserCubit>().isLoggedIn ? Routes.NOTIFICATIONS : Routes.FirstLoginScreen,
+                    context.read<UserCubit>().isLoggedIn
+                        ? Routes.NOTIFICATIONS
+                        : Routes.FirstLoginScreen,
                   );
                 },
                 child: Container(
                   padding: const EdgeInsetsDirectional.only(end: 12),
                   child: CustomNotificationWidget(
-                    icon: Image.asset(
-                      Assets.notification,
-                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-                    ),
-                    height: 20,
-                    unreadCount: !context.read<UserCubit>().isLoggedIn ? 0 : getUnreadNotificationsCountCubit.unreadNotificationsCountEntity?.total ?? 0),
-                  ),
+                      icon: Image.asset(
+                        Assets.notification,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                      height: 20,
+                      unreadCount: !context.read<UserCubit>().isLoggedIn
+                          ? 0
+                          : getUnreadNotificationsCountCubit
+                                  .unreadNotificationsCountEntity?.total ??
+                              0),
+                ),
               );
             },
           ),
           if (isMenu)
             ClickableWidget(
               onTap: () {
-                var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+                var currentContext =
+                    AppPages.router.configuration.navigatorKey.currentContext!;
                 ManageVibration.vibrate();
                 HandleCashback.setCount('drawerCount', context);
                 Scaffold.of(context).openDrawer();
@@ -280,7 +306,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 padding: const EdgeInsetsDirectional.only(end: 12),
                 child: SvgPicture.asset(
                   Assets.menuSvg,
-                  color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
                 ),
               ),
             ),

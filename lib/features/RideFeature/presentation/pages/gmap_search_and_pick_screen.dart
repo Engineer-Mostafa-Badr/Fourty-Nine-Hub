@@ -27,6 +27,8 @@ class _RideOpenGoogleMapSearchAndPickScreenState extends State<RideOpenGoogleMap
             onPicked: widget.params.onPicked,
             minAllowedDistanceKm: widget.params.minAllowedDistanceKm,
             minDistanceReferencePoint: widget.params.minDistanceReferencePoint,
+            initialPosition: widget.params.initialPosition,
+            initialAddress: widget.params.initialAddress,
             allowedCountryCode: serviceLocator<RideCubit>().getAvailableMapCountryKey, // eg, us, my, ae, sa
           ),
         ),

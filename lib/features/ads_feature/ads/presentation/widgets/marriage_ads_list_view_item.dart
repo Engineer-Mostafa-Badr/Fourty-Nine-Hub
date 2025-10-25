@@ -1,34 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_card.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_marriage_button_sheet.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
-
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-import '../../../../../core/constants/subscription_status.dart';
-import '../../../../../core/widget/common/global_card.dart';
-import '../../../../../res/assets/assets.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../../service_locator/service_locator.dart';
-import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../cubit/ads_cubit.dart';
-import '../../../../subcategories/presentation/widgets/build_tag_ads_widget.dart';
 
 class MarriageAdsListViewItem extends StatefulWidget {
   const MarriageAdsListViewItem({
@@ -43,16 +18,46 @@ class MarriageAdsListViewItem extends StatefulWidget {
   final SubcategoriesCubit controller;
 
   @override
-  State<MarriageAdsListViewItem> createState() => _MarriageAdsListViewItemState();
+  State<MarriageAdsListViewItem> createState() =>
+      _MarriageAdsListViewItemState();
 }
 
 class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
   @override
   Widget build(BuildContext context) {
-    return AdCard(item: widget.marriageAds, onFav: (v){}, onRemoveFav: (s){}, onDeleteAd: (String id) {
-      context.pop();
-      widget.controller.deleteAd(id);
-    },);
+    return AdCard(
+      item: widget.marriageAds,
+      onFav: (v) async {
+        bool result = await context
+            .read<AdvertisementCubit>()
+            .favouriteAd(widget.marriageAds.id);
+        if (result) {
+          widget.marriageAds.isFavourite = true;
+          widget.controller.updateAdFavoriteStatus(widget.marriageAds.id, true);
+          setState(() {});
+        }
+        return result;
+      },
+      onRemoveFav: (s) async {
+        bool result = await context
+            .read<AdvertisementCubit>()
+            .unFavouriteAd(widget.marriageAds.id);
+        if (result) {
+          widget.marriageAds.isFavourite = false;
+          widget.controller
+              .updateAdFavoriteStatus(widget.marriageAds.id, false);
+          setState(() {});
+        }
+        return result;
+      },
+      onDeleteAd: (String id) {
+        widget.controller.deleteAd(id);
+      },
+      onRefresh: () async {
+        // Refresh marriage ads data when returning from ad details view
+        await widget.controller.refreshMarriageAds();
+      },
+    );
     // return ClickableWidget(
     //   onTap: () {
     //     ManageVibration.vibrate();
@@ -272,112 +277,5 @@ class _MarriageAdsListViewItemState extends State<MarriageAdsListViewItem> {
     //     ),
     //   ),
     // );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 18.w, right: 18.w, top: 8.h, bottom: 4.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // user image , title and favourite
-          Row(
-            children: [
-              ImageFromInternet(
-                image: widget.marriageAds.images.first,
-                height: 40.h,
-                width: 40.w,
-                isCircle: true,
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              Expanded(
-                child: Label(
-                  text: widget.marriageAds.title,
-                  style: Styles.headerText(
-                    color: AppColors.getTextColor(context),
-                    height: 1.60,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              IconAppButton(
-                size: 32.h,
-                icon: widget.marriageAds.isFavourite == false
-                    ? Icons.favorite_border
-                    : Icons.favorite,
-                color: AppColors.SECONDARY_COLOR,
-                onPressed: () async {
-                  ManageVibration.vibrate();
-                  if (widget.marriageAds.isFavourite == false) {
-                    bool result = await context
-                        .read<AdvertisementCubit>()
-                        .favouriteAd(widget.marriageAds.id);
-                    if(result == true){
-                      widget.marriageAds.isFavourite = true;
-                      setState(() {});
-
-                    }
-                  } else {
-                    bool result= await context
-                        .read<AdvertisementCubit>()
-                        .unFavouriteAd(widget.marriageAds.id);
-                    if(result == true){
-                      widget.marriageAds.isFavourite = false;
-                      setState(() {});
-                    }
-                  }
-                },
-              ),
-            ],
-          ),
-
-          SizedBox(
-            height: 4.h,
-          ),
-          // description
-          Label(
-            text: widget.marriageAds.description,
-            style: Styles.mediumText(
-              fontSize: 48.sp,
-              height: 1.40,
-              color: AppColors.getTextColor(context),
-            ),
-            maxLines: 5,
-          ),
-          SizedBox(
-            height: 4.h,
-          ),
-          // location
-          if (widget.marriageAds.address?.cityEn != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SvgPicture.asset(
-                  Assets.mapPinIcon,
-                  color: context.isDarkMode ? Colors.white : null,
-                ),
-                SizedBox(
-                  width: 4.w,
-                ),
-                Flexible(
-                  child: Label(
-                    text: (context.isArabic
-                            ? widget.marriageAds.address?.addressAr
-                            : widget.marriageAds.address?.addressEn) ??
-                        '',
-                    style: Styles.mediumText(
-                      fontSize: 48.sp,
-                      height: 1.40,
-                      color: AppColors.getTextColor(context),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-        ],
-      ),
-    );
   }
 }

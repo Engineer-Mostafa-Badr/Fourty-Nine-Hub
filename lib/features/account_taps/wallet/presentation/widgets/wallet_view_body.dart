@@ -97,7 +97,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
                               children: [
                                 HeaderTotalAccountWidget(
                                   balance:
-                                      state.wallet?.realAmount.toString() ?? '',
+                                      state.wallet?.realAmount.toString() ?? '0',
                                   holdingAmount:
                                       state.wallet?.holdingAmount ?? 0,
                                   currency: context.isArabic

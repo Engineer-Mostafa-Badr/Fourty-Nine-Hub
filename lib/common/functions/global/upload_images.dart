@@ -30,7 +30,7 @@ class UploadImages {
   }) async {
     // Step 1️⃣ Pick images
     final uploadedFiles =
-    await FilePickerHelper().pickImages(isGallery: isGallery);
+        await FilePickerHelper().pickImages(isGallery: isGallery);
 
     if (uploadedFiles == null || uploadedFiles.isEmpty) return null;
 
@@ -64,8 +64,7 @@ class UploadImages {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel:
-      MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, _, __) {
         return PopScope(
@@ -166,9 +165,8 @@ class UploadImages {
       }
 
       // Step 8️⃣ Confirm upload
-      final List<String> mediaIds = uploadData
-          .map<String>((item) => item['mediaId'] as String)
-          .toList();
+      final List<String> mediaIds =
+          uploadData.map<String>((item) => item['mediaId'] as String).toList();
 
       final Map<String, dynamic> payloadMedia = {"mediaIds": mediaIds};
 

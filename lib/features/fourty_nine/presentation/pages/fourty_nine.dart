@@ -178,13 +178,18 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 mainCategory: 1,
                 index: 2,
               ),
+
         floatingActionButton: _isScrollingDown
             ? null
-            : const FloatingButton(
-                changeView: 1,
-                icon: Icons.person,
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: const FloatingButton(
+                  changeView: 1,
+                  icon: Icons.person,
+                ),
               ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterDocked,
         // drawer: const DrawerWidget(),
         body: ListView(
           controller: scrollController,
@@ -231,7 +236,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 height: 40.h,
                 alignment: Alignment.center,
                 child: AutoScrollText(
-                  // velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                  velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
                   "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                   style: Styles.headerText(
                       fontSize: 30,
@@ -355,11 +360,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 2),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: HomeMainCategoryBanner(
                           category: state.data![index],
-                          // imageHeight: MediaQuery.sizeOf(context).height * 0.10,
+                          imageHeight: MediaQuery.sizeOf(context).height * 0.10,
                           onFavorite: () async {
                             ManageVibration.vibrate();
                             var result =

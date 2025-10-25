@@ -21,6 +21,8 @@ class ViewAllTripJoinState {
   final DeleteMyTripJoinEntity? deleteMyPickMeEntity;
   final GetRequestCountEntity? requestCountData;
   final GetRequestCountEntity? pickMeRequestCountData;
+  final RideBrandModel? newBrand;
+  final RideCarModelModel? newModel;
   const ViewAllTripJoinState({
     this.status = ViewAllTripJoinStatus.initial,
     this.offersFromSearch,
@@ -36,6 +38,8 @@ class ViewAllTripJoinState {
     this.availableTripJoinEntity,
     this.availablePickMeEntity,
     this.requestTripJoinEntity,
+    this.newBrand,
+    this.newModel,
     // this.fullRequestTripJoinData,
     this.myAdsTripJoinData,
     this.deleteMyTripJoinEntity,
@@ -46,6 +50,8 @@ class ViewAllTripJoinState {
 
   ViewAllTripJoinState copyWith({
     ViewAllTripJoinStatus? status,
+    RideBrandModel? newBrand,
+    RideCarModelModel? newModel,
     String? errorMessage,
     String? searchText,
     String? tripsSearchText,
@@ -88,6 +94,8 @@ class ViewAllTripJoinState {
       offersFromSearch: offersFromSearch ?? this.offersFromSearch,
       tripsSearchText: tripsSearchText ?? this.tripsSearchText,
       tripsFromSearch: tripsFromSearch ?? this.tripsFromSearch,
+      newBrand: newBrand ?? this.newBrand,
+      newModel: newModel ?? this.newModel,
     );
   }
 }

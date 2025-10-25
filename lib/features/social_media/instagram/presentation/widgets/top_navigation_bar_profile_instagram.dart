@@ -31,13 +31,12 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
             tabs: [
               Tab(
                 height: 44,
-
                 child: SvgPicture.asset(
                   tabController.index == 0
-                      ? (context.isDarkMode
+                      ? (!context.isDarkMode
                           ? Assets.appsBlackIconDark
                           : Assets.appsBlackIcon)
-                      : (context.isDarkMode
+                      : (!context.isDarkMode
                           ? Assets.appsGreyIconDark
                           : Assets.appsGreyIcon),
                 ),
@@ -46,10 +45,10 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
                 height: 44,
                 child: SvgPicture.asset(
                   tabController.index == 1
-                      ? (context.isDarkMode
+                      ? (!context.isDarkMode
                           ? Assets.videoIconDark
                           : Assets.videoIcon)
-                      : (context.isDarkMode
+                      : (!context.isDarkMode
                           ? Assets.videoGreyIconDark
                           : Assets.videoGreyIcon),
                 ),
@@ -58,10 +57,10 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
                 height: 44,
                 child: SvgPicture.asset(
                   tabController.index == 2
-                      ? (context.isDarkMode
+                      ? (!context.isDarkMode
                           ? Assets.profile2BlackIconDark
                           : Assets.profile2BlackIcon)
-                      : (context.isDarkMode
+                      : (!context.isDarkMode
                           ? Assets.profile2GreyIconDark
                           : Assets.profile2GreyIcon),
                 ),

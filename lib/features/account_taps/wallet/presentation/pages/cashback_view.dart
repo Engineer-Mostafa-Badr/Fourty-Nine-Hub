@@ -19,19 +19,17 @@ class CashbackView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.balance.localize,
-          actions: [
-            CustomWinnerAppbar(
-              onPressed: () {
-                ManageVibration.vibrate();
-                context.push(Routes.WINNERSCASHBACK);
-              },
-            ),
-          ],
-        ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.balance.localize,
+        actions: [
+          CustomWinnerAppbar(
+            onPressed: () {
+              ManageVibration.vibrate();
+              context.push(Routes.WINNERSCASHBACK);
+            },
+          ),
+        ],
       ),
       body: BlocProvider(
         create: (context) =>

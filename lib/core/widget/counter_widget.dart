@@ -27,19 +27,22 @@ class CounterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("formatNumber(unreadCount, isArabic: context.isArabic) ${formatNumber(unreadCount, isArabic: context.isArabic)}");
-    String arabicText = unreadCount.toString()
-        .replaceAll('0','٠')
-        .replaceAll('1','١')
-        .replaceAll('2','٢')
-        .replaceAll('3','٣')
-        .replaceAll('4','٤')
-        .replaceAll('5','٥')
-        .replaceAll('6','٦')
-        .replaceAll('7','٧')
-        .replaceAll('8','٨')
-        .replaceAll('9','٩');
-    String englishText = unreadCount.toString()
+    print(
+        "formatNumber(unreadCount, isArabic: context.isArabic) ${formatNumber(unreadCount, isArabic: context.isArabic)}");
+    String arabicText = unreadCount
+        .toString()
+        .replaceAll('0', '٠')
+        .replaceAll('1', '١')
+        .replaceAll('2', '٢')
+        .replaceAll('3', '٣')
+        .replaceAll('4', '٤')
+        .replaceAll('5', '٥')
+        .replaceAll('6', '٦')
+        .replaceAll('7', '٧')
+        .replaceAll('8', '٨')
+        .replaceAll('9', '٩');
+    String englishText = unreadCount
+        .toString()
         .replaceAll('٠', '0')
         .replaceAll('١', '1')
         .replaceAll('٢', '2')
@@ -62,9 +65,9 @@ class CounterWidget extends StatelessWidget {
           color: bgColor ?? AppColors.getRedColor(context)),
       alignment: AlignmentDirectional.center,
       child: AutoSizeText(
-        context.isArabic?arabicText:englishText,
+        context.isArabic ? arabicText : englishText,
         style: TextStyle(
-          fontSize: fontSize ?? 4.sp,
+          fontSize: fontSize ?? 20.sp,
           color: txtColor ?? AppColors.getReversedTextColor(context),
         ),
         maxLines: 1,

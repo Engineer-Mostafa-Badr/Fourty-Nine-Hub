@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -32,101 +33,124 @@ class _AzkarViewState extends State<AzkarView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      // enableCustomAppBar: true,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(30),
-      //   child: BackAppBar(
-      //     label: LocaleKeys.azkar.localize,
-      //     enableCustomAppBar: true,
-      //   ),
-      // ),
-      body: BlocBuilder<AzkarCubit, AzkarState>(
-        builder: (BuildContext context, state) {
-          if (state.status == AzkarStates.loading) {
-            return const Center(child: CustomLoadingSearchWidget());
-          }
-          final isSearching = state.azkarSearch != null &&
-              state.azkarSearch!.isNotEmpty &&
-              _cubit.searchController.text.isNotEmpty;
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  textDirection: TextDirection.rtl,
-                  focusNode: _focusNode,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.getFillColor(context),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.transparent),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.transparent),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.transparent),
-                    ),
-                    hintText: LocaleKeys.search.localize,
-                    hintStyle: Styles.mediumText(
-                        color: AppColors.getTextColor(context)),
-                  ),
-                  controller: _cubit.searchController,
-                  onSubmitted: (value) {
-                    // _cubit.searchAzkar(search: value);
-                  },
-                  onChanged: (value) {
-                    if (state.akar == null) return;
-                    // if (value.isNotEmpty) {
-                    // _cubit.searchController.clear();
-                    // _cubit.cleanSearchAzkar();
-                    _cubit.searchAzkar2(search: value);
-                    // state.akar = state.akar!
-                    //     .where((element) => element.name
-                    //         .toLowerCase()
-                    //         .contains(value.toLowerCase()))
-                    //     .toList();
-                    // setState(() {});
-                    // }
-                  },
-                ),
-              ),
-              Expanded(
-                child: GlowingOverscrollIndicator(
-                  color: AppColors.SECONDARY_COLOR,
-                  axisDirection: AxisDirection.down,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                    itemCount: isSearching
-                        ? state.azkarSearch!.length
-                        : state.akar!.length,
-                    itemBuilder: (context, index) {
-                      final items =
-                          isSearching ? state.azkarSearch! : state.akar!;
-
-                      if (index >= items.length) {
-                        return const Center(child: CustomLoadingSearchWidget());
-                      }
-
-                      return _buildAzkarItem(
-                          context, items[index], isSearching);
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 10.h);
-                    },
+    return SafeArea(
+      child: CustomScaffold(
+        // enableCustomAppBar: true,
+        // appBar: PreferredSize(
+        //   preferredSize: const Size.fromHeight(30),
+        //   child: BackAppBar(
+        //     label: LocaleKeys.azkar.localize,
+        //     enableCustomAppBar: true,
+        //   ),
+        // ),
+        body: BlocBuilder<AzkarCubit, AzkarState>(
+          builder: (BuildContext context, state) {
+            if (state.status == AzkarStates.loading) {
+              return const Center(child: CustomLoadingSearchWidget());
+            }
+            final isSearching = state.azkarSearch != null &&
+                state.azkarSearch!.isNotEmpty &&
+                _cubit.searchController.text.isNotEmpty;
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          ManageVibration.vibrate();
+                          context.pop();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(AppColors.PRIMARY_COLOR),
+                        ),
+                        icon: Icon(
+                          Icons.arrow_back,
+                          size: 40.w,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                      Sizer(),
+                      Expanded(
+                        child: TextField(
+                          textDirection: TextDirection.rtl,
+                          focusNode: _focusNode,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppColors.getFillColor(context),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.transparent),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.transparent),
+                            ),
+                            hintText: LocaleKeys.search.localize,
+                            hintStyle: Styles.mediumText(
+                                color: AppColors.getTextColor(context)),
+                          ),
+                          controller: _cubit.searchController,
+                          onSubmitted: (value) {
+                            // _cubit.searchAzkar(search: value);
+                          },
+                          onChanged: (value) {
+                            if (state.akar == null) return;
+                            // if (value.isNotEmpty) {
+                            // _cubit.searchController.clear();
+                            // _cubit.cleanSearchAzkar();
+                            _cubit.searchAzkar2(search: value);
+                            // state.akar = state.akar!
+                            //     .where((element) => element.name
+                            //         .toLowerCase()
+                            //         .contains(value.toLowerCase()))
+                            //     .toList();
+                            // setState(() {});
+                            // }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+                Expanded(
+                  child: GlowingOverscrollIndicator(
+                    color: AppColors.SECONDARY_COLOR,
+                    axisDirection: AxisDirection.down,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                      itemCount: isSearching
+                          ? state.azkarSearch!.length
+                          : state.akar!.length,
+                      itemBuilder: (context, index) {
+                        final items =
+                            isSearching ? state.azkarSearch! : state.akar!;
+      
+                        if (index >= items.length) {
+                          return const Center(child: CustomLoadingSearchWidget());
+                        }
+      
+                        return _buildAzkarItem(
+                            context, items[index], isSearching);
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 10.h);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

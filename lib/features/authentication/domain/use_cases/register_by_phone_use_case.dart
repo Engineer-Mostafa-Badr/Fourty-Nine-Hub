@@ -53,7 +53,7 @@ class RegisterByPhoneParams extends Equatable {
         'password': password,
         'confirmPassword': confirmPassword,
         'gender': isMale ? 'male' : 'female',
-        'fcm': token,
+        'fcmToken': token,
         'referralId': referralId,
         'deviceId': await getDeviceId(),
       };

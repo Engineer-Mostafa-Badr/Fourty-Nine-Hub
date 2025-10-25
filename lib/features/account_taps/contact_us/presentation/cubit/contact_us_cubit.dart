@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/data/models/contact_us_model.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -28,7 +29,7 @@ class ContactUsCubit extends Cubit<ContactUsState> {
       final data = {
         'content': messageController.text,
         if (phoneController.text.isNotEmpty)
-          'phone': phoneController.text, // Include phone only if not empty
+          'phone': phoneController.text.toEnglishNumbers(), // تحويل الأرقام العربية للإنجليزية
       };
 
       final response =

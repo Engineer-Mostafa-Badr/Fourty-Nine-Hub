@@ -66,16 +66,14 @@ class GridBlocksWidget extends StatelessWidget {
         context,
         onTap: () {
           ManageVibration.vibrate();
-          if (!context.read<UserCubit>().isLoggedIn) {
-            return pleaseLoginDialog(context);
-          }
+
           ManageVibration.vibrate();
           AdInterstitialTop.loadIntersitialAd();
           AdInterstitialTop.showInterstitialAd();
           HandleCashback.setCount('tripJoinCount', context);
           context.push(Routes.newRideModeScreen);
         },
-        shadowColor:  Colors.lightGreenAccent.withValues(alpha: .9),
+        shadowColor: Colors.lightGreenAccent.withValues(alpha: .9),
         image: Assets.joinTrip,
         title: LocaleKeys.tripJoin.localize,
       ),
@@ -140,7 +138,7 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.pink.withValues(alpha: 0.9),
         image: Assets.moneyExchangeImage,
-        title: context.isArabic ? 'عملات' : 'Exchange',
+        title: context.isArabic ? 'عملات' : 'Currencies',
       ),
       _buildStarWidget(
         context,
@@ -165,7 +163,7 @@ class GridBlocksWidget extends StatelessWidget {
         },
         shadowColor: Colors.brown.withValues(alpha: 0.9),
         image: Assets.gamesImage,
-        title: context.isArabic ? 'العاب' : 'Games',
+        title: context.isArabic ? 'ألعاب' : 'Games',
       ),
     ];
 
@@ -183,7 +181,7 @@ class GridBlocksWidget extends StatelessWidget {
         ),
         items: items.map((item) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             child: item,
           );
         }).toList(),
@@ -206,7 +204,11 @@ class GridBlocksWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
-          border: Border.all(color: context.isDarkMode? AppColors.whiteColor : AppColors.GREY_DARK_COLOR, width: 1),
+          border: Border.all(
+              color: context.isDarkMode
+                  ? AppColors.whiteColor
+                  : AppColors.GREY_DARK_COLOR,
+              width: 1),
           image: DecorationImage(
             image: AssetImage(image),
             fit: BoxFit.cover,
@@ -223,16 +225,14 @@ class GridBlocksWidget extends StatelessWidget {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Center(
           child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.4),
-                  spreadRadius: 5,
-                  blurRadius: 5,
-                  offset: const Offset(1, 1),
-                )
-              ]
-            ),
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.4),
+                spreadRadius: 5,
+                blurRadius: 5,
+                offset: const Offset(1, 1),
+              )
+            ]),
             child: Label(
               text: title,
               style: Styles.mediumText(

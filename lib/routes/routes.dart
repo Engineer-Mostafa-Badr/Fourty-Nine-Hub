@@ -142,6 +142,7 @@ abstract class Routes {
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
+  static const ALLMEALCATEGORIES = '/Food/AllMealCategories';
   static const RestaurantDashboard = '/RestaurantDashboard';
   static const RestaurantOrders = '/RestaurantDashboard/RestaurantOrders';
   static const CREATERESTURANT = '/Food/CreateResturant';
@@ -185,6 +186,7 @@ abstract class Routes {
   static const REGISTERDRIVER = '/Register/register-driver';
   static const ACCOUNT = '/Account';
   static const PRIVACY = '/Account/Privacy';
+  static const APPPOLICY = '/Account/APPPOLICY';
   static const POLICY = '/Account/POLICY';
 
   static const Lists = '/Account/Lists';
@@ -315,6 +317,7 @@ abstract class Routes {
   static const allClientRatingScreen = '/allClientRatingScreen';
   static const loadingDashboardDetailsScreen = '/LoadingDashboardDetailsScreen';
   static const conversationsScreen = '/ConversationsScreen';
+  static const conversationScreen = '/ConversationScreen';
   static const socialArchivedScreen = '/SocialArchivedScreen';
   static const socialGreetScreen = '/SocialGreetScreen';
   static const socialLockedScreen = '/SocialLockedScreen';
@@ -461,6 +464,7 @@ abstract class Paths {
   static const RestaurantDashboard = 'RestaurantDashboard';
   static const RestaurantOrders = 'RestaurantOrders';
   static const SearchMeals = 'SearchMeals';
+  static const ALLMEALCATEGORIES = 'AllMealCategories';
   static const SHIPPING = 'Shipping';
   static const SHIPPING_REGISTER = 'shippingRegister';
   static const CONTACTS_VIEW = 'ContactsView';
@@ -495,6 +499,7 @@ abstract class Paths {
   static const REGISTERDRIVER = 'register-driver';
   static const ACCOUNT = 'Account';
   static const PRIVACY = 'Privacy';
+  static const APPPOLICY = 'APPPOLICY';
   static const POLICY = 'Policy';
 
   static const Lists = 'Lists';
@@ -629,6 +634,7 @@ abstract class Paths {
   static const followersScreen = 'FollowersScreen';
   static const allClientRatingScreen = 'allClientRatingScreen';
   static const conversationsScreen = 'ConversationsScreen';
+  static const conversationScreen = 'ConversationScreen';
   static const socialArchivedScreen = 'SocialArchivedScreen';
   static const socialGreetScreen = 'SocialGreetScreen';
   static const socialLockedScreen = 'SocialLockedScreen';

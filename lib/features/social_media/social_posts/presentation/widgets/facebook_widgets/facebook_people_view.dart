@@ -207,8 +207,8 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
             color: category
                 ? AppColors.Facebook_Red_DARK
                 : context.isDarkMode
-                    ? Colors.white.withOpacity(.3)
-                    : Colors.black.withOpacity(.3)),
+                    ? Colors.white.withOpacity(.9)
+                    : Colors.black.withOpacity(.9)),
       ),
     );
   }

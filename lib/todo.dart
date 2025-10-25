@@ -23,5 +23,7 @@
 //! montaser
 //Todo: favorite in chance from my chance
 //Todo: add widget and lik it with winner
+//! Food
+//Todo: Logic not handled 
 
 

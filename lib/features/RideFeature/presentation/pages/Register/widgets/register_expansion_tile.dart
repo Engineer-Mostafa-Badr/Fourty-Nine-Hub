@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
@@ -11,10 +12,12 @@ class RegisterExpansionTile extends StatefulWidget {
     required this.length,
     this.onChange,
     this.onSelect,
+    this.emptyText,
     this.initialTitle,
   });
 
   final Widget title;
+  final String? emptyText;
   final List<Widget> children;
   final int length;
   final ValueChanged<Widget>? onChange;
@@ -58,7 +61,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
           ),
           Container(
             constraints: const BoxConstraints(maxHeight: 250),
-            child: ListView(
+            child: widget.children.isNotEmpty?ListView(
               padding: const EdgeInsets.all(16.0),
               children: List.generate(
                 widget.children.length,
@@ -87,6 +90,8 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
                   ),
                 ),
               ),
+            ):Center(
+              child: CustomEmptyWidget(label: widget.emptyText??(context.isArabic?'لا يوجد نتائج':'No results found')),
             ),
           ),
         ],

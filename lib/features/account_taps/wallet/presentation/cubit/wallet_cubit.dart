@@ -47,16 +47,21 @@ class WalletCubit extends Cubit<WalletState> {
     this._deleteSubscriptionUseCase,
     this._addSubscriptionUseCase,
   ) : super(const WalletState());
-  Future<void> addSubscription({required AddSubscriptionParams params}) async {
+  Future<bool> addSubscription({required AddSubscriptionParams params}) async {
+    bool success = false;
     var response = await _addSubscriptionUseCase(params);
     return response.fold((l) {
+      success = false;
       var currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;
       showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: WalletStates.error));
+      return success;
     }, (data) {
+      success = true;
       fetchWalletSubscription();
       emit(state.copyWith(status: WalletStates.initial));
+      return success;
     });
   }
 

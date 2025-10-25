@@ -74,7 +74,6 @@ import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubit
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_view.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
@@ -264,8 +263,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/pages
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/single_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
+// import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
+// import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/main_reel_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/music_reels.dart';
@@ -278,14 +277,10 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/spotlight_view.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/my_profile.dart';
-import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/tinder_view.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/pages/user_profile.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/spotlight/presentation/screens/spot_light_screen.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/tube_feed/pages/tube_feed_page.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/winners_ten_percent_cubit/winners_ten_percent_cubit.dart';
@@ -327,6 +322,7 @@ import 'package:go_router/go_router.dart';
 
 import '../common/widgets/stateless/pages/choose_lang_screen.dart';
 import '../features/Conversations/Presentation/Controllers/cubits/conversations_cubit.dart';
+import '../features/Conversations/Presentation/Pages/conversation_screen.dart';
 import '../features/Conversations/Presentation/Pages/conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/socail_greet_conversations_screen.dart';
 import '../features/Conversations/Presentation/Pages/social_anonymous_conversations_screen.dart';
@@ -408,7 +404,6 @@ import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
-import '../features/chance_feature/presentation/pages/chance_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
 import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
@@ -418,8 +413,8 @@ import '../features/food_feature/restaurant_details/presentation/cubit/restauran
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/food_feature/restaurants_list/presentation/pages/all_meal_categories_view.dart';
 import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
@@ -1045,7 +1040,7 @@ class AppPages {
                                       serviceLocator<AdvertisementCubit>(),
                                 ),
                               ],
-                              child: AdDetailsView(payload: state.extra),
+                              child: AdDetailsView(id: state.extra.toString()),
                             )),
                       ),
                       GoRoute(
@@ -1695,10 +1690,10 @@ class AppPages {
                           customTransition(context, state, PrivacyView()),
                     ),
                     GoRoute(
-                      path: Paths.POLICY,
-                      name: Routes.POLICY,
-                      pageBuilder: (context, state) => customTransition(context,
-                          state, PolicyView(fromTerms: state.extra as bool)),
+                      path: Paths.APPPOLICY,
+                      name: Routes.APPPOLICY,
+                      pageBuilder: (context, state) =>
+                          customTransition(context, state, PolicyView()),
                     ),
                     GoRoute(
                       path: Paths.Lists,
@@ -2300,58 +2295,58 @@ class AppPages {
                       pageBuilder: (context, state) => customTransition(
                           context, state, const EditProfileTinder()),
                     ),
-                    GoRoute(
-                        path: Paths.LIVE,
-                        name: Routes.LIVE,
-                        pageBuilder: (context, state) => customTransition(
-                              context,
-                              state,
-                              MultiBlocProvider(
-                                providers: [
-                                  //club voice
-                                  BlocProvider<ClubVoiceCubit>(
-                                    create: (context) =>
-                                        serviceLocator()..loadData(),
-                                    child: const ClubHouseHome(),
-                                  ),
-                                ],
-                                child: const LiveStreamHomeScreen(),
-                              ),
-                            ),
-                        routes: [
-                          GoRoute(
-                              path: Paths.LIVEVIEW,
-                              name: Routes.LIVEView,
-                              pageBuilder: (context, state) {
-                                var extras = state.extra as ZegoArgs;
-                                return customTransition(
-                                    context,
-                                    state,
-                                    LiveStreamView(
-                                      isHost: extras.isHost,
-                                      liveID: extras.liveId,
-                                    ));
-                              }),
-
-                          // ClubHouseHome
-
-                          GoRoute(
-                            path: Paths.CLUBHOUSEROOM,
-                            name: Routes.AUDIOSTREAMSCREEN,
-                            pageBuilder: (context, state) {
-                              final extras = state.extra as RoomArgs;
-                              return customTransition(
-                                  context,
-                                  state,
-                                  AudioStreamScreen(
-                                    liveId: extras.liveId,
-                                    roomSubject: extras.subject,
-                                    isHost: extras.isHost,
-                                  ));
-                            },
-                            routes: const [],
-                          ),
-                        ]),
+                    // GoRoute(
+                    //     path: Paths.LIVE,
+                    //     name: Routes.LIVE,
+                    //     pageBuilder: (context, state) => customTransition(
+                    //           context,
+                    //           state,
+                    //           MultiBlocProvider(
+                    //             providers: [
+                    //               //club voice
+                    //               BlocProvider<ClubVoiceCubit>(
+                    //                 create: (context) =>
+                    //                     serviceLocator()..loadData(),
+                    //                 child: const ClubHouseHome(),
+                    //               ),
+                    //             ],
+                    //             child: const LiveStreamHomeScreen(),
+                    //           ),
+                    //         ),
+                    //     routes: [
+                    //       // GoRoute(
+                    //       //     path: Paths.LIVEVIEW,
+                    //       //     name: Routes.LIVEView,
+                    //       //     pageBuilder: (context, state) {
+                    //       //       var extras = state.extra as ZegoArgs;
+                    //       //       return customTransition(
+                    //       //           context,
+                    //       //           state,
+                    //       //           LiveStreamView(
+                    //       //             isHost: extras.isHost,
+                    //       //             liveID: extras.liveId,
+                    //       //           ));
+                    //       //     }),
+                    //
+                    //       // ClubHouseHome
+                    //
+                    //       GoRoute(
+                    //         path: Paths.CLUBHOUSEROOM,
+                    //         name: Routes.AUDIOSTREAMSCREEN,
+                    //         pageBuilder: (context, state) {
+                    //           final extras = state.extra as RoomArgs;
+                    //           return customTransition(
+                    //               context,
+                    //               state,
+                    //               AudioStreamScreen(
+                    //                 liveId: extras.liveId,
+                    //                 roomSubject: extras.subject,
+                    //                 isHost: extras.isHost,
+                    //               ));
+                    //         },
+                    //         routes: const [],
+                    //       ),
+                    //     ]),
                   ]),
               GoRoute(
                 path: Paths.Married,
@@ -2445,6 +2440,22 @@ class AppPages {
                   BlocProvider.value(
                     value: serviceLocator<ConversationsCubit>(),
                     child: const ConversationsScreen(),
+                  ),
+                ),
+              ),
+
+
+              GoRoute(
+                path: Paths.conversationScreen,
+                name: Routes.conversationScreen,
+                pageBuilder: (context, state) => customTransition(
+                  context,
+                  state,
+                  BlocProvider.value(
+                    value: serviceLocator<ConversationsCubit>(),
+                    child: ConversationScreen(
+                      conversationId: state.extra as String,
+                    ),
                   ),
                 ),
               ),
@@ -2926,6 +2937,20 @@ class AppPages {
                           child: const CusineRestaurantsView(),
                         ),
                       ),
+                    ),
+                    GoRoute(
+                      path: Paths.ALLMEALCATEGORIES,
+                      name: Routes.ALLMEALCATEGORIES,
+                      pageBuilder: (context, state) {
+                        // Get the existing RestaurantsCubit from parent context
+                        final restaurantsCubit =
+                            context.read<RestaurantsCubit>();
+                        return customTransition(
+                          context,
+                          state,
+                          AllMealCategoriesView(cubit: restaurantsCubit),
+                        );
+                      },
                     ),
                     GoRoute(
                         path: Paths.RESTAURANTDETAILS,
@@ -3584,36 +3609,36 @@ class AppPages {
                       ),
                     )
                   ]),
-              GoRoute(
-                  path: Paths.ZOOM,
-                  name: Routes.ZOOM,
-                  pageBuilder: (context, state) => customTransition(
-                        context,
-                        state,
-                        BlocProvider<StreamCubit>(
-                          create: (context) => serviceLocator<StreamCubit>()
-                            ..getScheduledMeetings(),
-                          child: const MeetingView(),
-                        ),
-                      ),
-                  // create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
-                  // child: const MeetingView(),
-
-                  routes: [
-                    // PlayVideo
-                    GoRoute(
-                      path: Paths.MEETINGROOM,
-                      name: Routes.MEETINGROOM,
-                      pageBuilder: (context, state) {
-                        return customTransition(
-                            context,
-                            state,
-                            MeetingRoom(
-                              payload: state.extra as dynamic,
-                            ));
-                      },
-                    ),
-                  ]),
+              // GoRoute(
+              //     path: Paths.ZOOM,
+              //     name: Routes.ZOOM,
+              //     pageBuilder: (context, state) => customTransition(
+              //           context,
+              //           state,
+              //           BlocProvider<StreamCubit>(
+              //             create: (context) => serviceLocator<StreamCubit>()
+              //               ..getScheduledMeetings(),
+              //             child: const MeetingView(),
+              //           ),
+              //         ),
+              //     // create: (context) => serviceLocator<StreamCubit>()..getScheduledMeetings(),
+              //     // child: const MeetingView(),
+              //
+              //     routes: [
+              //       // PlayVideo
+              //       // GoRoute(
+              //       //   path: Paths.MEETINGROOM,
+              //       //   name: Routes.MEETINGROOM,
+              //       //   pageBuilder: (context, state) {
+              //       //     return customTransition(
+              //       //         context,
+              //       //         state,
+              //       //         MeetingRoom(
+              //       //           payload: state.extra as dynamic,
+              //       //         ));
+              //       //   },
+              //       // ),
+              //     ]),
               GoRoute(
                   path: Paths.INSTALLMENT,
                   name: Routes.INSTALLMENT,
@@ -3929,11 +3954,6 @@ class AppPages {
                       BlocProvider(
                         create: (context) =>
                             serviceLocator<ViewAllTripJoinCubit>(),
-
-                        // create: (_) => ViewAllTripJoinCubit(
-                        //   viewAllTripJoinUseCase:
-                        //       serviceLocator<ViewAllTripJoinUseCase>(),
-                        // ),
                       ),
                       BlocProvider(
                         create: (_) => RequestTripJoinCubit(
@@ -3956,11 +3976,6 @@ class AppPages {
                       BlocProvider<GetAllTripsCubit>(
                         create: (context) =>
                             GetAllTripsCubit(apiConsumer: serviceLocator()),
-                      ),
-                      BlocProvider<GetCurrencyCubit>(
-                        create: (context) => GetCurrencyCubit(
-                          serviceLocator(),
-                        ),
                       ),
                       BlocProvider<JoinTripCarPoolCubit>(
                         create: (context) => JoinTripCarPoolCubit(
@@ -4739,6 +4754,16 @@ class AppPages {
                     state,
                     MultiBlocProvider(
                         providers: [
+                          BlocProvider(
+                            create: (_) => ViewAllPickMeCubit(
+                              viewAllPickMeUseCase:
+                                  serviceLocator<ViewAllPickMeUseCase>(),
+                            ),
+                          ),
+                          BlocProvider(
+                            create: (_) =>
+                                serviceLocator<ViewAllTripJoinCubit>(),
+                          ),
                           BlocProvider<DestGetLatAndLongCubit>(
                             create: (context) => DestGetLatAndLongCubit(
                                 getLatLongFromAddressRemoteDataSource:

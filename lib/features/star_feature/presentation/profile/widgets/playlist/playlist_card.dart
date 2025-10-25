@@ -38,7 +38,7 @@ class PlaylistCard extends StatelessWidget {
           vertical: _getResponsiveSpacing(context, 8),
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          // color: Colors.white,
           borderRadius:
               BorderRadius.circular(_getResponsiveBorderRadius(context, 12)),
           boxShadow: [
@@ -80,7 +80,8 @@ class PlaylistCard extends StatelessWidget {
   Widget _buildPlaylistThumbnail(BuildContext context) {
     final thumbnailSize = _getResponsivePadding(context, 80);
     // استخدم العدد المخصص أو العدد من الـ playlist
-    final videoCount = overrideVideoCount ?? playlist.videosCount ?? playlist.videos.length;
+    final videoCount =
+        overrideVideoCount ?? playlist.videosCount ?? playlist.videos.length;
 
     return Container(
       width: thumbnailSize * 1.5,
@@ -135,7 +136,8 @@ class PlaylistCard extends StatelessWidget {
   }
 
   Widget _buildPlaylistInfo(BuildContext context) {
-    final videoCount = overrideVideoCount ?? playlist.videosCount ?? playlist.videos.length;
+    final videoCount =
+        overrideVideoCount ?? playlist.videosCount ?? playlist.videos.length;
 
     return Padding(
       padding:
@@ -149,7 +151,7 @@ class PlaylistCard extends StatelessWidget {
             style: TextStyle(
               fontSize: _getResponsiveFontSize(context, 16),
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: context.isDarkMode ? Colors.white : Colors.black87,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -163,7 +165,7 @@ class PlaylistCard extends StatelessWidget {
                 : '$videoCount videos • ${timeago.format(playlist.createdAt, locale: context.locale.languageCode)}',
             style: TextStyle(
               fontSize: _getResponsiveFontSize(context, 13),
-              color: Colors.grey[600],
+              color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
             ),
           ),
           SizedBox(height: _getResponsiveSpacing(context, 6)),
@@ -174,7 +176,7 @@ class PlaylistCard extends StatelessWidget {
               playlist.description,
               style: TextStyle(
                 fontSize: _getResponsiveFontSize(context, 12),
-                color: Colors.grey[500],
+                color: context.isDarkMode ? Colors.grey[400] : Colors.grey[500],
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -242,7 +244,7 @@ class PlaylistCard extends StatelessWidget {
         child: Icon(
           Icons.more_vert,
           size: _getResponsiveIconSize(context, 24),
-          color: Colors.grey[600],
+          color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
         ),
       ),
     );

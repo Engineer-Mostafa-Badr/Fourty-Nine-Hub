@@ -92,7 +92,7 @@ class SubscriptionController {
       {List<WalletTypes>? wallets,
       required String subCategoryId,
       String? title,
-      final Function? onSubscribe,
+      final Function(bool success)? onSubscribe,
       bool? showRegular}) async {
     if (!_isBottomSheetShown) {
       _isBottomSheetShown = true;
@@ -135,9 +135,11 @@ class SubscriptionController {
 
   //payment method
 
-  Future<void> subscribe({required SubscribeParams subscribeParams}) async {
+  Future<bool> subscribe({required SubscribeParams subscribeParams}) async {
+    bool success = false;
     final response = await _subscribeUseCase(subscribeParams);
     response.fold((l) {
+      success = false;
       var currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;
       showErrorMessage(currentContext, getFailureMessage(l, currentContext));
@@ -165,9 +167,11 @@ class SubscriptionController {
         showErrorMessage(context, Labels.errorHappened);
       }
     }, (data) {
+      success = true;
       showSuccessMessage(context,
           context.isArabic ? "تم الاشتراك بنجاح" : "Subscribed successfully");
     });
+    return success;
   }
 }
 //9.16 8/9/2024

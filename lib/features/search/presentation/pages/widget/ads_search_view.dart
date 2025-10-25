@@ -69,13 +69,12 @@ class _AdsSearchViewState extends State<AdsSearchView> {
       buildWhen: (prev, curr) =>
           prev.adsSearch != curr.adsSearch || prev.status != curr.status,
       builder: (context, state) {
+        final ads = _cubit.reelsSearch;
         print('==> 0');
         // final ads = _cubit.adsSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
           print('==> 1');
-          return CustomEmptyWidget(
-            label: LocaleKeys.noData.localize,
-          );
+          return CustomEmptyWidget.searchInitial(context: context);
         }
         if (state.status == SearchStates.loading) {
           print('==> 2');
@@ -83,18 +82,18 @@ class _AdsSearchViewState extends State<AdsSearchView> {
           return const Center(child: CustomLoadingSearchWidget());
         }
 
-        // if (ads.isEmpty) {
-        //   print('==> 3');
-        //
-        //   return CustomEmptyWidget(
-        //     label: LocaleKeys.noResultsFound.localize,
-        //   );
-        // }
+        if (ads.isEmpty) {
+          print('==> 3');
+
+          return CustomEmptyWidget(
+            label: LocaleKeys.noResultsFound.localize,
+          );
+        }
         print('==> 4');
         return OlxPaginationWidget(
           scrollController: ScrollController(),
           itemsPerPage: 2,
-          loadPage: (page) async{
+          loadPage: (page) async {
             {
               final searchText = _cubit.searchController.text.trim();
               if (searchText.isEmpty) return;
@@ -111,32 +110,32 @@ class _AdsSearchViewState extends State<AdsSearchView> {
           banners: bannersList,
           items: List.generate(
             _cubit.adsSearch.length + (_cubit.isLoadingAdsMore ? 1 : 0),
-                (index) {
-                  print('==> 5');
-                  if (index >= _cubit.adsSearch.length) {
-                    print('==> 6');
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Center(child: CustomLoadingSearchWidget()),
-                    );
-                  }
-                  print('==> 7');
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
-                    child: BuildItemAdsSearch(
-                      item: _cubit.adsSearch[index],
-                      onFav: (String id) async {
-                        // return await controllerAdvertise.favouriteAd(id);
-                      },
-                      onRemoveFav: (String id) async {
-                        // return await controllerAdvertise.unFavouriteAd(id);
-                      },
-                    ),
-                  );
+            (index) {
+              print('==> 5');
+              if (index >= _cubit.adsSearch.length) {
+                print('==> 6');
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(child: CustomLoadingSearchWidget()),
+                );
+              }
+              print('==> 7');
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                child: BuildItemAdsSearch(
+                  item: _cubit.adsSearch[index],
+                  onFav: (String id) async {
+                    // return await controllerAdvertise.favouriteAd(id);
+                  },
+                  onRemoveFav: (String id) async {
+                    // return await controllerAdvertise.unFavouriteAd(id);
+                  },
+                ),
+              );
             },
           ),
         );
-       /* return ListView.builder(
+        /* return ListView.builder(
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount:

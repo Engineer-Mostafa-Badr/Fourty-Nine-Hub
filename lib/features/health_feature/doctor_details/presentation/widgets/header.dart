@@ -430,28 +430,28 @@ class _DoctorDetailsAccountHeaderState
                                         Styles.mediumText(color: Colors.white),
                                     onPressed: () async {
                                       ManageVibration.vibrate();
-                                      bool result = await context
-                                          .read<StreamCubit>()
-                                          .joinNewMeeting(
-                                              doctor?.meetingData?.roomId ??
-                                                  '');
-                                      if (result) {
-                                        await context
-                                            .read<SecretsCubit>()
-                                            .getAllSecrets();
-                                        context.go(Routes.MEETINGROOM,
-                                            extra: MeetingRoomArguments(
-                                                liveID: doctor
-                                                        ?.meetingData?.roomId ??
-                                                    '',
-                                                isHost: false,
-                                                userName: context
-                                                        .read<UserCubit>()
-                                                        .state
-                                                        .data
-                                                        ?.fullName ??
-                                                    ''));
-                                      }
+                                      // bool result = await context
+                                      //     .read<StreamCubit>()
+                                      //     .joinNewMeeting(
+                                      //         doctor?.meetingData?.roomId ??
+                                      //             '');
+                                      // if (result) {
+                                      //   await context
+                                      //       .read<SecretsCubit>()
+                                      //       .getAllSecrets();
+                                      //   // context.go(Routes.MEETINGROOM,
+                                      //   //     extra: MeetingRoomArguments(
+                                      //   //         liveID: doctor
+                                      //   //                 ?.meetingData?.roomId ??
+                                      //   //             '',
+                                      //   //         isHost: false,
+                                      //   //         userName: context
+                                      //   //                 .read<UserCubit>()
+                                      //   //                 .state
+                                      //   //                 .data
+                                      //   //                 ?.fullName ??
+                                      //   //             ''));
+                                      // }
                                     },
                                   ),
                                 )

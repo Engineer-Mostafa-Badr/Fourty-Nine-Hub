@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/custom_phone_dialog.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/gmap_search_and_pick.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/create_pick_me_offer_use_case.dart';
+import 'package:fourtyninehub/helpers/responsive/responsive.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
@@ -20,7 +28,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../routes/routes.dart';
@@ -42,14 +49,11 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   String? selectedBrandId;
   String? selectedModel;
   String? selectedModelId;
-  int? selectedSeatNum;
+  int? selectedSeatNum = 1;
   bool isChecked = false;
   TimeOfDay? time;
   int seatNum = 1;
-  var phoneController = TextEditingController();
   String? selectedCountry;
-  final MapController _mapController = MapController();
-  final _formKey = GlobalKey<FormState>();
   List<double>? currentLocation;
   List<double>? toLocation;
   String? currentAddress;
@@ -63,21 +67,84 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
     super.initState();
     if(widget.isFromPickMe==false)context.read<ViewAllTripJoinCubit>().loadInitialCarBrandLoading();
   }
+  final GlobalKey<FormState> _phoneNumberFormKey = GlobalKey<FormState>();
+  final TextEditingController _controller = TextEditingController();
 
   String _formatDistance(double meters) {
-    final km = (meters / 1000).toStringAsFixed(1);
-    return '$km ${LocaleKeys.KM.localize}';
+    final km = (meters / 1000).ceil().toStringAsFixed(1);
+
+    // detect current language
+    final locale = Localizations.localeOf(context).languageCode;
+    final isArabic = locale == 'ar';
+
+    // convert digits
+    final localizedKm = convertDigits(km, toArabic: isArabic);
+
+    // localize the unit (assuming LocaleKeys.KM.localize gives "كم" / "km")
+    final unit = LocaleKeys.KM.localize;
+
+    return '$localizedKm $unit';
   }
 
   String _calculateTotalPrice(ExpectedPriceTripEntity? entity) {
     final pricePerSeat = entity?.pricePerSeat ?? 0;
     final seatCount = selectedSeatNum ?? 1;
     final total = pricePerSeat * seatCount;
-    return total % 1 == 0 ? total.toInt().toString() : total.toStringAsFixed(1);
+
+    // Detect app language
+    final locale = Localizations.localeOf(context).languageCode;
+    final isArabic = locale == 'ar';
+
+    // Format number
+    String formatted = total % 1 == 0
+        ? total.toInt().toString()
+        : total.toStringAsFixed(1);
+
+    // Convert digits
+    formatted = convertDigits(formatted, toArabic: isArabic);
+
+    // Localize currency symbol (if needed)
+
+    return formatted;
   }
 
+  String _calculatePricePerSeat(ExpectedPriceTripEntity? entity) {
+    final pricePerSeat = entity?.pricePerSeat ?? 0;
+    final seatCount =  1;
+    final total = pricePerSeat * seatCount;
+
+    // Detect app language
+    final locale = Localizations.localeOf(context).languageCode;
+    final isArabic = locale == 'ar';
+
+    // Format number
+    String formatted = total % 1 == 0
+        ? total.toInt().toString()
+        : total.toStringAsFixed(1);
+
+    // Convert digits
+    formatted = convertDigits(formatted, toArabic: isArabic);
+
+    // Localize currency symbol (if needed)
+
+    return formatted;
+  }
+
+  String convertDigits(String input, {required bool toArabic}) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+    for (int i = 0; i < 10; i++) {
+      input = input.replaceAll(
+        toArabic ? english[i] : arabic[i],
+        toArabic ? arabic[i] : english[i],
+      );
+    }
+    return input;
+  }
   String _getTime2() {
-    return time?.format(context) ?? TimeOfDay.now().format(context);
+    final formatted = time?.format(context) ?? TimeOfDay.now().format(context);
+    return convertDigits(formatted, toArabic: context.isArabic);
   }
 
   DateTime _getTime() {
@@ -88,26 +155,6 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   }
 
   // New method to print all selected data
-  void _printAllData(ViewAllTripJoinState state) {
-    print('=== Trip Join Data ===');
-    print('Selected Brand: ${selectedBrand ?? 'Not selected'}');
-    print('Selected Model: ${selectedModel ?? 'Not selected'}');
-    print('Selected Seat Number: ${selectedSeatNum ?? 'Not selected'}');
-    print('Repeat Trip: $isChecked');
-    print('Selected Time: ${_getTime()}');
-    double? rawDistance = state.expectedPriceEntity?.distance;
-    print(
-        'Distance: ${rawDistance != null ? rawDistance.toStringAsFixed(1) : 'Not available'} meters');
-    print(
-        'Total Price: ${_calculateTotalPrice(state.expectedPriceEntity)} ${context.isArabic ? 'جنيه' : 'EGP'}');
-    print(
-        'Phone Number: ${phoneController.text.isEmpty ? 'Not entered' : phoneController.text}');
-    print('Current Location: ${currentLocation?.join(', ') ?? 'Not selected'}');
-    print('Current Address: ${currentAddress ?? 'Not selected'}');
-    print('To Location: ${toLocation?.join(', ') ?? 'Not selected'}');
-    print('To Address: ${toAddress ?? 'Not selected'}');
-    print('=================');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +183,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         builder: (context, state) {
           return SharedScaffold(
             mainCategoryId: 1,
-            isWithBackArrow: true,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(),
+            onBackPressed: ()=>context.pop(),
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -154,9 +201,10 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                   _buildTopImage(),
                   // const Sizer(),
                   Expanded(
-                    child: ListView(
+                    child: SingleChildScrollView(
                       padding: EdgeInsets.zero,
-                      children: [
+                      child: Column(
+                        children: [
                         Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
@@ -203,9 +251,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                         pickedData.latitude,
                                         pickedData.longitude,
                                       ];
-                                      
+
                                       context.pop();
-                                      
+
                                       if (currentLocation != null &&
                                           toLocation != null) {
                                         final params = ExpectedPriceTripParams(
@@ -214,7 +262,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                           targetLatitude: toLocation![0],
                                           targetLongitude: toLocation![1],
                                         );
-                                      
+
                                         context
                                             .read<ViewAllTripJoinCubit>()
                                             .getExpectedPrice(params: params);
@@ -225,13 +273,13 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                                   'Please select both locations')),
                                         );
                                       }
-                                      
+
                                       setState(() {});
                                     },
                                   ),
                                 );
                               }
-                                      
+
                               /*
                           onPressed: () async {
                           ManageVibration.vibrate();
@@ -259,62 +307,13 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                   },
                                 ));
                           },
-                                      
+
                            */
                               ),
                         ),
-                        const Sizer(),
-                        Form(
-                          key: _formKey,
-                          autovalidateMode: AutovalidateMode
-                              .onUserInteraction, // 👈 enables live validation
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.h),
-                            child: FormTextField(
-                              textStyle: Styles.mediumText(
-                                  color: AppColors.getTextColor(context)),
-                              type: TextInputType.phone,
-                              height: 76.h,
-                              style: Styles.mediumText(
-                                  color: AppColors.getTextColor(context)),
-                              constraints: const BoxConstraints(
-                                  maxHeight: 52, minHeight: 52),
-                              fillColor: AppColors.getFillColor(context),
-                              borderRadius: BorderRadius.circular(30.h),
-                              borderColor: AppColors.getFillColor(context),
-                              borderSide: AppColors.getFillColor(context),
-                              controller: phoneController,
-                              hint: LocaleKeys.phoneNumber.localize,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                LengthLimitingTextInputFormatter(11),
-                              ],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return LocaleKeys
-                                      .please_enter_phone_number.localize;
-                                }
-                                      
-                                if (!value.startsWith('01')) {
-                                  return LocaleKeys
-                                      .please_enter_phone_number.localize;
-                                }
-                                      
-                                final egyptianPhoneRegExp =
-                                    RegExp(r'^(010|011|012|015)\d{8}$');
-                                if (!egyptianPhoneRegExp.hasMatch(value)) {
-                                  return LocaleKeys
-                                      .please_enter_phone_number.localize;
-                                }
-                                      
-                                return null;
-                              },
-                            ),
-                          ),
-                        ),
-                        const Sizer(),
+                        const Sizer(height: 8,),
                         if(widget.isFromPickMe==false)Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.h),
+                          padding: EdgeInsets.only(left: 16.h, right: 16.h,bottom: 8),
                           child: BlocBuilder<ViewAllTripJoinCubit,
                               ViewAllTripJoinState>(
                             builder: (context, state) {
@@ -328,7 +327,69 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                               }
                               return Row(
                                 children: [
-                                  _buildMenuButton(
+                                  if(context.read<ViewAllTripJoinCubit>().state.newBrand!=null&&(context.read<ViewAllTripJoinCubit>().state.newBrand?.id!=''))Expanded(
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsetsDirectional.only(end: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              ClickableWidget(
+                                                onTap: () {
+                                                  ManageVibration.vibrate();
+                                                    showAddNewBrandDialog(
+                                                        context: context,
+                                                        onBrandAdded: (String brandName) {
+                                                          context.read<ViewAllTripJoinCubit>().addNewBrand(context: context, brandName: brandName);
+                                                        });
+
+                                                },
+                                                child: Text(
+                                                  context.isArabic ? 'إضافة جديد' : 'Add New',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 13.ts,
+                                                    color: AppColors.SECONDARY_COLOR,
+                                                    decoration: TextDecoration.underline,
+                                                    decorationColor: AppColors.SECONDARY_COLOR,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 12.h),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(30.h),
+                                                  color: AppColors.getFillColor(context),
+                                                ),
+                                                child: Text(
+                                                  context.isArabic?
+                                                  (context.read<ViewAllTripJoinCubit>().state.newBrand?.brandNameAr??'')
+                                                      :(context.read<ViewAllTripJoinCubit>().state.newBrand?.brandNameEn??''),
+                                                  style: Styles.mediumText(
+                                                    color: AppColors.getTextColor(context)
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            ClickableWidget(
+                                                onTap: () {
+                                                  ManageVibration.vibrate();
+                                                  context.read<ViewAllTripJoinCubit>().onRemoveBrand();
+                                                },
+                                                child: Icon(Icons.close,color: context.isDarkMode?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,))
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if(context.read<ViewAllTripJoinCubit>().state.newBrand==null||(context.read<ViewAllTripJoinCubit>().state.newBrand?.id=='')) _buildMenuButton(
                                     title: LocaleKeys.vehicleBrand.localize,
                                     items: cubit.carBrandData
                                         .map((e) => e.brandNameEn)
@@ -369,19 +430,20 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                       }
                                     },
                                     isPaginated: true,
-                                    canOpen: true,
+                                    canOpen: true, isModels: false,
                                   ),
                                   const Sizer(),
                                   isModelLoading
                                       ? Expanded(
                                           child: Container(
                                             height: 48.h,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30.h),
-                                              color:
-                                                  AppColors.getFillColor(context),
-                                            ),
+                                            alignment: Alignment.center,
+                                            // decoration: BoxDecoration(
+                                            //   borderRadius:
+                                            //       BorderRadius.circular(30.h),
+                                            //   color:
+                                            //       AppColors.getFillColor(context),
+                                            // ),
                                             child: Center(
                                                 child: CircularProgressIndicator()),
                                           ),
@@ -405,14 +467,13 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                                           },
                                           isPaginated: true,
                                           canOpen: selectedBrandId != null &&
-                                              carModels.isNotEmpty,
+                                              carModels.isNotEmpty, isModels: true,
                                         ),
                                 ],
                               );
                             },
                           ),
                         ),
-                        const Sizer(),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.h),
                           child: TripJoinBottomSection(
@@ -438,172 +499,219 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                             formatDistance: _formatDistance,
                             calculateTotalPrice: () =>
                                 _calculateTotalPrice(state.expectedPriceEntity),
+                            calculatePricePerSeat: () =>
+                                _calculatePricePerSeat(state.expectedPriceEntity),
                             getTime: _getTime2,
                           ),
                         ),
-                        const Sizer(),
                         // New button to print all data
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 18.0.h, vertical: 8.h),
-                          child: PremiumAndRequestTripWidget(
-                            onPremiumPressed: () {
-                              print("widget.isFromPickMe ${widget.isFromPickMe}");
-                              if (widget.isFromPickMe!=true && (phoneController.text.isEmpty ||
-                                  selectedBrand == null ||
-                                  selectedModel == null ||
-                                  selectedSeatNum == null ||
-                                  currentLocation == null ||
-                                  toLocation == null ||
-                                  selectedBrandId == null ||
-                                  selectedModelId == null)) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        LocaleKeys.pleaseFillAllFields.localize),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-                              if (widget.isFromPickMe==true && (phoneController.text.isEmpty ||
-                                  selectedSeatNum == null ||
-                                  currentLocation == null ||
-                                  toLocation == null)
-                                  ) {
-                                print("selectedSeatNum == null ${selectedSeatNum} currentLocation == null ${currentLocation}");
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        LocaleKeys.pleaseFillAllFields.localize),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-                                      
-                              final params = CreateTripJoinParams(
-                                creatorPhoneNumber: phoneController.text,
-                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
-                                isPremium: true,
-                                isRepeat: isChecked,
-                                passengers: selectedSeatNum!,
-                                vehicleCarBrandId: selectedBrandId??'',
-                                vehicleModelId: selectedModelId??'',
-                                startDate: _getTime(),
-                                startLongitude: currentLocation?[1]??0,
-                                startLatitude: currentLocation?[0]??0,
-                                targetLongitude: toLocation?[1]??0,
-                                targetLatitude: toLocation?[0]??0,
-                              );
-
-                              final pickMeParams = CreatePickMeParams(
-                                creatorPhoneNumber: phoneController.text,
-                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
-                                isPremium: true,
-                                isRepeat: isChecked,
-                                passengers: selectedSeatNum??0,
-                                startDate: _getTime(),
-                                startLongitude: currentLocation?[1]??0,
-                                startLatitude: currentLocation?[0]??0,
-                                targetLongitude: toLocation?[1]??0,
-                                targetLatitude: toLocation?[0]??0,
-                              );
-                                      
-                              if(widget.isFromPickMe==false) {
-                                context
-                                  .read<ViewAllTripJoinCubit>()
-                                  .createTripJoinOffer(params, context)
-                                  .then((_) {
-                                Navigator.pop(context);
-                              });
-                              }
-                              if(widget.isFromPickMe==true) {
-                                context
-                                    .read<ViewAllTripJoinCubit>()
-                                    .createPickMeOffer(pickMeParams, context);
-                              }
-                            },
-                            onNormalPressed: () {
-                              if (widget.isFromPickMe!=true && (phoneController.text.isEmpty ||
-                                  selectedBrand == null ||
-                                  selectedModel == null ||
-                                  selectedSeatNum == null ||
-                                  currentLocation == null ||
-                                  toLocation == null ||
-                                  selectedBrandId == null ||
-                                  selectedModelId == null))  {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        LocaleKeys.pleaseFillAllFields.localize),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-
-                              if (widget.isFromPickMe==true && (phoneController.text.isEmpty ||
-                                  selectedSeatNum == null ||
-                                  currentLocation == null ||
-                                  toLocation == null)
-                              ) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        LocaleKeys.pleaseFillAllFields.localize),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Fixed buttons at bottom
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 18.0.h, vertical: 8.h),
+                    child: PremiumAndRequestTripWidget(
+                      onPremiumPressed: () async {
+                        print("widget.isFromPickMe ${widget.isFromPickMe}");
+                        if (widget.isFromPickMe!=true && (
+                            selectedBrand == null ||
+                                selectedModel == null ||
+                                selectedSeatNum == null ||
+                                currentLocation == null ||
+                                toLocation == null ||
+                                selectedBrandId == null ||
+                                selectedModelId == null)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  LocaleKeys.pleaseFillAllFields.localize),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+                        if (widget.isFromPickMe==true && (
+                            selectedSeatNum == null ||
+                                currentLocation == null ||
+                                toLocation == null)
+                        ) {
+                          print("selectedSeatNum == null ${selectedSeatNum} currentLocation == null ${currentLocation}");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  LocaleKeys.pleaseFillAllFields.localize),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
 
 
-                              final params = CreateTripJoinParams(
-                                creatorPhoneNumber: phoneController.text,
-                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
-                                isPremium: false,
-                                isRepeat: isChecked,
-                                passengers: selectedSeatNum??0,
-                                vehicleCarBrandId: selectedBrandId??'',
-                                vehicleModelId: selectedModelId??'',
-                                startDate: _getTime(),
-                                startLongitude: currentLocation?[1]??0,
-                                startLatitude: currentLocation?[0]??0,
-                                targetLongitude: toLocation?[1]??0,
-                                targetLatitude: toLocation?[0]??0,
-                              );
 
-                              final pickMeParams = CreatePickMeParams(
-                                creatorPhoneNumber: phoneController.text,
-                                subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
-                                isPremium: false,
-                                isRepeat: isChecked,
-                                passengers: selectedSeatNum!,
-                                startDate: _getTime(),
-                                startLongitude: currentLocation?[1]??0,
-                                startLatitude: currentLocation?[0]??0,
-                                targetLongitude: toLocation?[1]??0,
-                                targetLatitude: toLocation?[0]??0,
-                              );
+                        if(widget.isFromPickMe==false) {
+                          final bool?
+                          isPhoneNumberValid =
+                          await PhoneNumberBottomSheet.show(context: context, formKey: _phoneNumberFormKey, controller: _controller);
+                          print("isPhoneNumberValid $isPhoneNumberValid ${_controller.text.replaceAllMapped(
+                            RegExp(r'[٠-٩]'),
+                                (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                          )}");
+                          final params = CreateTripJoinParams(
+                            creatorPhoneNumber: _controller.text.replaceAllMapped(
+                              RegExp(r'[٠-٩]'),
+                                  (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                            ),
+                            subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                            isPremium: true,
+                            isRepeat: isChecked,
+                            passengers: selectedSeatNum!,
+                            vehicleCarBrandId: selectedBrandId??'',
+                            vehicleModelId: selectedModelId??'',
+                            startDate: _getTime(),
+                            startLongitude: currentLocation?[1]??0,
+                            startLatitude: currentLocation?[0]??0,
+                            targetLongitude: toLocation?[1]??0,
+                            targetLatitude: toLocation?[0]??0,
+                          );
 
-                              if(widget.isFromPickMe==false) {
-                                context
-                                  .read<ViewAllTripJoinCubit>()
-                                  .createTripJoinOffer(params, context)
-                                  .then((_) {
-                                Navigator.pop(context);
-                              });
-                              }
-                              if(widget.isFromPickMe==true) {
-                                context
-                                    .read<ViewAllTripJoinCubit>()
-                                    .createPickMeOffer(pickMeParams, context);
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                          context
+                              .read<ViewAllTripJoinCubit>()
+                              .createTripJoinOffer(params, context)
+                              .then((_) {
+                            Navigator.pop(context);
+                          });
+                        }
+                        if(widget.isFromPickMe==true) {
+                          final bool?
+                          isPhoneNumberValid =
+                          await PhoneNumberBottomSheet.show(context: context, formKey: _phoneNumberFormKey, controller: _controller);
+                          print("isPhoneNumberValid $isPhoneNumberValid ${_controller.text.replaceAllMapped(
+                            RegExp(r'[٠-٩]'),
+                                (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                          )}");
+                          final pickMeParams = CreatePickMeParams(
+                            creatorPhoneNumber: _controller.text.replaceAllMapped(
+                              RegExp(r'[٠-٩]'),
+                                  (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                            ),
+                            subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                            isPremium: true,
+                            isRepeat: isChecked,
+                            passengers: selectedSeatNum??0,
+                            startDate: _getTime(),
+                            startLongitude: currentLocation?[1]??0,
+                            startLatitude: currentLocation?[0]??0,
+                            targetLongitude: toLocation?[1]??0,
+                            targetLatitude: toLocation?[0]??0,
+                          );
+
+                          context
+                              .read<ViewAllTripJoinCubit>()
+                              .createPickMeOffer(pickMeParams, context);
+                        }
+                      },
+                      onNormalPressed: () async {
+                        if (widget.isFromPickMe!=true && (
+                            selectedBrand == null ||
+                                selectedModel == null ||
+                                selectedSeatNum == null ||
+                                currentLocation == null ||
+                                toLocation == null ||
+                                selectedBrandId == null ||
+                                selectedModelId == null))  {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  LocaleKeys.pleaseFillAllFields.localize),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (widget.isFromPickMe==true && (
+                            selectedSeatNum == null ||
+                                currentLocation == null ||
+                                toLocation == null)
+                        ) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  LocaleKeys.pleaseFillAllFields.localize),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+
+
+
+                        if(widget.isFromPickMe==false) {
+                          final bool
+                          isPhoneNumberValid =
+                          await PhoneNumberBottomSheet.show(context: context, formKey: _phoneNumberFormKey, controller: _controller);
+                          print("isPhoneNumberValid $isPhoneNumberValid ${_controller.text.replaceAllMapped(
+                            RegExp(r'[٠-٩]'),
+                                (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                          )}");
+                          final params = CreateTripJoinParams(
+                            creatorPhoneNumber: _controller.text.replaceAllMapped(
+                                RegExp(r'[٠-٩]'),
+                                    (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString()),
+                            subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                            isPremium: false,
+                            isRepeat: isChecked,
+                            passengers: selectedSeatNum??0,
+                            vehicleCarBrandId: (context.read<ViewAllTripJoinCubit>().state.newBrand!=null&&(context.read<ViewAllTripJoinCubit>().state.newBrand?.id!=''))?(context.read<ViewAllTripJoinCubit>().state.newBrand?.id??''):selectedBrandId??'',
+                            vehicleModelId: selectedModelId??'',
+                            startDate: _getTime(),
+                            startLongitude: currentLocation?[1]??0,
+                            startLatitude: currentLocation?[0]??0,
+                            targetLongitude: toLocation?[1]??0,
+                            targetLatitude: toLocation?[0]??0,
+                          );
+
+                          context
+                              .read<ViewAllTripJoinCubit>()
+                              .createTripJoinOffer(params, context)
+                              .then((_) {
+                            Navigator.pop(context);
+                          });
+                        }
+                        if(widget.isFromPickMe==true) {
+                          final bool?
+                          isPhoneNumberValid =
+                          await PhoneNumberBottomSheet.show(context: context, formKey: _phoneNumberFormKey, controller: _controller);
+                          print("isPhoneNumberValid $isPhoneNumberValid ${_controller.text.replaceAllMapped(
+                            RegExp(r'[٠-٩]'),
+                                (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString(),
+                          )}");
+                          if(isPhoneNumberValid==true) {
+                            final pickMeParams = CreatePickMeParams(
+                              creatorPhoneNumber: _controller.text.replaceAllMapped(
+                                  RegExp(r'[٠-٩]'),
+                                      (match) => (match.group(0)!.codeUnitAt(0) - 0x0660).toString()),
+                              subcategoryId: widget.isFromPickMe==false?"62ea00e269ea29c91dfc390c":"62ea008d69ea29c91dfc3908",
+                              isPremium: false,
+                              isRepeat: isChecked,
+                              passengers: selectedSeatNum!,
+                              startDate: _getTime(),
+                              startLongitude: currentLocation?[1]??0,
+                              startLatitude: currentLocation?[0]??0,
+                              targetLongitude: toLocation?[1]??0,
+                              targetLatitude: toLocation?[0]??0,
+                            );
+
+                            context
+                                .read<ViewAllTripJoinCubit>()
+                                .createPickMeOffer(pickMeParams, context);
+                          }
+                        }
+                      },
                     ),
                   ),
                 ],
@@ -636,16 +744,23 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
         ),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CircleAvatar(
-                backgroundColor: color,
-                radius: 10,
-                child: CircleAvatar(
-                    backgroundColor: AppColors.getFillColor(context),
-                    radius: 5),
-              ),
+            Sizer(),
+            Image.asset(
+              !isTo?Assets.rideFrom:Assets.rideTo,
+              width: 18,
+              height: 18,
             ),
+            Sizer(width: 8,),
+            // CircleAvatar(
+            //   backgroundColor: Colors.transparent,
+            //   child: CircleAvatar(
+            //     backgroundColor: color,
+            //     radius: 10,
+            //     child: CircleAvatar(
+            //         backgroundColor: AppColors.getFillColor(context),
+            //         radius: 5),
+            //   ),
+            // ),
             Expanded(
               child: Text(
                 displayText,
@@ -759,61 +874,105 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
     required void Function(String) onSelected,
     bool isPaginated = false,
     bool canOpen = true,
+    required bool isModels,
   }) {
     return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 16.h),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.h),
-          color: AppColors.getFillColor(context),
-          border:
-              !canOpen ? Border.all(color: Colors.grey.withOpacity(0.3)) : null,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              selectedItem ?? title,
-              style: Styles.mediumText(
-                color: canOpen
-                    ? AppColors.getTextColor(context)
-                    : AppColors.getTextColor(context).withOpacity(0.5),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+
+                ClickableWidget(
+                  onTap: () {
+                    ManageVibration.vibrate();
+                    if(isModels){
+                      showAddNewModelDialog(
+                        context: context,
+                        brandId: '',
+                        onModelAdded: (String modelName) {
+                          context.read<ViewAllTripJoinCubit>().addNewModel(context: context, modelName: modelName,brandId: '');
+                        }
+                      );
+                    } else{
+                      showAddNewBrandDialog(
+                          context: context,
+                          onBrandAdded: (String brandName) {
+                            context.read<ViewAllTripJoinCubit>().addNewBrand(context: context, brandName: brandName);
+                          });
+                    }
+                  },
+                  child: Text(
+                    context.isArabic ? 'إضافة جديد' : 'Add New',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 13.ts,
+                      color: AppColors.SECONDARY_COLOR,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.SECONDARY_COLOR,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ClickableWidget(
+            onTap: () {
+              ManageVibration.vibrate();
+              if (!canOpen) {
+                showSuccessMessage(
+                    context, LocaleKeys.emptyFieldNotValid.localize);
+                return;
+              }
+              if (isPaginated) {
+                if (title == LocaleKeys.vehicleBrand.localize) {
+                  _showPaginatedBrandDropdownMenu(
+                      context: context, onSelected: onSelected);
+                } else if (title == LocaleKeys.vehicleModel.localize) {
+                  _showPaginatedModelDropdownMenu(
+                      context: context, onSelected: onSelected);
+                }
+              } else {
+                _showDropdownMenu(
+                  onSelected: onSelected,
+                  context: context,
+                  position: Offset(0, 0),
+                  items: items,
+                );
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 10.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.h),
+                color: AppColors.getFillColor(context),
+                border:
+                    !canOpen ? Border.all(color: Colors.grey.withValues(alpha: 0.3)) : null,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    selectedItem ?? title,
+                    style: Styles.mediumText(
+                      color: canOpen
+                          ? AppColors.getTextColor(context)
+                          : AppColors.getTextColor(context).withValues(alpha: 0.5),
+                    ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_down,
+                    color: canOpen
+                        ? AppColors.getTextColor(context)
+                        : AppColors.getTextColor(context).withValues(alpha: 0.5),
+                  ),
+                ],
               ),
             ),
-            GestureDetector(
-              child: Icon(
-                Icons.keyboard_arrow_down,
-                color: canOpen
-                    ? AppColors.getTextColor(context)
-                    : AppColors.getTextColor(context).withOpacity(0.5),
-              ),
-              onTap: () {
-                ManageVibration.vibrate();
-                if (!canOpen) {
-                  showSuccessMessage(
-                      context, LocaleKeys.emptyFieldNotValid.localize);
-                  return;
-                }
-                if (isPaginated) {
-                  if (title == LocaleKeys.vehicleBrand.localize) {
-                    _showPaginatedBrandDropdownMenu(
-                        context: context, onSelected: onSelected);
-                  } else if (title == LocaleKeys.vehicleModel.localize) {
-                    _showPaginatedModelDropdownMenu(
-                        context: context, onSelected: onSelected);
-                  }
-                } else {
-                  _showDropdownMenu(
-                    onSelected: onSelected,
-                    context: context,
-                    position: Offset(0, 0),
-                    items: items,
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -894,6 +1053,156 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
       },
     );
   }
+
+  showAddNewBrandDialog({
+    required BuildContext context,
+    required Function(String brandName) onBrandAdded,
+  }) {
+    showCustomDialogTrip(
+        context,
+        BlocProvider.value(
+          value: serviceLocator<ViewAllTripJoinCubit>(),
+          child: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(builder: (context, state) {
+            var cubit = context.read<ViewAllTripJoinCubit>();
+            return Form(
+              key: cubit.modelFormKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.isArabic ? 'سيتم اضافة الماركة للمراجعة' : 'The brand will be added for review',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  DefaultTextFormField(
+                    currentController: cubit.brandNameController,
+                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                    borderColor: Colors.transparent,
+                    hint: context.isArabic ? 'اكتب اسم الماركة' : 'Write Brand Name',
+                    // label: LocaleKeys.firstName.localize,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return LocaleKeys.required.localize;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AppButton(
+                          width: context.screenWidth / 3.4,
+                          label: context.isArabic ? 'الغاء' : 'Close',
+                          backColor: AppColors.SECONDARY_COLOR_DARK2,
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            // cubit
+                          }),
+                      const SizedBox(width: 16),
+                      AppButton(
+                          width: context.screenWidth / 3.4,
+                          label: context.isArabic ? 'تأكيد' : 'Confirm',
+                          backColor: AppColors.PRIMARY_COLOR,
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            if (cubit.modelFormKey.currentState!.validate()) {
+                              context.pop();
+                              onBrandAdded(cubit.brandNameController.text);
+                            }
+                          }),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            );
+          }),
+        ));
+  }
+
+  showAddNewModelDialog({
+    required BuildContext context,
+    required String brandId,
+    required Function(String modelName) onModelAdded,
+  }) {
+    showCustomDialogTrip(
+        context,
+        BlocProvider.value(
+          value: serviceLocator<ViewAllTripJoinCubit>(),
+          child: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(builder: (context, state) {
+            var cubit = context.read<ViewAllTripJoinCubit>();
+            return Form(
+              key: cubit.modelFormKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.isArabic ? 'سيتم اضافة الطراز للمراجعة' : 'The model will be added for review',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  DefaultTextFormField(
+                    currentController: cubit.modelNameController,
+                    fillColor: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                    borderColor: Colors.transparent,
+                    hint: context.isArabic ? 'اكتب اسم الطراز' : 'Write Model Name',
+                    // label: LocaleKeys.firstName.localize,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return LocaleKeys.required.localize;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AppButton(
+                          width: context.screenWidth / 3.4,
+                          label: context.isArabic ? 'الغاء' : 'Close',
+                          backColor: AppColors.SECONDARY_COLOR_DARK2,
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.pop();
+                            // cubit
+                          }),
+                      const SizedBox(width: 16),
+                      AppButton(
+                          width: context.screenWidth / 3.4,
+                          label: context.isArabic ? 'تأكيد' : 'Confirm',
+                          backColor: AppColors.PRIMARY_COLOR,
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            if (cubit.modelFormKey.currentState!.validate()) {
+                              context.pop();
+                              onModelAdded(cubit.modelNameController.text);
+                            }
+                          }),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            );
+          }),
+        ));
+  }
+
 
   void _showPaginatedModelDropdownMenu({
     required BuildContext context,
@@ -1034,4 +1343,5 @@ class EgyptianPhoneFormatter extends TextInputFormatter {
 
     return newValue;
   }
+
 }

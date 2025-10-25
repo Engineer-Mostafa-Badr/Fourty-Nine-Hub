@@ -61,20 +61,15 @@ class _AllWinnerViewState extends State<AllWinnerView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      backgroundColor: Colors.grey[50],
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          backColor: context.isDarkMode
-              ? AppColors.Floating_Button_COLOR_DARK
-              : AppColors.PRIMARY_COLOR,
-          label: LocaleKeys.winners.localize,
-          iconColor: context.isDarkMode ? Colors.black : Colors.white,
-          textColor: context.isDarkMode ? Colors.black : Colors.white,
-          actions: [
-            SvgPicture.asset(Assets.cupIcon),
-          ],
-        ),
+      // backgroundColor: Colors.grey[50],
+      appBar: BackAppBar(
+        label: LocaleKeys.winners.localize,
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 16),
+            child: Image.asset(Assets.cupImage),
+          ),
+        ],
       ),
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {

@@ -43,7 +43,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
           width: double.infinity,
-          height: imageHeight,
+          height: imageHeight * 1.2,
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -55,15 +55,17 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                 widthForImages: MediaQuery.of(context).size.width,
               ),
               // Overlay gradient
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withOpacity(0.6),
-                      Colors.transparent,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+              IgnorePointer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withValues(alpha: 0.6),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
                   ),
                 ),
               ),
