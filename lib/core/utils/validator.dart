@@ -136,7 +136,7 @@ String? validateEgyptianPhone(String? value) {
 }
 
 String? validatorEmailOrPhone(String? value) {
-  String email = (value??'').trim().toLowerCase();
+  String email = (value ?? '').trim().toLowerCase();
   final egyptPhoneRegex = RegExp(r'^(010|011|012|015)\d{8}$');
   final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
 
@@ -157,8 +157,6 @@ String? validatorEmailOrPhone(String? value) {
 
   return null;
 }
-
-
 
 String? validatorEgyptPhone(String? phoneNumber) {
   // Regex for Egyptian mobile numbers

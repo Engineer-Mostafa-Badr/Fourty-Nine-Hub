@@ -142,7 +142,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                                       ),
                                       content: Text(
                                         context.isArabic
-                                            ? "كن حذرا ربما تحصل علي سائق ليس لديه الاحتياجات المختاره"
+                                            ? "كن حذرا ربما تحصل على سائق ليس لديه الاحتياجات المختاره"
                                             : "Be careful, you might get a driver who does not meet your selected needs.",
                                         textAlign: TextAlign.center,
                                       ),

@@ -132,7 +132,7 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+            color: context.isDarkMode ? Colors.grey[800] : Colors.grey[200],
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
@@ -151,7 +151,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                     child: Icon(
                       Icons.star_border,
                       size: 20,
-                      color: Colors.grey[600],
+                      color: context.isDarkMode
+                          ? Colors.grey[400]
+                          : Colors.grey[600],
                     ),
                   ),
                 )
@@ -168,7 +170,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                     Text(
                       averageRating.toStringAsFixed(1).toArabicNumbers(context),
                       style: TextStyle(
-                        color: Colors.grey[700],
+                        color: context.isDarkMode
+                            ? Colors.grey[300]
+                            : Colors.grey[700],
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -205,7 +209,7 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
               return Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  // color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -230,20 +234,29 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                       children: [
                         Text(
                           '${_formatViewCount(widget.talent.totalViews).toArabicNumbers(context)} ${context.isArabic ? 'مشاهدة' : 'views'}',
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
+                          style: TextStyle(
+                              color: context.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                              fontSize: 14),
                         ),
                         Text(
                           ' · ',
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
+                          style: TextStyle(
+                              color: context.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                              fontSize: 14),
                         ),
                         Text(
                           _formatTimeAgo(
                                   widget.talent.createdAt ?? DateTime.now())
                               .toArabicNumbers(context),
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
+                          style: TextStyle(
+                              color: context.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                              fontSize: 14),
                         ),
                         const Spacer(),
                         // Star rating
@@ -276,7 +289,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: context.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[100],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
@@ -286,7 +301,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                               widget.talent.description,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black87,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black87,
                               ),
                               maxLines: _showFullDescription ? null : 2,
                               overflow: _showFullDescription
@@ -360,7 +377,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                 Text(
                                   '${_formatViewCount(widget.talent.user.viewNumber).toArabicNumbers(context)} ${context.isArabic ? 'مشترك' : 'subscribers'}',
                                   style: TextStyle(
-                                    color: Colors.grey[600],
+                                    color: context.isDarkMode
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
                                     fontSize: 12,
                                   ),
                                 ),
@@ -468,7 +487,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                             return Container(
                               padding: EdgeInsets.symmetric(horizontal: 8.w),
                               decoration: BoxDecoration(
-                                color: Colors.grey[200],
+                                color: context.isDarkMode
+                                    ? Colors.grey[800]
+                                    : Colors.grey[200],
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -481,9 +502,11 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                           ? Icons.thumb_up
                                           : Icons.thumb_up_outlined,
                                       size: 20,
-                                      color: isLiked
+                                      color: context.isDarkMode
                                           ? Colors.blue
-                                          : Colors.grey[700],
+                                          : isLiked
+                                              ? Colors.blue
+                                              : Colors.grey[700],
                                     ),
                                     onPressed: () {
                                       ManageVibration.vibrate();
@@ -497,7 +520,11 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                   Text(
                                     likes.toString().toArabicNumbers(context),
                                     style: TextStyle(
-                                      color: Colors.grey[700],
+                                      color: isLiked
+                                          ? Colors.white
+                                          : context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.grey[700],
                                       fontSize: 14,
                                     ),
                                   ),
@@ -518,9 +545,13 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                           ? Icons.thumb_down
                                           : Icons.thumb_down_outlined,
                                       size: 20,
-                                      color: isDisliked
-                                          ? Colors.red
-                                          : Colors.grey[700],
+                                      color: context.isDarkMode
+                                          ? isDisliked
+                                              ? Colors.red
+                                              : Colors.grey[300]
+                                          : isDisliked
+                                              ? Colors.red
+                                              : Colors.grey[700],
                                     ),
                                     onPressed: () {
                                       ManageVibration.vibrate();
@@ -537,7 +568,11 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                                         .toString()
                                         .toArabicNumbers(context),
                                     style: TextStyle(
-                                      color: Colors.grey[700],
+                                      color: isDisliked
+                                          ? Colors.white
+                                          : context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.grey[700],
                                       fontSize: 14,
                                     ),
                                   ),
@@ -563,7 +598,9 @@ class _VideoInfoSectionState extends State<VideoInfoSection> {
                           horizontal: 16,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: context.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[100],
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(

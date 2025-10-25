@@ -153,7 +153,7 @@ class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
 //           ),
 //           Expanded(
 //             child: _buildCategory(
-//                 title: context.isArabic ? "اعلاناتي" : "My Ads",
+//                 title: context.isArabic ? "إعلاناتي" : "My Ads",
 //                 selected: true),
 //           ),
 //         ],

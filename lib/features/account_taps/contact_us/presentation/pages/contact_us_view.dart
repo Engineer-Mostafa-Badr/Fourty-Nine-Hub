@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../core/extensions/numbers_extensions.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -93,8 +94,16 @@ class _ContactUsViewState extends State<ContactUsView> {
                           DefaultTextFormField(
                             contentPadding: EdgeInsets.symmetric(horizontal: 4),
                             inputFormatter: [
-                              FilteringTextInputFormatter
-                                  .digitsOnly, // يسمح بالأرقام فقط
+                              TextInputFormatter.withFunction(
+                                  (oldValue, newValue) {
+                                // السماح بالأرقام الإنجليزية والعربية فقط
+                                final arabicDigitsRegex =
+                                    RegExp(r'^[0-9٠-٩]*$');
+                                if (arabicDigitsRegex.hasMatch(newValue.text)) {
+                                  return newValue;
+                                }
+                                return oldValue;
+                              }),
                             ],
                             fillColor: Colors.transparent,
                             borderColor: AppColors.getTextColor(context),
@@ -119,7 +128,24 @@ class _ContactUsViewState extends State<ContactUsView> {
                                 ),
                               ),
                             ),
+                            onChanged: (v) {
+                              controller.phoneController.text = v;
+                            },
                             currentFocusNode: phoneFocusNode,
+                            validator: (value) {
+                              // الحقل optional، إذا كان فارغ مش مطلوب validation
+                              if (value == null || value.isEmpty) {
+                                return null;
+                              }
+                              // تحويل الأرقام العربية للإنجليزية قبل التحقق
+                              final englishValue = value.toEnglishNumbers();
+                              // التحقق من صحة رقم الهاتف (11 رقم)
+                              final phoneRegex = RegExp(r'^\+?\d{11}$');
+                              if (!phoneRegex.hasMatch(englishValue)) {
+                                return LocaleKeys.invalidPhoneNumber.localize;
+                              }
+                              return null;
+                            },
                           ),
                           const Sizer(),
                           DefaultTextFormField(
@@ -140,6 +166,13 @@ class _ContactUsViewState extends State<ContactUsView> {
                                   : Colors.black54,
                             ),
                             textInputAction: TextInputAction.done,
+                            currentFocusNode: messageFocusNode,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return LocaleKeys.required.localize;
+                              }
+                              return null;
+                            },
                           ),
                           const SizedBox(
                             height: 30,

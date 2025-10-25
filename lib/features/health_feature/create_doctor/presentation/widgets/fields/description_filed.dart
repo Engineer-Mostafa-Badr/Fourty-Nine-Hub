@@ -19,7 +19,7 @@ class CreateDoctorDescriptionField extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return context.isArabic
-              ? 'برجاء ادخال الوصف'
+              ? 'برجاء إدخال الوصف'
               : 'Please enter description';
         }
         return null;
@@ -29,7 +29,7 @@ class CreateDoctorDescriptionField extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return context.isArabic
-              ? 'برجاء ادخال الوصف'
+              ? 'برجاء إدخال الوصف'
               : 'Please enter description';
         }
         return null;

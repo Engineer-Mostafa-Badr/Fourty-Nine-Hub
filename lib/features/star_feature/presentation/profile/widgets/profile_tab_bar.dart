@@ -39,15 +39,16 @@ class ProfileTabBar extends StatelessWidget {
 
     return Container(
       height: 56.0, // إضافة height صريح
-      color: Colors.white,
+      color: context.isDarkMode ? Colors.black : Colors.white,
       child: TabBar(
         controller: tabController,
         isScrollable: true,
         tabAlignment: TabAlignment.start,
-        indicatorColor: Colors.black,
+        indicatorColor: context.isDarkMode ? Colors.white : Colors.black,
         indicatorWeight: 3,
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.grey[600],
+        labelColor: context.isDarkMode ? Colors.white : Colors.black,
+        unselectedLabelColor:
+            context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
         labelStyle: TextStyle(
           fontSize: _getResponsiveFontSize(context, 16), // تقليل من 18 إلى 16
           fontWeight: FontWeight.w600,

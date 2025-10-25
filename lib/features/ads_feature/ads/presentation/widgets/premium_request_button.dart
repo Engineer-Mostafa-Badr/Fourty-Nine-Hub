@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -19,8 +15,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 
-import '../../../../../common/widgets/form/text_fields/new_phone_number_text_field.dart';
-
 class PremiumRequestButton extends StatefulWidget {
   const PremiumRequestButton({
     super.key,
@@ -28,12 +22,14 @@ class PremiumRequestButton extends StatefulWidget {
     required this.subCategoryId,
     required this.adId,
     this.dontPop = false,
+    this.onSubscriptionSuccess,
   });
 
   final String subscriptionStatus;
   final String subCategoryId;
   final String adId;
   final bool dontPop;
+  final VoidCallback? onSubscriptionSuccess;
 
   @override
   State<PremiumRequestButton> createState() => _PremiumRequestButtonState();
@@ -66,12 +62,20 @@ class _PremiumRequestButtonState extends State<PremiumRequestButton> {
           if (!widget.dontPop) context.pop();
           if (context.read<UserCubit>().isLoggedIn) {
             // TODO: change
-            // if (subscriptionStatus != 'premium') {
-            if (false) {
+            if (widget.subscriptionStatus != 'premium') {
               SubscriptionMethod().subscribe(
                 subscribeId: widget.subCategoryId,
                 showRegular: false,
                 title: widget.subCategoryId,
+                onSubscribe: (success) {
+                  if (success) {
+                    // إغلاق الديالوج الحالي
+                    context.pop();
+                    // استدعاء callback إذا كان موجود
+                    widget.onSubscriptionSuccess?.call();
+                    showSuccessMessage(context, 'تم الاشتراك بنجاح');
+                  }
+                },
               );
             } else {
               showModalBottomSheet(

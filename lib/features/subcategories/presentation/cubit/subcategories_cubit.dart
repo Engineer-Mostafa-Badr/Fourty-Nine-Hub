@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_category.dart';
@@ -135,9 +136,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   changeSubCatIndex(int index) async {
     if (index == state.subCatIndex) return;
     List<SubCategoryEntity> marriageSubCategories = state.subCategories ?? [];
-    marriageSubCategories
-        .where((element) => element.isSelected = false)
-        .toList();
+    for (var element in marriageSubCategories) {
+      element.isSelected = false;
+    }
     marriageSubCategories[index].isSelected = true;
     emit(state.copyWith(
         status: SubcategoriesStates.loadingAds,
@@ -194,8 +195,13 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required FilterModel model,
     required String filter,
   }) async {
-    print("objectasdsad");
-    if (!hasMoreData || isLoadingMore) return;
+    print("filterAds called with model: ${model.toJson()}");
+    print("filterAds called with filter: $filter");
+    // Don't check hasMoreData for initial filter load
+    if (isLoadingMore) {
+      print("Already loading more, returning");
+      return;
+    }
     state.copyWith(status: SubcategoriesStates.loadingAds);
     isLoadingMore = true;
 
@@ -203,6 +209,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     print(filter);
     print("objectHiiiiiiiiiiii");
 
+    print("Creating FilterModel...");
     FilterModel filterModel = FilterModel(
       price: model.price,
       props: model.props,
@@ -213,9 +220,31 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       subCategoryId: model.subCategoryId,
       filter: filter,
     );
-    final response = await _filterAdUseCase(filterModel);
+    print("FilterModel created successfully");
+    print("About to call _filterAdUseCase with model: ${filterModel.toJson()}");
+    print("Starting filter request at: ${DateTime.now()}");
+    Either<Failure, List<AdModel>> response;
+    try {
+      response = await _filterAdUseCase(filterModel).timeout(
+        const Duration(
+            seconds: 10), // Reduced timeout to 10 seconds for testing
+        onTimeout: () {
+          print(
+              "Filter request timed out after 10 seconds at: ${DateTime.now()}");
+          return Left(ServerFailure(message: "Request timed out"));
+        },
+      );
+      print("Received response from _filterAdUseCase at: ${DateTime.now()}");
+    } catch (e) {
+      print("Error calling _filterAdUseCase: $e at: ${DateTime.now()}");
+      emit(state.copyWith(
+          failure: ServerFailure(message: "Network error: $e"),
+          status: SubcategoriesStates.error));
+      return;
+    }
     response.fold(
       (failure) {
+        print("Filter request failed: ${failure.toString()}");
         var currentContext =
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
@@ -232,6 +261,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
         isLoadingMore = false;
         print("objectmarriageAds${data.length}");
+        print("Filtered data received from server: ${data.length} ads");
+        // Clear previous ads and set filtered data
         emit(state.copyWith(ads: data, status: SubcategoriesStates.adsSuccess));
       },
     );
@@ -241,43 +272,10 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required FilterModel model,
     required String filter,
   }) async {
-    print("objectasdsad");
-    // if (!hasMoreData || isLoadingMore) return;
-
-    // isLoadingMore = true;
-
-    print("object");
-    print(filter);
-    print("objectHiiiiiiiiiiii");
-
-    FilterModel filterModel = FilterModel(
-        price: model.price,
-        props: model.props,
-        cityId: model.cityId,
-        governorateId: model.governorateId,
-        limit: 15,
-        page: currentPage,
-        subCategoryId: model.subCategoryId,
-        filter: filter);
-    // final response = await _filterAdUseCase(filterModel);
-    // response.fold(
-    //   (failure) => emit(
-    //       state.copyWith(failure: failure, status: SubcategoriesStates.error)),
-    //   (data) {
-    //     mrriageMyAds.clear();
-    //     mrriageMyAds.addAll(data);
-    //
-    //     // if (data.length < pageSize) {
-    //     //   hasMoreData = false;
-    //     // } else {
-    //     //   currentPage++;
-    //     // }
-    //
-    //     // isLoadingMore = false;
-    //     print("objectmarriageAds${marriageAds.length}");
-    //     emit(state.copyWith(myAds: data));
-    //   },
-    // );
+    print("filterMyAds called - this is a placeholder function");
+    // This function is currently not implemented
+    // It's called from loadFilterData but doesn't do anything
+    // The main filtering is done by filterAds function
   }
 
   Future<List<SubCategoryEntity>> getCustomPageSubcategories(
@@ -669,19 +667,26 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required FilterModel model,
     required String filter,
   }) async {
-    print("Gettinghiii");
+    print("Gettinghiii - loadFilterData called");
+    print("Filter model: ${model.toJson()}");
+    print("Filter type: $filter");
 
+    // Reset pagination and loading state for new filter
     currentPage = 1;
     hasMoreData = true;
     isLoadingMore = false;
+
     print("state.status${state.status}");
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     print("state.status${state.status}");
+
+    // Only load filtered data, don't load unfiltered data
+    await filterAds(model: model, filter: filter);
+
+    // Load other data that doesn't interfere with the main ads list
     await filterMyAds(model: model, filter: filter);
     await getRequestsLog('62c8b5b09332225799fe335e');
-    await getMarriageAds(
-        subCategoryId: state.selectedSubCatId ?? '62c8be728e28a58a3edf5f55');
-    await filterAds(model: model, filter: filter);
+
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
     print("state.status${state.status}");
   }

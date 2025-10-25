@@ -2503,7 +2503,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic
-                                                                    ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                                                                    ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                                                                     : "Please enter a direct contact number for the service provider.",
                                                               ),
                                                               // const SizedBox(height: 20),
@@ -2547,7 +2547,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                               // const SizedBox(height: 20),
                                                               Text(
                                                                 context.isArabic
-                                                                    ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                                                                    ? "كتابة رقم عميل آخر على مسؤوليتك و يعرض للمسائله القانونيه."
                                                                     : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                               ),
                                                               const SizedBox(
@@ -2851,7 +2851,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 // const SizedBox(height: 20),
                                                                 Text(
                                                                   context.isArabic
-                                                                      ? 'الرجاء ادخال رقم تواصل مباشر مع مقدم الخدمة'
+                                                                      ? 'الرجاء إدخال رقم تواصل مباشر مع مقدم الخدمة'
                                                                       : "Please enter a direct contact number for the service provider.",
                                                                 ),
                                                                 // const SizedBox(height: 20),
@@ -2894,7 +2894,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 // const SizedBox(height: 20),
                                                                 Text(
                                                                   context.isArabic
-                                                                      ? "كتابة رقم عميل اخر علي مسؤوليتك و يعرض للمسائله القانونيه."
+                                                                      ? "كتابة رقم عميل آخر على مسؤوليتك و يعرض للمسائله القانونيه."
                                                                       : "Entering another customer's number is at your own risk and may subject you to legal liability.",
                                                                 ),
                                                                 const SizedBox(
