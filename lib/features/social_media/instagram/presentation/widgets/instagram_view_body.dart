@@ -583,7 +583,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                                       ? (context.isDarkMode
                                           ? Colors.white
                                           : const Color(0xFF0B1035))
-                                      : (context.isDarkMode
+                                      : (!context.isDarkMode
                                           ? const Color(0xff333333)
                                           : const Color(0xffD9D9D9)),
                                   BlendMode.srcIn),
@@ -601,7 +601,7 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                                       ? (context.isDarkMode
                                           ? Colors.white
                                           : const Color(0xFF0B1035))
-                                      : (context.isDarkMode
+                                      : (!context.isDarkMode
                                           ? const Color(0xff333333)
                                           : const Color(0xffD9D9D9)),
                                 ),

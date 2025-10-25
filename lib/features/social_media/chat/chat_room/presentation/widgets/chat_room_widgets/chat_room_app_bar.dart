@@ -410,7 +410,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                     null)
                                                   Label(
                                                     text: context.isArabic
-                                                        ? " اخر ظهور في ${chatsCubit.selectedChat.lastSeen}"
+                                                        ? " آخر ظهور في ${chatsCubit.selectedChat.lastSeen}"
                                                         : "Last seen at ${chatsCubit.selectedChat.lastSeen}",
                                                     style: Styles.mediumText(
                                                       fontSize: 24,

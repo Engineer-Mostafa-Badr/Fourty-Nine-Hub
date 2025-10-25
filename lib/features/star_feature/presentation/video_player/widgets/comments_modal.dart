@@ -105,7 +105,7 @@ class _CommentsModalState extends State<CommentsModal> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.9,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -269,7 +269,9 @@ class _CommentsModalState extends State<CommentsModal> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: Colors.grey[600],
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey[600],
                             ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -282,7 +284,9 @@ class _CommentsModalState extends State<CommentsModal> {
                               .toArabicNumbers(context),
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[500],
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.grey[500],
                           ),
                         ),
                       ],
@@ -310,7 +314,9 @@ class _CommentsModalState extends State<CommentsModal> {
                                 size: 16,
                                 color: updatedComment.isLiked
                                     ? Colors.blue
-                                    : Colors.grey[600],
+                                    : context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.grey[600],
                               ),
                               const SizedBox(width: 4),
                               Label(
@@ -319,7 +325,9 @@ class _CommentsModalState extends State<CommentsModal> {
                                     .toArabicNumbers(context),
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[600],
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.grey[600],
                                 ),
                               ),
                             ],
@@ -341,7 +349,9 @@ class _CommentsModalState extends State<CommentsModal> {
                                 size: 16,
                                 color: updatedComment.isDisliked
                                     ? Colors.red
-                                    : Colors.grey[600],
+                                    : context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.grey[600],
                               ),
                               const SizedBox(width: 4),
                               Label(
@@ -350,7 +360,9 @@ class _CommentsModalState extends State<CommentsModal> {
                                     .toArabicNumbers(context),
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[600],
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.grey[600],
                                 ),
                               ),
                             ],
@@ -365,14 +377,18 @@ class _CommentsModalState extends State<CommentsModal> {
                                 Icon(
                                   Icons.reply,
                                   size: 16,
-                                  color: Colors.grey[600],
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.grey[600],
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   context.isArabic ? 'رد' : 'Reply',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[600],
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.grey[600],
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -394,7 +410,10 @@ class _CommentsModalState extends State<CommentsModal> {
 
               // More options
               IconButton(
-                icon: Icon(Icons.more_vert, size: 18, color: Colors.grey[600]),
+                icon: Icon(Icons.more_vert,
+                    size: 18,
+                    color:
+                        context.isDarkMode ? Colors.white : Colors.grey[600]),
                 onPressed: () => _showCommentOptions(updatedComment),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -416,7 +435,7 @@ class _CommentsModalState extends State<CommentsModal> {
             MediaQuery.of(context).viewInsets.bottom, // إضافة مهمة للكيبورد
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         border: Border.all(color: Colors.black),
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(16),
@@ -485,10 +504,10 @@ class _CommentsModalState extends State<CommentsModal> {
   void _showCommentOptions(CommentModel comment) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          // color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -503,7 +522,7 @@ class _CommentsModalState extends State<CommentsModal> {
               height: 4,
               margin: EdgeInsets.only(top: 12, bottom: 16),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: context.isDarkMode ? Colors.white : Colors.grey[300],
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -525,11 +544,16 @@ class _CommentsModalState extends State<CommentsModal> {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.grey[300],
                             shape: BoxShape.circle,
                           ),
-                          child:
-                              Icon(Icons.person, color: Colors.grey, size: 16),
+                          child: Icon(Icons.person,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey,
+                              size: 16),
                         ),
                   SizedBox(width: 12),
                   Expanded(
@@ -546,7 +570,9 @@ class _CommentsModalState extends State<CommentsModal> {
                         Text(
                           comment.content,
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.grey[600],
                             fontSize: 12,
                           ),
                           maxLines: 2,
@@ -576,6 +602,7 @@ class _CommentsModalState extends State<CommentsModal> {
                       context.isArabic ? 'تعديل التعليق' : 'Edit Comment',
                       style: TextStyle(
                         fontSize: 16,
+                        color: AppColors.PRIMARY_COLOR,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

@@ -137,7 +137,7 @@ class ReportWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'سبب اخر',
+                    'سبب آخر',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 13.sp,

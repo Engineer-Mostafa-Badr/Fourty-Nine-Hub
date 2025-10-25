@@ -280,7 +280,7 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
              ),
            ),
           if(widget.isStarted)
-          Text(context.isArabic?'اخر تسجيل صوتي فقط سيتم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
+          Text(context.isArabic?'آخر تسجيل صوتي فقط سيتم الاحتفاظ به':'The last record only will be saved', style: TextStyle(fontSize: FontSize.s12, fontWeight: FontWeight.bold,color: AppColors.SECONDARY_COLOR)),
 
           // ClickableWidget(
           //   onTap: () {

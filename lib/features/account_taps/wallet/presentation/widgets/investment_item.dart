@@ -62,14 +62,11 @@ class InvestmentItem extends StatelessWidget {
             ? AppButton(
                 label: LocaleKeys.received.localize,
                 style: Styles.headerText(
-                  color: context.isDarkMode
-                      ? const Color(0xff0D0D0D)
-                      : Colors.white,
+                  color: Colors.white,
                   fontSize: 32,
                 ),
                 onPressed: () {
-                  
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                 },
                 backColor: Colors.green,
                 padding: 24,

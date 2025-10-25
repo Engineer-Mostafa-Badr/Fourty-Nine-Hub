@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/extensions/string_extension.dart';
@@ -60,7 +61,7 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
     //     ),
     //     leading: IconButton(
     //       onPressed: () {},
-      ManageVibration.vibrate();
+    ManageVibration.vibrate();
     //       icon: const Icon(
     //         Icons.close,
     //       ),
@@ -141,7 +142,7 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
               return CustomFailureWidget(
                 title: getFailureMessage(state.failure!, context),
                 onPressed: () {
-      ManageVibration.vibrate();
+                  ManageVibration.vibrate();
                   context.read<CommentsInstagramCubit>().getComments(
                         widget.postId,
                       );
@@ -195,7 +196,7 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
                                         title: Text(
                                             LocaleKeys.deleteComment.localize),
                                         onTap: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           Navigator.pop(
                                               context); // إغلاق النافذة المنبثقة
                                           // تأكيد حذف التعليق
@@ -216,7 +217,7 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-      ManageVibration.vibrate();
+                                                    ManageVibration.vibrate();
                                                     Navigator.pop(context);
                                                     context
                                                         .read<
@@ -291,7 +292,9 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
                                 '${LocaleKeys.addACommentsFor.localize} Ahmed',
                             hintStyle: Styles.headerText(
                               fontSize: 32,
-                              color: Colors.black.withValues(alpha: 102),
+                              color: !context.isDarkMode
+                                  ? AppColors.QUANTITY_COLOR
+                                  : Colors.grey.shade200,
                             ),
                             border: InputBorder.none,
                             errorBorder: InputBorder.none,
@@ -308,7 +311,7 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
                       else
                         InkWell(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (textEditingController.text.isNotEmpty) {
                               context.read<CommentsInstagramCubit>().addComment(
                                     contentComment: textEditingController.text,
@@ -323,9 +326,11 @@ class _CommentInstagramViewState extends State<CommentInstagramView> {
                                   width: 25,
                                   height: 24,
                                 )
-                              : const Icon(
+                              : Icon(
                                   Icons.send,
-                                  color: AppColors.c161F68,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.c161F68,
                                 ),
                         ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/instagram_post_entity.dart';
@@ -76,7 +77,7 @@ class HeaderPostInstagram extends StatelessWidget {
                           isReel: isReel,
                           isFollow: isFollow,
                           onPressed: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             if (isFollow) {
                               context
                                   .read<ProfileInstagramCubit>()
@@ -92,7 +93,7 @@ class HeaderPostInstagram extends StatelessWidget {
                     ),
                   GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       showModalBottomSheet(
                         backgroundColor: Colors.white,
                         context: context,
@@ -105,7 +106,9 @@ class HeaderPostInstagram extends StatelessWidget {
                     },
                     child: Icon(
                       Icons.more_vert_sharp,
-                      color: isReel ? Colors.white : Colors.black,
+                      color: (!context.isDarkMode && isReel)
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                 ],

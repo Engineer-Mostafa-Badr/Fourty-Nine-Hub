@@ -75,9 +75,7 @@ class _MainCategorySearchViewState extends State<MainCategorySearchView> {
       builder: (context, state) {
         final subCategories = _cubit.paginatedSearch;
         if (_cubit.searchController.text.trim().isEmpty) {
-          return CustomEmptyWidget(
-            label: LocaleKeys.noData.localize,
-          );
+          return CustomEmptyWidget.searchInitial(context: context);
         }
         // Loading first page
         if (state.status == SearchStates.loading && subCategories.isEmpty) {

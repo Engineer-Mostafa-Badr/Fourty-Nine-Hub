@@ -61,7 +61,7 @@ class _AllWinnerViewState extends State<AllWinnerView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      backgroundColor: Colors.grey[50],
+      // backgroundColor: Colors.grey[50],
       appBar: BackAppBar(
         label: LocaleKeys.winners.localize,
         actions: [

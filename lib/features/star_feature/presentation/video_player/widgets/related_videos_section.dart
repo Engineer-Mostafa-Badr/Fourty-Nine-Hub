@@ -27,7 +27,7 @@ class RelatedVideosSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      // color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,7 +38,7 @@ class RelatedVideosSection extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: context.isDarkMode ? Colors.white : Colors.black,
               ),
             ),
           ),
@@ -57,7 +57,8 @@ class RelatedVideosSection extends StatelessWidget {
                   context.isArabic
                       ? 'لا توجد فيديوهات مرتبطة'
                       : 'No related videos',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(
+                      color: context.isDarkMode ? Colors.white : Colors.grey),
                 ),
               ),
             )

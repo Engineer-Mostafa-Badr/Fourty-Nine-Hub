@@ -12,7 +12,6 @@ import '../../../../../common/functions/global/upload_file.dart';
 import '../../../domain/entity/profile_entity.dart';
 import '../../presentation_exports.dart';
 
-
 class EditProfileSheet extends StatefulWidget {
   final ProfileEntity? currentProfile;
 
@@ -141,7 +140,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -152,7 +151,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
             height: 4,
             margin: EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: context.isDarkMode ? Colors.grey[600] : Colors.grey[300],
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -177,7 +176,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: context.isDarkMode ? Colors.white : Colors.black87,
                     ),
                   ),
                 ),
@@ -302,7 +301,7 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Colors.black87,
+        color: context.isDarkMode ? Colors.white : Colors.black87,
       ),
     );
   }
@@ -317,9 +316,10 @@ class _EditProfileSheetState extends State<EditProfileSheet> {
       maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey[500]),
+        hintStyle: TextStyle(
+            color: context.isDarkMode ? Colors.grey[400] : Colors.grey[500]),
         filled: true,
-        fillColor: Colors.grey[50],
+        fillColor: context.isDarkMode ? Colors.grey[800] : Colors.grey[50],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey[300]!),

@@ -176,7 +176,7 @@ class _SpotLightSearchViewState extends State<SpotLightSearchView> {
               height: 8,
             ),
             Text(
-              context.isArabic ? 'سبب اخر' : 'Other reason',
+              context.isArabic ? 'سبب آخر' : 'Other reason',
               style: Styles.mediumText(color: Colors.red),
             ),
           ],

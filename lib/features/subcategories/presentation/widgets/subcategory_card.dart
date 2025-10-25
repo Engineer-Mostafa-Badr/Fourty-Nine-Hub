@@ -55,7 +55,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                 children: [
                   Positioned.fill(
                     child: SquareImage(
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       radius: 30.r,
                       url: widget.item.image,
                     ),
