@@ -121,7 +121,7 @@ class CriminalRecordScreen extends StatelessWidget {
                           maxDate: DateTime(2090),
                           pickerTitle: context.isArabic?'تاريخ انتهاء الصلاحية':'Expire Date',
                           onDateSelected: (date){
-                          cubit.rideCriminalRecordExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                          cubit.rideCriminalRecordExpireDateController.text = DateFormat('yyyy-MM-dd',context.isArabic?'ar':'en').format(date??DateTime.now());
                         }, controller:cubit.rideCriminalRecordExpireDateController,
                           hintText: LocaleKeys.expireDate.localize,
                         ),

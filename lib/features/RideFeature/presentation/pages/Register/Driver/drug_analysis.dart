@@ -120,7 +120,7 @@ class DragAnalyticsScreen extends StatelessWidget {
                             maxDate: DateTime(2090),
                             pickerTitle: context.isArabic?'تاريخ انتهاء الصلاحية':'Expire Date',
                             onDateSelected: (date){
-                            cubit.rideDragAnalysisExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                            cubit.rideDragAnalysisExpireDateController.text = DateFormat('yyyy-MM-dd',context.isArabic?'ar':'en').format(date??DateTime.now());
                           }, controller:cubit.rideDragAnalysisExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                         ],
                       ),

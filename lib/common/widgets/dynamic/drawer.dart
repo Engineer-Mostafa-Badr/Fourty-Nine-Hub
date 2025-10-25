@@ -541,6 +541,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                 color: AppColors
                                                     .AUTH_CONTAINER_COLOR,
                                                 onPressed: () async {
+                                                  SessionEntity currentSession = context
+                                                      .read<UserCubit>()
+                                                      .sessions
+                                                      .firstWhere(
+                                                          (s) => s.deviceId == deviceId,
+                                                      orElse: () => context
+                                                          .read<UserCubit>()
+                                                          .sessions
+                                                          .isNotEmpty
+                                                          ? context
+                                                          .read<UserCubit>()
+                                                          .sessions
+                                                          .first
+                                                          : SessionEntity());
+                                                  print('Logout from ${currentSession.refreshToken}');
                                                   ManageVibration.vibrate();
                                                   String? refreshToken =
                                                       await Storage
@@ -562,7 +577,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                 .circular(20),
                                                       ),
                                                       content:
-                                                          const LogoutWidget(),
+                                                      LogoutWidget(refreshToken:currentSession.refreshToken??''),
                                                     ),
                                                   );
                                                 },

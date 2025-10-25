@@ -114,7 +114,7 @@ class TechnicalExaminationScreen extends StatelessWidget {
                             maxDate: DateTime(2090),
                             pickerTitle: context.isArabic?'تاريخ انتهاء الصلاحية':'Expire Date',
                             onDateSelected: (date){
-                            cubit.rideTechnicalExaminationExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                            cubit.rideTechnicalExaminationExpireDateController.text = DateFormat('yyyy-MM-dd',context.isArabic?'ar':'en').format(date??DateTime.now());
                           }, controller:cubit.rideTechnicalExaminationExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                         ],
                       ),

@@ -1512,10 +1512,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     DriverInfoEntity? driverInfo = state.driverInfo;
     LoadingInfoEntity? loaderInfo = state.loaderInfo;
     log('params.isShipping:=>:${params.isShipping}');
+    String dateString = rideVehicleExpireDateController.text;
+    dateString = convertArabicToEnglishNumbers(dateString);
+    DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+    String rideVehicleFormattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
+
     showLoadingDialog(context, canPop: false);
     params.isShipping == true
         ? await LoadingMethodHelper().uploadCarLicense(
-            licenseExpiryDate: rideVehicleExpireDateController.text,
+            licenseExpiryDate: rideVehicleFormattedDate,
             carLicenseBehindImage: state.vehicleBackPicture!,
             carLicenseFrontImage: state.vehicleFrontPicture!,
             onSuccessUploaded: (bool isSuccess) async {
@@ -1550,7 +1555,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
               }
             })
         : await RideMethodHelper().uploadCarLicense(
-            licenseExpiryDate: rideVehicleExpireDateController.text,
+            licenseExpiryDate: rideVehicleFormattedDate,
             carLicenseBehindImage: state.vehicleBackPicture!,
             carLicenseFrontImage: state.vehicleFrontPicture!,
             onSuccessUploaded: (bool isSuccess) async {
@@ -1659,9 +1664,13 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     if (criminalRecordFormKey.currentState!.validate()) {
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
       DriverInfoEntity? driverInfo = state.driverInfo;
+      String dateString = rideCriminalRecordExpireDateController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
       showLoadingDialog(context, canPop: false);
       await RideMethodHelper().uploadCriminalRecord(
-          criminalRecordDate: rideCriminalRecordExpireDateController.text,
+          criminalRecordDate: formattedDate,
           criminalRecordImage: state.personalCriminalRecordPicture!,
           onSuccessUploaded: (bool isSuccess) async {
             if (isSuccess) {
@@ -1719,6 +1728,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
             context, "Please select selfie driver license picture");
         return;
       }
+      String dateString = rideDriverExpireDateController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
+
       showLoadingDialog(context, canPop: false);
       params.isShipping == true
           ? await LoadingMethodHelper().uploadDriverLicense(
@@ -1758,11 +1772,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
               },
               drivingImageInFront: state.driverLicensePicture!,
               drivingImageBehind: state.backOfDriverLicensePicture!,
-              drivingExpiryDate: rideDriverExpireDateController.text)
+              drivingExpiryDate: formattedDate)
           : await RideMethodHelper().uploadDriverLicense(
               drivingImageInFront: state.driverLicensePicture!,
               drivingImageBehind: state.backOfDriverLicensePicture!,
-              drivingExpiryDate: rideDriverExpireDateController.text,
+              drivingExpiryDate: formattedDate,
               onSuccessUploaded: (bool isSuccess) async {
                 if (isSuccess) {
                   driverInfo?.isUploadDriverLicense = true;
@@ -1841,9 +1855,14 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     if (drugAnalysisFormKey.currentState!.validate()) {
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
       DriverInfoEntity? driverInfo = state.driverInfo;
+      String dateString = rideDragAnalysisExpireDateController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
+
       showLoadingDialog(context, canPop: false);
       await RideMethodHelper().uploadDrugAnalysis(
-          dragAnalysisDate: rideDragAnalysisExpireDateController.text,
+          dragAnalysisDate: formattedDate,
           dragAnalysis: state.personalDrugAnalysisPicture!,
           onSuccessUploaded: (bool isSuccess) async {
             if (isSuccess) {
@@ -1895,13 +1914,18 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         showErrorMessage(context, "Please select back id picture");
         return;
       }
+      String dateString = ridePersonalDocExpireDateController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
+
       showLoadingDialog(context, canPop: false);
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
       params.isShipping == true
           ? await LoadingMethodHelper().uploadDriverId(
               idImageInBehind: state.personalBackIdPicture!,
               idImageInFront: state.personalFrontIdPicture!,
-              idExpiryDate: ridePersonalDocExpireDateController.text,
+              idExpiryDate: formattedDate,
               onSuccessUploaded: (bool isSuccess) async {
                 if (isSuccess == true) {
                   loaderInfo?.isUploadDriverId = true;
@@ -1934,7 +1958,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           : await RideMethodHelper().uploadDriverId(
               idImageInBehind: state.personalBackIdPicture!,
               idImageInFront: state.personalFrontIdPicture!,
-              idExpiryDate: ridePersonalDocExpireDateController.text,
+              idExpiryDate: formattedDate,
               onSuccessUploaded: (bool isSuccess) async {
                 if (isSuccess) {
                   driverInfo?.isUploadDriverId = true;
@@ -2067,10 +2091,15 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     if (terminalExaminationFormKey.currentState!.validate()) {
       emit(state.copyWith(status: RideRegisterStates.loadingSubmit));
       DriverInfoEntity? driverInfo = state.driverInfo;
+      String dateString = rideTechnicalExaminationExpireDateController.text;
+      dateString = convertArabicToEnglishNumbers(dateString);
+      DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
+
       showLoadingDialog(context, canPop: false);
       await RideMethodHelper().uploadTechnicalExamination(
           technicalExaminationDate:
-              rideTechnicalExaminationExpireDateController.text,
+          formattedDate,
           technicalExaminationImage: state.personalTechnicalExaminationPicture!,
           onSuccessUploaded: (bool isSuccess) async {
             if (isSuccess) {

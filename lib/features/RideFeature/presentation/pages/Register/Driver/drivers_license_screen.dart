@@ -148,7 +148,7 @@ class DriversLicenseScreen extends StatelessWidget {
                                 maxDate: DateTime(2090),
                                 pickerTitle: context.isArabic?'تاريخ انتهاء الصلاحية':'Expire Date',
                                 onDateSelected: (date){
-                                cubit.rideDriverExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                                cubit.rideDriverExpireDateController.text = DateFormat('yyyy-MM-dd',context.isArabic?'ar':'en').format(date??DateTime.now());
                               }, controller:cubit.rideDriverExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                             ],
                           ),
