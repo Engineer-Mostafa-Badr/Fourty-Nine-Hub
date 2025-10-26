@@ -10,11 +10,11 @@ import '../../../../core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/messages/messages.dart';
 import '../cubit/create_menu_cubit/create_menu_cubit.dart';
-import '../cubit/create_resturant_cubit.dart';
+import '../cubit/create_restaurant_cubit.dart';
 import 'widgets/location/cities_dropdowns.dart';
 import 'widgets/location/governorate_dropdown.dart';
-import 'widgets/mneu/show_menu.dart';
-import 'widgets/name/name_filed.dart';
+import 'widgets/menu/show_menu.dart';
+import 'widgets/name/name_field.dart';
 import 'widgets/photo/license_photo_picker.dart';
 import 'widgets/photo/restaurant_photo_picker.dart';
 import 'widgets/subcategory.dart';
@@ -68,13 +68,13 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
     return BlocListener<CreateRestaurantCubit, CreateRestaurantState>(
       listener: (context, state) {
         switch (state) {
-          case CreateResturantLoading _:
+          case CreateRestaurantLoading _:
             showLoadingDialog(context);
             break;
           case CreateRestaurantCloseLoading _:
             Navigator.pop(context);
             break;
-          case CreateResturantError _:
+          case CreateRestaurantError _:
             showErrorMessage(context, state.message);
             break;
           case CreateRestaurantSuccess _:
@@ -155,7 +155,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                       ],
                     ),
                     Sizer(height: 32.h),
-                    const CreateResturantSubcategoryDropdown(),
+                    const CreateRestaurantSubcategoryDropdown(),
                     Sizer(height: 20.h),
                     CreateRestaurantNameField(
                       focusNode: nameFocusNode,

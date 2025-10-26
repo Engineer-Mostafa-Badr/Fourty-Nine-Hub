@@ -140,7 +140,7 @@ abstract class Routes {
   static const LIFEEVENTSub = '/Social/LIFEEVENTSub';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
-  static const CusineRestaurants = '/Food/Cusine-Restaurants';
+  static const CuisineRestaurants = '/Food/Cuisine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
   static const ALLMEALCATEGORIES = '/Food/AllMealCategories';
   static const RestaurantDashboard = '/RestaurantDashboard';
@@ -460,7 +460,7 @@ abstract class Paths {
   static const CREATELIFEEVENT = 'CREATELIFEEVENT';
   static const LIFEEVENTSub = 'LIFEEVENTSub';
   static const CREATERESTURANT = 'CreateResturant';
-  static const CusineRestaurants = 'Cusine-Restaurants';
+  static const CuisineRestaurants = 'Cuisine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
   static const RestaurantOrders = 'RestaurantOrders';
   static const SearchMeals = 'SearchMeals';

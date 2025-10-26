@@ -13,7 +13,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
+import '../../../create_restaurant/cubit/create_restaurant_cubit.dart';
 import '../../domain/usecases/update_restaurant_usecase.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
 import '../../../../../helpers/manage_vibration.dart';

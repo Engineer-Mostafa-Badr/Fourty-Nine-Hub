@@ -19,21 +19,21 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
-part 'create_resturant_state.dart';
+part 'create_restaurant_state.dart';
 
-class CreateResturantCubit extends Cubit<CreateResturantState> {
+class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final HealthSharedData _shareCubit;
   final GetHealthSubcategoriesUseCase _getHealthSubcategoriesUseCase;
   final GetGovernoratesUseCase _getGovernoratesUseCase;
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateDoctorUseCase _createDoctorUseCase;
-  CreateResturantCubit(
+  CreateRestaurantCubit(
       this._shareCubit,
       this._getHealthSubcategoriesUseCase,
       this._getGovernoratesUseCase,
       this._getCitiesUseCase,
       this._createDoctorUseCase)
-      : super(CreateResturantInitial());
+      : super(CreateRestaurantInitial());
 
   Future<void> loadData() async {
     await _getSubCategories();
@@ -45,7 +45,7 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
       _saveTextEditingControllers();
       _saveWorkDays();
       String? checkFilledMessage = _createDoctorParams.isFilled();
-      emit(CreateResturantError(checkFilledMessage ?? ""));
+      emit(CreateRestaurantError(checkFilledMessage ?? ""));
     }
   }
 
@@ -60,14 +60,14 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
                 AppPages.router.configuration.navigatorKey.currentContext!;
             showErrorMessage(
                 currentContext, getFailureMessage(failure, currentContext));
-            emit(CreateResturantError("Can't Load Specialities"));
+            emit(CreateRestaurantError("Can't Load Specialities"));
           },
           (data) {
         _shareCubit.subCategories = data;
-        emit(CreateResturantSubCategoriesLoaded(data));
+        emit(CreateRestaurantSubCategoriesLoaded(data));
       });
     } else {
-      emit(CreateResturantSubCategoriesLoaded(_shareCubit.subCategories));
+      emit(CreateRestaurantSubCategoriesLoaded(_shareCubit.subCategories));
     }
   }
 
@@ -80,19 +80,19 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
                 AppPages.router.configuration.navigatorKey.currentContext!;
             showErrorMessage(
                 currentContext, getFailureMessage(failure, currentContext));
-            emit(CreateResturantError("Can't Load Governorates"));
+            emit(CreateRestaurantError("Can't Load Governorates"));
           },
           (data) {
         _shareCubit.governorates = data;
-        emit(CreateResturantGovernoratesLoaded(data));
+        emit(CreateRestaurantGovernoratesLoaded(data));
       });
     } else {
-      emit(CreateResturantGovernoratesLoaded(_shareCubit.governorates));
+      emit(CreateRestaurantGovernoratesLoaded(_shareCubit.governorates));
     }
   }
 
   Future<void> _getCities(String governorateId) async {
-    emit(CreateResturantCitiesLoading());
+    emit(CreateRestaurantCitiesLoading());
     final response = await _getCitiesUseCase.call(governorateId);
 
     response.fold(
@@ -101,9 +101,9 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(CreateResturantError("Can't Load Cities"));
+        emit(CreateRestaurantError("Can't Load Cities"));
       },
-      (data) => emit(CreateResturantCitiesLoaded(data)),
+      (data) => emit(CreateRestaurantCitiesLoaded(data)),
     );
   }
 
@@ -190,51 +190,51 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
   Future<void> _uploadImage(
       {required dynamic Function(UploadFileEntity) onUploaded,required BuildContext context}) async {
     if (_createDoctorParams.subCategoryId.isNotEmpty) {
-      emit(CreateResturantLoading("Uploading Image..."));
+      emit(CreateRestaurantLoading("Uploading Image..."));
       await UploadFile().uploadImage(
         subCategoryId: _createDoctorParams.subCategoryId,
         onUploaded: (value) {
           onUploaded(value);
         }, context: context,
       );
-      emit(CreateResturantCloseLoading());
+      emit(CreateRestaurantCloseLoading());
     } else {
-      emit(CreateResturantError("Select Subcategory First"));
+      emit(CreateRestaurantError("Select Subcategory First"));
     }
   }
 
   Future<void> uploadProfileImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.mediaId = media.mediaId[0];
-      emit(CreateResturantUploadProfileImage(media.file));
+      emit(CreateRestaurantUploadProfileImage(media.file));
     }, context: context);
   }
 
   Future<void> uploadIdFrontImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.idFrontKey = media.mediaId[0];
-      emit(CreateResturantUploadIdFrontImage(media.file));
+      emit(CreateRestaurantUploadIdFrontImage(media.file));
     }, context: context);
   }
 
   Future<void> uploadIdBehindImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.idBehindKey = media.mediaId[0];
-      emit(CreateResturantUploadIdBehindImage(media.file));
+      emit(CreateRestaurantUploadIdBehindImage(media.file));
     }, context: context);
   }
 
   Future<void> uploadPracticingFrontImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.practicingFront = media.mediaId[0];
-      emit(CreateResturantUploadPracticingFrontImage(media.file));
+      emit(CreateRestaurantUploadPracticingFrontImage(media.file));
     }, context: context);
   }
 
   Future<void> uploadPracticingBehindImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       _createDoctorParams.practicingBehind = media.mediaId[0];
-      emit(CreateResturantUploadPracticingBehindImage(media.file));
+      emit(CreateRestaurantUploadPracticingBehindImage(media.file));
     }, context: context);
   }
 
@@ -242,17 +242,17 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
 
   void toggleClinic(bool value) {
     _createDoctorParams.hasClinic = value;
-    emit(CreateResturantShowClinic(value));
+    emit(CreateRestaurantShowClinic(value));
   }
 
   void toggleCallCheck(bool value) {
     _createDoctorParams.hasCalls = value;
-    emit(CreateResturantShowCall(value));
+    emit(CreateRestaurantShowCall(value));
   }
 
   void toggleHomeVisit(bool value) {
     _createDoctorParams.hasHomeVisit = value;
-    emit(CreateResturantShowHomeVisit(value));
+    emit(CreateRestaurantShowHomeVisit(value));
   }
 
   // ================================= TextEditingControllers =================================

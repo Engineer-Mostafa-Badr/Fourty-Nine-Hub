@@ -26,12 +26,12 @@ import '../features/food_feature/restaurants_list/domain/usecases/is_resturant_u
 import '../features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
 import '../features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import '../features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import '../features/food_feature/create_restaurant/cubit/create_restaurant_cubit.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import '../features/food_feature/cuisine_restaurants/presentation/cubit/cuisine_restaurants_cubit.dart';
 import '../features/food_feature/restaurant_dashboard/domain/repositories/restaurant_dashboard_repo.dart';
 import '../features/food_feature/restaurant_dashboard/domain/usecases/complete_order_restaurant_usecase.dart';
 import '../features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -199,7 +199,7 @@ class FoodServiceLocator {
               serviceLocator()
             ));
     serviceLocator
-        .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
+        .registerFactory<CuisineRestaurantsCubit>(() => CuisineRestaurantsCubit(
               serviceLocator(),
             ));
 

@@ -5,21 +5,21 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../restaurants_list/presentation/widgets/restaurant_card.dart';
-import '../cubit/cusine_restaurants_cubit.dart';
+import '../cubit/cuisine_restaurants_cubit.dart';
 
-class CusineRestaurantsView extends StatelessWidget {
-  const CusineRestaurantsView({super.key});
+class CuisineRestaurantsView extends StatelessWidget {
+  const CuisineRestaurantsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CusineRestaurantsCubit, CusineRestaurantsState>(
+    return BlocConsumer<CuisineRestaurantsCubit, CuisineRestaurantsState>(
         listener: (context, state) {},
         builder: (context, state) {
           return CustomScaffold(
             appBar: const PreferredSize(
               preferredSize: Size.fromHeight(30),
               child: BackAppBar(
-                label: 'Cusine Restaurants',
+                label: 'Cuisine Restaurants',
               ),
             ),
             body: Padding(

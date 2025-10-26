@@ -5,10 +5,10 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/info_text.dart';
 import '../../../../../core/messages/messages.dart';
-import '../cubit/create_resturant_cubit.dart';
+import '../cubit/create_restaurant_cubit.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/fields/address_field.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
-import '../../../../health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
+import '../../../../health_feature/create_doctor/presentation/widgets/fields/name_field.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/options_checkbox.dart';
@@ -29,14 +29,14 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
-class CreateResturantView extends StatefulWidget {
-  const CreateResturantView({super.key});
+class CreateRestaurantView extends StatefulWidget {
+  const CreateRestaurantView({super.key});
 
   @override
-  State<CreateResturantView> createState() => _CreateResturantViewState();
+  State<CreateRestaurantView> createState() => _CreateRestaurantViewState();
 }
 
-class _CreateResturantViewState extends State<CreateResturantView> {
+class _CreateRestaurantViewState extends State<CreateRestaurantView> {
   final FocusNode nameFocusNode = FocusNode();
   @override
   void initState() {
@@ -54,19 +54,19 @@ class _CreateResturantViewState extends State<CreateResturantView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateResturantCubit, CreateResturantState>(
+    return BlocListener<CreateRestaurantCubit, CreateRestaurantState>(
       listener: (context, state) {
         switch (state) {
-          case CreateResturantLoading _:
+          case CreateRestaurantLoading _:
             showLoadingDialog(context);
             break;
-          case CreateResturantCloseLoading _:
+          case CreateRestaurantCloseLoading _:
             Navigator.pop(context);
             break;
-          case CreateResturantError _:
+          case CreateRestaurantError _:
             showErrorMessage(context, state.message);
             break;
-          case CreateResturantSuccess _:
+          case CreateRestaurantSuccess _:
             showSuccessMessage(context, state.message);
             break;
           default:
@@ -81,7 +81,7 @@ class _CreateResturantViewState extends State<CreateResturantView> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(15.0),
           child: Form(
-            key: context.read<CreateResturantCubit>().formKey,
+            key: context.read<CreateRestaurantCubit>().formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -103,7 +103,7 @@ class _CreateResturantViewState extends State<CreateResturantView> {
                 CreateDoctorIDExpiryDatePicker(
                   onDateSelected: (date) {
                     context
-                        .read<CreateResturantCubit>()
+                        .read<CreateRestaurantCubit>()
                         .pickIDExpiryDate(date!);
                   },
                 ),
@@ -118,7 +118,7 @@ class _CreateResturantViewState extends State<CreateResturantView> {
                   onSelected: (value) {
                     if (value != null) {
                       context
-                          .read<CreateResturantCubit>()
+                          .read<CreateRestaurantCubit>()
                           .selectGovernorate(value);
                     }
                   },

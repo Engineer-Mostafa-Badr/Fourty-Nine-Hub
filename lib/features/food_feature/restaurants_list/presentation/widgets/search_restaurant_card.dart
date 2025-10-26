@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/restaurant.dart';
 import 'Images_profile_for_restaurant.dart';
-import 'subcatigories_restaurant_card.dart';
+import 'subcategories_restaurant_card.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../helpers/manage_vibration.dart';

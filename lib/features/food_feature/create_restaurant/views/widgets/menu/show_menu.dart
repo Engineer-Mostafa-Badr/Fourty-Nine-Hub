@@ -10,8 +10,8 @@ import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../cubit/create_menu_cubit/create_menu_cubit.dart';
-import '../../../cubit/create_resturant_cubit.dart';
-import '../../../../restaurants_list/data/models/restaurant_mneu_model.dart';
+import '../../../cubit/create_restaurant_cubit.dart';
+import '../../../../restaurants_list/data/models/restaurant_menu_model.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 
@@ -51,7 +51,7 @@ class ShowMneu extends StatelessWidget {
                     children: [
                       // عرض القائمة
                       ...menuCubit.menu.map(
-                        (RestaurantMneuModel e) => Container(
+                        (RestaurantMenuModel e) => Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -410,7 +410,7 @@ class ShowMneu extends StatelessWidget {
                                               if (foodName.isNotEmpty &&
                                                   price != null) {
                                                 final menuItem =
-                                                    RestaurantMneuModel(
+                                                    RestaurantMenuModel(
                                                   foodName: foodName,
                                                   price: price,
                                                   photoPath: imagePath,

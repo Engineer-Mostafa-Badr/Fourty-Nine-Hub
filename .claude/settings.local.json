@@ -9,7 +9,14 @@
       "Bash(flutter analyze lib/features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart)",
       "Bash(flutter analyze lib/core/widget/olx_pagination/olx_pagination_widget.dart)",
       "Bash(python:*)",
-      "Bash(flutter analyze:*)"
+      "Bash(flutter analyze:*)",
+      "Bash(tree:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nrefactor(food): Move hardcoded URLs and utilities to proper layers\n\n- Move showCustomSnackBar from cubit to core/messages for reusability\n- Move hardcoded API URLs from restaurant_details_cubit to datasource layer\n- Add getCart, createNormalOrder, createPremiumOrder to repository pattern\n- Replace ApiConsumer direct usage with repository in cubit\n- Improve separation of concerns following Clean Architecture\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git mv:*)",
+      "Bash(git grep:*)",
+      "Bash(find:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

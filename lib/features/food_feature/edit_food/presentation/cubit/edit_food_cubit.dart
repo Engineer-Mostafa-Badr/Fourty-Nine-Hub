@@ -15,10 +15,10 @@ import '../../../restaurant_details/domain/usecases/delete_food_usecase.dart';
 import '../../../restaurant_details/domain/usecases/get_meals_usecase.dart';
 import '../../../restaurant_details/domain/usecases/get_restaurant_details_usecase.dart';
 import '../../../restaurants_list/data/models/is_restaurant_model.dart';
-import '../../../restaurants_list/data/models/restaurant_mneu_model.dart';
+import '../../../restaurants_list/data/models/restaurant_menu_model.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
-import '../../../restaurants_list/domain/usecases/is_resturant_usecase.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
+import '../../../restaurants_list/domain/usecases/is_restaurant_usecase.dart';
 
 part 'edit_food_state.dart';
 
@@ -27,7 +27,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
   final GetMealsUseCase _getMealsUseCase;
   final AddFoodUseCase _addFoodUseCase;
   final DeleteFoodUseCase _deleteFoodUseCase;
-  final IsResturantUsecase _isResturantUseCase;
+  final IsRestaurantUsecase _isResturantUseCase;
 
   bool isLoadingMore = false;
 
@@ -163,7 +163,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
     return result;
   }
 
-  updateMenuItem(context, RestaurantMneuModel menuItem,
+  updateMenuItem(context, RestaurantMenuModel menuItem,
       {required String id}) async {
     AddFoodParams params = AddFoodParams(
       foodName: menuItem.foodName ?? '',

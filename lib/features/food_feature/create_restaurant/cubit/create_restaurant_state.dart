@@ -1,4 +1,4 @@
-part of 'create_resturant_cubit.dart';
+part of 'create_restaurant_cubit.dart';
 
 sealed class CreateRestaurantState {}
 
@@ -8,15 +8,15 @@ final class CreateRestaurantLoading extends CreateRestaurantState {}
 
 final class CreateRestaurantFinish extends CreateRestaurantState {}
 
-final class CreateResturantLoading extends CreateRestaurantState {
+final class CreateRestaurantLoading extends CreateRestaurantState {
   final String message;
 
-  CreateResturantLoading(this.message);
+  CreateRestaurantLoading(this.message);
 }
 
 final class CreateRestaurantCloseLoading extends CreateRestaurantState {}
 
-final class CreateResturantLoaded extends CreateRestaurantState {}
+final class CreateRestaurantLoaded extends CreateRestaurantState {}
 
 final class CreateRestaurantSuccess extends CreateRestaurantState {
   final String message;
@@ -25,10 +25,10 @@ final class CreateRestaurantSuccess extends CreateRestaurantState {
 }
 final class CreateRestaurantRefreshUI extends CreateRestaurantState {}
 
-final class CreateResturantError extends CreateRestaurantState {
+final class CreateRestaurantError extends CreateRestaurantState {
   final String message;
 
-  CreateResturantError(this.message);
+  CreateRestaurantError(this.message);
 }
 
 enum ValidationStates {
@@ -140,10 +140,10 @@ final class CreateRestaurantGovernoratesLoaded extends CreateRestaurantState {
   CreateRestaurantGovernoratesLoaded(this.governorates);
 }
 
-final class CreateResturantSubCategoriesLoaded extends CreateRestaurantState {
+final class CreateRestaurantSubCategoriesLoaded extends CreateRestaurantState {
   final List<FoodCategoryEntity> subCategories;
 
-  CreateResturantSubCategoriesLoaded(this.subCategories);
+  CreateRestaurantSubCategoriesLoaded(this.subCategories);
 }
 
 final class CreateRestaurantUploadProfileImage extends CreateRestaurantState {

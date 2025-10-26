@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/extensions/context_extension.dart';
-import '../../cubit/create_resturant_cubit.dart';
+import '../../cubit/create_restaurant_cubit.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../helpers/manage_vibration.dart';
 

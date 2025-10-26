@@ -10,7 +10,7 @@ import 'package:fourtyninehub/routes/pages.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 import '../../../restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/selected_meal_model.dart';

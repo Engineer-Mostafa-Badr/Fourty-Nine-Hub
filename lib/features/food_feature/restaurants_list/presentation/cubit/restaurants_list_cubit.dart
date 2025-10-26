@@ -41,7 +41,7 @@ import '../../domain/usecases/get_req_logs_count_use_case.dart';
 import '../../domain/usecases/get_req_logs_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
 import '../../domain/usecases/getsubcategory_restaurants_usecase.dart';
-import '../../domain/usecases/is_resturant_usecase.dart';
+import '../../domain/usecases/is_restaurant_usecase.dart';
 import '../../domain/usecases/set_request_log_seen_use_case.dart';
 import '../../domain/usecases/toggle_restaurant_favourite_use_case.dart';
 
@@ -61,7 +61,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   // final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final ToggleFavoriteCategoryUseCase _toggleFavoriteCategoryUseCase;
   final ToggleRestaurantFavouriteUseCase _toggleRestaurantFavouriteUseCase;
-  final IsResturantUsecase _isResturantUseCase;
+  final IsRestaurantUsecase _isResturantUseCase;
   final ChangeConnectivityUseCase _changeConnectivityUseCase;
   final GetExpiredOrdersUseCase _getExpiredOrdersUseCase;
   final GetMealCategoriesWithCountRestaurantsUseCase

@@ -12,7 +12,7 @@ import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 
 class ItemCard extends StatefulWidget {
   final String restaurantId;

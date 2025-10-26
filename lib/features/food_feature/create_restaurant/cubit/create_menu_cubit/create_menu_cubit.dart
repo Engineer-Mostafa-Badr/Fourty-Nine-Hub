@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/messages/messages.dart';
-import '../../../restaurants_list/data/models/restaurant_mneu_model.dart';
-import '../create_resturant_cubit.dart';
+import '../../../restaurants_list/data/models/restaurant_menu_model.dart';
+import '../create_restaurant_cubit.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
@@ -15,11 +15,11 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
   RestaurantMenuCubit(this.apiConsumer) : super(RestaurantMenuInitial());
 
-  final List<RestaurantMneuModel> _menu = [];
+  final List<RestaurantMenuModel> _menu = [];
 
-  List<RestaurantMneuModel> get menu => _menu;
+  List<RestaurantMenuModel> get menu => _menu;
 
-  updateMenuItem(context, RestaurantMneuModel menuItem) async {
+  updateMenuItem(context, RestaurantMenuModel menuItem) async {
     Map<String, dynamic> data = {
       "picture": menuItem.photo,
       "price": menuItem.price,
@@ -44,7 +44,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
     );
   }
 
-  void addMenuItem(BuildContext context, RestaurantMneuModel menuItem) {
+  void addMenuItem(BuildContext context, RestaurantMenuModel menuItem) {
     _menu.add(menuItem);
     emit(RestaurantMenuLoaded(List.from(_menu)));
     context.read<CreateRestaurantCubit>().createRestaurantParams.mneu = _menu;
@@ -52,7 +52,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
         "params: ${context.read<CreateRestaurantCubit>().createRestaurantParams.toJson()}");
   }
 
-  void removeMenuItem(BuildContext context, RestaurantMneuModel index) {
+  void removeMenuItem(BuildContext context, RestaurantMenuModel index) {
     _menu.remove(index);
     context.read<CreateRestaurantCubit>().createRestaurantParams.mneu = _menu;
     emit(RestaurantMenuLoaded(List.from(_menu)));
