@@ -43,16 +43,26 @@ class AdDynamicInputWidget extends StatefulWidget {
 
 class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   SelectionEntity? value;
+  String? customValue;
+  TextEditingController? customValueController;
+
   @override
   void initState() {
     if (widget.property.values.isNotEmpty) {
       value = widget.property.values.first;
     }
+    customValueController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.focusNode?.requestFocus();
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    customValueController?.dispose();
+    super.dispose();
   }
 
   // Check if this field should be hidden based on other field selections
@@ -154,6 +164,29 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
       return getLang() == 'ar' ? 'عدد جرامات الذهب' : 'Number of Gold Grams';
     }
 
+    // Check if this is a location field and customize the label for health category
+    final isLocationField =
+        widget.property.nameAr.toLowerCase().contains('موقع') ||
+            widget.property.nameAr.toLowerCase().contains('عنوان') ||
+            widget.property.nameAr.toLowerCase().contains('العنوان') ||
+            widget.property.nameEn.toLowerCase().contains('location') ||
+            widget.property.nameEn.toLowerCase().contains('address');
+
+    if (isLocationField) {
+      return getLang() == 'ar' ? 'عنوان العياده' : 'Clinic Address';
+    }
+
+    // Check if this is a qualification field and customize the label
+    final isQualificationField =
+        widget.property.nameAr.toLowerCase().contains('مؤهل') ||
+            widget.property.nameAr.toLowerCase().contains('ترخيص') ||
+            widget.property.nameEn.toLowerCase().contains('qualification') ||
+            widget.property.nameEn.toLowerCase().contains('license');
+
+    if (isQualificationField) {
+      return getLang() == 'ar' ? 'المؤهل' : 'Qualification';
+    }
+
     // Default behavior for other fields
     return getLang() == 'ar'
         ? widget.property.nameAr
@@ -170,9 +203,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             start: 15,
           ),
           child: Label(
-            text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : formatText(widget.property.nameEn),
+            text: _getDisplayLabel(),
             style: Styles.mediumText(
                 fontSize: 32, color: AppColors.getTextColor(context)),
           ),
@@ -181,15 +212,28 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
           height: 4,
         ),
         CreateAdTextFormField(
-          hintText: getLang() == 'ar'
-              ? widget.property.nameAr
-              : formatText(widget.property.nameEn),
+          hintText: _getDisplayLabel(),
           onChanged: (v) {
             widget.formKey.currentState!.validate();
             widget.onTextChanged(v);
           },
           keyboardType: TextInputType.text,
           validator: (value) {
+            // جعل حقل التفاصيل الإضافية غير مطلوب
+            final isAdditionalDetailsField = widget.property.nameAr
+                    .toLowerCase()
+                    .contains('تفاصيل') ||
+                widget.property.nameAr.toLowerCase().contains('إضافية') ||
+                widget.property.nameAr.toLowerCase().contains('زائدة') ||
+                widget.property.nameAr.toLowerCase().contains('أخرى') ||
+                widget.property.nameEn.toLowerCase().contains('additional') ||
+                widget.property.nameEn.toLowerCase().contains('extra') ||
+                widget.property.nameEn.toLowerCase().contains('other');
+
+            if (isAdditionalDetailsField) {
+              return null; // لا تطلب هذا الحقل
+            }
+
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;
             } else {
@@ -204,6 +248,24 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   }
 
   Widget _buildDropDownWidget() {
+    // التحقق من أن هذا حقل مؤهل دراسي أو تخصص
+    final isEducationField =
+        widget.property.nameAr.toLowerCase().contains('مؤهل') ||
+            widget.property.nameAr.toLowerCase().contains('تعليم') ||
+            widget.property.nameAr.toLowerCase().contains('تخصص') ||
+            widget.property.nameAr.toLowerCase().contains('دراسي') ||
+            widget.property.nameEn.toLowerCase().contains('education') ||
+            widget.property.nameEn.toLowerCase().contains('qualification') ||
+            widget.property.nameEn.toLowerCase().contains('specialization');
+
+    // التحقق من اختيار "تخصص آخر" أو "آخر"
+    final isOtherSelected = value != null &&
+        (value!.nameAr.toLowerCase().contains('آخر') ||
+            value!.nameAr.toLowerCase().contains('أخرى') ||
+            value!.nameAr.toLowerCase().contains('تخصص آخر') ||
+            value!.nameEn.toLowerCase().contains('other') ||
+            value!.nameEn.toLowerCase().contains('else'));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -222,14 +284,6 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
         ),
         CreateAdDropdownMenu<SelectionEntity>(
           hint: getLang() == 'ar' ? value?.nameAr ?? '' : value?.nameEn ?? '',
-          // items: state.cities
-          //                 ?.map<DropdownMenuItem<CityEntity>>(
-          //                     (CityEntity city) {
-          //               return DropdownMenuItem<CityEntity>(
-          //                 value: city,
-          //                 child: Text(city.nameEn),
-          //               );
-          //             }).toList(),
           items: widget.property.values
               .map<DropdownMenuItem<SelectionEntity>>((e) => DropdownMenuItem(
                     value: e,
@@ -241,12 +295,56 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             widget.formKey.currentState!.validate();
             if (newValue != null) {
               value = newValue;
+              // مسح الحقل المخصص عند تغيير الاختيار
+              customValue = null;
+              customValueController?.clear();
               widget.onChanged(newValue);
               setState(() {});
             }
           },
           value: value,
         ),
+        // إضافة حقل النص المخصص عند اختيار "تخصص آخر"
+        if (isEducationField && isOtherSelected) ...[
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(start: 16),
+            child: Label(
+              text: context.isArabic
+                  ? 'يرجى كتابة التخصص'
+                  : 'Please specify the specialization',
+              style: Styles.mediumText(
+                  fontSize: 32, color: AppColors.getTextColor(context)),
+            ),
+          ),
+          const SizedBox(height: 4),
+          CreateAdTextFormField(
+            hintText: context.isArabic
+                ? 'اكتب التخصص هنا'
+                : 'Enter specialization here',
+            onChanged: (v) {
+              widget.formKey.currentState!.validate();
+              customValue = v;
+              // إنشاء SelectionEntity مخصص مع القيمة المدخلة
+              if (v.isNotEmpty) {
+                final customSelection = SelectionEntity(
+                  nameAr: v,
+                  nameEn: v,
+                );
+                widget.onChanged(customSelection);
+              }
+            },
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (isOtherSelected && (value == null || value.isEmpty)) {
+                return context.isArabic
+                    ? 'يرجى كتابة التخصص'
+                    : 'Please specify the specialization';
+              }
+              return null;
+            },
+          ),
+        ],
       ],
     );
   }
@@ -273,12 +371,25 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             widget.formKey.currentState!.validate();
             widget.onTextChanged(v);
           },
-          hintText: getLang() == 'ar'
-              ? widget.property.nameAr
-              : formatText(widget.property.nameEn),
+          hintText: _getDisplayLabel(),
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           validator: (value) {
+            // جعل حقل التفاصيل الإضافية غير مطلوب
+            final isAdditionalDetailsField = widget.property.nameAr
+                    .toLowerCase()
+                    .contains('تفاصيل') ||
+                widget.property.nameAr.toLowerCase().contains('إضافية') ||
+                widget.property.nameAr.toLowerCase().contains('زائدة') ||
+                widget.property.nameAr.toLowerCase().contains('أخرى') ||
+                widget.property.nameEn.toLowerCase().contains('additional') ||
+                widget.property.nameEn.toLowerCase().contains('extra') ||
+                widget.property.nameEn.toLowerCase().contains('other');
+
+            if (isAdditionalDetailsField) {
+              return null; // لا تطلب هذا الحقل
+            }
+
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;
             } else {

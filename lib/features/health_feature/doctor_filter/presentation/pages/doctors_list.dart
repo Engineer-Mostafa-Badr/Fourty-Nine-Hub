@@ -39,7 +39,11 @@ class DoctorsListParams {
   final String? name;
 
   DoctorsListParams(
-      {required this.fromHome, required this.subCategoryId, this.type = '', this.name = '',this.fromSearch = false});
+      {required this.fromHome,
+      required this.subCategoryId,
+      this.type = '',
+      this.name = '',
+      this.fromSearch = false});
 }
 
 class DoctorsListView extends StatefulWidget {
@@ -56,9 +60,11 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   void initState() {
     print("widget.params.name ${widget.params.name}");
     _scrollController = ScrollController()..addListener(_onScroll);
-    context
-        .read<DoctorsListCubit>()
-        .loadInitialData(widget.params.fromSearch==true?widget.params.name??'':widget.params.subCategoryId,widget.params.fromSearch??false);
+    context.read<DoctorsListCubit>().loadInitialData(
+        widget.params.fromSearch == true
+            ? widget.params.name ?? ''
+            : widget.params.subCategoryId,
+        widget.params.fromSearch ?? false);
     super.initState();
   }
 
@@ -66,14 +72,14 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       print("object");
-      if(widget.params.fromSearch==false) {
-        context
-          .read<DoctorsListCubit>()
-          .getDoctorsFromSubCategory(widget.params.subCategoryId);
-      }else{
+      if (widget.params.fromSearch == false) {
         context
             .read<DoctorsListCubit>()
-            .getDoctorsFromSearch(widget.params.name??'');
+            .getDoctorsFromSubCategory(widget.params.subCategoryId);
+      } else {
+        context
+            .read<DoctorsListCubit>()
+            .getDoctorsFromSearch(widget.params.name ?? '');
       }
       print("object");
     }
@@ -120,9 +126,13 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                   child: cubit.doctorsList.isEmpty
                       ? Center(
                           child: CustomEmptyWidget(
-                              label: context.isArabic
-                                  ? 'لا يوجد حجوزات سابقة'
-                                  : 'No booking history'))
+                              label: widget.params.fromSearch == true
+                                  ? (context.isArabic
+                                      ? 'لا توجد نتائج للبحث'
+                                      : 'No search results found')
+                                  : (context.isArabic
+                                      ? 'لا يوجد حجوزات سابقة'
+                                      : 'No booking history')))
                       : ListView.separated(
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.sizeOf(context).height * 0.35),
@@ -198,10 +208,10 @@ class _DoctorListCardState extends State<DoctorListCard> {
   @override
   Widget build(BuildContext context) {
     return ClickableWidget(
-      onTap: (){
+      onTap: () {
         context.push(Routes.VISITADOCTORDETAILS,
             extra: DoctorDetailsParams(
-                doctorId: widget.data.id??'', fromSearch: false));
+                doctorId: widget.data.id ?? '', fromSearch: false));
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -351,8 +361,8 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       ],
                     ),
                     Label(
-                      text:
-                          getSubscriptionType(widget.data.subscriptionRank ?? 0),
+                      text: getSubscriptionType(
+                          widget.data.subscriptionRank ?? 0),
                       textAlign: TextAlign.right,
                       style: Styles.mediumText(
                         color: AppColors.getRedColor(context),
@@ -439,10 +449,8 @@ class _DoctorListCardState extends State<DoctorListCard> {
                               const SizedBox(height: 4),
                               Text(
                                 context.isArabic
-                                    ? widget.data.subCategory?.nameAr ??
-                                        "N/A"
-                                    : widget.data.subCategory?.nameEn ??
-                                        "N/A",
+                                    ? widget.data.subCategory?.nameAr ?? "N/A"
+                                    : widget.data.subCategory?.nameEn ?? "N/A",
                                 style: Styles.mediumText(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w400,
@@ -665,7 +673,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Title
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -674,7 +682,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            color: AppColors.getButtonPrimaryColor(context)
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -723,7 +732,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                           margin: const EdgeInsets.all(8),
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            color: AppColors.getButtonPrimaryColor(context)
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -732,13 +742,17 @@ class PremiumAndRequestButtons extends StatelessWidget {
                             size: 20,
                           ),
                         ),
-                        hintText: context.isArabic?'اسم المريض':'Patient Name',
+                        hintText:
+                            context.isArabic ? 'اسم المريض' : 'Patient Name',
                         hintStyle: TextStyle(
-                          color: AppColors.getTextColor(context).withOpacity(0.6),
+                          color:
+                              AppColors.getTextColor(context).withOpacity(0.6),
                           fontSize: 16,
                         ),
                         errorText: hasNameError
-                            ? context.isArabic?'ادخل اسم المريض':'Enter Patient Name'
+                            ? context.isArabic
+                                ? 'ادخل اسم المريض'
+                                : 'Enter Patient Name'
                             : null,
                         errorStyle: TextStyle(
                           color: AppColors.getRedColor(context),
@@ -754,7 +768,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide(
-                            color: AppColors.getTextColor(context).withOpacity(0.1),
+                            color: AppColors.getTextColor(context)
+                                .withOpacity(0.1),
                             width: 1,
                           ),
                         ),
@@ -813,7 +828,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                           margin: const EdgeInsets.all(8),
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            color: AppColors.getButtonPrimaryColor(context)
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: SvgPicture.asset(
@@ -826,7 +842,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         ),
                         hintText: LocaleKeys.phone.localize,
                         hintStyle: TextStyle(
-                          color: AppColors.getTextColor(context).withOpacity(0.6),
+                          color:
+                              AppColors.getTextColor(context).withOpacity(0.6),
                           fontSize: 16,
                         ),
                         errorText: hasPhoneError
@@ -846,7 +863,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide(
-                            color: AppColors.getTextColor(context).withOpacity(0.1),
+                            color: AppColors.getTextColor(context)
+                                .withOpacity(0.1),
                             width: 1,
                           ),
                         ),
@@ -893,12 +911,14 @@ class PremiumAndRequestButtons extends StatelessWidget {
                       ],
                     ),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.getFillColor(context),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: AppColors.getTextColor(context).withOpacity(0.1),
+                          color:
+                              AppColors.getTextColor(context).withOpacity(0.1),
                           width: 1,
                         ),
                       ),
@@ -908,7 +928,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                             margin: const EdgeInsets.all(8),
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                              color: AppColors.getButtonPrimaryColor(context)
+                                  .withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(
@@ -928,9 +949,11 @@ class PremiumAndRequestButtons extends StatelessWidget {
                           ),
                           const Spacer(),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                              color: AppColors.getButtonPrimaryColor(context)
+                                  .withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: DropdownButton<String>(
@@ -997,7 +1020,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                           margin: const EdgeInsets.all(8),
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.getButtonPrimaryColor(context).withOpacity(0.1),
+                            color: AppColors.getButtonPrimaryColor(context)
+                                .withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -1008,7 +1032,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         ),
                         hintText: LocaleKeys.notes.localize,
                         hintStyle: TextStyle(
-                          color: AppColors.getTextColor(context).withOpacity(0.6),
+                          color:
+                              AppColors.getTextColor(context).withOpacity(0.6),
                           fontSize: 16,
                         ),
                         filled: true,
@@ -1020,7 +1045,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide(
-                            color: AppColors.getTextColor(context).withOpacity(0.1),
+                            color: AppColors.getTextColor(context)
+                                .withOpacity(0.1),
                             width: 1,
                           ),
                         ),
@@ -1051,7 +1077,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.getButtonPrimaryColor(context).withOpacity(0.3),
+                                color: AppColors.getButtonPrimaryColor(context)
+                                    .withOpacity(0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
@@ -1086,7 +1113,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      
+
                       // Premium Book Button
                       Expanded(
                         child: Container(
@@ -1094,7 +1121,8 @@ class PremiumAndRequestButtons extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.getRedColor(context).withOpacity(0.3),
+                                color: AppColors.getRedColor(context)
+                                    .withOpacity(0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
@@ -1113,12 +1141,12 @@ class PremiumAndRequestButtons extends StatelessWidget {
                             ),
                             onPressed: () {
                               ManageVibration.vibrate();
-                              if(item.isPremium==false){
+                              if (item.isPremium == false) {
                                 SubscriptionMethod().subscribe(
                                   subscribeId: item.subCategory?.id ?? '',
                                   title: item.firstName ?? '',
                                 );
-                              }else{
+                              } else {
                                 _handleBooking(
                                   context,
                                   patientNameController.text.trim(),
@@ -1175,14 +1203,18 @@ class PremiumAndRequestButtons extends StatelessWidget {
     // Here you can implement the actual booking logic
     // For now, we'll just show a success message and close the sheet
     Navigator.pop(context);
-    
+
     // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          isPremium 
-            ? context.isArabic?"تم الحجز المميز بنجاح":"Booking premium successful"
-            : context.isArabic?"تم الحجز بنجاح":"Booking successful",
+          isPremium
+              ? context.isArabic
+                  ? "تم الحجز المميز بنجاح"
+                  : "Booking premium successful"
+              : context.isArabic
+                  ? "تم الحجز بنجاح"
+                  : "Booking successful",
         ),
         backgroundColor: AppColors.getButtonPrimaryColor(context),
       ),

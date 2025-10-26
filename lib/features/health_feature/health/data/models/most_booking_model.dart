@@ -36,17 +36,31 @@ class MostBookingModel extends MostBookingEntity {
       address: json['address'] != null
           ? AddressModel.fromJson(json['address'])
           : null,
-      subCategory:json['medicalSpecialization']!=null? MostSubCategoryModel.fromJson(json['medicalSpecialization']):null,
+      subCategory: json['subCategoryId'] != null
+          ? MostSubCategoryModel.fromJson(json['subCategoryId'])
+          : (json['medicalSpecialization'] != null
+              ? MostSubCategoryModel.fromJson(json['medicalSpecialization'])
+              : null),
       averageRating: json['averageRating']?.toDouble(),
       totalRatings: json['totalRatings'],
       ratingText: json['ratingText'],
       bookingCount: json['bookingCount'],
       viewCount: json['viewCount'],
-      profilePicture: json['profilePicture'],
+      profilePicture: json['mediaId'] != null && json['mediaId'] is Map
+          ? json['mediaId']['mediaKey'] ?? json['mediaId']['_id']
+          : json['profilePicture'],
       subscriptionType: json['subscriptionType'],
       subscriptionRank: json['subscriptionRank'],
-      waitingTimeAr: json['waitingTime']!=null?json['waitingTime']['ar']?.toString():'',
-      waitingTimeEn: json['waitingTime']!=null?json['waitingTime']['en']?.toString():'',
+      waitingTimeAr: json['waitingTime'] != null
+          ? (json['waitingTime'] is Map
+              ? json['waitingTime']['ar']?.toString()
+              : json['waitingTime'].toString())
+          : '',
+      waitingTimeEn: json['waitingTime'] != null
+          ? (json['waitingTime'] is Map
+              ? json['waitingTime']['en']?.toString()
+              : json['waitingTime'].toString())
+          : '',
       currencyAr: json['currencyAr']?.toString(),
       currencyEn: json['currencyEn']?.toString(),
       isPremium: json['isPremium'],
@@ -66,9 +80,15 @@ class AddressModel extends AddressEntity {
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
       governorate: json['governorate'] != null
-          ? MostGovernorateModel.fromJson(json['governorate'])
+          ? (json['governorate'] is Map<String, dynamic>
+              ? MostGovernorateModel.fromJson(json['governorate'])
+              : MostGovernorateModel(id: json['governorate'].toString()))
           : null,
-      city: json['city'] != null ? MostCityModel.fromJson(json['city']) : null,
+      city: json['city'] != null
+          ? (json['city'] is Map<String, dynamic>
+              ? MostCityModel.fromJson(json['city'])
+              : MostCityModel(id: json['city'].toString()))
+          : null,
       address: json['address'],
     );
   }

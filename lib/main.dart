@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
@@ -64,6 +65,9 @@ final GlobalKey _toastificationKey = GlobalKey();
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Initialize Google Mobile Ads
+    await MobileAds.instance.initialize();
 
     await LocalizationService.init(); // Initialize Easy Localization
 
@@ -366,7 +370,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                 child: MaterialApp.router(
                                   routerConfig: AppPages.router,
                                   builder:
-                                      (BuildContext context, Widget? child) { 
+                                      (BuildContext context, Widget? child) {
                                     final mediaQuery = MediaQuery.of(context);
                                     return MediaQuery(
                                       data: mediaQuery.copyWith(

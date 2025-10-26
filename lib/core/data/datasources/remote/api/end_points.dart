@@ -432,7 +432,7 @@ class EndPoints {
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
   static searchDoctors(SearchDoctorsParams params) =>
-      '/health/doctors/search/doctor?name=${params.name}&limit=${params.limit}&page=${params.page}';
+      '/health/doctor-search?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
 

@@ -55,6 +55,8 @@ class _HealthBannerState extends State<HealthBanner> {
               }
             },
             onFavorite: () {
+              // Use the same favorite logic as subcategories for consistency
+              // This ensures that the favorite status is unified between banner and cards
               context
                   .read<HealthCubit>()
                   .toggleFavoriteCategory(state.mainCategory!.id);

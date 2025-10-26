@@ -113,9 +113,16 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
       },
     );
   }
+
   getDoctorsFromSearch(String name) async {
-    print("object");
+    print("Searching for: $name");
     if (!hasMoreData || isLoadingMore) return;
+
+    // Validate search query
+    if (name.trim().isEmpty) {
+      print("Empty search query provided");
+      return;
+    }
 
     isLoadingMore = true;
 
@@ -128,12 +135,21 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMore = false;
         emit(state.copyWith(failure: failure, status: DoctorsListStates.error));
       },
       (data) {
-        doctorsList.addAll(data);
+        print('Search results received: ${data.length} items');
+        print(
+            'First item: ${data.isNotEmpty ? data.first.toString() : 'No items'}');
 
-        if (data.length < pageSize) {
+        // Filter results based on search query for better relevance
+        List<MostBookingEntity> filteredData = _filterSearchResults(data, name);
+        print('Filtered results: ${filteredData.length} items');
+
+        doctorsList.addAll(filteredData);
+
+        if (filteredData.length < pageSize) {
           hasMoreData = false;
         } else {
           currentPage++;
@@ -141,18 +157,71 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
         isLoadingMore = false;
         emit(state.copyWith(
-            status: DoctorsListStates.success, doctorsList: data));
+            status: DoctorsListStates.success, doctorsList: filteredData));
       },
     );
   }
 
-  void loadInitialData(String subCategory,bool fromSearch) async {
+  List<MostBookingEntity> _filterSearchResults(
+      List<MostBookingEntity> data, String searchQuery) {
+    if (searchQuery.trim().isEmpty) return data;
+
+    String query = searchQuery.toLowerCase().trim();
+
+    return data.where((doctor) {
+      // Check doctor name
+      String doctorName =
+          '${doctor.firstName ?? ''} ${doctor.lastName ?? ''}'.toLowerCase();
+      if (doctorName.contains(query)) return true;
+
+      // Check subcategory name in Arabic
+      if (doctor.subCategory?.nameAr != null) {
+        String subCategoryAr = doctor.subCategory!.nameAr!.toLowerCase();
+        if (subCategoryAr.contains(query)) return true;
+      }
+
+      // Check subcategory name in English
+      if (doctor.subCategory?.nameEn != null) {
+        String subCategoryEn = doctor.subCategory!.nameEn!.toLowerCase();
+        if (subCategoryEn.contains(query)) return true;
+      }
+
+      // Check for specific medical terms
+      Map<String, List<String>> medicalTerms = {
+        'عيون': ['عيون', 'عين', 'eyes', 'ophthalmology', 'ophthalmologist'],
+        'قلب': ['قلب', 'cardiology', 'cardiologist', 'heart'],
+        'عظام': ['عظام', 'orthopedics', 'orthopedic', 'bones'],
+        'أطفال': ['أطفال', 'pediatrics', 'pediatric', 'children'],
+        'نساء': ['نساء', 'gynecology', 'gynecologist', 'women'],
+        'جلدية': ['جلدية', 'dermatology', 'dermatologist', 'skin'],
+        'أذن': ['أذن', 'انف', 'اذن', 'ear', 'nose', 'ent'],
+        'مخ': ['مخ', 'اعصاب', 'neurology', 'neurologist', 'brain'],
+      };
+
+      if (medicalTerms.containsKey(query)) {
+        List<String> terms = medicalTerms[query]!;
+        for (String term in terms) {
+          if (doctorName.contains(term) ||
+              (doctor.subCategory?.nameAr?.toLowerCase().contains(term) ??
+                  false) ||
+              (doctor.subCategory?.nameEn?.toLowerCase().contains(term) ??
+                  false)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }).toList();
+  }
+
+  void loadInitialData(String subCategory, bool fromSearch) async {
     emit(state.copyWith(status: DoctorsListStates.loading));
     doctorsList.clear();
     currentPage = 1;
     hasMoreData = true;
-    if(fromSearch) await getDoctorsFromSearch(subCategory);
-    if(!fromSearch)await getDoctorsFromSubCategory(subCategory);
+    if (fromSearch) await getDoctorsFromSearch(subCategory);
+    if (!fromSearch) await getDoctorsFromSubCategory(subCategory);
   }
 }
 /*

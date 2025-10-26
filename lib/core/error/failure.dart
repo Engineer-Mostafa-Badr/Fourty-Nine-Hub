@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,12 +53,14 @@ class ValidationFailure extends Failure {
 class SocialLoginFailure extends Failure {
   final dynamic exception;
 
-  const SocialLoginFailure(this.exception,);
+  const SocialLoginFailure(
+    this.exception,
+  );
 }
 
 String getFailureMessage(Failure failure, BuildContext context) {
   String failureName = getFailureName(failure, context);
-  if(failureName=='EmailNotVerifiedError')return '';
+  if (failureName == 'EmailNotVerifiedError') return '';
   String localizeMessage(String message) {
     if (message.contains('&&&')) {
       final parts = message.split('&&&');
@@ -73,37 +74,46 @@ String getFailureMessage(Failure failure, BuildContext context) {
     return message;
   }
 
+  // Function to remove emojis from error messages
+  String removeEmojis(String text) {
+    return text.replaceAll(
+        RegExp(
+            r'[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]',
+            unicode: true),
+        '');
+  }
+
   if (failure is ServerFailure) {
     final message = localizeMessage(failure.message);
     if (failure.errors != null && failure.errors!.isNotEmpty) {
       final errors = failure.errors!.map(localizeMessage).join('\n');
-      return '$message\n$errors';
+      return removeEmojis('$message\n$errors');
     }
-    return message;
+    return removeEmojis(message);
   } else if (failure is InvalidOtpFailure) {
-    return localizeMessage(failure.message);
+    return removeEmojis(localizeMessage(failure.message));
   } else if (failure is UnauthorizedFailure) {
-    return localizeMessage(failure.message);
+    return removeEmojis(localizeMessage(failure.message));
   } else if (failure is SocialLoginFailure) {
     if (failure.exception is FirebaseException &&
         (failure.exception as FirebaseException).message != null) {
-      return localizeMessage((failure.exception as FirebaseException).message!);
+      return removeEmojis(
+          localizeMessage((failure.exception as FirebaseException).message!));
     }
-    return localizeMessage(failure.exception.toString());
+    return removeEmojis(localizeMessage(failure.exception.toString()));
   } else if (failure is CacheFailure) {
-    return localizeMessage('Cache Failure');
+    return removeEmojis(localizeMessage('Cache Failure'));
   } else if (failure is ValidationFailure) {
-    return localizeMessage(failure.message);
+    return removeEmojis(localizeMessage(failure.message));
   } else if (failure is UnknownFailure) {
-    return localizeMessage(failure.error);
+    return removeEmojis(localizeMessage(failure.error));
   } else {
     // Log the unknown failure type for debugging
     log('🚨 Unknown Failure Type: ${failure.runtimeType}');
     log('🚨 Failure Details: ${failure.toString()}');
-    return localizeMessage('Unknown Error - Please try again');
+    return removeEmojis(localizeMessage('Unknown Error - Please try again'));
   }
 }
-
 
 String getFailureName(Failure failure, BuildContext context) {
   if (failure is ServerFailure) {
@@ -111,7 +121,7 @@ String getFailureName(Failure failure, BuildContext context) {
     if (failure.errors != null && failure.errors!.isNotEmpty) {
       return '$message\n${failure.errors!.join('\n')}';
     }
-    return failure.name??'Unknown';
+    return failure.name ?? 'Unknown';
   } else if (failure is InvalidOtpFailure) {
     return failure.message;
   } else if (failure is UnauthorizedFailure) {
