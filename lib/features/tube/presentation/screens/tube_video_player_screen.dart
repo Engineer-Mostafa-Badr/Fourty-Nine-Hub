@@ -1,480 +1,18 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../../../core/enums/base_status_enum.dart';
-import '../../../../service_locator/service_locator.dart';
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../../domain/entities/get_tube_video_commnets_entity.dart';
 import '../cubit/tube_cubit.dart';
 
 
-import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../domain/entities/get_all_tube_videos_entity.dart';
-import '../cubit/tube_cubit.dart';
-
-import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../domain/entities/get_all_tube_videos_entity.dart';
-import '../cubit/tube_cubit.dart';
 import '../widgets/video_card_widget.dart';
 
-import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../domain/entities/get_all_tube_videos_entity.dart';
-import '../cubit/tube_cubit.dart';
-import '../widgets/video_card_widget.dart';
-import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../../../service_locator/service_locator.dart';
-import '../../domain/entities/get_all_tube_videos_entity.dart';
-import '../../domain/entities/get_tube_video_commnets_entity.dart';
-import '../cubit/tube_cubit.dart';
-import '../widgets/video_card_widget.dart';
 
-import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../../../service_locator/service_locator.dart';
-import '../../domain/entities/get_all_tube_videos_entity.dart';
-import '../../domain/entities/get_tube_video_commnets_entity.dart';
-import '../cubit/tube_cubit.dart';
-import '../widgets/video_card_widget.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chewie/chewie.dart';
-
-// class VideoPlayerPage extends StatefulWidget {
-//   final GetAllTubeVideosEntity video;
-//   final List<GetAllTubeVideosEntity>? videoList; // Added to pass the video list
-//
-//   const VideoPlayerPage({super.key, required this.video, this.videoList});
-//
-//   @override
-//   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
-// }
-//
-// class _VideoPlayerPageState extends State<VideoPlayerPage> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     final cubit = context.read<TubeCubit>();
-//     if (cubit.state.currentVideo?.id != widget.video.id) {
-//       cubit.playVideo(widget.video, videoList: widget.videoList); // Pass videoList
-//     } else {
-//       cubit.maximizePlayer();
-//     }
-//   }
-//
-//   Widget _buildActionButton(IconData icon, String label) {
-//     return Padding(
-//       padding: const EdgeInsets.only(right: 16),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Icon(icon, size: 24, color: Colors.white),
-//           const SizedBox(height: 4),
-//           Text(label, style: const TextStyle(fontSize: 12, color: Colors.white)),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       appBar: AppBar(
-//         leading: IconButton(
-//           icon: const Icon(Icons.arrow_back),
-//           onPressed: () {
-//             context.read<TubeCubit>().minimizePlayer();
-//             Navigator.pop(context);
-//           },
-//         ),
-//         actions: [
-//           IconButton(icon: const Icon(Icons.cast), onPressed: () {}),
-//           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-//           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-//         ],
-//       ),
-//       body: BlocBuilder<TubeCubit, TubeState>(
-//         builder: (context, state) {
-//           return ListView(
-//             children: [
-//               // 🎥 Video Player Section
-//               SizedBox(
-//                 height: 400,
-//                 child: GestureDetector(
-//                   onVerticalDragEnd: (details) {
-//                     if (details.primaryVelocity! > 300 && !state.isLoading) {
-//                       context.read<TubeCubit>().minimizePlayer();
-//                       Navigator.pop(context);
-//                     }
-//                   },
-//                   child: AspectRatio(
-//                     aspectRatio: state.chewieController?.videoPlayerController.value.aspectRatio ?? 16 / 9,
-//                     child: (state.isLoading || state.chewieController == null || !state.chewieController!.videoPlayerController.value.isInitialized)
-//                         ? const Center(
-//                       child: Column(
-//                         mainAxisAlignment: MainAxisAlignment.center,
-//                         children: [
-//                           CircularProgressIndicator(),
-//                           SizedBox(height: 16),
-//                           Text('جارٍ تحميل الفيديو...', style: TextStyle(color: Colors.white70)),
-//                         ],
-//                       ),
-//                     )
-//                         : Chewie(controller: state.chewieController!),
-//                   ),
-//                 ),
-//               ),
-//
-//               // 📝 Video Info
-//               Padding(
-//                 padding: const EdgeInsets.all(12),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       widget.video.title ?? "غير متوفر",
-//                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-//                     ),
-//                     const SizedBox(height: 8),
-//                     Text(
-//                       '${widget.video.views} • ${widget.video.updatedAt}',
-//                       style: const TextStyle(color: Colors.grey, fontSize: 14),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//
-//               // 🔘 Action Buttons
-//               SizedBox(
-//                 height: 48,
-//                 child: ListView(
-//                   scrollDirection: Axis.horizontal,
-//                   padding: const EdgeInsets.symmetric(horizontal: 12),
-//                   children: [
-//                     _buildActionButton(Icons.thumb_up_outlined, '12K'),
-//                     _buildActionButton(Icons.thumb_down_outlined, 'غير معجب'),
-//                     _buildActionButton(Icons.share, 'مشاركة'),
-//                     _buildActionButton(Icons.download, 'تنزيل'),
-//                     _buildActionButton(Icons.library_add, 'حفظ'),
-//                   ],
-//                 ),
-//               ),
-//
-//               const Divider(height: 1, color: Color(0xFF272727)),
-//
-//               // 📜 Description
-//               Padding(
-//                 padding: const EdgeInsets.all(12),
-//                 child: Text(
-//                   widget.video.description ?? "غير متوفر",
-//                   style: const TextStyle(color: Colors.grey, fontSize: 14),
-//                 ),
-//               ),
-//
-//               const Divider(height: 1, color: Color(0xFF272727)),
-//
-//               TubeCommentsSection(videoId: widget.video.id!),
-//
-//               RelatedVideosScreen(videoId: widget.video.id!),
-//
-//               const Divider(height: 1, color: Color(0xFF272727)),
-//
-//               const SizedBox(height: 80),
-//             ],
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chewie/chewie.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chewie/chewie.dart';
-// class VideoPlayerPage extends StatefulWidget {
-//   final GetAllTubeVideosEntity video;
-//   final List<GetAllTubeVideosEntity>? videoList;
-//
-//   const VideoPlayerPage({super.key, required this.video, this.videoList});
-//
-//   @override
-//   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
-// }
-//
-// class _VideoPlayerPageState extends State<VideoPlayerPage> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     final cubit = context.read<TubeCubit>();
-//     final state = cubit.state;
-//
-//     if (state.currentVideo?.id == widget.video.id &&
-//         state.isMinimized &&
-//         state.areControllersInitialized) {
-//       cubit.maximizePlayer();
-//       if (state.videoPlayerController != null &&
-//           state.lastPlaybackPosition != null) {
-//         state.videoPlayerController!.seekTo(state.lastPlaybackPosition!);
-//         if (state.isPlaying) {
-//           state.videoPlayerController!.play();
-//         }
-//       }
-//     } else {
-//       cubit.playVideo(widget.video, videoList: widget.videoList);
-//     }
-//   }
-//
-//   Widget _buildActionButton(IconData icon, String label, {VoidCallback? onTap}) {
-//     return Padding(
-//       padding: const EdgeInsets.only(right: 16),
-//       child: InkWell(
-//         onTap: onTap,
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Icon(icon, size: 24, color: Colors.white),
-//             const SizedBox(height: 4),
-//             Text(label,
-//                 style: const TextStyle(fontSize: 12, color: Colors.white)),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   void _showCommentsBottomSheet(BuildContext context) {
-//     final cubit = context.read<TubeCubit>();
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       backgroundColor: Colors.black,
-//       builder: (ctx) => BlocProvider.value(
-//         value: cubit,
-//         child: DraggableScrollableSheet(
-//           initialChildSize: 0.7,
-//           minChildSize: 0.3,
-//           maxChildSize: 0.9,
-//           expand: false,
-//           builder: (ctx, scrollController) => TubeCommentsSection(
-//             videoId: widget.video.id!,
-//             scrollController: scrollController,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   bool _isImageContent() {
-//     return widget.video.videoUrl == null || widget.video.videoUrl!.isEmpty;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       appBar: AppBar(
-//         leading: IconButton(
-//           icon: const Icon(Icons.arrow_back),
-//           onPressed: () {
-//             context.read<TubeCubit>().minimizePlayer();
-//             Navigator.pop(context);
-//           },
-//         ),
-//         actions: [
-//           IconButton(icon: const Icon(Icons.cast), onPressed: () {}),
-//           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-//           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-//         ],
-//       ),
-//       body: BlocBuilder<TubeCubit, TubeState>(
-//         builder: (context, state) {
-//           return SingleChildScrollView(
-//             physics: const BouncingScrollPhysics(),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 // 🎥 Video Player
-//                 SizedBox(
-//                   height: 400,
-//                   child: GestureDetector(
-//                     onVerticalDragEnd: (details) {
-//                       if (details.primaryVelocity! > 300 &&
-//                           !state.isLoading &&
-//                           !_isImageContent()) {
-//                         context.read<TubeCubit>().minimizePlayer();
-//                         Navigator.pop(context);
-//                       }
-//                     },
-//                     child: _isImageContent()
-//                         ? Image.network(
-//                       widget.video.thumbnail ?? '',
-//                       fit: BoxFit.cover,
-//                       width: double.infinity,
-//                       errorBuilder: (context, error, stackTrace) =>
-//                       const Center(
-//                         child: Icon(Icons.error, color: Colors.white),
-//                       ),
-//                     )
-//                         : Container(
-//                       width: double.infinity,
-//                       color: Colors.black,
-//                       child: (state.isLoading ||
-//                           state.chewieController == null ||
-//                           !state
-//                               .chewieController!
-//                               .videoPlayerController
-//                               .value
-//                               .isInitialized)
-//                           ? const Center(
-//                         child: Column(
-//                           mainAxisAlignment:
-//                           MainAxisAlignment.center,
-//                           children: [
-//                             CircularProgressIndicator(),
-//                             SizedBox(height: 16),
-//                             Text('Loading video...',
-//                                 style: TextStyle(
-//                                     color: Colors.white70)),
-//                           ],
-//                         ),
-//                       )
-//                           : ClipRRect(
-//                         borderRadius: BorderRadius.zero,
-//                         child: Chewie(
-//                           controller: state.chewieController!,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//
-//                 // 📄 Title & info
-//                 Padding(
-//                   padding: const EdgeInsets.all(12),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(widget.video.title ?? "Not available",
-//                           style: const TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.w500,
-//                               color: Colors.white)),
-//                       const SizedBox(height: 8),
-//                       Text(
-//                         '${widget.video.views} • ${widget.video.updatedAt}',
-//                         style: const TextStyle(
-//                             color: Colors.grey, fontSize: 14),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//
-//                 // 🎛️ Actions
-//                 SizedBox(
-//                   height: 48,
-//                   child: ListView(
-//                     scrollDirection: Axis.horizontal,
-//                     padding: const EdgeInsets.symmetric(horizontal: 12),
-//                     children: [
-//                       _buildActionButton(Icons.thumb_up_outlined, '12K'),
-//                       _buildActionButton(Icons.thumb_down_outlined, 'Dislike'),
-//                       _buildActionButton(Icons.share, 'Share'),
-//                       _buildActionButton(Icons.download, 'Download'),
-//                       if (!_isImageContent())
-//                         _buildActionButton(Icons.comment, 'Comments',
-//                             onTap: () => _showCommentsBottomSheet(context)),
-//                       _buildActionButton(Icons.library_add, 'Save'),
-//                     ],
-//                   ),
-//                 ),
-//
-//                 const Divider(height: 1, color: Color(0xFF272727)),
-//
-//                 // 📝 Description
-//                 Padding(
-//                   padding: const EdgeInsets.all(12),
-//                   child: Text(
-//                     widget.video.description ?? "Not available",
-//                     style: const TextStyle(
-//                         color: Colors.grey, fontSize: 14),
-//                   ),
-//                 ),
-//
-//                 const Divider(height: 1, color: Color(0xFF272727)),
-//
-//                 // 🎥 Related videos / comments
-//                 _isImageContent()
-//                     ? BlocBuilder<TubeCubit, TubeState>(
-//                   builder: (context, state) {
-//                     final comments =
-//                         context.read<TubeCubit>().tubeVideoComments;
-//                     if (comments.isEmpty &&
-//                         state.status == StateStatus.loading) {
-//                       return const Center(
-//                           child: CircularProgressIndicator(
-//                               color: Colors.red));
-//                     }
-//                     if (comments.isEmpty) {
-//                       return const Padding(
-//                         padding: EdgeInsets.all(16),
-//                         child: Center(
-//                           child: Text('No comments yet',
-//                               style:
-//                               TextStyle(color: Colors.grey)),
-//                         ),
-//                       );
-//                     }
-//                     return GestureDetector(
-//                       onTap: () => _showCommentsBottomSheet(context),
-//                       child: CommentItem(
-//                         comment: comments.first,
-//                         videoId: widget.video.id!,
-//                         currentUserId: null,
-//                       ),
-//                     );
-//                   },
-//                 )
-//                     : RelatedVideosScreen(videoId: widget.video.id!),
-//
-//                 const Divider(height: 1, color: Color(0xFF272727)),
-//               ],
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
 class VideoPlayerPage extends StatefulWidget {
   final GetAllTubeVideosEntity video;
   final List<GetAllTubeVideosEntity>? videoList;
@@ -486,9 +24,12 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
+
+
   @override
   void initState() {
     super.initState();
+    _currentVideoId = widget.video.id!;
     final cubit = context.read<TubeCubit>();
     final state = cubit.state;
 
@@ -507,7 +48,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       cubit.playVideo(widget.video, videoList: widget.videoList);
     }
   }
-
   Widget _buildActionButton(IconData icon, String label, {VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.only(right: 16),
@@ -525,7 +65,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     );
   }
 
-  void _showCommentsBottomSheet(BuildContext context) {
+  void _showCommentsBottomSheet(BuildContext context, GetAllTubeVideosEntity video) {
     final cubit = context.read<TubeCubit>();
     showModalBottomSheet(
       context: context,
@@ -539,7 +79,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           maxChildSize: 0.9,
           expand: false,
           builder: (ctx, scrollController) => TubeCommentsSection(
-            videoId: widget.video.id!,
+            videoId: video.id!,
             scrollController: scrollController,
           ),
         ),
@@ -547,132 +87,150 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     );
   }
 
-  bool _isImageContent() => widget.video.videoUrl == null || widget.video.videoUrl!.isEmpty;
 
+    // bool _isImageContent() => widget.video.videoUrl == null || widget.video.videoUrl!.isEmpty;
+  bool _isImageContent(GetAllTubeVideosEntity video) => video.videoUrl == null || video.videoUrl!.isEmpty;
+  String _currentVideoId = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-
-      body: BlocBuilder<TubeCubit, TubeState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              // 🔹 Video Player
-              SizedBox(
-                height: 400,
-                child: GestureDetector(
-                  onVerticalDragEnd: (details) {
-                    if (details.primaryVelocity! > 300 &&
-                        !state.isLoading &&
-                        !_isImageContent()) {
-                      context.read<TubeCubit>().minimizePlayer();
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: _isImageContent()
-                      ? Image.network(
-                    widget.video.thumbnail ?? '',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) =>
-                    const Center(
-                      child: Icon(Icons.error, color: Colors.white),
-                    ),
-                  )
-                      : Container(
-                    color: Colors.black,
-                    width: double.infinity,
-                    child: (state.isLoading ||
-                        state.chewieController == null ||
-                        !state.chewieController!.videoPlayerController.value.isInitialized)
-                        ? const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 16),
-                          Text('Loading video...',
-                              style: TextStyle(color: Colors.white70)),
-                        ],
+    return WillPopScope(
+      onWillPop: () async {
+        final cubit = context.read<TubeCubit>();
+        cubit.minimizePlayer(); // 👈 Minimize when back
+        return true; // Allow pop to continue
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+      
+        body: BlocConsumer<TubeCubit, TubeState>(
+          listener: (context, state) {
+            // 🔥 Listen for video changes and update the related videos
+            if (state.currentVideo != null && state.currentVideo!.id != _currentVideoId) {
+              setState(() {
+                _currentVideoId = state.currentVideo!.id!;
+              });
+            }
+          },
+          builder: (context, state) {
+            final currentVideo = state.currentVideo ?? widget.video;
+      
+            return Column(
+              children: [
+                // 🔹 Video Player (same as before)
+                SizedBox(
+                  height: 400,
+                  child: GestureDetector(
+                    onVerticalDragEnd: (details) {
+                      if (details.primaryVelocity! > 300 &&
+                          !state.isLoading &&
+                          !_isImageContent(currentVideo)) {
+                        context.read<TubeCubit>().minimizePlayer();
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: _isImageContent(currentVideo)
+                        ? Image.network(
+                      currentVideo.thumbnail ?? '',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) =>
+                      const Center(
+                        child: Icon(Icons.error, color: Colors.white),
                       ),
                     )
-                        : ClipRRect(
-                      borderRadius: BorderRadius.zero,
-                      child: Chewie(controller: state.chewieController!),
+                        : Container(
+                      color: Colors.black,
+                      width: double.infinity,
+                      child: (state.isLoading ||
+                          state.chewieController == null ||
+                          !state.chewieController!.videoPlayerController.value.isInitialized)
+                          ? const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Loading video...',
+                                style: TextStyle(color: Colors.white70)),
+                          ],
+                        ),
+                      )
+                          : ClipRRect(
+                        borderRadius: BorderRadius.zero,
+                        child: Chewie(controller: state.chewieController!),
+                      ),
                     ),
                   ),
                 ),
-              ),
-
-              // 🔹 Rest of content scrolls independently with pagination below
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    // ▶ Title and metadata
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.video.title ?? "Not available",
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white)),
-                          const SizedBox(height: 8),
-                          Text(
-                            '${widget.video.views} • ${widget.video.updatedAt}',
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                        ],
+      
+                Expanded(
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      // ▶ Title and metadata - use currentVideo instead of widget.video
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(currentVideo.title ?? "Not available",
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${currentVideo.views} • ${currentVideo.updatedAt}',
+                              style: const TextStyle(color: Colors.grey, fontSize: 14),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-
-                    // 🔹 Buttons
-                    SizedBox(
-                      height: 48,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        children: [
-                          _buildActionButton(Icons.thumb_up_outlined, '12K'),
-                          _buildActionButton(Icons.thumb_down_outlined, 'Dislike'),
-                          _buildActionButton(Icons.share, 'Share'),
-                          _buildActionButton(Icons.download, 'Download'),
-                          if (!_isImageContent())
-                            _buildActionButton(Icons.comment, 'Comments',
-                                onTap: () => _showCommentsBottomSheet(context)),
-                          _buildActionButton(Icons.library_add, 'Save'),
-                        ],
+      
+                      // 🔹 Buttons
+                      SizedBox(
+                        height: 48,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          children: [
+                            _buildActionButton(Icons.thumb_up_outlined, '12K'),
+                            _buildActionButton(Icons.thumb_down_outlined, 'Dislike'),
+                            _buildActionButton(Icons.share, 'Share'),
+                            _buildActionButton(Icons.download, 'Download'),
+                            if (!_isImageContent(currentVideo))
+                              _buildActionButton(Icons.comment, 'Comments',
+                                  onTap: () => _showCommentsBottomSheet(context, currentVideo)),
+                            _buildActionButton(Icons.library_add, 'Save'),
+                          ],
+                        ),
                       ),
-                    ),
-
-                    const Divider(height: 1, color: Color(0xFF272727)),
-
-                    // 🔹 Description
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text(
-                        widget.video.description ?? "Not available",
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
+      
+                      const Divider(height: 1, color: Color(0xFF272727)),
+      
+                      // 🔹 Description - use currentVideo
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          currentVideo.description ?? "Not available",
+                          style: const TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
                       ),
-                    ),
-
-                    const Divider(height: 1, color: Color(0xFF272727)),
-
-                    // 🔹 Related Videos (this part scrolls + paginates)
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.65,
-                      child: RelatedVideosScreen(videoId: widget.video.id!),
-                    ),
-                  ],
+      
+                      const Divider(height: 1, color: Color(0xFF272727)),
+      
+                      // 🔹 Related Videos - use current video ID
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.65,
+                        child: RelatedVideosScreen(videoId: currentVideo.id!),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -693,6 +251,11 @@ class _TubeCommentsSectionState extends State<TubeCommentsSection> {
   @override
   void initState() {
     super.initState();
+    final cubit = context.read<TubeCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cubit.loadInitialTubeVideoComments(context, widget.videoId);
+    });
+
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels >=
           widget.scrollController.position.maxScrollExtent - 200) {
@@ -1184,12 +747,21 @@ class _CommentItemState extends State<CommentItem> {
     );
   }
 
+
+  // Add this static flag at the top of the _CommentItemState class
+  static bool _isReplyDialogOpen = false;
   void _showReplyDialog(BuildContext context) {
+    if (_isReplyDialogOpen) return;
+    _isReplyDialogOpen = true;
+
     final cubit = context.read<TubeCubit>();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.black,
+      isDismissible: true,
+      enableDrag: true,
       builder: (ctx) => BlocProvider.value(
         value: cubit,
         child: DraggableScrollableSheet(
@@ -1233,18 +805,52 @@ class _CommentItemState extends State<CommentItem> {
                 ),
                 const Divider(height: 1, color: Color(0xFF272727)),
                 Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: CommentItem(
-                        comment: widget.comment,
-                        videoId: widget.videoId,
-                        currentUserId: widget.currentUserId,
-                        isReply: false,
-                      ),
-                    ),
+                  child: BlocBuilder<TubeCubit, TubeState>(
+                    builder: (context, state) {
+                      final latestComments = cubit.tubeVideoComments;
+                      final latestComment = latestComments.firstWhere(
+                            (c) => c.id == widget.comment.id,
+                        orElse: () => widget.comment,
+                      );
+
+                      return SingleChildScrollView(
+                        controller: scrollController,
+                        child: Column(
+                          children: [
+                            // Original comment - PASS isReply: true to prevent nested rendering
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CommentItem(
+                                comment: latestComment,
+                                videoId: widget.videoId,
+                                currentUserId: widget.currentUserId,
+                                isReply: true, // ✅ Changed from false to true
+                              ),
+                            ),
+                            // Replies - now displayed separately without duplication
+                            ...latestComment.replies.map((reply) {
+                              return CommentItem(
+                                comment: TubeCommentEntity(
+                                  id: reply.id,
+                                  content: reply.content,
+                                  userId: reply.userId,
+                                  owner: reply.owner,
+                                  video: reply.video,
+                                  likes: reply.likes.length,
+                                  dislikes: reply.dislikes.length,
+                                  replies: [],
+                                  createdAt: reply.createdAt,
+                                  updatedAt: reply.updatedAt,
+                                ),
+                                videoId: widget.videoId,
+                                currentUserId: widget.currentUserId,
+                                isReply: true,
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const Divider(height: 1, color: Color(0xFF272727)),
@@ -1259,8 +865,13 @@ class _CommentItemState extends State<CommentItem> {
           ),
         ),
       ),
-    );
+    ).whenComplete(() {
+      _isReplyDialogOpen = false;
+    });
   }
+
+
+
 
   void _showReportDialog(BuildContext context) {
     showDialog(
@@ -1333,6 +944,7 @@ class AddCommentWidget extends StatefulWidget {
   final String? currentUserAvatar;
   final String? currentUserName;
   final String? parentCommentId;
+  final VoidCallback? onReplyPosted; // Add this callback
 
   const AddCommentWidget({
     Key? key,
@@ -1340,6 +952,7 @@ class AddCommentWidget extends StatefulWidget {
     this.currentUserAvatar,
     this.currentUserName,
     this.parentCommentId,
+    this.onReplyPosted, // Add this
   }) : super(key: key);
 
   @override
@@ -1371,35 +984,38 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
     super.dispose();
   }
 
-  void _postComment() {
+  void _postComment() async {
     final content = _commentController.text.trim();
     if (content.isEmpty) return;
 
     final cubit = context.read<TubeCubit>();
+
+    // Clear text and reset input
     _commentController.clear();
     _focusNode.unfocus();
     setState(() => _isExpanded = false);
 
-    cubit.createCommentOnTubeVideo(
+    // Wait for backend + Cubit silent refresh
+    await cubit.createCommentOnTubeVideo(
       context: context,
       videoId: widget.videoId,
       content: content,
       parentCommentId: widget.parentCommentId,
     );
 
-    // Auto-expand the parent comment if it's a reply
+    // ✅ Only scroll after Cubit finishes refresh
     if (widget.parentCommentId != null) {
-      cubit.toggleCommentReplies(widget.parentCommentId!);
-      Navigator.pop(context); // Close the reply bottom sheet
+      widget.onReplyPosted?.call();
     }
   }
+
 
   void _cancelComment() {
     _commentController.clear();
     _focusNode.unfocus();
     setState(() => _isExpanded = false);
 
-    // Close the reply bottom sheet if cancelling a reply
+    // Only close if it's a reply in bottom sheet
     if (widget.parentCommentId != null) {
       Navigator.pop(context);
     }
@@ -1554,24 +1170,38 @@ class RelatedVideosScreen extends StatefulWidget {
 
 class _RelatedVideosScreenState extends State<RelatedVideosScreen> {
   late final ScrollController _scrollController;
+  late String _currentVideoId;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _currentVideoId = widget.videoId;
 
-    final cubit = context.read<TubeCubit>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.loadInitialRelatedTubeVideos(context, widget.videoId);
-    });
+    _loadInitialVideos();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
-        cubit.getRelatedTubeVideos(context);
+        context.read<TubeCubit>().getRelatedTubeVideos();
       }
     });
+  }
+
+  void _loadInitialVideos() {
+    final cubit = context.read<TubeCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cubit.loadInitialRelatedTubeVideos( _currentVideoId);
+    });
+  }
+
+  @override
+  void didUpdateWidget(RelatedVideosScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.videoId != widget.videoId) {
+      _currentVideoId = widget.videoId;
+      _loadInitialVideos();
+    }
   }
 
   @override

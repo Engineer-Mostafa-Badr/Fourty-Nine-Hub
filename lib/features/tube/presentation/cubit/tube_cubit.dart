@@ -51,7 +51,7 @@ class TubeCubit extends Cubit<TubeState> {
   final DeleteTubeCommentUseCase deleteTubeCommentUseCase;
   TubeCubit(this.getAllTubeVideosUseCase, this.getTubeFavoriteVideosUseCase, this.addFavoriteTubeUseCase, this.removeFavoriteTubeUseCase, this.searchTubeVideoUseCase, this.getRelatedTubeVideosUseCase, this.getTubeVideoCommentsUseCase, this.createCommentTubeVideoUseCase, this.updateCommentTubeVideoUseCase, this.likeTubeVideoUseCase, this.dislikeTubeVideoUseCase, this.deleteTubeCommentUseCase) : super(TubeState());
   List<GetAllTubeVideosEntity> currentVideoList = [];
-
+  // In TubeCubit
 // Toggle the expanded state of a comment's replies
 // In TubeCubit
   void toggleCommentReplies(String commentId) {
@@ -60,6 +60,7 @@ class TubeCubit extends Cubit<TubeState> {
     expandedComments[commentId] = !(expandedComments[commentId] ?? false);
     emit(currentState.copyWith(expandedComments: expandedComments));
   }
+
 
   void addReplyToComment(String parentCommentId, TubeCommentEntity reply) {
     final currentState = state;
@@ -88,36 +89,36 @@ class TubeCubit extends Cubit<TubeState> {
     response.fold(
           (failure) {
         debugPrint("❌ Failed to create comment");
-        // SILENT: No state changes, no snackbars
+        // Silent failure, no state change
       },
           (entity) async {
         debugPrint("✅ Comment created successfully!");
 
-        // Update expanded state if it's a reply
+        // If it's a reply, ensure parent is expanded
         Map<String, bool> newExpandedComments = Map.from(state.expandedComments);
         if (parentCommentId != null) {
           newExpandedComments[parentCommentId] = true;
         }
 
-        // SILENT REFRESH: Refresh comments without loading states
+        // 🔹 Refresh from backend to get latest comments & replies
         await _silentlyRefreshComments(context, videoId);
 
-        // Emit state with updated expandedComments and lastRepliedCommentId
+        // 🔹 Emit updated expansion state
         emit(state.copyWith(
           expandedComments: newExpandedComments,
-          lastRepliedCommentId: parentCommentId, // Store for scrolling
+          lastRepliedCommentId: parentCommentId,
         ));
       },
     );
   }
 
-  /// 🔄 Refresh comments without any loading indicators
+  /// 🔄 Refresh comments without duplication or loading indicators
   Future<void> _silentlyRefreshComments(BuildContext context, String videoId) async {
     try {
       final response = await getTubeVideoCommentsUseCase(
         GetRelatedTubeVideosParams(
           id: videoId,
-          page: 1, // Always load first page for new comments
+          page: 1,
           limit: pageSize,
         ),
       );
@@ -125,20 +126,20 @@ class TubeCubit extends Cubit<TubeState> {
       response.fold(
             (failure) {
           debugPrint("❌ Silent refresh failed");
-          // SILENT: Don't emit error state
+          // Silent fail: don't emit an error state
         },
             (entity) {
           final TubeVideoCommentsDataEntity? commentsData = entity.data;
           final List<TubeCommentEntity> newComments = commentsData?.comments ?? [];
 
-          // Update comments list silently
+          // 🚨 Overwrite (not append) existing list to avoid duplicates
           tubeVideoComments = List<TubeCommentEntity>.from(newComments);
 
-          // Update pagination state
+          // Pagination handling
           hasMoreTubeVideoComments = newComments.length >= pageSize;
           currentPageTubeVideoComments = hasMoreTubeVideoComments ? 2 : 1;
 
-          // Emit success without loading state
+          // Emit clean, non-duplicated state
           emit(state.copyWith(
             status: StateStatus.success,
             tubeVideoCommentsData: List<TubeCommentEntity>.from(tubeVideoComments),
@@ -149,9 +150,9 @@ class TubeCubit extends Cubit<TubeState> {
       );
     } catch (e) {
       debugPrint("❌ Error in silent refresh: $e");
-      // SILENT: Don't show errors to user
     }
   }
+
   // /// 💬 Create a new comment on a video (COMPLETELY SILENT VERSION)
   // Future<void> createCommentOnTubeVideo({
   //   required BuildContext context,
@@ -485,7 +486,7 @@ class TubeCubit extends Cubit<TubeState> {
   String currentRelatedTubeId = '';
 
 // 🔍 Load Initial Related Videos
-  Future<void> loadInitialRelatedTubeVideos(BuildContext context, String videoId) async {
+  Future<void> loadInitialRelatedTubeVideos(String videoId) async {
     debugPrint("🚀 CUBIT: loadInitialRelatedTubeVideos() called with videoId=$videoId");
 
     isRelatedTubeInitialLoading = true;
@@ -499,13 +500,13 @@ class TubeCubit extends Cubit<TubeState> {
       relatedTubeVideosData: [], // 👈 make sure TubeState supports this field
     ));
 
-    await getRelatedTubeVideos(context);
+    await getRelatedTubeVideos();
 
     isRelatedTubeInitialLoading = false;
   }
 
 // 🔁 Pagination / Load More Related Videos
-  Future<void> getRelatedTubeVideos(BuildContext context) async {
+  Future<void> getRelatedTubeVideos() async {
     debugPrint("🚀 CUBIT: getRelatedTubeVideos() called");
     debugPrint("📊 State: hasMore=$hasMoreRelatedTubeVideos, "
         "isLoading=$isRelatedTubeLoadingMore, "
@@ -1115,6 +1116,10 @@ class TubeCubit extends Cubit<TubeState> {
     await Future.delayed(const Duration(milliseconds: 100)); // Tiny delay for smoother transition
 
     await _initializeController(video);
+
+    // 🔥 CRITICAL: Load related videos for the new video
+    await loadInitialRelatedTubeVideos(video.id!);
+
     if (wasMinimized) {
       emit(state.copyWith(isMinimized: true));
     }
@@ -1172,7 +1177,8 @@ class TubeCubit extends Cubit<TubeState> {
 
     final currentIndex = currentVideoList.indexWhere((v) => v.id == state.currentVideo!.id);
     if (currentIndex >= 0 && currentIndex < currentVideoList.length - 1) {
-      playVideo(currentVideoList[currentIndex + 1], videoList: currentVideoList);
+      final nextVideo = currentVideoList[currentIndex + 1];
+      playVideo(nextVideo, videoList: currentVideoList);
     }
   }
 
@@ -1181,7 +1187,8 @@ class TubeCubit extends Cubit<TubeState> {
 
     final currentIndex = currentVideoList.indexWhere((v) => v.id == state.currentVideo!.id);
     if (currentIndex > 0) {
-      playVideo(currentVideoList[currentIndex - 1], videoList: currentVideoList);
+      final previousVideo = currentVideoList[currentIndex - 1];
+      playVideo(previousVideo, videoList: currentVideoList);
     }
   }
 
