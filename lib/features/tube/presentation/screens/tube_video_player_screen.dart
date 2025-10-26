@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../core/enums/base_status_enum.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../../domain/entities/get_tube_video_commnets_entity.dart';
@@ -59,6 +60,163 @@ import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../../domain/entities/get_tube_video_commnets_entity.dart';
 import '../cubit/tube_cubit.dart';
 import '../widgets/video_card_widget.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:chewie/chewie.dart';
+
+// class VideoPlayerPage extends StatefulWidget {
+//   final GetAllTubeVideosEntity video;
+//   final List<GetAllTubeVideosEntity>? videoList; // Added to pass the video list
+//
+//   const VideoPlayerPage({super.key, required this.video, this.videoList});
+//
+//   @override
+//   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
+// }
+//
+// class _VideoPlayerPageState extends State<VideoPlayerPage> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     final cubit = context.read<TubeCubit>();
+//     if (cubit.state.currentVideo?.id != widget.video.id) {
+//       cubit.playVideo(widget.video, videoList: widget.videoList); // Pass videoList
+//     } else {
+//       cubit.maximizePlayer();
+//     }
+//   }
+//
+//   Widget _buildActionButton(IconData icon, String label) {
+//     return Padding(
+//       padding: const EdgeInsets.only(right: 16),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Icon(icon, size: 24, color: Colors.white),
+//           const SizedBox(height: 4),
+//           Text(label, style: const TextStyle(fontSize: 12, color: Colors.white)),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       appBar: AppBar(
+//         leading: IconButton(
+//           icon: const Icon(Icons.arrow_back),
+//           onPressed: () {
+//             context.read<TubeCubit>().minimizePlayer();
+//             Navigator.pop(context);
+//           },
+//         ),
+//         actions: [
+//           IconButton(icon: const Icon(Icons.cast), onPressed: () {}),
+//           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+//           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+//         ],
+//       ),
+//       body: BlocBuilder<TubeCubit, TubeState>(
+//         builder: (context, state) {
+//           return ListView(
+//             children: [
+//               // 🎥 Video Player Section
+//               SizedBox(
+//                 height: 400,
+//                 child: GestureDetector(
+//                   onVerticalDragEnd: (details) {
+//                     if (details.primaryVelocity! > 300 && !state.isLoading) {
+//                       context.read<TubeCubit>().minimizePlayer();
+//                       Navigator.pop(context);
+//                     }
+//                   },
+//                   child: AspectRatio(
+//                     aspectRatio: state.chewieController?.videoPlayerController.value.aspectRatio ?? 16 / 9,
+//                     child: (state.isLoading || state.chewieController == null || !state.chewieController!.videoPlayerController.value.isInitialized)
+//                         ? const Center(
+//                       child: Column(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           CircularProgressIndicator(),
+//                           SizedBox(height: 16),
+//                           Text('جارٍ تحميل الفيديو...', style: TextStyle(color: Colors.white70)),
+//                         ],
+//                       ),
+//                     )
+//                         : Chewie(controller: state.chewieController!),
+//                   ),
+//                 ),
+//               ),
+//
+//               // 📝 Video Info
+//               Padding(
+//                 padding: const EdgeInsets.all(12),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       widget.video.title ?? "غير متوفر",
+//                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text(
+//                       '${widget.video.views} • ${widget.video.updatedAt}',
+//                       style: const TextStyle(color: Colors.grey, fontSize: 14),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//
+//               // 🔘 Action Buttons
+//               SizedBox(
+//                 height: 48,
+//                 child: ListView(
+//                   scrollDirection: Axis.horizontal,
+//                   padding: const EdgeInsets.symmetric(horizontal: 12),
+//                   children: [
+//                     _buildActionButton(Icons.thumb_up_outlined, '12K'),
+//                     _buildActionButton(Icons.thumb_down_outlined, 'غير معجب'),
+//                     _buildActionButton(Icons.share, 'مشاركة'),
+//                     _buildActionButton(Icons.download, 'تنزيل'),
+//                     _buildActionButton(Icons.library_add, 'حفظ'),
+//                   ],
+//                 ),
+//               ),
+//
+//               const Divider(height: 1, color: Color(0xFF272727)),
+//
+//               // 📜 Description
+//               Padding(
+//                 padding: const EdgeInsets.all(12),
+//                 child: Text(
+//                   widget.video.description ?? "غير متوفر",
+//                   style: const TextStyle(color: Colors.grey, fontSize: 14),
+//                 ),
+//               ),
+//
+//               const Divider(height: 1, color: Color(0xFF272727)),
+//
+//               TubeCommentsSection(videoId: widget.video.id!),
+//
+//               RelatedVideosScreen(videoId: widget.video.id!),
+//
+//               const Divider(height: 1, color: Color(0xFF272727)),
+//
+//               const SizedBox(height: 80),
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:chewie/chewie.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +224,7 @@ import 'package:chewie/chewie.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final GetAllTubeVideosEntity video;
-  final List<GetAllTubeVideosEntity>? videoList; // Added to pass the video list
+  final List<GetAllTubeVideosEntity>? videoList;
 
   const VideoPlayerPage({super.key, required this.video, this.videoList});
 
@@ -86,18 +244,47 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     }
   }
 
-  Widget _buildActionButton(IconData icon, String label) {
+  Widget _buildActionButton(IconData icon, String label, {VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.only(right: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 24, color: Colors.white),
-          const SizedBox(height: 4),
-          Text(label, style: const TextStyle(fontSize: 12, color: Colors.white)),
-        ],
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 24, color: Colors.white),
+            const SizedBox(height: 4),
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.white)),
+          ],
+        ),
       ),
     );
+  }
+
+  void _showCommentsBottomSheet(BuildContext context) {
+    final cubit = context.read<TubeCubit>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.black,
+      builder: (ctx) => BlocProvider.value(
+        value: cubit,
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (ctx, scrollController) => TubeCommentsSection(
+            videoId: widget.video.id!,
+            scrollController: scrollController,
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _isImageContent() {
+    return widget.video.videoUrl == null || widget.video.videoUrl!.isEmpty;
   }
 
   @override
@@ -120,19 +307,26 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       ),
       body: BlocBuilder<TubeCubit, TubeState>(
         builder: (context, state) {
-          return ListView(
+          return Column(
             children: [
-              // 🎥 Video Player Section
               SizedBox(
                 height: 400,
                 child: GestureDetector(
                   onVerticalDragEnd: (details) {
-                    if (details.primaryVelocity! > 300 && !state.isLoading) {
+                    if (details.primaryVelocity! > 300 && !state.isLoading && !_isImageContent()) {
                       context.read<TubeCubit>().minimizePlayer();
                       Navigator.pop(context);
                     }
                   },
-                  child: AspectRatio(
+                  child: _isImageContent()
+                      ? Image.network(
+                    widget.video.thumbnail ?? '',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => const Center(
+                      child: Icon(Icons.error, color: Colors.white),
+                    ),
+                  )
+                      : AspectRatio(
                     aspectRatio: state.chewieController?.videoPlayerController.value.aspectRatio ?? 16 / 9,
                     child: (state.isLoading || state.chewieController == null || !state.chewieController!.videoPlayerController.value.isInitialized)
                         ? const Center(
@@ -141,7 +335,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         children: [
                           CircularProgressIndicator(),
                           SizedBox(height: 16),
-                          Text('جارٍ تحميل الفيديو...', style: TextStyle(color: Colors.white70)),
+                          Text('Loading video...', style: TextStyle(color: Colors.white70)),
                         ],
                       ),
                     )
@@ -149,16 +343,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   ),
                 ),
               ),
-
-              // 📝 Video Info
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.video.title ?? "غير متوفر",
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                      widget.video.title ?? "Not available",
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -168,8 +360,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   ],
                 ),
               ),
-
-              // 🔘 Action Buttons
               SizedBox(
                 height: 48,
                 child: ListView(
@@ -177,34 +367,54 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   children: [
                     _buildActionButton(Icons.thumb_up_outlined, '12K'),
-                    _buildActionButton(Icons.thumb_down_outlined, 'غير معجب'),
-                    _buildActionButton(Icons.share, 'مشاركة'),
-                    _buildActionButton(Icons.download, 'تنزيل'),
-                    _buildActionButton(Icons.library_add, 'حفظ'),
+                    _buildActionButton(Icons.thumb_down_outlined, 'Dislike'),
+                    _buildActionButton(Icons.share, 'Share'),
+                    _buildActionButton(Icons.download, 'Download'),
+                    if (!_isImageContent())
+                      _buildActionButton(
+                        Icons.comment,
+                        'Comments',
+                        onTap: () => _showCommentsBottomSheet(context),
+                      ),
+                    _buildActionButton(Icons.library_add, 'Save'),
                   ],
                 ),
               ),
-
               const Divider(height: 1, color: Color(0xFF272727)),
-
-              // 📜 Description
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
-                  widget.video.description ?? "غير متوفر",
+                  widget.video.description ?? "Not available",
                   style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ),
-
               const Divider(height: 1, color: Color(0xFF272727)),
-
-              TubeCommentsSection(videoId: widget.video.id!),
-
-              RelatedVideosScreen(videoId: widget.video.id!),
-
+              Expanded(
+                child: _isImageContent()
+                    ? BlocBuilder<TubeCubit, TubeState>(
+                  builder: (context, state) {
+                    final comments = context.read<TubeCubit>().tubeVideoComments;
+                    if (comments.isEmpty && state.status == StateStatus.loading) {
+                      return const Center(child: CircularProgressIndicator(color: Colors.red));
+                    }
+                    if (comments.isEmpty) {
+                      return const Center(
+                        child: Text('No comments yet', style: TextStyle(color: Colors.grey)),
+                      );
+                    }
+                    return GestureDetector(
+                      onTap: () => _showCommentsBottomSheet(context),
+                      child: CommentItem(
+                        comment: comments.first,
+                        videoId: widget.video.id!,
+                        currentUserId: null,
+                      ),
+                    );
+                  },
+                )
+                    : RelatedVideosScreen(videoId: widget.video.id!),
+              ),
               const Divider(height: 1, color: Color(0xFF272727)),
-
-              const SizedBox(height: 80),
             ],
           );
         },
@@ -215,74 +425,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
 class TubeCommentsSection extends StatefulWidget {
   final String videoId;
+  final ScrollController scrollController;
 
-  const TubeCommentsSection({super.key, required this.videoId});
+  const TubeCommentsSection({super.key, required this.videoId, required this.scrollController});
 
   @override
   State<TubeCommentsSection> createState() => _TubeCommentsSectionState();
 }
 
 class _TubeCommentsSectionState extends State<TubeCommentsSection> {
-  late final ScrollController _scrollController;
-  int _visibleCommentsCount = 3;
-  bool _isCommentsExpanded = false;
-  bool _allCommentsLoadedIncrementally = false; // NEW: Track incremental loading
-
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-
-    final cubit = context.read<TubeCubit>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.loadInitialTubeVideoComments(context, widget.videoId);
-    });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        cubit.getTubeVideoComments(context);
+    widget.scrollController.addListener(() {
+      if (widget.scrollController.position.pixels >=
+          widget.scrollController.position.maxScrollExtent - 200) {
+        context.read<TubeCubit>().getTubeVideoComments(context);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _toggleCommentsExpansion(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    setState(() {
-      if (_areAllCommentsVisible(comments, cubit)) {
-        // If all comments are visible, collapse them
-        _isCommentsExpanded = false;
-        _allCommentsLoadedIncrementally = false; // Reset incremental flag
-        _visibleCommentsCount = 3;
-      } else {
-        // If not all comments are visible, expand them
-        _isCommentsExpanded = true;
-        _visibleCommentsCount = comments.length;
-      }
-    });
-  }
-
-  void _loadMoreComments(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    setState(() {
-      _visibleCommentsCount += 3;
-
-      // Check if we've loaded all comments incrementally
-      if (_visibleCommentsCount >= comments.length && !cubit.hasMoreTubeVideoComments) {
-        _allCommentsLoadedIncrementally = true;
-      }
-    });
-
-    // If we've reached the end of loaded comments and there are more from API, load them
-    if (_visibleCommentsCount >= comments.length &&
-        cubit.hasMoreTubeVideoComments) {
-      cubit.getTubeVideoComments(context);
-    }
   }
 
   @override
@@ -292,29 +452,38 @@ class _TubeCommentsSectionState extends State<TubeCommentsSection> {
         final cubit = context.read<TubeCubit>();
         final comments = cubit.tubeVideoComments;
 
-        // Only show initial loading when there are no comments
-        if (cubit.isTubeVideoCommentsInitialLoading && comments.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 32),
-            child: Center(child: CircularProgressIndicator(color: Colors.red)),
-          );
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Add Comment Widget at the top
-            AddCommentWidget(
-              videoId: widget.videoId,
-              currentUserAvatar: null,
-              currentUserName: null,
-            ),
-
-            if (comments.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(24),
-                child: Center(
+        return Container(
+          color: Colors.black,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Comments',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: Color(0xFF272727)),
+              Expanded(
+                child: comments.isEmpty && cubit.isTubeVideoCommentsInitialLoading
+                    ? const Center(child: CircularProgressIndicator(color: Colors.red))
+                    : comments.isEmpty
+                    ? const Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.comment_outlined, size: 48, color: Colors.grey),
                       SizedBox(height: 12),
@@ -333,239 +502,43 @@ class _TubeCommentsSectionState extends State<TubeCommentsSection> {
                       ),
                     ],
                   ),
+                )
+                    : ListView.builder(
+                  controller: widget.scrollController,
+                  itemCount: comments.length + (cubit.hasMoreTubeVideoComments ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index < comments.length) {
+                      final comment = comments[index];
+                      return CommentItem(
+                        comment: comment,
+                        videoId: widget.videoId,
+                        currentUserId: null,
+                      );
+                    } else {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Center(
+                          child: CircularProgressIndicator(color: Colors.red),
+                        ),
+                      );
+                    }
+                  },
                 ),
-              )
-            else
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Comments Header with Expand/Collapse
-                  _buildCommentsHeader(comments, cubit),
-
-                  const Divider(height: 1, color: Color(0xFF272727)),
-
-                  // Comments List
-                  _buildCommentsList(comments, cubit),
-                ],
               ),
-          ],
+              const Divider(height: 1, color: Color(0xFF272727)),
+              AddCommentWidget(
+                videoId: widget.videoId,
+                currentUserAvatar: null,
+                currentUserName: null,
+              ),
+            ],
+          ),
         );
       },
     );
   }
-
-  Widget _buildCommentsHeader(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    final areAllCommentsVisible = _areAllCommentsVisible(comments, cubit);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-      child: Row(
-        children: [
-          const Text(
-            'Comments',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            '${_getTotalCommentsCount(comments)}',
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-          ),
-          const Spacer(),
-
-          // Expand/Collapse Button (YouTube style) - Only show when there are more than 3 comments
-          if (comments.length > 3)
-            TextButton(
-              onPressed: () => _toggleCommentsExpansion(comments, cubit),
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                minimumSize: Size.zero,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    areAllCommentsVisible ? Icons.expand_less : Icons.expand_more,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    areAllCommentsVisible ? 'Show less' : 'Show more',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  bool _areAllCommentsVisible(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    // All comments are visible if:
-    // 1. User clicked "Show more" in header OR
-    // 2. User loaded all comments incrementally
-    return _isCommentsExpanded || _allCommentsLoadedIncrementally;
-  }
-
-  Widget _buildCommentsList(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    // Determine visible comments based on state
-    final visibleComments = _areAllCommentsVisible(comments, cubit)
-        ? comments
-        : comments.take(_visibleCommentsCount).toList();
-
-    // Check if there are more comments to show (only when not all comments are visible)
-    final hasMoreToShow = !_areAllCommentsVisible(comments, cubit) &&
-        (_visibleCommentsCount < comments.length || cubit.hasMoreTubeVideoComments);
-
-    return Column(
-      children: [
-        // Comments List
-        ListView.builder(
-          controller: _areAllCommentsVisible(comments, cubit) ? _scrollController : null,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: visibleComments.length + (hasMoreToShow ? 1 : 0) + _getAdditionalItemsCount(comments, cubit),
-          itemBuilder: (context, index) {
-            // Show comments
-            if (index < visibleComments.length) {
-              final comment = visibleComments[index];
-              return CommentItem(
-                comment: comment,
-                videoId: widget.videoId,
-                currentUserId: null,
-              );
-            }
-
-            // Show "Load more" button when not all comments are visible and there are more comments
-            else if (!_areAllCommentsVisible(comments, cubit) &&
-                index == visibleComments.length &&
-                hasMoreToShow) {
-              return _buildLoadMoreButton(comments, cubit);
-            }
-
-            // Show loading indicator for pagination
-            else if (cubit.isTubeVideoCommentsLoadingMore) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: Center(
-                  child: CircularProgressIndicator(color: Colors.red),
-                ),
-              );
-            }
-
-            // Show "No more comments"
-            else if (!cubit.hasMoreTubeVideoComments &&
-                comments.isNotEmpty &&
-                index >= comments.length) {
-              return const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(
-                  child: Text(
-                    'No more comments',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ),
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoadMoreButton(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    final remainingComments = comments.length - _visibleCommentsCount;
-    final hasMoreFromApi = cubit.hasMoreTubeVideoComments;
-
-    String buttonText;
-    if (hasMoreFromApi && remainingComments > 0) {
-      buttonText = 'View $remainingComments more comments';
-    } else if (hasMoreFromApi) {
-      buttonText = 'Load more comments';
-    } else {
-      buttonText = 'View $remainingComments more comments';
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Center(
-        child: TextButton(
-          onPressed: () => _loadMoreComments(comments, cubit),
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.expand_more,
-                size: 18,
-                color: Colors.blue,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                buttonText,
-                style: const TextStyle(
-                  color: Colors.blue,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  int _getAdditionalItemsCount(List<TubeCommentEntity> comments, TubeCubit cubit) {
-    int count = 0;
-
-    // Only add "Load more" button when not all comments are visible
-    if (!_areAllCommentsVisible(comments, cubit) &&
-        (_visibleCommentsCount < comments.length || cubit.hasMoreTubeVideoComments)) {
-      count += 1;
-    }
-
-    // Add loading indicator
-    if (cubit.isTubeVideoCommentsLoadingMore) {
-      count += 1;
-    }
-
-    // Add "No more comments" when appropriate
-    if (!cubit.hasMoreTubeVideoComments && comments.isNotEmpty) {
-      count += 1;
-    }
-
-    return count;
-  }
-
-  int _getTotalCommentsCount(List<TubeCommentEntity> comments) {
-    int total = comments.length;
-    for (var comment in comments) {
-      total += comment.replies.length;
-    }
-    return total;
-  }
 }
 
-// ---------------------------------------------------------------
-// 💬 CommentItem: Individual comment card with nested replies
-// ---------------------------------------------------------------
 class CommentItem extends StatefulWidget {
   final TubeCommentEntity comment;
   final String videoId;
@@ -586,9 +559,7 @@ class CommentItem extends StatefulWidget {
 
 class _CommentItemState extends State<CommentItem> {
   bool _isEditing = false;
-  bool _showReplies = false;
   late TextEditingController _editController;
-
   late bool _isLiked;
   late bool _isDisliked;
   late int _localLikes;
@@ -598,11 +569,8 @@ class _CommentItemState extends State<CommentItem> {
   void initState() {
     super.initState();
     _editController = TextEditingController(text: widget.comment.content);
-
     _localLikes = widget.comment.likes;
     _localDislikes = widget.comment.dislikes;
-
-    // TODO: Initialize from API if your backend tracks user-specific likes
     _isLiked = false;
     _isDisliked = false;
   }
@@ -626,211 +594,202 @@ class _CommentItemState extends State<CommentItem> {
     final repliesCount = widget.comment.replies.length;
     final width = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: widget.isReply ? 56 : 16,
-            right: 16,
-            top: 10,
-            bottom: 10,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Avatar
-              CircleAvatar(
-                radius: widget.isReply ? 16 : 18,
-                backgroundColor: Colors.grey[800],
-                backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty
-                    ? NetworkImage(avatarUrl)
-                    : null,
-                child: (avatarUrl == null || avatarUrl.isEmpty)
-                    ? Text(
-                  _getInitials(userName),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: widget.isReply ? 12 : 14,
-                  ),
-                )
-                    : null,
-              ),
-              const SizedBox(width: 12),
+    return BlocBuilder<TubeCubit, TubeState>(
+      builder: (context, state) {
+        final showReplies = state.expandedComments[widget.comment.id] ?? false;
 
-              // Main content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Username + timestamp
-                    Row(
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: widget.isReply ? 56 : 16,
+                right: 16,
+                top: 10,
+                bottom: 10,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: widget.isReply ? 16 : 18,
+                    backgroundColor: Colors.grey[800],
+                    backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty
+                        ? NetworkImage(avatarUrl)
+                        : null,
+                    child: (avatarUrl == null || avatarUrl.isEmpty)
+                        ? Text(
+                      _getInitials(userName),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: widget.isReply ? 12 : 14,
+                      ),
+                    )
+                        : null,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            userName,
-                            style: TextStyle(
-                              fontSize: width * 0.035,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                userName,
+                                style: TextStyle(
+                                  fontSize: width * 0.035,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                            const SizedBox(width: 8),
+                            Text(
+                              _formatTimeAgo(widget.comment.createdAt),
+                              style: TextStyle(
+                                fontSize: width * 0.032,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            if (_isEdited)
+                              const Padding(
+                                padding: EdgeInsets.only(left: 6),
+                                child: Text(
+                                  '(edited)',
+                                  style: TextStyle(fontSize: 11, color: Colors.grey),
+                                ),
+                              ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _formatTimeAgo(widget.comment.createdAt),
-                          style: TextStyle(
-                            fontSize: width * 0.032,
-                            color: Colors.grey[400],
+                        const SizedBox(height: 4),
+                        if (_isEditing)
+                          _buildEditField()
+                        else
+                          Text(
+                            widget.comment.content,
+                            style: TextStyle(
+                              fontSize: width * 0.038,
+                              color: Colors.white,
+                              height: 1.4,
+                            ),
                           ),
-                        ),
-                        if (_isEdited)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 6),
-                            child: Text(
-                              '(edited)',
-                              style: TextStyle(fontSize: 11, color: Colors.grey),
+                        const SizedBox(height: 6),
+                        if (!_isEditing)
+                          Row(
+                            children: [
+                              _ActionButton(
+                                icon: _isLiked ? Icons.thumb_up : Icons.thumb_up_outlined,
+                                label: _localLikes > 0 ? _localLikes.toString() : '',
+                                onTap: _handleLike,
+                                isActive: _isLiked,
+                              ),
+                              const SizedBox(width: 12),
+                              _ActionButton(
+                                icon: _isDisliked ? Icons.thumb_down : Icons.thumb_down_outlined,
+                                label: _localDislikes > 0 ? _localDislikes.toString() : '',
+                                onTap: _handleDislike,
+                                isActive: _isDisliked,
+                              ),
+                              if (!widget.isReply)
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 12),
+                                    _ActionButton(
+                                      icon: Icons.comment_outlined,
+                                      label: 'Reply',
+                                      onTap: () => _showReplyDialog(context),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        if (repliesCount > 0 && !_isEditing && !widget.isReply)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: InkWell(
+                              onTap: () {
+                                context.read<TubeCubit>().toggleCommentReplies(widget.comment.id);
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    showReplies ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                    color: Colors.blue,
+                                    size: 24,
+                                  ),
+                                  Text(
+                                    '$repliesCount ${repliesCount == 1 ? 'reply' : 'replies'}',
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-
-                    // Comment text
-                    if (_isEditing)
-                      _buildEditField()
-                    else
-                      Text(
-                        widget.comment.content,
-                        style: TextStyle(
-                          fontSize: width * 0.038,
-                          color: Colors.white,
-                          height: 1.4,
+                  ),
+                  if (_isMyComment && !_isEditing)
+                    PopupMenuButton<String>(
+                      icon: const Icon(Icons.more_vert, size: 18, color: Colors.grey),
+                      color: Colors.grey[900],
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          setState(() => _isEditing = true);
+                        } else if (value == 'delete') {
+                          _showDeleteDialog(context);
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Edit', style: TextStyle(color: Colors.white)),
                         ),
-                      ),
-
-                    const SizedBox(height: 6),
-
-                    // Like / Dislike / Reply buttons
-                    if (!_isEditing)
-                      Row(
-                        children: [
-                          _ActionButton(
-                            icon: _isLiked ? Icons.thumb_up : Icons.thumb_up_outlined,
-                            label: _localLikes > 0 ? _localLikes.toString() : '',
-                            onTap: _handleLike,
-                            isActive: _isLiked,
-                          ),
-                          const SizedBox(width: 12),
-                          _ActionButton(
-                            icon: _isDisliked ? Icons.thumb_down : Icons.thumb_down_outlined,
-                            label: _localDislikes > 0 ? _localDislikes.toString() : '',
-                            onTap: _handleDislike,
-                            isActive: _isDisliked,
-                          ),
-                          if (!widget.isReply) ...[
-                            const SizedBox(width: 12),
-                            _ActionButton(
-                              icon: Icons.comment_outlined,
-                              label: 'Reply',
-                              onTap: () => _showReplyDialog(context),
-                            ),
-                          ],
-                        ],
-                      ),
-
-                    // Show/Hide Replies Button (YouTube style)
-                    if (repliesCount > 0 && !_isEditing && !widget.isReply)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _showReplies = !_showReplies;
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                _showReplies ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                                color: Colors.blue,
-                                size: 24,
-                              ),
-                              Text(
-                                '$repliesCount ${repliesCount == 1 ? 'reply' : 'replies'}',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Delete', style: TextStyle(color: Colors.red)),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-
-              // Menu (edit/delete/report)
-              if (_isMyComment && !_isEditing)
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, size: 18, color: Colors.grey),
-                  color: Colors.grey[900],
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      setState(() => _isEditing = true);
-                    } else if (value == 'delete') {
-                      _showDeleteDialog(context);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Edit', style: TextStyle(color: Colors.white)),
+                      ],
+                    )
+                  else if (!_isMyComment && !_isEditing)
+                    IconButton(
+                      icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
+                      onPressed: () => _showReportDialog(context),
+                      padding: EdgeInsets.zero,
                     ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Text('Delete', style: TextStyle(color: Colors.red)),
-                    ),
-                  ],
-                )
-              else if (!_isMyComment && !_isEditing)
-                IconButton(
-                  icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
-                  onPressed: () => _showReportDialog(context),
-                  padding: EdgeInsets.zero,
-                ),
-            ],
-          ),
-        ),
-
-        // Nested Replies (YouTube style)
-        if (_showReplies && repliesCount > 0 && !widget.isReply)
-          ...widget.comment.replies.map((reply) {
-            return CommentItem(
-              comment: TubeCommentEntity(
-                id: reply.id,
-                content: reply.content,
-                userId: reply.userId,
-                owner: reply.owner,
-                video: reply.video,
-                likes: reply.likes.length,
-                dislikes: reply.dislikes.length,
-                replies: [],
-                createdAt: reply.createdAt,
-                updatedAt: reply.updatedAt,
+                ],
               ),
-              videoId: widget.videoId,
-              currentUserId: widget.currentUserId,
-              isReply: true,
-            );
-          }).toList(),
-      ],
+            ),
+            if (showReplies && repliesCount > 0 && !widget.isReply)
+              ...widget.comment.replies.map((reply) {
+                return CommentItem(
+                  comment: TubeCommentEntity(
+                    id: reply.id,
+                    content: reply.content,
+                    userId: reply.userId,
+                    owner: reply.owner,
+                    video: reply.video,
+                    likes: reply.likes.length,
+                    dislikes: reply.dislikes.length,
+                    replies: [],
+                    createdAt: reply.createdAt,
+                    updatedAt: reply.updatedAt,
+                  ),
+                  videoId: widget.videoId,
+                  currentUserId: widget.currentUserId,
+                  isReply: true,
+                );
+              }).toList(),
+          ],
+        );
+      },
     );
   }
 
-  // 🩵 Handles like toggle
   void _handleLike() {
     final cubit = context.read<TubeCubit>();
 
@@ -851,7 +810,6 @@ class _CommentItemState extends State<CommentItem> {
     cubit.likeComment(widget.comment.id);
   }
 
-  // 💔 Handles dislike toggle
   void _handleDislike() {
     final cubit = context.read<TubeCubit>();
 
@@ -971,79 +929,78 @@ class _CommentItemState extends State<CommentItem> {
   }
 
   void _showReplyDialog(BuildContext context) {
-    final replyController = TextEditingController();
-
+    final cubit = context.read<TubeCubit>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.grey[900],
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 16,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Reply to ${widget.comment.owner?.channelName ?? 'User'}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: replyController,
-              maxLines: 3,
-              autofocus: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Add a reply...',
-                hintStyle: TextStyle(color: Colors.grey[600]),
-                filled: true,
-                fillColor: Colors.grey[850],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+      backgroundColor: Colors.black,
+      builder: (ctx) => BlocProvider.value(
+        value: cubit,
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (ctx, scrollController) => Container(
+            color: Colors.black,
+            child: Column(
               children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: const Text('Cancel'),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    final reply = replyController.text.trim();
-                    if (reply.isNotEmpty) {
-                      Navigator.pop(ctx);
-                      context.read<TubeCubit>().createCommentOnTubeVideo(
-                        context: context,
-                        videoId: widget.videoId,
-                        content: reply,
-                        parentCommentId: widget.comment.id,
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () => Navigator.pop(ctx),
+                          ),
+                          Text(
+                            'Reply to ${widget.comment.owner?.channelName ?? 'User'}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        },
+                      ),
+                    ],
                   ),
-                  child: const Text('Reply'),
+                ),
+                const Divider(height: 1, color: Color(0xFF272727)),
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: CommentItem(
+                        comment: widget.comment,
+                        videoId: widget.videoId,
+                        currentUserId: widget.currentUserId,
+                        isReply: false,
+                      ),
+                    ),
+                  ),
+                ),
+                const Divider(height: 1, color: Color(0xFF272727)),
+                AddCommentWidget(
+                  videoId: widget.videoId,
+                  currentUserAvatar: null,
+                  currentUserName: null,
+                  parentCommentId: widget.comment.id,
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-          ],
+          ),
         ),
       ),
     );
@@ -1115,6 +1072,180 @@ class _CommentItemState extends State<CommentItem> {
   }
 }
 
+class AddCommentWidget extends StatefulWidget {
+  final String videoId;
+  final String? currentUserAvatar;
+  final String? currentUserName;
+  final String? parentCommentId;
+
+  const AddCommentWidget({
+    Key? key,
+    required this.videoId,
+    this.currentUserAvatar,
+    this.currentUserName,
+    this.parentCommentId,
+  }) : super(key: key);
+
+  @override
+  State<AddCommentWidget> createState() => _AddCommentWidgetState();
+}
+
+class _AddCommentWidgetState extends State<AddCommentWidget> {
+  final TextEditingController _commentController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {
+        _isExpanded = _focusNode.hasFocus || _commentController.text.isNotEmpty;
+      });
+    });
+    _commentController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _postComment() {
+    final content = _commentController.text.trim();
+    if (content.isEmpty) return;
+
+    final cubit = context.read<TubeCubit>();
+    _commentController.clear();
+    _focusNode.unfocus();
+    setState(() => _isExpanded = false);
+
+    cubit.createCommentOnTubeVideo(
+      context: context,
+      videoId: widget.videoId,
+      content: content,
+      parentCommentId: widget.parentCommentId,
+    );
+
+    // Auto-expand the parent comment if it's a reply
+    if (widget.parentCommentId != null) {
+      cubit.toggleCommentReplies(widget.parentCommentId!);
+      Navigator.pop(context); // Close the reply bottom sheet
+    }
+  }
+
+  void _cancelComment() {
+    _commentController.clear();
+    _focusNode.unfocus();
+    setState(() => _isExpanded = false);
+
+    // Close the reply bottom sheet if cancelling a reply
+    if (widget.parentCommentId != null) {
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 8,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 8,
+      ),
+      color: Colors.black,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.grey[800],
+                backgroundImage: widget.currentUserAvatar != null &&
+                    widget.currentUserAvatar!.isNotEmpty
+                    ? NetworkImage(widget.currentUserAvatar!)
+                    : null,
+                child: widget.currentUserAvatar == null || widget.currentUserAvatar!.isEmpty
+                    ? Text(
+                  _getInitials(widget.currentUserName ?? 'User'),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                )
+                    : null,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  controller: _commentController,
+                  focusNode: _focusNode,
+                  maxLines: 3,
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: widget.parentCommentId != null
+                        ? 'Add a reply...'
+                        : 'Add a public comment...',
+                    hintStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    filled: true,
+                    fillColor: Colors.grey[900],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (_isExpanded)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: _cancelComment,
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: _commentController.text.trim().isEmpty ? null : _postComment,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                    child: Text(widget.parentCommentId != null ? 'Reply' : 'Comment'),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  String _getInitials(String name) {
+    final parts = name.trim().split(' ');
+    if (parts.isEmpty) return 'U';
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+  }
+}
+
 class _ActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -1132,224 +1263,29 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isActive ? Colors.blue : Colors.grey,
-            ),
-            if (label.isNotEmpty) ...[
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isActive ? Colors.blue : Colors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------
-// ➕ Add Comment Widget
-// ---------------------------------------------------------------
-class AddCommentWidget extends StatefulWidget {
-  final String videoId;
-  final String? currentUserAvatar;
-  final String? currentUserName;
-
-  const AddCommentWidget({
-    Key? key,
-    required this.videoId,
-    this.currentUserAvatar,
-    this.currentUserName,
-  }) : super(key: key);
-
-  @override
-  State<AddCommentWidget> createState() => _AddCommentWidgetState();
-}
-
-class _AddCommentWidgetState extends State<AddCommentWidget> {
-  final TextEditingController _commentController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-  bool _isExpanded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(() {
-      setState(() {
-        _isExpanded = _focusNode.hasFocus;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void _postComment() {
-    final content = _commentController.text.trim();
-    if (content.isEmpty) return;
-
-    final cubit = context.read<TubeCubit>();
-
-    // Clear input and close immediately
-    _commentController.clear();
-    _focusNode.unfocus();
-    setState(() => _isExpanded = false);
-
-    // Make completely silent API call - no loading state
-    cubit.createCommentOnTubeVideo(
-      context: context,
-      videoId: widget.videoId,
-      content: content,
-      parentCommentId: null,
-    );
-  }
-
-  void _cancel() {
-    _commentController.clear();
-    _focusNode.unfocus();
-    setState(() => _isExpanded = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey[800]!,
-            width: 1,
-          ),
-        ),
-      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 18,
-            backgroundColor: Colors.grey[800],
-            backgroundImage: widget.currentUserAvatar != null &&
-                widget.currentUserAvatar!.isNotEmpty
-                ? NetworkImage(widget.currentUserAvatar!)
-                : null,
-            child: widget.currentUserAvatar == null ||
-                widget.currentUserAvatar!.isEmpty
-                ? Text(
-              _getInitials(widget.currentUserName ?? 'User'),
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
+          Icon(
+            icon,
+            size: 18,
+            color: isActive ? Colors.blue : Colors.grey,
+          ),
+          if (label.isNotEmpty) ...[
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: isActive ? Colors.blue : Colors.grey,
               ),
-            )
-                : null,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TextField(
-                  controller: _commentController,
-                  focusNode: _focusNode,
-                  maxLines: _isExpanded ? 3 : 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Add a comment...',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                    filled: false,
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[700]!),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[700]!),
-                    ),
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 0,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                ),
-                if (_isExpanded) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: _cancel,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                        ),
-                        child: const Text('Cancel'),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton(
-                        onPressed: _commentController.text.trim().isEmpty
-                            ? null
-                            : _postComment,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _commentController.text.trim().isEmpty
-                              ? Colors.grey[800]
-                              : Colors.blue,
-                          foregroundColor: Colors.white,
-                          disabledBackgroundColor: Colors.grey[800],
-                          disabledForegroundColor: Colors.grey[600],
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                        ),
-                        child: const Text('Comment'), // No loading indicator
-                      ),
-                    ],
-                  ),
-                ],
-              ],
             ),
-          ),
+          ],
         ],
       ),
     );
   }
-
-  String _getInitials(String name) {
-    final parts = name.trim().split(' ');
-    if (parts.isEmpty) return 'U';
-    if (parts.length == 1) return parts[0][0].toUpperCase();
-    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-  }
 }
-// 💬 Comments Section
+
 
 class RelatedVideosScreen extends StatefulWidget {
   final String videoId;

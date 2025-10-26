@@ -52,8 +52,23 @@ class TubeCubit extends Cubit<TubeState> {
   TubeCubit(this.getAllTubeVideosUseCase, this.getTubeFavoriteVideosUseCase, this.addFavoriteTubeUseCase, this.removeFavoriteTubeUseCase, this.searchTubeVideoUseCase, this.getRelatedTubeVideosUseCase, this.getTubeVideoCommentsUseCase, this.createCommentTubeVideoUseCase, this.updateCommentTubeVideoUseCase, this.likeTubeVideoUseCase, this.dislikeTubeVideoUseCase, this.deleteTubeCommentUseCase) : super(TubeState());
   List<GetAllTubeVideosEntity> currentVideoList = [];
 
+// Toggle the expanded state of a comment's replies
+// In TubeCubit
+  void toggleCommentReplies(String commentId) {
+    final currentState = state;
+    final expandedComments = Map<String, bool>.from(currentState.expandedComments);
+    expandedComments[commentId] = !(expandedComments[commentId] ?? false);
+    emit(currentState.copyWith(expandedComments: expandedComments));
+  }
 
-  /// 💬 Create a new comment on a video (COMPLETELY SILENT VERSION)
+  void addReplyToComment(String parentCommentId, TubeCommentEntity reply) {
+    final currentState = state;
+    // You might need to update your comments list here to include the new reply
+    // This depends on how you're storing comments in your state
+    emit(currentState.copyWith(lastRepliedCommentId: parentCommentId));
+  }
+
+  /// 💬 Create a new comment on a video
   Future<void> createCommentOnTubeVideo({
     required BuildContext context,
     required String videoId,
@@ -73,13 +88,25 @@ class TubeCubit extends Cubit<TubeState> {
     response.fold(
           (failure) {
         debugPrint("❌ Failed to create comment");
-        // COMPLETELY SILENT: No state changes, no snackbars
+        // SILENT: No state changes, no snackbars
       },
           (entity) async {
         debugPrint("✅ Comment created successfully!");
 
+        // Update expanded state if it's a reply
+        Map<String, bool> newExpandedComments = Map.from(state.expandedComments);
+        if (parentCommentId != null) {
+          newExpandedComments[parentCommentId] = true;
+        }
+
         // SILENT REFRESH: Refresh comments without loading states
         await _silentlyRefreshComments(context, videoId);
+
+        // Emit state with updated expandedComments and lastRepliedCommentId
+        emit(state.copyWith(
+          expandedComments: newExpandedComments,
+          lastRepliedCommentId: parentCommentId, // Store for scrolling
+        ));
       },
     );
   }
@@ -113,7 +140,7 @@ class TubeCubit extends Cubit<TubeState> {
 
           // Emit success without loading state
           emit(state.copyWith(
-            status: StateStatus.success, // Use success, not loading
+            status: StateStatus.success,
             tubeVideoCommentsData: List<TubeCommentEntity>.from(tubeVideoComments),
           ));
 
@@ -125,6 +152,78 @@ class TubeCubit extends Cubit<TubeState> {
       // SILENT: Don't show errors to user
     }
   }
+  // /// 💬 Create a new comment on a video (COMPLETELY SILENT VERSION)
+  // Future<void> createCommentOnTubeVideo({
+  //   required BuildContext context,
+  //   required String videoId,
+  //   required String content,
+  //   String? parentCommentId,
+  // }) async {
+  //   debugPrint("💬 Creating comment on videoId=$videoId");
+  //
+  //   final response = await createCommentTubeVideoUseCase(
+  //     CreateCommentTubeParams(
+  //       content: content,
+  //       videoId: videoId,
+  //       parentCommentId: parentCommentId ?? '',
+  //     ),
+  //   );
+  //
+  //   response.fold(
+  //         (failure) {
+  //       debugPrint("❌ Failed to create comment");
+  //       // COMPLETELY SILENT: No state changes, no snackbars
+  //     },
+  //         (entity) async {
+  //       debugPrint("✅ Comment created successfully!");
+  //
+  //       // SILENT REFRESH: Refresh comments without loading states
+  //       await _silentlyRefreshComments(context, videoId);
+  //     },
+  //   );
+  // }
+  //
+  // /// 🔄 Refresh comments without any loading indicators
+  // Future<void> _silentlyRefreshComments(BuildContext context, String videoId) async {
+  //   try {
+  //     final response = await getTubeVideoCommentsUseCase(
+  //       GetRelatedTubeVideosParams(
+  //         id: videoId,
+  //         page: 1, // Always load first page for new comments
+  //         limit: pageSize,
+  //       ),
+  //     );
+  //
+  //     response.fold(
+  //           (failure) {
+  //         debugPrint("❌ Silent refresh failed");
+  //         // SILENT: Don't emit error state
+  //       },
+  //           (entity) {
+  //         final TubeVideoCommentsDataEntity? commentsData = entity.data;
+  //         final List<TubeCommentEntity> newComments = commentsData?.comments ?? [];
+  //
+  //         // Update comments list silently
+  //         tubeVideoComments = List<TubeCommentEntity>.from(newComments);
+  //
+  //         // Update pagination state
+  //         hasMoreTubeVideoComments = newComments.length >= pageSize;
+  //         currentPageTubeVideoComments = hasMoreTubeVideoComments ? 2 : 1;
+  //
+  //         // Emit success without loading state
+  //         emit(state.copyWith(
+  //           status: StateStatus.success, // Use success, not loading
+  //           tubeVideoCommentsData: List<TubeCommentEntity>.from(tubeVideoComments),
+  //         ));
+  //
+  //         debugPrint("✅ Comments silently refreshed: ${tubeVideoComments.length}");
+  //       },
+  //     );
+  //   } catch (e) {
+  //     debugPrint("❌ Error in silent refresh: $e");
+  //     // SILENT: Don't show errors to user
+  //   }
+  // }
   /// ✏️ Update an existing comment
   /// ✏️ Update an existing comment (SILENT VERSION)
   Future<void> updateCommentOnTubeVideo({

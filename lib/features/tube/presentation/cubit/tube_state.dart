@@ -22,6 +22,9 @@ class TubeState {
   final List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData;
   final bool areControllersInitialized; // ✅ ADD
   final List<TubeCommentEntity>? tubeVideoCommentsData;
+  final Map<String, bool> expandedComments; // New field to track expanded replies
+  final String? lastRepliedCommentId; // New field for scrolling
+
   TubeState({
     this.status = StateStatus.initial,
     this.getAllTubeVideosData = const [],
@@ -44,6 +47,10 @@ class TubeState {
     this.getFavoriteTubeVideosData,
     this.relatedTubeVideosData = const [],
     this.tubeVideoCommentsData = const [],
+
+    this.expandedComments = const {}, // Initialize as empty map
+
+    this.lastRepliedCommentId,
   });
 
   TubeState copyWith({
@@ -67,7 +74,8 @@ class TubeState {
     List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData,
     bool? areControllersInitialized,
     List<TubeCommentEntity>? tubeVideoCommentsData,
-
+    Map<String, bool>? expandedComments,
+    String? lastRepliedCommentId,
   }) {
     return TubeState(
       status: status ?? this.status,
@@ -90,6 +98,8 @@ class TubeState {
       relatedTubeVideosData: relatedTubeVideosData ?? this.relatedTubeVideosData,
       areControllersInitialized: areControllersInitialized ?? this.areControllersInitialized,
       tubeVideoCommentsData: tubeVideoCommentsData ?? this.tubeVideoCommentsData,
+      expandedComments: expandedComments ?? this.expandedComments,
+      lastRepliedCommentId: lastRepliedCommentId ?? this.lastRepliedCommentId,
     );
   }
 }
