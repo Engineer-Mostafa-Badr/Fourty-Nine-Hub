@@ -27,10 +27,10 @@ class CuisineRestaurantsView extends StatelessWidget {
               child: ListView.separated(
                   itemBuilder: (context, index) => const RestaurantCard(
                         isVert: false,
-                        // item:,// state.cusineRestaurants![index],
+                        // item:,// state.cuisineRestaurants![index],
                       ),
                   separatorBuilder: (context, index) => const Sizer(),
-                  itemCount: state.cusineRestaurants?.length ?? 0),
+                  itemCount: state.cuisineRestaurants?.length ?? 0),
             ),
           );
         });

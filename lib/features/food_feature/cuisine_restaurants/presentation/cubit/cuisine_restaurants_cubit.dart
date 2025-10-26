@@ -31,7 +31,7 @@ class CuisineRestaurantsCubit extends Cubit<CuisineRestaurantsState> {
           failure: failure, status: CuisineRestaurantsStates.error));
     },
         (data) => emit(state.copyWith(
-            cusineRestaurants: data,
+            cuisineRestaurants: data,
             status: CuisineRestaurantsStates.initState)));
   }
 
