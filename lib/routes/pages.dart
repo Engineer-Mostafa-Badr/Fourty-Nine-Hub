@@ -76,14 +76,13 @@ import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_restaurant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_restaurant_view.dart';
 import 'package:fourtyninehub/features/food_feature/cuisine_restaurants/presentation/cubit/cuisine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_restaurant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_restaurant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
@@ -2630,9 +2629,9 @@ class AppPages {
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<CreateResturantCubit>(
+                        BlocProvider<CreateRestaurantCubit>(
                           create: (context) => serviceLocator(),
-                          child: const CreateResturantView(),
+                          child: const CreateRestaurantForm(),
                         ),
                       ),
                     ),
