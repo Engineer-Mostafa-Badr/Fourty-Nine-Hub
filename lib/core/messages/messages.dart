@@ -567,3 +567,33 @@ showHaveTripDialog(
         ],
       ));
 }
+
+void showCustomSnackBar(BuildContext context, String message, Icon icon) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      content: Row(
+        spacing: 10,
+        children: [
+          icon,
+          16.verticalSpace,
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                color: AppColors.getTextColor(context),
+                fontWeight: FontWeight.w500,
+                fontSize: 30.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

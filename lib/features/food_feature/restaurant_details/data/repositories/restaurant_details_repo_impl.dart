@@ -66,4 +66,31 @@ class RestaurantDetailsRepoImpl implements RestaurantDetailsRepo {
       {required ChangeQuantityParams params}) {
     return _remoteDataSource.changeQuantity(params: params);
   }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getCart() {
+    return _remoteDataSource.getCart();
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> createNormalOrder({
+    required String cartId,
+    required String phone,
+  }) {
+    return _remoteDataSource.createNormalOrder(
+      cartId: cartId,
+      phone: phone,
+    );
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> createPremiumOrder({
+    required String cartId,
+    required String phone,
+  }) {
+    return _remoteDataSource.createPremiumOrder(
+      cartId: cartId,
+      phone: phone,
+    );
+  }
 }

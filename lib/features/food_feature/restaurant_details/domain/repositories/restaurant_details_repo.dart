@@ -26,4 +26,13 @@ abstract class RestaurantDetailsRepo {
     required String foodId,
     required int quantity,
   });
+  Future<Either<Failure, Map<String, dynamic>>> getCart();
+  Future<Either<Failure, Map<String, dynamic>>> createNormalOrder({
+    required String cartId,
+    required String phone,
+  });
+  Future<Either<Failure, Map<String, dynamic>>> createPremiumOrder({
+    required String cartId,
+    required String phone,
+  });
 }

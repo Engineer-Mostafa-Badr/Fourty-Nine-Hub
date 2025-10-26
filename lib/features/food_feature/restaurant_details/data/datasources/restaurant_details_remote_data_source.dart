@@ -31,6 +31,15 @@ abstract class RestaurantRemoteDataSource {
     required String foodId,
     required int quantity,
   });
+  Future<Either<Failure, Map<String, dynamic>>> getCart();
+  Future<Either<Failure, Map<String, dynamic>>> createNormalOrder({
+    required String cartId,
+    required String phone,
+  });
+  Future<Either<Failure, Map<String, dynamic>>> createPremiumOrder({
+    required String cartId,
+    required String phone,
+  });
 }
 
 class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
@@ -113,5 +122,49 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
         data: params.toJson());
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getCart() async {
+    const url = '/food/getCart';
+    final response = await _apiConsumer.get(url);
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(data as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> createNormalOrder({
+    required String cartId,
+    required String phone,
+  }) async {
+    const url = '/food/make-order';
+    final data = {
+      "cartId": cartId,
+      "phone": phone,
+    };
+    final response = await _apiConsumer.post(url, data: data);
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(data as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> createPremiumOrder({
+    required String cartId,
+    required String phone,
+  }) async {
+    const url = '/food/make-order-premium';
+    final data = {
+      "cartId": cartId,
+      "phone": phone,
+    };
+    final response = await _apiConsumer.post(url, data: data);
+    return response.fold(
+      (failure) => Left(failure),
+      (data) => Right(data as Map<String, dynamic>),
+    );
   }
 }
