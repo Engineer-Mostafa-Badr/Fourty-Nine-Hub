@@ -84,7 +84,7 @@ class PhoneNumberBottomSheet {
                       return validatorEgyptPhone(normalized);
                     },
                     onChanged: (_) {
-                      print("value $_");
+                      // print("value $_");
                       formKey.currentState?.validate();
                     },
                     inputFormatter: [
