@@ -1,6 +1,9 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../../domain/entities/get_tube_video_commnets_entity.dart';
@@ -169,51 +172,199 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     children: [
                       // ▶ Title and metadata - use currentVideo instead of widget.video
                       Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(currentVideo.title ?? "Not available",
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
-                            const SizedBox(height: 8),
+                            // Title
                             Text(
-                              '${currentVideo.views} • ${currentVideo.updatedAt}',
-                              style: const TextStyle(color: Colors.grey, fontSize: 14),
+                              currentVideo.title ?? "Not available",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                height: 1.3,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 8),
+                            // Views and date
+                            Text(
+                              '${currentVideo.views} views • ${currentVideo.updatedAt != null ? DateFormat('MMM d, yyyy', context.isArabic ? 'ar' : 'en').format(DateTime.parse(currentVideo.updatedAt!)) : ''}',
+                              style: const TextStyle(
+                                color: Color(0xFFAAAAAA),
+                                fontSize: 13,
+                              ),
                             ),
                           ],
                         ),
                       ),
-      
-                      // 🔹 Buttons
-                      SizedBox(
-                        height: 48,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          children: [
-                            _buildActionButton(Icons.thumb_up_outlined, '12K'),
-                            _buildActionButton(Icons.thumb_down_outlined, 'Dislike'),
-                            _buildActionButton(Icons.share, 'Share'),
-                            _buildActionButton(Icons.download, 'Download'),
-                            if (!_isImageContent(currentVideo))
-                              _buildActionButton(Icons.comment, 'Comments',
-                                  onTap: () => _showCommentsBottomSheet(context, currentVideo)),
-                            _buildActionButton(Icons.library_add, 'Save'),
-                          ],
-                        ),
-                      ),
-      
-                      const Divider(height: 1, color: Color(0xFF272727)),
-      
                       // 🔹 Description - use currentVideo
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Text(
                           currentVideo.description ?? "Not available",
                           style: const TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ),
+
+                      // 🔹 Action Buttons Row (Like, Dislike, Share, etc.)
+                      Container(
+                        height: 48,
+                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            _buildYouTubeActionButton(
+                              icon: Icons.thumb_up_outlined,
+                              activeIcon: Icons.thumb_up,
+                              label: '12K',
+                              isActive: false,
+                            ),
+                            const SizedBox(width: 2),
+                            _buildYouTubeActionButton(
+                              icon: Icons.thumb_down_outlined,
+                              activeIcon: Icons.thumb_down,
+                              label: 'Dislike',
+                              isActive: false,
+                            ),
+                            const SizedBox(width: 2),
+                            _buildYouTubeActionButton(
+                              icon: Icons.share_outlined,
+                              label: 'Share',
+                            ),
+                            const SizedBox(width: 2),
+                            _buildYouTubeActionButton(
+                              icon: Icons.download_outlined,
+                              label: 'Download',
+                            ),
+                            if (!_isImageContent(currentVideo)) ...[
+                              const SizedBox(width: 2),
+                              _buildYouTubeActionButton(
+                                icon: Icons.comment_outlined,
+                                label: 'Comments',
+                                onTap: () => _showCommentsBottomSheet(context, currentVideo),
+                              ),
+                            ],
+                            const SizedBox(width: 2),
+                            _buildYouTubeActionButton(
+                              icon: Icons.playlist_add,
+                              label: 'Save',
+                            ),
+                          ],
+                        ),
+                      ),
+      
+                      const Divider(height: 1, color: Color(0xFF272727)),
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            // Channel avatar
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.grey.shade800,
+                              backgroundImage: currentVideo.owner?.channelPicture != null &&
+                                  currentVideo.owner!.channelPicture!.isNotEmpty
+                                  ? NetworkImage(currentVideo.owner!.channelPicture!)
+                                  : null,
+                              child: (currentVideo.owner?.channelPicture == null ||
+                                  currentVideo.owner!.channelPicture!.isEmpty)
+                                  ? const Icon(Icons.person, color: Colors.white, size: 20)
+                                  : null,
+                            ),
+                            const SizedBox(width: 12),
+                            // Channel name and subscribers
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          currentVideo.owner?.channelName ?? "Unknown Channel",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (currentVideo.owner?.isAccountVerified == true)
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 4),
+                                          child: Icon(Icons.check_circle, color: Color(0xFFAAAAAA), size: 14),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 2),
+                                  const Text(
+                                    '1.2M subscribers', // You can replace with actual subscriber count
+                                    style: TextStyle(
+                                      color: Color(0xFFAAAAAA),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Subscribe Button
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Subscribe',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: GestureDetector(
+                          onTap: () => _showCommentsBottomSheet(context, currentVideo),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF272727),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  currentVideo.description ?? "No description available",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    height: 1.4,
+                                  ),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'Show more',
+                                  style: TextStyle(
+                                    color: Color(0xFFAAAAAA),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
       
@@ -230,6 +381,44 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+  Widget _buildYouTubeActionButton({
+    required IconData icon,
+    IconData? activeIcon,
+    required String label,
+    bool isActive = false,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xFF272727),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isActive && activeIcon != null ? activeIcon : icon,
+              size: 20,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );
