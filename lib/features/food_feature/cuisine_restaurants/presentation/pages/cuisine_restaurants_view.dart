@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/food_feature/cuisine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/cuisine_restaurants/presentation/cubit/cuisine_restaurants_cubit.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';

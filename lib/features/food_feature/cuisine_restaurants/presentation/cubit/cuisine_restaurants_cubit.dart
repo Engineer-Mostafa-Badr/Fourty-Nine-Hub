@@ -11,7 +11,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 
-part 'cusine_restaurants_state.dart';
+part 'cuisine_restaurants_state.dart';
 
 class CuisineRestaurantsCubit extends Cubit<CuisineRestaurantsState> {
   final GetNearByRestaurantsUseCase _getNearByRestaurantsUseCase;

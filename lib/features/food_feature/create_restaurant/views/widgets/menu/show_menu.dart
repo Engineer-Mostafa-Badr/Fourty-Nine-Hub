@@ -458,7 +458,7 @@ class ShowMneu extends StatelessWidget {
                 builder: (context, restState) {
                   return Visibility(
                     visible: restState is ValidationState &&
-                        (restState.isMneu ?? false),
+                        (restState.isMenu ?? false),
                     child:  Padding(
                       padding:const EdgeInsets.only(right: 5, left: 5, top: 5.0),
                       child: Text(
