@@ -164,7 +164,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
     setState(() {
       _isClosing = true;
     });
-    cubit.closePlayer();
+    cubit.closePlayer(); // This now fully resets the state
 
     // Reset position after closing
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -172,6 +172,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
         setState(() {
           _xPosition = 8;
           _yPosition = 60;
+          _isClosing = false;
         });
       }
     });

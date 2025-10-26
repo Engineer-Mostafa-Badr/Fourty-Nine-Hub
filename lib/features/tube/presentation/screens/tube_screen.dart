@@ -15,74 +15,7 @@ import '../cubit/tube_cubit.dart';
 import '../widgets/video_card_widget.dart';
 import '../widgets/video_mini_player.dart';
 
-// ==================== TUBE SCREEN WITH TABS ====================
-// class TubeScreen extends StatefulWidget {
-//   const TubeScreen({super.key});
-//
-//   @override
-//   State<TubeScreen> createState() => _TubeScreenState();
-// }
-//
-// class _TubeScreenState extends State<TubeScreen>
-//     with SingleTickerProviderStateMixin {
-//   late final TabController _tabController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(length: 3, vsync: this);
-//   }
-//
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<TubeCubit, TubeState>(
-//       builder: (context, state) {
-//         return Scaffold(
-//           appBar: AppBar(
-//             backgroundColor: Colors.black,
-//             title: const Text('Tube', style: TextStyle(color: Colors.white)),
-//             bottom: TabBar(
-//               controller: _tabController,
-//               labelColor: Colors.white,
-//               unselectedLabelColor: Colors.grey,
-//               indicatorColor: Colors.red,
-//               tabs: const [
-//                 Tab(text: 'All'),
-//                 Tab(text: 'Subscribed'),
-//                 Tab(text: 'Favorites'),
-//               ],
-//             ),
-//           ),
-//           body: Stack(
-//             children: [
-//               TabBarView(
-//                 controller: _tabController,
-//                 children: const [
-//                   HomeVideosTubeScreen(),
-//                   SubscribedTab(),
-//                   TubeFavoriteScreen(),
-//                 ],
-//               ),
-//               if (state.isMinimized &&
-//                   state.currentVideo != null &&
-//                   !state.isLoading)
-//                 const MiniPlayer(),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
-// ==================== TUBE SCREEN WITH SEARCH ====================
-// ==================== TUBE SCREEN WITH SEARCH ====================
 class TubeScreen extends StatefulWidget {
   const TubeScreen({super.key});
 
@@ -300,6 +233,7 @@ class _TubeScreenState extends State<TubeScreen>
                         return VideoCardTube(
                           video: video,
                           videoList: searchResults,
+
                         );
                       },
                     ),

@@ -938,7 +938,6 @@ class TubeCubit extends Cubit<TubeState> {
   static const int _maxRetries = 3;
 
 
-
   Future<void> _initializeController(GetAllTubeVideosEntity video) async {
     if (_isInitializing) return;
     _isInitializing = true;
@@ -1040,9 +1039,12 @@ class TubeCubit extends Cubit<TubeState> {
       );
 
       videoPlayerController.addListener(() {
-        if (videoPlayerController.value.isPlaying != state.isPlaying) {
+        if (videoPlayerController.value.isPlaying != state.isPlaying || videoPlayerController.value.position != state.lastPlaybackPosition) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            emit(state.copyWith(isPlaying: videoPlayerController.value.isPlaying));
+            emit(state.copyWith(
+              isPlaying: videoPlayerController.value.isPlaying,
+              lastPlaybackPosition: videoPlayerController.value.position, // Track position
+            ));
           });
         }
       });
@@ -1054,6 +1056,8 @@ class TubeCubit extends Cubit<TubeState> {
         chewieController: chewieController,
         isPlaying: true,
         isLoading: false,
+        areControllersInitialized: true,
+        lastPlaybackPosition: Duration.zero, // Start from beginning
       ));
     } catch (error) {
       debugPrint('Error initializing video player: $error');
@@ -1069,6 +1073,7 @@ class TubeCubit extends Cubit<TubeState> {
     }
   }
 
+
   void playVideo(GetAllTubeVideosEntity video, {List<GetAllTubeVideosEntity>? videoList}) async {
     final wasMinimized = state.isMinimized;
 
@@ -1076,14 +1081,33 @@ class TubeCubit extends Cubit<TubeState> {
     if (videoList != null && videoList.isNotEmpty) {
       currentVideoList = List.from(videoList);
     } else if (currentVideoList.isEmpty) {
-      // Fallback to allTubeVideos or favoriteTubeVideos if no list is provided
       currentVideoList = allTubeVideos.isNotEmpty ? allTubeVideos : favoriteTubeVideos;
     }
 
+    // Check if the video is the same as the current one and controllers are initialized
+    final isSameVideo = state.currentVideo?.id == video.id && state.areControllersInitialized && state.videoPlayerController != null && state.chewieController != null;
+
+    if (isSameVideo) {
+      // If the same video is selected, reuse controllers and maintain playback position
+      emit(state.copyWith(
+        isLoading: false,
+        isMinimized: false, // Maximize the player
+        lastPlaybackPosition: state.videoPlayerController!.value.position, // Preserve position
+      ));
+      if (state.isPlaying) {
+        await state.videoPlayerController!.play();
+      }
+      return;
+    }
+
+    // Otherwise, dispose existing controllers and initialize new ones
     emit(state.copyWith(
       isLoading: true,
       chewieController: null,
       videoPlayerController: null,
+      currentVideo: null,
+      lastPlaybackPosition: null,
+      areControllersInitialized: false,
     ));
 
     _disposeControllers();
@@ -1095,6 +1119,7 @@ class TubeCubit extends Cubit<TubeState> {
       emit(state.copyWith(isMinimized: true));
     }
   }
+
 
   void togglePlayPause() {
     if (state.chewieController != null && state.videoPlayerController != null && !state.isLoading) {
@@ -1126,13 +1151,18 @@ class TubeCubit extends Cubit<TubeState> {
   }
 
   void closePlayer() {
-    _disposeControllers();
+    _disposeControllers(); // Dispose controllers completely
     emit(state.copyWith(
-      clearCurrentVideo: true,
-      clearControllers: true,
+      currentVideo: null, // Clear current video
+      videoPlayerController: null,
+      chewieController: null,
       isMinimized: false,
       isPlaying: false,
       isLoading: false,
+      areControllersInitialized: false,
+      lastPlaybackPosition: null, // Clear last playback position
+      clearCurrentVideo: true,
+      clearControllers: true,
     ));
     _retryCount = 0;
   }
@@ -1220,10 +1250,11 @@ class TubeCubit extends Cubit<TubeState> {
         state.videoPlayerController!.pause();
         state.videoPlayerController!.dispose();
       }
-
       emit(state.copyWith(
         chewieController: null,
         videoPlayerController: null,
+        areControllersInitialized: false,
+        lastPlaybackPosition: null,
       ));
     } catch (e) {
       debugPrint('Error disposing controllers: $e');

@@ -268,11 +268,12 @@ class VideoCardTube extends StatelessWidget {
   final GetAllTubeVideosEntity video;
   final List<GetAllTubeVideosEntity>? videoList;
   final bool? isFavorite;
-
+  final VoidCallback? onTap; // ✅ Add this
   const VideoCardTube({
     required this.video,
     this.videoList,
     this.isFavorite = false,
+    this.onTap, // ✅ Add this
     super.key,
   });
 
@@ -326,20 +327,38 @@ class VideoCardTube extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isFav = isFavorite == true || video.isFavorite == true;
-
+    final cubit = context.read<TubeCubit>();
+    final state = cubit.state;
     return GestureDetector(
       onTap: () {
-        final cubit = context.read<TubeCubit>();
-        cubit.playVideo(video, videoList: videoList);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: cubit,
-              child: VideoPlayerPage(video: video, videoList: videoList), // Pass videoList
+        if (state.currentVideo?.id == video.id && state.isMinimized && state.areControllersInitialized) {
+          // Same video in mini player: maximize and navigate
+          cubit.maximizePlayer();
+          if (state.isPlaying && state.videoPlayerController != null) {
+            state.videoPlayerController!.play();
+          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: cubit,
+                child: VideoPlayerPage(video: video, videoList: videoList),
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          // Different video or not in mini player: play new video
+          cubit.playVideo(video, videoList: videoList);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: cubit,
+                child: VideoPlayerPage(video: video, videoList: videoList),
+              ),
+            ),
+          );
+        }
       },
       child: Container(
         color: Colors.black,

@@ -12,7 +12,7 @@ class TubeState {
   final bool isPlaying;
   final bool isMinimized;
   final bool isLoading;
-  final String? errorMessage; // New field
+  final String? errorMessage;
   final bool showForwardIndicator;
   final bool showBackwardIndicator;
   final bool clearCurrentVideo;
@@ -20,10 +20,11 @@ class TubeState {
   final Failure? failure;
   final AddFavoriteTubeEntity? addFavoriteTubeData;
   final List<GetAllTubeVideosEntity>? getFavoriteTubeVideosData;
-  final bool areControllersInitialized; // ✅ ADD
+  final bool areControllersInitialized;
   final List<TubeCommentEntity>? tubeVideoCommentsData;
-  final Map<String, bool> expandedComments; // New field to track expanded replies
-  final String? lastRepliedCommentId; // New field for scrolling
+  final Map<String, bool> expandedComments;
+  final String? lastRepliedCommentId;
+  final Duration? lastPlaybackPosition; // Track playback position
 
   TubeState({
     this.status = StateStatus.initial,
@@ -42,15 +43,13 @@ class TubeState {
     this.failure,
     this.addFavoriteTubeData,
     this.searchTubeVideosData,
-
-    this.areControllersInitialized = false, // ✅ ADD THIS
+    this.areControllersInitialized = false,
     this.getFavoriteTubeVideosData,
     this.relatedTubeVideosData = const [],
     this.tubeVideoCommentsData = const [],
-
-    this.expandedComments = const {}, // Initialize as empty map
-
+    this.expandedComments = const {},
     this.lastRepliedCommentId,
+    this.lastPlaybackPosition,
   });
 
   TubeState copyWith({
@@ -76,6 +75,7 @@ class TubeState {
     List<TubeCommentEntity>? tubeVideoCommentsData,
     Map<String, bool>? expandedComments,
     String? lastRepliedCommentId,
+    Duration? lastPlaybackPosition,
   }) {
     return TubeState(
       status: status ?? this.status,
@@ -100,6 +100,7 @@ class TubeState {
       tubeVideoCommentsData: tubeVideoCommentsData ?? this.tubeVideoCommentsData,
       expandedComments: expandedComments ?? this.expandedComments,
       lastRepliedCommentId: lastRepliedCommentId ?? this.lastRepliedCommentId,
+      lastPlaybackPosition: lastPlaybackPosition ?? this.lastPlaybackPosition,
     );
   }
 }
