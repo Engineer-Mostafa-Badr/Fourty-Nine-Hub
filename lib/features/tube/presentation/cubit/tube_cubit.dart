@@ -52,40 +52,7 @@ class TubeCubit extends Cubit<TubeState> {
   TubeCubit(this.getAllTubeVideosUseCase, this.getTubeFavoriteVideosUseCase, this.addFavoriteTubeUseCase, this.removeFavoriteTubeUseCase, this.searchTubeVideoUseCase, this.getRelatedTubeVideosUseCase, this.getTubeVideoCommentsUseCase, this.createCommentTubeVideoUseCase, this.updateCommentTubeVideoUseCase, this.likeTubeVideoUseCase, this.dislikeTubeVideoUseCase, this.deleteTubeCommentUseCase) : super(TubeState());
   List<GetAllTubeVideosEntity> currentVideoList = [];
 
-  /// 💬 Create a new comment on a video
-  /// 💬 Create a new comment on a video (SILENT VERSION)
-  // Future<void> createCommentOnTubeVideo({
-  //   required BuildContext context,
-  //   required String videoId,
-  //   required String content,
-  //   String? parentCommentId,
-  // }) async {
-  //   debugPrint("💬 Creating comment on videoId=$videoId");
-  //
-  //   // SILENT: Don't show loading state for comments
-  //   final response = await createCommentTubeVideoUseCase(
-  //     CreateCommentTubeParams(
-  //       content: content,
-  //       videoId: videoId,
-  //       parentCommentId: parentCommentId ?? '', // Fix: handle null case
-  //     ),
-  //   );
-  //
-  //   response.fold(
-  //         (failure) {
-  //       debugPrint("❌ Failed to create comment");
-  //       // SILENT: Don't show error state or snackbar
-  //       // The UI will remain unchanged on failure
-  //     },
-  //         (entity) async {
-  //       debugPrint("✅ Comment created successfully!");
-  //
-  //       // SILENT: No success snackbar
-  //       // Just refresh the comments in background
-  //       await loadInitialTubeVideoComments(context, videoId);
-  //     },
-  //   );
-  // }
+
   /// 💬 Create a new comment on a video (COMPLETELY SILENT VERSION)
   Future<void> createCommentOnTubeVideo({
     required BuildContext context,
@@ -232,115 +199,6 @@ class TubeCubit extends Cubit<TubeState> {
       },
     );
   }
-  // Future<void> updateCommentOnTubeVideo({
-  //   required BuildContext context,
-  //   required String commentId,
-  //   required String videoId,
-  //   required String content,
-  // }) async {
-  //   debugPrint("✏️ Updating comment id=$commentId");
-  //
-  //   emit(state.copyWith(status: StateStatus.loading));
-  //
-  //   final response = await updateCommentTubeVideoUseCase(
-  //     UpdateCommentTubeParams(
-  //       content: content,
-  //       videoId: videoId,
-  //     ),
-  //   );
-  //
-  //   response.fold(
-  //         (failure) {
-  //       debugPrint("❌ Failed to update comment");
-  //       emit(state.copyWith(
-  //         failure: failure,
-  //         status: StateStatus.error,
-  //       ));
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Failed to update comment. Please try again.'),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //     },
-  //         (entity) async {
-  //       debugPrint("✅ Comment updated successfully!");
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Comment updated successfully'),
-  //           backgroundColor: Colors.green,
-  //           duration: Duration(seconds: 2),
-  //         ),
-  //       );
-  //
-  //       // 🔁 Refresh the comments
-  //       await loadInitialTubeVideoComments(context, videoId);
-  //     },
-  //   );
-  // }
-
-  // /// 🗑️ Delete a comment
-  // Future<void> deleteTubeComment({
-  //   required BuildContext context,
-  //   required String commentId,
-  //   required String videoId,
-  // }) async {
-  //   debugPrint("🗑️ Deleting comment id=$commentId for video=$videoId");
-  //
-  //   // Optimistically remove from UI
-  //   final commentIndex = tubeVideoComments.indexWhere((c) => c.id == commentId);
-  //   TubeCommentEntity? removedComment;
-  //
-  //   if (commentIndex != -1) {
-  //     removedComment = tubeVideoComments[commentIndex];
-  //     tubeVideoComments.removeAt(commentIndex);
-  //     emit(state.copyWith(
-  //       tubeVideoCommentsData: List.from(tubeVideoComments),
-  //     ));
-  //   }
-  //
-  //   final response = await deleteTubeCommentUseCase(
-  //     FavoriteTubeParams(id: commentId),
-  //   );
-  //
-  //   response.fold(
-  //         (failure) {
-  //       debugPrint("❌ Failed to delete comment");
-  //
-  //       // Restore comment on failure
-  //       if (removedComment != null && commentIndex != -1) {
-  //         tubeVideoComments.insert(commentIndex, removedComment);
-  //         emit(state.copyWith(
-  //           tubeVideoCommentsData: List.from(tubeVideoComments),
-  //         ));
-  //       }
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Failed to delete comment. Please try again.'),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //
-  //       emit(state.copyWith(failure: failure, status: StateStatus.error));
-  //     },
-  //         (entity) {
-  //       debugPrint("✅ Comment deleted successfully!");
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Comment deleted'),
-  //           backgroundColor: Colors.green,
-  //           duration: Duration(seconds: 2),
-  //         ),
-  //       );
-  //
-  //       emit(state.copyWith(status: StateStatus.success));
-  //     },
-  //   );
-  // }
 
   /// 👍 Like a comment
   Future<void> likeComment(String commentId) async {
@@ -682,147 +540,7 @@ class TubeCubit extends Cubit<TubeState> {
     );
   }
 
-/*
-  // ❤️ Like a Tube Video
-  Future<void> likeTubeVideo(String videoId) async {
-    debugPrint("👍 LikeTubeVideo called for videoId=$videoId");
-    emit(state.copyWith(status: StateStatus.loading));
 
-    final response = await likeTubeVideoUseCase(FavoriteTubeParams(id: videoId));
-
-    response.fold(
-          (failure) {
-        debugPrint("❌ Failed to like video");
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-          (entity) {
-        debugPrint("✅ Video liked successfully!");
-        emit(state.copyWith(status: StateStatus.success));
-      },
-    );
-  }
-
-// 👎 Dislike a Tube Video
-  Future<void> dislikeTubeVideo(String videoId) async {
-    debugPrint("👎 DislikeTubeVideo called for videoId=$videoId");
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await dislikeTubeVideoUseCase(FavoriteTubeParams(id: videoId));
-
-    response.fold(
-          (failure) {
-        debugPrint("❌ Failed to dislike video");
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-          (entity) {
-        debugPrint("✅ Video disliked successfully!");
-        emit(state.copyWith(status: StateStatus.success));
-      },
-    );
-  }
-
-// 🗑️ Delete a Tube Comment
-  Future<void> deleteTubeComment({
-    required BuildContext context,
-    required String commentId,
-    required String videoId,
-  }) async {
-    debugPrint("🗑️ Deleting comment id=$commentId for video=$videoId");
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await deleteTubeCommentUseCase(FavoriteTubeParams(id: commentId));
-
-    response.fold(
-          (failure) {
-        debugPrint("❌ Failed to delete comment");
-        emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-          (entity) async {
-        debugPrint("✅ Comment deleted successfully!");
-        // 🔁 Refresh comments after deletion
-        await loadInitialTubeVideoComments(context, videoId);
-        emit(state.copyWith(status: StateStatus.success));
-      },
-    );
-  }
-
-
-  Future<void> updateCommentOnTubeVideo({
-    required BuildContext context,
-    required String videoId,
-    required String content,
-
-  }) async {
-    debugPrint("💬 Creating comment on videoId=$videoId");
-
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await updateCommentTubeVideoUseCase(
-      UpdateCommentTubeParams(
-        content: content,
-        videoId: videoId,
-      ),
-    );
-
-    response.fold(
-          (failure) {
-        debugPrint("❌ Failed to create comment");
-        emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ));
-      },
-          (entity) async {
-        debugPrint("✅ Comment created successfully!");
-
-        // 🔁 Refresh the comments for this video
-        await loadInitialTubeVideoComments(context, videoId);
-
-        emit(state.copyWith(
-          status: StateStatus.success,
-        ));
-      },
-    );
-  }
-
-  Future<void> createCommentOnTubeVideo({
-    required BuildContext context,
-    required String videoId,
-    required String content,
-
-  }) async {
-    debugPrint("💬 Creating comment on videoId=$videoId");
-
-    emit(state.copyWith(status: StateStatus.loading));
-
-    final response = await createCommentTubeVideoUseCase(
-      CreateCommentTubeParams(
-        content: content,
-        videoId: videoId,
-      ),
-    );
-
-    response.fold(
-          (failure) {
-        debugPrint("❌ Failed to create comment");
-        emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ));
-      },
-          (entity) async {
-        debugPrint("✅ Comment created successfully!");
-
-        // 🔁 Refresh the comments for this video
-        await loadInitialTubeVideoComments(context, videoId);
-
-        emit(state.copyWith(
-          status: StateStatus.success,
-        ));
-      },
-    );
-  }
-*/
 
 
 
@@ -1120,18 +838,13 @@ class TubeCubit extends Cubit<TubeState> {
   int _retryCount = 0;
   static const int _maxRetries = 3;
 
+
+
   Future<void> _initializeController(GetAllTubeVideosEntity video) async {
     if (_isInitializing) return;
     _isInitializing = true;
 
     try {
-      // final videoPlayerController = VideoPlayerController.networkUrl(
-      //   Uri.parse(GetAllTubeVideosEntity.videoUrl!),
-      //   videoPlayerOptions: VideoPlayerOptions(
-      //     mixWithOthers: false,
-      //     allowBackgroundPlayback: false,
-      //   ),
-      // );
       final videoPlayerController = VideoPlayerController.networkUrl(
         Uri.parse(video.videoUrl!),
         videoPlayerOptions: VideoPlayerOptions(
@@ -1184,36 +897,6 @@ class TubeCubit extends Cubit<TubeState> {
             ),
           );
         },
-        // customControls: CustomVideoControls(
-        //   cubit: this, // مرر الـ cubit الحالي
-        //   onPrevious: playPreviousVideo,
-        //   onNext: playNextVideo,
-        //   onDoubleTapLeft: () {
-        //     seekBackward20Seconds();
-        //     SchedulerBinding.instance.addPostFrameCallback((_) {
-        //       emit(state.copyWith(showBackwardIndicator: true));
-        //       Future.delayed(const Duration(milliseconds: 1000), () {
-        //         if (state.showBackwardIndicator) {
-        //           emit(state.copyWith(showBackwardIndicator: false));
-        //         }
-        //       });
-        //     });
-        //   },
-        //   onDoubleTapRight: () {
-        //     seekForward20Seconds();
-        //     SchedulerBinding.instance.addPostFrameCallback((_) {
-        //       emit(state.copyWith(showForwardIndicator: true));
-        //       Future.delayed(const Duration(milliseconds: 1000), () {
-        //         if (state.showForwardIndicator) {
-        //           emit(state.copyWith(showForwardIndicator: false));
-        //         }
-        //       });
-        //     });
-        //   },
-        //   hasPrevious: () => allTubeVideos.indexWhere((v) => v.id == state.currentVideo?.id) > 0,
-        //   hasNext: () => allTubeVideos.indexWhere((v) => v.id == state.currentVideo?.id) < allTubeVideos.length - 1,
-        //   videoUrl: video.videoUrl!,
-        // ),
         customControls: CustomVideoControls(
           cubit: this,
           onPrevious: playPreviousVideo,
@@ -1248,11 +931,10 @@ class TubeCubit extends Cubit<TubeState> {
           hasNext: () {
             if (state.currentVideo == null || currentVideoList.isEmpty) return false;
             final currentIndex = currentVideoList.indexWhere((v) => v.id == state.currentVideo!.id);
-            return currentIndex < currentVideoList.length - 1;
+            return currentIndex >= 0 && currentIndex < currentVideoList.length - 1;
           },
           videoUrl: video.videoUrl!,
         ),
-
         allowedScreenSleep: false,
         showOptions: true,
         allowPlaybackSpeedChanging: true,
@@ -1272,7 +954,6 @@ class TubeCubit extends Cubit<TubeState> {
         videoPlayerController: videoPlayerController,
         chewieController: chewieController,
         isPlaying: true,
-        isMinimized: false,
         isLoading: false,
       ));
     } catch (error) {
@@ -1292,6 +973,14 @@ class TubeCubit extends Cubit<TubeState> {
   void playVideo(GetAllTubeVideosEntity video, {List<GetAllTubeVideosEntity>? videoList}) async {
     final wasMinimized = state.isMinimized;
 
+    // Update currentVideoList with the provided videoList or use existing one
+    if (videoList != null && videoList.isNotEmpty) {
+      currentVideoList = List.from(videoList);
+    } else if (currentVideoList.isEmpty) {
+      // Fallback to allTubeVideos or favoriteTubeVideos if no list is provided
+      currentVideoList = allTubeVideos.isNotEmpty ? allTubeVideos : favoriteTubeVideos;
+    }
+
     emit(state.copyWith(
       isLoading: true,
       chewieController: null,
@@ -1300,13 +989,12 @@ class TubeCubit extends Cubit<TubeState> {
 
     _disposeControllers();
 
-    await Future.delayed(const Duration(milliseconds: 100)); // ⏳ tiny delay
+    await Future.delayed(const Duration(milliseconds: 100)); // Tiny delay for smoother transition
 
-    _initializeController(video).then((_) {
-      if (wasMinimized) {
-        emit(state.copyWith(isMinimized: true));
-      }
-    });
+    await _initializeController(video);
+    if (wasMinimized) {
+      emit(state.copyWith(isMinimized: true));
+    }
   }
 
   void togglePlayPause() {
@@ -1354,8 +1042,8 @@ class TubeCubit extends Cubit<TubeState> {
     if (state.currentVideo == null || state.isLoading || currentVideoList.isEmpty) return;
 
     final currentIndex = currentVideoList.indexWhere((v) => v.id == state.currentVideo!.id);
-    if (currentIndex < currentVideoList.length - 1) {
-      playVideo(currentVideoList[currentIndex + 1]);
+    if (currentIndex >= 0 && currentIndex < currentVideoList.length - 1) {
+      playVideo(currentVideoList[currentIndex + 1], videoList: currentVideoList);
     }
   }
 
@@ -1364,24 +1052,34 @@ class TubeCubit extends Cubit<TubeState> {
 
     final currentIndex = currentVideoList.indexWhere((v) => v.id == state.currentVideo!.id);
     if (currentIndex > 0) {
-      playVideo(currentVideoList[currentIndex - 1]);
+      playVideo(currentVideoList[currentIndex - 1], videoList: currentVideoList);
     }
   }
-
-
 
   void seekForward20Seconds() {
     if (state.videoPlayerController != null && !state.isLoading) {
       final currentPosition = state.videoPlayerController!.value.position;
       final duration = state.videoPlayerController!.value.duration;
       final newPosition = currentPosition + const Duration(seconds: 20);
-      if (newPosition < duration) {
-        state.videoPlayerController!.seekTo(newPosition);
-      } else {
-        state.videoPlayerController!.seekTo(duration);
-      }
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        emit(state.copyWith());
+      final wasPlaying = state.videoPlayerController!.value.isPlaying;
+
+      state.videoPlayerController!.pause().then((_) async {
+        if (newPosition < duration) {
+          await state.videoPlayerController!.seekTo(newPosition);
+        } else {
+          await state.videoPlayerController!.seekTo(duration);
+        }
+        if (wasPlaying) {
+          await state.videoPlayerController!.play();
+        }
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          emit(state.copyWith(showForwardIndicator: true));
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            if (state.showForwardIndicator) {
+              emit(state.copyWith(showForwardIndicator: false));
+            }
+          });
+        });
       });
     }
   }
@@ -1390,13 +1088,25 @@ class TubeCubit extends Cubit<TubeState> {
     if (state.videoPlayerController != null && !state.isLoading) {
       final currentPosition = state.videoPlayerController!.value.position;
       final newPosition = currentPosition - const Duration(seconds: 20);
-      if (newPosition > Duration.zero) {
-        state.videoPlayerController!.seekTo(newPosition);
-      } else {
-        state.videoPlayerController!.seekTo(Duration.zero);
-      }
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        emit(state.copyWith());
+      final wasPlaying = state.videoPlayerController!.value.isPlaying;
+
+      state.videoPlayerController!.pause().then((_) async {
+        if (newPosition > Duration.zero) {
+          await state.videoPlayerController!.seekTo(newPosition);
+        } else {
+          await state.videoPlayerController!.seekTo(Duration.zero);
+        }
+        if (wasPlaying) {
+          await state.videoPlayerController!.play();
+        }
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          emit(state.copyWith(showBackwardIndicator: true));
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            if (state.showBackwardIndicator) {
+              emit(state.copyWith(showBackwardIndicator: false));
+            }
+          });
+        });
       });
     }
   }
@@ -1420,7 +1130,6 @@ class TubeCubit extends Cubit<TubeState> {
       debugPrint('Error disposing controllers: $e');
     }
   }
-
 
   @override
   Future<void> close() async {

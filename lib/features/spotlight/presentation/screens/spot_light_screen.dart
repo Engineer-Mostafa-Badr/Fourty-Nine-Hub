@@ -376,6 +376,8 @@ import '../../../../res/style/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../cubit/spotlight_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SpotLightScreen extends StatelessWidget {
   const SpotLightScreen({super.key});
@@ -391,12 +393,84 @@ class SpotLightScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotlightCubit, SpotlightState>(
       builder: (context, state) {
+        // Handle error state
+        if (state.status == StateStatus.error) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                context.isArabic ? 'خطأ' : 'Error',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
+                ),
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: iconColor),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            body: Container(
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: textColor,
+                      size: 48,
+                    ),
+                    const SizedBox(height: kPadding),
+                    Text(
+                      context.isArabic
+                          ? 'حدث خطأ أثناء تحميل البيانات'
+                          : 'An error occurred while loading data',
+                      style: textStyle.copyWith(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: kPadding),
+                    Text(
+                      state.failure?.toString() ?? (context.isArabic ? 'خطأ غير معروف' : 'Unknown error'),
+                      style: textStyle.copyWith(color: Colors.grey, fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: kPadding * 2),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Retry loading data
+                        // context.read<SpotlightCubit>().loadSpotlightData(); // Adjust method name as needed
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: boxColor,
+                        foregroundColor: textColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        context.isArabic ? 'إعادة المحاولة' : 'Retry',
+                        style: textStyle,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Handle loading state
         if (state.status == StateStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state.status == StateStatus.success &&
-            state.spotlightEntity != null) {
+        // Handle success state
+        if (state.status == StateStatus.success && state.spotlightEntity != null) {
           final data = state.spotlightEntity!;
           return Scaffold(
             backgroundColor: Colors.white,
@@ -407,8 +481,7 @@ class SpotLightScreen extends StatelessWidget {
                 children: [
                   // ✅ Top Cover Image
                   TopImageSection(
-                    imageUrl: data.coverPictureUrl ??
-                        'https://via.placeholder.com/600x300',
+                    imageUrl: data.coverPictureUrl ?? 'https://via.placeholder.com/600x300',
                   ),
 
                   Padding(
@@ -435,8 +508,7 @@ class SpotLightScreen extends StatelessWidget {
                                     color: Colors.grey[200],
                                     image: DecorationImage(
                                       image: NetworkImage(
-                                        (data.profilePictureUrl != null &&
-                                            data.profilePictureUrl!.isNotEmpty)
+                                        (data.profilePictureUrl != null && data.profilePictureUrl!.isNotEmpty)
                                             ? data.profilePictureUrl!
                                             : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
                                       ),
@@ -448,7 +520,7 @@ class SpotLightScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: context.isArabic ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                               children: [
                                 Label(text: "${data.firstName} ${data.lastName}"),
                                 Label(text: "@${data.username}"),
@@ -457,7 +529,6 @@ class SpotLightScreen extends StatelessWidget {
                           ],
                         ),
 
-
                         const SizedBox(height: kPadding),
 
                         // ✅ Looking For
@@ -465,7 +536,7 @@ class SpotLightScreen extends StatelessWidget {
                           InfoBox(children: [
                             IconText(
                               icon: Assets.tinder_search,
-                              text: 'Looking for',
+                              text: context.isArabic ? 'يبحث عن' : 'Looking for',
                               iconSize: 12,
                               iconColor: Colors.black,
                             ),
@@ -480,13 +551,14 @@ class SpotLightScreen extends StatelessWidget {
                         // ✅ About Me
                         if (data.aboutMe != null) ...[
                           InfoBox(children: [
-                            const SectionTitle(text: 'About Me'),
+                            SectionTitle(text: context.isArabic ? 'عني' : 'About Me'),
                             const SizedBox(height: 6),
                             Text(
                               data.aboutMe!,
                               style: textStyle.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
+                              textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                             ),
                           ]),
                           const SizedBox(height: kPadding),
@@ -494,39 +566,68 @@ class SpotLightScreen extends StatelessWidget {
 
                         // ✅ Essentials & Lifestyle
                         InfoBox(children: [
-                          const SectionTitle(
-                              text: "Essentials", icon: Icons.badge_outlined),
+                          SectionTitle(
+                            text: context.isArabic ? 'الأساسيات' : 'Essentials',
+                            icon: Icons.badge_outlined,
+                          ),
                           const SizedBox(height: 8),
                           if (data.distance != null)
-                            InfoRow(Icons.location_on_outlined,
-                                "${data.distance} miles away"),
+                            InfoRow(
+                              Icons.location_on_outlined,
+                              context.isArabic ? "${data.distance} ميل بعيدًا" : "${data.distance} miles away",
+
+                            ),
                           if (data.height != null)
-                            InfoRow(Icons.straighten, "${data.height} cm"),
+                            InfoRow(
+                              Icons.straighten,
+                              context.isArabic ? "${data.height} سم" : "${data.height} cm",
+
+                            ),
                           if (data.university != null)
-                            InfoRow(Icons.school_outlined,
-                                data.university!, showDivider: false),
+                            InfoRow(
+                              Icons.school_outlined,
+                              data.university!,
+                              showDivider: false,
+
+                            ),
                         ]),
                         const SizedBox(height: 12),
 
                         InfoBox(children: [
-                          const SectionTitle(
-                              text: "Lifestyle", icon: Icons.favorite_outline),
+                          SectionTitle(
+                            text: context.isArabic ? 'نمط الحياة' : 'Lifestyle',
+                            icon: Icons.favorite_outline,
+                          ),
                           const SizedBox(height: 8),
                           if (data.smoking != null)
-                            InfoRow(Icons.smoking_rooms_outlined, data.smoking!),
+                            InfoRow(
+                              Icons.smoking_rooms_outlined,
+                              data.smoking!,
+
+                            ),
                           if (data.workout != null)
-                            InfoRow(Icons.fitness_center_outlined, data.workout!),
+                            InfoRow(
+                              Icons.fitness_center_outlined,
+                              data.workout!,
+
+                            ),
                           if (data.pets.isNotEmpty)
-                            InfoRow(Icons.pets_outlined, data.pets.join(", "),
-                                showDivider: false),
+                            InfoRow(
+                              Icons.pets_outlined,
+                              data.pets.join(", "),
+                              showDivider: false,
+
+                            ),
                         ]),
                         const SizedBox(height: kPadding * 2),
 
                         // ✅ Interests
                         if (data.interests.isNotEmpty) ...[
                           InfoBox(children: [
-                            const SectionTitle(
-                                text: 'Interests', icon: Icons.interests),
+                            SectionTitle(
+                              text: context.isArabic ? 'الاهتمامات' : 'Interests',
+                              icon: Icons.interests,
+                            ),
                             const SizedBox(height: 8),
                             Wrap(
                               spacing: 8,
@@ -534,6 +635,8 @@ class SpotLightScreen extends StatelessWidget {
                               children: data.interests
                                   .map((interest) => InterestChip(interest))
                                   .toList(),
+                              direction: context.isArabic ? Axis.horizontal : Axis.horizontal,
+                              alignment: context.isArabic ? WrapAlignment.end : WrapAlignment.start,
                             ),
                           ]),
                           const SizedBox(height: kPadding),
@@ -547,12 +650,188 @@ class SpotLightScreen extends StatelessWidget {
           );
         }
 
-        // initial or fallback
+        // Initial or fallback state
         return const SizedBox();
       },
     );
   }
 }
+// class SpotLightScreen extends StatelessWidget {
+//   const SpotLightScreen({super.key});
+//
+//   static const double kPadding = 16;
+//   static const Color textColor = Colors.black87;
+//   static const Color iconColor = Colors.black87;
+//   static const Color boxColor = Color(0xFFE7E7E7);
+//   static const TextStyle textStyle =
+//   TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: textColor);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<SpotlightCubit, SpotlightState>(
+//       builder: (context, state) {
+//         if (state.status == StateStatus.loading) {
+//           return const Center(child: CircularProgressIndicator());
+//         }
+//
+//         if (state.status == StateStatus.success &&
+//             state.spotlightEntity != null) {
+//           final data = state.spotlightEntity!;
+//           return Scaffold(
+//             backgroundColor: Colors.white,
+//             body: SingleChildScrollView(
+//               physics: const BouncingScrollPhysics(),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   // ✅ Top Cover Image
+//                   TopImageSection(
+//                     imageUrl: data.coverPictureUrl ??
+//                         'https://via.placeholder.com/600x300',
+//                   ),
+//
+//                   Padding(
+//                     padding: const EdgeInsets.all(kPadding),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.stretch,
+//                       children: [
+//                         const SizedBox(height: kPadding),
+//
+//                         // ✅ Profile Picture + Name
+//                         Row(
+//                           children: [
+//                             Container(
+//                               width: 65,
+//                               height: 65,
+//                               decoration: const BoxDecoration(
+//                                 shape: BoxShape.circle,
+//                               ),
+//                               child: Padding(
+//                                 padding: const EdgeInsets.all(3.0),
+//                                 child: Container(
+//                                   decoration: BoxDecoration(
+//                                     shape: BoxShape.circle,
+//                                     color: Colors.grey[200],
+//                                     image: DecorationImage(
+//                                       image: NetworkImage(
+//                                         (data.profilePictureUrl != null &&
+//                                             data.profilePictureUrl!.isNotEmpty)
+//                                             ? data.profilePictureUrl!
+//                                             : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
+//                                       ),
+//                                       fit: BoxFit.cover,
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                             const SizedBox(width: 12),
+//                             Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Label(text: "${data.firstName} ${data.lastName}"),
+//                                 Label(text: "@${data.username}"),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//
+//
+//                         const SizedBox(height: kPadding),
+//
+//                         // ✅ Looking For
+//                         if (data.lookingFor != null) ...[
+//                           InfoBox(children: [
+//                             IconText(
+//                               icon: Assets.tinder_search,
+//                               text: 'Looking for',
+//                               iconSize: 12,
+//                               iconColor: Colors.black,
+//                             ),
+//                             IconText(
+//                               icon: Assets.waving,
+//                               text: data.lookingFor!,
+//                             ),
+//                           ]),
+//                           const SizedBox(height: kPadding),
+//                         ],
+//
+//                         // ✅ About Me
+//                         if (data.aboutMe != null) ...[
+//                           InfoBox(children: [
+//                             const SectionTitle(text: 'About Me'),
+//                             const SizedBox(height: 6),
+//                             Text(
+//                               data.aboutMe!,
+//                               style: textStyle.copyWith(
+//                                 fontWeight: FontWeight.bold,
+//                               ),
+//                             ),
+//                           ]),
+//                           const SizedBox(height: kPadding),
+//                         ],
+//
+//                         // ✅ Essentials & Lifestyle
+//                         InfoBox(children: [
+//                           const SectionTitle(
+//                               text: "Essentials", icon: Icons.badge_outlined),
+//                           const SizedBox(height: 8),
+//                           if (data.distance != null)
+//                             InfoRow(Icons.location_on_outlined,
+//                                 "${data.distance} miles away"),
+//                           if (data.height != null)
+//                             InfoRow(Icons.straighten, "${data.height} cm"),
+//                           if (data.university != null)
+//                             InfoRow(Icons.school_outlined,
+//                                 data.university!, showDivider: false),
+//                         ]),
+//                         const SizedBox(height: 12),
+//
+//                         InfoBox(children: [
+//                           const SectionTitle(
+//                               text: "Lifestyle", icon: Icons.favorite_outline),
+//                           const SizedBox(height: 8),
+//                           if (data.smoking != null)
+//                             InfoRow(Icons.smoking_rooms_outlined, data.smoking!),
+//                           if (data.workout != null)
+//                             InfoRow(Icons.fitness_center_outlined, data.workout!),
+//                           if (data.pets.isNotEmpty)
+//                             InfoRow(Icons.pets_outlined, data.pets.join(", "),
+//                                 showDivider: false),
+//                         ]),
+//                         const SizedBox(height: kPadding * 2),
+//
+//                         // ✅ Interests
+//                         if (data.interests.isNotEmpty) ...[
+//                           InfoBox(children: [
+//                             const SectionTitle(
+//                                 text: 'Interests', icon: Icons.interests),
+//                             const SizedBox(height: 8),
+//                             Wrap(
+//                               spacing: 8,
+//                               runSpacing: 8,
+//                               children: data.interests
+//                                   .map((interest) => InterestChip(interest))
+//                                   .toList(),
+//                             ),
+//                           ]),
+//                           const SizedBox(height: kPadding),
+//                         ],
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           );
+//         }
+//
+//         // initial or fallback
+//         return const SizedBox();
+//       },
+//     );
+//   }
+// }
 
 
 /// ===== Reusable Small Widgets =====
