@@ -102,6 +102,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       // if (!dashboardCubit.isClosed) {
+      print("widget.params.isSocket ${widget.params.isSocket} widget.params.modeType ${widget.params.modeType}");
       widget.params.isSocket == true && widget.params.modeType == "ride"
           ? [
               dashboardCubit.changeIndex( 0, context, widget.params),

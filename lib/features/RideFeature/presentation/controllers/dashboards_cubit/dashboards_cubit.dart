@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/find_media_id.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
@@ -66,7 +65,6 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/fo
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -1794,7 +1792,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       if (params.isSocket == true) {
         loadAvailableRideTrips(context);
         getSettings(context);
-      } else if (params.modeType == "ride" && settings?.isReady == true) {
+      } else if (params.modeType == "ride") {
         loadInitialAvailableNonSocketTrips();
       } else if (params.modeType == "truck") {
         loadInitialAvailableNonSocketLoading();

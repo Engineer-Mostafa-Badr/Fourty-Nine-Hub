@@ -8,14 +8,16 @@ import 'package:fourtyninehub/helpers/marker_generator.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-// --- Data Models ---
+// --------------------
+// Person Model
+// --------------------
 class Person {
   final String name;
   final String gender;
   final double lat;
   final double lng;
   final String vehicleType;
-  final List<List<double>>? _polyline; // nullable for safety
+  final List<List<double>>? _polyline;
   final bool isAvailable;
 
   Person({
@@ -28,10 +30,12 @@ class Person {
     this.isAvailable = true,
   }) : _polyline = polyline;
 
-  /// Always return a valid list (never null)
   List<List<double>> get polyline => _polyline ?? [];
 }
 
+// --------------------
+// Dummy Data
+// --------------------
 final List<Person> courierPeople = [
   Person(name: 'Ahmed',
       polyline:[[31.67768, 31.28032], [31.67784, 31.2803], [31.67799, 31.28031], [31.67818, 31.2804], [31.6783, 31.28038], [31.67831, 31.28053], [31.67893, 31.28002], [31.67949, 31.27964], [31.67989, 31.27932], [31.68061, 31.27887], [31.68112, 31.27853], [31.68138, 31.27839], [31.68152, 31.27834], [31.68289, 31.27767], [31.68336, 31.27751], [31.68409, 31.27732], [31.6842, 31.2773], [31.6841, 31.27705], [31.68462, 31.27684], [31.68505, 31.27663], [31.68524, 31.27658], [31.68634, 31.27611], [31.68682, 31.27587], [31.68791, 31.27548], [31.68818, 31.2753], [31.68829, 31.27524], [31.68832, 31.27521], [31.68837, 31.27504], [31.68841, 31.27495], [31.68856, 31.2748], [31.68905, 31.2746], [31.68941, 31.27441], [31.68959, 31.27429], [31.68976, 31.27422], [31.68992, 31.27419], [31.6904, 31.2739], [31.69032, 31.27378], [31.69024, 31.2737], [31.69003, 31.27358], [31.68968, 31.27329], [31.68864, 31.27227], [31.68832, 31.27175], [31.68811, 31.27128], [31.68791, 31.2707], [31.68776, 31.26987], [31.68769, 31.26929], [31.68757, 31.26848], [31.68749, 31.26782], [31.68753, 31.26744], [31.68764, 31.26698], [31.6877, 31.26678], [31.68726, 31.26663], [31.68646, 31.2664], [31.68625, 31.26637], [31.68573, 31.26637], [31.68549, 31.2664], [31.68525, 31.26639], [31.68507, 31.26641], [31.68464, 31.26631], [31.68388, 31.26609], [31.68405, 31.26563]],
@@ -50,12 +54,16 @@ final List<Person> courierPeople = [
       polyline: [[31.61219, 31.25499], [31.61221, 31.25458], [31.61241, 31.25357], [31.6125, 31.25332], [31.61482, 31.24961], [31.61575, 31.24816], [31.61628, 31.2473], [31.61663, 31.24677], [31.61748, 31.24728], [31.61783, 31.24752], [31.61818, 31.24784], [31.61833, 31.24801], [31.61862, 31.24848], [31.61904, 31.24905], [31.6192, 31.24919], [31.61943, 31.24931], [31.61972, 31.24939], [31.61997, 31.24941], [31.62109, 31.2492], [31.62345, 31.24869], [31.62443, 31.24845], [31.62677, 31.24796], [31.62707, 31.2479], [31.62844, 31.24758], [31.63016, 31.24719], [31.63309, 31.24652], [31.63429, 31.24624], [31.63449, 31.24621], [31.63475, 31.2462], [31.63761, 31.2465], [31.64069, 31.24682], [31.64109, 31.24686], [31.64116, 31.24685], [31.64218, 31.24697], [31.64297, 31.24708], [31.64322, 31.24714], [31.6438, 31.24736], [31.64543, 31.248], [31.64689, 31.24856], [31.6509, 31.25012], [31.65318, 31.25097], [31.65428, 31.2514], [31.6544, 31.25121], [31.65515, 31.25151], [31.65803, 31.2526], [31.65896, 31.25297]],
       gender: 'Male', lat: 31.249113394030847, lng: 31.64445239309742, vehicleType: 'Motorcycle'),
 ];
-// --- Main Widget ---
+
+// --------------------
+// Main Widget
+// --------------------
 class TrackingAvailableTrips extends StatefulWidget {
   const TrackingAvailableTrips({super.key});
 
   @override
-  State<TrackingAvailableTrips> createState() => _TrackingAvailableTripsState();
+  State<TrackingAvailableTrips> createState() =>
+      _TrackingAvailableTripsState();
 }
 
 class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
@@ -63,8 +71,8 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   Set<Marker> _markers = {};
   Set<Polyline> _polylines = {};
   CameraPosition? _initialCameraPosition;
-
   bool _isLoading = true;
+
   List<Person> _filteredPeople = [];
   Person? _selectedPerson;
 
@@ -140,7 +148,6 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
       return;
     }
 
-    // ✅ Use correct coordinate order (LatLng(lat, lng))
     final List<LatLng> points =
     person.polyline.map((p) => LatLng(p[1], p[0])).toList();
 
@@ -158,7 +165,6 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
       _polylines = {polyline};
     });
 
-    // Fit camera to the route
     double minLat = points.map((p) => p.latitude).reduce(min);
     double maxLat = points.map((p) => p.latitude).reduce(max);
     double minLng = points.map((p) => p.longitude).reduce(min);
@@ -188,16 +194,13 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   }
 
   Future<void> _setMarkerWidgets() async {
-    if (_filteredPeople.isEmpty) {
-      // ... (rest of your empty check is fine)
-      return;
-    }
+    if (_filteredPeople.isEmpty) return;
 
     await Future.delayed(const Duration(milliseconds: 100));
 
     MarkerGenerator(markerWidgets(_filteredPeople), (bitmaps) {
       final markersList = mapBitmapsToMarkers(bitmaps, _filteredPeople);
-      final bounds = _calculateBounds(_filteredPeople); // Bounds for ALL markers
+      final bounds = _calculateBounds(_filteredPeople);
 
       if (mounted) {
         setState(() {
@@ -205,21 +208,15 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
           _isLoading = false;
         });
 
-        // --- FIXED LOGIC ---
-        // Check if a person is selected AND they have a polyline to show
         if (_selectedPerson != null && _selectedPerson!.polyline.isNotEmpty) {
-          // If yes, create the polyline. This function will also
-          // handle fitting the camera bounds to the route.
           _createPolyline(_selectedPerson!);
         } else {
-          // Otherwise (no person selected, or person has no route),
-          // just fit the camera to show all the markers.
           _fitBounds(bounds);
         }
-        // --- END FIXED LOGIC ---
       }
     }).generate(context);
   }
+
   List<Widget> markerWidgets(List<Person> courierList) {
     return courierList.map((c) => _getMarkerWidget(c)).toList();
   }
@@ -233,23 +230,138 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   }
 
   void _selectCourier(Person person) {
-    setState(() => _selectedPerson = person);
+    setState(() {
+      _filteredPeople.remove(person);
+      _filteredPeople.insert(0, person);
+      _selectedPerson = person;
+    });
     _createPolyline(person);
+  }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Selected ${person.name} (${person.vehicleType})'),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
+  /// ✅ Remove top card, marker, and refresh after last one (with first polyline)
+  void _removeCurrentCard() async {
+    if (_filteredPeople.isEmpty) return;
+
+    final removedPerson = _filteredPeople.first;
+
+    setState(() {
+      _filteredPeople.removeAt(0);
+      _markers.removeWhere(
+            (marker) => marker.markerId.value.contains(removedPerson.name),
+      );
+
+      if (_selectedPerson == removedPerson) {
+        _polylines.clear();
+      }
+    });
+
+    // If there are still people left
+    if (_filteredPeople.isNotEmpty) {
+      setState(() {
+        _selectedPerson = _filteredPeople.first;
+      });
+      _createPolyline(_selectedPerson!);
+    } else {
+      // ✅ Show loading for 2 seconds and refresh data
+      setState(() {
+        _selectedPerson = null;
+        _isLoading = true;
+      });
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      // Refill the list and reset markers
+      setState(() {
+        _filteredPeople = List.from(courierPeople);
+        _selectedPerson = _filteredPeople.first; // ✅ Select first item again
+      });
+
+      // Regenerate markers for the new list
+      await _setMarkerWidgets();
+
+      // ✅ After markers are added, show the first polyline again
+      if (_selectedPerson != null) {
+        _createPolyline(_selectedPerson!);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Widget _buildPersonCard(BuildContext context, Person person,
+      {double offsetY = 0, double scale = 1.0, bool isTop = false}) {
+    return Transform.translate(
+      offset: Offset(0, offsetY),
+      child: Transform.scale(
+        scale: scale,
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Card(
+            elevation: isTop ? 10 : 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage(
+                      person.gender == 'Male'
+                          ? _manIconPath
+                          : _womanIconPath,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(person.name,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text('${person.vehicleType} • ${person.gender}'),
+                        const SizedBox(height: 4),
+                        Text(
+                          person.isAvailable ? 'Available' : 'Unavailable',
+                          style: TextStyle(
+                            color: person.isAvailable
+                                ? Colors.green
+                                : Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.grey),
+                    onPressed: _removeCurrentCard,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
 
+  // --------------------
+  // Build UI
+  // --------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          // Google Map
           if (_initialCameraPosition == null)
             const Center(child: CustomCircularProgressIndicator())
           else
@@ -262,16 +374,64 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               zoomControlsEnabled: true,
-              zoomGesturesEnabled: true,
-              scrollGesturesEnabled: true,
-              rotateGesturesEnabled: true,
-              tiltGesturesEnabled: true,
-              mapToolbarEnabled: true,
             ),
+
+          // ✅ Loading overlay (for map setup + refresh)
           if (_isLoading)
             Container(
-              color: Colors.black.withOpacity(0.1),
-              child: const Center(child: CustomCircularProgressIndicator()),
+              color: Colors.black.withOpacity(0.3),
+              child: const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomCircularProgressIndicator(),
+                    SizedBox(height: 12),
+                    Text(
+                      'Refreshing couriers...',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+          // ✅ Bottom stacked cards
+          if (_filteredPeople.isNotEmpty && !_isLoading)
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: 180,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: List.generate(
+                    _filteredPeople.length,
+                        (index) {
+                      final person = _filteredPeople[index];
+                      double offsetY = 20.0 * index;
+                      double scale = 1.0 - (index * 0.05);
+                      bool isTop = index == 0;
+
+                      return AnimatedPositioned(
+                        key: ValueKey(person.name),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        bottom: offsetY,
+                        left: 0,
+                        right: 0,
+                        child: _buildPersonCard(
+                          context,
+                          person,
+                          offsetY: 0,
+                          scale: scale,
+                          isTop: isTop,
+                        ),
+                      );
+                    },
+                  ).reversed.toList(),
+                ),
+              ),
             ),
         ],
       ),
