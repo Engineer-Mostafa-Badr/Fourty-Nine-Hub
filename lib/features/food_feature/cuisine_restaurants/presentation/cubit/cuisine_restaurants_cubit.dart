@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
+
+import '../../../../../core/error/failure.dart';
 
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 
-part 'cuisine_restaurants_state.dart';
+part 'cusine_restaurants_state.dart';
 
 class CuisineRestaurantsCubit extends Cubit<CuisineRestaurantsState> {
   final GetNearByRestaurantsUseCase _getNearByRestaurantsUseCase;

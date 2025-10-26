@@ -1,5 +1,4 @@
-part of 'cuisine_restaurants_cubit.dart';
-
+part of 'cusine_restaurants_cubit.dart';
 enum CuisineRestaurantsStates { initState, loading, error }
 
 extension CuisineRestaurantsStateX on CuisineRestaurantsState {

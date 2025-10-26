@@ -22,7 +22,7 @@ import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../food_feature/create_restaurant/views/widgets/mneu/name/price_text_form_field.dart';
+import '../../../../food_feature/create_restaurant/views/widgets/menu/name/price_text_form_field.dart';
 import '../../domain/entities/user_transfer_money_entity.dart';
 
 class TransferMoneyView extends StatefulWidget {

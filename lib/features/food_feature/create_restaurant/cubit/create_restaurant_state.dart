@@ -4,14 +4,12 @@ sealed class CreateRestaurantState {}
 
 final class CreateRestaurantInitial extends CreateRestaurantState {}
 
-final class CreateRestaurantLoading extends CreateRestaurantState {}
-
 final class CreateRestaurantFinish extends CreateRestaurantState {}
 
 final class CreateRestaurantLoading extends CreateRestaurantState {
-  final String message;
+  final String? message;
 
-  CreateRestaurantLoading(this.message);
+  CreateRestaurantLoading([this.message]);
 }
 
 final class CreateRestaurantCloseLoading extends CreateRestaurantState {}
@@ -63,7 +61,7 @@ class ValidationState extends CreateRestaurantState {
   final bool? isGovernorate;
   final bool? isCity;
   final ValidationStates? status;
-  final bool? isMneu;
+  final bool? isMenu;
 
   ValidationState({
     this.isNumber,
@@ -77,7 +75,7 @@ class ValidationState extends CreateRestaurantState {
     this.isCommercialThirdPage,
     this.isGovernorate,
     this.isCity,
-    this.isMneu,
+    this.isMenu,
   });
 
   ValidationState copyWith({
@@ -92,7 +90,7 @@ class ValidationState extends CreateRestaurantState {
     bool? isCommercialThirdPage,
     bool? isGovernorate,
     bool? isCity,
-    bool? isMneu,
+    bool? isMenu,
   }) {
     return ValidationState(
       isName: isName ?? this.isName,
@@ -109,7 +107,7 @@ class ValidationState extends CreateRestaurantState {
           isCommercialThirdPage ?? this.isCommercialThirdPage,
       isGovernorate: isGovernorate ?? this.isGovernorate,
       isCity: isCity ?? this.isCity,
-      isMneu: isMneu ?? this.isMneu,
+      isMenu: isMenu ?? this.isMenu,
     );
   }
 }
@@ -120,16 +118,16 @@ final class CreateRestaurantCitiesLoaded extends CreateRestaurantState {
   CreateRestaurantCitiesLoaded(this.cities);
 }
 
-final class CreateAddMneuToRestaurant extends CreateRestaurantState {
-  final List<RestaurantMenu> mneu;
+final class CreateAddMenuToRestaurant extends CreateRestaurantState {
+  final List<RestaurantMenu> menu;
 
-  CreateAddMneuToRestaurant(this.mneu);
+  CreateAddMenuToRestaurant(this.menu);
 }
 
-final class CreateUploadMneuImageLoading extends CreateRestaurantState {
+final class CreateUploadMenuImageLoading extends CreateRestaurantState {
   final XFile file;
 
-  CreateUploadMneuImageLoading(this.file);
+  CreateUploadMenuImageLoading(this.file);
 }
 
 final class CreateRestaurantCitiesLoading extends CreateRestaurantState {}

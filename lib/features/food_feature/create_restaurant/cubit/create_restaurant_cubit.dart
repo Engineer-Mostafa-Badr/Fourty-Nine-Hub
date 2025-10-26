@@ -471,7 +471,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
           (createRestaurantParams.licenseMedia?.length ?? 1) < 2,
       isCommercialThirdPage:
           (createRestaurantParams.licenseMedia?.length ?? 2) < 3,
-      isMneu: createRestaurantParams.mneu?.isEmpty ?? true,
+      isMenu: createRestaurantParams.mneu?.isEmpty ?? true,
     ));
   }
 

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/info_text.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/messages/messages.dart';
-import '../cubit/create_restaurant_cubit.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/strings/labels.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/fields/address_field.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
-import '../../../../health_feature/create_doctor/presentation/widgets/fields/name_field.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/options_checkbox.dart';
@@ -22,12 +27,7 @@ import '../../../../health_feature/create_doctor/presentation/widgets/submit_but
 import '../../../../health_feature/create_doctor/presentation/widgets/time_tables/call_time_table.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/time_tables/clinic_time_table.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/time_tables/home_visit_time_table.dart';
-import '../../../../../res/strings/labels.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
-
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
+import '../cubit/create_restaurant_cubit.dart';
 
 class CreateRestaurantView extends StatefulWidget {
   const CreateRestaurantView({super.key});
