@@ -56,6 +56,31 @@ class TubeCommentEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+  TubeCommentEntity copyWith({
+    String? id,
+    String? content,
+    String? userId,
+    TubeCommentOwnerEntity? owner,
+    String? video,
+    int? likes,
+    int? dislikes,
+    List<TubeReplyEntity>? replies,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return TubeCommentEntity(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      userId: userId ?? this.userId,
+      owner: owner ?? this.owner,
+      video: video ?? this.video,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      replies: replies ?? this.replies,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 class TubeReplyEntity {
@@ -84,6 +109,33 @@ class TubeReplyEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+  TubeReplyEntity copyWith({
+    String? id,
+    String? content,
+    String? userId,
+    TubeCommentOwnerEntity? owner,
+    String? video,
+    List<dynamic>? likes,
+    List<dynamic>? dislikes,
+    String? parentComment,
+    List<dynamic>? replies,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return TubeReplyEntity(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      userId: userId ?? this.userId,
+      owner: owner ?? this.owner,
+      video: video ?? this.video,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      parentComment: parentComment ?? this.parentComment,
+      replies: replies ?? this.replies,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 class TubeCommentOwnerEntity {
