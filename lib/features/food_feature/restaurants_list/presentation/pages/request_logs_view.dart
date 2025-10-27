@@ -87,7 +87,8 @@ class _RestaurantRequestLogsScreenState
       }
 
       if (!state.isLoading) {
-        return Expanded(
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.7,
           child: OlxPaginationWidget(
             scrollController: _scrollController,
             itemsPerPage: 2,

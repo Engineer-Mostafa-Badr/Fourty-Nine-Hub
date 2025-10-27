@@ -38,7 +38,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
   Widget build(BuildContext context) {
     final double imageHeight = MediaQuery.of(context).size.width * 0.5;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.only(right: 30.w, left: 30.w, top: 20.h),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(

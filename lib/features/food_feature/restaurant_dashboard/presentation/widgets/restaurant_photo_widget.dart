@@ -127,16 +127,18 @@ class _RestaurantPhotoPickerState extends State<RestaurantPhotoPicker> {
                               width: 44,
                               height: 24,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      color:
-                                          AppColors.getButtonPrimaryWhiteColor(
-                                              context),
-                                      width: 1)),
-                              child: SvgPicture.asset(
-                                Assets.arrowUp,
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                  color: AppColors.getButtonPrimaryWhiteColor(
+                                      context),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Image.asset(
+                                Assets.uploadImage,
                                 color: AppColors.getButtonPrimaryWhiteColor(
-                                    context),
+                                  context,
+                                ),
                               ),
                             ),
                           ],

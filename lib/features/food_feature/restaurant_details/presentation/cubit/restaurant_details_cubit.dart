@@ -220,17 +220,30 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
 
       response.fold(
         (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(status: RestaurantDetailsStates.error));
+          // Check if cart is empty (cart not found is a normal state)
+          if (failure is ServerFailure &&
+              (failure.message.toLowerCase().contains('cart not found'))) {
+            // Cart is empty, emit empty cart state
+            log('Cart is empty (not found)');
+            emit(state.copyWith(
+              cart: null,
+              status: RestaurantDetailsStates.initState,
+            ));
+          } else {
+            // Real error, show message
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+            emit(state.copyWith(status: RestaurantDetailsStates.error));
 
-          log('Failed to load cart: ${failure.toString()}');
+            log('Failed to load cart: ${failure.toString()}');
+          }
         },
         (data) {
           final cart = Cart.fromJson(data);
           log("Cart subtotal: ${cart.subTotal}");
+
           emit(state.copyWith(
               cart: cart, status: RestaurantDetailsStates.initState));
         },
