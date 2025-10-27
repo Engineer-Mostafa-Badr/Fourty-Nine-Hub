@@ -60,11 +60,18 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   void initState() {
     print("widget.params.name ${widget.params.name}");
     _scrollController = ScrollController()..addListener(_onScroll);
-    context.read<DoctorsListCubit>().loadInitialData(
-        widget.params.fromSearch == true
-            ? widget.params.name ?? ''
-            : widget.params.subCategoryId,
-        widget.params.fromSearch ?? false);
+
+    // Use the new specialty-based loading for subcategory navigation
+    if (widget.params.fromSearch == true) {
+      context
+          .read<DoctorsListCubit>()
+          .loadInitialData(widget.params.name ?? '', true);
+    } else {
+      // Use the new specialty-based method for subcategory
+      context
+          .read<DoctorsListCubit>()
+          .loadInitialDataBySpecialty(widget.params.subCategoryId);
+    }
     super.initState();
   }
 
@@ -75,7 +82,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
       if (widget.params.fromSearch == false) {
         context
             .read<DoctorsListCubit>()
-            .getDoctorsFromSubCategory(widget.params.subCategoryId);
+            .getDoctorsBySpecialty(widget.params.subCategoryId);
       } else {
         context
             .read<DoctorsListCubit>()
@@ -106,8 +113,6 @@ class _DoctorsListViewState extends State<DoctorsListView> {
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
-          final cubit = context.read<DoctorsListCubit>();
-
           if (state.isLoading) {
             return CustomLoadingSearchWidget();
           } else {
@@ -123,7 +128,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                 Column(
               children: [
                 Expanded(
-                  child: cubit.doctorsList.isEmpty
+                  child: (state.doctorsList?.isEmpty ?? true)
                       ? Center(
                           child: CustomEmptyWidget(
                               label: widget.params.fromSearch == true
@@ -137,9 +142,9 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.sizeOf(context).height * 0.35),
                           controller: _scrollController,
-                          itemCount: cubit.doctorsList.length,
+                          itemCount: state.doctorsList?.length ?? 0,
                           itemBuilder: (context, index) {
-                            final booking = cubit.doctorsList[index];
+                            final booking = state.doctorsList![index];
                             return Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: DoctorListCard(
@@ -1368,7 +1373,7 @@ class CallMessageReportButtons extends StatelessWidget {
     bool isBookingForAnotherClient = false;
     bool hasPhoneError = false;
     final TextEditingController phoneController =
-        TextEditingController(text: "phone" ?? '');
+        TextEditingController(text: "phone");
 
     showModalBottomSheet(
       context: context,
@@ -1491,27 +1496,6 @@ class CallMessageReportButtons extends StatelessWidget {
           },
         );
       },
-    );
-  }
-
-  Widget _buildButtonWithIcon({
-    required String label,
-    required IconData icon,
-    required Color color,
-    required Function onPressed,
-  }) {
-    return Expanded(
-      child: AppButton(
-        padding: 0,
-        margin: 0,
-        height: 60.h,
-        label: label,
-        icon: icon,
-        iconSize: 70.h,
-        backColor: color,
-        style: Styles.mediumText(color: Colors.white),
-        onPressed: onPressed,
-      ),
     );
   }
 }

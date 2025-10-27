@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_doctors_by_specialty_usecase.dart';
 
 import '../../../health/domain/entities/most_booking_entity.dart';
 import '../../domain/repositories/doctor_list_repo.dart';
@@ -18,6 +19,12 @@ class DoctorListRepoImpl implements DoctorListRepo {
   Future<Either<Failure, List<MostBookingEntity>>> getDoctorsList(
       {required GetDoctorListParams params}) async {
     return await _remoteDataSource.getDoctorsList(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> getDoctorsBySpecialty(
+      {required GetDoctorsBySpecialtyParams params}) async {
+    return await _remoteDataSource.getDoctorsBySpecialty(params: params);
   }
 
   @override

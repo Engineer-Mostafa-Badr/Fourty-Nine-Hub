@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_doctors_by_specialty_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -14,9 +13,8 @@ import '../../../domain/usecases/get_doctor_list_use_case.dart';
 part 'doctors_list_state.dart';
 
 class DoctorsListCubit extends Cubit<DoctorsListState> {
-  final HealthSharedData _healthSharedData;
   final GetDoctorListUseCase _getDoctorListUseCase;
-  final GetSubCategoryDoctorsListUseCase _getSubCategoryDoctorsListUseCase;
+  final GetDoctorsBySpecialtyUseCase _getDoctorsBySpecialtyUseCase;
   final SearchDoctorsUseCase _searchDoctorsUseCase;
 
   // void loadData() async {
@@ -75,8 +73,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   int pageSize = 10;
   DoctorsListCubit(
     this._getDoctorListUseCase,
-    this._healthSharedData,
-    this._getSubCategoryDoctorsListUseCase,
+    this._getDoctorsBySpecialtyUseCase,
     this._searchDoctorsUseCase,
   ) : super(const DoctorsListState());
 
@@ -109,7 +106,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
         isLoadingMore = false;
         emit(state.copyWith(
-            status: DoctorsListStates.success, doctorsList: data));
+            status: DoctorsListStates.success, doctorsList: doctorsList));
       },
     );
   }
@@ -140,12 +137,16 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
       },
       (data) {
         print('Search results received: ${data.length} items');
-        print(
-            'First item: ${data.isNotEmpty ? data.first.toString() : 'No items'}');
+        if (data.isNotEmpty) {
+          print('First item specialty: ${data.first.subCategory?.nameAr}');
+          print(
+              'First item name: ${data.first.firstName} ${data.first.lastName}');
+        }
 
         // Filter results based on search query for better relevance
         List<MostBookingEntity> filteredData = _filterSearchResults(data, name);
         print('Filtered results: ${filteredData.length} items');
+        print('Search query: "$name"');
 
         doctorsList.addAll(filteredData);
 
@@ -157,7 +158,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
         isLoadingMore = false;
         emit(state.copyWith(
-            status: DoctorsListStates.success, doctorsList: filteredData));
+            status: DoctorsListStates.success, doctorsList: doctorsList));
       },
     );
   }
@@ -167,7 +168,10 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     if (searchQuery.trim().isEmpty) return data;
 
     String query = searchQuery.toLowerCase().trim();
+    print('Filtering ${data.length} items with query: "$query"');
 
+    // If the API returned results, trust them more and apply minimal filtering
+    // The API should handle the main search logic
     return data.where((doctor) {
       // Check doctor name
       String doctorName =
@@ -186,7 +190,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
         if (subCategoryEn.contains(query)) return true;
       }
 
-      // Check for specific medical terms
+      // Precise medical terms mapping for accurate search results
       Map<String, List<String>> medicalTerms = {
         'عيون': ['عيون', 'عين', 'eyes', 'ophthalmology', 'ophthalmologist'],
         'قلب': ['قلب', 'cardiology', 'cardiologist', 'heart'],
@@ -194,10 +198,14 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
         'أطفال': ['أطفال', 'pediatrics', 'pediatric', 'children'],
         'نساء': ['نساء', 'gynecology', 'gynecologist', 'women'],
         'جلدية': ['جلدية', 'dermatology', 'dermatologist', 'skin'],
-        'أذن': ['أذن', 'انف', 'اذن', 'ear', 'nose', 'ent'],
+        'أذن': ['أذن', 'اذن', 'ear', 'ent'],
         'مخ': ['مخ', 'اعصاب', 'neurology', 'neurologist', 'brain'],
+        'انف': ['انف', 'nose', 'ent'],
+        'اذن': ['اذن', 'ear', 'ent'],
+        'اعصاب': ['اعصاب', 'neurology', 'neurologist'],
       };
 
+      // Check if the search query matches any medical terms exactly
       if (medicalTerms.containsKey(query)) {
         List<String> terms = medicalTerms[query]!;
         for (String term in terms) {
@@ -211,8 +219,44 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
         }
       }
 
+      // If no specific match found, don't include the result
+      // This ensures only relevant results are shown
       return false;
     }).toList();
+  }
+
+  getDoctorsBySpecialty(String specialtyId) async {
+    print("Getting doctors by specialty: $specialtyId");
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await _getDoctorsBySpecialtyUseCase.call(
+        GetDoctorsBySpecialtyParams(
+            specialtyId: specialtyId, page: currentPage, limit: pageSize));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: DoctorsListStates.error));
+      },
+      (data) {
+        doctorsList.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(
+            status: DoctorsListStates.success, doctorsList: doctorsList));
+      },
+    );
   }
 
   void loadInitialData(String subCategory, bool fromSearch) async {
@@ -222,6 +266,14 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     hasMoreData = true;
     if (fromSearch) await getDoctorsFromSearch(subCategory);
     if (!fromSearch) await getDoctorsFromSubCategory(subCategory);
+  }
+
+  void loadInitialDataBySpecialty(String specialtyId) async {
+    emit(state.copyWith(status: DoctorsListStates.loading));
+    doctorsList.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getDoctorsBySpecialty(specialtyId);
   }
 }
 /*
