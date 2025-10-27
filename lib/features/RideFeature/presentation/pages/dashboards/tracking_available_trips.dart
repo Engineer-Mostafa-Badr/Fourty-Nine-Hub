@@ -239,7 +239,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   }
 
   /// ✅ Remove top card, marker, and refresh after last one (with first polyline)
-  void _removeCurrentCard() async {
+  void _removeCurrentCard(Person person) async {
     if (_filteredPeople.isEmpty) return;
 
     final removedPerson = _filteredPeople.first;
@@ -342,7 +342,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.close, color: Colors.grey),
-                    onPressed: _removeCurrentCard,
+                    onPressed: ()=>_removeCurrentCard(person),
                   ),
                 ],
               ),
@@ -398,41 +398,46 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
           // ✅ Bottom stacked cards
           if (_filteredPeople.isNotEmpty && !_isLoading)
             Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: SizedBox(
-                height: 180,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: List.generate(
-                    _filteredPeople.length,
-                        (index) {
-                      final person = _filteredPeople[index];
-                      double offsetY = 20.0 * index;
-                      double scale = 1.0 - (index * 0.05);
-                      bool isTop = index == 0;
-
-                      return AnimatedPositioned(
-                        key: ValueKey(person.name),
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        bottom: offsetY,
-                        left: 0,
-                        right: 0,
-                        child: _buildPersonCard(
-                          context,
-                          person,
-                          offsetY: 0,
-                          scale: scale,
-                          isTop: isTop,
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                  height: 220,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    clipBehavior: Clip.none,
+                    children: [
+                      for (int i = 0; i < _filteredPeople.length; i++)
+                        AnimatedPositioned(
+                          key: ValueKey(_filteredPeople[i].name),
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          // نزود المسافة بين كل كارت والتاني
+                          bottom: 15.0 * (_filteredPeople.length - 1 - i),
+                          left: 0,
+                          right: 0,
+                          child: Opacity(
+                            // الكروت اللي تحت تبقى أغمق شوية
+                            opacity: i == 0
+                                ? 1.0
+                                : 1.0 - (0.1 * i.clamp(0, 2)), // أول كارت واضح، اللي تحته أقل وضوحًا
+                            child: FractionallySizedBox(
+                              widthFactor: 0.95, // نخلي كل الكروت عرضها أقل شوية عشان الحواف تبان
+                              alignment: Alignment.bottomCenter,
+                              child: _buildPersonCard(
+                                context,
+                                _filteredPeople[i],
+                                offsetY: 0,
+                                scale: 1.0,
+                                isTop: i == 0,
+                              ),
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                  ).reversed.toList(),
+                    ].reversed.toList(),
+                  ),
                 ),
-              ),
-            ),
+                ),
         ],
       ),
     );

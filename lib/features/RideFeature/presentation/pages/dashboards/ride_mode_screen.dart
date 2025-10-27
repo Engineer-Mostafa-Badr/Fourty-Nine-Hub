@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -98,6 +99,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
     _currentTruckTripsScrollController = ScrollController();
     _pastTruckTripsScrollController = ScrollController();
     _pastTripsScrollController = ScrollController()..addListener(_onScrollPastTrips);
+
+    // Clean up expired timers when page loads
+    CacheManager.cleanupExpiredTimers();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();

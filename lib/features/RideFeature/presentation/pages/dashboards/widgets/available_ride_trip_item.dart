@@ -9,8 +9,10 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
@@ -20,6 +22,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:toastification/toastification.dart';
+import 'dart:async';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -28,14 +31,84 @@ import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'edit_price_widget.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
-class AvailableRideTripItem extends StatelessWidget {
+class AvailableRideTripItem extends StatefulWidget {
   final AvailableRideTripEntity tripEntity;
   final RideModeParams params;
   final Function(String id) onRefuseTrip;
   const AvailableRideTripItem({super.key, required this.tripEntity,required this.params,required this.onRefuseTrip});
 
   @override
+  State<AvailableRideTripItem> createState() => _AvailableRideTripItemState();
+}
+
+class _AvailableRideTripItemState extends State<AvailableRideTripItem> {
+  Timer? _timer;
+  Duration? _remainingTime;
+  bool _isButtonDisabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkTimerStatus();
+  }
+
+  Future<void> _checkTimerStatus() async {
+    // Clean up expired timers first
+    await CacheManager.cleanupExpiredTimers();
+    
+    // Check if this trip has an active timer
+    final tripId = widget.tripEntity.id;
+    final remaining = await CacheManager.getTripOfferRemainingTime(tripId);
+    
+    if (remaining != null && remaining.inSeconds > 0) {
+      setState(() {
+        _remainingTime = remaining;
+        _isButtonDisabled = true;
+      });
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    final tripId = widget.tripEntity.id;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      final remaining = await CacheManager.getTripOfferRemainingTime(tripId);
+      
+      if (remaining != null && remaining.inSeconds > 0) {
+        setState(() {
+          _remainingTime = remaining;
+        });
+      } else {
+        setState(() {
+          _remainingTime = null;
+          _isButtonDisabled = false;
+        });
+        _timer?.cancel();
+      }
+    });
+  }
+
+  Future<void> _saveOfferTimer() async {
+    final expireTime = DateTime.now().add(const Duration(seconds: 10));
+    final tripId = widget.tripEntity.id;
+    await CacheManager.saveTripOfferTimer(tripId, expireTime);
+    setState(() {
+      _remainingTime = const Duration(seconds: 10);
+      _isButtonDisabled = true;
+    });
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final tripEntity = widget.tripEntity;
     return BlocBuilder<DashboardsCubit, DashboardsState>(builder: (context, state) {
       var cubit = context.read<DashboardsCubit>();
       return Container(
@@ -64,15 +137,23 @@ class AvailableRideTripItem extends StatelessWidget {
                               height: 50,
                               decoration: const BoxDecoration(shape: BoxShape.circle),
                               clipBehavior: Clip.antiAliasWithSaveLayer,
-                              child: tripEntity.clientGender == 'male'
-                                  ? Image.asset(
-                                      Assets.maleImagePlaceholder,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.asset(
-                                      Assets.femaleImagePlacehlder,
-                                      fit: BoxFit.cover,
-                                    ),
+                              child: ProfilePictureWidget(
+                                image: '',
+                                isMale: tripEntity.clientGender == 'male',
+                                firstChar: '',
+                                hasStories: false,
+                                segments: 0,
+
+                              ),
+                              // tripEntity.clientGender == 'male'
+                              //     ? Image.asset(
+                              //         Assets.maleImagePlaceholder,
+                              //         fit: BoxFit.cover,
+                              //       )
+                              //     : Image.asset(
+                              //         Assets.femaleImagePlacehlder,
+                              //         fit: BoxFit.cover,
+                              //       ),
                             ),
                             PositionedDirectional(
                               start: -28.w,
@@ -198,12 +279,15 @@ class AvailableRideTripItem extends StatelessWidget {
                   flex: 2,
                     child: ClickableWidget(
                       onTap: () {
+                        if (_isButtonDisabled) return;
                         ManageVibration.vibrate();
                         print("tripEntity.isPremium ${tripEntity.isPremium}");
                         print("tripEntity.isButtonEnabled ${tripEntity.isButtonEnabled}");
                         if(tripEntity.isPremium==true||tripEntity.isButtonEnabled==true){
                           if (tripEntity.isAutoAccept == false) {
                             cubit.createOffer(tripId: tripEntity.id, price: (tripEntity.price ?? 0), context: context, subCategoryId: tripEntity.subcategoryId, onSuccess: () {
+                              // Save timer when offer is sent
+                              _saveOfferTimer();
                               final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
                               currentContext.pop();
                               toastification.show(
@@ -232,7 +316,7 @@ class AvailableRideTripItem extends StatelessWidget {
                             });
                           }
                           else {
-                            cubit.autoAcceptTrip(context, tripEntity.id,params);
+                            cubit.autoAcceptTrip(context, tripEntity.id, widget.params);
                           }
                         }else{
                           SubscriptionMethod().subscribe(
@@ -247,26 +331,36 @@ class AvailableRideTripItem extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: tripEntity.isPremium||tripEntity.isButtonEnabled?AppColors.PRIMARY_COLOR:AppColors.GREYBG,
+                          color: _isButtonDisabled
+                              ? AppColors.GREYBG
+                              : (tripEntity.isPremium||tripEntity.isButtonEnabled?AppColors.PRIMARY_COLOR:AppColors.GREYBG),
                         ),
                         alignment: Alignment.center,
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(color: AppColors.black),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${LocaleKeys.Accept.tr()} ${FormatNumbers().convertNumberToLocalizedString((tripEntity.price??0).ceil().toString(), isArabic: context.isArabic)}  ',
-                                  style: Styles.mediumText(
-                                    color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black,
-                                  )),
-                              TextSpan(
-                                  text: LocaleKeys.egp.tr(),
-                                  style: Styles.smallText(
-                                    color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black,
-                                  )),
-                            ],
-                          ),
-                        ),
+                        child: _isButtonDisabled && _remainingTime != null
+                            ? Text(
+                                '${_remainingTime!.inSeconds}s',
+                                style: Styles.mediumText(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: AppColors.black),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: '${LocaleKeys.Accept.tr()} ${FormatNumbers().convertNumberToLocalizedString((tripEntity.price??0).ceil().toString(), isArabic: context.isArabic)}  ',
+                                        style: Styles.mediumText(
+                                          color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black,
+                                        )),
+                                    TextSpan(
+                                        text: LocaleKeys.egp.tr(),
+                                        style: Styles.smallText(
+                                          color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black,
+                                        )),
+                                  ],
+                                ),
+                              ),
                       ),
                     )),
                 const Sizer(),
@@ -275,9 +369,13 @@ class AvailableRideTripItem extends StatelessWidget {
                   child: AppButton(
                     radius: 15,
                     height: 30,
-                    label: tripEntity.isAutoAccept == false ? LocaleKeys.acceptAnothePrice.tr() : LocaleKeys.refuse.tr(),
+                    label: _isButtonDisabled && _remainingTime != null
+                        ? '${_remainingTime!.inSeconds}s'
+                        : (tripEntity.isAutoAccept == false ? LocaleKeys.acceptAnothePrice.tr() : LocaleKeys.refuse.tr()),
                     style: Styles.mediumText(color: tripEntity.isPremium||tripEntity.isButtonEnabled?Colors.white:Colors.black, fontSize: tripEntity.isAutoAccept == false ? 28 : 28),
+                    backColor: _isButtonDisabled ? AppColors.GREYBG : (tripEntity.isPremium||tripEntity.isButtonEnabled?AppColors.SECONDARY_COLOR_DARK2:AppColors.GREYBG),
                     onPressed: () {
+                      if (_isButtonDisabled) return;
                       ManageVibration.vibrate();
                       if(tripEntity.isPremium||tripEntity.isButtonEnabled){
                         if (tripEntity.isAutoAccept == false) {
@@ -292,6 +390,8 @@ class AvailableRideTripItem extends StatelessWidget {
                               onSendOffer: (num offer) {
                                 context.pop();
                                 cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId, onSuccess: () {
+                                  // Save timer when offer is sent
+                                  _saveOfferTimer();
                                   final currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
                                   currentContext.pop();
                                   toastification.show(
@@ -364,7 +464,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                             onPressed: () {
       ManageVibration.vibrate();
                                               Navigator.of(context).pop();
-                                              onRefuseTrip(tripEntity.id);
+                                              widget.onRefuseTrip(tripEntity.id);
                                             }),
                                       ),
                                     ],
@@ -376,7 +476,6 @@ class AvailableRideTripItem extends StatelessWidget {
                       }
 
                     },
-                    backColor:tripEntity.isPremium||tripEntity.isButtonEnabled?AppColors.SECONDARY_COLOR_DARK2:AppColors.GREYBG,
                   ),
                 ),
               ],
