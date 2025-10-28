@@ -1,16 +1,10 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/tube/presentation/screens/create_tube_video.dart';
 import 'package:fourtyninehub/features/tube/presentation/screens/tube_favorites_videos_screen.dart';
 import 'package:fourtyninehub/features/tube/presentation/screens/tube_home_videos_screen.dart';
-import 'package:fourtyninehub/features/tube/presentation/screens/tube_video_player_screen.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
-
+import 'package:fourtyninehub/features/tube/presentation/screens/tube_my_videos_screen.dart';
 import '../../../../core/enums/base_status_enum.dart';
-import '../../../../service_locator/service_locator.dart';
-import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../cubit/tube_cubit.dart';
 import '../widgets/video_card_widget.dart';
 import '../widgets/video_mini_player.dart';
@@ -32,7 +26,7 @@ class _TubeScreenState extends State<TubeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4 , vsync: this);
 
     // ✅ Removed unnecessary favorite loader to prevent double API calls
     _tabController.addListener(() {
@@ -83,6 +77,9 @@ class _TubeScreenState extends State<TubeScreen>
           case 2:
           // ✅ Removed reload call here too
             break;
+            case 3:
+          // ✅ Removed reload call here too
+            break;
         }
       }
     });
@@ -93,6 +90,9 @@ class _TubeScreenState extends State<TubeScreen>
     return BlocBuilder<TubeCubit, TubeState>(
       builder: (context, state) {
         return Scaffold(
+          floatingActionButton: ElevatedButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateTubeScreen()));
+          }, child: Text("Crate Tube Video")),
           backgroundColor: Colors.black,
           appBar: AppBar(
             backgroundColor: Colors.black,
@@ -116,6 +116,7 @@ class _TubeScreenState extends State<TubeScreen>
                 Tab(text: 'All'),
                 Tab(text: 'Subscribed'),
                 Tab(text: 'Favorites'),
+                Tab(text: 'My Videos'),
               ],
             )
                 : null,
@@ -130,6 +131,7 @@ class _TubeScreenState extends State<TubeScreen>
                   HomeVideosTubeScreen(),
                   SubscribedTab(),
                   TubeFavoriteScreen(),
+                  MyVideosTubeScreen(),
                 ],
               ),
               if (state.isMinimized &&

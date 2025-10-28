@@ -1,4 +1,3 @@
-
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 
 class GetAllTubeVideosModel extends GetAllTubeVideosEntity {
@@ -20,6 +19,7 @@ class GetAllTubeVideosModel extends GetAllTubeVideosEntity {
     super.isLike,
     super.isDislike,
     super.isSubscribed,
+    super.subscriberCount, // ✅ Added
     super.createdAt,
     super.updatedAt,
     super.isFavorite,
@@ -48,6 +48,7 @@ class GetAllTubeVideosModel extends GetAllTubeVideosEntity {
       isLike: json['isLike'] as bool?,
       isDislike: json['isDislike'] as bool?,
       isSubscribed: json['isSubscribed'] as bool?,
+      subscriberCount: json['SubscriberCount'] as int?, // ✅ Correct mapping
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
       isFavorite: json['isFavorite'] as bool?,
@@ -73,6 +74,7 @@ class GetAllTubeVideosModel extends GetAllTubeVideosEntity {
       'isLike': isLike,
       'isDislike': isDislike,
       'isSubscribed': isSubscribed,
+      'SubscriberCount': subscriberCount, // ✅ Include in JSON output
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'isFavorite': isFavorite,

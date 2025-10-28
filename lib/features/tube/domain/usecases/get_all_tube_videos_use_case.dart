@@ -16,15 +16,24 @@ class GetAllTubeVideosUseCase extends UseCase<List<GetAllTubeVideosEntity  >, Ge
     return await _repo.getAllTubeVideos(params:params);
   }
 }
-class GetAllTubeVideosParams{
+class GetAllTubeVideosParams {
   final int page;
   final int limit;
+  final String? userId; // ✅ Optional field
 
-  GetAllTubeVideosParams({required this.page, required this.limit});
+  GetAllTubeVideosParams({
+    required this.page,
+    required this.limit,
+    this.userId, // ✅ Not required
+  });
 
-  Map<String,dynamic>toJson()=>{
-    "page":page,
-    "limit":limit
-  };
+  Map<String, dynamic> toJson() {
+    final data = {
+      "page": page,
+      "limit": limit,
+    };
 
+
+    return data;
+  }
 }

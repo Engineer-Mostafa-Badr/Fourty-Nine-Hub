@@ -16,10 +16,36 @@ class GetAllTubeVideosEntity {
   final bool? isLike;
   final bool? isDislike;
   final bool? isSubscribed;
+  final int? subscriberCount; // ✅ Added
   final String? createdAt;
   final String? updatedAt;
   final bool? isFavorite;
-  /// ✅ Add this `copyWith` method
+
+  const GetAllTubeVideosEntity({
+    this.id,
+    this.userId,
+    this.owner,
+    this.title,
+    this.description,
+    this.videoUrl,
+    this.thumbnail,
+    this.duration,
+    this.category,
+    this.views,
+    this.likes,
+    this.dislikes,
+    this.isRate,
+    this.averageRating,
+    this.isLike,
+    this.isDislike,
+    this.isSubscribed,
+    this.subscriberCount, // ✅ Added
+    this.createdAt,
+    this.updatedAt,
+    this.isFavorite,
+  });
+
+  /// ✅ Added `copyWith` method
   GetAllTubeVideosEntity copyWith({
     String? id,
     String? userId,
@@ -38,6 +64,7 @@ class GetAllTubeVideosEntity {
     bool? isLike,
     bool? isDislike,
     bool? isSubscribed,
+    int? subscriberCount,
     String? createdAt,
     String? updatedAt,
     bool? isFavorite,
@@ -60,33 +87,12 @@ class GetAllTubeVideosEntity {
       isLike: isLike ?? this.isLike,
       isDislike: isDislike ?? this.isDislike,
       isSubscribed: isSubscribed ?? this.isSubscribed,
+      subscriberCount: subscriberCount ?? this.subscriberCount,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isFavorite: isFavorite ?? this.isFavorite,
     );
   }
-  const GetAllTubeVideosEntity({
-    this.id,
-    this.userId,
-    this.owner,
-    this.title,
-    this.description,
-    this.videoUrl,
-    this.thumbnail,
-    this.duration,
-    this.category,
-    this.views,
-    this.likes,
-    this.dislikes,
-    this.isRate,
-    this.averageRating,
-    this.isLike,
-    this.isDislike,
-    this.isSubscribed,
-    this.createdAt,
-    this.updatedAt,
-    this.isFavorite,
-  });
 }
 
 class OwnerEntity {

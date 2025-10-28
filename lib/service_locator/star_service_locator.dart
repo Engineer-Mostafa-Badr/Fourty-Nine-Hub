@@ -30,8 +30,8 @@
 // import '../features/star_feature/domain/use_case/fetch_all_tube_videos_use_case.dart';
 // import '../features/star_feature/domain/use_case/fetch_my_tube_videos_use_case.dart';
 // import '../features/star_feature/domain/use_case/fetch_tube_video_details_by_iduse_case.dart';
-// import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
-// import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
+// import '../features/star_feature/domain/use_case/like_tube_comment_use_case.dart';
+// import '../features/star_feature/domain/use_case/dislike_tube_comment_use_case.dart';
 // import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
 // import '../features/star_feature/domain/use_case/rate_tube_video_use_case.dart';
 // import '../features/star_feature/domain/use_case/delete_tube_video_use_case.dart';
