@@ -333,7 +333,7 @@ abstract class Routes {
   static const spotLightScreen =  '/SpotLightScreen';
   static const tubeScreens =  '/TubeScreens';
 
-  static const spotLightScreen = '/SpotLightScreen';
+  // static const spotLightScreen = '/SpotLightScreen';
 }
 
 abstract class Paths {
@@ -651,4 +651,5 @@ abstract class Paths {
   static const myAuctionScreen = 'MyAuctionScreen';
   static const auctionWinnersScreen = 'AuctionWinnersScreen';
   static const spotLightScreen = 'SpotLightScreen';
+  static const tubeScreens =  'TubeScreens';
 }
