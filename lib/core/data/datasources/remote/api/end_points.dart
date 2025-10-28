@@ -433,7 +433,7 @@ class EndPoints {
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
   static searchDoctors(SearchDoctorsParams params) =>
-      '/health/doctors/search/doctor?name=${params.name}&limit=${params.limit}&page=${params.page}';
+      '/health/doctor-search?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
 
@@ -1696,6 +1696,7 @@ class EndPoints {
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
+  static const getDoctorsBySpecialty = '/health/booking/doctors/specialties';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
       '/ride/non-tracking/trips/client/pending';

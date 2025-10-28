@@ -88,42 +88,45 @@ class _FavouriteAdsViewState extends State<FavouriteAdsView> {
           ),
         );
       }
-      return OlxPaginationWidget(
-        scrollController: _scrollController,
-        itemsPerPage: 2,
-        loadPage: (page) =>
-            context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
-        banners: bannersList,
-        items: List.generate(
-            filteredFavouriteAds.length,
-            (i) => Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: MyAdCard(
-                    item: filteredFavouriteAds[i]
-                      ..isFavourite = true, // Force isFavourite to true
-                    showSubCategory: true,
-                    onFav: (id) async {
-                      // This should not be called in favorite view since all items are favorited
-                      return false;
-                    },
-                    onRemoveFav: (id) async {
-                      // When user clicks favorite icon in favorite view, remove from favorites
-                      bool result = await context
-                          .read<AdvertisementCubit>()
-                          .unFavouriteAd(filteredFavouriteAds[i].id);
-                      if (result) {
-                        // Update the favorite status in the main ads list
-                        controller.updateAdFavoriteStatus(
-                            filteredFavouriteAds[i].id, false);
-                        controller.myFavouriteAds
-                            .remove(filteredFavouriteAds[i]);
-                        setState(() {});
-                      }
-                      return result;
-                    },
-                  ),
-                )),
+      return SizedBox(
+        height: double.infinity,
+        child: OlxPaginationWidget(
+          scrollController: _scrollController,
+          itemsPerPage: 2,
+          loadPage: (page) =>
+              context.read<SubcategoriesCubit>().getMyFavouriteAds(widget.id),
+          banners: bannersList,
+          items: List.generate(
+              filteredFavouriteAds.length,
+              (i) => Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: MyAdCard(
+                      item: filteredFavouriteAds[i]
+                        ..isFavourite = true, // Force isFavourite to true
+                      showSubCategory: true,
+                      onFav: (id) async {
+                        // This should not be called in favorite view since all items are favorited
+                        return false;
+                      },
+                      onRemoveFav: (id) async {
+                        // When user clicks favorite icon in favorite view, remove from favorites
+                        bool result = await context
+                            .read<AdvertisementCubit>()
+                            .unFavouriteAd(filteredFavouriteAds[i].id);
+                        if (result) {
+                          // Update the favorite status in the main ads list
+                          controller.updateAdFavoriteStatus(
+                              filteredFavouriteAds[i].id, false);
+                          controller.myFavouriteAds
+                              .remove(filteredFavouriteAds[i]);
+                          setState(() {});
+                        }
+                        return result;
+                      },
+                    ),
+                  )),
+        ),
       );
       /* return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

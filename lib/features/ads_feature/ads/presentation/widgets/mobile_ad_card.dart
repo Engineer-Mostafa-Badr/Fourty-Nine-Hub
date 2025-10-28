@@ -166,15 +166,13 @@ class _MobileAdCardState extends State<MobileAdCard> {
                                           var result = await widget
                                               .onFav(widget.item.id);
                                           if (result == true) {
-                                            widget.item.isFavourite =
-                                                !widget.item.isFavourite!;
+                                            widget.item.isFavourite = true;
                                           }
                                         } else {
                                           var result = await widget
                                               .onRemoveFav(widget.item.id);
                                           if (result == true) {
-                                            widget.item.isFavourite =
-                                                !widget.item.isFavourite!;
+                                            widget.item.isFavourite = false;
                                           }
                                         }
                                       })

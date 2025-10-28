@@ -208,7 +208,6 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
   bool _hasLoadedInitialPage = false;
 
   @override
-
   void initState() {
     super.initState();
     widget.scrollController.addListener(_scrollListener);
@@ -263,6 +262,8 @@ class _OlxPaginationWidget extends State<OlxPaginationWidget> {
         axisDirection: AxisDirection.down,
         child: CustomScrollView(
           controller: widget.scrollController,
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             // First page items
             if (widget.items.isNotEmpty)

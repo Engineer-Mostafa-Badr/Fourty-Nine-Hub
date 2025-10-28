@@ -51,6 +51,12 @@ class _HealthEmergencyViewState extends State<HealthEmergencyView> {
                 context.isArabic
                     ? 'تم ارسال طلبك بنجاح, سيتم التواصل معك قريبا'
                     : 'Your request has been sent successfully, doctor will call you soon.');
+            // Return to previous screen after showing success message
+            Future.delayed(const Duration(milliseconds: 200), () {
+              if (mounted) {
+                context.pop();
+              }
+            });
             break;
 
           default:
@@ -58,7 +64,7 @@ class _HealthEmergencyViewState extends State<HealthEmergencyView> {
         }
       },
       child: SharedScaffold(
-        onBackPressed: ()=>context.pop(),
+        onBackPressed: () => context.pop(),
         // appBar: PreferredSize(
         //   preferredSize: const Size.fromHeight(30),
         //   child: AppBar(
@@ -89,6 +95,7 @@ class _HealthEmergencyViewState extends State<HealthEmergencyView> {
                   currentFocusNode: emergencyCubit.firstNameFocusNode,
                   currentController: emergencyCubit.firstNameController,
                   nextFocusNode: emergencyCubit.phoneFocusNode,
+                  isRequired: true,
                 ),
                 // Sizer(height: 30.h),
                 // PhoneTextFormField(
@@ -128,7 +135,7 @@ class _HealthEmergencyViewState extends State<HealthEmergencyView> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     emergencyCubit.bookEmergency();
                   },
                   backColor: AppColors.SECONDARY_COLOR,
