@@ -38,91 +38,70 @@ class _CreateRestaurantProfilePhotoPickerState
         final images = List<XFile>.from(createRestaurantCubit.restaurantImages);
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // العنوان
-            Center(
-              child: Label(
-                text: LocaleKeys.photoForRestaurant.localize,
-                style: Styles.headerText(fontSize: 40),
-              ),
+            Label(
+              text: LocaleKeys.photoForRestaurant.localize,
+              style: Styles.headerText(fontSize: 40),
             ),
 
-            15.verticalSpace,
+            20.verticalSpace,
 
-            Column(children: [
-              ...List.generate(
-                images.length + 1,
-                (index) {
+            // Container مع ارتفاع محدد وscroll
+            Container(
+              height: 400.h,
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: AppColors.getFillColor(context).withOpacity(0.3),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.getRedColor(context).withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: GridView.builder(
+                physics: const BouncingScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 12.w,
+                  mainAxisSpacing: 12.h,
+                  childAspectRatio: 1,
+                ),
+                itemCount: images.length + 1,
+                itemBuilder: (context, index) {
                   final bool isAddBox = (index == images.length);
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: buildPhotoBox(
-                      context: context,
-                      isAddBox: isAddBox,
-                      image: isAddBox ? null : images[index],
-                      onTap: () async {
-                        ManageVibration.vibrate();
+                  return buildPhotoBox(
+                    context: context,
+                    isAddBox: isAddBox,
+                    image: isAddBox ? null : images[index],
+                    onTap: () async {
+                      ManageVibration.vibrate();
 
-                        await createRestaurantCubit.uploadProfileImage(
-                          context: context,
-                          subcategoryId: widget.subcategoryId ??
-                              "62c8babb8e28a58a3edf581d",
-                          index: isAddBox ? null : index,
-                        );
-                      },
-                      onDelete: isAddBox
-                          ? null
-                          : () {
-                              // حذف الصورة
-                              createRestaurantCubit.restaurantImages
-                                  .removeAt(index);
-                              createRestaurantCubit.restaurantImagesIds
-                                  .removeAt(index);
-                              createRestaurantCubit
-                                      .createRestaurantParams.restaurantMedia =
-                                  createRestaurantCubit.restaurantImagesIds;
-                              createRestaurantCubit.refreshUI();
-                            },
-                    ),
+                      await createRestaurantCubit.uploadProfileImage(
+                        context: context,
+                        subcategoryId:
+                            widget.subcategoryId ?? "62c8babb8e28a58a3edf581d",
+                        index: isAddBox ? null : index,
+                      );
+                    },
+                    onDelete: isAddBox
+                        ? null
+                        : () {
+                            createRestaurantCubit.restaurantImages
+                                .removeAt(index);
+                            createRestaurantCubit.restaurantImagesIds
+                                .removeAt(index);
+                            createRestaurantCubit
+                                    .createRestaurantParams.restaurantMedia =
+                                createRestaurantCubit.restaurantImagesIds;
+                            createRestaurantCubit.refreshUI();
+                          },
                   );
                 },
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    LocaleKeys.addPhoto.localize,
-                    style:
-                        TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w400),
-                  ),
-                  8.verticalSpace,
-                  Container(
-                    width: 210.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.getRedColor(context),
-                    ),
-                    child: IconButton(
-                      visualDensity: VisualDensity.compact,
-                      onPressed: () async {
-                        ManageVibration.vibrate();
-                        // لو isAddBox = true => إضافة جديدة
-                        // لو false => استبدال الصورة
-                        await createRestaurantCubit.uploadProfileImage(
-                          context: context,
-                          subcategoryId: widget.subcategoryId,
-                          //   index: isAddBox ? null : index,
-                        );
-                      },
-                      icon: Icon(Icons.add),
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ]),
+            ),
           ],
         );
       },
@@ -136,50 +115,72 @@ Widget buildPhotoBox({
   required VoidCallback onTap,
   required XFile? image,
   VoidCallback? onDelete,
-  double? width,
 }) {
   return Container(
-    width: width ?? double.infinity,
-    height: 200.h,
     decoration: BoxDecoration(
       color: AppColors.getFillColor(context),
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: isAddBox
+            ? AppColors.getRedColor(context).withOpacity(0.4)
+            : Colors.transparent,
+        width: 2,
+      ),
     ),
     child: Stack(
       children: [
         // 1) صورة الخلفية
         if (!isAddBox && image != null)
           ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(14),
             child: File(image.path).existsSync()
                 ? Image.file(
                     File(image.path),
                     width: double.infinity,
                     height: double.infinity,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   )
                 : Image.asset(
-                    Assets.icon, // replace with your fallback asset
+                    Assets.icon,
                     width: double.infinity,
                     height: double.infinity,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
           ),
 
-        // 2) InkWell الكبير ليجعل الصندوق بأكمله قابلاً للنقر (إضافة / استبدال صورة)
+        // 2) InkWell الكبير ليجعل الصندوق بأكمله قابلاً للنقر
         Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
             child: Center(
               child: isAddBox
-                  ? SvgPicture.asset(
-                      Assets.cameraSvg,
-                      colorFilter: context.isDarkMode
-                          ? const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn)
-                          : null,
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          Assets.cameraSvg,
+                          width: 45.w,
+                          height: 45.w,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.getRedColor(context),
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        8.verticalSpace,
+                        Text(
+                          LocaleKeys.addPhoto.localize,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            color: context.isDarkMode
+                                ? AppColors.whiteColor
+                                : AppColors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     )
                   : const SizedBox.shrink(),
             ),
@@ -189,17 +190,20 @@ Widget buildPhotoBox({
         // 3) زر الحذف (في الأعلى على اليمين)
         if (!isAddBox && onDelete != null)
           Positioned(
-            top: 6,
-            right: 6,
+            top: 4,
+            right: 4,
             child: InkWell(
-              onTap: onDelete, // <-- الآن سيعمل
-              child: CircleAvatar(
-                backgroundColor: Colors.black54,
-                radius: 15,
+              onTap: onDelete,
+              child: Container(
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  color: Colors.black87,
+                  shape: BoxShape.circle,
+                ),
                 child: Icon(
                   Icons.close,
-                  color: AppColors.getTextColor(context),
-                  size: 36.w,
+                  color: AppColors.whiteColor,
+                  size: 18.w,
                 ),
               ),
             ),

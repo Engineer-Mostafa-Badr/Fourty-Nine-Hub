@@ -74,7 +74,7 @@ class ShowMneu extends StatelessWidget {
                                 Column(
                                   children: [
                                     buildPhotoBox(
-                                        width: 200.w,
+                                        // width: 200.w,
                                         context: context,
                                         isAddBox: false, // لأنها صورة موجودة
                                         image: XFile(e.photoPath ?? ""),
@@ -246,7 +246,7 @@ class ShowMneu extends StatelessWidget {
                                       final bool noImageYet = imagePath.isEmpty;
 
                                       return buildPhotoBox(
-                                        width: 200.w,
+                                        // width: 200.w,
                                         context: context,
                                         isAddBox: noImageYet,
                                         image: noImageYet
