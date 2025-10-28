@@ -114,7 +114,7 @@ class CompleteRideScreen extends StatelessWidget {
                         //
 
                         LocationInfoWidget(
-                          from: 'أول العاشر من رمضان',
+                          from: "المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية" ,
                           to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
                         ),
 

@@ -576,4 +576,10 @@ class RideRepositoryImplementation extends RideRepository {
     return await rideRemoteDataSource.getDriverRatings(driverId: driverId);
   }
 
+
+  @override
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId}) async {
+    return await rideRemoteDataSource.rejectOfferByClient(offerId: offerId);
+  }
+
 }

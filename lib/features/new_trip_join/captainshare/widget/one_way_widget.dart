@@ -270,67 +270,76 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                   height: 200.h, child: _buildTopMap(context, widget.model)),
               const SizedBox(height: 8),
 
-              Row(
+              // 🟩🟦 Location Stepper (From/To)
+              Stack(
+                clipBehavior: Clip.none,
                 children: [
-                  CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.transparent,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.green,
-                      radius: 10,
-                      child: CircleAvatar(
-                          backgroundColor: AppColors.getFillColor(context),
-                          radius: 5),
-                    ),
+                  // الخط العمودي بين الدائرتين
+                  Positioned(
+                    left: context.isArabic ? null : 0,
+                    right: context.isArabic ? 0 : null,
+                    top: 0,
+                    bottom: 0,
+                    child: _buildStepperLine(context),
                   ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      widget.model?.startLocation?.address ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w900,
-                      ),
+
+                  // النصوص والعناوين
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: context.isArabic ? 0 : 28.w,
+                      right: context.isArabic ? 28.w : 0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // From location
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                widget.model?.startLocation?.address ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 18.h),
+
+                        // To location
+                        Row(
+                          children: [
+
+                            Flexible(
+                              child: Text(
+                                widget.model?.targetLocation?.address ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.PRIMARY_COLOR,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10.h),
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.transparent,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      radius: 10,
-                      child: CircleAvatar(
-                          backgroundColor: AppColors.getFillColor(context),
-                          radius: 5),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      widget.model?.targetLocation?.address ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+
               SizedBox(height: 8),
               Row(
                 children: [
@@ -441,6 +450,45 @@ class _OneWayWidgetState extends State<OneWayWidget> {
       ),
     );
   }
+
+  Widget _buildStepperLine(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          backgroundColor: Colors.green,
+          radius: 6,
+          child: const CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 3,
+          ),
+        ),
+        SizedBox(height: 4.h),
+        ...List.generate(
+          2,
+              (index) => Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            width: 4,
+            height: 4,
+            decoration: BoxDecoration(
+              color: context.isDarkMode ? Colors.grey[600] : Colors.grey[400],
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+        SizedBox(height: 4.h),
+        CircleAvatar(
+          backgroundColor: Colors.blue,
+          radius: 6,
+          child: const CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 3,
+          ),
+        ),
+      ],
+    );
+  }
+
 
   final MapController _mapController = MapController();
 

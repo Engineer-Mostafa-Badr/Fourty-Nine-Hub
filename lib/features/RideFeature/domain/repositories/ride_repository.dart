@@ -178,4 +178,5 @@ abstract class RideRepository {
   Future<Either<Failure, DriverAllRatingEntity >> getDriverAllRating(DriverAllRatingParams params);
   Future<Either<Failure, ClientAllRatingEntity >> getClientAllRating(DriverAllRatingParams params);
   Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId});
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId});
 }
