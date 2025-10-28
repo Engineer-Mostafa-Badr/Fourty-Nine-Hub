@@ -25,4 +25,9 @@ class CreateDoctorRepoImpl implements CreateDoctorRepo {
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates() {
     return _createDoctorRemoteDataSource.getGovernorates();
   }
+
+  @override
+  Future<Either<Failure, bool>> uploadDocuments(List<DocumentParams> docs) {
+    return _createDoctorRemoteDataSource.uploadDocuments(docs);
+  }
 }

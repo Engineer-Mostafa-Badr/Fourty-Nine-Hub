@@ -5,9 +5,9 @@ class CityModel extends CityEntity {
 
   factory CityModel.fromJson(Map<String, dynamic> json) {
     return CityModel(
-      id: json['_id'],
-      nameAr: json['city_name_ar'],
-      nameEn: json['city_name_en'],
+      id: json['id'] ?? json['_id'],
+      nameAr: json['nameAr'] ?? json['city_name_ar'],
+      nameEn: json['nameEn'] ?? json['city_name_en'],
     );
   }
 

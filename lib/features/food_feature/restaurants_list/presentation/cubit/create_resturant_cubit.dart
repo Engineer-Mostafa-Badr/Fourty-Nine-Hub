@@ -40,29 +40,27 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     await _getGovernorates();
   }
 
-  Future<void> submit() async {
-    if (formKey.currentState!.validate()) {
-      _saveTextEditingControllers();
-      _saveWorkDays();
-      String? checkFilledMessage = _createDoctorParams.isFilled();
-      emit(CreateResturantError(checkFilledMessage ?? ""));
-    }
-  }
+  // Future<void> submit() async {
+  //   if (formKey.currentState!.validate()) {
+  //     _saveTextEditingControllers();
+  //     _saveWorkDays();
+  //     String? checkFilledMessage = _createDoctorParams.isFilled();
+  //     emit(CreateResturantError(checkFilledMessage ?? ""));
+  //   }
+  // }
 
   Future<void> _getSubCategories() async {
     final userId = UserCubit.to.state.data?.id;
 
     if (_shareCubit.subCategories.isEmpty) {
       final response = await _getHealthSubcategoriesUseCase.call(userId ?? '');
-      response.fold(
-          (failure) {
-            var currentContext =
-                AppPages.router.configuration.navigatorKey.currentContext!;
-            showErrorMessage(
-                currentContext, getFailureMessage(failure, currentContext));
-            emit(CreateResturantError("Can't Load Specialities"));
-          },
-          (data) {
+      response.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(CreateResturantError("Can't Load Specialities"));
+      }, (data) {
         _shareCubit.subCategories = data;
         emit(CreateResturantSubCategoriesLoaded(data));
       });
@@ -74,15 +72,13 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
   Future<void> _getGovernorates() async {
     if (_shareCubit.governorates.isEmpty) {
       final response = await _getGovernoratesUseCase.call(const NoParams());
-      response.fold(
-          (failure) {
-            var currentContext =
-                AppPages.router.configuration.navigatorKey.currentContext!;
-            showErrorMessage(
-                currentContext, getFailureMessage(failure, currentContext));
-            emit(CreateResturantError("Can't Load Governorates"));
-          },
-          (data) {
+      response.fold((failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(CreateResturantError("Can't Load Governorates"));
+      }, (data) {
         _shareCubit.governorates = data;
         emit(CreateResturantGovernoratesLoaded(data));
       });
@@ -107,173 +103,284 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
     );
   }
 
-  final CreateDoctorParams _createDoctorParams = CreateDoctorParams();
+  // final CreateDoctorParams _createDoctorParams = CreateDoctorParams();
 
-  // =============================== Timetables ===============================
-  List<DoctorDayEntity> clinicTimetable = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
+  // // =============================== Timetables ===============================
+  // List<DoctorDayEntity> clinicTimetable = [
+  //   DoctorDayEntity(day: WeekDays.saturday),
+  //   DoctorDayEntity(day: WeekDays.sunday),
+  //   DoctorDayEntity(day: WeekDays.monday),
+  //   DoctorDayEntity(day: WeekDays.tuesday),
+  //   DoctorDayEntity(day: WeekDays.wednesday),
+  //   DoctorDayEntity(day: WeekDays.thursday),
+  //   DoctorDayEntity(day: WeekDays.friday),
+  // ];
 
-  List<DoctorDayEntity> callTimetable = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
+  // List<DoctorDayEntity> callTimetable = [
+  //   DoctorDayEntity(day: WeekDays.saturday),
+  //   DoctorDayEntity(day: WeekDays.sunday),
+  //   DoctorDayEntity(day: WeekDays.monday),
+  //   DoctorDayEntity(day: WeekDays.tuesday),
+  //   DoctorDayEntity(day: WeekDays.wednesday),
+  //   DoctorDayEntity(day: WeekDays.thursday),
+  //   DoctorDayEntity(day: WeekDays.friday),
+  // ];
 
-  List<DoctorDayEntity> homeVisitTimetable = [
-    DoctorDayEntity(day: WeekDays.saturday),
-    DoctorDayEntity(day: WeekDays.sunday),
-    DoctorDayEntity(day: WeekDays.monday),
-    DoctorDayEntity(day: WeekDays.tuesday),
-    DoctorDayEntity(day: WeekDays.wednesday),
-    DoctorDayEntity(day: WeekDays.thursday),
-    DoctorDayEntity(day: WeekDays.friday),
-  ];
+  // List<DoctorDayEntity> homeVisitTimetable = [
+  //   DoctorDayEntity(day: WeekDays.saturday),
+  //   DoctorDayEntity(day: WeekDays.sunday),
+  //   DoctorDayEntity(day: WeekDays.monday),
+  //   DoctorDayEntity(day: WeekDays.tuesday),
+  //   DoctorDayEntity(day: WeekDays.wednesday),
+  //   DoctorDayEntity(day: WeekDays.thursday),
+  //   DoctorDayEntity(day: WeekDays.friday),
+  // ];
 
-  void _saveWorkDays() {
-    for (var element in clinicTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.clinic?.workDays
-            .add(DoctorDayModel.fromEntity(element));
-      }
-    }
+  // void _saveWorkDays() {
+  //   // Build detections array according to new schema
+  //   _createDoctorParams.detections = [];
 
-    for (var element in callTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.calls?.workDays
-            .add(DoctorDayModel.fromEntity(element));
-      }
-    }
+  //   final clinicAvailability = clinicTimetable
+  //       .where((e) => e.isAvailable)
+  //       .map((e) => DoctorDayModel.fromEntity(e))
+  //       .toList();
+  //   if (clinicAvailability.isNotEmpty) {
+  //     final num clinicPrice = num.tryParse(clinicPriceController.text) ?? 0;
+  //     final int clinicPeriod =
+  //         int.tryParse(clinicExamineDurationController.text) ?? 0;
+  //     _createDoctorParams.detections.add(
+  //       DetectionParams(
+  //         type: 'clinic_visit',
+  //         price: clinicPrice,
+  //         detectionPeriod: clinicPeriod,
+  //         description: '',
+  //         availability: clinicAvailability,
+  //       ),
+  //     );
+  //     debugPrint(
+  //         'Clinic detection added - Price: $clinicPrice, Period: $clinicPeriod, Days: ${clinicAvailability.length}');
+  //   }
 
-    for (var element in homeVisitTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.visitHome?.workDays
-            .add(DoctorDayModel.fromEntity(element));
-      }
-    }
-  }
+  //   final callAvailability = callTimetable
+  //       .where((e) => e.isAvailable)
+  //       .map((e) => DoctorDayModel.fromEntity(e))
+  //       .toList();
+  //   if (callAvailability.isNotEmpty) {
+  //     final num callPrice = num.tryParse(callPriceController.text) ?? 0;
+  //     final int callPeriod =
+  //         int.tryParse(callExamineDurationController.text) ?? 0;
+  //     _createDoctorParams.detections.add(
+  //       DetectionParams(
+  //         type: 'video_call',
+  //         price: callPrice,
+  //         detectionPeriod: callPeriod,
+  //         description: '',
+  //         availability: callAvailability,
+  //       ),
+  //     );
+  //     debugPrint(
+  //         'Call detection added - Price: $callPrice, Period: $callPeriod, Days: ${callAvailability.length}');
+  //   }
 
-  // ================================ DatePickers ===============================
-  void pickIDExpiryDate(DateTime value) {
-    _createDoctorParams.idExpiryDate = value.toIso8601String();
-  }
+  //   final homeAvailability = homeVisitTimetable
+  //       .where((e) => e.isAvailable)
+  //       .map((e) => DoctorDayModel.fromEntity(e))
+  //       .toList();
+  //   if (homeAvailability.isNotEmpty) {
+  //     final num homePrice = num.tryParse(homeVisitPriceController.text) ?? 0;
+  //     final int homePeriod =
+  //         int.tryParse(homeVisitExamineDurationController.text) ?? 0;
+  //     _createDoctorParams.detections.add(
+  //       DetectionParams(
+  //         type: 'home_visit',
+  //         price: homePrice,
+  //         detectionPeriod: homePeriod,
+  //         description: '',
+  //         availability: homeAvailability,
+  //       ),
+  //     );
+  //     debugPrint(
+  //         'Home visit detection added - Price: $homePrice, Period: $homePeriod, Days: ${homeAvailability.length}');
+  //   }
+  // }
 
-  void pickPracticingExpiryDate(DateTime value) {
-    _createDoctorParams.practicingExpiryDate = value.toIso8601String();
-  }
+  // // ================================ DatePickers ===============================
+  // void pickIDExpiryDate(DateTime value) {
+  //   _upsertDocument(
+  //     type: 'id_card',
+  //     expiryDate: value.toIso8601String(),
+  //   );
+  //   debugPrint('ID expiry: ${value.toIso8601String()}');
+  // }
 
-  // ================================ dropdowns ===============================
-  Future<void> selectGovernorate(GovernorateEntity value) async {
-    _createDoctorParams.address.governorateId = value.id;
-    await _getCities(value.id);
-  }
+  // void pickPracticingExpiryDate(DateTime value) {
+  //   _upsertDocument(
+  //     type: 'license',
+  //     expiryDate: value.toIso8601String(),
+  //   );
+  //   debugPrint('License expiry: ${value.toIso8601String()}');
+  // }
 
-  void selectCity(CityEntity value) {
-    _createDoctorParams.address.cityId = value.id;
-  }
+  // // ================================ dropdowns ===============================
+  // Future<void> selectGovernorate(GovernorateEntity value) async {
+  //   _createDoctorParams.address.governorateId = value.id;
+  //   debugPrint('Governorate: ${value.nameEn} (${value.id})');
+  //   await _getCities(value.id);
+  // }
 
-  void selectSubcategory(SubCategoryEntity subCategoryModel) {
-    _createDoctorParams.subCategoryId = subCategoryModel.id;
-  }
+  // void selectCity(CityEntity value) {
+  //   _createDoctorParams.address.cityId = value.id;
+  //   debugPrint('City: ${value.nameEn} (${value.id})');
+  // }
 
-  // ================================= upload images =================================
-  Future<void> _uploadImage(
-      {required dynamic Function(UploadFileEntity) onUploaded,required BuildContext context}) async {
-    if (_createDoctorParams.subCategoryId.isNotEmpty) {
-      emit(CreateResturantLoading("Uploading Image..."));
-      await UploadFile().uploadImage(
-        subCategoryId: _createDoctorParams.subCategoryId,
-        onUploaded: (value) {
-          onUploaded(value);
-        }, context: context,
-      );
-      emit(CreateResturantCloseLoading());
-    } else {
-      emit(CreateResturantError("Select Subcategory First"));
-    }
-  }
+  // void selectSubcategory(SubCategoryEntity subCategoryModel) {
+  //   _createDoctorParams.specialityId = subCategoryModel.id;
+  //   debugPrint(
+  //       'Speciality: ${subCategoryModel.nameAr} (${subCategoryModel.id})');
+  // }
 
-  Future<void> uploadProfileImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      _createDoctorParams.mediaId = media.mediaId[0];
-      emit(CreateResturantUploadProfileImage(media.file));
-    }, context: context);
-  }
+  // // ================================= upload images =================================
+  // Future<void> _uploadImage(
+  //     {required dynamic Function(UploadFileEntity) onUploaded,
+  //     required BuildContext context}) async {
+  //   if (_createDoctorParams.specialityId.isNotEmpty) {
+  //     emit(CreateResturantLoading("Uploading Image..."));
+  //     await UploadFile().uploadImage(
+  //       subCategoryId: _createDoctorParams.specialityId,
+  //       onUploaded: (value) {
+  //         onUploaded(value);
+  //       },
+  //       context: context,
+  //     );
+  //     emit(CreateResturantCloseLoading());
+  //   } else {
+  //     emit(CreateResturantError("Select Subcategory First"));
+  //   }
+  // }
 
-  Future<void> uploadIdFrontImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      _createDoctorParams.idFrontKey = media.mediaId[0];
-      emit(CreateResturantUploadIdFrontImage(media.file));
-    }, context: context);
-  }
+  // Future<void> uploadProfileImage({required BuildContext context}) async {
+  //   await _uploadImage(
+  //       onUploaded: (media) {
+  //         _createDoctorParams.doctorProfilePicMediaId = media.mediaId[0];
+  //         debugPrint('Profile mediaId: ${media.mediaId[0]}');
+  //         emit(CreateResturantUploadProfileImage(media.file));
+  //       },
+  //       context: context);
+  // }
 
-  Future<void> uploadIdBehindImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      _createDoctorParams.idBehindKey = media.mediaId[0];
-      emit(CreateResturantUploadIdBehindImage(media.file));
-    }, context: context);
-  }
+  // Future<void> uploadIdFrontImage({required BuildContext context}) async {
+  //   await _uploadImage(
+  //       onUploaded: (media) {
+  //         _upsertDocument(
+  //           type: 'id_card',
+  //           frontMediaId: media.mediaId[0],
+  //         );
+  //         debugPrint('ID front mediaId: ${media.mediaId[0]}');
+  //         emit(CreateResturantUploadIdFrontImage(media.file));
+  //       },
+  //       context: context);
+  // }
 
-  Future<void> uploadPracticingFrontImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      _createDoctorParams.practicingFront = media.mediaId[0];
-      emit(CreateResturantUploadPracticingFrontImage(media.file));
-    }, context: context);
-  }
+  // Future<void> uploadIdBehindImage({required BuildContext context}) async {
+  //   await _uploadImage(
+  //       onUploaded: (media) {
+  //         _upsertDocument(
+  //           type: 'id_card',
+  //           backMediaId: media.mediaId[0],
+  //         );
+  //         debugPrint('ID back mediaId: ${media.mediaId[0]}');
+  //         emit(CreateResturantUploadIdBehindImage(media.file));
+  //       },
+  //       context: context);
+  // }
 
-  Future<void> uploadPracticingBehindImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      _createDoctorParams.practicingBehind = media.mediaId[0];
-      emit(CreateResturantUploadPracticingBehindImage(media.file));
-    }, context: context);
-  }
+  // Future<void> uploadPracticingFrontImage(
+  //     {required BuildContext context}) async {
+  //   await _uploadImage(
+  //       onUploaded: (media) {
+  //         _upsertDocument(
+  //           type: 'license',
+  //           frontMediaId: media.mediaId[0],
+  //         );
+  //         debugPrint('License front mediaId: ${media.mediaId[0]}');
+  //         emit(CreateResturantUploadPracticingFrontImage(media.file));
+  //       },
+  //       context: context);
+  // }
+
+  // Future<void> uploadPracticingBehindImage(
+  //     {required BuildContext context}) async {
+  //   await _uploadImage(
+  //       onUploaded: (media) {
+  //         _upsertDocument(
+  //           type: 'license',
+  //           backMediaId: media.mediaId[0],
+  //         );
+  //         debugPrint('License back mediaId: ${media.mediaId[0]}');
+  //         emit(CreateResturantUploadPracticingBehindImage(media.file));
+  //       },
+  //       context: context);
+  // }
+
+  // void _upsertDocument({
+  //   required String type,
+  //   String? frontMediaId,
+  //   String? backMediaId,
+  //   String? expiryDate,
+  // }) {
+  //   final idx = _createDoctorParams.documents.indexWhere((d) => d.type == type);
+  //   if (idx == -1) {
+  //     _createDoctorParams.documents.add(
+  //       DocumentParams(
+  //         type: type,
+  //         frontMediaId: frontMediaId ?? '',
+  //         backMediaId: backMediaId ?? '',
+  //         expiryDate: expiryDate ?? '',
+  //       ),
+  //     );
+  //     return;
+  //   }
+  //   final doc = _createDoctorParams.documents[idx];
+  //   _createDoctorParams.documents[idx] = DocumentParams(
+  //     type: type,
+  //     frontMediaId: frontMediaId ?? doc.frontMediaId,
+  //     backMediaId: backMediaId ?? doc.backMediaId,
+  //     expiryDate: expiryDate ?? doc.expiryDate,
+  //   );
+  // }
 
   // ================================= toggles =================================
 
   void toggleClinic(bool value) {
-    _createDoctorParams.hasClinic = value;
+    debugPrint('Clinic toggle: $value');
     emit(CreateResturantShowClinic(value));
   }
 
   void toggleCallCheck(bool value) {
-    _createDoctorParams.hasCalls = value;
+    debugPrint('Call toggle: $value');
     emit(CreateResturantShowCall(value));
   }
 
   void toggleHomeVisit(bool value) {
-    _createDoctorParams.hasHomeVisit = value;
+    debugPrint('Home visit toggle: $value');
     emit(CreateResturantShowHomeVisit(value));
   }
 
   // ================================= TextEditingControllers =================================
 
-  void _saveTextEditingControllers() {
-    _createDoctorParams.firstName = firstNameController.text;
-    _createDoctorParams.lastName = lastNameController.text;
-    _createDoctorParams.phone = phoneController.text;
-    _createDoctorParams.address.address = addressController.text;
-    _createDoctorParams.detectionPeriodClinic =
-        clinicExamineDurationController.text;
-    _createDoctorParams.detectionPeriodCalls =
-        callExamineDurationController.text;
-    _createDoctorParams.detectionPeriodvisitHome =
-        homeVisitExamineDurationController.text;
-    _createDoctorParams.callsPrice = callPriceController.text;
-    _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
-    _createDoctorParams.clinicPrice = clinicPriceController.text;
-    _createDoctorParams.waitingTime = waitingTimeController.text;
-    _createDoctorParams.description = descriptionController.text;
-  }
+  // void _saveTextEditingControllers() {
+  //   _createDoctorParams.firstName = firstNameController.text;
+  //   _createDoctorParams.lastName = lastNameController.text;
+  //   _createDoctorParams.phoneNumber = phoneController.text;
+  //   _createDoctorParams.address.address = addressController.text;
+  //   _createDoctorParams.description = descriptionController.text;
+
+  //   debugPrint('First name: ${_createDoctorParams.firstName}');
+  //   debugPrint('Last name: ${_createDoctorParams.lastName}');
+  //   debugPrint('Phone: ${_createDoctorParams.phoneNumber}');
+  //   debugPrint('Address: ${_createDoctorParams.address.address}');
+  //   debugPrint('Description: ${_createDoctorParams.description}');
+  // }
 
   final firstNameFocusNode = FocusNode();
   final lastNameFocusNode = FocusNode();

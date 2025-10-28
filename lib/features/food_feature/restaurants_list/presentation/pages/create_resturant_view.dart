@@ -101,11 +101,11 @@ class _CreateResturantViewState extends State<CreateResturantView> {
                 const CreateDoctorIDPhotoPicker(),
                 Sizer(height: 20.h),
                 CreateDoctorIDExpiryDatePicker(
-                  onDateSelected: (date) {
-                    context
-                        .read<CreateResturantCubit>()
-                        .pickIDExpiryDate(date!);
-                  },
+                  // onDateSelected: (date) {
+                  //   context
+                  //       .read<CreateResturantCubit>()
+                  //       .pickIDExpiryDate(date!);
+                  // },
                 ),
                 Sizer(height: 20.h),
                 const CreateDoctorLicensePhotoPicker(),
@@ -115,13 +115,13 @@ class _CreateResturantViewState extends State<CreateResturantView> {
                 const CreateDoctorDescriptionField(),
                 Sizer(height: 20.h),
                 CreateDoctorGovernorateDropdown(
-                  onSelected: (value) {
-                    if (value != null) {
-                      context
-                          .read<CreateResturantCubit>()
-                          .selectGovernorate(value);
-                    }
-                  },
+                  // onSelected: (value) {
+                  //   if (value != null) {
+                  //     context
+                  //         .read<CreateResturantCubit>()
+                  //         .selectGovernorate(value);
+                  //   }
+                  // },
                 ),
                 Sizer(height: 20.h),
                 const CreateDoctorCitiesDropdowns(),

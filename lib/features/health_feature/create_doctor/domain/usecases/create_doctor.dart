@@ -17,145 +17,124 @@ class CreateDoctorUseCase extends UseCase<bool, CreateDoctorParams> {
 class CreateDoctorParams {
   String firstName = '';
   String lastName = '';
-  String subCategoryId = '';
-  String phone = '';
+  String phoneNumber = '';
+  String email = '';
+  String specialityId = '';
+  String doctorProfilePicMediaId = '';
+  String description = '';
   DoctorAddressModel address =
       DoctorAddressModel(governorateId: '', cityId: '', address: '');
-  bool hasClinic = false;
-  bool hasHomeVisit = false;
-  bool hasCalls = false;
-  WorkDaysParams? clinic = WorkDaysParams([]);
-  WorkDaysParams? calls = WorkDaysParams([]);
-  WorkDaysParams? visitHome = WorkDaysParams([]);
-  String? detectionPeriodClinic = '';
-  String? detectionPeriodCalls = '';
-  String? detectionPeriodvisitHome = '';
-  String? clinicPrice = '';
-  String? callsPrice = '';
-  String? visitHomePrice = '';
-  String mediaId = '';
-  String waitingTime = '';
-  String description = '';
-  String idFrontKey = '';
-  String idBehindKey = '';
-  String idExpiryDate = '';
-  String practicingBehind = '';
-  String practicingFront = '';
-  String practicingExpiryDate = '';
+  List<DetectionParams> detections = [];
+  List<DocumentParams> documents = [];
+
+  // Helper getters for backward compatibility
+  bool get hasClinic => detections.any((d) => d.type == 'clinic_visit');
+  bool get hasHomeVisit => detections.any((d) => d.type == 'home_visit');
+  bool get hasCalls => detections.any((d) => d.type == 'video_call');
+
+  // Legacy getters for maximum compatibility
+  bool get clinic => hasClinic;
+  bool get homeVisit => hasHomeVisit;
+  bool get calls => hasCalls;
+
+  // Get specific detection by type
+  DetectionParams? getClinicDetection() {
+    try {
+      return detections.firstWhere((d) => d.type == 'clinic_visit');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  DetectionParams? getHomeVisitDetection() {
+    try {
+      return detections.firstWhere((d) => d.type == 'home_visit');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  DetectionParams? getCallsDetection() {
+    try {
+      return detections.firstWhere((d) => d.type == 'video_call');
+    } catch (e) {
+      return null;
+    }
+  }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['subCategoryId'] = subCategoryId;
-    data['phone'] = phone;
-    data['address'] = address.toJson();
-    if (hasClinic && clinic != null && clinic!.workDays.isNotEmpty) {
-      data['clinic'] = clinic!.toJson();
-    }
-    if (hasCalls && calls != null && calls!.workDays.isNotEmpty) {
-      data['calls'] = calls!.toJson();
-    }
-    if (hasHomeVisit && visitHome != null && visitHome!.workDays.isNotEmpty) {
-      data['visitHome'] = visitHome!.toJson();
-    }
-    if (hasClinic &&
-        detectionPeriodClinic != null &&
-        detectionPeriodClinic!.isNotEmpty) {
-      data['detectionPeriodClinic'] = '$detectionPeriodClinic';
-    }
-    if (hasCalls &&
-        detectionPeriodCalls != null &&
-        detectionPeriodCalls!.isNotEmpty) {
-      data['detectionPeriodCalls'] = '$detectionPeriodCalls';
-    }
-    if (hasHomeVisit &&
-        detectionPeriodvisitHome != null &&
-        detectionPeriodvisitHome!.isNotEmpty) {
-      data['detectionPeriodVisitHome'] = '$detectionPeriodvisitHome';
-    }
-    if (hasClinic && clinicPrice != null && clinicPrice!.isNotEmpty) {
-      data['clinicPrice'] = '$clinicPrice';
-    }
-    if (hasCalls && callsPrice != null && callsPrice!.isNotEmpty) {
-      data['callsPrice'] = '$callsPrice';
-    }
-    if (hasHomeVisit && visitHomePrice != null && visitHomePrice!.isNotEmpty) {
-      data['visitHomePrice'] = '$visitHomePrice';
-    }
-    data['waitingTime'] = waitingTime;
-    data['mediaId'] = mediaId;
-    data['description'] = description;
-    data['idFrontKey'] = idFrontKey;
-    data['idBehindKey'] = idBehindKey;
-    data['idExpiryDate'] = idExpiryDate;
-    data['practicingBehind'] = practicingBehind;
-    data['practicingFront'] = practicingFront;
-    data['practicingExpiryDate'] = practicingExpiryDate;
-    return data;
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneNumber': phoneNumber,
+      'email': email,
+      'specialityId': specialityId,
+      'doctorProfilePicMediaId': doctorProfilePicMediaId,
+      'description': description,
+      'address': address.toJson(),
+      'detections': detections.map((e) => e.toJson()).toList(),
+      'documents': documents.map((e) => e.toJson()).toList(),
+    };
   }
 
   String? isFilled() {
-    if (subCategoryId.isEmpty) return "Please choose your specialty";
-
-    if (mediaId.isEmpty) return "Please upload your photo";
-
-    if (idFrontKey.isEmpty) return "Please upload your ID front photo";
-    if (idBehindKey.isEmpty) return "Please upload your ID back photo";
-    if (idExpiryDate.isEmpty) return "Please choose your ID expiry date";
-
-    if (practicingFront.isEmpty) {
-      return "Please upload your licence front photo";
-    }
-    if (practicingBehind.isEmpty) {
-      return "Please upload your licence behind photo";
-    }
-    if (practicingExpiryDate.isEmpty) {
-      return "Please choose your practicing expiry date";
-    }
-
-    // address
-    if (address.governorateId.isEmpty) return "Please enter your governorate";
-    if (address.cityId.isEmpty) return "Please enter your city";
-    if (address.address.isEmpty) return "Please enter your address";
-
-    // work days
-    if (!hasClinic && !hasHomeVisit && !hasCalls) {
-      return "Select at least one service (clinic or home visit or calls)";
-    }
-    if (hasClinic && (clinic == null || clinic!.workDays.isEmpty)) {
-      return "Please choose your clinic days";
-    }
-    if (hasClinic &&
-        ((clinicPrice ?? '').isEmpty ||
-            waitingTime.isEmpty ||
-            (detectionPeriodClinic ?? '').isEmpty)) {
-      return "Please enter your clinic price, waiting time and examination period";
-    }
-    if (hasHomeVisit && (visitHome == null || visitHome!.workDays.isEmpty)) {
-      return "Please choose your home visit days";
-    }
-    if (hasHomeVisit &&
-        ((visitHomePrice ?? '').isEmpty ||
-            (detectionPeriodvisitHome ?? '').isEmpty)) {
-      return "Please enter your home visit price and examination period";
-    }
-    if (hasCalls && (calls == null || calls!.workDays.isEmpty)) {
-      return "Please choose your calls days";
-    }
-    if (hasCalls &&
-        ((callsPrice ?? "").isEmpty || (detectionPeriodCalls ?? "").isEmpty)) {
-      return "Please enter your calls price and examination period";
-    }
-
-    if (firstName.isEmpty) return "Please enter your first name";
-    if (lastName.isEmpty) return "Please enter your last name";
-    if (phone.isEmpty) return "Please enter your phone number";
-
-    if (description.isEmpty) return "Please enter your description";
-
+    if (specialityId.isEmpty) return 'Please choose your specialty';
+    if (doctorProfilePicMediaId.isEmpty) return 'Please upload your photo';
+    if (firstName.isEmpty) return 'Please enter your first name';
+    if (lastName.isEmpty) return 'Please enter your last name';
+    if (phoneNumber.isEmpty) return 'Please enter your phone number';
+    if (description.isEmpty) return 'Please enter your description';
+    if (address.governorateId.isEmpty) return 'Please enter your governorate';
+    if (address.cityId.isEmpty) return 'Please enter your city';
+    if (address.address.isEmpty) return 'Please enter your address';
+    if (detections.isEmpty) return 'Please add at least one detection type';
     return null;
   }
+}
+
+class DetectionParams {
+  String type; // clinic_visit | video_call | home_visit
+  num price;
+  int detectionPeriod;
+  String description;
+  List<DoctorDayModel> availability; // mapped to new keys in toJson
+
+  DetectionParams({
+    required this.type,
+    required this.price,
+    required this.detectionPeriod,
+    required this.description,
+    required this.availability,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'price': price,
+        'detectionPeriod': detectionPeriod,
+        'description': description,
+        'availability': availability.map((e) => e.toJson()).toList(),
+      };
+}
+
+class DocumentParams {
+  String type; // id_card | license
+  String frontMediaId;
+  String backMediaId;
+  String expiryDate; // ISO8601
+
+  DocumentParams({
+    required this.type,
+    required this.frontMediaId,
+    required this.backMediaId,
+    required this.expiryDate,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'frontMediaId': frontMediaId,
+        'backMediaId': backMediaId,
+        'expiryDate': expiryDate,
+      };
 }
 
 class WorkDaysParams {

@@ -8,4 +8,5 @@ abstract class CreateDoctorRepo {
   Future<Either<Failure, bool>> createDoctor(CreateDoctorParams params);
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
   Future<Either<Failure, List<CityEntity>>> getCities(String governorateId);
+  Future<Either<Failure, bool>> uploadDocuments(List<DocumentParams> docs);
 }

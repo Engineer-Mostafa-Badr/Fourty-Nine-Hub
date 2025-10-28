@@ -386,9 +386,10 @@ class EndPoints {
 
   // health
   static String getCities({required String governorateId}) =>
-      '/health/cities/$governorateId';
-  static const getGovernorates = '/health/governorate';
-  static const createDoctor = '/health/doctor';
+      '/health/booking/address/$governorateId/cities';
+  static const getGovernorates = '/health/booking/address';
+  static const createDoctor = '/health/booking/doctors/register';
+  static const uploadDoctorDocuments = '/health/booking/doctors/documents';
   static String doctorSearch =
       '/health/doctor-search${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
   static const bookEmergency = '/health/book-emergency';
