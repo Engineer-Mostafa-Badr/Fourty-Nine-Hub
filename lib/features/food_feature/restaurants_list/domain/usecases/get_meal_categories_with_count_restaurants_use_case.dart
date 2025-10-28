@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/food_category_entity.dart';
-import '../repositories/resturant_list_repo.dart';
+import '../repositories/restaurant_list_repo.dart';
 import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 class GetMealCategoriesWithCountRestaurantsUseCase {

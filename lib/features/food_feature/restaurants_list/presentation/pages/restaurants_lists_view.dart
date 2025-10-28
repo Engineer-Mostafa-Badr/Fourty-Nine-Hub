@@ -15,24 +15,27 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_resturant_view.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_restaurant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_restaurant_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/expired_request_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/request_logs_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/searsh_view.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/search_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/banner.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/widgets/restaurant_list/meal_categories.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcategories_restaurant_card.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/constants/registration_status.dart';
+import '../../../../../core/widget/common/tab_widget.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -307,9 +310,10 @@ class RestaurantsListsView extends StatefulWidget {
 }
 
 class _RestaurantsListsViewState extends State<RestaurantsListsView>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   NoAuthRestaurantCategory? restaurantCategory;
   late ScrollController _scrollController;
+  late TabController _tabController;
   bool isFirstSearchListenerCall = true;
 
   final AdsManager _adsManager = AdsManager();
@@ -321,6 +325,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   @override
   void initState() {
     _adsManager.preloadAds();
+    _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
@@ -340,6 +345,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -355,8 +361,12 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   Widget build(BuildContext context) {
     super.build(context);
     final state = context.watch<RestaurantsCubit>().state;
-    return SharedScaffold(
-      mainCategoryId: 1,
+    return CustomScaffold(
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: context.isArabic ? 'أكلة' : 'Meal',
+      ),
+      // mainCategoryId: 1,
       // backgroundColor: scaffoldDarkColor(context),
       body: RefreshIndicator(
         backgroundColor: AppColors.getFindFillColor(context),
@@ -377,7 +387,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   Widget _buildLoggedInView(RestaurantsListState state) {
     return Padding(
-      padding: EdgeInsets.all(10.w),
+      padding: EdgeInsets.only(top: 15.h, left: 10.w, right: 10.w),
       child: ListView(
         children: [
           const MealBanner(),
@@ -704,247 +714,120 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   }
 
   Widget _buildSearchAndExpiredRequests() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 5,
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          spacing: 5,
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    ManageVibration.vibrate();
-                    if (context.read<UserCubit>().isLoggedIn) {
-                      setState(() {
-                        _showSearch = !_showSearch;
-                        if (_showSearch) {
-                          _showExpire = false;
-                          _showLog = false;
-                          _showFavAds = false;
-                        }
-                      });
-                    } else {
-                      return pleaseLoginDialog(context);
-
-                      // context.push(Routes.LOGIN);
-                    }
-                  },
-                  child: Icon(
-                      _showSearch ? Icons.search_off_rounded : Icons.search,
-                      color: _showSearch
-                          ? AppColors.getRedColor(context)
-                          : AppColors.getTextColor(context)),
-                ),
-                const Sizer(),
-                GestureDetector(
-                    onTap: () {
-                      ManageVibration.vibrate();
-                      if (context.read<UserCubit>().isLoggedIn) {
-                        context.push(Routes.FOODCART);
-                      } else {
-                        return pleaseLoginDialog(context);
-                      }
-                    },
-                    child: Icon(
-                      Icons.shopping_cart,
-                      color: context.isDarkMode
-                          ? AppColors.whiteColor
-                          : AppColors.PRIMARY_COLOR,
-                    )),
-              ],
-            ),
-            GestureDetector(
-              onTap: () {
-                ManageVibration.vibrate();
-                if (context.read<UserCubit>().isLoggedIn) {
-                  setState(() {
-                    _showFavAds = !_showFavAds;
-                    if (_showFavAds) {
-                      _showSearch = false;
-                      _showLog = false;
-                      _showExpire = false;
-                    } else if (!_showFavAds) {
-                      context
-                          .read<RestaurantsCubit>()
-                          .loadInitialRestaurantsData('');
-                    }
-                  });
-                } else {
-                  return pleaseLoginDialog(context);
-
-                  // context.push(Routes.LOGIN);
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.all(6),
-                width: 210.w,
-                decoration: BoxDecoration(
-                    // border: Border.all(
-                    //     color: _showFavAds
-                    //         ? AppColors.getRedColor(context)
-                    //         : AppColors.getButtonPrimaryColor(context)),
-                    borderRadius: BorderRadius.circular(15),
-                    color: _showFavAds
-                        ? AppColors.getButtonPrimaryColor(context)
-                        : AppColors.getFillColor(context)),
-                child: Label(
-                  text: context.isArabic ? 'مفضلة' : 'Favourites',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: _showFavAds
-                          ? AppColors.getReversedTextColor(context)
-                          : AppColors.getTextColor(context)),
-                ),
-              ),
-            ),
-            BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-              builder: (context, state) {
-                return Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ManageVibration.vibrate();
-                        print(context
-                            .read<RestaurantsCubit>()
-                            .state
-                            .logsEntity
-                            ?.length);
-                        if (context.read<UserCubit>().isLoggedIn) {
-                          setState(() {
-                            _showLog = !_showLog;
-                            if (_showLog) {
-                              _showSearch = false;
-                              _showExpire = false;
-                              _showFavAds = false;
-                            }
-                          });
-                        } else {
-                          return pleaseLoginDialog(context);
-
-                          // context.push(Routes.LOGIN);
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        width: 210.w,
-                        decoration: BoxDecoration(
-                          // border: Border.all(
-                          //   color: _showLog
-                          //       ? AppColors.getRedColor(context)
-                          //       : AppColors.getButtonPrimaryColor(context),
-                          // ),
-                          borderRadius: BorderRadius.circular(15),
-                          color: _showLog
-                              ? AppColors.getButtonPrimaryColor(context)
-                              : AppColors.getFillColor(context),
-                        ),
-                        child: Label(
-                          text: context.isArabic ? 'سجل طلبات' : 'Request Log',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: _showLog
-                                ? AppColors.getReversedTextColor(context)
-                                : AppColors.getTextColor(context),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: context
-                              .read<RestaurantsCubit>()
-                              .state
-                              .reqCount
-                              ?.count !=
-                          0,
-                      child: Positioned(
-                        top: -8,
-                        right: -6,
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: AppColors.getRedColor(context),
-                            shape: BoxShape.circle,
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 20,
-                            minHeight: 20,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${context.read<RestaurantsCubit>().state.reqCount?.count ?? 0}'
-                                  .toArabicNumbers(context),
-                              style: TextStyle(
-                                color: AppColors.getReversedTextColor(context),
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.0.h),
-              child: GestureDetector(
+    return Container(
+      color: context.isDarkMode ? Colors.black : Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              // Search Icon
+              GestureDetector(
                 onTap: () {
                   ManageVibration.vibrate();
                   if (context.read<UserCubit>().isLoggedIn) {
                     setState(() {
-                      _showExpire = !_showExpire;
-                      if (_showExpire) {
-                        _showSearch = false;
+                      _showSearch = !_showSearch;
+                      if (_showSearch) {
+                        _showExpire = false;
                         _showLog = false;
                         _showFavAds = false;
                       }
                     });
                   } else {
                     return pleaseLoginDialog(context);
-
-                    // context.push(Routes.LOGIN);
                   }
                 },
-                child: Container(
-                  width: 210.w,
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                      // border: Border.all(
-                      //     color: _showExpire
-                      //         ? AppColors.getRedColor(context)
-                      //         :AppColors.getButtonPrimaryColor(context)),
-                      borderRadius: BorderRadius.circular(15),
-                      color: _showExpire
-                          ? AppColors.getButtonPrimaryColor(context)
-                          : AppColors.getFillColor(context)),
-                  child: Label(
-                    text: context.isArabic ? 'منتهية' : 'Expired',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: _showExpire
-                            ? AppColors.getReversedTextColor(context)
-                            : AppColors.getTextColor(context)),
-                  ),
+                child: Icon(
+                  _showSearch ? Icons.search_off_rounded : Icons.search,
+                  color: _showSearch
+                      ? AppColors.getRedColor(context)
+                      : AppColors.getTextColor(context),
                 ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(width: 8),
+              // Cart Icon
+              GestureDetector(
+                onTap: () {
+                  ManageVibration.vibrate();
+                  if (context.read<UserCubit>().isLoggedIn) {
+                    context.push(Routes.FOODCART);
+                  } else {
+                    return pleaseLoginDialog(context);
+                  }
+                },
+                child: Icon(
+                  Icons.shopping_cart,
+                  color: context.isDarkMode
+                      ? AppColors.whiteColor
+                      : AppColors.PRIMARY_COLOR,
+                ),
+              ),
+              const SizedBox(width: 8),
+              // 3 Tabs in one row
+              Expanded(
+                child: Row(
+                  children: List.generate(3, (index) {
+                    final labels = [
+                      context.isArabic ? 'مفضلة' : 'Favourites',
+                      context.isArabic ? 'سجل طلبات' : 'Request Log',
+                      context.isArabic ? 'منتهية' : 'Expired',
+                    ];
+
+                    return Expanded(
+                      child: AnimatedBuilder(
+                        animation: _tabController,
+                        builder: (context, _) {
+                          final isSelected = _tabController.index == index;
+
+                          // For Request Log tab, show badge
+                          Widget tabWidget = TabWidget(
+                            textSize: 18,
+                            title: labels[index],
+                            count: index == 1
+                                ? context
+                                    .watch<RestaurantsCubit>()
+                                    .state
+                                    .reqCount
+                                    ?.count
+                                : null,
+                            selected: isSelected,
+                            onTap: () {
+                              ManageVibration.vibrate();
+                              if (context.read<UserCubit>().isLoggedIn) {
+                                _tabController.animateTo(index);
+                                setState(() {
+                                  _showSearch = false;
+                                  _showFavAds = index == 0;
+                                  _showLog = index == 1;
+                                  _showExpire = index == 2;
+
+                                  if (!_showFavAds) {
+                                    context
+                                        .read<RestaurantsCubit>()
+                                        .loadInitialRestaurantsData('');
+                                  }
+                                });
+                              } else {
+                                pleaseLoginDialog(context);
+                              }
+                            },
+                          );
+
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: tabWidget,
+                          );
+                        },
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

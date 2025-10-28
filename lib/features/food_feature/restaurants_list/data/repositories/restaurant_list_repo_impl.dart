@@ -17,7 +17,7 @@ import '../../domain/usecases/set_request_log_seen_use_case.dart';
 import '../../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../domain/entities/restaurant.dart';
-import '../../domain/repositories/resturant_list_repo.dart';
+import '../../domain/repositories/restaurant_list_repo.dart';
 import '../datasources/restaurants_remote_data_source.dart';
 
 class RestaurantListRepoImpl implements RestaurantListRepo {

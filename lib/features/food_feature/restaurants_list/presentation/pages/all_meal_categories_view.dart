@@ -98,6 +98,7 @@ class _AllMealCategoriesViewState extends State<AllMealCategoriesView> {
                     // Return the selected category ID to the parent page
                     Navigator.pop(context, id);
                   },
+                  index: index,
                   subCategory: subCategory,
                   favouriteSubCategory: () async {
                     var result = await widget.cubit.toggleFavoriteSubcategory(

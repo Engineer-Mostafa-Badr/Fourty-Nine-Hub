@@ -37,9 +37,9 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    context
-        .read<RestaurantDetailsCubit>()
-        .loadData(id: widget.restaurant.id ?? '');
+    final cubit = context.read<RestaurantDetailsCubit>();
+    cubit.loadData(id: widget.restaurant.id ?? '');
+    cubit.fetchCart(); // Load cart to show quantities
   }
 
   void _onScroll() {
@@ -133,13 +133,18 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
         return SizedBox(
           width: double.infinity,
           child: Padding(
-            padding:
-                const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.all(12.0),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 ManageVibration.vibrate();
                 if (context.isUserLoggedIn) {
-                  context.push(Routes.FOODCART);
+                  // Navigate to cart and refresh when returning
+                  final cubit = context.read<RestaurantDetailsCubit>();
+                  await context.push(Routes.FOODCART);
+                  // User returned from cart, refresh quantities
+                  if (mounted) {
+                    cubit.fetchCart();
+                  }
                 } else {
                   return pleaseLoginDialog(context);
 

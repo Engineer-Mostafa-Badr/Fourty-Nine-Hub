@@ -75,15 +75,14 @@ import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cub
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_view.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_restaurant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_restaurant_view.dart';
+import 'package:fourtyninehub/features/food_feature/cuisine_restaurants/presentation/cubit/cuisine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
@@ -407,7 +406,7 @@ import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
 import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
-import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
+import '../features/food_feature/cuisine_restaurants/presentation/pages/cuisine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
@@ -2630,9 +2629,9 @@ class AppPages {
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<CreateResturantCubit>(
+                        BlocProvider<CreateRestaurantCubit>(
                           create: (context) => serviceLocator(),
-                          child: const CreateResturantView(),
+                          child: const CreateRestaurantForm(),
                         ),
                       ),
                     ),
@@ -2915,7 +2914,7 @@ class AppPages {
                         ),
                       ),
                   routes: [
-                    // CusineRestaurantsView
+                    // CuisineRestaurantsView
                     // GoRoute(
                     //   path: Paths.RestaurantDashboard,
                     //   name: Routes.RestaurantDashboard,
@@ -2927,14 +2926,14 @@ class AppPages {
                     //   ),
                     // ),
                     GoRoute(
-                      path: Paths.CusineRestaurants,
-                      name: Routes.CusineRestaurants,
+                      path: Paths.CuisineRestaurants,
+                      name: Routes.CuisineRestaurants,
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<CusineRestaurantsCubit>(
+                        BlocProvider<CuisineRestaurantsCubit>(
                           create: (_) => serviceLocator(),
-                          child: const CusineRestaurantsView(),
+                          child: const CuisineRestaurantsView(),
                         ),
                       ),
                     ),

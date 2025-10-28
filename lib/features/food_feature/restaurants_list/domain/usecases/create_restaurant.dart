@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import '../../../../../core/error/failure.dart';
-import '../../data/models/restaurant_mneu_model.dart';
-import '../repositories/resturant_list_repo.dart';
+import '../../data/models/restaurant_menu_model.dart';
+import '../repositories/restaurant_list_repo.dart';
 
 class CreateRestaurantUseCase {
   final RestaurantListRepo _restaurantRepo;
@@ -31,7 +31,7 @@ class CreateRestaurantParams {
   String? expireOwnerIdMedia = "";
   String? ownerIdBackMedia = "";
   String? ownerIdFrontMedia = "";
-  List<RestaurantMneuModel>? mneu;
+  List<RestaurantMenuModel>? mneu;
   CreateRestaurantParams({
     this.number,
     this.name,
@@ -67,7 +67,7 @@ class CreateRestaurantParams {
     String? expireOwnerIdMedia,
     String? ownerIdBackMedia,
     String? ownerIdFrontMedia,
-    List<RestaurantMneuModel>? mneu,
+    List<RestaurantMenuModel>? mneu,
   }) {
     return CreateRestaurantParams(
       name: name ?? this.name,
@@ -162,8 +162,8 @@ class CreateRestaurantParams {
       ownerIdBackMedia: map['ownerIdBackMedia'],
       ownerIdFrontMedia: map['ownerIdFrontMedia'],
       mneu: map['mneu'] != null
-          ? List<RestaurantMneuModel>.from(
-              map['mneu']?.map((x) => RestaurantMneuModel.fromJson(x)))
+          ? List<RestaurantMenuModel>.from(
+              map['mneu']?.map((x) => RestaurantMenuModel.fromJson(x)))
           : null,
     );
   }

@@ -12,12 +12,14 @@ class MealCategoryCard extends StatefulWidget {
   final FoodCategoryEntity? subCategory;
   final Function(String) onTap;
   final Function() favouriteSubCategory;
+  final int index;
 
   const MealCategoryCard(
       {super.key,
       this.subCategory,
       required this.onTap,
-      required this.favouriteSubCategory});
+      required this.favouriteSubCategory,
+      required this.index});
 
   @override
   State<MealCategoryCard> createState() => _MealCategoryCardState();
@@ -91,26 +93,27 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                           ),
                         ],
                       ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: IconButton(
-                          icon: Icon(
-                            (widget.subCategory?.isFavorite ?? false)
-                                ? Icons.favorite_outlined
-                                : Icons.favorite_border,
-                            color: Colors.red,
-                            size: 55.sp,
+                      if (widget.index != 0)
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: Icon(
+                              (widget.subCategory?.isFavorite ?? false)
+                                  ? Icons.favorite_outlined
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                              size: 55.sp,
+                            ),
+                            onPressed: () {
+                              ManageVibration.vibrate();
+                              widget.favouriteSubCategory();
+                              setState(() {});
+                            },
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
                           ),
-                          onPressed: () {
-                            ManageVibration.vibrate();
-                            widget.favouriteSubCategory();
-                            setState(() {});
-                          },
-                          visualDensity:
-                              const VisualDensity(horizontal: -4, vertical: -4),
                         ),
-                      ),
                     ],
                   ),
                 ),

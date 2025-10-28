@@ -19,16 +19,19 @@ class BuildFoodList extends StatelessWidget {
         if (meals == null || meals.isEmpty) {
           return const SizedBox(); // Return an empty widget if meals are null or empty
         }
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: context.read<RestaurantDetailsCubit>().menu.length,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return ItemCard(
-              meal: context.read<RestaurantDetailsCubit>().menu[index],
-              restaurantId: restaurantId,
-            );
-          },
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: context.read<RestaurantDetailsCubit>().menu.length,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return ItemCard(
+                meal: context.read<RestaurantDetailsCubit>().menu[index],
+                restaurantId: restaurantId,
+              );
+            },
+          ),
         );
       },
     );

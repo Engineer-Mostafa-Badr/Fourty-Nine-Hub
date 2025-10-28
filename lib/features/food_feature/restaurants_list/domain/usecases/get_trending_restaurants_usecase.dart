@@ -3,7 +3,7 @@ import '../../../../../core/error/failure.dart';
 
 import '../../../../../../core/abstract/use_case.dart';
 import '../entities/restaurant.dart';
-import '../repositories/resturant_list_repo.dart';
+import '../repositories/restaurant_list_repo.dart';
 import 'get_nearby_restaurants_usecase.dart';
 
 class GetTrendingRestaurantsUseCase
