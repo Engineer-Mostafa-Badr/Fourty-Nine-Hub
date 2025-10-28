@@ -123,31 +123,24 @@ class _FoodCartViewState extends State<FoodCartView> {
     required String restaurantId,
     required String foodId,
   }) async {
-    if (context.read<RestaurantDetailsCubit>().state.cart?.allItems.length ==
-            1 &&
-        context
-                .read<RestaurantDetailsCubit>()
-                .state
-                .cart
-                ?.allItems
-                .first
-                .restaurantItems
-                .length ==
-            1) {
-      await context.read<RestaurantDetailsCubit>().deleteFromCart(
-            context,
-            restaurantId: restaurantId,
-            foodId: foodId,
-          );
-      await context.read<RestaurantDetailsCubit>().fetchCart();
-      context.pop();
-    } else {
-      await context.read<RestaurantDetailsCubit>().deleteFromCart(
-            context,
-            restaurantId: restaurantId,
-            foodId: foodId,
-          );
-      await context.read<RestaurantDetailsCubit>().fetchCart();
+    if (!mounted) return;
+
+    final cubit = context.read<RestaurantDetailsCubit>();
+    final isLastItem = cubit.state.cart?.allItems.length == 1 &&
+        cubit.state.cart?.allItems.first.restaurantItems.length == 1;
+
+    await cubit.deleteFromCart(
+          context,
+          restaurantId: restaurantId,
+          foodId: foodId,
+        );
+
+    if (mounted) {
+      await cubit.fetchCart();
+
+      if (isLastItem && mounted) {
+        context.pop();
+      }
     }
   }
 
@@ -533,6 +526,8 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
 
   Future<void> _submitOrder() async {
     if (_formKey.currentState?.validate() ?? false) {
+      if (!mounted) return;
+
       // Clean the phone number before sending
       final phone = _phoneController.text
           .trim()
@@ -542,23 +537,28 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
           .replaceAll('(', '')
           .replaceAll(')', '');
 
+      final cubit = context.read<RestaurantDetailsCubit>();
+      final currentContext = context;
+
       if (widget.orderType == 'premium') {
-        await context.read<RestaurantDetailsCubit>().createPremiumOrder(
-              context,
+        await cubit.createPremiumOrder(
+              currentContext,
               cartId: widget.cartId,
               phone: phone,
               address: '',
             );
       } else if (widget.orderType == 'normal') {
-        await context.read<RestaurantDetailsCubit>().createNormalOrder(
-              context,
+        await cubit.createNormalOrder(
+              currentContext,
               cartId: widget.cartId,
               phone: phone,
               address: '',
             );
       }
 
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     }
   }
 

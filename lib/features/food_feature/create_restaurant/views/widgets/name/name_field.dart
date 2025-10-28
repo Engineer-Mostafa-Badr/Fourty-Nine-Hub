@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
-import '../../../cubit/create_resturant_cubit.dart';
+import '../../../cubit/create_restaurant_cubit.dart';
 
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';

@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/registration_banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/pages/health_favorites_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
@@ -48,15 +49,16 @@ class _HealthViewState extends State<HealthView> {
   bool _showMyBookings = false;
 
   bool _showFavoriteAds = false;
+  bool _showHealthFavorites = false;
 
   bool _showRequestLog = false;
   bool _showMyAds = false;
-  
+
   // Search functionality
   bool _showSearchField = false;
   final TextEditingController _searchController = TextEditingController();
   bool _hasSearchText = false;
-  
+
   // Second search functionality (for ads section)
   bool _showAdsSearchField = false;
   final TextEditingController _adsSearchController = TextEditingController();
@@ -91,24 +93,35 @@ class _HealthViewState extends State<HealthView> {
   }
 
   void _performSearch(String query) {
-    if (query.trim().isEmpty) return;
-    
+    if (query.trim().isEmpty) {
+      // Show message for empty search
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.isArabic
+                ? 'يرجى إدخال نص للبحث'
+                : 'Please enter search text',
+          ),
+          backgroundColor: AppColors.SECONDARY_COLOR,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     ManageVibration.vibrate();
-    
+
     // Here you can implement your search logic
     // For now, we'll just print the search query
     print('Searching for: $query');
-    
-    // You can add search functionality here, such as:
-    // - Navigate to search results page
-    // - Filter current content
-    // - Call API for search results
-    // - Update the UI with search results
-    
-    // Example: Show a snackbar with the search query
+
+    // Navigate to search results page
     context.push(Routes.VISITADOCTORLIST,
         extra: DoctorsListParams(
-            fromHome: true, subCategoryId: '',name: query, fromSearch: true));
+            fromHome: true,
+            subCategoryId: '',
+            name: query.trim(),
+            fromSearch: true));
     // ScaffoldMessenger.of(context).showSnackBar(
     //   SnackBar(
     //     content: Text(
@@ -125,24 +138,24 @@ class _HealthViewState extends State<HealthView> {
 
   void _performAdsSearch(String query) {
     if (query.trim().isEmpty) return;
-    
+
     ManageVibration.vibrate();
-    
+
     // Here you can implement your ads search logic
     // For now, we'll just print the search query
     print('Searching ads for: $query');
-    
+
     // You can add ads search functionality here, such as:
     // - Filter favorite ads
     // - Search in request log
     // - Search in my ads
     // - Call API for ads search results
-    
+
     // Example: Show a snackbar with the search query
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          context.isArabic 
+          context.isArabic
               ? 'البحث في الإعلانات عن: $query'
               : 'Searching ads for: $query',
         ),
@@ -174,16 +187,16 @@ class _HealthViewState extends State<HealthView> {
                 state.isDoctor == false
                     ? const RegistrationBanner()
                     : DoctorModeBanner(
-                  isApproval: state.isApproved??false,
+                        isApproval: state.isApproved ?? false,
                       ),
-                if (state.isApproved==false) WaitingAprovalText(),
+                if (state.isApproved == false) WaitingAprovalText(),
                 Sizer(),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
                       const SizedBox(width: 16),
-                      
+
                       // Search Icon
                       GestureDetector(
                         onTap: () {
@@ -200,7 +213,7 @@ class _HealthViewState extends State<HealthView> {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: _showSearchField 
+                            color: _showSearchField
                                 ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
@@ -208,7 +221,7 @@ class _HealthViewState extends State<HealthView> {
                           child: Icon(
                             Icons.search,
                             size: 24,
-                            color: _showSearchField 
+                            color: _showSearchField
                                 ? AppColors.SECONDARY_COLOR
                                 : null,
                           ),
@@ -293,9 +306,7 @@ class _HealthViewState extends State<HealthView> {
 
                       /// My Booking
                       CurrentHistoryBooking(
-                        title: context.isArabic
-                            ? 'حجوزاتي'
-                            : 'My Booking',
+                        title: context.isArabic ? 'حجوزاتي' : 'My Booking',
                         isSelected: _showMyBookings,
                         onTap: () {
                           ManageVibration.vibrate();
@@ -310,11 +321,12 @@ class _HealthViewState extends State<HealthView> {
                     ],
                   ),
                 ),
-                
+
                 // Search Field
                 if (_showSearchField) ...[
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 16.h),
                     child: Container(
                       decoration: BoxDecoration(
                         color: AppColors.getFillColor(context),
@@ -334,11 +346,12 @@ class _HealthViewState extends State<HealthView> {
                                 fontSize: 16,
                               ),
                               decoration: InputDecoration(
-                                hintText: context.isArabic 
+                                hintText: context.isArabic
                                     ? 'ابحث عن الأطباء أو الخدمات...'
                                     : 'Search doctors or services...',
                                 hintStyle: TextStyle(
-                                  color: AppColors.getTextColor(context).withOpacity(0.6),
+                                  color: AppColors.getTextColor(context)
+                                      .withOpacity(0.6),
                                   fontSize: 16,
                                 ),
                                 border: InputBorder.none,
@@ -353,7 +366,8 @@ class _HealthViewState extends State<HealthView> {
                                 ),
                               ),
                               textInputAction: TextInputAction.search,
-                              onChanged: (value) => setState(() => _hasSearchText = value.isNotEmpty),
+                              onChanged: (value) => setState(
+                                  () => _hasSearchText = value.isNotEmpty),
                               onSubmitted: (value) {
                                 if (value.isNotEmpty) {
                                   _performSearch(value);
@@ -363,7 +377,7 @@ class _HealthViewState extends State<HealthView> {
                           ),
                           if (_hasSearchText)
                             Padding(
-                              padding: const EdgeInsets.only(right: 8,left: 8),
+                              padding: const EdgeInsets.only(right: 8, left: 8),
                               child: GestureDetector(
                                 onTap: () {
                                   ManageVibration.vibrate();
@@ -389,11 +403,14 @@ class _HealthViewState extends State<HealthView> {
                   ),
                   const Sizer(height: 16),
                 ],
-                
+
                 Sizer(height: 20),
 
                 // Default view when none are selected
-                if (!_showMost && !_showHistory && !_showCurrent&& !_showMyBookings) ...[
+                if (!_showMost &&
+                    !_showHistory &&
+                    !_showCurrent &&
+                    !_showMyBookings) ...[
                   Column(
                     children: [
                       const HealthBookingTypesWidgt(),
@@ -423,15 +440,16 @@ class _HealthViewState extends State<HealthView> {
                                 height: 40,
                                 width: 40,
                                 decoration: BoxDecoration(
-                                  color: _showAdsSearchField 
-                                      ? AppColors.SECONDARY_COLOR.withOpacity(0.1)
+                                  color: _showAdsSearchField
+                                      ? AppColors.SECONDARY_COLOR
+                                          .withOpacity(0.1)
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
                                   Icons.search,
                                   size: 24,
-                                  color: _showAdsSearchField 
+                                  color: _showAdsSearchField
                                       ? AppColors.SECONDARY_COLOR
                                       : null,
                                 ),
@@ -463,7 +481,7 @@ class _HealthViewState extends State<HealthView> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              
+
                               // Search Submit Button
                               GestureDetector(
                                 onTap: () {
@@ -472,13 +490,15 @@ class _HealthViewState extends State<HealthView> {
                                 },
                                 child: Container(
                                   height: 40,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
                                   decoration: BoxDecoration(
                                     color: AppColors.SECONDARY_COLOR,
                                     borderRadius: BorderRadius.circular(8),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppColors.SECONDARY_COLOR.withOpacity(0.3),
+                                        color: AppColors.SECONDARY_COLOR
+                                            .withOpacity(0.3),
                                         blurRadius: 4,
                                         offset: const Offset(0, 2),
                                       ),
@@ -522,6 +542,23 @@ class _HealthViewState extends State<HealthView> {
                             ),
                             const SizedBox(width: 8),
 
+                            /// Health Favorites
+                            CurrentHistoryBooking(
+                              title: context.isArabic
+                                  ? 'المفضلة الصحية'
+                                  : 'Health Favorites',
+                              isSelected: _showHealthFavorites,
+                              onTap: () {
+                                ManageVibration.vibrate();
+                                if (!context.read<UserCubit>().isLoggedIn) {
+                                  return pleaseLoginDialog(context);
+                                } else {
+                                  _toggleHealthFavorites();
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 8),
+
                             /// Request Log
                             CurrentHistoryBooking(
                               title: LocaleKeys.requestLog.localize,
@@ -554,7 +591,7 @@ class _HealthViewState extends State<HealthView> {
                           ],
                         ),
                       ),
-                      
+
                       // Ads Search Field
                       if (_showAdsSearchField) ...[
                         Padding(
@@ -564,7 +601,8 @@ class _HealthViewState extends State<HealthView> {
                               color: AppColors.getFillColor(context),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: AppColors.SECONDARY_COLOR.withOpacity(0.3),
+                                color:
+                                    AppColors.SECONDARY_COLOR.withOpacity(0.3),
                                 width: 1,
                               ),
                             ),
@@ -578,15 +616,17 @@ class _HealthViewState extends State<HealthView> {
                                       fontSize: 16,
                                     ),
                                     decoration: InputDecoration(
-                                      hintText: context.isArabic 
+                                      hintText: context.isArabic
                                           ? 'ابحث في الإعلانات...'
                                           : 'Search in ads...',
                                       hintStyle: TextStyle(
-                                        color: AppColors.getTextColor(context).withOpacity(0.6),
+                                        color: AppColors.getTextColor(context)
+                                            .withOpacity(0.6),
                                         fontSize: 16,
                                       ),
                                       border: InputBorder.none,
-                                      contentPadding: const EdgeInsets.symmetric(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
                                         horizontal: 16,
                                         vertical: 12,
                                       ),
@@ -597,7 +637,8 @@ class _HealthViewState extends State<HealthView> {
                                       ),
                                     ),
                                     textInputAction: TextInputAction.search,
-                                    onChanged: (value) => setState(() => _hasAdsSearchText = value.isNotEmpty),
+                                    onChanged: (value) => setState(() =>
+                                        _hasAdsSearchText = value.isNotEmpty),
                                     onSubmitted: (value) {
                                       if (value.isNotEmpty) {
                                         _performAdsSearch(value);
@@ -607,17 +648,20 @@ class _HealthViewState extends State<HealthView> {
                                 ),
                                 if (_hasAdsSearchText)
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 8, left: 8),
+                                    padding: const EdgeInsets.only(
+                                        right: 8, left: 8),
                                     child: GestureDetector(
                                       onTap: () {
                                         ManageVibration.vibrate();
-                                        _performAdsSearch(_adsSearchController.text);
+                                        _performAdsSearch(
+                                            _adsSearchController.text);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
                                           color: AppColors.SECONDARY_COLOR,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Icon(
                                           Icons.arrow_forward,
@@ -633,31 +677,46 @@ class _HealthViewState extends State<HealthView> {
                         ),
                         const Sizer(height: 16),
                       ],
-                      
+
                       const Sizer(height: 8),
                       if (!_showFavoriteAds &&
                           !_showRequestLog &&
-                          !_showMyAds&&
-                          !_showMyBookings) ...[
+                          !_showMyAds &&
+                          !_showMyBookings &&
+                          !_showHealthFavorites) ...[
                         const HealthMedicalServices(),
                         const Sizer(),
                         const HealthBookings(),
                         const Sizer(),
                       ],
                       if (_showFavoriteAds)
-                        FavouriteAdsView(
-                          id: '62c8b57c9332225799fe3306',
-                          isFloatingButtonVisible: (p0) {},
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: FavouriteAdsView(
+                            id: '62c8b57c9332225799fe3306',
+                            isFloatingButtonVisible: (p0) {},
+                          ),
+                        ),
+                      if (_showHealthFavorites)
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: const HealthFavoritesView(),
                         ),
                       if (_showRequestLog)
-                        AdsRequestLogView(
-                          mainCategoryId: '62c8b57c9332225799fe3306',
-                          isFloatingButtonVisible: (p0) {},
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: AdsRequestLogView(
+                            mainCategoryId: '62c8b57c9332225799fe3306',
+                            isFloatingButtonVisible: (p0) {},
+                          ),
                         ),
                       if (_showMyAds)
-                        MyAdsView(
-                          id: '62c8b57c9332225799fe3306',
-                          isFloatingButtonVisible: (p0) {},
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: MyAdsView(
+                            id: '62c8b57c9332225799fe3306',
+                            isFloatingButtonVisible: (p0) {},
+                          ),
                         ),
                     ],
                   ),
@@ -739,6 +798,7 @@ class _HealthViewState extends State<HealthView> {
         if (_showFavoriteAds) {
           _showRequestLog = false;
           _showMyAds = false;
+          _showHealthFavorites = false;
           context
               .read<SubcategoriesCubit>()
               .loadMyFavouriteAds(id: '62c8b57c9332225799fe3306');
@@ -748,6 +808,7 @@ class _HealthViewState extends State<HealthView> {
         if (_showRequestLog) {
           _showFavoriteAds = false;
           _showMyAds = false;
+          _showHealthFavorites = false;
           context
               .read<SubcategoriesCubit>()
               .loadRequestsLog(id: '62c8b57c9332225799fe3306');
@@ -757,10 +818,26 @@ class _HealthViewState extends State<HealthView> {
         if (_showMyAds) {
           _showFavoriteAds = false;
           _showRequestLog = false;
+          _showHealthFavorites = false;
           context
               .read<SubcategoriesCubit>()
               .loadMyAds(id: '62c8b57c9332225799fe3306');
         }
+      }
+    });
+  }
+
+  void _toggleHealthFavorites() {
+    setState(() {
+      _showHealthFavorites = !_showHealthFavorites;
+      if (_showHealthFavorites) {
+        _showFavoriteAds = false;
+        _showRequestLog = false;
+        _showMyAds = false;
+        _showMost = false;
+        _showHistory = false;
+        _showCurrent = false;
+        _showMyBookings = false;
       }
     });
   }
@@ -793,8 +870,7 @@ class _HealthViewState extends State<HealthView> {
           _showMyBookings = false;
           cubit.switchBookingType('current');
         }
-      }
-      else if (viewType == 'myBookings') {
+      } else if (viewType == 'myBookings') {
         _showMyBookings = !_showMyBookings;
         if (_showCurrent) {
           _showMost = false;

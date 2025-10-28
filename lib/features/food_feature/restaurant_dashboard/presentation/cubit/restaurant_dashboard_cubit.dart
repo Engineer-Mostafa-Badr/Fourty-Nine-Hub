@@ -24,7 +24,7 @@ import '../../../restaurants_list/data/models/is_restaurant_model.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../restaurants_list/domain/usecases/change_connectivity_use_case.dart';
 import '../../../restaurants_list/domain/usecases/create_restaurant.dart';
-import '../../../restaurants_list/domain/usecases/is_resturant_usecase.dart';
+import '../../../restaurants_list/domain/usecases/is_restaurant_usecase.dart';
 import '../../domain/entity/complete_order_entity.dart';
 import '../../domain/entity/order_food_entity.dart';
 import '../../domain/usecases/complete_order_restaurant_usecase.dart';
@@ -40,7 +40,7 @@ part 'restaurant_dashboard_state.dart';
 class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   final GetRestaurantStatisticUseCase _getRestaurantStatisticUseCase;
   final GetRestaurantInfoUseCase _getRestaurantInfoUseCase;
-  final IsResturantUsecase _isRestaurantUsecase;
+  final IsRestaurantUsecase _isRestaurantUsecase;
   final DeleteRestaurantUseCase _deleteRestaurantUseCase;
   final GetRestaurantOrdersUseCase _getRestaurantOrdersUseCase;
   final ChangeConnectivityUseCase _changeConnectivityUseCase;
@@ -160,7 +160,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   }
 
   Future<void> getCities(String governorateId) async {
-    // emit(CreateResturantCitiesLoading());
+    // emit(CreateRestaurantCitiesLoading());
     final response = await _getCitiesUseCase.call(governorateId);
 
     response.fold(

@@ -36,8 +36,8 @@ class PropertyDetailsModel extends PropertyDetailsEntity {
     return PropertyDetailsModel(
       id: json['_id'],
       mainCategoryId: json['main_category_id'],
-      nameAr: json['name_ar'],
-      nameEn: json['name_en'],
+      nameAr: json['name_ar'] ?? '',
+      nameEn: json['name_en'] ?? '',
       index: json['index'],
       type: json['type'],
       createdAt: DateTime.parse(json['createdAt']),

@@ -8,7 +8,7 @@ import '../../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../domain/entities/restaurant.dart';
 import '../cubit/restaurants_list_cubit.dart';
-import '../widgets/subcatigories_restaurant_card.dart';
+import '../widgets/subcategories_restaurant_card.dart';
 
 class RestaurantFavAdsScreen extends StatefulWidget {
   const RestaurantFavAdsScreen({super.key, this.onClose});

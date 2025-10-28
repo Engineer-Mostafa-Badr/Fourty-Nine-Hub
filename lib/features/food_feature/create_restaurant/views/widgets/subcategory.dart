@@ -5,22 +5,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../cubit/create_resturant_cubit.dart';
+import '../../cubit/create_restaurant_cubit.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../restaurants_list/domain/entities/food_category_entity.dart';
 import '../../../../../res/style/styles.dart';
 
-class CreateResturantSubcategoryDropdown extends StatelessWidget {
-  const CreateResturantSubcategoryDropdown({super.key});
+class CreateRestaurantSubcategoryDropdown extends StatelessWidget {
+  const CreateRestaurantSubcategoryDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
     final createResturantCubit = context.read<CreateRestaurantCubit>();
     return BlocConsumer<CreateRestaurantCubit, CreateRestaurantState>(
       buildWhen: (previous, current) =>
-          current is CreateResturantSubCategoriesLoaded,
+          current is CreateRestaurantSubCategoriesLoaded,
       builder: (context, state) {
-        if (state is CreateResturantSubCategoriesLoaded) {
+        if (state is CreateRestaurantSubCategoriesLoaded) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

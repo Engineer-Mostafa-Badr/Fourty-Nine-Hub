@@ -76,21 +76,39 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: IconButton(
-                    icon: Icon(
-                        widget.subCategory.isFavorite==true
-                            ? Icons.favorite_outlined
-                            : Icons.favorite_border,
-                        color: Colors.red),
-                    onPressed: () {
-                      ManageVibration.vibrate();
-                      context.read<HealthCubit>().toggleFavoriteMedicalService(widget.subCategory.id);
-                      // setState(() {
-                      //   widget.subCategory.isFavorite = !(widget.subCategory.isFavorite??false);
-                      // });
+                  child: BlocBuilder<HealthCubit, HealthState>(
+                    builder: (context, state) {
+                      // Find the current service in the state to get updated favorite status
+                      bool isFavorite = widget.subCategory.isFavorite ?? false;
+
+                      if (state.medicalServices != null) {
+                        try {
+                          final currentService =
+                              state.medicalServices!.firstWhere(
+                            (service) => service.id == widget.subCategory.id,
+                          );
+                          isFavorite = currentService.isFavorite ?? false;
+                        } catch (e) {
+                          // Service not found in state, use original value
+                          isFavorite = widget.subCategory.isFavorite ?? false;
+                        }
+                      }
+
+                      return IconButton(
+                        icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: Colors.red),
+                        onPressed: () {
+                          ManageVibration.vibrate();
+                          context
+                              .read<HealthCubit>()
+                              .toggleFavoriteMedicalService(
+                                  widget.subCategory.id);
+                        },
+                        visualDensity:
+                            const VisualDensity(horizontal: -4, vertical: -4),
+                      );
                     },
-                    visualDensity:
-                        const VisualDensity(horizontal: -4, vertical: -4),
                   ),
                 ),
               ],
@@ -124,7 +142,8 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                     backColor: AppColors.getButtonPrimaryWhiteColor(context),
                     onPressed: () {
                       ManageVibration.vibrate();
-                      print("widget.subCategory.id111 ${widget.subCategory.id}");
+                      print(
+                          "widget.subCategory.id111 ${widget.subCategory.id}");
                       if (context.read<HealthCubit>().state.mainCategory !=
                               null &&
                           UserCubit.to.isLoggedIn) {

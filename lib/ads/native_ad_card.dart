@@ -28,7 +28,6 @@ class AdsManager {
 
   void _loadAd() {
     final nativeAd = NativeAd(
-      factoryId: "",
       adUnitId: adUnitId,
       listener: NativeAdListener(
         onAdLoaded: (ad) {
@@ -47,9 +46,9 @@ class AdsManager {
         mediaAspectRatio: MediaAspectRatio.any,
         videoOptions: VideoOptions(startMuted: true),
       ),
-      // nativeTemplateStyle: NativeTemplateStyle(
-      //   templateType: TemplateType.medium,
-      // ),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.medium,
+      ),
     );
     nativeAd.load();
   }
@@ -219,7 +218,6 @@ class _AdsManagerWidgetState extends State<AdsManagerWidget> {
 
   void _loadAd() {
     final nativeAd = NativeAd(
-      factoryId: "",
       adUnitId: adUnitId,
       listener: NativeAdListener(
         onAdLoaded: (ad) {
@@ -241,9 +239,9 @@ class _AdsManagerWidgetState extends State<AdsManagerWidget> {
         mediaAspectRatio: MediaAspectRatio.any,
         videoOptions: VideoOptions(startMuted: true),
       ),
-      // nativeTemplateStyle: NativeTemplateStyle(
-      //   templateType: TemplateType.medium,
-      // ),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.medium,
+      ),
     );
     nativeAd.load();
   }

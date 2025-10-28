@@ -22,7 +22,7 @@ class ImageFromInternet extends StatelessWidget {
     this.fit,
     this.border,
     this.firstChar,
-    this.charPadding=10,
+    this.charPadding = 10,
     this.isMale = true,
   });
   final String image;
@@ -65,7 +65,6 @@ class ImageFromInternet extends StatelessWidget {
       errorWidget: (context, url, error) => SizedBox(
         height: height,
         width: width,
-
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
@@ -75,7 +74,7 @@ class ImageFromInternet extends StatelessWidget {
                 borderRadius: borderRadius,
                 shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
                 color: Colors.transparent,
-                border: Border.all(color:AppColors.LIGHT_GRAY_COLOR),
+                border: Border.all(color: AppColors.LIGHT_GRAY_COLOR),
                 image: fromFile == true
                     ? DecorationImage(
                         image: FileImage(File(image)),
@@ -87,38 +86,39 @@ class ImageFromInternet extends StatelessWidget {
                             fit: BoxFit.fill,
                           )
                         : isMale
-                            ?  DecorationImage(
-                  image: AssetImage(Assets.manIcon),
-                  fit: BoxFit.fill,
-                )
+                            ? DecorationImage(
+                                image: AssetImage(Assets.manIcon),
+                                fit: BoxFit.fill,
+                              )
                             : DecorationImage(
                                 image: AssetImage(Assets.womanIcon),
                                 fit: BoxFit.fill,
                               ),
               ),
             ),
-            if(firstChar!=null&&(firstChar?.isNotEmpty??false))PositionedDirectional(
-              bottom: 0,
-              // end: 0,
-              child: Container(
-                width: 60,
-                padding: EdgeInsets.all(charPadding??2),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 0.5),
+            if (firstChar != null && (firstChar?.isNotEmpty ?? false))
+              PositionedDirectional(
+                bottom: 0,
+                // end: 0,
+                child: Container(
+                  width: 60,
+                  padding: EdgeInsets.all(charPadding ?? 2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 0.5),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    firstChar ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.PRIMARY_COLOR,
+                        fontSize: 8),
+                  ),
                 ),
-                alignment: Alignment.center,
-                child: Text(firstChar??'',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-
-                    color: AppColors.PRIMARY_COLOR,
-                    fontSize: 8),),
-              ),
-            )
-
+              )
           ],
         ),
       ),

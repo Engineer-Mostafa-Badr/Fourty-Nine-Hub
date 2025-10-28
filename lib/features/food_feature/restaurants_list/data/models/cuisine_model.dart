@@ -1,4 +1,4 @@
-import '../../domain/entities/cusine_entity.dart';
+import '../../domain/entities/cuisine_entity.dart';
 
 class CuisineModel extends CuisineEntity {
   CuisineModel({required super.id, required super.name});

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../repositories/restaurant_details_repo.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 
 class AddFoodUseCase extends UseCase<RestaurantMenu, AddFoodParams> {
   final RestaurantDetailsRepo _repository;

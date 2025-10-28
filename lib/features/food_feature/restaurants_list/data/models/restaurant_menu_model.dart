@@ -1,15 +1,16 @@
 import 'dart:convert';
 
-import '../../domain/entities/restaurant_mneu.dart';
+import '../../domain/entities/restaurant_menu.dart';
 
-class RestaurantMneuModel extends RestaurantMenu {
-  const RestaurantMneuModel({
+class RestaurantMenuModel extends RestaurantMenu {
+  const RestaurantMenuModel({
     super.id,
     super.restaurantId,
     super.foodName,
     super.price,
     super.picture,
     super.photo,
+    super.description,
     this.photoPath,
   });
 
@@ -36,6 +37,9 @@ class RestaurantMneuModel extends RestaurantMenu {
     if (price != null) {
       result.addAll({'price': price});
     }
+    if (description != null) {
+      result.addAll({'description': description});
+    }
 
     if (photo != null) {
       result.addAll({'picture': photo});
@@ -44,13 +48,14 @@ class RestaurantMneuModel extends RestaurantMenu {
     return result;
   }
 
-  factory RestaurantMneuModel.fromJson(Map<String, dynamic> map) {
-    return RestaurantMneuModel(
+  factory RestaurantMenuModel.fromJson(Map<String, dynamic> map) {
+    return RestaurantMenuModel(
       id: map['id'],
       photoPath: map['photoPath'],
       restaurantId: map['restaurantId'],
       foodName: map['foodName'],
       price: map['price']?.toDouble(),
+      description: map['description'],
       picture: map['picture'] != null
           ? map['picture'] is String
               ? map['picture']
@@ -61,25 +66,26 @@ class RestaurantMneuModel extends RestaurantMenu {
 
   String toJson() => json.encode(toMap());
 
-  factory RestaurantMneuModel.fromMap(String source) =>
-      RestaurantMneuModel.fromJson(json.decode(source));
+  factory RestaurantMenuModel.fromMap(String source) =>
+      RestaurantMenuModel.fromJson(json.decode(source));
 
   @override
   String toString() {
-    return 'RestaurantMneuModel(id: $id, restaurantId: $restaurantId, foodName: $foodName, price: $price, picture: $picture)';
+    return 'RestaurantMenuModel(id: $id, restaurantId: $restaurantId, foodName: $foodName, price: $price, picture: $picture, description: $description)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is RestaurantMneuModel &&
+    return other is RestaurantMenuModel &&
         other.id == id &&
         other.photo == photo &&
         other.photoPath == photoPath &&
         other.restaurantId == restaurantId &&
         other.foodName == foodName &&
         other.price == price &&
+        other.description == description &&
         other.picture == picture;
   }
 
@@ -89,6 +95,7 @@ class RestaurantMneuModel extends RestaurantMenu {
         restaurantId.hashCode ^
         foodName.hashCode ^
         price.hashCode ^
+        description.hashCode ^
         picture.hashCode;
   }
 }

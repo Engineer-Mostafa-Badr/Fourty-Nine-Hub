@@ -33,7 +33,7 @@ class RestaurantDetailsState {
     Failure? failure,
     List<RestaurantMenu>? meals,
     // Restaurant? restaurant,
-    Cart? cart,
+    Object? cart = _undefined,
     List<SelectedMealModel>? selectedMeals,
   }) {
     return RestaurantDetailsState(
@@ -41,8 +41,11 @@ class RestaurantDetailsState {
       failure: failure ?? this.failure,
       meals: meals ?? this.meals,
       // restaurant: restaurant ?? this.restaurant,
-      cart: cart ?? this.cart,
+      cart: cart == _undefined ? this.cart : cart as Cart?,
       selectedMeals: selectedMeals ?? this.selectedMeals,
     );
   }
 }
+
+// Sentinel value for copyWith
+const Object _undefined = Object();

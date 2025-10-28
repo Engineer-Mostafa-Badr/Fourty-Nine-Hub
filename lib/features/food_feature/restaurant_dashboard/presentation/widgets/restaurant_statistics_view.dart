@@ -59,7 +59,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
             // Text("${state.info?.city.toString()}"),
             _buildStatisticColumn(
               context.isArabic
-                  ? 'اجمالي الأرباح'
+                  ? 'إجمالي الأرباح'
                   : LocaleKeys.totalProfit.localize,
               state.statistics?.data.totalRevenue.toString() ?? "N/A",
             ),

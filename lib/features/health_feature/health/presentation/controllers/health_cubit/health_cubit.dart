@@ -212,6 +212,7 @@ class HealthCubit extends Cubit<HealthState> {
       },
     );
   }
+
   Future<void> getBookings(String type) async {
     final isCurrent = type == 'current';
 
@@ -329,6 +330,7 @@ class HealthCubit extends Cubit<HealthState> {
       // },
     );
   }
+
   Future<void> getUserBookings(String type) async {
     final isCurrent = type == 'myBookings';
     print("objectIsCurrent $isCurrent");
@@ -365,8 +367,7 @@ class HealthCubit extends Cubit<HealthState> {
         }
 
         isLoadingMyBooking = false;
-        emit(
-            state.copyWith(myBookings: data, isLoadingMoreMostBooking: false));
+        emit(state.copyWith(myBookings: data, isLoadingMoreMostBooking: false));
       },
     );
   }
@@ -388,8 +389,7 @@ class HealthCubit extends Cubit<HealthState> {
         ));
       },
       (data) {
-        emit(
-            state.copyWith(status: HealthStates.success));
+        emit(state.copyWith(status: HealthStates.success));
       },
     );
   }
@@ -466,9 +466,9 @@ class HealthCubit extends Cubit<HealthState> {
       hasMoreHistory = true;
     }
 
-    if(type == 'history') await getHistoryBookings(type);
-    if(type == 'current') await getBookings(type);
-    if(type == 'myBookings') await getUserBookings(type);
+    if (type == 'history') await getHistoryBookings(type);
+    if (type == 'current') await getBookings(type);
+    if (type == 'myBookings') await getUserBookings(type);
     emit(state.copyWith(status: HealthStates.success));
   }
 
@@ -481,7 +481,6 @@ class HealthCubit extends Cubit<HealthState> {
     await getMostBookings();
     emit(state.copyWith(status: HealthStates.success));
   }
-
 
   void loadInitialMyBookings() async {
     emit(state.copyWith(status: HealthStates.loading));
@@ -499,8 +498,8 @@ class HealthCubit extends Cubit<HealthState> {
     loadInitialBooking(type);
   }
 
-  Future<bool> toggleFavoriteCategory(String subcategoryId) async {
-    final response = await _toggleFavoriteCategoryUseCase(subcategoryId);
+  Future<bool> toggleFavoriteCategory(String categoryId) async {
+    final response = await _toggleFavoriteCategoryUseCase(categoryId);
     bool result = false;
     response.fold((failure) {
       var currentContext =
@@ -509,18 +508,35 @@ class HealthCubit extends Cubit<HealthState> {
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: HealthStates.error));
     }, (data) {
-      // MainCategoryEntity mainCategoryEntity;
-      //   mainCategoryEntity = state.mainCategory!;
-      //   mainCategoryEntity.isFavorite = !mainCategoryEntity.isFavorite!;
-      // emit(state.copyWith(mainCategory: mainCategoryEntity));
-      // result = state.mainCategory!.isFavorite!;
-      // print("Salama ${data}");
-      MainCategoryEntity newMainCategory = state.mainCategory!;
-      newMainCategory.isFavorite = !(state.mainCategory?.isFavorite ?? false);
-      emit(state.copyWith(mainCategory: newMainCategory));
-      // _getMainCategoryDetails();
+      // Update main category favorite status if it exists
+      if (state.mainCategory != null) {
+        MainCategoryEntity newMainCategory = state.mainCategory!;
+        newMainCategory.isFavorite = !(state.mainCategory?.isFavorite ?? false);
 
-      // return getServices();
+        // Also update all medical services favorite status to match main category
+        List<HealthSubcategoryEntity> newMedicalServices =
+            state.medicalServices ?? [];
+        for (int i = 0; i < newMedicalServices.length; i++) {
+          newMedicalServices[i].isFavorite = newMainCategory.isFavorite;
+        }
+
+        // Also update all subcategories favorite status to match main category
+        List<HealthSubcategoryEntity> newSubCategories =
+            state.subCategories ?? [];
+        for (int i = 0; i < newSubCategories.length; i++) {
+          newSubCategories[i].isFavorite = newMainCategory.isFavorite;
+        }
+
+        emit(state.copyWith(
+          mainCategory: newMainCategory,
+          medicalServices: newMedicalServices,
+          subCategories: newSubCategories,
+        ));
+        result = newMainCategory.isFavorite ?? false;
+      } else {
+        // If mainCategory is null, just update the result
+        result = true; // Assume success since API returned success
+      }
     });
     return result;
   }
@@ -536,15 +552,49 @@ class HealthCubit extends Cubit<HealthState> {
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: HealthStates.error));
     }, (data) {
+      // Create new lists to trigger BlocBuilder update
       List<HealthSubcategoryEntity> newMedicalServices =
-          state.medicalServices ?? [];
-      newMedicalServices
-          .firstWhere((element) => element.id == subcategoryId)
-          .isFavorite = !(newMedicalServices
-              .firstWhere((element) => element.id == subcategoryId)
-              .isFavorite ??
-          false);
-      emit(state.copyWith(medicalServices: newMedicalServices));
+          List<HealthSubcategoryEntity>.from(state.medicalServices ?? []);
+      try {
+        final serviceIndex = newMedicalServices
+            .indexWhere((element) => element.id == subcategoryId);
+        if (serviceIndex != -1) {
+          // Toggle the favorite status
+          newMedicalServices[serviceIndex].isFavorite =
+              !(newMedicalServices[serviceIndex].isFavorite ?? false);
+          result = newMedicalServices[serviceIndex].isFavorite ?? false;
+
+          // Also update subcategories if they exist
+          List<HealthSubcategoryEntity> newSubCategories =
+              List<HealthSubcategoryEntity>.from(state.subCategories ?? []);
+          final subCategoryIndex = newSubCategories
+              .indexWhere((element) => element.id == subcategoryId);
+          if (subCategoryIndex != -1) {
+            newSubCategories[subCategoryIndex].isFavorite =
+                newMedicalServices[serviceIndex].isFavorite;
+          }
+
+          // Update main category favorite status based on subcategory status
+          if (state.mainCategory != null) {
+            MainCategoryEntity newMainCategory = state.mainCategory!;
+            newMainCategory.isFavorite =
+                newMedicalServices[serviceIndex].isFavorite;
+
+            emit(state.copyWith(
+              mainCategory: newMainCategory,
+              medicalServices: newMedicalServices,
+              subCategories: newSubCategories,
+            ));
+          } else {
+            emit(state.copyWith(
+              medicalServices: newMedicalServices,
+              subCategories: newSubCategories,
+            ));
+          }
+        }
+      } catch (e) {
+        print('Error toggling favorite for service $subcategoryId: $e');
+      }
     });
     return result;
   }
@@ -567,16 +617,48 @@ class HealthCubit extends Cubit<HealthState> {
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: HealthStates.error));
     }, (data) {
+      // Create new lists to trigger BlocBuilder update
       List<HealthSubcategoryEntity> newSubCategories =
-          state.subCategories ?? [];
-      newSubCategories
-          .firstWhere((element) => element.id == subcategoryId)
-          .isFavorite = !(newSubCategories
-              .firstWhere((element) => element.id == subcategoryId)
-              .isFavorite ??
-          false);
-      // getSubCategories(reload: true);
-      emit(state.copyWith(subCategories: newSubCategories));
+          List<HealthSubcategoryEntity>.from(state.subCategories ?? []);
+      try {
+        final subCategoryIndex = newSubCategories
+            .indexWhere((element) => element.id == subcategoryId);
+        if (subCategoryIndex != -1) {
+          // Toggle the favorite status
+          newSubCategories[subCategoryIndex].isFavorite =
+              !(newSubCategories[subCategoryIndex].isFavorite ?? false);
+
+          // Also update medical services if they exist
+          List<HealthSubcategoryEntity> newMedicalServices =
+              List<HealthSubcategoryEntity>.from(state.medicalServices ?? []);
+          final serviceIndex = newMedicalServices
+              .indexWhere((element) => element.id == subcategoryId);
+          if (serviceIndex != -1) {
+            newMedicalServices[serviceIndex].isFavorite =
+                newSubCategories[subCategoryIndex].isFavorite;
+          }
+
+          // Update main category favorite status based on subcategory status
+          if (state.mainCategory != null) {
+            MainCategoryEntity newMainCategory = state.mainCategory!;
+            newMainCategory.isFavorite =
+                newSubCategories[subCategoryIndex].isFavorite;
+
+            emit(state.copyWith(
+              mainCategory: newMainCategory,
+              subCategories: newSubCategories,
+              medicalServices: newMedicalServices,
+            ));
+          } else {
+            emit(state.copyWith(
+              subCategories: newSubCategories,
+              medicalServices: newMedicalServices,
+            ));
+          }
+        }
+      } catch (e) {
+        print('Error toggling favorite for subcategory $subcategoryId: $e');
+      }
     });
   }
 
@@ -607,7 +689,9 @@ class HealthCubit extends Cubit<HealthState> {
       showErrorMessage(
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: HealthStates.error));
-    }, (data) => emit(state.copyWith(isDoctor: data.isDoctor,isApproved: data.isApproved)));
+    },
+        (data) => emit(state.copyWith(
+            isDoctor: data.isDoctor, isApproved: data.isApproved)));
   }
 
   Future<void> _isDoctorApproval() async {

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/extensions/context_extension.dart';
@@ -18,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../../core/widget/common/tab_widget.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
@@ -42,24 +43,30 @@ class RestaurantDashboardView extends StatefulWidget {
 class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late RestaurantDashboardCubit _cubit;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabChange);
-    context.read<RestaurantDashboardCubit>().initialize();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cubit = context.read<RestaurantDashboardCubit>();
+    _cubit.initialize();
   }
 
   void _handleTabChange() {
     if (!_tabController.indexIsChanging) {
-      final cubit = context.read<RestaurantDashboardCubit>();
       switch (_tabController.index) {
         case 0:
-          cubit.loadData(); // التبويب الخاص بـ Available
+          _cubit.loadData(); // التبويب الخاص بـ Available
           break;
         case 1:
-          cubit.loadDataPast(); // التبويب الخاص بـ Past
+          _cubit.loadDataPast(); // التبويب الخاص بـ Past
           break;
         case 2:
           // إذا كان عندك تبويب ثالث (مثل الفلتر)، ضع ما يناسبك هنا
@@ -72,71 +79,6 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  Widget _buildTab(String text, int index) {
-    return AnimatedBuilder(
-      animation: _tabController,
-      builder: (context, child) {
-        bool isSelected = _tabController.index == index;
-        return GestureDetector(
-          onTap: () => _tabController.animateTo(index),
-          child: AnimatedContainer(
-            width: 150,
-            height: 70.h,
-            duration: const Duration(milliseconds: 300),
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.getButtonPrimaryColor(context)
-                  : AppColors.getFindFillColor(context),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            alignment: Alignment.center,
-            child: Label(
-              text: text,
-              style: Styles.mediumText(
-                color: isSelected
-                    ? AppColors.getReversedTextColor(context)
-                    : AppColors.getTextColor(context),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildTabIcon(IconData icon, int index) {
-    return AnimatedBuilder(
-      animation: _tabController,
-      builder: (context, child) {
-        bool isSelected = _tabController.index == index;
-        return GestureDetector(
-          onTap: () => _tabController.animateTo(index),
-          child: AnimatedContainer(
-            height: 70.h,
-            duration: const Duration(milliseconds: 300),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.getButtonPrimaryColor(context)
-                  : AppColors.getFindFillColor(context),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Icon(
-              icon,
-              color: isSelected
-                  ? AppColors.getReversedTextColor(context)
-                  : AppColors.getTextColor(context),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -154,70 +96,126 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
               // }
             },
             child: CustomScaffold(
-              appBar: HomeAppbar(
-                isWithBackArrow: true,
+              enableCustomAppBar: true,
+              appBar: BackAppBar(
+                label: LocaleKeys.restaurantMode.localize,
               ),
-              body: BlocConsumer<RestaurantDashboardCubit,
-                      RestaurantDashboardState>(
-                  listener: (context, state) {},
-                  builder: (context, state) {
-                    return Column(
-                      children: [
-                        const Sizer(),
-                        Align(
-                            alignment: AlignmentDirectional.topStart,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6.0),
-                              child: Text(
-                                LocaleKeys.restaurantMode.localize,
-                                style: Styles.headerText(fontSize: 40),
-                              ),
-                            )),
-                        Container(
-                          height: 100.h,
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 2.0,
-                          ),
-                          padding: const EdgeInsets.all(2.0),
-                          decoration: BoxDecoration(
-                            // color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              spacing: 8,
-                              children: [
-                                _buildTab(
-                                    context.isArabic
-                                        ? 'طلبات متاحة'
-                                        : LocaleKeys.availableRequest.localize,
-                                    0),
-                                _buildTab(
-                                    context.isArabic
-                                        ? 'طلبات سابقة'
-                                        : LocaleKeys.pastRequests.localize,
-                                    1),
-                                _buildTabIcon(Icons.tune, 2),
-                              ],
+              body: BlocBuilder<RestaurantDashboardCubit,
+                  RestaurantDashboardState>(builder: (context, state) {
+                return Column(
+                  children: [
+                    // const Sizer(),
+                    // Align(
+                    //     alignment: AlignmentDirectional.topStart,
+                    //     child: Padding(
+                    //       padding:
+                    //           const EdgeInsets.symmetric(horizontal: 6.0),
+                    //       child: Text(
+                    //         LocaleKeys.restaurantMode.localize,
+                    //         style: Styles.headerText(fontSize: 40),
+                    //       ),
+                    //     )),
+                    Container(
+                      color: context.isDarkMode ? Colors.black : Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Row(
+                        children: List.generate(3, (index) {
+                          final labels = [
+                            context.isArabic
+                                ? 'طلبات متاحة'
+                                : LocaleKeys.availableRequest.localize,
+                            context.isArabic
+                                ? 'طلبات سابقة'
+                                : LocaleKeys.pastRequests.localize,
+                            '', // Empty for icon tab
+                          ];
+
+                          return Expanded(
+                            child: AnimatedBuilder(
+                              animation: _tabController,
+                              builder: (context, _) {
+                                final isSelected =
+                                    _tabController.index == index;
+
+                                // For the third tab (Settings/Filter), show icon
+                                if (index == 2) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ManageVibration.vibrate();
+                                        _tabController.animateTo(index);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 10.h),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40.h),
+                                          color: isSelected
+                                              ? AppColors.getButtonPrimaryColor(
+                                                  context)
+                                              : AppColors.getFillColor(context),
+                                          border: Border.all(
+                                            color:
+                                                AppColors.getButtonPrimaryColor(
+                                                    context),
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.tune,
+                                            color: isSelected
+                                                ? (context.isDarkMode
+                                                    ? Colors.black
+                                                    : Colors.white)
+                                                : AppColors.getTextColor(
+                                                    context),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                // For normal tabs
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  child: TabWidget(
+                                    textSize: 18,
+                                    title: labels[index],
+                                    selected: isSelected,
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      _tabController.animateTo(index);
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: [
-                              const AvailableRequestFood(),
-                              const PastRequestFood(),
-                              RestaurantSettingScreen(widget: widget),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
+                          );
+                        }),
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        // physics: const NeverScrollableScrollPhysics(),
+                        controller: _tabController,
+                        children: [
+                          const AvailableRequestFood(),
+                          const PastRequestFood(),
+                          RestaurantSettingScreen(widget: widget),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
             )));
   }
 }
@@ -229,14 +227,20 @@ class RestaurantSettingScreen extends StatelessWidget {
   });
 
   final RestaurantDashboardView widget;
-  // bool editFood = false;
+
+  void _showActivationDialog(BuildContext context, bool newValue) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => _ActivationDialog(
+        newValue: newValue,
+        parentContext: context,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+    return BlocBuilder<RestaurantDashboardCubit, RestaurantDashboardState>(
       builder: (context, state) {
         return SizedBox(
           child: Padding(
@@ -251,104 +255,17 @@ class RestaurantSettingScreen extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Label(
-                        text: state.isRestaurant?.isActive ?? false
+                        text: state.isRestaurant?.isRestaurant == 'active' &&
+                                state.isRestaurant?.status == true
                             ? LocaleKeys.ready.localize
                             : LocaleKeys.notAvailable.localize,
                         style: Styles.headerText(),
                       )),
                       CustomSwitchButton(
-                        value: state.isRestaurant?.isActive ?? false,
-                        onChanged: (v) async {
-                          showDialog(
-                            context: context,
-                            builder: (dialogContext) => AlertDialog(
-                              backgroundColor:
-                                  AppColors.getFindFillColor(context),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 24,
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Title centered at top
-                                  Text(
-                                    LocaleKeys.alert.localize,
-                                    textAlign: TextAlign.center,
-                                    style: Styles.mediumText(
-                                      color: AppColors.getRedColor(context),
-                                      // fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  // Confirmation message
-                                  Text(
-                                    LocaleKeys.areYouSureUpdate.localize,
-                                    // 'Are you sure you want to ${v ? 'activate' : 'deactivate'} your restaurant?',
-                                    textAlign: TextAlign.center,
-                                    style: Styles.mediumText(
-                                      color: AppColors.getRedColor(context),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-
-                                  // Buttons row
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      // Close button
-                                      Expanded(
-                                        child: AppButton(
-                                          onPressed: () {
-                                            ManageVibration.vibrate();
-                                            Navigator.pop(
-                                                dialogContext); // Close dialog
-                                          },
-                                          label: LocaleKeys.cancel.localize,
-                                          backColor:
-                                              AppColors.getRedColor(context),
-                                          color: AppColors.getReversedTextColor(
-                                              context),
-                                          // variant: AppButtonVariant.outlined,
-                                          // width: 100,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      // Open button
-                                      Expanded(
-                                        child: AppButton(
-                                          backColor:
-                                              AppColors.getButtonPrimaryColor(
-                                                  context),
-                                          onPressed: () async {
-                                            ManageVibration.vibrate();
-                                            Navigator.pop(
-                                                dialogContext); // Close dialog
-                                            await context
-                                                .read<
-                                                    RestaurantDashboardCubit>()
-                                                .changeConnectivityStatus(v);
-                                          },
-                                          label: LocaleKeys.update.localize,
-                                          color: AppColors.getReversedTextColor(
-                                              context),
-                                          // width: 100,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                        value: state.isRestaurant?.isRestaurant == 'active'
+                            ? true
+                            : false,
+                        onChanged: (v) => _showActivationDialog(context, v),
                       )
                     ],
                   ),
@@ -393,7 +310,10 @@ class RestaurantSettingScreen extends StatelessWidget {
                                 half: SvgPicture.asset(Assets.halfStar),
                                 empty: SvgPicture.asset(
                                   Assets.starEmpty,
-                                  color: AppColors.getTextColor(context),
+                                  colorFilter: ColorFilter.mode(
+                                    AppColors.getTextColor(context),
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ),
                               itemSize: 13,
@@ -420,7 +340,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                       ManageVibration.vibrate();
                       context.push(Routes.EditFoodView,
                           extra: EditFoodParams(
-                              restaurantId: widget.restaurantId ?? '',
+                              restaurantId: widget.restaurantId,
                               subCategoryId:
                                   state.info?.subcategoryId?.id ?? ''));
                       // Navigator.push(
@@ -453,13 +373,14 @@ class RestaurantSettingScreen extends StatelessWidget {
                         message: LocaleKeys.sureRemoveRestaurant.localize,
                         onConfirm: () async {
                           if (widget.restaurantId.isNotEmpty) {
+                            final navigator = Navigator.of(context);
                             await context
                                 .read<RestaurantDashboardCubit>()
                                 .deleteRestaurantById(context,
                                     id: widget.restaurantId,
                                     subCategoryId:
                                         state.info?.subcategoryId?.id ?? '');
-                            context.pop(true);
+                            navigator.pop(true);
                           }
                         },
                       );
@@ -733,11 +654,12 @@ class CustomBottomSheet extends StatelessWidget {
                   fontSize: 18),
               onPressed: () async {
                 ManageVibration.vibrate();
+                final messenger = ScaffoldMessenger.of(context);
                 final Uri phoneUri = Uri(scheme: 'tel', path: phone);
                 if (await canLaunchUrl(phoneUri)) {
                   await launchUrl(phoneUri);
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(content: Text('Could not launch $phone')),
                   );
                 }
@@ -838,4 +760,81 @@ void deleteItem(BuildContext context) {
       ),
     )),
   );
+}
+
+class _ActivationDialog extends StatelessWidget {
+  final bool newValue;
+  final BuildContext parentContext;
+
+  const _ActivationDialog({
+    required this.newValue,
+    required this.parentContext,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppColors.getFindFillColor(parentContext),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 24,
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.alert.localize,
+            textAlign: TextAlign.center,
+            style: Styles.mediumText(
+              color: AppColors.getRedColor(parentContext),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            LocaleKeys.areYouSureUpdate.localize,
+            textAlign: TextAlign.center,
+            style: Styles.mediumText(
+              color: AppColors.getRedColor(parentContext),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: AppButton(
+                  onPressed: () {
+                    ManageVibration.vibrate();
+                    Navigator.pop(context);
+                  },
+                  label: LocaleKeys.cancel.localize,
+                  backColor: AppColors.getRedColor(parentContext),
+                  color: AppColors.getReversedTextColor(parentContext),
+                ),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: AppButton(
+                  backColor: AppColors.getButtonPrimaryColor(parentContext),
+                  onPressed: () async {
+                    ManageVibration.vibrate();
+                    Navigator.pop(context);
+                    await parentContext
+                        .read<RestaurantDashboardCubit>()
+                        .changeConnectivityStatus(newValue);
+                  },
+                  label: LocaleKeys.update.localize,
+                  color: AppColors.getReversedTextColor(parentContext),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

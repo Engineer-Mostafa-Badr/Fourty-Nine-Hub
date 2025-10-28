@@ -3,7 +3,8 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dar
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class FavoriteIcon extends StatelessWidget {
-  const FavoriteIcon({super.key, required this.isFavourite, required this.onPressedFavorite});
+  const FavoriteIcon(
+      {super.key, required this.isFavourite, required this.onPressedFavorite});
   final bool isFavourite;
   final Function() onPressedFavorite;
   @override
@@ -23,10 +24,10 @@ class FavoriteIcon extends StatelessWidget {
       ),
       child: IconAppButton(
         size: 32,
-        icon: isFavourite == false
-            ? Icons.favorite_border
-            : Icons.favorite,
-        color: isFavourite == false?AppColors.whiteColor:AppColors.SECONDARY_COLOR,
+        icon: isFavourite == false ? Icons.favorite_border : Icons.favorite,
+        color: isFavourite == true
+            ? AppColors.SECONDARY_COLOR
+            : AppColors.whiteColor,
         onPressed: onPressedFavorite,
       ),
     );
