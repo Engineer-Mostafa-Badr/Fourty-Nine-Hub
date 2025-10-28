@@ -1676,7 +1676,7 @@ class EndPoints {
   }
 
   static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
-    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
+    return '/ride/driver/trips/available?page=${params.page}&limit=${params.limit}';
   }
 
   static String acceptOfferByClient(String offerId) {

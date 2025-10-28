@@ -403,8 +403,8 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       final data = prefs.getString(tripOfferTimersKey);
-      
-      if (data == null) return;
+      print("tripOfferTimersKey $data");
+      if (data == null||data.isEmpty) return;
       
       final timers = jsonDecode(data) as Map<String, dynamic>;
       final now = DateTime.now();
