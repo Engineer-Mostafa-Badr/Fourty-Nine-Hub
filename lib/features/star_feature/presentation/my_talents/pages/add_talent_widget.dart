@@ -700,64 +700,6 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     );
   }
 
-  Widget _buildVideoLoadingIndicator() {
-    return SizedBox(
-      height: 220.h,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: AppColors.getTextColor(context).withOpacity(0.05),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.check_circle,
-              size: 48,
-              color: Colors.green,
-            ),
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            context.isArabic ? 'تم اختيار الفيديو ✓' : 'Video Selected ✓',
-            style: TextStyle(
-              color: Colors.green,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          if (_videoController == null ||
-              !_videoController!.value.isInitialized)
-            Column(
-              children: [
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.getRedColor(context),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  context.isArabic
-                      ? 'جاري تحضير الفيديو...'
-                      : 'Preparing video...',
-                  style: TextStyle(
-                    color: AppColors.getTextColor(context).withOpacity(0.6),
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildVideoPreparingState() {
     return SizedBox(
@@ -990,16 +932,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     } catch (e) {
       print('Error initializing video: $e');
       if (mounted) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text(
-        //       context.isArabic
-        //           ? 'خطأ في تحميل الفيديو. يرجى المحاولة مرة أخرى.'
-        //           : 'Error loading video. Please try again.',
-        //     ),
-        //     backgroundColor: Colors.red,
-        //   ),
-        // );
+
         showErrorMessage(
           context,
           context.isArabic
@@ -1016,38 +949,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     }
   }
 
-  // Future<void> _handleSubmit() async {
-  //   if (!_formKey.currentState!.validate()) return;
 
-  //   if (_selectedVideo == null) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(
-  //             context.isArabic ? 'يرجى اختيار فيديو' : 'Please select a video'),
-  //         backgroundColor: Colors.red,
-  //       ),
-  //     );
-  //     return;
-  //   }
-
-  //   if (_selectedThumbnail == null) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(context.isArabic
-  //             ? 'يرجى اختيار صورة مصغرة'
-  //             : 'Please select a thumbnail'),
-  //         backgroundColor: Colors.red,
-  //       ),
-  //     );
-  //     return;
-  //   }
-
-  //   // Check subscription first
-  //   serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-  //     onSubscribed: () => _performUpload(),
-  //     subCategoryId: Constants.tubeSubCategory,
-  //   );
-  // }
 
   Future<void> _handleSubmit() async {
     // Prevent double submission
@@ -1064,14 +966,6 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
     // تحقق إضافي من الوصف
     final description = _descriptionController.text.trim();
     if (description.length < 3 || description.length > 1000) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(context.isArabic
-      //         ? 'يجب أن يكون طول الوصف بين 3 و 1000 حرف'
-      //         : 'Description length must be between 3-1000 characters'),
-      //     backgroundColor: Colors.red,
-      //   ),
-      // );
       showErrorMessage(
         context,
         context.isArabic
@@ -1134,13 +1028,6 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
       return;
     }
 
-    // Check subscription first - for now skip subscription check
-    // serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-    //   onSubscribed: () => _performUpload(),
-    //   subCategoryId: Constants.tubeSubCategory,
-    // );
-
-    // Direct upload for testing
     _performUpload();
   }
 
@@ -1250,38 +1137,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
 
-          // String errorMessage;
-          // if (failure is ServerFailure) {
-          //   if (failure.statusCode == 401) {
-          //     errorMessage = context.isArabic
-          //         ? 'انتهت صلاحية الجلسة. يرجى إعادة المحاولة'
-          //         : 'Session expired. Please try again';
-          //   } else {
-          //     errorMessage = context.isArabic
-          //         ? 'خطأ في الخادم: ${failure.message}'
-          //         : 'Server error: ${failure.message}';
-          //   }
-          // } else if (failure is UnknownFailure) {
-          //   if (failure.error.contains('expired')) {
-          //     errorMessage = context.isArabic
-          //         ? 'انتهت صلاحية رفع الملف. يرجى إعادة المحاولة'
-          //         : 'Upload session expired. Please try again';
-          //   } else if (failure.error.contains('duration')) {
-          //     errorMessage = context.isArabic
-          //         ? 'فشل في الحصول على مدة الفيديو. يرجى إعادة المحاولة'
-          //         : 'Failed to get video duration. Please try again';
-          //   } else {
-          //     errorMessage = context.isArabic
-          //         ? 'فشل الرفع: ${failure.error}'
-          //         : 'Upload failed: ${failure.error}';
-          //   }
-          // } else {
-          //   errorMessage = context.isArabic
-          //       ? 'حدث خطأ غير معروف'
-          //       : 'An unknown error occurred';
-          // }
 
-          // _showError(errorMessage);
         },
         (success) {
           print("✅ Upload successful for ID $uploadId!");
@@ -1418,17 +1274,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   _manualDuration = duration;
                   Navigator.of(dialogContext).pop(duration);
                 } else {
-                  // عرض خطأ
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   SnackBar(
-                  //     content: Text(
-                  //       context.isArabic
-                  //           ? 'يرجى إدخال مدة صحيحة (1-3600 ثانية)'
-                  //           : 'Please enter valid duration (1-3600 seconds)',
-                  //     ),
-                  //     backgroundColor: Colors.red,
-                  //   ),
-                  // );
+
                   showErrorMessage(
                     context,
                     context.isArabic

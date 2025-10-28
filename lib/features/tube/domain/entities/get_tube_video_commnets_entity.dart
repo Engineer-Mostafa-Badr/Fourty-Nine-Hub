@@ -1,3 +1,4 @@
+// DOMAIN ENTITY LAYER
 class TubeVideoCommentsEntity {
   final bool status;
   final TubeVideoCommentsDataEntity? data;
@@ -40,6 +41,11 @@ class TubeCommentEntity {
   final String video;
   final int likes;
   final int dislikes;
+  final List<String> allLike;
+  final List<String> allDislike;
+  final bool isLike;
+  final bool isDislike;
+  final bool isMyComment;
   final List<TubeReplyEntity> replies;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -52,10 +58,51 @@ class TubeCommentEntity {
     required this.video,
     required this.likes,
     required this.dislikes,
+    required this.allLike,
+    required this.allDislike,
+    required this.isLike,
+    required this.isDislike,
+    required this.isMyComment,
     required this.replies,
     required this.createdAt,
     required this.updatedAt,
   });
+
+  TubeCommentEntity copyWith({
+    String? id,
+    String? content,
+    String? userId,
+    TubeCommentOwnerEntity? owner,
+    String? video,
+    int? likes,
+    int? dislikes,
+    List<String>? allLike,
+    List<String>? allDislike,
+    bool? isLike,
+    bool? isDislike,
+    bool? isMyComment,
+    List<TubeReplyEntity>? replies,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return TubeCommentEntity(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      userId: userId ?? this.userId,
+      owner: owner ?? this.owner,
+      video: video ?? this.video,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      allLike: allLike ?? this.allLike,
+      allDislike: allDislike ?? this.allDislike,
+      isLike: isLike ?? this.isLike,
+      isDislike: isDislike ?? this.isDislike,
+      isMyComment: isMyComment ?? this.isMyComment,
+      replies: replies ?? this.replies,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 class TubeReplyEntity {
@@ -64,8 +111,11 @@ class TubeReplyEntity {
   final String userId;
   final TubeCommentOwnerEntity? owner;
   final String video;
-  final List<dynamic> likes;
-  final List<dynamic> dislikes;
+  final int likes;
+  final int dislikes;
+  final bool isLike;
+  final bool isDislike;
+  final bool isMyComment;
   final String? parentComment;
   final List<dynamic> replies;
   final DateTime createdAt;
@@ -79,11 +129,48 @@ class TubeReplyEntity {
     required this.video,
     required this.likes,
     required this.dislikes,
+    required this.isLike,
+    required this.isDislike,
+    required this.isMyComment,
     this.parentComment,
     required this.replies,
     required this.createdAt,
     required this.updatedAt,
   });
+
+  TubeReplyEntity copyWith({
+    String? id,
+    String? content,
+    String? userId,
+    TubeCommentOwnerEntity? owner,
+    String? video,
+    int? likes,
+    int? dislikes,
+    bool? isLike,
+    bool? isDislike,
+    bool? isMyComment,
+    String? parentComment,
+    List<dynamic>? replies,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return TubeReplyEntity(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      userId: userId ?? this.userId,
+      owner: owner ?? this.owner,
+      video: video ?? this.video,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      isLike: isLike ?? this.isLike,
+      isDislike: isDislike ?? this.isDislike,
+      isMyComment: isMyComment ?? this.isMyComment,
+      parentComment: parentComment ?? this.parentComment,
+      replies: replies ?? this.replies,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 class TubeCommentOwnerEntity {

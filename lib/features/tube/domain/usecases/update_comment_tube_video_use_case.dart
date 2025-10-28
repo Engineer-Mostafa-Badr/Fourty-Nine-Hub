@@ -19,12 +19,12 @@ class UpdateCommentTubeVideoUseCase extends UseCase<AddFavoriteTubeEntity , Upda
 
 class UpdateCommentTubeParams {
   final String content;
-  final String videoId;
+  final String commentId;
 
 
   UpdateCommentTubeParams({
     required this.content,
-    required this.videoId,
+    required this.commentId,
 
   });
 
