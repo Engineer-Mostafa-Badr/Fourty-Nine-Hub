@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -63,7 +64,7 @@ class TabWidget extends StatelessWidget {
                     color: AppColors.getRedColor(context)),
                 child: Center(
                   child: Text(
-                    count.toString(),
+                    count.toString().toArabicNumbers(context),
                     style: Styles.smallText(
                         color: context.isDarkMode
                             ? Colors.black

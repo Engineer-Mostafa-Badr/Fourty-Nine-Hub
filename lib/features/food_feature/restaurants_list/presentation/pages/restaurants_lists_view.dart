@@ -723,45 +723,54 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           Row(
             children: [
               // Search Icon
-              GestureDetector(
-                onTap: () {
-                  ManageVibration.vibrate();
-                  if (context.read<UserCubit>().isLoggedIn) {
-                    setState(() {
-                      _showSearch = !_showSearch;
-                      if (_showSearch) {
-                        _showExpire = false;
-                        _showLog = false;
-                        _showFavAds = false;
-                      }
-                    });
-                  } else {
-                    return pleaseLoginDialog(context);
-                  }
-                },
-                child: Icon(
-                  _showSearch ? Icons.search_off_rounded : Icons.search,
-                  color: _showSearch
-                      ? AppColors.getRedColor(context)
-                      : AppColors.getTextColor(context),
+              Container(
+                margin: EdgeInsets.only(
+                  top: 12.h,
                 ),
-              ),
-              const SizedBox(width: 8),
-              // Cart Icon
-              GestureDetector(
-                onTap: () {
-                  ManageVibration.vibrate();
-                  if (context.read<UserCubit>().isLoggedIn) {
-                    context.push(Routes.FOODCART);
-                  } else {
-                    return pleaseLoginDialog(context);
-                  }
-                },
-                child: Icon(
-                  Icons.shopping_cart,
-                  color: context.isDarkMode
-                      ? AppColors.whiteColor
-                      : AppColors.PRIMARY_COLOR,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          setState(() {
+                            _showSearch = !_showSearch;
+                            if (_showSearch) {
+                              _showExpire = false;
+                              _showLog = false;
+                              _showFavAds = false;
+                            }
+                          });
+                        } else {
+                          return pleaseLoginDialog(context);
+                        }
+                      },
+                      child: Icon(
+                        _showSearch ? Icons.search_off_rounded : Icons.search,
+                        color: _showSearch
+                            ? AppColors.getRedColor(context)
+                            : AppColors.getTextColor(context),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Cart Icon
+                    GestureDetector(
+                      onTap: () {
+                        ManageVibration.vibrate();
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          context.push(Routes.FOODCART);
+                        } else {
+                          return pleaseLoginDialog(context);
+                        }
+                      },
+                      child: Icon(
+                        Icons.shopping_cart,
+                        color: context.isDarkMode
+                            ? AppColors.whiteColor
+                            : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 8),

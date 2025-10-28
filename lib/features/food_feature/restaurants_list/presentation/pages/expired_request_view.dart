@@ -172,13 +172,13 @@ class TripRequestCard extends StatelessWidget {
                   color: AppColors.getTextColor(context),
                 ),
                 borderRadius: BorderRadius.circular(15)),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Subscription Type and Subcategory at top
-                  Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Subscription Type and Subcategory at top
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
                     children: [
                       if (orderData.restaurant?.subcategory != null)
                         Expanded(
@@ -246,11 +246,14 @@ class TripRequestCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Divider(height: 24),
-                  _buildHeader(context),
-                  _buildFooter(context),
-                ],
-              ),
+                ),
+                const Divider(height: 24),
+                _buildHeader(context),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _buildFooter(context),
+                ),
+              ],
             ),
           )
         : const SizedBox.shrink();
@@ -260,45 +263,51 @@ class TripRequestCard extends StatelessWidget {
     return Column(
       children: [
         // User Info Section
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Avatar
-            ImageFromInternet(
-              image: '',
-              width: 70,
-              height: 70,
-              isCircle: true,
-              isMale: orderData.user?.gender?.toLowerCase() == 'male',
-              defaultLogo: false,
-              fit: BoxFit.cover,
-              charPadding: 1,
-              firstChar: orderData.user?.firstName?.isNotEmpty == true
-                  ? orderData.user!.firstName![0].toUpperCase()
-                  : null,
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Icon(
-                  //   Icons.person_outline,
-                  //   size: 18,
-                  //   color: context.isDarkMode
-                  //       ? AppColors.whiteColor.withValues(alpha: 0.7)
-                  //       : AppColors.black.withValues(alpha: 0.7),
-                  // ),
-                  // const SizedBox(width: 6),
-                  _buildUserName(context),
-                ],
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Avatar
+              ImageFromInternet(
+                image: '',
+                width: 70,
+                height: 70,
+                isCircle: true,
+                isMale: orderData.user?.gender?.toLowerCase() == 'male',
+                defaultLogo: false,
+                fit: BoxFit.cover,
+                charPadding: 1,
+                firstChar: orderData.user?.firstName?.isNotEmpty == true
+                    ? orderData.user!.firstName![0].toUpperCase()
+                    : null,
               ),
-            ),
-          ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Icon(
+                    //   Icons.person_outline,
+                    //   size: 18,
+                    //   color: context.isDarkMode
+                    //       ? AppColors.whiteColor.withValues(alpha: 0.7)
+                    //       : AppColors.black.withValues(alpha: 0.7),
+                    // ),
+                    // const SizedBox(width: 6),
+                    _buildUserName(context),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         const Divider(height: 24),
         // Restaurant Info Section
-        _buildRestaurantDetails(context),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _buildRestaurantDetails(context),
+        ),
       ],
     );
   }
