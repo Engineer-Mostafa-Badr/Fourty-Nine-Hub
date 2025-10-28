@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/foundation.dart';
 
 /// A comprehensive logging helper that provides structured logging similar to SSLCertificateHelper

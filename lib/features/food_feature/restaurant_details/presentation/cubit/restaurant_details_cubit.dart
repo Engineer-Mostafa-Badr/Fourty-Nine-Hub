@@ -7,14 +7,14 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
-import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 import '../../../restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/selected_meal_model.dart';
+import '../../domain/repositories/restaurant_details_repo.dart';
 import '../../domain/usecases/add_food_usecase.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';
 import '../../domain/usecases/change_quantity_usecase.dart';
@@ -26,38 +26,8 @@ import '../../domain/usecases/get_restaurant_details_usecase.dart';
 
 part 'restaurant_details_state.dart';
 
-showCustomSnackBar(BuildContext context, String message, Icon icon) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      behavior: SnackBarBehavior.floating, // اجعل الـSnackbar عائمًا
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      content: Row(
-        spacing: 10,
-        children: [
-          icon,
-          16.verticalSpace,
-          Expanded(
-            child: Text(
-              message,
-              style: TextStyle(
-                color: AppColors.getTextColor(context),
-                fontWeight: FontWeight.w500,
-                fontSize: 30.sp,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
-  final ApiConsumer apiConsumer;
+  final RestaurantDetailsRepo _repository;
 
   final AddToCartUseCase _addToCartUseCase;
   final DeleteFoodUseCase _deleteFoodUseCase;
@@ -82,7 +52,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       this._addToCartUseCase,
       this._getMealsUseCase,
       this._getRestaurantDetailsUseCase,
-      this.apiConsumer,
+      this._repository,
       this._deleteFoodUseCase,
       this._addFoodUseCase,
       this._changeQuantityUseCase,
@@ -125,17 +95,9 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }) async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading));
 
-    const url = 'https://49backend.com/api/v1/food/make-order';
-
-    final data = {
-      "cartId": cartId,
-      // "address": address,
-      "phone": phone,
-    };
-
-    final response = await apiConsumer.post(
-      url,
-      data: data,
+    final response = await _repository.createNormalOrder(
+      cartId: cartId,
+      phone: phone,
     );
 
     response.fold(
@@ -150,55 +112,11 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         showErrorMessage(context, getFailureMessage(failure, context));
       },
       (data) async {
-        // Handle the successful response
-        // For example, parse the order data and emit a success state
-        final orderData =
-            data['data']; // Adjust based on your API response structure
-        // final order = Order.fromJson(orderData);
-        log("${data['message']}    const url = 'https://49backend.com/api/v1/food/make-order';");
+        final orderData = data['data'];
+        log("${data['message']} - Order created successfully");
         Navigator.pop(context);
         showSuccessMessage(
             context, LocaleKeys.orderCreatedSuccessfully.localize);
-        // WidgetsBinding.instance.addPostFrameCallback(
-        //   (_) => ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(10),
-        //       ),
-        //       content: Row(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Expanded(
-        //             child: Text(
-        //               data['message'],
-        //               ,
-        //               style: const TextStyle(
-        //                 fontWeight: FontWeight.w500,
-        //                 color: AppColors.QUANTITY_COLOR,
-        //               ),
-        //             ),
-        //           ),
-        //           const SizedBox(width: 10),
-        //           const Icon(
-        //             Icons.check_circle_outline,
-        //             color: AppColors.WHATS_APP_COLOR,
-        //           ),
-        //         ],
-        //       ),
-        //       backgroundColor: Colors.white,
-        //       behavior: SnackBarBehavior.floating,
-        //       padding: EdgeInsets.symmetric(
-        //         vertical: 20.h,
-        //         horizontal: 20,
-        //       ),
-        //       margin: const EdgeInsets.only(
-        //         bottom: 25,
-        //         right: 20,
-        //         left: 20,
-        //       ),
-        //     ),
-        //   ),
-        // );
 
         emit(state.copyWith(status: RestaurantDetailsStates.initState));
       },
@@ -213,17 +131,9 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }) async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading));
 
-    const url = 'https://49backend.com/api/v1/food/make-order-premium';
-
-    final data = {
-      "cartId": cartId,
-      // "address": address,
-      "phone": phone,
-    };
-
-    final response = await apiConsumer.post(
-      url,
-      data: data,
+    final response = await _repository.createPremiumOrder(
+      cartId: cartId,
+      phone: phone,
     );
 
     response.fold(
@@ -238,54 +148,10 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         showErrorMessage(context, getFailureMessage(failure, context));
       },
       (data) async {
-        // Handle the successful response
-        // For example, parse the order data and emit a success state
-        final orderData =
-            data['data']; // Adjust based on your API response structure
-        // final order = Order.fromJson(orderData);
-        log("${data['message']}ssssssasssssssssssssssssssss");
+        final orderData = data['data'];
+        log("${data['message']} - Premium order created");
         Navigator.pop(context);
         showSuccessMessage(context, data['message']);
-        // WidgetsBinding.instance.addPostFrameCallback(
-        //   (_) => ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(10),
-        //       ),
-        //       content: Row(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Expanded(
-        //             child: Text(
-        //               data['message'],
-        //               ,
-        //               style: const TextStyle(
-        //                 fontWeight: FontWeight.w500,
-        //                 color: AppColors.QUANTITY_COLOR,
-        //               ),
-        //             ),
-        //           ),
-        //           const SizedBox(width: 10),
-        //           const Icon(
-        //             Icons.check_circle_outline,
-        //             color: AppColors.WHATS_APP_COLOR,
-        //           ),
-        //         ],
-        //       ),
-        //       backgroundColor: Colors.white,
-        //       behavior: SnackBarBehavior.floating,
-        //       padding: EdgeInsets.symmetric(
-        //         vertical: 20.h,
-        //         horizontal: 20,
-        //       ),
-        //       margin: const EdgeInsets.only(
-        //         bottom: 25,
-        //         right: 20,
-        //         left: 20,
-        //       ),
-        //     ),
-        //   ),
-        // );
 
         emit(state.copyWith(status: RestaurantDetailsStates.initState));
       },
@@ -347,27 +213,37 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
     }
 
-    const url = 'https://49backend.com/api/v1/food/getCart';
-
     try {
-      final response = await apiConsumer.get(url);
+      final response = await _repository.getCart();
 
-      log('Failed;;;; ${response.toString()}');
+      log('Cart response: ${response.toString()}');
 
       response.fold(
         (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(status: RestaurantDetailsStates.error));
+          // Check if cart is empty (cart not found is a normal state)
+          if (failure is ServerFailure &&
+              (failure.message.toLowerCase().contains('cart not found'))) {
+            // Cart is empty, emit empty cart state
+            log('Cart is empty (not found)');
+            emit(state.copyWith(
+              cart: null,
+              status: RestaurantDetailsStates.initState,
+            ));
+          } else {
+            // Real error, show message
+            var currentContext =
+                AppPages.router.configuration.navigatorKey.currentContext!;
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+            emit(state.copyWith(status: RestaurantDetailsStates.error));
 
-          log('Failed to load cart: ${failure.toString()}');
+            log('Failed to load cart: ${failure.toString()}');
+          }
         },
         (data) {
-          final cartData = data; // Adjust based on your API response structure
-          final cart = Cart.fromJson(cartData);
-          log("${cart.subTotal}------------------------------------");
+          final cart = Cart.fromJson(data);
+          log("Cart subtotal: ${cart.subTotal}");
+
           emit(state.copyWith(
               cart: cart, status: RestaurantDetailsStates.initState));
         },

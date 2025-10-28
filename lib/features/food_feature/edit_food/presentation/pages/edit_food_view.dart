@@ -13,8 +13,8 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../cubit/edit_food_cubit.dart';
 import '../../../restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import '../../../restaurants_list/data/models/restaurant_mneu_model.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/data/models/restaurant_menu_model.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -473,7 +473,7 @@ class _EditFoodViewState extends State<EditFoodView>
         final foodName = foodNameController.text;
         final price = double.tryParse(priceController.text);
         if (foodName.isNotEmpty && price != null) {
-          final menuItem = RestaurantMneuModel(
+          final menuItem = RestaurantMenuModel(
             foodName: foodName,
             price: price,
             photoPath: imagePath,

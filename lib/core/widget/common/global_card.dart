@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
 
 class GlobalCard extends StatelessWidget {
   const GlobalCard(

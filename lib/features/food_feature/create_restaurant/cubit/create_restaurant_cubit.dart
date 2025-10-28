@@ -20,13 +20,13 @@ import '../../../health_feature/create_doctor/domain/usecases/get_governorates.d
 import '../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../restaurant_dashboard/domain/usecases/update_restaurant_usecase.dart';
 import '../../restaurants_list/domain/entities/food_category_entity.dart';
-import '../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../restaurants_list/domain/entities/restaurant_menu.dart';
 import '../../restaurants_list/domain/usecases/create_restaurant.dart';
 import '../../restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
 import '../../restaurants_list/domain/usecases/restaurant_shared_data.dart';
 import '../../restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 
-part 'create_resturant_state.dart';
+part 'create_restaurant_state.dart';
 
 class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final RestaurantSharedData _shareCubit;
@@ -84,14 +84,14 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   //       (createRestaurantParams.restaurantMedia?.isNotEmpty ?? false) &&
   //       (createRestaurantParams.mneu?.isNotEmpty ?? false)) {
   //     saveTextEditingController();
-  //     emit(CreateResturantLoading(LocaleKeys.creatingRestaurant.tr()));
+  //     emit(CreateRestaurantLoading(LocaleKeys.creatingRestaurant.tr()));
   //     final response = await _createREstaurant.call(createRestaurantParams);
   //     emit(CreateRestaurantCloseLoading());
   //     response.fold((Failure failure) {
   //       if (failure is ServerFailure) {
-  //         emit(CreateResturantError(failure.message));
+  //         emit(CreateRestaurantError(failure.message));
   //       } else if (failure is UnauthorizedFailure) {
-  //         emit(CreateResturantError(failure.toString()));
+  //         emit(CreateRestaurantError(failure.toString()));
   //         AppPages.router.routerDelegate.navigatorKey.currentContext!
   //             .pushNamed(Routes.LOGIN);
   //       }
@@ -149,6 +149,11 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       this._updateRestaurantUseCase)
       : super(CreateRestaurantInitial());
 
+  // Method to refresh UI from outside the cubit
+  void refreshUI() {
+    emit(CreateRestaurantRefreshUI());
+  }
+
   @override
   Future<void> close() {
     name.dispose();
@@ -198,7 +203,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         (createRestaurantParams.mneu?.isNotEmpty ?? false)) {
       saveTextEditingController();
       log("create data:${createRestaurantParams.toMap()}");
-      emit(CreateResturantLoading(LocaleKeys.creatingRestaurant.tr()));
+      emit(CreateRestaurantLoading(LocaleKeys.creatingRestaurant.tr()));
       final response = await _createREstaurant.call(createRestaurantParams);
       emit(CreateRestaurantCloseLoading());
       response.fold((Failure failure) {
@@ -207,9 +212,9 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         if (failure is ServerFailure) {
-          emit(CreateResturantError(failure.message));
+          emit(CreateRestaurantError(failure.message));
         } else if (failure is UnauthorizedFailure) {
-          emit(CreateResturantError(failure.toString()));
+          emit(CreateRestaurantError(failure.toString()));
 
           return pleaseLoginDialog(context);
           // AppPages.router.routerDelegate.navigatorKey.currentContext!
@@ -385,7 +390,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(CreateResturantError(LocaleKeys.cantLoadCities.tr()));
+        emit(CreateRestaurantError(LocaleKeys.cantLoadCities.tr()));
       },
       (data) => emit(CreateRestaurantCitiesLoaded(data)),
     );
@@ -399,7 +404,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(CreateResturantError(LocaleKeys.cantLoadGovernorates.tr()));
+        emit(CreateRestaurantError(LocaleKeys.cantLoadGovernorates.tr()));
       }, (data) {
         _shareCubit.governorates = data;
         emit(CreateRestaurantGovernoratesLoaded(data));
@@ -418,13 +423,13 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
             AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-        emit(CreateResturantError(LocaleKeys.cantLoadSubCategories.tr()));
+        emit(CreateRestaurantError(LocaleKeys.cantLoadSubCategories.tr()));
       }, (data) {
         _shareCubit.subCategories = data;
-        emit(CreateResturantSubCategoriesLoaded(data));
+        emit(CreateRestaurantSubCategoriesLoaded(data));
       });
     } else {
-      emit(CreateResturantSubCategoriesLoaded(_shareCubit.subCategories));
+      emit(CreateRestaurantSubCategoriesLoaded(_shareCubit.subCategories));
     }
   }
 
@@ -436,7 +441,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     if (createRestaurantParams.subcategoryId != null ||
         createRestaurantParams.subcategoryId != "" ||
         subcategoryId != null) {
-      emit(CreateResturantLoading(LocaleKeys.uploadingImage.tr()));
+      emit(CreateRestaurantLoading(LocaleKeys.uploadingImage.tr()));
       await UploadFile().uploadImage(
         useWeChatPicker: true,
         subCategoryId: createRestaurantParams.subcategoryId ??
@@ -449,7 +454,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       );
       emit(CreateRestaurantCloseLoading());
     } else {
-      emit(CreateResturantError(LocaleKeys.selectSubcategoryFirst.tr()));
+      emit(CreateRestaurantError(LocaleKeys.selectSubcategoryFirst.tr()));
     }
   }
 
@@ -471,7 +476,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
           (createRestaurantParams.licenseMedia?.length ?? 1) < 2,
       isCommercialThirdPage:
           (createRestaurantParams.licenseMedia?.length ?? 2) < 3,
-      isMneu: createRestaurantParams.mneu?.isEmpty ?? true,
+      isMenu: createRestaurantParams.mneu?.isEmpty ?? true,
     ));
   }
 

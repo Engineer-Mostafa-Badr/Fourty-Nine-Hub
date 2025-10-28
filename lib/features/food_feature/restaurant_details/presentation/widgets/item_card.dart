@@ -12,7 +12,7 @@ import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 
 class ItemCard extends StatefulWidget {
   final String restaurantId;
@@ -32,12 +32,73 @@ class ItemCard extends StatefulWidget {
 
 class _ItemCardState extends State<ItemCard> {
   int qty = 0;
+  int? lastCartQty; // Track last cart quantity to detect changes
   bool isAddingToCart = false;
+  bool userIsEditing = false; // Track if user is currently editing quantity
+  bool isInitialized = false; // Track if qty has been initialized from cart
+
+  @override
+  void initState() {
+    super.initState();
+    // Quantity will be initialized from cart in first build
+  }
+
+  // Helper method to get current quantity from cart
+  int _getQuantityFromCart(RestaurantDetailsState state) {
+    if (state.cart == null) return 0;
+
+    for (var cartItem in state.cart!.allItems) {
+      for (var restaurantItem in cartItem.restaurantItems) {
+        if (restaurantItem.food?.id == widget.meal.id) {
+          return restaurantItem.quantity;
+        }
+      }
+    }
+    return 0;
+  }
 
   @override
   Widget build(BuildContext context) {
-    context.read<RestaurantDetailsCubit>();
-    return Padding(
+    return BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
+      buildWhen: (previous, current) {
+        // Rebuild on any state change to catch cart updates
+        return true;
+      },
+      builder: (context, state) {
+        // Get current cart quantity
+        final cartQty = _getQuantityFromCart(state);
+
+        // Initialize qty from cart on first build (works even if cart is null/empty)
+        if (!isInitialized) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                qty = cartQty; // Will be 0 if cart is empty
+                lastCartQty = cartQty;
+                isInitialized = true;
+              });
+            }
+          });
+        }
+
+        // Sync logic:
+        // 1. Always sync with cart when not adding or editing
+        // 2. Detect changes from cart_view by comparing with lastCartQty
+        if (isInitialized && !isAddingToCart && !userIsEditing) {
+          if (lastCartQty != cartQty) {
+            // Cart changed (from cart_view or after our update), sync it
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                setState(() {
+                  qty = cartQty;
+                  lastCartQty = cartQty;
+                });
+              }
+            });
+          }
+        }
+
+        return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
         decoration: BoxDecoration(
@@ -186,7 +247,7 @@ class _ItemCardState extends State<ItemCard> {
                   ),
                   SizedBox(
                     child: Visibility(
-                      visible: qty > 0,
+                      visible: qty > 0 && cartQty == 0, // Show only if item NOT in cart
                       child: Padding(
                         padding: const EdgeInsets.only(top: 0),
                         child: GestureDetector(
@@ -244,45 +305,85 @@ class _ItemCardState extends State<ItemCard> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize quantity if needed
+      },
+    );
   }
 
   void _addToCart() async {
+    if (!mounted) return;
+
     setState(() {
       isAddingToCart = true;
     });
 
-    await context.read<RestaurantDetailsCubit>().addToCart(
+    final cubit = context.read<RestaurantDetailsCubit>();
+    final success = await cubit.addToCart(
           context,
           restaurantId: widget.restaurantId,
           foodId: widget.meal.id ?? "",
           quantity: qty,
         );
 
+    if (success && mounted) {
+      // Fetch cart to update quantities across all items
+      await cubit.fetchCart();
+    }
+
     if (mounted) {
       setState(() {
-        qty = 0;
+        // Reset editing flag and update lastCartQty
+        userIsEditing = false;
         isAddingToCart = false;
+        lastCartQty = qty; // Update lastCartQty to current qty
       });
     }
   }
 
   void _decreaseQuantity() async {
-    if (qty > 0) {
-      // await context.read<RestaurantDetailsCubit>().addToCart(
-      //   context,
-      //   restaurantId: widget.restaurantId,
-      //   foodId: widget.meal.id ?? "",
-      //   quantity: qty.toString(),
-      // );
+    if (!mounted) return;
+
+    final cubit = context.read<RestaurantDetailsCubit>();
+    final cartQty = _getQuantityFromCart(cubit.state);
+
+    if (cartQty > 0) {
+      // Item exists in cart, update cart directly
       setState(() {
+        userIsEditing = true;
         qty--;
       });
+
+      if (qty == 0) {
+        // Remove from cart
+        await cubit.deleteFromCart(
+          context,
+          restaurantId: widget.restaurantId,
+          foodId: widget.meal.id ?? "",
+        );
+      } else {
+        // Update quantity in cart
+        await cubit.decrement(
+          context,
+          restaurantId: widget.restaurantId,
+          foodId: widget.meal.id ?? "",
+          quantity: qty,
+        );
+      }
+
+      if (mounted) {
+        await cubit.fetchCart();
+        setState(() {
+          userIsEditing = false;
+          lastCartQty = qty;
+        });
+      }
+    } else {
+      // Item not in cart, just decrease local qty
+      if (qty > 0) {
+        setState(() {
+          userIsEditing = true;
+          qty--;
+        });
+      }
     }
   }
 
@@ -295,14 +396,39 @@ class _ItemCardState extends State<ItemCard> {
   }
 
   void _increaseQuantity() async {
-    // await context.read<RestaurantDetailsCubit>().addToCart(
-    //   context,
-    //   restaurantId: widget.restaurantId,
-    //   foodId: widget.meal.id ?? "",
-    //   quantity: (1).toString(),
-    // );
-    setState(() {
-      qty++;
-    });
+    if (!mounted) return;
+
+    final cubit = context.read<RestaurantDetailsCubit>();
+    final cartQty = _getQuantityFromCart(cubit.state);
+
+    if (cartQty > 0) {
+      // Item exists in cart, update cart directly
+      setState(() {
+        userIsEditing = true;
+        qty++;
+      });
+
+      // Update quantity in cart
+      await cubit.addToCart(
+        context,
+        restaurantId: widget.restaurantId,
+        foodId: widget.meal.id ?? "",
+        quantity: 1, // Add 1 more
+      );
+
+      if (mounted) {
+        await cubit.fetchCart();
+        setState(() {
+          userIsEditing = false;
+          lastCartQty = qty;
+        });
+      }
+    } else {
+      // Item not in cart, just increase local qty
+      setState(() {
+        userIsEditing = true;
+        qty++;
+      });
+    }
   }
 }

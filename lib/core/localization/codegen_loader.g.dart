@@ -1275,7 +1275,7 @@ class CodegenLoader extends AssetLoader{
   "addAde": "اضافة إعلان",
   "cashBack": "قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
   "navigateBarDescription": "اختر المجال الذي يناسب اهتماماتك في شريط القائمة السفلي. يمكنك اختيار بحد ادنى 3 مجالات وبحد اقصى 5 مجالات.",
-  "socialDescription": "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
+  "socialDescription": "اختر الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
   "favouriteDescription": "اختار الاقسام الرئيسية المفضلة لديك التي تحب أن تراها.  يمكنك اختيار بحد ادنى 3 فئات وبحد اقصى 5 فئات.",
   "warning": "تحذير!!!",
   "saveAndActivate": "حفظ وتفعيل",
@@ -1679,7 +1679,8 @@ class CodegenLoader extends AssetLoader{
   "timeLeftForAuctionEnd": "الوقت المتبقي لانتهاء المزاد",
   "noAuctionAvailable": "لا توجد مزادات متاحة",
   "auctionWinners": "الفائزين في المزاد",
-  "games": "ألعاب"
+  "games": "ألعاب",
+  "noGender": "لا يوجد جنس"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3366,7 +3367,8 @@ static const Map<String,dynamic> _en = {
   "timeLeftForAuctionEnd": "Time left for auction to end",
   "noAuctionAvailable": "No auctions available",
   "auctionWinners": "Auction Winners",
-  "games": "Games"
+  "games": "Games",
+  "noGender": "No Gender"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

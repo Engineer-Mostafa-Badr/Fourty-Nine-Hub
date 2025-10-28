@@ -90,6 +90,8 @@ class EndPoints {
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
+  static rejectOfferByClient({required String offerId}) => '/ride/client/tracking/offers/$offerId/reject';
+
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
 
@@ -433,7 +435,7 @@ class EndPoints {
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
   static searchDoctors(SearchDoctorsParams params) =>
-      '/health/doctors/search/doctor?name=${params.name}&limit=${params.limit}&page=${params.page}';
+      '/health/doctor-search?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
 
@@ -1676,7 +1678,7 @@ class EndPoints {
   }
 
   static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
-    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
+    return '/ride/driver/trips/available?page=${params.page}&limit=${params.limit}';
   }
 
   static String acceptOfferByClient(String offerId) {
@@ -1696,6 +1698,7 @@ class EndPoints {
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
+  static const getDoctorsBySpecialty = '/health/booking/doctors/specialties';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
       '/ride/non-tracking/trips/client/pending';

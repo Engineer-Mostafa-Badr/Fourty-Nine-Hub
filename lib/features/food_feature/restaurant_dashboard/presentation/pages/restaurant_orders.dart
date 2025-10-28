@@ -70,9 +70,15 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
           }
 
           if (controller.orders.isEmpty) {
+            // return Center(
+            //     child:
+            //         CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize));
             return Center(
-                child:
-                    CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize));
+              child: CustomEmptyWidget(
+                label:
+                    context.isArabic ? 'لا يوجد طلبات' : 'There are no orders',
+              ),
+            );
           }
           return ListView.builder(
             controller: _scrollController,
@@ -337,7 +343,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                       backColor: AppColors.getButtonPrimaryWhiteColor(context),
                       label: context.isArabic ? 'اكمال' : "Complete",
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         controller.completeOrder(data.id!);
                       },
                     ),
@@ -405,7 +411,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                                     AppColors.getButtonPrimaryColor(context),
                                 color: AppColors.getReversedTextColor(context),
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   // _showFreeCallBottomSheet(context, item);
                                 },
@@ -415,7 +421,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                                 backColor: AppColors.cD9D9D9,
                                 color: AppColors.black,
                                 onPressed: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   Navigator.pop(context); // Close first sheet
                                   _showRegularCallBottomSheet(
                                       context, item); // Open second
@@ -471,7 +477,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
             ),
             color: AppColors.getRedColor(context),
             onPressed: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -598,7 +604,7 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
                       color: AppColors.getReversedTextColor(context),
                       label: LocaleKeys.submit.localize,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         final enteredNumber = phoneController.text.trim();
                         if (isBookingForAnotherClient) {
                           if (enteredNumber.isEmpty) {
@@ -671,8 +677,11 @@ class _PastRequestFoodState extends State<PastRequestFood> {
 
           if (controller.ordersPast.isEmpty) {
             return Center(
-                child:
-                    CustomEmptyWidget(label: LocaleKeys.thereNoItems.localize));
+              child: CustomEmptyWidget(
+                label:
+                    context.isArabic ? 'لا يوجد طلبات' : 'There are no orders',
+              ),
+            );
           }
 
           return ListView.builder(

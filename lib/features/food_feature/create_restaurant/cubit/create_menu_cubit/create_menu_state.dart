@@ -14,7 +14,7 @@ final class RestaurantUpLoadPhototLoading extends RestaurantMenuState {
 final class CreateMenuCloseLoading extends RestaurantMenuState {}
 
 final class RestaurantMenuLoaded extends RestaurantMenuState {
-  final List<RestaurantMneuModel> menu;
+  final List<RestaurantMenuModel> menu;
 
   RestaurantMenuLoaded(this.menu);
 }

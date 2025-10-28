@@ -62,7 +62,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if(serviceLocator<RideCubit>().tripViewers.isNotEmpty)
+                        serviceLocator<RideCubit>().tripViewers.isNotEmpty?
                         Container(
                           height: 40,
                           decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                               ),
                             ],
                           ),
-                        ),
+                        ) : Text(context.isArabic? "برجاء الانتظار حتى تصلك العروض من السائقين القريبين" : "Please wait for nearby drivers to send you offers", style: TextStyle(color: textColor, fontSize: 14, fontWeight: FontWeight.bold),),
                         const SizedBox(height: 12),
                         OfferRow(rideCubit: widget.rideCubit,),
                         Row(
@@ -338,8 +338,12 @@ class _OfferRowState extends State<OfferRow> {
                     const Spacer(), // Space between buttons and text
                     // Offer Text
                      Text(
-                      context.isArabic ? " ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic)} ج.م" : "EGP ${FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic)}",
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                       FormatNumbers().convertNumberToLocalizedString(state.requestedTrip!.price!.toInt().toString(), isArabic: context.isArabic),
+                      style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      context.isArabic ? "  ج.م " : " EGP ",
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.PRIMARY_COLOR_DARK),
                     ),
                     const Spacer(), // Space between text and buttons
                     // Increase Button

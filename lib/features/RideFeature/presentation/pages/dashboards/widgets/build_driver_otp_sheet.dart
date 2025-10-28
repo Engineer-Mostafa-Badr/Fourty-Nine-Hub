@@ -338,6 +338,8 @@ class _BuildDriverOtpSheetState extends State<BuildDriverOtpSheet> {
                     LocationInfoWidget(
                       from: widget.activeTrip?.from??'',
                       to: widget.activeTrip?.to??'',
+                      wayPointOne: widget.activeTrip?.wayPointOneTitle,
+                      wayPointTwo: widget.activeTrip?.wayPointTwoTitle,
                     ),
                     const SizedBox(
                       height: 16,

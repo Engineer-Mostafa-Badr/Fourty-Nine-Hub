@@ -1,3 +1,6 @@
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/repositories/restaurant_list_repo.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_restaurant_use_case.dart';
+
 import '../features/food_feature/food_cart/data/datasources/food_cart_remote_datasource.dart';
 import '../features/food_feature/food_cart/data/repositories/food_cart_repo_impl.dart';
 import '../features/food_feature/food_cart/domain/repositories/food_cart_repo.dart';
@@ -21,17 +24,15 @@ import '../features/food_feature/restaurants_list/domain/usecases/create_restaur
 import '../features/food_feature/restaurants_list/domain/usecases/get_all_restaurant_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_expired_orders_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_meal_categories_with_count_restaurants_use_case.dart';
-import '../features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
-import '../features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/restaurant_shared_data.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/search_restaurants_use_case.dart';
 import '../features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import '../features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
+import '../features/food_feature/create_restaurant/cubit/create_restaurant_cubit.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import '../features/food_feature/cuisine_restaurants/presentation/cubit/cuisine_restaurants_cubit.dart';
 import '../features/food_feature/restaurant_dashboard/domain/repositories/restaurant_dashboard_repo.dart';
 import '../features/food_feature/restaurant_dashboard/domain/usecases/complete_order_restaurant_usecase.dart';
 import '../features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
@@ -44,7 +45,6 @@ import '../features/food_feature/restaurant_details/domain/usecases/get_restaura
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurants_list/data/datasources/restaurants_remote_data_source.dart';
 import '../features/food_feature/restaurants_list/data/repositories/restaurant_list_repo_impl.dart';
-import '../features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_food_ads_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_req_logs_count_use_case.dart';
@@ -53,6 +53,7 @@ import '../features/food_feature/restaurants_list/domain/usecases/get_user_order
 import '../features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_trending_restaurants_usecase.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/is_restaurant_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/set_request_log_seen_use_case.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 
@@ -199,7 +200,7 @@ class FoodServiceLocator {
               serviceLocator()
             ));
     serviceLocator
-        .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
+        .registerFactory<CuisineRestaurantsCubit>(() => CuisineRestaurantsCubit(
               serviceLocator(),
             ));
 
@@ -262,8 +263,8 @@ class FoodServiceLocator {
         serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<IsResturantUsecase>(
-      () => IsResturantUsecase(
+    serviceLocator.registerLazySingleton<IsRestaurantUsecase>(
+      () => IsRestaurantUsecase(
         serviceLocator(),
       ),
     );

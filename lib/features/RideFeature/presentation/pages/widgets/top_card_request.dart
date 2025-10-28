@@ -162,9 +162,9 @@ class TopCardRequest extends StatelessWidget {
                     child: TweenAnimationBuilder<double>(
                       duration: const Duration(seconds: 10),
                       tween: Tween(begin: 0.0, end: 1.0),
-                      onEnd: (){
+                      onEnd: () async {
                         ManageVibration.vibrate();
-                        rideCubit.removeRideOfferFromRideOffers(rideOffer);
+                       rideCubit.removeRideOfferFromRideOffers(rideOffer);
                       },
                       builder: (context, value, child) {
                         return Stack(
@@ -213,9 +213,9 @@ class TopCardRequest extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: MaterialButton(
-                        onPressed: (){
-      ManageVibration.vibrate();
-                          rideCubit.removeRideOfferFromRideOffers(rideOffer);
+                        onPressed: () async {
+                          ManageVibration.vibrate();
+                          await rideCubit.rejectOfferByClient(offer: rideOffer);
                         },
                         child: Text(
                           LocaleKeys.refuse.tr(),

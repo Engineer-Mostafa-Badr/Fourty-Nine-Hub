@@ -16,10 +16,14 @@ class CreateAdModel extends CreateAdEntity {
           : json['propertyId']?['_id'] ?? '',
       nameAr: json['props'] is String
           ? ''
-          : json['propertyId']['name_ar'].toString(),
+          : json['propertyId'] != null && json['propertyId'] is Map
+              ? json['propertyId']['name_ar']?.toString() ?? ''
+              : '',
       nameEn: json['props'] is String
           ? ''
-          : json['propertyId']['name_en'].toString(),
+          : json['propertyId'] != null && json['propertyId'] is Map
+              ? json['propertyId']['name_en']?.toString() ?? ''
+              : '',
       image: json['propertyId'] is String || json['propertyId'] == null
           ? ''
           : json['propertyId']['image'] ?? '',

@@ -229,7 +229,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                 fontSize: 16,
               ),
               decoration: InputDecoration(
-                hintText: context.isArabic ? 'ابحث عن عروض الرحلات...' : 'Search Trips...',
+                hintText: context.isArabic ? 'ابحث عن الرحلات' : 'Search Trips',
                 hintStyle: TextStyle(
                   color: AppColors.getTextColor(context).withOpacity(0.6),
                   fontSize: 16,

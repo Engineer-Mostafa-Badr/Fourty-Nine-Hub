@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
-import '../../stateless/labels/read_more_label.dart';
-import '../../stateless/labels/label.dart';
+
 import '../../../../res/style/styles.dart';
+import '../../stateless/labels/label.dart';
+import '../../stateless/labels/read_more_label.dart';
 
 class CollabsableInfoWidget extends StatefulWidget {
   final String label;

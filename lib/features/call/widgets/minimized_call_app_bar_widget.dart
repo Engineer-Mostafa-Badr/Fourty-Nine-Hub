@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../helpers/manage_vibration.dart';
 import '../../authentication/data/models/user_model.dart';
-import '../presentation/controller/call_controller/call_cubit.dart';
 import '../presentation/controller/minimized_cubit/minimize_cubit.dart';
 import '../services/call_timer_service.dart';
-import '../../../helpers/manage_vibration.dart';
 
 class MinimizedCallAppBarWrapper extends StatelessWidget {
   final UserModel receiver;

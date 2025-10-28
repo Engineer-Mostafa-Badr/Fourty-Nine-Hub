@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../../res/style/app_colors.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'call_control_button.dart';
+
 import '../../../helpers/manage_vibration.dart';
+import 'call_control_button.dart';
 
 class DeclinedBtns extends StatelessWidget {
   const DeclinedBtns({super.key});

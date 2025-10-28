@@ -11,12 +11,24 @@ class AdDetailsPropModel extends AdDetailsPropEntity {
   });
   factory AdDetailsPropModel.fromJson(Map<String, dynamic> json) {
     return AdDetailsPropModel(
-      id: json['propertyId']?['_id'] ?? '',
-      nameAr: json['propertyId']?['name_ar'] ?? json['name_ar'] ?? '',
-      nameEn: json['propertyId']?['name_en'] ?? json['name_ar'] ?? '',
-      valueAr: json['value']?['ar'] ?? json['ar'] ?? '',
-      valueEn: json['value']?['en'] ?? json['en'] ?? '',
-      imageUrl: json['propertyId']?['image'] ?? '',
+      id: json['propertyId'] != null && json['propertyId'] is Map
+          ? json['propertyId']['_id'] ?? ''
+          : '',
+      nameAr: json['propertyId'] != null && json['propertyId'] is Map
+          ? json['propertyId']['name_ar'] ?? json['name_ar'] ?? ''
+          : json['name_ar'] ?? '',
+      nameEn: json['propertyId'] != null && json['propertyId'] is Map
+          ? json['propertyId']['name_en'] ?? json['name_en'] ?? ''
+          : json['name_en'] ?? '',
+      valueAr: json['value'] != null && json['value'] is Map
+          ? json['value']['ar'] ?? json['ar'] ?? ''
+          : json['ar'] ?? '',
+      valueEn: json['value'] != null && json['value'] is Map
+          ? json['value']['en'] ?? json['en'] ?? ''
+          : json['en'] ?? '',
+      imageUrl: json['propertyId'] != null && json['propertyId'] is Map
+          ? json['propertyId']['image'] ?? ''
+          : '',
     );
   }
 }

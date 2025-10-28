@@ -6,7 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as path;
 
 class RideMethodHelper {
@@ -23,6 +27,8 @@ class RideMethodHelper {
         });
     response.fold(
           (l) {
+            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+            currentContext.pop();
             successUpdate= false;
           },
           (r) async {
@@ -38,7 +44,11 @@ class RideMethodHelper {
         required Function(Map<String, dynamic> data) onSuccess}) async {
     var response = await serviceLocator<ApiConsumer>().put(url,data: data);
     response.fold(
-          (l) {},
+          (l) {
+            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+            currentContext.pop();
+            showErrorMessage(currentContext, currentContext.isArabic?'حدث خطأ أثناء رفع الصورة':'Something went wrong during image upload');
+          },
           (r) async {
         print("rtttttttttt$r");
         onSuccess(r);
@@ -87,7 +97,9 @@ class RideMethodHelper {
     bool isSuccess = false;
     response.fold(
           (l) {
-        print("rtttttttttt11$l");
+            var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+            currentContext.pop();
+            print("rtttttttttt11$l");
 
       },
           (r) async {

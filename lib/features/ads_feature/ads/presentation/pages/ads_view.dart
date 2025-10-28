@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/mobi
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/user_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -112,7 +113,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
         preferredSize: const Size.fromHeight(30),
         child: HomeAppbar(
           isWithBackArrow: true,
-          onBackPressed: ()=>context.pop(),
+          onBackPressed: () => context.pop(),
         ),
       ),
 
@@ -139,7 +140,16 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                       width: double.infinity,
                       child: MainCategoryBanner(
                         category: widget.params.mainCategory,
-                        onFavorite: () {},
+                        onFavorite: () async {
+                          // Check if this is a health category and call the appropriate toggle method
+                          if (widget.params.mainCategory.nameEn == 'Health') {
+                            return await context
+                                .read<HealthCubit>()
+                                .toggleFavoriteCategory(
+                                    widget.params.mainCategory.id);
+                          }
+                          return false;
+                        },
                         isFavorite: widget.params.mainCategory.isFavorite,
                       )),
                   const Sizer(),
@@ -376,4 +386,3 @@ enum Categories {
   farming,
   governmentCharity
 }
-

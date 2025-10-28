@@ -30,7 +30,8 @@ abstract class HealthRemoteDataSource {
       String id);
   Future<Either<Failure, List<HealthSubcategoryEntity>>> getMedicalServices(
       String userId);
-  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(SearchDoctorsParams params);
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(
+      SearchDoctorsParams params);
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getFavoriteCategory();
 
@@ -103,21 +104,54 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(SearchDoctorsParams params) async {
-    final response =
-        await _apiConsumer.get(EndPoints.searchDoctors(params));
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['result'] as List)
-            .map((e) => MostBookingModel.fromJson(e))
-            .toList()));
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(
+      SearchDoctorsParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.doctorSearch,
+      queryParameters: {
+        'name': params.name,
+        'limit': params.limit,
+        'page': params.page,
+      },
+    );
+    return response.fold((failure) => Left(failure), (data) {
+      print('Search response data structure: $data');
+      print('Data type: ${data.runtimeType}');
+
+      try {
+        // Handle the response structure correctly
+        if (data['data'] != null && data['data'] is List) {
+          print(
+              'Data is in data field, length: ${(data['data'] as List).length}');
+          if ((data['data'] as List).isNotEmpty) {
+            print('First item structure: ${(data['data'] as List).first}');
+          }
+          return Right((data['data'] as List)
+              .map((e) => MostBookingModel.fromJson(e))
+              .toList());
+        } else if (data is List) {
+          print('Data is directly a list, length: ${data.length}');
+          if (data.isNotEmpty) {
+            //print('First item structure: ${data.first}');
+          }
+          return Right(
+              (data as List).map((e) => MostBookingModel.fromJson(e)).toList());
+        } else {
+          print('Unexpected data structure');
+          return Right([]);
+        }
+      } catch (e) {
+        print('Error parsing search results: $e');
+        return Right([]);
+      }
+    });
   }
 
   @override
   Future<Either<Failure, DoctorSettingEntity>> isDoctor() async {
     final response = await _apiConsumer.get(EndPoints.isDoctor);
-    return response.fold(
-        (l) => Left(l), (data) => Right(DoctorSettingModel.fromJson(data['data'])));
+    return response.fold((l) => Left(l),
+        (data) => Right(DoctorSettingModel.fromJson(data['data'])));
   }
 
   @override
@@ -221,7 +255,8 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
       (l) => Left(l),
       (data) {
         final restaurantList = (data['data']["bookings"] as List)
-            .map((e) => BookedUserAppointmentModel.fromJson(e as Map<String, dynamic>))
+            .map((e) =>
+                BookedUserAppointmentModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(restaurantList);
       },

@@ -102,6 +102,7 @@ import 'package:record/record.dart';
 
 import '../../../domain/usecases/partial_payment_in_trip.dart';
 import '../../../domain/usecases/rating_driver_by_client.dart';
+import '../../../domain/usecases/reject_offer_by_client_use_case.dart';
 import '../../../domain/usecases/send_ok_iam_coming_message_usecase.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
@@ -199,6 +200,7 @@ class RideCubit extends Cubit<RideState> {
 
   final GetDriverRatingsUseCase getDriverRatingsUseCase;
   final GetUnreadOffersUseCase getUnreadOffersUseCase;
+  final RejectOfferByClientUseCase rejectOfferByClientUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -239,6 +241,7 @@ class RideCubit extends Cubit<RideState> {
     this.partialPaymentInTripUseCase,
     this.getDriverRatingsUseCase,
     this.getUnreadOffersUseCase,
+    this.rejectOfferByClientUseCase,
   ) : super(RideState(
           rideOffers: [],
         ));
@@ -1453,7 +1456,7 @@ class RideCubit extends Cubit<RideState> {
       required List<double> targetLocation,
       required List<double>? wayPointOne,
       required List<double>? wayPointTwo,
-      required int calculateB,
+      required num calculateB,
       required String paymentMethod,
       required int passengers,
       required bool comfort,
@@ -1746,6 +1749,27 @@ class RideCubit extends Cubit<RideState> {
         rideRequestTrip.status = TripState.accepted.name;
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: rideRequestTrip));
+      },
+    );
+  }
+
+
+  Future<void> rejectOfferByClient({required RideOfferEntity offer}) async {
+    final Either<Failure, void> result =
+    await rejectOfferByClientUseCase(offerId:  offer.offerId);
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    result.fold(
+          (failure) {
+        currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },(v) async {
+        currentContext.pop();
+        removeRideOfferFromRideOffers(offer);
+        emit(state.copyWith(
+            status: RideStates.success,));
       },
     );
   }

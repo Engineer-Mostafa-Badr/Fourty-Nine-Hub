@@ -113,13 +113,7 @@ String? validatorEmail(String? email) {
 }
 
 String? validatorPhone(String? phone) {
-  final phoneRegex = RegExp(r'^\+?\d{11}$');
-  if (phone == null || phone.isEmpty) {
-    return LocaleKeys.required.localize;
-  } else if (!phoneRegex.hasMatch(phone) && phone.length != 11) {
-    return LocaleKeys.invalidPhoneNumber.localize;
-  }
-  return null;
+  return validatorEgyptianPhoneAdvanced(phone);
 }
 
 String? validateEgyptianPhone(String? value) {
@@ -199,4 +193,48 @@ String? validatorNumber(String? value) {
     return 'Enter a positive number';
   }
   return null;
+}
+
+String? validatorEgyptianPhoneAdvanced(String? phoneNumber) {
+  if (phoneNumber == null || phoneNumber.isEmpty) {
+    return LocaleKeys.required.localize;
+  }
+
+  // تحويل الأرقام العربية إلى إنجليزية
+  String normalizedPhone = phoneNumber
+      .replaceAll('٠', '0')
+      .replaceAll('١', '1')
+      .replaceAll('٢', '2')
+      .replaceAll('٣', '3')
+      .replaceAll('٤', '4')
+      .replaceAll('٥', '5')
+      .replaceAll('٦', '6')
+      .replaceAll('٧', '7')
+      .replaceAll('٨', '8')
+      .replaceAll('٩', '9');
+
+  // إزالة المسافات والرموز الخاصة
+  normalizedPhone = normalizedPhone.replaceAll(RegExp(r'[^\d]'), '');
+
+  // التحقق من الأرقام التي تبدأ بـ 011 أو 010 أو 012 أو 015 (11 رقم)
+  if (normalizedPhone.length == 11) {
+    if (normalizedPhone.startsWith('011') ||
+        normalizedPhone.startsWith('010') ||
+        normalizedPhone.startsWith('012') ||
+        normalizedPhone.startsWith('015')) {
+      return null; // رقم صحيح
+    }
+  }
+
+  // التحقق من الأرقام التي تبدأ بـ 002011 أو 002010 أو 002012 أو 002015 (14 رقم)
+  if (normalizedPhone.length == 14) {
+    if (normalizedPhone.startsWith('002011') ||
+        normalizedPhone.startsWith('002010') ||
+        normalizedPhone.startsWith('002012') ||
+        normalizedPhone.startsWith('002015')) {
+      return null; // رقم صحيح
+    }
+  }
+
+  return LocaleKeys.invalidPhoneNumber.localize;
 }

@@ -13,7 +13,7 @@ import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../create_restaurant/cubit/create_resturant_cubit.dart';
+import '../../../create_restaurant/cubit/create_restaurant_cubit.dart';
 import '../../domain/usecases/update_restaurant_usecase.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
 import '../../../../../helpers/manage_vibration.dart';
@@ -127,16 +127,18 @@ class _RestaurantPhotoPickerState extends State<RestaurantPhotoPicker> {
                               width: 44,
                               height: 24,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      color:
-                                          AppColors.getButtonPrimaryWhiteColor(
-                                              context),
-                                      width: 1)),
-                              child: SvgPicture.asset(
-                                Assets.arrowUp,
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                  color: AppColors.getButtonPrimaryWhiteColor(
+                                      context),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Image.asset(
+                                Assets.uploadImage,
                                 color: AppColors.getButtonPrimaryWhiteColor(
-                                    context),
+                                  context,
+                                ),
                               ),
                             ),
                           ],

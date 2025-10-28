@@ -69,6 +69,7 @@ abstract class SocketIOListeners {
   static const String acceptDriverOffer = 'RIDE:ACCEPTED_OFFER_FROM_CLIENT';
   static const String newAvailableTrip = 'REID:NEW_AVAILABLE_TRIP';
   static const String removeTrip = 'REMOVE_TRIP_FROM_LIST';
+  static const String listenToRemoveOffer = 'ride:rejected-trip-offer';
   static const String endTrip = 'RIDE:TRIP_CANCELLED_BY_CLIENT';
   static const String listenToClientComing = 'RIDE:CLIENT_ABROACH_DRIVER';
   static const String listenToCancelRoute = 'CAPTAIN-SHARE:ROUTE-CANCELLED';

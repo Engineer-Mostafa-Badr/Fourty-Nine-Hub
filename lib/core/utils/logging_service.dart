@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/foundation.dart';
 
 /// Logging service to replace print statements throughout the application

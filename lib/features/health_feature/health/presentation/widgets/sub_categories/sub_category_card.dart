@@ -27,7 +27,6 @@ class HealthSubCategoryCard extends StatefulWidget {
 }
 
 class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
-
   @override
   Widget build(BuildContext context) {
     print(widget.subCategory.id);
@@ -77,21 +76,43 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: IconButton(
-                      icon: Icon(
-                          (widget.subCategory.isFavorite??false)
-                              ? Icons.favorite_outlined
-                              : Icons.favorite_border,
-                          color: Colors.red),
-                      onPressed: () {
-                        ManageVibration.vibrate();
-                        context.read<HealthCubit>().toggleFavoriteSubcategory(widget.subCategory.id);
-                        // setState(() {
-                        //   isFavorite = !isFavorite;
-                        // });
+                    child: BlocBuilder<HealthCubit, HealthState>(
+                      builder: (context, state) {
+                        // Find the current subcategory in the state to get updated favorite status
+                        bool isFavorite =
+                            widget.subCategory.isFavorite ?? false;
+
+                        if (state.subCategories != null) {
+                          try {
+                            final currentSubcategory =
+                                state.subCategories!.firstWhere(
+                              (subcategory) =>
+                                  subcategory.id == widget.subCategory.id,
+                            );
+                            isFavorite = currentSubcategory.isFavorite ?? false;
+                          } catch (e) {
+                            // Subcategory not found in state, use original value
+                            isFavorite = widget.subCategory.isFavorite ?? false;
+                          }
+                        }
+
+                        return IconButton(
+                          icon: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red),
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context
+                                .read<HealthCubit>()
+                                .toggleFavoriteSubcategory(
+                                    widget.subCategory.id);
+                          },
+                          visualDensity:
+                              const VisualDensity(horizontal: -4, vertical: -4),
+                        );
                       },
-                      visualDensity:
-                          const VisualDensity(horizontal: -4, vertical: -4),
                     ),
                   ),
                 ],

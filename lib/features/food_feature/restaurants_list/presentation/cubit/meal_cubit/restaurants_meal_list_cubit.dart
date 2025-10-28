@@ -19,7 +19,7 @@
 // import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 // import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_num_of_resturant_use_case.dart';
 // import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
+// import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_restaurant_usecase.dart';
 // import 'package:fourtyninehub/features/fourty_nine/domain/entities/banner.dart';
 // import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 // import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_banner_by_id_use_case.dart';
@@ -46,7 +46,7 @@
 //   final GetNumOfResturantUseCase _getNumOfResturantUseCase;
 //   final GetSubCategoryRestaurantsUseCases _getSubCategoryRestaurantsUseCases;
 //   final ToggleFavoriteSubcategoryUseCase _toggleFavoriteSubcategoryUseCase;
-//   final IsResturantUsecase _isResturantUseCase;
+//   final IsRestaurantUsecase _isResturantUseCase;
 //   final GetMealCategoriesWithCountRestaurantsUseCase
 //       _getMealCategoriesWithCountRestaurantsUseCase;
 //

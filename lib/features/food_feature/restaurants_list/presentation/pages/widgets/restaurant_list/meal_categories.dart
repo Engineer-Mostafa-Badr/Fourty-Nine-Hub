@@ -190,6 +190,7 @@ class _MealCategoriesState extends State<MealCategories> {
                             return Container(
                               key: _itemKeys[categoryId],
                               child: MealCategoryCard(
+                                index: index,
                                 onTap: (String id) {
                                   AdInterstitialTop.loadIntersitialAd();
                                   AdInterstitialTop.showInterstitialAd();
@@ -226,8 +227,10 @@ class _MealCategoriesState extends State<MealCategories> {
           );
         } else {
           return Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+            baseColor:
+                context.isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
+            highlightColor:
+                context.isDarkMode ? Colors.grey[700]! : Colors.grey[100]!,
             child: Column(
               children: [
                 Padding(
@@ -236,15 +239,21 @@ class _MealCategoriesState extends State<MealCategories> {
                     children: [
                       const Spacer(),
                       Container(
-                        width: 50.0,
-                        height: 20.0,
-                        color: Colors.white, // Shimmer placeholder for text
+                        width: 80.0,
+                        height: 16.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
                       ),
                       const SizedBox(width: 8.0),
                       Container(
-                        width: 20.0,
-                        height: 20.0,
-                        color: Colors.white, // Shimmer placeholder for icon
+                        width: 16.0,
+                        height: 16.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
                       ),
                       const SizedBox(width: 8.0),
                     ],
@@ -256,16 +265,58 @@ class _MealCategoriesState extends State<MealCategories> {
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     separatorBuilder: (context, index) =>
-                        const SizedBox(width: 8.0),
+                        const SizedBox(width: 12.0),
                     scrollDirection: Axis.horizontal,
-                    itemCount: 5, // Number of shimmer placeholders
+                    itemCount: 5,
                     itemBuilder: (context, index) {
                       return Container(
                         width: 0.55.sw,
-                        height: double.infinity,
                         decoration: BoxDecoration(
-                          // color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Image placeholder
+                            Container(
+                              width: double.infinity,
+                              height: 0.15.sh,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12.0),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Title placeholder
+                                  Container(
+                                    width: double.infinity,
+                                    height: 16.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  // Subtitle placeholder
+                                  Container(
+                                    width: 0.3.sw,
+                                    height: 12.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
