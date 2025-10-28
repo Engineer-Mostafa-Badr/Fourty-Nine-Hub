@@ -294,7 +294,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params);
 
   Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId});
-
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId});
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -1759,6 +1759,19 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (l) => Left(l),
           (data) {
         return Right(DriverRatingsModel.fromJson(data['data']));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId}) async {
+    final response = await _apiConsumer.put(
+      EndPoints.rejectOfferByClient(offerId: offerId),
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data);
       },
     );
   }

@@ -54,6 +54,14 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   final Set<Polyline> _polylines = {};
   final Set<Circle> _circles = {};
   Marker? _carMarker;
+  // في أول الكلاس، ضيف المتغيرات دي:
+  BitmapDescriptor? _startMarkerIcon; // A
+  BitmapDescriptor? _waypoint1MarkerIcon; // B
+  BitmapDescriptor? _waypoint2MarkerIcon; // C
+  BitmapDescriptor? _targetMarkerIcon; // B or C or D (dynamic)
+  double? _cachedMarkerSize;
+  BitmapDescriptor? _clientMarkerIcon;
+
 
   final LatLngBounds egyptBounds = LatLngBounds(
     southwest: const LatLng(22.0, 24.7),
@@ -63,10 +71,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   LatLng? _latestStartLocation;
 
   // Instance-level caching that gets cleared when needed
-  BitmapDescriptor? _startMarkerIcon;
-  BitmapDescriptor? _targetMarkerIcon;
-  BitmapDescriptor? _clientMarkerIcon;
-  double? _cachedMarkerSize;
 
   double _currentZoom = 16.0;
   bool _isDisposed = false;
@@ -85,12 +89,46 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _mapController?.dispose();
     // Clear cached icons when disposing
     _startMarkerIcon = null;
+    _waypoint1MarkerIcon = null;
+    _waypoint2MarkerIcon = null;
     _targetMarkerIcon = null;
-    _clientMarkerIcon = null;
     super.dispose();
   }
 
   // Initialize marker icons - now properly handles updates
+  // Future<void> _initializeMarkerIcons({bool forceRecreate = false}) async {
+  //   if (_isDisposed || _isUpdatingMarkers) return;
+  //
+  //   _isUpdatingMarkers = true;
+  //   final markerSize = _calculateMarkerSizeByZoom(_currentZoom);
+  //
+  //   // Recreate icons if forced, don't have them, or size changed significantly
+  //   if (forceRecreate ||
+  //       _startMarkerIcon == null ||
+  //       _cachedMarkerSize == null ||
+  //       (markerSize - _cachedMarkerSize!).abs() > 3) {
+  //
+  //     _cachedMarkerSize = markerSize;
+  //
+  //     try {
+  //       _startMarkerIcon = await _createSimpleMarker(Colors.blue, markerSize);
+  //       _targetMarkerIcon = await _createSimpleMarker(Colors.green, markerSize);
+  //       _clientMarkerIcon = await _createSimpleMarker(Colors.red, markerSize);
+  //     } catch (e) {
+  //       // Fallback to default markers
+  //       _startMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+  //       _targetMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+  //       _clientMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+  //     }
+  //   }
+  //
+  //   _isUpdatingMarkers = false;
+  //
+  //   if (!_isDisposed) {
+  //     _setMarkersAndPolyline();
+  //   }
+  // }
+
   Future<void> _initializeMarkerIcons({bool forceRecreate = false}) async {
     if (_isDisposed || _isUpdatingMarkers) return;
 
@@ -106,21 +144,119 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       _cachedMarkerSize = markerSize;
 
       try {
-        _startMarkerIcon = await _createSimpleMarker(Colors.green, markerSize);
-        _targetMarkerIcon = await _createSimpleMarker(Colors.blue, markerSize);
-        _clientMarkerIcon = await _createSimpleMarker(Colors.red, markerSize);
+        // Start location is always A
+        _startMarkerIcon = await _createMarkerWithLetter('A', Colors.blue, markerSize);
+
+        // Waypoint 1 is always B (if exists)
+        _waypoint1MarkerIcon = await _createMarkerWithLetter('B', Colors.red, markerSize);
+
+        // Waypoint 2 is always C (if exists)
+        _waypoint2MarkerIcon = await _createMarkerWithLetter('C', Colors.red, markerSize);
+
+        // Target location letter depends on waypoints
+        String targetLetter = 'B'; // Default if no waypoints
+        if (widget.clientLocations.length >= 2) {
+          targetLetter = 'D'; // A -> B -> C -> D
+        } else if (widget.clientLocations.length == 1) {
+          targetLetter = 'C'; // A -> B -> C
+        }
+
+        _targetMarkerIcon = await _createMarkerWithLetter(targetLetter, Colors.green, markerSize);
+
       } catch (e) {
         // Fallback to default markers
-        _startMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
-        _targetMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-        _clientMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+        _startMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+        _waypoint1MarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+        _waypoint2MarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+        _targetMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
       }
     }
-
     _isUpdatingMarkers = false;
 
     if (!_isDisposed) {
       _setMarkersAndPolyline();
+    }
+  }
+
+  Future<BitmapDescriptor> _createMarkerWithLetter(
+      String letter,
+      Color color,
+      double size
+      ) async {
+    try {
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+
+      // Outer glow circle
+      final glowPaint = Paint()
+        ..color = color.withOpacity(0.3)
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(
+        Offset(size / 2, size / 2),
+        size / 2,
+        glowPaint,
+      );
+
+      // Main marker circle
+      final mainPaint = Paint()
+        ..color = color
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(
+        Offset(size / 2, size / 2),
+        (size / 2) * 0.7,
+        mainPaint,
+      );
+
+      // White border
+      final borderPaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+      canvas.drawCircle(
+        Offset(size / 2, size / 2),
+        (size / 2) * 0.7,
+        borderPaint,
+      );
+
+      // Draw letter in the center
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: letter,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: size * 0.4, // Letter size relative to marker
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+
+      textPainter.layout();
+
+      // Center the text
+      final textOffset = Offset(
+        (size - textPainter.width) / 2,
+        (size - textPainter.height) / 2,
+      );
+
+      textPainter.paint(canvas, textOffset);
+
+      final picture = recorder.endRecording();
+      final image = await picture.toImage(size.toInt(), size.toInt());
+      final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+
+      // Proper resource cleanup
+      picture.dispose();
+      image.dispose();
+
+      return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
+    } catch (e) {
+      // Fallback to default marker
+      return BitmapDescriptor.defaultMarkerWithHue(
+          color == Colors.green ? BitmapDescriptor.hueGreen :
+          color == Colors.blue ? BitmapDescriptor.hueBlue :
+          BitmapDescriptor.hueRed
+      );
     }
   }
 
@@ -305,7 +441,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     const maxZoom = 20.0;
     final clampedZoom = zoom.clamp(minZoom, maxZoom);
     final normalized = (clampedZoom - minZoom) / (maxZoom - minZoom);
-    return 35 + (normalized * (50 - 30));
+    return 40 + (normalized * (50 - 30));
   }
 
   // Highly optimized marker creation using Canvas instead of Widget rendering
@@ -429,6 +565,64 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return stepPoints;
   }
 
+  // void _addStepCircles() {
+  //   if (_isDisposed) return;
+  //
+  //   _circles.clear();
+  //
+  //   if (widget.polylinePoints.isEmpty) return;
+  //
+  //   double circleRadius = _calculateCircleRadiusByZoom(_currentZoom);
+  //   const double stepDistance = 80.0; // Optimized distance
+  //   const int maxCircles = 25; // Reasonable limit
+  //
+  //   int circleCount = 0;
+  //
+  //   // Add steps between start location and polyline start
+  //   if (widget.startLocation != null && circleCount < maxCircles) {
+  //     LatLng polylineStart = widget.polylinePoints.first;
+  //     List<LatLng> startSteps = _generateStepPoints(
+  //         widget.startLocation!,
+  //         polylineStart,
+  //         stepDistance
+  //     );
+  //
+  //     for (int i = 0; i < startSteps.length && circleCount < maxCircles; i++) {
+  //       _circles.add(Circle(
+  //         circleId: CircleId('start_step_$i'),
+  //         center: startSteps[i],
+  //         radius: circleRadius,
+  //         fillColor: Colors.grey.withOpacity(0.25),
+  //         strokeColor: Colors.grey.withOpacity(0.4),
+  //         strokeWidth: 1,
+  //       ));
+  //       circleCount++;
+  //     }
+  //   }
+  //
+  //   // Add steps between polyline end and target location
+  //   if (widget.targetLocation != null && circleCount < maxCircles) {
+  //     LatLng polylineEnd = widget.polylinePoints.last;
+  //     List<LatLng> endSteps = _generateStepPoints(
+  //         polylineEnd,
+  //         widget.targetLocation!,
+  //         stepDistance
+  //     );
+  //
+  //     for (int i = 0; i < endSteps.length && circleCount < maxCircles; i++) {
+  //       _circles.add(Circle(
+  //         circleId: CircleId('end_step_$i'),
+  //         center: endSteps[i],
+  //         radius: circleRadius,
+  //         fillColor: Colors.grey.withOpacity(0.25),
+  //         strokeColor: Colors.grey.withOpacity(0.4),
+  //         strokeWidth: 1,
+  //       ));
+  //       circleCount++;
+  //     }
+  //   }
+  // }
+
   void _addStepCircles() {
     if (_isDisposed) return;
 
@@ -437,8 +631,10 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     if (widget.polylinePoints.isEmpty) return;
 
     double circleRadius = _calculateCircleRadiusByZoom(_currentZoom);
-    const double stepDistance = 80.0; // Optimized distance
-    const int maxCircles = 25; // Reasonable limit
+
+    // قللت المسافة من 80 إلى 60 عشان النقاط تبقى أكتر
+    const double stepDistance = 60.0; // كان 80
+    const int maxCircles = 25;
 
     int circleCount = 0;
 
@@ -456,9 +652,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           circleId: CircleId('start_step_$i'),
           center: startSteps[i],
           radius: circleRadius,
-          fillColor: Colors.grey.withOpacity(0.25),
-          strokeColor: Colors.grey.withOpacity(0.4),
-          strokeWidth: 1,
+          fillColor: Colors.grey.withOpacity(0.3), // زودت opacity من 0.25 إلى 0.3
+          strokeColor: Colors.grey.withOpacity(0.5), // زودت opacity من 0.4 إلى 0.5
+          strokeWidth: 2, // زودت عرض البوردر من 1 إلى 2
         ));
         circleCount++;
       }
@@ -478,22 +674,107 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           circleId: CircleId('end_step_$i'),
           center: endSteps[i],
           radius: circleRadius,
-          fillColor: Colors.grey.withOpacity(0.25),
-          strokeColor: Colors.grey.withOpacity(0.4),
-          strokeWidth: 1,
+          fillColor: Colors.grey.withOpacity(0.3),
+          strokeColor: Colors.grey.withOpacity(0.5),
+          strokeWidth: 2,
         ));
         circleCount++;
       }
     }
   }
 
+  // double _calculateCircleRadiusByZoom(double zoom) {
+  //   const minZoom = 10.0;
+  //   const maxZoom = 20.0;
+  //   final clampedZoom = zoom.clamp(minZoom, maxZoom);
+  //   final normalized = (clampedZoom - minZoom) / (maxZoom - minZoom);
+  //   return 3 + (normalized * (8 - 3));
+  // }
+
   double _calculateCircleRadiusByZoom(double zoom) {
     const minZoom = 10.0;
     const maxZoom = 20.0;
     final clampedZoom = zoom.clamp(minZoom, maxZoom);
     final normalized = (clampedZoom - minZoom) / (maxZoom - minZoom);
-    return 3 + (normalized * (8 - 3));
+
+    // زودت الحجم من (3-8) إلى (6-14)
+    return 10 + (normalized * (22 - 10));
   }
+
+  // void _setMarkersAndPolyline() {
+  //   if (_isDisposed || _isUpdatingMarkers) return;
+  //
+  //   _markers.clear();
+  //   _polylines.clear();
+  //
+  //   // Add start marker
+  //   if (widget.startLocation != null && _startMarkerIcon != null) {
+  //     _markers.add(Marker(
+  //       markerId: const MarkerId('start'),
+  //       position: widget.startLocation!,
+  //       icon: _startMarkerIcon!,
+  //       infoWindow: (widget.startAddress?.isNotEmpty ?? false)
+  //           ? InfoWindow(title: widget.startAddress!)
+  //           : const InfoWindow(),
+  //     ));
+  //   }
+  //
+  //   // Add target marker
+  //   if (widget.targetLocation != null && _targetMarkerIcon != null) {
+  //     _markers.add(Marker(
+  //       markerId: const MarkerId('target'),
+  //       position: widget.targetLocation!,
+  //       icon: _targetMarkerIcon!,
+  //       infoWindow: (widget.targetAddress?.isNotEmpty ?? false)
+  //           ? InfoWindow(title: widget.targetAddress!)
+  //           : const InfoWindow(),
+  //     ));
+  //   }
+  //
+  //   // Add client markers (with reasonable limit)
+  //   final clientLimit = min(widget.clientLocations.length, 20);
+  //   for (int i = 0; i < clientLimit; i++) {
+  //     if (_clientMarkerIcon != null) {
+  //       _markers.add(Marker(
+  //         markerId: MarkerId('client_$i'),
+  //         position: widget.clientLocations[i],
+  //         icon: _clientMarkerIcon!,
+  //         infoWindow: i < widget.clientAddresses.length
+  //             ? InfoWindow(title: widget.clientAddresses[i])
+  //             : const InfoWindow(),
+  //       ));
+  //     }
+  //   }
+  //
+  //   // Add polylines with optimized rendering
+  //   if (widget.polylinePoints.isNotEmpty) {
+  //     final clientsCount = widget.clientLocations.length;
+  //     List<Color> gradientColors;
+  //     // if (clientsCount == 0) {
+  //     //   gradientColors = [Colors.green, Colors.blue];
+  //     // } else if (clientsCount == 1) {
+  //     //   gradientColors = [Colors.green, Colors.red, Colors.blue];
+  //     // } else {
+  //     //   gradientColors = [Colors.green, Colors.red, Colors.red, Colors.blue];
+  //     // }
+  //     if(context.isDarkMode){
+  //       gradientColors = [AppColors.PRIMARY_COLOR_DARK, AppColors.blueColor];
+  //     }else{
+  //       gradientColors = [AppColors.PRIMARY_COLOR_DARK, AppColors.PRIMARY_COLOR_DARK];
+  //     }
+  //     _polylines.addAll(_buildOptimizedGradientPolyline(widget.polylinePoints, gradientColors));
+  //   }
+  //
+  //   _addStepCircles();
+  //
+  //   if (_carMarker != null) {
+  //     _markers.add(_carMarker!);
+  //   }
+  //
+  //   if (mounted && !_isDisposed) {
+  //     setState(() {});
+  //   }
+  // }
 
   void _setMarkersAndPolyline() {
     if (_isDisposed || _isUpdatingMarkers) return;
@@ -501,56 +782,63 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     _markers.clear();
     _polylines.clear();
 
-    // Add start marker
+    // Add start marker (A)
     if (widget.startLocation != null && _startMarkerIcon != null) {
       _markers.add(Marker(
         markerId: const MarkerId('start'),
         position: widget.startLocation!,
         icon: _startMarkerIcon!,
         infoWindow: (widget.startAddress?.isNotEmpty ?? false)
-            ? InfoWindow(title: widget.startAddress!)
-            : const InfoWindow(),
+            ? InfoWindow(title: 'A: ${widget.startAddress!}')
+            : const InfoWindow(title: 'A'),
       ));
     }
 
-    // Add target marker
+    // Add waypoint 1 marker (B) if exists
+    if (widget.clientLocations.isNotEmpty && _waypoint1MarkerIcon != null) {
+      _markers.add(Marker(
+        markerId: const MarkerId('waypoint1'),
+        position: widget.clientLocations[0],
+        icon: _waypoint1MarkerIcon!,
+        infoWindow: widget.clientAddresses.isNotEmpty
+            ? InfoWindow(title: 'B: ${widget.clientAddresses[0]}')
+            : const InfoWindow(title: 'B'),
+      ));
+    }
+
+    // Add waypoint 2 marker (C) if exists
+    if (widget.clientLocations.length >= 2 && _waypoint2MarkerIcon != null) {
+      _markers.add(Marker(
+        markerId: const MarkerId('waypoint2'),
+        position: widget.clientLocations[1],
+        icon: _waypoint2MarkerIcon!,
+        infoWindow: widget.clientAddresses.length >= 2
+            ? InfoWindow(title: 'C: ${widget.clientAddresses[1]}')
+            : const InfoWindow(title: 'C'),
+      ));
+    }
+
+    // Add target marker (B, C, or D depending on waypoints)
     if (widget.targetLocation != null && _targetMarkerIcon != null) {
+      String targetLabel = 'B'; // Default
+      if (widget.clientLocations.length >= 2) {
+        targetLabel = 'D';
+      } else if (widget.clientLocations.length == 1) {
+        targetLabel = 'C';
+      }
+
       _markers.add(Marker(
         markerId: const MarkerId('target'),
         position: widget.targetLocation!,
         icon: _targetMarkerIcon!,
         infoWindow: (widget.targetAddress?.isNotEmpty ?? false)
-            ? InfoWindow(title: widget.targetAddress!)
-            : const InfoWindow(),
+            ? InfoWindow(title: '$targetLabel: ${widget.targetAddress!}')
+            : InfoWindow(title: targetLabel),
       ));
     }
-
-    // Add client markers (with reasonable limit)
-    final clientLimit = min(widget.clientLocations.length, 20);
-    for (int i = 0; i < clientLimit; i++) {
-      if (_clientMarkerIcon != null) {
-        _markers.add(Marker(
-          markerId: MarkerId('client_$i'),
-          position: widget.clientLocations[i],
-          icon: _clientMarkerIcon!,
-          infoWindow: i < widget.clientAddresses.length
-              ? InfoWindow(title: widget.clientAddresses[i])
-              : const InfoWindow(),
-        ));
-      }
-    }
-
     // Add polylines with optimized rendering
     if (widget.polylinePoints.isNotEmpty) {
-      final clientsCount = widget.clientLocations.length;
       List<Color> gradientColors;
-      // if (clientsCount == 0) {
-      //   gradientColors = [Colors.green, Colors.blue];
-      // } else if (clientsCount == 1) {
-      //   gradientColors = [Colors.green, Colors.red, Colors.blue];
-      // } else {
-      //   gradientColors = [Colors.green, Colors.red, Colors.red, Colors.blue];
-      // }
       if(context.isDarkMode){
         gradientColors = [AppColors.PRIMARY_COLOR_DARK, AppColors.blueColor];
       }else{
