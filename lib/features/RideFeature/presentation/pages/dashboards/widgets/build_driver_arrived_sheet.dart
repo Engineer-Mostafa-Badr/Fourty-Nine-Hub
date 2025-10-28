@@ -137,6 +137,8 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                   LocationInfoWidget(
                     from: widget.activeTrip?.from??'',
                     to: widget.activeTrip?.to??'',
+                    wayPointOne: widget.activeTrip?.wayPointOneTitle,
+                    wayPointTwo: widget.activeTrip?.wayPointTwoTitle,
                     hasTitle: true,
                   ),
                   CustomRideButton(text: context.isArabic?"انا وصلت":"I've Arrived",onPressed: (){
@@ -148,7 +150,7 @@ class _BuildDriverArrivedSheetState extends State<BuildDriverArrivedSheet> {
                     runSpacing: 10, // المسافة بين الصفوف
                     alignment: WrapAlignment.center,
                     children: [
-                      CustomRideButton(text: context.isArabic?"انا هنا":"Im Here",onPressed: (){
+                      CustomRideButton(text: context.isArabic?"انا هنا":"I'm Here",onPressed: (){
                         widget.onPressed('imHere');
                       },),
                       CustomRideButton(text: context.isArabic?'مرحبا':'Hello',onPressed: (){

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/create_no_track_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/create_non_track_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_driver_settings_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
@@ -352,7 +353,7 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(
+  Future<Either<Failure, List<AvailableTripEntity>>> getAvailableRideTrips(
       AvailableRideTripsUseCaseParams params) async {
     final data = await rideRemoteDataSource.getAvailableRideTrips(params);
     return data;
@@ -573,6 +574,12 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId}) async {
     return await rideRemoteDataSource.getDriverRatings(driverId: driverId);
+  }
+
+
+  @override
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId}) async {
+    return await rideRemoteDataSource.rejectOfferByClient(offerId: offerId);
   }
 
 }

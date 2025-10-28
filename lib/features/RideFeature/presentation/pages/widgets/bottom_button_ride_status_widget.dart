@@ -111,7 +111,7 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
                         : 'EGP ${FormatNumbers().convertNumberToLocalizedString(widget.price.toString(), isArabic: context.isArabic)} Visa',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: 18,
                 ),
               ),
               const SizedBox(width: 12),
@@ -144,31 +144,89 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
               fontSize: 14,
             ),
           ),
-          if (widget.fromLocation != null)
-            _buildLocationRow(
-              context: context,
-              color: Colors.green,
-              location: widget.fromLocation!,
-            ),
-          if (widget.wayPointOne != null)
-            _buildLocationRow(
-              context: context,
-              color: Colors.red,
-              location: widget.wayPointOne!,
-            ),
-          if (widget.wayPointTwo != null)
-            _buildLocationRow(
-              context: context,
-              color: Colors.blue,
-              location: widget.wayPointTwo!,
-            ),
-          if (widget.toLocation != null)
-            _buildLocationRow(
-              context: context,
-              color: Colors.blue,
-              location: widget.toLocation!,
-            ),
+          const SizedBox(height: 8),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Column(
+                children: [
+                  // From Location
+                  if (widget.fromLocation != null)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: context.isArabic ? 0 : 32,
+                        right: context.isArabic ? 32 : 0,
+                      ),
+                      child: _buildLocationRow(
+                        context: context,
+                        color: Colors.green,
+                        location: widget.fromLocation!,
+                      ),
+                    ),
+
+                  // Waypoint One (if not null)
+                  if (widget.wayPointOne != null) ...[
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: context.isArabic ? 0 : 32,
+                        right: context.isArabic ? 32 : 0,
+                      ),
+                      child: _buildLocationRow(
+                        context: context,
+                        color: Colors.red,
+                        location: widget.wayPointOne!,
+                      ),
+                    ),
+                  ],
+
+                  // Waypoint Two (if not null)
+                  if (widget.wayPointTwo != null) ...[
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: context.isArabic ? 0 : 32,
+                        right: context.isArabic ? 32 : 0,
+                      ),
+                      child: _buildLocationRow(
+                        context: context,
+                        color: Colors.red,
+                        location: widget.wayPointTwo!,
+                      ),
+                    ),
+                  ],
+
+                  // To Location
+                  if (widget.toLocation != null) ...[
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: context.isArabic ? 0 : 32,
+                        right: context.isArabic ? 32 : 0,
+                      ),
+                      child: _buildLocationRow(
+                        context: context,
+                        color: Colors.blue,
+                        location: widget.toLocation!,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+
+              // Stepper Line with Dots (نفس AddStopsWidget بالظبط)
+              Positioned(
+                left: context.isArabic ? null : -10,
+                right: context.isArabic ? -10 : null,
+                top: 0,
+                bottom: 0,
+                child: _buildStepperLine(context),
+              ),
+            ],
+          ),
+          if(widget.showOTP)
           const SizedBox(height: 16),
+          if(widget.showOTP)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -341,35 +399,132 @@ class _BottomRideStatusWidgetState extends State<BottomRideStatusWidget> {
     );
   }
 
+  Widget _buildStepperLine(BuildContext context) {
+    bool showWaypoint1 = widget.wayPointOne != null;
+    bool showWaypoint2 = widget.wayPointTwo != null;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Green dot for "From" location
+          CircleAvatar(
+            backgroundColor: Colors.green,
+            radius: 6,
+            child: const CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 3,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          // Connecting dots
+          ...List.generate(
+            3,
+                (index) => Container(
+              margin: const EdgeInsets.symmetric(vertical: 2),
+              width: 4,
+              height: 4,
+              decoration: BoxDecoration(
+                color: context.isDarkMode
+                    ? Colors.grey[600]
+                    : Colors.grey[400],
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+
+          // Red dot for Waypoint 1 (if shown)
+          if (showWaypoint1) ...[
+            const SizedBox(height: 4),
+            CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 6,
+              child: const CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 3,
+              ),
+            ),
+            const SizedBox(height: 4),
+
+            ...List.generate(
+              3,
+                  (index) => Container(
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                width: 4,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: context.isDarkMode
+                      ? Colors.grey[600]
+                      : Colors.grey[400],
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+
+          // Red dot for Waypoint 2 (if shown)
+          if (showWaypoint2) ...[
+            const SizedBox(height: 4),
+            CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 6,
+              child: const CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 3,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+            ...List.generate(
+              3,
+                  (index) => Container(
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                width: 4,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: context.isDarkMode
+                      ? Colors.grey[600]
+                      : Colors.grey[400],
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 4),
+
+          // Blue dot for "To" location
+          CircleAvatar(
+            backgroundColor: Colors.blue,
+            radius: 6,
+            child: const CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildLocationRow({
     required BuildContext context,
     required Color color,
     required String location,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 12,
-            height: 12,
-            margin: const EdgeInsets.only(top: 2),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              shape: BoxShape.circle,
-              border: Border.all(color: color, width: 2),
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Text(
+            location,
+            style: const TextStyle(fontSize: 14),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              location,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

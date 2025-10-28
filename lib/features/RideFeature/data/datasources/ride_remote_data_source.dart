@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type
 import 'package:fourtyninehub/features/RideFeature/data/models/client/unread_offers_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/cost_per_km_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_info_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_picture_optional_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_statistics_model.dart';
@@ -33,6 +34,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/client/unread
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
@@ -236,7 +238,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
   Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh);
   Future<Either<Failure, bool>> makeRequestTrip();
-  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(
+  Future<Either<Failure, List<AvailableTripEntity>>> getAvailableRideTrips(
       AvailableRideTripsUseCaseParams params);
   Future<Either<Failure, bool>> makeNonTrackingRequestTrip(
       MakeNonTrackingRequestTripUsecaseParam params);
@@ -294,7 +296,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, ClientAllRatingEntity>> getClientAllRating(DriverAllRatingParams params);
 
   Future<Either<Failure, DriverRatingsEntity>> getDriverRatings({required String driverId});
-
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId});
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -1054,7 +1056,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(
+  Future<Either<Failure, List<AvailableTripEntity>>> getAvailableRideTrips(
       AvailableRideTripsUseCaseParams params) async {
     try {
       final response = await _apiConsumer.get(
@@ -1062,8 +1064,8 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data']['trips'] as List)
-            .map((e) => AvailableRideTripModel.fromJson(e))
+        return Right((data['data']['availableTrips'] as List)
+            .map((e) => AvailableTripModel.fromJson(e))
             .toList());
       });
     } catch (e) {
@@ -1759,6 +1761,19 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
           (l) => Left(l),
           (data) {
         return Right(DriverRatingsModel.fromJson(data['data']));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> rejectOfferByClient({required String offerId}) async {
+    final response = await _apiConsumer.put(
+      EndPoints.rejectOfferByClient(offerId: offerId),
+    );
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(data);
       },
     );
   }

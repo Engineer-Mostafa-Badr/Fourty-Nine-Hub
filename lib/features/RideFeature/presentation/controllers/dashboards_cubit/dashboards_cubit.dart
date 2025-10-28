@@ -24,6 +24,7 @@ import 'package:fourtyninehub/core/utils/upload_record.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/refuse_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
@@ -2082,7 +2083,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     print("loadAvailableRideTrips1");
     emit(state.copyWith(availableRideTrips: []));
     currentPage = 1;
-    availableRideTrips.clear();
+    newAvailableRideTrips.clear();
     hasMoreData = true;
     await getAvailableRideTrips(context);
     print("loadAvailableRideTrips2");
@@ -2095,6 +2096,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   int currentPage = 1;
   int pageSize = 10;
   List<AvailableRideTripEntity> availableRideTrips = [];
+  List<AvailableTripEntity> newAvailableRideTrips = [];
 
   Future<void> getAvailableRideTrips(BuildContext context) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -2107,19 +2109,19 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (failure) {
         showErrorMessage(context, getFailureMessage(failure, context));
         isLoadingMore = false;
-        print("objectavailableRideTripsEEEE");
+        print("objectnewAvailableRideTripsEEEE");
         print("Failure");
 
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
       (data) async {
-        List<String> tripIds = data.map((e) => e.id).toList();
+        List<String> tripIds = data.map((e) => e.id??'').toList();
         if (tripIds.isNotEmpty) emitWatchingTrips(tripIds);
         // availableRideTrips.addAll(state.availableRideTrips ?? []);
-        availableRideTrips.addAll(data);
+        newAvailableRideTrips.addAll(data);
         List<RefuseModel> refuseModels = await Storage().getValidModels();
         if (refuseModels.isNotEmpty) {
-          availableRideTrips = availableRideTrips
+          newAvailableRideTrips = newAvailableRideTrips
               .where((element) => !refuseModels.any((e) => e.id == element.id))
               .toList();
         }
@@ -2131,7 +2133,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         isLoadingMore = false;
         emit(state.copyWith(
             status: DashboardsStates.success,
-            availableRideTrips: availableRideTrips));
+            newAvailableRideTrips: newAvailableRideTrips));
       },
     );
   }
