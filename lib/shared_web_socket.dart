@@ -8,7 +8,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class SharedWebSocket {
   static IO.Socket? socket;
   static const String _url = 'https://49backend.com';
-  // static const String _url = 'https://d0e2803e70a6.ngrok-free.app';
+  // static const String _url = 'https://5989016c147a.ngrok-free.app';
 
   static bool _isConnecting = false;
   static Completer<void>? _connectionCompleter;
@@ -25,7 +25,6 @@ class SharedWebSocket {
     if (token == await CacheManager.getAccessToken()) {
       log("Token from connect socket matches cached token: $token");
     }
-
     log("Socket connect start connection...");
     log("Token from connect socket befor connection: $token");
     socket = IO.io(

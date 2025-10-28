@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
-import 'package:lottie/lottie.dart';
-
-import '../../res/assets/assets.dart';
 
 class CustomLoadingSearchWidget extends StatelessWidget {
   const CustomLoadingSearchWidget({

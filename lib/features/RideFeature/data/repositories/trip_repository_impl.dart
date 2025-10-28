@@ -161,6 +161,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  void listenToRemoveOffer(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveOffer(params);
+  }
+
+  @override
   void listenToEndTrip(Function(String tripId) params) {
     remoteDataSource.listenToEndTrip(params);
   }

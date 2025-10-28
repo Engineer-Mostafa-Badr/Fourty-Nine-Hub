@@ -13,7 +13,7 @@ class RequestTripUseCaseParams {
   final List<double> targetLocation;
   final List<double>? wayPointOne;
   final List<double>? wayPointTwo;
-  final int calculateB;
+  final num calculateB;
   final String paymentMethod;
   final int passengers;
   final bool comfort;

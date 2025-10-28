@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
-import 'dart:async';
 
 class LocationService {
   final double distanceThreshold = 0.2;

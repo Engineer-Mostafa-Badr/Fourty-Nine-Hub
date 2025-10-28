@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
+
 import '../../../core/abstract/use_case.dart';
 import '../../../core/error/failure.dart';
-import '../repositories/secrets_repository_contract.dart';
-
 import '../entities/secrets.dart';
+import '../repositories/secrets_repository_contract.dart';
 
 class GetAllSecretsUseCase extends UseCase<Secrets, NoParams> {
   final SecretsRepository _secretsRepository;

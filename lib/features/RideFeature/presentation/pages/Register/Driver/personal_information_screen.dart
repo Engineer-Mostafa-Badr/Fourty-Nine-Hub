@@ -150,6 +150,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         },
         child: CustomScaffold(
           enableCustomAppBar: true,
+          resizeToAvoidBottomInset: false,
           appBar: BackAppBar(
             label: widget.params.isShipping==true?(context.isArabic?'تسجيل سائق نقل':'Truck Register'):(context.isArabic?'تسجيل سائق سيارة':'Ride Register'),
           ),
@@ -265,6 +266,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       // widget.onDateChanged(index?.toIso8601String());
                                       String formattedDate = DateFormat('yyyy-MM-dd', context.isArabic?'ar':'en').format(date!);
                                       cubit.rideDateOfBirthController.text =formattedDate;
+                                      cubit.formKey.currentState?.validate();
                                       // widget.controller.text = dateFormat.format(index);
                                       debugPrint("widget.controller.text${cubit.rideDateOfBirthController.text}");
                                       // cubit.rideDateOfBirthController.text = DateFormat('yyyy-MM-dd').format(date ?? DateTime.now());

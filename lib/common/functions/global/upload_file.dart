@@ -22,11 +22,11 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_compress/video_compress.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
-import 'package:video_compress/video_compress.dart';
 
 class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(

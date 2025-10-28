@@ -19,8 +19,8 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../domain/entities/session_entity.dart';
 
 class LogoutWidget extends StatefulWidget {
-  const LogoutWidget({super.key});
-
+  const LogoutWidget({super.key, required this.refreshToken});
+  final String refreshToken;
   @override
   State<LogoutWidget> createState() => _LogoutWidgetState();
 }
@@ -65,7 +65,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 onPressed: () async {
                   ManageVibration.vibrate();
-                  await controller.logout(context);
+                  await controller.logout(context,refreshToken: widget.refreshToken);
                   //Phoenix.rebirth(context);
                   // setState(() {});
                   // context.pop();

@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import '../core/service/storage.dart';
 import 'package:vibration/vibration.dart';
+
+import '../core/service/storage.dart';
 
 class ManageVibration {
   static Future<void> vibrate() async {

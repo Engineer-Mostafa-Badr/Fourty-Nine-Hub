@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/find_media_id.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
@@ -25,6 +24,7 @@ import 'package:fourtyninehub/core/utils/upload_record.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/refuse_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
@@ -49,6 +49,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/li
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_end_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_partial_payment_driver_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/listen_to_accept_loading_trip_offer_use_case.dart';
@@ -65,7 +66,6 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/fo
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/new_trip_join/domain/usecases/driver/listen_to_client_coming_use_case.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
@@ -179,6 +179,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       listenToAcceptUntrackedTripOfferUseCase;
   final ListenToEndTripUseCase listenToEndTripUseCase;
   final ListenToPartialPaymentDriverUseCase listenToPartialPaymentDriverUseCase;
+  final ListenToRemoveOfferUseCase listenToRemoveOfferUseCase;
   final AddRateWithDriverUseCase addRateWithDriverUseCase;
   final terminalExaminationFormKey = GlobalKey<FormState>();
   final GetRideGovernoratesUseCase getRideGovernoratesUseCase;
@@ -266,6 +267,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToRemoveLoadingUseCase,
       this.listenToAvailableLoadingUseCase,
       this.updateDriverRateLoadingNonSocketUseCase,
+      this.listenToRemoveOfferUseCase,
       this.addRateWithDriverLoadingUseCase)
       : super(const DashboardsState());
   TextEditingController rideVehicleExpireDateController =
@@ -1791,7 +1793,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       if (params.isSocket == true) {
         loadAvailableRideTrips(context);
         getSettings(context);
-      } else if (params.modeType == "ride" && settings?.isReady == true) {
+      } else if (params.modeType == "ride") {
         loadInitialAvailableNonSocketTrips();
       } else if (params.modeType == "truck") {
         loadInitialAvailableNonSocketLoading();
@@ -1871,8 +1873,24 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           currentContext,
           currentContext.isArabic
               ? 'تم إلغاء الرحلة من قبل العميل'
-              : 'Trip has been canceled by the customer');
+              : 'Trip has been canceled by the client');
       changeIndex(0, currentContext, params);
+      emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
+    });
+  }
+
+  void listenToRemoveOffer() {
+    CliLogger.info('Remove Offer');
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    // TripsResponseEntity
+    listenToRemoveOfferUseCase((tripId) {
+      log("removeOfferId $tripId");
+      showErrorMessage(
+          currentContext,
+          currentContext.isArabic
+              ? 'تم إلغاء العرض من قبل العميل'
+              : 'Offer has been canceled by the client');
       emit(state.copyWith(status: DashboardsStates.success, tripStatus: ''));
     });
   }
@@ -2065,7 +2083,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     print("loadAvailableRideTrips1");
     emit(state.copyWith(availableRideTrips: []));
     currentPage = 1;
-    availableRideTrips.clear();
+    newAvailableRideTrips.clear();
     hasMoreData = true;
     await getAvailableRideTrips(context);
     print("loadAvailableRideTrips2");
@@ -2078,6 +2096,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   int currentPage = 1;
   int pageSize = 10;
   List<AvailableRideTripEntity> availableRideTrips = [];
+  List<AvailableTripEntity> newAvailableRideTrips = [];
 
   Future<void> getAvailableRideTrips(BuildContext context) async {
     if (!hasMoreData || isLoadingMore) return;
@@ -2090,19 +2109,19 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (failure) {
         showErrorMessage(context, getFailureMessage(failure, context));
         isLoadingMore = false;
-        print("objectavailableRideTripsEEEE");
+        print("objectnewAvailableRideTripsEEEE");
         print("Failure");
 
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
       (data) async {
-        List<String> tripIds = data.map((e) => e.id).toList();
+        List<String> tripIds = data.map((e) => e.id??'').toList();
         if (tripIds.isNotEmpty) emitWatchingTrips(tripIds);
         // availableRideTrips.addAll(state.availableRideTrips ?? []);
-        availableRideTrips.addAll(data);
+        newAvailableRideTrips.addAll(data);
         List<RefuseModel> refuseModels = await Storage().getValidModels();
         if (refuseModels.isNotEmpty) {
-          availableRideTrips = availableRideTrips
+          newAvailableRideTrips = newAvailableRideTrips
               .where((element) => !refuseModels.any((e) => e.id == element.id))
               .toList();
         }
@@ -2114,7 +2133,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         isLoadingMore = false;
         emit(state.copyWith(
             status: DashboardsStates.success,
-            availableRideTrips: availableRideTrips));
+            newAvailableRideTrips: newAvailableRideTrips));
       },
     );
   }
@@ -2719,13 +2738,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       required Function() onSuccess,
       required String subCategoryId}) async {
     showLoadingDialog(context);
-    Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    // Position currentPosition = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
     final response = await createRiderOfferUseCase(CreateRiderOfferParams(
         tripId: tripId,
         price: price,
-        lat: currentPosition.latitude,
-        lng: currentPosition.longitude));
+        lat: 31.2802521,
+        lng: 31.6774589));
     response.fold((l) {
       final currentContext =
           AppPages.router.configuration.navigatorKey.currentContext!;

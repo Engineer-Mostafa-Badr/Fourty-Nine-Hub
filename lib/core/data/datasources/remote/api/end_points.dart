@@ -90,6 +90,8 @@ class EndPoints {
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
 
+  static rejectOfferByClient({required String offerId}) => '/ride/client/tracking/offers/$offerId/reject';
+
   static String friendsList(TwitterFeedParams params) =>
       '/friends/allFriends?search=${params.search}&page=${params.page}&limit=${params.limit}';
 
@@ -1676,7 +1678,7 @@ class EndPoints {
   }
 
   static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
-    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
+    return '/ride/driver/trips/available?page=${params.page}&limit=${params.limit}';
   }
 
   static String acceptOfferByClient(String offerId) {

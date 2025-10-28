@@ -2,14 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FindMediaId{

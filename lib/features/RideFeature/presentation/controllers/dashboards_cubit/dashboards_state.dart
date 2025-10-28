@@ -50,6 +50,7 @@ class DashboardsState
   final SettingsDashboardEntity? settings;
   final int? currentIndex;
   final List<AvailableRideTripEntity>? availableRideTrips;
+  final List<AvailableTripEntity>? newAvailableRideTrips;
   final String? tripStatus;
   final String? lastStatus;
   final bool? isChangedMindReason;
@@ -98,6 +99,7 @@ class DashboardsState
       this.status = DashboardsStates.initState,
       this.availableTrips,
       this.availableRideTrips,
+      this.newAvailableRideTrips,
       this.availableRideNonSocketTrips,
       this.acceptedRideNonSocketTrips,
       this.personalFrontMediaId,
@@ -143,6 +145,7 @@ class DashboardsState
       List<TripEntity>? pastTrips,
       List<TripEntity>? availableTrips,
       List<AvailableRideTripEntity>? availableRideTrips,
+      List<AvailableTripEntity>? newAvailableRideTrips,
       SettingsDashboardEntity? settings,
       int? currentIndex,
         String? tripStatus,
@@ -196,6 +199,7 @@ class DashboardsState
       currentIndex: currentIndex ?? this.currentIndex,
       availableTrips: availableTrips ?? this.availableTrips,
       availableRideTrips: availableRideTrips ?? this.availableRideTrips,
+      newAvailableRideTrips: newAvailableRideTrips ?? this.newAvailableRideTrips,
       availableRideNonSocketTrips: availableRideNonSocketTrips ?? this.availableRideNonSocketTrips,
       acceptedRideNonSocketTrips: acceptedRideNonSocketTrips ?? this.acceptedRideNonSocketTrips,
       pastRideNonSocketTrips: pastRideNonSocketTrips ?? this.pastRideNonSocketTrips,

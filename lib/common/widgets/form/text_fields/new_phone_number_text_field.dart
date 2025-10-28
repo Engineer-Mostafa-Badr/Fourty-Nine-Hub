@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/utils/validator.dart';
 import 'abstract/main_text_form_field.dart';

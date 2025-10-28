@@ -18,7 +18,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../helpers/manage_vibration.dart';
 import '../../stateless/buttons/iconAppButton.dart';
 
 class MainCategoryBanner extends StatefulWidget {
