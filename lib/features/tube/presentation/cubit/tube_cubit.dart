@@ -1516,6 +1516,14 @@ class TubeCubit extends Cubit<TubeState> {
           return v;
         }).toList();
 
+        myTubeVideos = myTubeVideos.map((v) {
+          if (v.id == videoId) {
+            return v.copyWith(isFavorite: !isCurrentlyFavorite);
+          }
+          return v;
+        }).toList();
+
+
         // ✅ Update searchTubeVideos
         searchTubeVideos = searchTubeVideos.map((v) {
           if (v.id == videoId) {
