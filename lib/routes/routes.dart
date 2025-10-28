@@ -649,5 +649,4 @@ abstract class Paths {
   static const auctionWinnersScreen =  'AuctionWinnersScreen';
   static const spotLightScreen =  'SpotLightScreen';
   static const tubeScreens =  'TubeScreens';
-
 }
