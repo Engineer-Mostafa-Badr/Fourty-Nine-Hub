@@ -200,6 +200,7 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
         "foodName": element.foodName,
         "picture": element.photo,
         "price": element.price,
+        "description": element.description,
       };
       mneu.add(toMap);
     });

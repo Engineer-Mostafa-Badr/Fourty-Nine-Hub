@@ -107,12 +107,20 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
 
   final foodNameController = TextEditingController();
   final priceController = TextEditingController();
+  final descriptionController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  // Reset image after adding menu item
+  void resetImage() {
+    imageId = "";
+    emit(RestaurantMenuImagePicked(""));
+  }
 
   @override
   Future<void> close() {
     priceController.dispose();
     foodNameController.dispose();
+    descriptionController.dispose();
     imageId = "";
     return super.close();
   }

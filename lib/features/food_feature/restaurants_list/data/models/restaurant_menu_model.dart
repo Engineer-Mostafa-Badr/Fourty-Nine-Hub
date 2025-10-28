@@ -10,6 +10,7 @@ class RestaurantMenuModel extends RestaurantMenu {
     super.price,
     super.picture,
     super.photo,
+    super.description,
     this.photoPath,
   });
 
@@ -36,6 +37,9 @@ class RestaurantMenuModel extends RestaurantMenu {
     if (price != null) {
       result.addAll({'price': price});
     }
+    if (description != null) {
+      result.addAll({'description': description});
+    }
 
     if (photo != null) {
       result.addAll({'picture': photo});
@@ -51,6 +55,7 @@ class RestaurantMenuModel extends RestaurantMenu {
       restaurantId: map['restaurantId'],
       foodName: map['foodName'],
       price: map['price']?.toDouble(),
+      description: map['description'],
       picture: map['picture'] != null
           ? map['picture'] is String
               ? map['picture']
@@ -66,7 +71,7 @@ class RestaurantMenuModel extends RestaurantMenu {
 
   @override
   String toString() {
-    return 'RestaurantMenuModel(id: $id, restaurantId: $restaurantId, foodName: $foodName, price: $price, picture: $picture)';
+    return 'RestaurantMenuModel(id: $id, restaurantId: $restaurantId, foodName: $foodName, price: $price, picture: $picture, description: $description)';
   }
 
   @override
@@ -80,6 +85,7 @@ class RestaurantMenuModel extends RestaurantMenu {
         other.restaurantId == restaurantId &&
         other.foodName == foodName &&
         other.price == price &&
+        other.description == description &&
         other.picture == picture;
   }
 
@@ -89,6 +95,7 @@ class RestaurantMenuModel extends RestaurantMenu {
         restaurantId.hashCode ^
         foodName.hashCode ^
         price.hashCode ^
+        description.hashCode ^
         picture.hashCode;
   }
 }

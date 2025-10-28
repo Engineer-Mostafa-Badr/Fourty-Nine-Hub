@@ -34,8 +34,8 @@ class _CreateRestaurantProfilePhotoPickerState
 
     return BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
       builder: (context, state) {
-        // سنختصر الوصول للصور والمصفوفة هنا
-        final images = createRestaurantCubit.restaurantImages;
+        // سنختصر الوصول للصور والمصفوفة هنا - نأخذ نسخة جديدة
+        final images = List<XFile>.from(createRestaurantCubit.restaurantImages);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,14 +63,14 @@ class _CreateRestaurantProfilePhotoPickerState
                       isAddBox: isAddBox,
                       image: isAddBox ? null : images[index],
                       onTap: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
 
                         await createRestaurantCubit.uploadProfileImage(
                           context: context,
-                          subcategoryId: widget.subcategoryId ?? "62c8babb8e28a58a3edf581d",
+                          subcategoryId: widget.subcategoryId ??
+                              "62c8babb8e28a58a3edf581d",
                           index: isAddBox ? null : index,
                         );
-                        setState(() {});
                       },
                       onDelete: isAddBox
                           ? null
@@ -83,7 +83,7 @@ class _CreateRestaurantProfilePhotoPickerState
                               createRestaurantCubit
                                       .createRestaurantParams.restaurantMedia =
                                   createRestaurantCubit.restaurantImagesIds;
-                              setState(() {});
+                              createRestaurantCubit.refreshUI();
                             },
                     ),
                   );
@@ -102,12 +102,12 @@ class _CreateRestaurantProfilePhotoPickerState
                     width: 210.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color:AppColors.getRedColor(context),
+                      color: AppColors.getRedColor(context),
                     ),
                     child: IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         // لو isAddBox = true => إضافة جديدة
                         // لو false => استبدال الصورة
                         await createRestaurantCubit.uploadProfileImage(
@@ -115,7 +115,6 @@ class _CreateRestaurantProfilePhotoPickerState
                           subcategoryId: widget.subcategoryId,
                           //   index: isAddBox ? null : index,
                         );
-                        setState(() {});
                       },
                       icon: Icon(Icons.add),
                       color: Colors.black,
@@ -154,19 +153,18 @@ Widget buildPhotoBox({
             borderRadius: BorderRadius.circular(20),
             child: File(image.path).existsSync()
                 ? Image.file(
-              File(image.path),
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.fill,
-            )
+                    File(image.path),
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
+                  )
                 : Image.asset(
-              Assets.icon, // replace with your fallback asset
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.fill,
-            ),
+                    Assets.icon, // replace with your fallback asset
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
+                  ),
           ),
-
 
         // 2) InkWell الكبير ليجعل الصندوق بأكمله قابلاً للنقر (إضافة / استبدال صورة)
         Material(
@@ -176,7 +174,13 @@ Widget buildPhotoBox({
             borderRadius: BorderRadius.circular(20),
             child: Center(
               child: isAddBox
-                  ? SvgPicture.asset(Assets.cameraSvg,color:context.isDarkMode?Colors.white:null,)
+                  ? SvgPicture.asset(
+                      Assets.cameraSvg,
+                      colorFilter: context.isDarkMode
+                          ? const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn)
+                          : null,
+                    )
                   : const SizedBox.shrink(),
             ),
           ),

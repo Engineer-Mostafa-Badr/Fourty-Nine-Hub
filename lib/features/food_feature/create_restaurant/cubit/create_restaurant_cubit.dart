@@ -149,6 +149,11 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
       this._updateRestaurantUseCase)
       : super(CreateRestaurantInitial());
 
+  // Method to refresh UI from outside the cubit
+  void refreshUI() {
+    emit(CreateRestaurantRefreshUI());
+  }
+
   @override
   Future<void> close() {
     name.dispose();

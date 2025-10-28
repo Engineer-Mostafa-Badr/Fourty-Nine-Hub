@@ -101,125 +101,121 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
                 label: LocaleKeys.restaurantMode.localize,
               ),
               body: BlocBuilder<RestaurantDashboardCubit,
-                      RestaurantDashboardState>(
-                  builder: (context, state) {
-                    return Column(
-                      children: [
-                        // const Sizer(),
-                        // Align(
-                        //     alignment: AlignmentDirectional.topStart,
-                        //     child: Padding(
-                        //       padding:
-                        //           const EdgeInsets.symmetric(horizontal: 6.0),
-                        //       child: Text(
-                        //         LocaleKeys.restaurantMode.localize,
-                        //         style: Styles.headerText(fontSize: 40),
-                        //       ),
-                        //     )),
-                        Container(
-                          color:
-                              context.isDarkMode ? Colors.black : Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: Row(
-                            children: List.generate(3, (index) {
-                              final labels = [
-                                context.isArabic
-                                    ? 'طلبات متاحة'
-                                    : LocaleKeys.availableRequest.localize,
-                                context.isArabic
-                                    ? 'طلبات سابقة'
-                                    : LocaleKeys.pastRequests.localize,
-                                '', // Empty for icon tab
-                              ];
+                  RestaurantDashboardState>(builder: (context, state) {
+                return Column(
+                  children: [
+                    // const Sizer(),
+                    // Align(
+                    //     alignment: AlignmentDirectional.topStart,
+                    //     child: Padding(
+                    //       padding:
+                    //           const EdgeInsets.symmetric(horizontal: 6.0),
+                    //       child: Text(
+                    //         LocaleKeys.restaurantMode.localize,
+                    //         style: Styles.headerText(fontSize: 40),
+                    //       ),
+                    //     )),
+                    Container(
+                      color: context.isDarkMode ? Colors.black : Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Row(
+                        children: List.generate(3, (index) {
+                          final labels = [
+                            context.isArabic
+                                ? 'طلبات متاحة'
+                                : LocaleKeys.availableRequest.localize,
+                            context.isArabic
+                                ? 'طلبات سابقة'
+                                : LocaleKeys.pastRequests.localize,
+                            '', // Empty for icon tab
+                          ];
 
-                              return Expanded(
-                                child: AnimatedBuilder(
-                                  animation: _tabController,
-                                  builder: (context, _) {
-                                    final isSelected =
-                                        _tabController.index == index;
+                          return Expanded(
+                            child: AnimatedBuilder(
+                              animation: _tabController,
+                              builder: (context, _) {
+                                final isSelected =
+                                    _tabController.index == index;
 
-                                    // For the third tab (Settings/Filter), show icon
-                                    if (index == 2) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 2),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            ManageVibration.vibrate();
-                                            _tabController.animateTo(index);
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.only(top: 10.h),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5.h),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(40.h),
-                                              color: isSelected
-                                                  ? AppColors
-                                                      .getButtonPrimaryColor(
-                                                          context)
-                                                  : AppColors.getFillColor(
-                                                      context),
-                                              border: Border.all(
-                                                color: AppColors
-                                                    .getButtonPrimaryColor(
-                                                        context),
-                                                width: 2,
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.tune,
-                                                color: isSelected
-                                                    ? (context.isDarkMode
-                                                        ? Colors.black
-                                                        : Colors.white)
-                                                    : AppColors.getTextColor(
-                                                        context),
-                                              ),
-                                            ),
+                                // For the third tab (Settings/Filter), show icon
+                                if (index == 2) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ManageVibration.vibrate();
+                                        _tabController.animateTo(index);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 10.h),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40.h),
+                                          color: isSelected
+                                              ? AppColors.getButtonPrimaryColor(
+                                                  context)
+                                              : AppColors.getFillColor(context),
+                                          border: Border.all(
+                                            color:
+                                                AppColors.getButtonPrimaryColor(
+                                                    context),
+                                            width: 2,
                                           ),
                                         ),
-                                      );
-                                    }
-
-                                    // For normal tabs
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 2),
-                                      child: TabWidget(
-                                        textSize: 18,
-                                        title: labels[index],
-                                        selected: isSelected,
-                                        onTap: () {
-                                          ManageVibration.vibrate();
-                                          _tabController.animateTo(index);
-                                        },
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.tune,
+                                            color: isSelected
+                                                ? (context.isDarkMode
+                                                    ? Colors.black
+                                                    : Colors.white)
+                                                : AppColors.getTextColor(
+                                                    context),
+                                          ),
+                                        ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: [
-                              const AvailableRequestFood(),
-                              const PastRequestFood(),
-                              RestaurantSettingScreen(widget: widget),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
+                                    ),
+                                  );
+                                }
+
+                                // For normal tabs
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  child: TabWidget(
+                                    textSize: 18,
+                                    title: labels[index],
+                                    selected: isSelected,
+                                    onTap: () {
+                                      ManageVibration.vibrate();
+                                      _tabController.animateTo(index);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        // physics: const NeverScrollableScrollPhysics(),
+                        controller: _tabController,
+                        children: [
+                          const AvailableRequestFood(),
+                          const PastRequestFood(),
+                          RestaurantSettingScreen(widget: widget),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
             )));
   }
 }
@@ -259,13 +255,16 @@ class RestaurantSettingScreen extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Label(
-                        text: state.isRestaurant?.isActive ?? false
+                        text: state.isRestaurant?.isRestaurant == 'active' &&
+                                state.isRestaurant?.status == true
                             ? LocaleKeys.ready.localize
                             : LocaleKeys.notAvailable.localize,
                         style: Styles.headerText(),
                       )),
                       CustomSwitchButton(
-                        value: state.isRestaurant?.isActive ?? false,
+                        value: state.isRestaurant?.isRestaurant == 'active'
+                            ? true
+                            : false,
                         onChanged: (v) => _showActivationDialog(context, v),
                       )
                     ],

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,6 @@ import 'restaurant_photo_picker.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
   const CreateRestaurantLicensePhotoPicker({super.key});
 
@@ -22,6 +20,11 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
 
     return BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
       builder: (context, state) {
+        // اقرأ القيم من الـ Cubit مرة واحدة في بداية الـ builder
+        final licenseFirstPage = createRestaurantCubit.licenseFirstPage;
+        final licenseSecondPage = createRestaurantCubit.licenseSecondPage;
+        final licenseThirdPage = createRestaurantCubit.licenseThirdPage;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,9 +50,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     label: context.isArabic ? 'الصفحة الأولي' : 'First Page',
                     onTap: () => createRestaurantCubit
                         .uploadLicenseFirstPageImage(context: context),
-                    // سنبحث عن الملف (XFile) داخل state
-                    fileIfAny:
-                        context.read<CreateRestaurantCubit>().licenseFirstPage,
+                    // استخدم القيمة المحفوظة من الـ builder
+                    fileIfAny: licenseFirstPage,
                     onDelete: () {
                       // طالما أننا لا نحتفظ بملف مستقل للصفحة الأولى في الـCubit
                       // يكفي حذف العنصر الأول من licensRestaurantImagesIds (إن وُجد)
@@ -60,8 +62,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                         createRestaurantCubit
                             .createRestaurantParams.licenseMedia = licList;
                       }
-
-                      createRestaurantCubit.emit(CreateRestaurantRefreshUI());
+                      createRestaurantCubit.licenseFirstPage = null;
+                      createRestaurantCubit.refreshUI();
                     },
                   ),
                 ),
@@ -76,8 +78,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     label: context.isArabic ? 'الصفحة الثانية' : 'Second Page',
                     onTap: () => createRestaurantCubit
                         .uploadLicenseSecondPageImage(context: context),
-                    fileIfAny:
-                        context.read<CreateRestaurantCubit>().licenseSecondPage,
+                    fileIfAny: licenseSecondPage,
                     onDelete: () {
                       final licList =
                           createRestaurantCubit.licensRestaurantImagesIds;
@@ -86,7 +87,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                         createRestaurantCubit
                             .createRestaurantParams.licenseMedia = licList;
                       }
-                      createRestaurantCubit.emit(CreateRestaurantRefreshUI());
+                      createRestaurantCubit.licenseSecondPage = null;
+                      createRestaurantCubit.refreshUI();
                     },
                   ),
                 ),
@@ -101,8 +103,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                     label: context.isArabic ? 'الصفحة الثالثة' : 'Third Page',
                     onTap: () => createRestaurantCubit
                         .uploadLicenseThiredPageImage(context: context),
-                    fileIfAny:
-                        context.read<CreateRestaurantCubit>().licenseThirdPage,
+                    fileIfAny: licenseThirdPage,
                     onDelete: () {
                       final licList =
                           createRestaurantCubit.licensRestaurantImagesIds;
@@ -111,7 +112,8 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                         createRestaurantCubit
                             .createRestaurantParams.licenseMedia = licList;
                       }
-                      createRestaurantCubit.emit(CreateRestaurantRefreshUI());
+                      createRestaurantCubit.licenseThirdPage = null;
+                      createRestaurantCubit.refreshUI();
                     },
                   ),
                 ),
@@ -125,8 +127,11 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 5, left: 5, top: 5.0),
                 child: Text(
-                  context.isArabic?'يجب عليك تحميل الصفحات الثلاث للسجل التجاري!':LocaleKeys.youHaveToUploadThe3PagesOfCommercialRegistration
-                      .localize,
+                  context.isArabic
+                      ? 'يجب عليك تحميل الصفحات الثلاث للسجل التجاري!'
+                      : LocaleKeys
+                          .youHaveToUploadThe3PagesOfCommercialRegistration
+                          .localize,
                   style: const TextStyle(color: Colors.red),
                 ),
               ),

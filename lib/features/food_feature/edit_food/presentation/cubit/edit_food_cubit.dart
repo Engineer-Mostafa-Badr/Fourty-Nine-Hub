@@ -116,8 +116,10 @@ class EditFoodCubit extends Cubit<EditFoodState> {
       });
     } else {
       emit(state.copyWith(
-          isResturant:
-              IsRestaurantModel(isRestaurant: false, approved: false)));
+          isResturant: IsRestaurantModel(
+        isRestaurant: false,
+        
+      )));
     }
   }
 

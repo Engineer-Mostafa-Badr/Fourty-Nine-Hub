@@ -138,7 +138,7 @@ class CreateRestaurantParams {
       result.addAll({'ownerIdFrontMedia': ownerIdFrontMedia});
     }
     if (mneu != null) {
-      result.addAll({'mneu': mneu!.map((x) => x.toJson()).toList()});
+      result.addAll({'menu': mneu!.map((x) => x.toMap()).toList()});
     }
 
     return result;

@@ -34,20 +34,24 @@ class RestaurantResponseModel {
       RestaurantResponseModel.fromMap(json.decode(source));
 }
 
-// Updated IsRestaurantModel to include isActive
+// Updated IsRestaurantModel to include rejection/block/ban details
 class IsRestaurantModel {
   final bool? isRestaurant;
-  final bool? approved;
+  final String? status; // pending, approved, rejected, blocked, banned
   final String? restaurantId;
   final String? subCategoryId;
-  final bool? isActive; // New field
+  final String? reason; // Reason for rejection/block/ban
+  final String? bannedUntil; // Date when ban expires
+  final int? banDurationDays; // Ban duration in days
 
   IsRestaurantModel({
     this.isRestaurant,
-    this.approved,
+    this.status,
     this.restaurantId,
     this.subCategoryId,
-    this.isActive, // Include in constructor
+    this.reason,
+    this.bannedUntil,
+    this.banDurationDays,
   });
 
   // Convert the model to a map
@@ -57,8 +61,8 @@ class IsRestaurantModel {
     if (isRestaurant != null) {
       result.addAll({'isRestaurant': isRestaurant});
     }
-    if (approved != null) {
-      result.addAll({'Approved': approved});
+    if (status != null) {
+      result.addAll({'status': status});
     }
     if (restaurantId != null) {
       result.addAll({'restaurantId': restaurantId});
@@ -66,9 +70,14 @@ class IsRestaurantModel {
     if (subCategoryId != null) {
       result.addAll({'subCategoryId': subCategoryId});
     }
-    if (isActive != null) {
-      // Add isActive to the map
-      result.addAll({'isActive': isActive});
+    if (reason != null) {
+      result.addAll({'reason': reason});
+    }
+    if (bannedUntil != null) {
+      result.addAll({'bannedUntil': bannedUntil});
+    }
+    if (banDurationDays != null) {
+      result.addAll({'banDurationDays': banDurationDays});
     }
 
     return result;
@@ -78,10 +87,12 @@ class IsRestaurantModel {
   factory IsRestaurantModel.fromMap(Map<String, dynamic> map) {
     return IsRestaurantModel(
       isRestaurant: map['isRestaurant'],
-      approved: map['Approved'],
+      status: map['status'],
       restaurantId: map['restaurantId'],
       subCategoryId: map['subCategoryId'],
-      isActive: map['isActive'], // Parse isActive
+      reason: map['reason'],
+      bannedUntil: map['bannedUntil'],
+      banDurationDays: map['banDurationDays'],
     );
   }
 
@@ -94,7 +105,7 @@ class IsRestaurantModel {
 
   @override
   String toString() {
-    return 'IsRestaurantModel(isRestaurant: $isRestaurant, Approved: $approved, restaurantId: $restaurantId,subCategoryId:$subCategoryId, isActive: $isActive)';
+    return 'IsRestaurantModel(isRestaurant: $isRestaurant, status: $status, restaurantId: $restaurantId, subCategoryId: $subCategoryId, reason: $reason, bannedUntil: $bannedUntil, banDurationDays: $banDurationDays)';
   }
 
   @override
@@ -103,18 +114,22 @@ class IsRestaurantModel {
 
     return other is IsRestaurantModel &&
         other.isRestaurant == isRestaurant &&
-        other.approved == approved &&
+        other.status == status &&
         other.restaurantId == restaurantId &&
         other.subCategoryId == subCategoryId &&
-        other.isActive == isActive; // Check isActive
+        other.reason == reason &&
+        other.bannedUntil == bannedUntil &&
+        other.banDurationDays == banDurationDays;
   }
 
   @override
   int get hashCode {
     return isRestaurant.hashCode ^
-        approved.hashCode ^
+        status.hashCode ^
         restaurantId.hashCode ^
         subCategoryId.hashCode ^
-        isActive.hashCode; // Include isActive in hashCode
+        reason.hashCode ^
+        bannedUntil.hashCode ^
+        banDurationDays.hashCode;
   }
 }

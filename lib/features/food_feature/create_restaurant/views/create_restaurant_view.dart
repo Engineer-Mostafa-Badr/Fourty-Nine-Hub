@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../common/widgets/stateless/labels/info_text.dart';
@@ -26,7 +27,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../routes/routes.dart';
 import '../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
@@ -85,148 +85,145 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
         }
       },
       child: CustomScaffold(
-          appBar: const HomeAppbar(
-            isWithBackArrow: true,
+          // appBar: const HomeAppbar(
+          //   isWithBackArrow: true,
+          // ),
+          enableCustomAppBar: true,
+          appBar: BackAppBar(
+            label: context.isArabic ? 'تسجيل مطعم' : 'Register Restaurant',
           ),
           body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
               builder: (context, state) {
-            if (state is CreateRestaurantLoading) {
-              return const Center(
-                child: CustomCircularProgressIndicator(),
-              );
-            } else {
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+            // لا نعرض loading هنا لأن الـ BlocListener بيعرضه في dialog
+            // لو عرضناه هنا، الصفحة كلها هتختفي وتظهر loading فقط
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            ManageVibration.vibrate();
+                            setState(() {
+                              editFood = false;
+                            });
+                          },
+                          child: Text(
+                            widget.from == 'update'
+                                ? LocaleKeys.updateYourRestaurant.localize
+                                : context.isArabic
+                                    ? 'مرحباً بك في تسجيل مطعم'
+                                    : LocaleKeys.welcomeToResturantRegisteration
+                                        .tr(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Styles.headerText(
+                                color: AppColors.getRedColor(context)),
+                          ),
+                        ),
+                      ),
+                      if (widget.from == 'update')
+                        ElevatedAppButton(
+                          label: LocaleKeys.editFood.localize,
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.push(Routes.EditFoodView,
+                                extra: EditFoodParams(
+                                    restaurantId: widget.restaurantId ?? '',
+                                    subCategoryId: widget.subcategoryId ?? ''));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => BlocProvider.value(
+                            //         value: serviceLocator<RestaurantDetailsCubit>(),
+                            //         child:
+                            //             EditFoodView(payload: widget.restaurantId!),
+                            //       ),
+                            //     ));
+                            setState(() {
+                              editFood = true;
+                            });
+                          },
+                          textStyle: Styles.mediumText(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )
+                    ],
+                  ),
+                  Sizer(height: 32.h),
+                  const CreateRestaurantSubcategoryDropdown(),
+                  Sizer(height: 20.h),
+                  CreateRestaurantNameField(
+                    focusNode: nameFocusNode,
+                  ),
+                  Sizer(height: 20.h),
+                  CreateRestaurantNumberField(restaurantNumber: ''),
+                  Sizer(height: 20.h),
+                  CreateRestaurantProfilePhotoPicker(
+                    subcategoryId: widget.subcategoryId,
+                  ),
+                  Sizer(height: 20.h),
+                  if (widget.from != 'update')
+                    const CreateRestaurantLicensePhotoPicker(),
+                  Sizer(height: 30.h),
+                  CreateRestaurantGovernorateDropdown(
+                    onSelected: (value) {
+                      if (value != null) {
+                        context
+                            .read<CreateRestaurantCubit>()
+                            .selectGovernorate(value);
+                      }
+                    },
+                  ),
+                  Sizer(height: 20.h),
+                  const CreateRestaurantCitiesDropdowns(),
+                  Sizer(height: 20.h),
+
+                  /// menu
+                  if (widget.from != 'update')
+                    BlocProvider(
+                      create: (_) => RestaurantMenuCubit(serviceLocator()),
+                      child: ShowMneu(),
+                    ),
+                  Sizer(height: 20.h),
+
+                  AppInfoText(
+                      text: LocaleKeys
+                          .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
+                          .tr()),
+                  Sizer(height: 20.h),
+                  AppInfoText(
+                      text: LocaleKeys
+                          .youWillGetEGP3650PerYearIfYouSubscribeDaily
+                          .tr()),
+                  Sizer(height: 20.h),
+                  if (widget.from == 'update')
                     Row(
                       children: [
                         Expanded(
-                          child: InkWell(
-                            onTap: () {
+                          child: ElevatedAppButton(
+                            onPressed: () async {
                               ManageVibration.vibrate();
-                              setState(() {
-                                editFood = false;
-                              });
+                              var res = await context
+                                  .read<CreateRestaurantCubit>()
+                                  .updateRestaurant1(context);
+                              // if (res == 'success') {
+                              //   Navigator.pop(context);
+                              // }
                             },
-                            child: Text(
-                              widget.from == 'update'
-                                  ? LocaleKeys.updateYourRestaurant.localize
-                                  : context.isArabic
-                                      ? 'مرحباً بك في تسجيل مطعم'
-                                      : LocaleKeys
-                                          .welcomeToResturantRegisteration
-                                          .tr(),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Styles.headerText(
-                                  color: AppColors.getRedColor(context)),
-                            ),
+                            label: LocaleKeys.update.tr(),
+                            textStyle: Styles.headerText(color: Colors.white),
                           ),
                         ),
-                        if (widget.from == 'update')
-                          ElevatedAppButton(
-                            label: LocaleKeys.editFood.localize,
-                            onPressed: () {
-                              ManageVibration.vibrate();
-                              context.push(Routes.EditFoodView,
-                                  extra: EditFoodParams(
-                                      restaurantId: widget.restaurantId ?? '',
-                                      subCategoryId:
-                                          widget.subcategoryId ?? ''));
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => BlocProvider.value(
-                              //         value: serviceLocator<RestaurantDetailsCubit>(),
-                              //         child:
-                              //             EditFoodView(payload: widget.restaurantId!),
-                              //       ),
-                              //     ));
-                              setState(() {
-                                editFood = true;
-                              });
-                            },
-                            textStyle: Styles.mediumText(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )
                       ],
-                    ),
-                    Sizer(height: 32.h),
-                    const CreateRestaurantSubcategoryDropdown(),
-                    Sizer(height: 20.h),
-                    CreateRestaurantNameField(
-                      focusNode: nameFocusNode,
-                    ),
-                    Sizer(height: 20.h),
-                    CreateRestaurantNumberField(restaurantNumber: ''),
-                    Sizer(height: 20.h),
-                    CreateRestaurantProfilePhotoPicker(
-                      subcategoryId: widget.subcategoryId,
-                    ),
-                    Sizer(height: 20.h),
-                    if (widget.from != 'update')
-                      const CreateRestaurantLicensePhotoPicker(),
-                    Sizer(height: 30.h),
-                    CreateRestaurantGovernorateDropdown(
-                      onSelected: (value) {
-                        if (value != null) {
-                          context
-                              .read<CreateRestaurantCubit>()
-                              .selectGovernorate(value);
-                        }
-                      },
-                    ),
-                    Sizer(height: 20.h),
-                    const CreateRestaurantCitiesDropdowns(),
-                    Sizer(height: 20.h),
-
-                    /// menu
-                    if (widget.from != 'update')
-                      BlocProvider(
-                        create: (_) => RestaurantMenuCubit(serviceLocator()),
-                        child: ShowMneu(),
-                      ),
-                    Sizer(height: 20.h),
-
-                    AppInfoText(
-                        text: LocaleKeys
-                            .theApplicationDoesNotDeductAnyPercentageFromTheServiceProvider
-                            .tr()),
-                    Sizer(height: 20.h),
-                    AppInfoText(
-                        text: LocaleKeys
-                            .youWillGetEGP3650PerYearIfYouSubscribeDaily
-                            .tr()),
-                    Sizer(height: 20.h),
-                    if (widget.from == 'update')
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedAppButton(
-                              onPressed: () async {
-                                ManageVibration.vibrate();
-                                var res = await context
-                                    .read<CreateRestaurantCubit>()
-                                    .updateRestaurant1(context);
-                                // if (res == 'success') {
-                                //   Navigator.pop(context);
-                                // }
-                              },
-                              label: LocaleKeys.update.tr(),
-                              textStyle: Styles.headerText(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      const CreateRestaurantSubmitButton(),
-                  ],
-                ),
-              );
-            }
+                    )
+                  else
+                    const CreateRestaurantSubmitButton(),
+                ],
+              ),
+            );
           })),
     );
   }

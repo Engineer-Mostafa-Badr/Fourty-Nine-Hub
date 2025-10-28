@@ -3,6 +3,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/models/is_restaurant_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
@@ -357,6 +358,221 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   bool _showLog = false;
 
+  int? _selectedTabIndex; // null means no tab is selected
+
+  String _getRestaurantButtonText(IsRestaurantModel? restaurant) {
+    if (restaurant == null || restaurant.isRestaurant == false) {
+      return LocaleKeys.serveClientsByClickRegister.tr();
+    }
+
+    switch (restaurant.status) {
+      case "pending":
+        return LocaleKeys.restaurantMode.localize;
+      case "approved":
+        return LocaleKeys.restaurantMode.localize;
+      case "rejected":
+        return context.isArabic
+            ? "تم رفض طلبك - اضغط لمعرفة السبب"
+            : "Request Rejected - Tap for Details";
+      case "blocked":
+        return context.isArabic
+            ? "مطعمك محظور - اضغط لمعرفة السبب"
+            : "Restaurant Blocked - Tap for Details";
+      case "banned":
+        return context.isArabic
+            ? "مطعمك محظور مؤقتاً - اضغط للتفاصيل"
+            : "Temporarily Banned - Tap for Details";
+      default:
+        return LocaleKeys.serveClientsByClickRegister.tr();
+    }
+  }
+
+  void _showRejectedDialog(BuildContext context, IsRestaurantModel restaurant) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            context.isArabic ? "طلبك مرفوض" : "Request Rejected",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.isArabic ? "سبب الرفض:" : "Rejection Reason:",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                restaurant.reason ??
+                    (context.isArabic
+                        ? "لم يتم تحديد السبب"
+                        : "No reason provided"),
+                style: const TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                context.isArabic
+                    ? "يمكنك تقديم طلب جديد بعد تصحيح المشاكل المذكورة."
+                    : "You can submit a new request after fixing the mentioned issues.",
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.isArabic ? "حسناً" : "OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showBlockedDialog(BuildContext context, IsRestaurantModel restaurant) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            context.isArabic ? "مطعمك محظور" : "Restaurant Blocked",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.orange,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.isArabic ? "سبب الحظر:" : "Block Reason:",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                restaurant.reason ??
+                    (context.isArabic
+                        ? "لم يتم تحديد السبب"
+                        : "No reason provided"),
+                style: const TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                context.isArabic
+                    ? "تم حظر مطعمك مؤقتاً. يرجى التواصل مع الإدارة لحل المشكلة."
+                    : "Your restaurant has been blocked. Please contact support to resolve this issue.",
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.isArabic ? "حسناً" : "OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showBannedDialog(BuildContext context, IsRestaurantModel restaurant) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String banInfo = "";
+        if (restaurant.banDurationDays != null) {
+          banInfo = context.isArabic
+              ? "مدة الحظر: ${restaurant.banDurationDays} يوم"
+              : "Ban Duration: ${restaurant.banDurationDays} days";
+        } else if (restaurant.bannedUntil != null) {
+          banInfo = context.isArabic
+              ? "محظور حتى: ${restaurant.bannedUntil}"
+              : "Banned Until: ${restaurant.bannedUntil}";
+        }
+
+        return AlertDialog(
+          title: Text(
+            context.isArabic
+                ? "مطعمك محظور مؤقتاً"
+                : "Restaurant Temporarily Banned",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (banInfo.isNotEmpty) ...[
+                Text(
+                  banInfo,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.red,
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+              Text(
+                context.isArabic ? "سبب الحظر:" : "Ban Reason:",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                restaurant.reason ??
+                    (context.isArabic
+                        ? "لم يتم تحديد السبب"
+                        : "No reason provided"),
+                style: const TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                context.isArabic
+                    ? "لن تتمكن من استخدام المطعم خلال فترة الحظر. يرجى الالتزام بالقوانين في المستقبل."
+                    : "You won't be able to use the restaurant during the ban period. Please follow the rules in the future.",
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.isArabic ? "حسناً" : "OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -609,42 +825,58 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: ElevatedButton(
-                      onPressed: (state.isResturant?.approved == false)
-                          ? null // Disabled
-                          : (state.isResturant?.approved == true)
-                              ? () async {
-                                  var result = await context.push(
-                                    Routes.RestaurantDashboard,
-                                    extra: state.isResturant!.restaurantId!,
-                                  );
-                                  if (result == true) {
-                                    context.read<RestaurantsCubit>().loadData();
-                                  }
-                                }
-                              : () {
-                                  if (context.read<UserCubit>().isLoggedIn) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            BlocProvider<CreateRestaurantCubit>(
-                                          create: (context) => serviceLocator<
-                                              CreateRestaurantCubit>()
-                                            ..loadData(),
-                                          child: CreateRestaurantForm(
-                                            from: 'create',
-                                            restaurantId: state.isResturant
-                                                    ?.restaurantId ??
-                                                '',
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return pleaseLoginDialog(context);
-                                    // context.push(Routes.REGISTER);
-                                  }
-                                },
+                      onPressed: () {
+                        final status = state.isResturant?.status;
+                        final restaurant = state.isResturant;
+
+                        if (status == "pending") {
+                          // Do nothing - button is disabled
+                          return;
+                        } else if (status == "approved") {
+                          // Navigate to restaurant dashboard
+                          context
+                              .push(
+                            Routes.RestaurantDashboard,
+                            extra: restaurant!.restaurantId!,
+                          )
+                              .then((result) {
+                            if (mounted && result == true) {
+                              context.read<RestaurantsCubit>().loadData();
+                            }
+                          });
+                        } else if (status == "rejected") {
+                          // Show rejection dialog
+                          _showRejectedDialog(context, restaurant!);
+                        } else if (status == "blocked") {
+                          // Show blocked dialog
+                          _showBlockedDialog(context, restaurant!);
+                        } else if (status == "banned") {
+                          // Show banned dialog
+                          _showBannedDialog(context, restaurant!);
+                        } else {
+                          // No restaurant or create new restaurant
+                          if (context.read<UserCubit>().isLoggedIn) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider<CreateRestaurantCubit>(
+                                  create: (context) =>
+                                      serviceLocator<CreateRestaurantCubit>()
+                                        ..loadData(),
+                                  child: CreateRestaurantForm(
+                                    from: 'create',
+                                    restaurantId:
+                                        restaurant?.restaurantId ?? '',
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            pleaseLoginDialog(context);
+                          }
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
@@ -659,25 +891,19 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                         ),
                         child: Container(
                           alignment: Alignment.center,
-                          // padding: const EdgeInsets.symmetric(
-                          //     horizontal: 16.0, vertical: 12.0),
                           child: Text(
-                            state.isResturant?.isRestaurant == false
-                                ? LocaleKeys.serveClientsByClickRegister.tr()
-                                : LocaleKeys.restaurantMode.localize,
+                            _getRestaurantButtonText(state.isResturant),
                             style: Styles.mediumText(color: Colors.white),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  if (state.isResturant?.approved == false &&
-                      state.isResturant?.approved != null)
+                  if (state.isResturant?.status == "pending")
                     Positioned.fill(
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.5),
-                          // Optional opacity for transparency
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
@@ -694,20 +920,17 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               //   ),
               // ),
             ),
-          if (state.isResturant?.approved != null)
-            state.isResturant?.approved == true
-                ? const SizedBox()
-                : context.read<UserCubit>().isLoggedIn
-                    ? Label(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: AppColors.PRIMARY_COLOR_DARK,
-                        ),
-                        textAlign: TextAlign.end,
-                        text: LocaleKeys.waitingApproval.localize,
-                      )
-                    : SizedBox.shrink(),
+          if (state.isResturant?.status == "pending" &&
+              context.read<UserCubit>().isLoggedIn)
+            Label(
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: AppColors.PRIMARY_COLOR_DARK,
+              ),
+              textAlign: TextAlign.end,
+              text: LocaleKeys.waitingApproval.localize,
+            ),
         ],
       ),
     );
@@ -725,7 +948,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               // Search Icon
               Container(
                 margin: EdgeInsets.only(
-                  top: 12.h,
+                  top: 15.h,
                 ),
                 child: Row(
                   children: [

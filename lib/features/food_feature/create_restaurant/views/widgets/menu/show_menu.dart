@@ -97,7 +97,8 @@ class ShowMneu extends StatelessWidget {
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
                                       Container(
                                         padding: EdgeInsets.symmetric(
@@ -105,13 +106,13 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color:AppColors.getFillColor(context)),
+                                            color: AppColors.getFillColor(
+                                                context)),
                                         child: Row(
                                           children: [
                                             Text(
                                               e.foodName ?? "",
-                                              style: Styles.mediumText(
-                                              ),
+                                              style: Styles.mediumText(),
                                             ),
                                           ],
                                         ),
@@ -121,10 +122,11 @@ class ShowMneu extends StatelessWidget {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 24.w, vertical: 20.h),
                                         decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color:AppColors.getFillColor(context),
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color:
+                                              AppColors.getFillColor(context),
+                                        ),
                                         child: Row(
                                           children: [
                                             Text(
@@ -135,10 +137,32 @@ class ShowMneu extends StatelessWidget {
                                         ),
                                       ),
                                       const Sizer(),
+                                      // عرض الوصف
+                                      if (e.description != null &&
+                                          e.description!.isNotEmpty)
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 24.w, vertical: 20.h),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color:
+                                                AppColors.getFillColor(context),
+                                          ),
+                                          child: Text(
+                                            e.description ?? "",
+                                            style: Styles.mediumText(),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      if (e.description != null &&
+                                          e.description!.isNotEmpty)
+                                        const Sizer(),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
-                                          AppColors.getRedColor(context),
+                                              AppColors.getRedColor(context),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -147,14 +171,15 @@ class ShowMneu extends StatelessWidget {
                                           maximumSize: const Size(100, 40),
                                         ),
                                         onPressed: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           menuCubit.removeMenuItem(context, e);
                                         },
-                                        child:  Text(
+                                        child: Text(
                                           LocaleKeys.remove.localize,
                                           style: Styles.mediumText(
-                                            color: AppColors.getReversedTextColor(context)
-                                          ),
+                                              color: AppColors
+                                                  .getReversedTextColor(
+                                                      context)),
                                         ),
                                       )
                                     ],
@@ -186,7 +211,8 @@ class ShowMneu extends StatelessWidget {
                       Center(
                         child: Label(
                           text: LocaleKeys.menu.localize,
-                          style: Styles.headerText(color: AppColors.getRedColor(context)),
+                          style: Styles.headerText(
+                              color: AppColors.getRedColor(context)),
                         ),
                       ),
                       16.verticalSpace,
@@ -199,7 +225,7 @@ class ShowMneu extends StatelessWidget {
                             flex: 2,
                             child: GestureDetector(
                               onTap: () async {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 // استدعاء اختيار الصورة
                                 await menuCubit.uploadMealImage(
                                   context,
@@ -227,11 +253,12 @@ class ShowMneu extends StatelessWidget {
                                             ? null
                                             : XFile(imagePath),
                                         onTap: () async {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           // نفس onTap أعلاه
                                           await menuCubit.uploadMealImage(
                                               context,
-                                              subcategoryId: subcategoryId ??  "62c8babb8e28a58a3edf581d");
+                                              subcategoryId: subcategoryId ??
+                                                  "62c8babb8e28a58a3edf581d");
                                         },
                                         onDelete:
                                             null, // لا يوجد حذف للصورة قبل إضافة العنصر
@@ -252,16 +279,16 @@ class ShowMneu extends StatelessWidget {
                           const Sizer(
                             width: 30,
                           ),
-                          // حقول الاسم والسعر
+                          // حقول الاسم والسعر و الوصوف
                           Expanded(
                             flex: 4,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                // حقل اسم الطبق
                                 TextFormField(
                                   style: Styles.mediumText(
-                                    color:  AppColors.getTextColor(context)
-                                  ),
+                                      color: AppColors.getTextColor(context)),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -275,7 +302,8 @@ class ShowMneu extends StatelessWidget {
                                         Size.fromHeight(90.h)),
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.itemName.tr(),
-                                    hintStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
+                                    hintStyle: Styles.mediumText(
+                                        color: AppColors.getTextColor(context)),
                                     fillColor: AppColors.getFillColor(context),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
@@ -317,11 +345,10 @@ class ShowMneu extends StatelessWidget {
                                   ),
                                 ),
                                 const Sizer(),
+                                // حقل السعر
                                 TextFormField(
                                   style: Styles.mediumText(
-                                      color:  AppColors.getTextColor(context)
-
-                                  ),
+                                      color: AppColors.getTextColor(context)),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -339,8 +366,71 @@ class ShowMneu extends StatelessWidget {
                                         Size.fromHeight(90.h)),
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.price.tr(),
-                                    hintStyle: Styles.mediumText(color: AppColors.getTextColor(context)),
-                                    fillColor:  AppColors.getFillColor(context),
+                                    hintStyle: Styles.mediumText(
+                                        color: AppColors.getTextColor(context)),
+                                    fillColor: AppColors.getFillColor(context),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    filled: true,
+                                  ),
+                                ),
+                                const Sizer(),
+                                // حقل الوصف
+                                TextFormField(
+                                  style: Styles.mediumText(
+                                      color: AppColors.getTextColor(context)),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return LocaleKeys.emptyFieldNotValid.tr();
+                                    }
+                                    return null;
+                                  },
+                                  maxLines: 3,
+                                  controller: menuCubit.descriptionController,
+                                  decoration: InputDecoration(
+                                    constraints: BoxConstraints.loose(
+                                        Size.fromHeight(120.h)),
+                                    contentPadding: const EdgeInsets.all(10),
+                                    hintText: context.isArabic
+                                        ? 'الوصف'
+                                        : 'Description',
+                                    hintStyle: Styles.mediumText(
+                                        color: AppColors.getTextColor(context)),
+                                    fillColor: AppColors.getFillColor(context),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
@@ -392,27 +482,30 @@ class ShowMneu extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color:
-                                          AppColors.getRedColor(context),
+                                          color: AppColors.getRedColor(context),
                                         ),
                                         child: IconButton(
                                           visualDensity: VisualDensity.compact,
                                           onPressed: () {
-      ManageVibration.vibrate();
+                                            ManageVibration.vibrate();
                                             final foodName =
                                                 foodNameController.text;
                                             final price = double.tryParse(
                                                 priceController.text);
+                                            final description = menuCubit
+                                                .descriptionController.text;
 
                                             if (menuCubit.formKey.currentState
                                                     ?.validate() ??
                                                 false) {
                                               if (foodName.isNotEmpty &&
-                                                  price != null) {
+                                                  price != null &&
+                                                  description.isNotEmpty) {
                                                 final menuItem =
                                                     RestaurantMenuModel(
                                                   foodName: foodName,
                                                   price: price,
+                                                  description: description,
                                                   photoPath: imagePath,
                                                   photo: menuCubit
                                                       .imageId, // من الـcubit
@@ -426,18 +519,18 @@ class ShowMneu extends StatelessWidget {
                                                 // نظف الحقول
                                                 foodNameController.clear();
                                                 priceController.clear();
+                                                menuCubit.descriptionController
+                                                    .clear();
                                                 imagePath = "";
-                                                menuCubit.imageId = "";
 
-                                                // قد تريد إعادة بناء واجهة الإضافة كي تعود الصورة لإيقونة
-                                                menuCubit.emit(
-                                                    RestaurantMenuImagePicked(
-                                                        ""));
+                                                // إعادة تعيين الصورة
+                                                menuCubit.resetImage();
                                               }
                                             }
                                           },
                                           icon: Icon(Icons.add),
-                                          color: AppColors.getReversedTextColor(context),
+                                          color: AppColors.getReversedTextColor(
+                                              context),
                                         ),
                                       ),
                                     ),
@@ -459,10 +552,13 @@ class ShowMneu extends StatelessWidget {
                   return Visibility(
                     visible: restState is ValidationState &&
                         (restState.isMenu ?? false),
-                    child:  Padding(
-                      padding:const EdgeInsets.only(right: 5, left: 5, top: 5.0),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(right: 5, left: 5, top: 5.0),
                       child: Text(
-                        context.isArabic?'يجب ملء عنصر واحد على الاقل!':"You have to fill at least one item!",
+                        context.isArabic
+                            ? 'يجب ملء عنصر واحد على الاقل!'
+                            : "You have to fill at least one item!",
                         style: TextStyle(color: Colors.red),
                       ),
                     ),

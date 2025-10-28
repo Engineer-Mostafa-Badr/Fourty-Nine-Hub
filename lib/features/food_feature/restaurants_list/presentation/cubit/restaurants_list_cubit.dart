@@ -426,8 +426,9 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       });
     } else {
       emit(state.copyWith(
-          isRestaurant:
-              IsRestaurantModel(isRestaurant: false, approved: false)));
+          isRestaurant: IsRestaurantModel(
+        isRestaurant: false,
+      )));
     }
   }
 
