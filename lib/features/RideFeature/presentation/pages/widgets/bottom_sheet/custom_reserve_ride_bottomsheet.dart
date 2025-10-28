@@ -389,7 +389,7 @@ class _CustomReserveRideBottomSheetState
                                                     targetLocation: state.rideExpectedPrice?.targetLocation ?? [],
                                                     wayPointOne: state.wayPointOne != null ? [state.wayPointOne?.lat ?? 0, state.wayPointOne?.lng ?? 0] : null,
                                                     wayPointTwo: state.wayPointTwo != null ? [state.wayPointTwo?.lat ?? 0, state.wayPointTwo?.lng ?? 0] : null,
-                                                    calculateB: 0,
+                                                    calculateB: state.rideExpectedPrice?.calculateB ?? 0,
                                                     isPremium: widget.isPremium,
                                                     polyline: widget.rideCubit.state.rideExpectedPrice?.polyline ?? [],
                                                     wayPointOneTitle: widget.rideCubit.state.wayPointOne?.address,
@@ -418,7 +418,7 @@ class _CustomReserveRideBottomSheetState
                                                   targetLocation: state.rideExpectedPrice?.targetLocation ?? [],
                                                   wayPointOne: state.wayPointOne != null ? [state.wayPointOne?.lat ?? 0, state.wayPointOne?.lng ?? 0] : null,
                                                   wayPointTwo: state.wayPointTwo != null ? [state.wayPointTwo?.lat ?? 0, state.wayPointTwo?.lng ?? 0] : null,
-                                                  calculateB: 0,
+                                                  calculateB: state.rideExpectedPrice?.calculateB ?? 0,
                                                   isPremium: widget.isPremium,
                                                   polyline: widget.rideCubit.state.rideExpectedPrice?.polyline ?? [],
                                                   wayPointOneTitle: widget.rideCubit.state.wayPointOne?.address,
@@ -524,7 +524,7 @@ class _CustomReserveRideBottomSheetState
                                                                   0
                                                             ]
                                                           : null,
-                                                  calculateB: 0,
+                                                  calculateB: state.rideExpectedPrice?.calculateB ?? 0,
                                                   isPremium: widget.isPremium,
                                                   polyline: widget
                                                           .rideCubit
@@ -610,7 +610,7 @@ class _CustomReserveRideBottomSheetState
                                                             0
                                                       ]
                                                     : null,
-                                                calculateB: 0,
+                                                calculateB: state.rideExpectedPrice?.calculateB ?? 0,
                                                 isPremium: widget.isPremium,
                                                 polyline: widget
                                                         .rideCubit

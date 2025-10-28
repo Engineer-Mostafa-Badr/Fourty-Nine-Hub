@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/available_trip_card.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/tracking_available_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_dashboard_non_socket_details_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/tracking_available_trips.dart' show TrackingAvailableTripsScreen;
@@ -99,6 +101,10 @@ class _RideModeScreenState extends State<RideModeScreen> {
     _pastTruckTripsScrollController = ScrollController();
     _pastTripsScrollController = ScrollController()..addListener(_onScrollPastTrips);
 
+    // Clean up expired timers when page loads
+    CacheManager.cleanupExpiredTimers();
+    // _cleanupExpiredTimers();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       // if (!dashboardCubit.isClosed) {
@@ -137,6 +143,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
                     ]
                   : [];
     });
+  }
+
+  void _cleanupExpiredTimers() async {
+    try {
+      await CacheManager.cleanupExpiredTimers();
+    } catch (e) {
+      debugPrint("Error cleaning up expired timers: $e");
+    }
   }
 
   void _onScroll() {
@@ -317,7 +331,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 : widget.params.isSocket == true
                                 ? cubit.isLoadingAvailableRideTrips
                                 ? const Center(child: CustomCircularProgressIndicator())
-                                : cubit.availableRideTrips.isNotEmpty
+                                : cubit.newAvailableRideTrips.isNotEmpty
                                 ? OlxPaginationWidget(
                               itemsPerPage: 2,
                               loadPage: (page) {
@@ -328,15 +342,17 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               },
                               banners: bannersList,
                               items: List.generate(
-                                  cubit.availableRideTrips.length,
-                                      (index) => AvailableRideTripItem(
-                                    tripEntity: cubit.availableRideTrips[index],
-                                    onRefuseTrip: (String id) {
-                                      ManageVibration.vibrate();
-                                      cubit.refuseTripOffer(id);
-                                    },
-                                    params: widget.params,
-                                  )),
+                                  cubit.newAvailableRideTrips.length,
+                                      (index) => AvailableTripCard(trip:cubit.newAvailableRideTrips[index], params: widget.params,)
+                                  //         AvailableRideTripItem(
+                                  //   tripEntity: cubit.availableRideTrips[index],
+                                  //   onRefuseTrip: (String id) {
+                                  //     ManageVibration.vibrate();
+                                  //     cubit.refuseTripOffer(id);
+                                  //   },
+                                  //   params: widget.params,
+                                  // )
+                              ),
                               scrollController: availableScrollController,
                             )
                                 : Center(

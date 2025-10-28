@@ -284,67 +284,68 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
                   height: 200.h, child: _buildTopMap(context, widget.model)),
               const SizedBox(height: 8),
 
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.transparent,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.green,
-                      radius: 10,
-                      child: CircleAvatar(
-                          backgroundColor: AppColors.getFillColor(context),
-                          radius: 5),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      widget.model?.startLocation?.address ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10.h),
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.transparent,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      radius: 10,
-                      child: CircleAvatar(
-                          backgroundColor: AppColors.getFillColor(context),
-                          radius: 5),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      widget.model?.targetLocation?.address ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     CircleAvatar(
+              //       radius: 12,
+              //       backgroundColor: Colors.transparent,
+              //       child: CircleAvatar(
+              //         backgroundColor: Colors.green,
+              //         radius: 10,
+              //         child: CircleAvatar(
+              //             backgroundColor: AppColors.getFillColor(context),
+              //             radius: 5),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 4),
+              //     Expanded(
+              //       child: Text(
+              //         widget.model?.startLocation?.address ?? '',
+              //         overflow: TextOverflow.ellipsis,
+              //         maxLines: 2,
+              //         style: TextStyle(
+              //           color: context.isDarkMode
+              //               ? Colors.white
+              //               : AppColors.PRIMARY_COLOR,
+              //           fontSize: 28.sp,
+              //           fontWeight: FontWeight.w900,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(height: 10.h),
+              // Row(
+              //   children: [
+              //     CircleAvatar(
+              //       radius: 12,
+              //       backgroundColor: Colors.transparent,
+              //       child: CircleAvatar(
+              //         backgroundColor: Colors.blue,
+              //         radius: 10,
+              //         child: CircleAvatar(
+              //             backgroundColor: AppColors.getFillColor(context),
+              //             radius: 5),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 4),
+              //     Expanded(
+              //       child: Text(
+              //         widget.model?.targetLocation?.address ?? '',
+              //         overflow: TextOverflow.ellipsis,
+              //         maxLines: 2,
+              //         style: TextStyle(
+              //           color: context.isDarkMode
+              //               ? Colors.white
+              //               : AppColors.PRIMARY_COLOR,
+              //           fontSize: 14,
+              //           fontWeight: FontWeight.w900,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              _buildLocationStepper(context),
               SizedBox(height: 8),
               Row(
                 children: [
@@ -400,6 +401,141 @@ class _DriverRouteWidgetState extends State<DriverRouteWidget> {
       ),
     );
   }
+
+  Widget _buildLocationStepper(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // الخط العمودي بالنقط بين الدائرتين
+        Positioned(
+          left: context.isArabic ? null : 0,
+          right: context.isArabic ? 0 : null,
+          top: 0,
+          bottom: 0,
+          child: _buildStepperLine(context),
+        ),
+
+        // العناوين (من / إلى)
+        Padding(
+          padding: EdgeInsets.only(
+            left: context.isArabic ? 0 : 24.w,
+            right: context.isArabic ? 24.w : 0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // From (start location)
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: Colors.transparent,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.green,
+                      radius: 10,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.getFillColor(context),
+                        radius: 5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      widget.model?.startLocation?.address ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+
+              // To (target location)
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: Colors.transparent,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.blue,
+                      radius: 10,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.getFillColor(context),
+                        radius: 5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      widget.model?.targetLocation?.address ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildStepperLine(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          backgroundColor: Colors.green,
+          radius: 6,
+          child: const CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 3,
+          ),
+        ),
+        SizedBox(height: 4.h),
+        ...List.generate(
+          4,
+              (index) => Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            width: 4,
+            height: 4,
+            decoration: BoxDecoration(
+              color: context.isDarkMode ? Colors.grey[600] : Colors.grey[400],
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+        SizedBox(height: 4.h),
+        CircleAvatar(
+          backgroundColor: Colors.blue,
+          radius: 6,
+          child: const CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 3,
+          ),
+        ),
+      ],
+    );
+  }
+
 
   final MapController _mapController = MapController();
 

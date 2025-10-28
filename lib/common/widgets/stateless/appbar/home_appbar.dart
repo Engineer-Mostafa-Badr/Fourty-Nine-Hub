@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/whatsapp_notification_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/live_gift_effects/presentation/pages/gift_effects_demo_page.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -105,6 +106,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             InkWell(
               onTap: () async {
                 ManageVibration.vibrate();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GiftEffectsDemoPage(),
+                  ),
+                );
+                return;
                 await WhatsAppNotificationUtils.showWhatsAppMessage(
                   senderName: 'Mohamed',
                   message: 'Hello! How are you?',

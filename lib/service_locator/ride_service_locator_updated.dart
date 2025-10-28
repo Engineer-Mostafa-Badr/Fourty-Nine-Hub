@@ -43,6 +43,7 @@ import '../features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/refuse_shipping_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
 import '../features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
+import '../features/RideFeature/domain/usecases/reject_offer_by_client_use_case.dart';
 import '../features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
 import '../features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
@@ -238,9 +239,12 @@ class RideServiceLocatorUpdated {
         ReadLoadingOfferUseCase( serviceLocator()));
     serviceLocator.registerLazySingleton<GetUnreadOffersUseCase>(() =>
         GetUnreadOffersUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RejectOfferByClientUseCase>(() =>
+        RejectOfferByClientUseCase(repository:  serviceLocator()));
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

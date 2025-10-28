@@ -138,6 +138,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
+
                 color: context.isDarkMode
                     ? AppColors.QUANTITY_COLOR
                     : AppColors.whiteColor,
@@ -1292,7 +1293,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return Container(
       width: double.infinity,
       height: state.requestedTrip != null
-          ? MediaQuery.of(context).size.height * 0.55
+          ? MediaQuery.of(context).size.height * 0.8
           : MediaQuery.of(context).size.height * 0.55,
       // Add this to fix rendering issues
       decoration: const BoxDecoration(
@@ -1923,7 +1924,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.blue,
                 radius: 6,
                 child: const CircleAvatar(
                     backgroundColor: Colors.white, radius: 3),
@@ -1949,7 +1950,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 height: 4.h,
               ),
               CircleAvatar(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.green,
                 radius: 6,
                 child: const CircleAvatar(
                     backgroundColor: Colors.white, radius: 3),
@@ -2193,7 +2194,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   children: [
                                     // From Location Field
                                     Padding(
-                                      padding: EdgeInsets.only(left: 48.w),
+                                      padding: EdgeInsets.only(left: context.isArabic? 0 : 48.w, right: context.isArabic? 48.w : 0),
                                       child: _customLocationField(
                                         isTo: false,
                                         color: Colors.green,
@@ -2250,7 +2251,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ),
                                     // To Location Field
                                     Padding(
-                                      padding: EdgeInsets.only(left: 48.w),
+                                      padding: EdgeInsets.only(left: context.isArabic? 0 : 48.w, right: context.isArabic? 48.w : 0),
                                       child: _customLocationField(
                                         isTo: true,
                                         color: Colors.blue,
@@ -2308,7 +2309,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 ),
                                 // Stepper Line with Dots
                                 Positioned(
-                                    left: context.isArabic ? -18 : -10,
+                                    left: context.isArabic ? 0 : -10,
+                                    right: context.isArabic ? -10 : 0,
                                     top: 0,
                                     bottom: 0,
                                     child: _buildStepperLine(context)),
@@ -3468,6 +3470,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           title: LocaleKeys.options.tr());
                     }
                   },
+
                   child: SizedBox(
                     height: 25,
                     child: Icon(

@@ -102,6 +102,7 @@ import 'package:record/record.dart';
 
 import '../../../domain/usecases/partial_payment_in_trip.dart';
 import '../../../domain/usecases/rating_driver_by_client.dart';
+import '../../../domain/usecases/reject_offer_by_client_use_case.dart';
 import '../../../domain/usecases/send_ok_iam_coming_message_usecase.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
@@ -199,6 +200,7 @@ class RideCubit extends Cubit<RideState> {
 
   final GetDriverRatingsUseCase getDriverRatingsUseCase;
   final GetUnreadOffersUseCase getUnreadOffersUseCase;
+  final RejectOfferByClientUseCase rejectOfferByClientUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -239,6 +241,7 @@ class RideCubit extends Cubit<RideState> {
     this.partialPaymentInTripUseCase,
     this.getDriverRatingsUseCase,
     this.getUnreadOffersUseCase,
+    this.rejectOfferByClientUseCase,
   ) : super(RideState(
           rideOffers: [],
         ));
@@ -817,54 +820,54 @@ class RideCubit extends Cubit<RideState> {
     state.toLocation = null;
     state.wayPointOne = null;
     state.wayPointTwo = null;
-    // if (state.requestedTrip == null && state.rideExpectedPrice == null) {
-    //   await fetchUserLocation();
-    // } else {
-    //   if (state.requestedTrip?.status == TripState.canceled.name ||
-    //       state.requestedTrip?.status == TripState.completed.name ||
-    //       state.requestedTrip!.status == TripState.cancelledByClient.name ||
-    //       state.requestedTrip!.status == TripState.cancelledByDriver.name) {
-    //     await fetchUserLocation();
-    //   } else {
-    //     if (state.requestedTrip?.targetCoordinates != null &&
-    //         (state.requestedTrip?.targetCoordinates?.length ?? 0) >= 2) {
-    //       updateToLocation(
-    //         lat: state.requestedTrip!.targetCoordinates!.first,
-    //         lng: state.requestedTrip!.targetCoordinates!.last,
-    //         address: state.requestedTrip!.to!,
-    //       );
-    //     }
-    //
-    //     if (state.requestedTrip!.startCoordinates != null &&
-    //         state.requestedTrip!.startCoordinates!.length >= 2) {
-    //       updateCurrentLocation(
-    //         lat: state.requestedTrip!.startCoordinates!.first,
-    //         lng: state.requestedTrip!.startCoordinates!.last,
-    //         address: state.requestedTrip!.from!,
-    //       );
-    //     }
-    //
-    //     if (state.requestedTrip?.wayPointOne != null &&
-    //         state.requestedTrip!.wayPointOne!.length >= 2 &&
-    //         state.requestedTrip!.wayPointOneTitle != null) {
-    //       updateWayPointOne(
-    //         lat: state.requestedTrip!.wayPointOne!.first,
-    //         lng: state.requestedTrip!.wayPointOne!.last,
-    //         address: state.requestedTrip!.wayPointOneTitle!,
-    //       );
-    //     }
-    //
-    //     if (state.requestedTrip?.wayPointTwo != null &&
-    //         state.requestedTrip!.wayPointTwo!.length >= 2 &&
-    //         state.requestedTrip!.wayPointTwoTitle != null) {
-    //       updateWayPointTwo(
-    //         lat: state.requestedTrip!.wayPointTwo!.first,
-    //         lng: state.requestedTrip!.wayPointTwo!.last,
-    //         address: state.requestedTrip!.wayPointTwoTitle!,
-    //       );
-    //     }
-    //   }
-    // }
+    if (state.requestedTrip == null && state.rideExpectedPrice == null) {
+      await fetchUserLocation();
+    } else {
+      if (state.requestedTrip?.status == TripState.canceled.name ||
+          state.requestedTrip?.status == TripState.completed.name ||
+          state.requestedTrip!.status == TripState.cancelledByClient.name ||
+          state.requestedTrip!.status == TripState.cancelledByDriver.name) {
+        await fetchUserLocation();
+      } else {
+        if (state.requestedTrip?.targetCoordinates != null &&
+            (state.requestedTrip?.targetCoordinates?.length ?? 0) >= 2) {
+          updateToLocation(
+            lat: state.requestedTrip!.targetCoordinates!.first,
+            lng: state.requestedTrip!.targetCoordinates!.last,
+            address: state.requestedTrip!.to!,
+          );
+        }
+
+        if (state.requestedTrip!.startCoordinates != null &&
+            state.requestedTrip!.startCoordinates!.length >= 2) {
+          updateCurrentLocation(
+            lat: state.requestedTrip!.startCoordinates!.first,
+            lng: state.requestedTrip!.startCoordinates!.last,
+            address: state.requestedTrip!.from!,
+          );
+        }
+
+        if (state.requestedTrip?.wayPointOne != null &&
+            state.requestedTrip!.wayPointOne!.length >= 2 &&
+            state.requestedTrip!.wayPointOneTitle != null) {
+          updateWayPointOne(
+            lat: state.requestedTrip!.wayPointOne!.first,
+            lng: state.requestedTrip!.wayPointOne!.last,
+            address: state.requestedTrip!.wayPointOneTitle!,
+          );
+        }
+
+        if (state.requestedTrip?.wayPointTwo != null &&
+            state.requestedTrip!.wayPointTwo!.length >= 2 &&
+            state.requestedTrip!.wayPointTwoTitle != null) {
+          updateWayPointTwo(
+            lat: state.requestedTrip!.wayPointTwo!.first,
+            lng: state.requestedTrip!.wayPointTwo!.last,
+            address: state.requestedTrip!.wayPointTwoTitle!,
+          );
+        }
+      }
+    }
     loadingHomeData = false;
     context.pop();
     emit(state.copyWith(status: RideStates.success));
@@ -1453,7 +1456,7 @@ class RideCubit extends Cubit<RideState> {
       required List<double> targetLocation,
       required List<double>? wayPointOne,
       required List<double>? wayPointTwo,
-      required int calculateB,
+      required num calculateB,
       required String paymentMethod,
       required int passengers,
       required bool comfort,
@@ -1746,6 +1749,27 @@ class RideCubit extends Cubit<RideState> {
         rideRequestTrip.status = TripState.accepted.name;
         emit(state.copyWith(
             status: RideStates.success, requestedTrip: rideRequestTrip));
+      },
+    );
+  }
+
+
+  Future<void> rejectOfferByClient({required RideOfferEntity offer}) async {
+    final Either<Failure, void> result =
+    await rejectOfferByClientUseCase(offerId:  offer.offerId);
+    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    result.fold(
+          (failure) {
+        currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },(v) async {
+        currentContext.pop();
+        removeRideOfferFromRideOffers(offer);
+        emit(state.copyWith(
+            status: RideStates.success,));
       },
     );
   }

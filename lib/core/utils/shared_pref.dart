@@ -30,6 +30,7 @@ class CacheManager {
   static const isChoiceRulerEnabled = 'isChoiceRulerEnabled';
   static const showOnboarding = 'showOnboarding';
   static const forgotPasswordTimerKey = 'forgotPasswordTimer';
+  static const tripOfferTimersKey = 'tripOfferTimers';
 
   // static const themeLightKey = 'lightTheme';
 
@@ -336,6 +337,111 @@ class CacheManager {
       } catch (error) {
         log(error.toString());
       }
+    }
+  }
+
+  // Trip offer timer management
+  static Future<bool> saveTripOfferTimer(String tripId, DateTime expireTime) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(tripOfferTimersKey);
+      Map<String, dynamic> timers = {};
+      
+      if (data != null) {
+        timers = jsonDecode(data) as Map<String, dynamic>;
+      }
+      
+      timers[tripId] = expireTime.toIso8601String();
+      return await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
+    } catch (e) {
+      log("Error saving trip offer timer: $e");
+      return false;
+    }
+  }
+
+  // Get remaining time for a trip offer
+  static Future<Duration?> getTripOfferRemainingTime(String tripId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(tripOfferTimersKey);
+      
+      if (data == null) return null;
+      
+      final timers = jsonDecode(data) as Map<String, dynamic>;
+      if (!timers.containsKey(tripId)) return null;
+      
+      final expireTimeStr = timers[tripId] as String;
+      final expireTime = DateTime.parse(expireTimeStr);
+      final now = DateTime.now();
+      
+      if (now.isAfter(expireTime)) {
+        // Timer has expired, remove it
+        timers.remove(tripId);
+        await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
+        return null;
+      }
+      
+      return expireTime.difference(now);
+    } catch (e) {
+      log("Error getting trip offer remaining time: $e");
+      return null;
+    }
+  }
+
+  // Check if a trip has an active timer
+  static Future<bool> hasActiveOfferTimer(String tripId) async {
+    try {
+      final remaining = await getTripOfferRemainingTime(tripId);
+      return remaining != null && remaining.inSeconds > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Clean up expired timers
+  static Future<void> cleanupExpiredTimers() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(tripOfferTimersKey);
+      print("tripOfferTimersKey $data");
+      if (data == null||data.isEmpty) return;
+      
+      final timers = jsonDecode(data) as Map<String, dynamic>;
+      final now = DateTime.now();
+      final expiredKeys = <String>[];
+      
+      timers.forEach((tripId, expireTimeStr) {
+        final expireTime = DateTime.parse(expireTimeStr as String);
+        if (now.isAfter(expireTime)) {
+          expiredKeys.add(tripId);
+        }
+      });
+      
+      for (final key in expiredKeys) {
+        timers.remove(key);
+      }
+      
+      await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
+    } catch (e) {
+      log("Error cleaning up expired timers: $e");
+    }
+  }
+
+  // Remove a specific trip timer
+  static Future<bool> removeTripOfferTimer(String tripId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(tripOfferTimersKey);
+      
+      if (data == null) return true;
+      
+      final timers = jsonDecode(data) as Map<String, dynamic>;
+      timers.remove(tripId);
+      
+      return await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
+    } catch (e) {
+      log("Error removing trip offer timer: $e");
+      return false;
     }
   }
 }

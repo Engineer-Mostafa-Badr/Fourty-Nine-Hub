@@ -85,8 +85,8 @@ class AvailableTripsWidget extends StatelessWidget {
                   Expanded(
                       flex: 9,
                       child: Label(
-                          text:
-                              tripEntity.toAddress,//'Open Air Mall - Madinaty',
+                          text: tripEntity
+                              .toAddress, //'Open Air Mall - Madinaty',
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w300)))
                 ]),
@@ -116,8 +116,7 @@ class AvailableTripsWidget extends StatelessWidget {
                         radius: 15,
                         label: LocaleKeys.Accept.tr(),
                         onPressed: () {
-
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                         },
                         backColor: AppColors.PRIMARY_COLOR,
                       ),
@@ -127,29 +126,33 @@ class AvailableTripsWidget extends StatelessWidget {
                       child: AppButton(
                         radius: 15,
                         height: 30,
-                        label: tripEntity.isAutoAccept==false
+                        label: tripEntity.isAutoAccept == false
                             ? LocaleKeys.acceptAnothePrice.tr()
                             : LocaleKeys.refuse.tr(),
                         style: Styles.mediumText(
                             color: Colors.white,
-                            fontSize: tripEntity.isAutoAccept==false ? 23 : 28),
+                            fontSize:
+                                tripEntity.isAutoAccept == false ? 23 : 28),
                         onPressed: () {
-      ManageVibration.vibrate();
-                          if (tripEntity.isAutoAccept==false) {
-                            showModalBottomSheet(
-                              backgroundColor: AppColors.whiteColor,
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(15))),
-                              isScrollControlled: true,
-                              builder: (BuildContext context) =>
-                                  EditPriceWidget(tripEntity: tripEntity, price: tripEntity.price??0, onSendOffer: (num offer) {
-                                    context.pop();
-                                    // cubit.createOffer(tripId: tripEntity.id, price: offer);
-
-                                  },),
-                            );
+                          ManageVibration.vibrate();
+                          if (tripEntity.isAutoAccept == false) {
+                            // showModalBottomSheet(
+                            //   backgroundColor: AppColors.whiteColor,
+                            //   context: context,
+                            //   shape: const RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.vertical(
+                            //           top: Radius.circular(15))),
+                            //   isScrollControlled: true,
+                            //   builder: (BuildContext context) =>
+                            //       EditPriceWidget(
+                            //     tripEntity: tripEntity,
+                            //     price: tripEntity.price ?? 0,
+                            //     onSendOffer: (num offer) {
+                            //       context.pop();
+                            //       // cubit.createOffer(tripId: tripEntity.id, price: offer);
+                            //     },
+                            //   ),
+                            // );
                           } else {
                             showCustomDialogTrip(
                                 context,
@@ -181,7 +184,7 @@ class AvailableTripsWidget extends StatelessWidget {
                                         backColor:
                                             AppColors.SECONDARY_COLOR_DARK2,
                                         onPressed: () {
-      ManageVibration.vibrate();
+                                          ManageVibration.vibrate();
                                           Navigator.of(context).pop();
                                         }),
                                     const SizedBox(height: 16),
