@@ -16,7 +16,8 @@ class DoctorDetailsCard extends StatelessWidget {
   final String type;
 
   const DoctorDetailsCard({
-    super.key, required this.type,
+    super.key,
+    required this.type,
   });
 
   @override
@@ -26,59 +27,63 @@ class DoctorDetailsCard extends StatelessWidget {
 
     // final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
 
-
     return Column(
       children: [
-        type == BookingTypes.call.name? SizedBox(
-            width: 690.w,
-            height: 52.h,
-            child: Row(
-              children: [
-                Text(
-                  '${LocaleKeys.call.localize}: ',
-                  style: Styles.mediumText(),
+        type == BookingTypes.videoCall.name
+            ? SizedBox(
+                width: 690.w,
+                height: 52.h,
+                child: Row(
+                  children: [
+                    Text(
+                      '${LocaleKeys.call.localize}: ',
+                      style: Styles.mediumText(),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${doctor?.priceToShow ?? 0} ${context.isArabic ? doctor?.currencyAr ?? '' : doctor?.currencyEn ?? ''}',
+                      style: Styles.mediumText(),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                Text(
-                  '${doctor?.priceToShow ?? 0} ${context.isArabic ? doctor?.currencyAr ?? '' : doctor?.currencyEn ?? ''}',
-                  style: Styles.mediumText(),
-                ),
-              ],
-            ),
-          ):type == BookingTypes.clinic.name?   SizedBox(
-            width: 690.w,
-            height: 52.h,
-            child: Row(
-              children: [
-                Text(
-                  '${LocaleKeys.clinicFees.localize}: ',
-                  style: Styles.mediumText(),
-                ),
-                const Spacer(),
-                Text(
-                  '${doctor?.priceToShow ?? 0} ${context.isArabic ? doctor?.currencyAr ?? '' : doctor?.currencyEn ?? ''}',
-                  style: Styles.mediumText(),
-                ),
-              ],
-            ),
-          ):type == BookingTypes.home.name?   SizedBox(
-          width: 690.w,
-          height: 52.h,
-          child: Row(
-            children: [
-              Text(
-                '${LocaleKeys.homeVisitFees.localize}: ',
-                style: Styles.mediumText(),
-              ),
-              const Spacer(),
-              Text(
-                '${doctor?.priceToShow ?? 0} ${context.isArabic ? doctor?.currencyAr ?? '' : doctor?.currencyEn ?? ''}',
-                style: Styles.mediumText(),
-              ),
-            ],
-          ),
-        ):SizedBox(),
-
+              )
+            : type == BookingTypes.clinic.name
+                ? SizedBox(
+                    width: 690.w,
+                    height: 52.h,
+                    child: Row(
+                      children: [
+                        Text(
+                          '${LocaleKeys.clinicFees.localize}: ',
+                          style: Styles.mediumText(),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '${doctor?.priceToShow ?? 0} ${context.isArabic ? doctor?.currencyAr ?? '' : doctor?.currencyEn ?? ''}',
+                          style: Styles.mediumText(),
+                        ),
+                      ],
+                    ),
+                  )
+                : type == BookingTypes.home.name
+                    ? SizedBox(
+                        width: 690.w,
+                        height: 52.h,
+                        child: Row(
+                          children: [
+                            Text(
+                              '${LocaleKeys.homeVisitFees.localize}: ',
+                              style: Styles.mediumText(),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '${doctor?.priceToShow ?? 0} ${context.isArabic ? doctor?.currencyAr ?? '' : doctor?.currencyEn ?? ''}',
+                              style: Styles.mediumText(),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(),
         const Sizer(),
         DoctorDetailsInfoCard(
             icon: Icons.access_time,
@@ -92,7 +97,7 @@ class DoctorDetailsCard extends StatelessWidget {
                 label: doctor?.description.length.toString() ?? '',
               )
             : SizedBox(),
-      const Sizer()
+        const Sizer()
       ],
     );
   }

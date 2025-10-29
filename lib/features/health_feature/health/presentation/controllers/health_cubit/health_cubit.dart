@@ -62,7 +62,7 @@ class HealthCubit extends Cubit<HealthState> {
         bookingType: BookingTypes.clinic,
         image: Assets.doctorClinicVisit),
     HealthBookingFilterModel(
-        bookingType: BookingTypes.call,
+        bookingType: BookingTypes.videoCall,
         image: Assets.doctorCall,
         route: Routes.FILTERDOCTORSUBCATEGORY),
     HealthBookingFilterModel(

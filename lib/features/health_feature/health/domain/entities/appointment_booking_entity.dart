@@ -26,15 +26,13 @@ class BookedAppointmentEntity {
       required this.expired});
 }
 
-enum BookingTypes { call, videoCall, clinic, home, emergency }
+enum BookingTypes { videoCall, clinic, home, emergency }
 
 extension BookingTypesExtension on BookingTypes {
   String get translatedName {
     switch (this) {
-      case BookingTypes.call:
-        return LocaleKeys.call;
       case BookingTypes.videoCall:
-        return LocaleKeys.call; // Could be a separate locale key if needed
+        return LocaleKeys.call;
       case BookingTypes.clinic:
         return LocaleKeys.clinicVisit;
       case BookingTypes.home:
@@ -48,9 +46,9 @@ extension BookingTypesExtension on BookingTypes {
 extension BookingTypesExtensionString on String {
   BookingTypes get toBookingType {
     final lower = toLowerCase();
-    if (lower == 'call' || lower == 'calls') {
-      return BookingTypes.call;
-    } else if (lower == 'videocall' ||
+    if (lower == 'call' ||
+        lower == 'calls' ||
+        lower == 'videocall' ||
         lower == 'video_call' ||
         lower == 'video-call') {
       return BookingTypes.videoCall;
@@ -69,9 +67,11 @@ extension BookingTypesExtensionString on String {
 
 BookingTypes getBookingType(value) {
   final str = value.toString().toLowerCase();
-  if (str == 'call') {
-    return BookingTypes.call;
-  } else if (str == 'videocall' || str == 'video_call' || str == 'video-call') {
+  if (str == 'call' ||
+      str == 'calls' ||
+      str == 'videocall' ||
+      str == 'video_call' ||
+      str == 'video-call') {
     return BookingTypes.videoCall;
   } else if (str == 'clinic') {
     return BookingTypes.clinic;

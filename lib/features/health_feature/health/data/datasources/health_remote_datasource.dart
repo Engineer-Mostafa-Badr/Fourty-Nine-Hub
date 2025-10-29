@@ -156,9 +156,6 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
     // Determine the endpoint based on booking type
     String endpoint;
     switch (params.bookingType) {
-      case BookingTypes.call:
-        endpoint = EndPoints.searchDoctorsByCalls;
-        break;
       case BookingTypes.videoCall:
         endpoint = EndPoints.searchDoctorsByVideoCalls;
         break;
@@ -169,8 +166,8 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
         endpoint = EndPoints.searchDoctorsByHomeVisits;
         break;
       case BookingTypes.emergency:
-        // Emergency might not use this endpoint, but handle it anyway
-        endpoint = EndPoints.searchDoctorsByCalls;
+        // Emergency uses video call endpoint as fallback
+        endpoint = EndPoints.searchDoctorsByVideoCalls;
         break;
     }
 

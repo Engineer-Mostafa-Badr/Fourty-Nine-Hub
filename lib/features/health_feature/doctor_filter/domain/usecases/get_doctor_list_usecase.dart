@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+
 //
 // class GetDoctorListUseCase
 //     extends UseCase<List<DoctorEntity>, DoctorSearchParams> {
@@ -39,10 +40,11 @@ class DoctorSearchParams {
     if (bookingType != null) {
       data['type'] = bookingType?.name == 'home'
           ? 'visitHome'
-          : bookingType?.name == 'call'
+          : bookingType?.name == 'videoCall'
               ? 'calls'
               : 'clinic';
-      if (bookingType != BookingTypes.call) {
+      // Video calls don't require location, but clinic and home visits do
+      if (bookingType != BookingTypes.videoCall) {
         data['governorateId'] = governorate.id;
         data['cityId'] = city.id;
       }

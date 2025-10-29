@@ -191,9 +191,6 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     // Get booking type name
     if (bookingType != null) {
       switch (bookingType) {
-        case BookingTypes.call:
-          bookingTypeName = isArabic ? 'مكالمة' : 'call';
-          break;
         case BookingTypes.videoCall:
           bookingTypeName = isArabic ? 'مكالمة فيديو' : 'video call';
           break;
