@@ -3,6 +3,8 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_doctors_by_specialty_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_by_booking_type_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -16,6 +18,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   final GetDoctorListUseCase _getDoctorListUseCase;
   final GetDoctorsBySpecialtyUseCase _getDoctorsBySpecialtyUseCase;
   final SearchDoctorsUseCase _searchDoctorsUseCase;
+  final SearchDoctorsByBookingTypeUseCase _searchDoctorsByBookingTypeUseCase;
 
   // void loadData() async {
   //   emit(state.copyWith(status: DoctorsListStates.loading));
@@ -75,6 +78,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     this._getDoctorListUseCase,
     this._getDoctorsBySpecialtyUseCase,
     this._searchDoctorsUseCase,
+    this._searchDoctorsByBookingTypeUseCase,
   ) : super(const DoctorsListState());
 
   getDoctorsFromSubCategory(String subCategory) async {
@@ -274,6 +278,87 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
     currentPage = 1;
     hasMoreData = true;
     await getDoctorsBySpecialty(specialtyId);
+  }
+
+  void loadInitialDataByBookingType({
+    required BookingTypes bookingType,
+    required String specialtyId,
+    String? governorateId,
+    String? cityId,
+  }) async {
+    print('🟣 [DEBUG] Loading Initial Data By Booking Type:');
+    print('   - Booking Type: ${bookingType.name}');
+    print('   - Specialty ID: $specialtyId');
+    print('   - Governorate ID: ${governorateId ?? "null"}');
+    print('   - City ID: ${cityId ?? "null"}');
+
+    emit(state.copyWith(status: DoctorsListStates.loading));
+    doctorsList.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getDoctorsByBookingType(
+      bookingType: bookingType,
+      specialtyId: specialtyId,
+      governorateId: governorateId,
+      cityId: cityId,
+    );
+  }
+
+  Future<void> getDoctorsByBookingType({
+    required BookingTypes bookingType,
+    required String specialtyId,
+    String? governorateId,
+    String? cityId,
+  }) async {
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    // Debug print for API call
+    print('🔴 [DEBUG] Calling API - Search Doctors By Booking Type:');
+    print('   - Booking Type: ${bookingType.name}');
+    print('   - Specialty ID: $specialtyId');
+    print('   - Governorate ID: ${governorateId ?? "null"}');
+    print('   - City ID: ${cityId ?? "null"}');
+    print('   - Page: $currentPage');
+    print('   - Limit: $pageSize');
+
+    final response = await _searchDoctorsByBookingTypeUseCase.call(
+      SearchDoctorsByBookingTypeParams(
+        bookingType: bookingType,
+        specialtyId: specialtyId,
+        governorateId: governorateId,
+        cityId: cityId,
+        page: currentPage,
+        limit: pageSize,
+      ),
+    );
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        print('❌ [DEBUG] API Error: ${failure.toString()}');
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMore = false;
+        emit(state.copyWith(failure: failure, status: DoctorsListStates.error));
+      },
+      (data) {
+        print('✅ [DEBUG] API Success - Received ${data.length} doctors');
+        doctorsList.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(
+            status: DoctorsListStates.success, doctorsList: doctorsList));
+      },
+    );
   }
 }
 /*

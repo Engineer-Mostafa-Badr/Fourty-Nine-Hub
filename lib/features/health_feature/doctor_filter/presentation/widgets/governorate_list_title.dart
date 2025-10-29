@@ -28,8 +28,21 @@ class GovernorateListTitle extends StatelessWidget {
       ),
       onTap: () {
         ManageVibration.vibrate();
-        serviceLocator<HealthSharedData>().doctorSearchParams.governorate =
-            governorate;
+        final healthSharedData = serviceLocator<HealthSharedData>();
+        healthSharedData.doctorSearchParams.governorate = governorate;
+
+        // Debug print for governorate selection
+        print('🟢 [DEBUG] Governorate Selected:');
+        print('   - Governorate ID: ${governorate.id}');
+        print('   - Governorate Name (AR): ${governorate.nameAr}');
+        print('   - Governorate Name (EN): ${governorate.nameEn}');
+        print(
+            '   - Specialty ID: ${healthSharedData.doctorSearchParams.subCategory.id}');
+        print(
+            '   - Specialty Name: ${healthSharedData.doctorSearchParams.subCategory.nameAr ?? healthSharedData.doctorSearchParams.subCategory.nameEn}');
+        print(
+            '   - Booking Type: ${healthSharedData.doctorSearchParams.bookingType?.name ?? "null"}');
+        print('   → Navigating to City Selection');
 
         context.push(Routes.FILTERDOCTORCITY, extra: type);
       },

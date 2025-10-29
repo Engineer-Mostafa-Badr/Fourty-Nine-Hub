@@ -16,7 +16,7 @@ class BookedAppointmentEntity {
   BookedAppointmentEntity(
       {required this.id,
       required this.bookedPremium,
-        this.doctor,
+      this.doctor,
       required this.userId,
       required this.bookingType,
       required this.day,
@@ -26,13 +26,15 @@ class BookedAppointmentEntity {
       required this.expired});
 }
 
-enum BookingTypes { call, clinic, home, emergency }
+enum BookingTypes { call, videoCall, clinic, home, emergency }
 
 extension BookingTypesExtension on BookingTypes {
   String get translatedName {
     switch (this) {
       case BookingTypes.call:
         return LocaleKeys.call;
+      case BookingTypes.videoCall:
+        return LocaleKeys.call; // Could be a separate locale key if needed
       case BookingTypes.clinic:
         return LocaleKeys.clinicVisit;
       case BookingTypes.home:
@@ -45,31 +47,38 @@ extension BookingTypesExtension on BookingTypes {
 
 extension BookingTypesExtensionString on String {
   BookingTypes get toBookingType {
-    switch (toLowerCase()) {
-      case 'call' || 'calls':
-        return BookingTypes.call;
-      case 'clinic':
-        return BookingTypes.clinic;
-      case 'home' || 'homevisit' || 'visithome':
-        return BookingTypes.home;
-      case 'emergency':
-        return BookingTypes.emergency;
-      default:
-        return BookingTypes.clinic;
+    final lower = toLowerCase();
+    if (lower == 'call' || lower == 'calls') {
+      return BookingTypes.call;
+    } else if (lower == 'videocall' ||
+        lower == 'video_call' ||
+        lower == 'video-call') {
+      return BookingTypes.videoCall;
+    } else if (lower == 'clinic') {
+      return BookingTypes.clinic;
+    } else if (lower == 'home' ||
+        lower == 'homevisit' ||
+        lower == 'visithome') {
+      return BookingTypes.home;
+    } else if (lower == 'emergency') {
+      return BookingTypes.emergency;
     }
+    return BookingTypes.clinic;
   }
 }
 
 BookingTypes getBookingType(value) {
-  switch (value.toString()) {
-    case 'call':
-      return BookingTypes.call;
-    case 'clinic':
-      return BookingTypes.clinic;
-    case 'home':
-      return BookingTypes.home;
-    case 'emergency':
-      return BookingTypes.emergency;
+  final str = value.toString().toLowerCase();
+  if (str == 'call') {
+    return BookingTypes.call;
+  } else if (str == 'videocall' || str == 'video_call' || str == 'video-call') {
+    return BookingTypes.videoCall;
+  } else if (str == 'clinic') {
+    return BookingTypes.clinic;
+  } else if (str == 'home') {
+    return BookingTypes.home;
+  } else if (str == 'emergency') {
+    return BookingTypes.emergency;
   }
   return BookingTypes.clinic;
 }

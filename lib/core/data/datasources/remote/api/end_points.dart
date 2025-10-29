@@ -1697,6 +1697,13 @@ class EndPoints {
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
   static const getDoctorsBySpecialty = '/health/booking/doctors/specialties';
+  static const searchDoctorsByCalls = '/health/booking/doctors/search/calls';
+  static const searchDoctorsByVideoCalls =
+      '/health/booking/doctors/search/video-calls';
+  static const searchDoctorsByHomeVisits =
+      '/health/booking/doctors/search/home-visits';
+  static const searchDoctorsByClinicVisits =
+      '/health/booking/doctors/search/clinic-visits';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
       '/ride/non-tracking/trips/client/pending';

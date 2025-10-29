@@ -29,6 +29,9 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../health/domain/entities/most_booking_entity.dart';
+import '../../../health/domain/entities/appointment_booking_entity.dart';
+import '../../../health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorsListParams {
@@ -37,13 +40,15 @@ class DoctorsListParams {
   final String? type;
   final bool? fromSearch;
   final String? name;
+  final BookingTypes? bookingType;
 
   DoctorsListParams(
       {required this.fromHome,
       required this.subCategoryId,
       this.type = '',
       this.name = '',
-      this.fromSearch = false});
+      this.fromSearch = false,
+      this.bookingType});
 }
 
 class DoctorsListView extends StatefulWidget {
@@ -61,11 +66,44 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     print("widget.params.name ${widget.params.name}");
     _scrollController = ScrollController()..addListener(_onScroll);
 
+    final healthSharedData = serviceLocator<HealthSharedData>();
+
     // Use the new specialty-based loading for subcategory navigation
     if (widget.params.fromSearch == true) {
       context
           .read<DoctorsListCubit>()
           .loadInitialData(widget.params.name ?? '', true);
+    } else if (widget.params.bookingType != null) {
+      // Use booking type search if booking type is provided
+      final bookingType = widget.params.bookingType ??
+          healthSharedData.doctorSearchParams.bookingType;
+      if (bookingType != null) {
+        // Get specialty ID - prioritize params, fallback to shared data
+        final specialtyId = widget.params.subCategoryId.isNotEmpty
+            ? widget.params.subCategoryId
+            : healthSharedData.doctorSearchParams.subCategory.id;
+
+        // Get governorate and city from shared data
+        final governorateId =
+            healthSharedData.doctorSearchParams.governorate.id.isNotEmpty
+                ? healthSharedData.doctorSearchParams.governorate.id
+                : null;
+        final cityId = healthSharedData.doctorSearchParams.city.id.isNotEmpty
+            ? healthSharedData.doctorSearchParams.city.id
+            : null;
+
+        context.read<DoctorsListCubit>().loadInitialDataByBookingType(
+              bookingType: bookingType,
+              specialtyId: specialtyId,
+              governorateId: governorateId,
+              cityId: cityId,
+            );
+      } else {
+        // Fallback to specialty-based search
+        context
+            .read<DoctorsListCubit>()
+            .loadInitialDataBySpecialty(widget.params.subCategoryId);
+      }
     } else {
       // Use the new specialty-based method for subcategory
       context
@@ -79,14 +117,39 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       print("object");
-      if (widget.params.fromSearch == false) {
-        context
-            .read<DoctorsListCubit>()
-            .getDoctorsBySpecialty(widget.params.subCategoryId);
-      } else {
+      final healthSharedData = serviceLocator<HealthSharedData>();
+
+      if (widget.params.fromSearch == true) {
         context
             .read<DoctorsListCubit>()
             .getDoctorsFromSearch(widget.params.name ?? '');
+      } else if (widget.params.bookingType != null) {
+        // Use booking type search for pagination
+        final bookingType = widget.params.bookingType ??
+            healthSharedData.doctorSearchParams.bookingType;
+        if (bookingType != null) {
+          context.read<DoctorsListCubit>().getDoctorsByBookingType(
+                bookingType: bookingType,
+                specialtyId: widget.params.subCategoryId.isNotEmpty
+                    ? widget.params.subCategoryId
+                    : healthSharedData.doctorSearchParams.subCategory.id,
+                governorateId: healthSharedData
+                        .doctorSearchParams.governorate.id.isNotEmpty
+                    ? healthSharedData.doctorSearchParams.governorate.id
+                    : null,
+                cityId: healthSharedData.doctorSearchParams.city.id.isNotEmpty
+                    ? healthSharedData.doctorSearchParams.city.id
+                    : null,
+              );
+        } else {
+          context
+              .read<DoctorsListCubit>()
+              .getDoctorsBySpecialty(widget.params.subCategoryId);
+        }
+      } else {
+        context
+            .read<DoctorsListCubit>()
+            .getDoctorsBySpecialty(widget.params.subCategoryId);
       }
       print("object");
     }

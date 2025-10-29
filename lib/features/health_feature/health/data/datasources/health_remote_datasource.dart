@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/doc
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
+import '../../domain/usecases/search_doctors_by_booking_type_usecase.dart';
 
 import '../../domain/entities/most_booking_entity.dart';
 import '../../domain/usecases/get_booking_use_case.dart';
@@ -32,6 +33,8 @@ abstract class HealthRemoteDataSource {
       String userId);
   Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(
       SearchDoctorsParams params);
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsByBookingType(
+      SearchDoctorsByBookingTypeParams params);
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getFavoriteCategory();
 
@@ -145,6 +148,105 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
         return Right([]);
       }
     });
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsByBookingType(
+      SearchDoctorsByBookingTypeParams params) async {
+    // Determine the endpoint based on booking type
+    String endpoint;
+    switch (params.bookingType) {
+      case BookingTypes.call:
+        endpoint = EndPoints.searchDoctorsByCalls;
+        break;
+      case BookingTypes.videoCall:
+        endpoint = EndPoints.searchDoctorsByVideoCalls;
+        break;
+      case BookingTypes.clinic:
+        endpoint = EndPoints.searchDoctorsByClinicVisits;
+        break;
+      case BookingTypes.home:
+        endpoint = EndPoints.searchDoctorsByHomeVisits;
+        break;
+      case BookingTypes.emergency:
+        // Emergency might not use this endpoint, but handle it anyway
+        endpoint = EndPoints.searchDoctorsByCalls;
+        break;
+    }
+
+    final queryParams = params.toJson();
+
+    // Debug: Print params before sending
+    params.debugPrint();
+
+    print('🔍 [DEBUG] API Request Parameters:');
+    print('   - Endpoint: $endpoint');
+    print('   - Request Body: $queryParams');
+    print(
+        '   - Specialty ID: ${params.specialtyId} (isEmpty: ${params.specialtyId.isEmpty})');
+    print('   - Governorate ID: ${params.governorateId ?? "null"}');
+    print('   - City ID: ${params.cityId ?? "null"}');
+
+    // API expects GET request with JSON body (unusual but what the API requires)
+    print('🚀 [DEBUG] About to call API:');
+    print('   - Endpoint: $endpoint');
+    print('   - Method: GET');
+    print('   - Body: $queryParams');
+
+    final response = await _apiConsumer.get(
+      endpoint,
+      data: queryParams,
+    );
+
+    print('📥 [DEBUG] API call completed, processing response...');
+
+    return response.fold(
+      (failure) => Left(failure),
+      (data) {
+        try {
+          print('✅ [DEBUG] API Response received:');
+          print('   - Response keys: ${data.keys.toList()}');
+          print('   - Has data: ${data.containsKey('data')}');
+          if (data['data'] != null) {
+            print('   - Data type: ${data['data'].runtimeType}');
+            if (data['data'] is Map) {
+              print('   - Data keys: ${(data['data'] as Map).keys.toList()}');
+              if ((data['data'] as Map).containsKey('doctors')) {
+                final doctors = data['data']['doctors'];
+                print(
+                    '   - Doctors count: ${doctors is List ? doctors.length : "not a list"}');
+              }
+            }
+          }
+
+          // Handle the response structure
+          if (data['data'] != null) {
+            if (data['data'] is List) {
+              return Right((data['data'] as List)
+                  .map((e) => MostBookingModel.fromJson(e))
+                  .toList());
+            } else if (data['data']['doctors'] != null) {
+              return Right((data['data']['doctors'] as List)
+                  .map((e) => MostBookingModel.fromJson(e))
+                  .toList());
+            }
+          }
+          // Fallback: try direct list
+          if (data is List) {
+            return Right((data as List)
+                .map((e) => MostBookingModel.fromJson(e))
+                .toList());
+          }
+          print(
+              '⚠️ [WARNING] Unexpected response structure, returning empty list');
+          return Right([]);
+        } catch (e) {
+          print('❌ [ERROR] Error parsing booking type search results: $e');
+          print('   - Stack trace: ${StackTrace.current}');
+          return Right([]);
+        }
+      },
+    );
   }
 
   @override

@@ -27,11 +27,42 @@ class CityListTitle extends StatelessWidget {
       ),
       onTap: () {
         ManageVibration.vibrate();
-        serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
+        final healthSharedData = serviceLocator<HealthSharedData>();
+        healthSharedData.doctorSearchParams.city = city;
+
+        // Get booking type from shared data
+        final bookingType = healthSharedData.doctorSearchParams.bookingType;
+
+        // Debug print for city selection
+        print('🟡 [DEBUG] City Selected:');
+        print('   - City ID: ${city.id}');
+        print('   - City Name (AR): ${city.nameAr}');
+        print('   - City Name (EN): ${city.nameEn}');
+        print(
+            '   - Governorate ID: ${healthSharedData.doctorSearchParams.governorate.id}');
+        print(
+            '   - Governorate Name: ${healthSharedData.doctorSearchParams.governorate.nameAr ?? healthSharedData.doctorSearchParams.governorate.nameEn}');
+        print(
+            '   - Specialty ID: ${healthSharedData.doctorSearchParams.subCategory.id}');
+        print(
+            '   - Specialty ID isEmpty: ${healthSharedData.doctorSearchParams.subCategory.id.isEmpty}');
+        print(
+            '   - Specialty Name: ${healthSharedData.doctorSearchParams.subCategory.nameAr ?? healthSharedData.doctorSearchParams.subCategory.nameEn}');
+        print('   - Booking Type: ${bookingType?.name ?? "null"}');
+        print('   → Navigating to Doctors List with all filters');
+
+        final specialtyId = healthSharedData.doctorSearchParams.subCategory.id;
+        if (specialtyId.isEmpty) {
+          print('❌ [ERROR] Specialty ID is empty! Cannot proceed.');
+          return;
+        }
 
         context.push(Routes.VISITADOCTORLIST,
             extra: DoctorsListParams(
-                fromHome: false, subCategoryId: '', type: type));
+                fromHome: false,
+                subCategoryId: specialtyId,
+                type: type,
+                bookingType: bookingType));
       },
     );
   }
