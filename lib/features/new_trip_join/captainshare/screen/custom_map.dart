@@ -1009,6 +1009,7 @@
 //   }
 // }
 
+import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -1065,6 +1066,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
   final Set<Polyline> _polylines = {};
   final Set<Circle> _circles = {};
   Marker? _carMarker;
+  Timer? _polylineUpdateTimer;
+  bool _isAnimating = false;
 
   BitmapDescriptor? _startMarkerIcon;
   BitmapDescriptor? _waypoint1MarkerIcon;
@@ -1098,36 +1101,27 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     _latestStartLocation = widget.startLocation;
     _initializeMarkerIcons();
     _setupPolylineAnimation();
-    _setupTargetAnimation(); // 🔥 new
+    _setupTargetAnimation();
   }
 
   // 🔥 Target marker animation setup
   void _setupTargetAnimation() {
     _targetScaleController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 1500),
     );
 
-    _targetScaleAnimation = Tween<double>(begin: 1.0, end: 1.3).animate(
+    _targetScaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
       CurvedAnimation(parent: _targetScaleController, curve: Curves.easeInOut),
     );
 
-    _targetScaleAnimation.addListener(() async {
-      _targetScale = _targetScaleAnimation.value;
-      if (widget.targetLocation != null && !_isDisposed) {
-        // recreate target icon with new scale
-        _targetMarkerIcon = await _createMarkerWithLetter(
-          _getTargetLetter(),
-          Colors.green,
-          _calculateMarkerSizeByZoom(_currentZoom) * _targetScale,
-        );
-        _setMarkersAndPolyline();
-      }
-    });
-
-    _targetScaleController.addStatusListener((status) {
+    // 🔥 لا تعمل rebuild للـ markers في كل frame
+    // بدل كده، اعمل animation بسيطة مرة واحدة بس
+    _targetScaleAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _targetScaleController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        // لا تعيد الـ animation تلقائياً
       }
     });
   }
@@ -1143,22 +1137,32 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
+    // 🔥 استخدم addListener بحذر وامنع التحديثات المتكررة
     _colorAnimation.addListener(() {
-      if (mounted && !_isDisposed) {
-        setState(() {
-          _updatePolylineColors();
-        });
-      }
+      if (_isDisposed || !mounted || _isAnimating) return;
+
+      // 🔥 Throttle updates - بدل ما تعمل update كل frame، اعمله كل 50ms
+      _polylineUpdateTimer?.cancel();
+      _polylineUpdateTimer = Timer(const Duration(milliseconds: 50), () {
+        if (mounted && !_isDisposed) {
+          _isAnimating = true;
+          setState(() {
+            _updatePolylineColors();
+          });
+          _isAnimating = false;
+        }
+      });
     });
 
     _colorAnimation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        // 🔥 Trigger target marker animation when polyline reaches the end
-        _targetScaleController.forward(from: 0.0);
+      if (_isDisposed || !mounted) return;
 
-        // Wait 3 seconds before restarting polyline
+      if (status == AnimationStatus.completed) {
+        // 🔥 لا تعمل animation للـ target marker - ده بيسبب مشاكل كبيرة
+        // _targetScaleController.forward(from: 0.0);
+
         Future.delayed(const Duration(milliseconds: 3000), () {
-          if (mounted && !_isDisposed) {
+          if (mounted && !_isDisposed && _animationController.isCompleted) {
             _animationController.reset();
             _animationController.forward();
           }
@@ -1166,15 +1170,31 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       }
     });
 
-    _animationController.forward();
+    // 🔥 ابدأ الـ animation بعد ما الـ map يتحمل
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_isDisposed) {
+        _animationController.forward();
+      }
+    });
   }
 
   @override
   void dispose() {
     _isDisposed = true;
+
+    // 🔥 أهم حاجة - امسح كل الـ resources
+    _polylineUpdateTimer?.cancel();
+    _polylineUpdateTimer = null;
+
+    _animationController.stop();
     _animationController.dispose();
-    _targetScaleController.dispose(); // 🔥
+
+    _targetScaleController.stop();
+    _targetScaleController.dispose();
+
     _mapController?.dispose();
+    _mapController = null;
+
     super.dispose();
   }
 
@@ -1269,6 +1289,22 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     bool shouldMoveCameraToFitStartTarget = false;
     bool shouldMoveCameraToFitAll = false;
 
+    // 🔥 لو الـ polyline بقت فاضية، امسح كل حاجة وأوقف الـ animation
+    if (widget.polylinePoints.isEmpty && oldWidget.polylinePoints.isNotEmpty) {
+      _animationController.stop();
+      _animationController.reset();
+      _polylineUpdateTimer?.cancel();
+
+      _polylines.clear();
+      _circles.clear();
+
+      if (mounted && !_isDisposed) {
+        setState(() {});
+      }
+      return; // 🔥 خرج من الـ function
+    }
+
+    // Handle status changes
     if (widget.status != oldWidget.status) {
       if (_mapController != null && widget.startLocation != null &&
           widget.targetLocation != null && widget.status != TripState.started.name) {
@@ -1276,6 +1312,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       }
     }
 
+    // Handle start location changes
     if (widget.startLocation != oldWidget.startLocation) {
       _latestStartLocation = widget.startLocation;
       shouldUpdate = true;
@@ -1288,6 +1325,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       }
     }
 
+    // Check for significant changes that require full update
     if (_hasSignificantChanges(oldWidget)) {
       shouldUpdate = true;
       shouldMoveCameraToFitAll = true;
@@ -1298,16 +1336,39 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     }
 
     if (shouldUpdate) {
+      // أوقف الـ animation لما تعمل update
+      _animationController.stop();
+      _polylineUpdateTimer?.cancel();
+
+      // Reinitialize markers with fresh data
       _initializeMarkerIcons(forceRecreate: true);
 
       if (shouldMoveCameraToFitStartTarget) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!_isDisposed) _moveCameraToFitStartAndTarget();
+          if (!_isDisposed && mounted) {
+            _moveCameraToFitStartAndTarget();
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) { // 🔥 تأكد إن فيه polyline
+                _animationController.forward(from: 0.0);
+              }
+            });
+          }
         });
       } else if (shouldMoveCameraToFitAll) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted && !_isDisposed) {
             _moveCameraToFitAllPoints();
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) { // 🔥 تأكد إن فيه polyline
+                _animationController.forward(from: 0.0);
+              }
+            });
+          }
+        });
+      } else {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) { // 🔥 تأكد إن فيه polyline
+            _animationController.forward(from: 0.0);
           }
         });
       }
@@ -1443,10 +1504,20 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
 
     _mapController = controller;
     initMapStyle();
-    _setMarkersAndPolyline();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_isDisposed) _moveCameraToFitAllPoints();
+      if (!_isDisposed && mounted) {
+        _moveCameraToFitAllPoints();
+
+        // 🔥 بس ابدأ الـ animation لو فيه polyline points
+        if (widget.polylinePoints.isNotEmpty) {
+          Future.delayed(const Duration(milliseconds: 800), () {
+            if (mounted && !_isDisposed) {
+              _animationController.forward();
+            }
+          });
+        }
+      }
     });
   }
 
@@ -1509,6 +1580,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
 
     _circles.clear();
 
+    // 🔥 لو مفيش polyline، ما تضيفش circles
     if (widget.polylinePoints.isEmpty) return;
 
     double circleRadius = _calculateCircleRadiusByZoom(_currentZoom);
@@ -1569,7 +1641,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
   }
 
   void _setMarkersAndPolyline() {
-    if (_isDisposed || _isUpdatingMarkers) return;
+    if (_isDisposed || _isUpdatingMarkers || !mounted) return;
 
     _markers.clear();
 
@@ -1628,26 +1700,40 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       ));
     }
 
-    _updatePolylineColors();
-    _addStepCircles();
+    // 🔥 بس لو فيه polyline points، حدّث الـ polylines والـ circles
+    if (widget.polylinePoints.isNotEmpty) {
+      _updatePolylineColors();
+      _addStepCircles();
+    } else {
+      // 🔥 لو مفيش، امسحهم
+      _polylines.clear();
+      _circles.clear();
+    }
 
     if (_carMarker != null) {
       _markers.add(_carMarker!);
     }
 
     if (mounted && !_isDisposed) {
-      setState(() {});
+      scheduleMicrotask(() {
+        if (mounted && !_isDisposed) {
+          setState(() {});
+        }
+      });
     }
   }
 
   void _updatePolylineColors() {
-    if (_isDisposed || widget.polylinePoints.isEmpty) return;
+    // 🔥 لو مفيش polyline points، امسح كل حاجة
+    if (_isDisposed || widget.polylinePoints.isEmpty) {
+      _polylines.clear();
+      return;
+    }
 
     _polylines.clear();
 
     final animationValue = _colorAnimation.value;
 
-    // Define colors based on theme
     Color startColor = context.isDarkMode
         ? AppColors.PRIMARY_COLOR_DARK
         : AppColors.PRIMARY_COLOR_DARK;
@@ -1655,7 +1741,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
         ? AppColors.blueColor
         : AppColors.PRIMARY_COLOR;
 
-    // Build solid animated polyline
     _polylines.addAll(_buildAnimatedPolyline(
         widget.polylinePoints,
         startColor,
@@ -1673,36 +1758,27 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     List<Polyline> polylines = [];
     if (points.length < 2) return polylines;
 
-    // Optimize for performance - limit segments
-    final maxSegments = 100;
+    // 🔥 قلل عدد الـ segments أكتر للبرفورمانس
+    final maxSegments = 50; // كان 100
     final segmentCount = min(points.length - 1, maxSegments);
     final stepSize = max(1, (points.length - 1) ~/ segmentCount);
 
     for (int i = 0; i < points.length - stepSize; i += stepSize) {
       final int endIndex = min(i + stepSize, points.length - 1);
-
-      // Calculate position along the route (0 to 1)
       final double routePosition = i / (points.length - 1);
 
-      // Calculate animated color wave that moves along the route
-      // The wave moves from start to end based on animationValue
+      // 🔥 بسّط الحسابات
       final double wavePosition = (routePosition - animationValue + 1.0) % 1.0;
-
-      // Use smooth interpolation for the color
-      final Color segmentColor = Color.lerp(
-        startColor,
-        endColor,
-        wavePosition,
-      )!;
+      final Color segmentColor = Color.lerp(startColor, endColor, wavePosition)!;
 
       polylines.add(
         Polyline(
           polylineId: PolylineId('animated_$i'),
           points: [points[i], points[endIndex]],
           color: segmentColor,
-          width: 6, // خليته أعرض شوية عشان يكون واضح
-          jointType: JointType.round, // عشان يبقى smooth
-          startCap: Cap.roundCap, // عشان النهايات تبقى مدورة
+          width: 6,
+          jointType: JointType.round,
+          startCap: Cap.roundCap,
           endCap: Cap.roundCap,
         ),
       );
