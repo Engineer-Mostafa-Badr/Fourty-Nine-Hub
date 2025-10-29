@@ -317,7 +317,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           status: DashboardsStates.success,
         ));
         showSuccessMessage(
-            context, rateData.message ?? LocaleKeys.successSubmit.localize);
+            context, rateData.message);
       },
     );
   }
@@ -386,7 +386,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           status: DashboardsStates.success,
         ));
         showSuccessMessage(
-            context, rateData.message ?? LocaleKeys.successSubmit.localize);
+            context, rateData.message);
       },
     );
   }
@@ -449,7 +449,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) {
         historyLoadingNonSocketData.addAll(data);
-        if ((data.length ?? 0) < 5) {
+        if ((data.length) < 5) {
           hasMoreHistoryNonSocketLoading = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
@@ -470,7 +470,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     // TripsResponseEntity
     listenToRemoveLoadingUseCase((tripId) {
       List<GetLoadingAvailableEntity> list =
-          availableLoadingNonSocketData ?? [];
+          availableLoadingNonSocketData;
       log("tripId.toString()${tripId.toString()}");
       if (tripId.isNotEmpty) {
         list.removeWhere((e) => e.tripDetails?.id == tripId);
@@ -489,7 +489,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     // TripsResponseEntity
     listenToAvailableLoadingUseCase((trip) {
       List<GetLoadingAvailableEntity> list =
-          availableLoadingNonSocketData ?? [];
+          availableLoadingNonSocketData;
       list.insert(0, trip);
       emit(state.copyWith(loadingAvailableNonSocket: list));
       log(trip.toString());
@@ -583,7 +583,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) {
         availableLoadingNonSocketData.addAll(data);
-        if ((data.length ?? 0) < 5) {
+        if ((data.length) < 5) {
           hasMoreAvailableNonSocketLoading = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
@@ -1111,7 +1111,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     var currentContext =
         AppPages.router.configuration.navigatorKey.currentContext!;
     listenToAcceptLoadingTripOfferUseCase((tripId) {
-      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       if (tripId.isNotEmpty) {
         availableLoadingNonSocketData
             .removeWhere((e) => e.tripDetails?.id == tripId);
@@ -1125,8 +1124,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   void listenToRemoveAcceptedTripOfferLoading() {
     CliLogger.info('Listen to Remove Accepted Trip Offer Loading');
-    var currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
     listenToRemoveAcceptedLoadingTripOfferUseCase((tripId) {
       if (tripId.isNotEmpty) {
         availableLoadingNonSocketData
@@ -1395,7 +1392,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       //     onUploaded:(String mediaId){
       //       personalFrontMediaId = mediaId;
       //       emit(state.copyWith(status: DashboardsStates.success,personalFrontMediaId:mediaId));
-      //     print("String mediaId $mediaId");
+      //     debugPrint("String mediaId $mediaId");
       //     }
       // );
       final personalFrontMediaId = await FindMediaId.getMediaId(
@@ -1428,7 +1425,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
                   : 'Please upload front id picture');
           return;
         } else {
-          print("state.personalFrontMediaId ${state.personalFrontMediaId}");
+          debugPrint("state.personalFrontMediaId ${state.personalFrontMediaId}");
         }
         if (personalBackMediaId.isEmpty) {
           context.pop();
@@ -1657,7 +1654,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) {
         pastRideNonSocketData.addAll(data);
-        if ((data.length ?? 0) < 5) {
+        if ((data.length) < 5) {
           hasMorePastNonSocketTrips = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
@@ -1706,7 +1703,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (data) {
         acceptedRideNonSocketData.addAll(data);
-        if ((data.length ?? 0) < 5) {
+        if ((data.length) < 5) {
           hasMoreAcceptedNonSocketTrips = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: DashboardsStates.loading));
@@ -1729,7 +1726,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   bool isLoadingAvailableNonSocketTrips = false;
 
   void loadInitialAvailableNonSocketTrips() async {
-    print("loadInitialAvailableNonSocketTrips");
+    debugPrint("loadInitialAvailableNonSocketTrips");
     isLoadingAvailableNonSocketTrips = true;
     isLoadingMoreAvailableNonSocketTrips = false;
     availableRideNonSocketData.clear();
@@ -1742,10 +1739,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   Future<void> getAvailableNonSocketTrips() async {
-    print("hasMoreAvailableNonSocketTrips $hasMoreAvailableNonSocketTrips");
-    print(
+    debugPrint("hasMoreAvailableNonSocketTrips $hasMoreAvailableNonSocketTrips");
+    debugPrint(
         "isLoadingMoreAvailableNonSocketTrips $isLoadingMoreAvailableNonSocketTrips");
-    print(
+    debugPrint(
         "currentPageAvailableNonSocketTrips $currentPageAvailableNonSocketTrips");
     if (!hasMoreAvailableNonSocketTrips ||
         isLoadingMoreAvailableNonSocketTrips) {
@@ -1783,12 +1780,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   TextEditingController reasonController = TextEditingController();
 
   void changeIndex(int index, BuildContext context, RideModeParams params) {
-    final settings =
-        state.driverSettingsEntity; // Assuming this contains `isReady`
-
     emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
-
-    // Index 0: Available Trips
     if (index == 0) {
       if (params.isSocket == true) {
         loadAvailableRideTrips(context);
@@ -1798,16 +1790,21 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       } else if (params.modeType == "truck") {
         loadInitialAvailableNonSocketLoading();
       }
-      return; // prevent loading other data if index is 0
+      return;
     }
-
+    if(index == 8){
+      loadAvailableTrips(context);
+    }
     if (index == 1 && params.isSocket == true) getActiveTrip(context);
     if (index == 2 && params.isSocket == true) {
       loadPastRideTrips(
-          context, params.isSocket == true ? "tracking" : 'non-tracking');
+          context,
+          params.isSocket == true ? "tracking" : 'non-tracking'
+      );
     }
-    if (index == 3 && params.isSocket == true)
+    if (index == 3 && params.isSocket == true) {
       [fetchGovs(), getSettings(context)];
+    }
 
     // Index 2: Past Trips
     if (index == 2 && params.isSocket == false) {
@@ -1987,7 +1984,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     // TripsResponseEntity
     listenToRemoveUntrackedTripUseCase((tripId) {
       List<AvailableRideNonSocketTripEntity> list =
-          availableRideNonSocketData ?? [];
+          availableRideNonSocketData;
       log("tripId.toString()${tripId.toString()}");
       if (tripId.isNotEmpty) {
         list.removeWhere((e) => e.tripDetails?.id == tripId);
@@ -2078,15 +2075,27 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   bool isLoadingAvailableRideTrips = false;
 
-  void loadAvailableRideTrips(BuildContext context) async {
+  void loadAvailableTrips(BuildContext context) async {
     isLoadingAvailableRideTrips = true;
-    print("loadAvailableRideTrips1");
+    debugPrint("loadAvailableRideTrips1");
     emit(state.copyWith(availableRideTrips: []));
     currentPage = 1;
     newAvailableRideTrips.clear();
     hasMoreData = true;
     await getAvailableRideTrips(context);
-    print("loadAvailableRideTrips2");
+    debugPrint("loadAvailableRideTrips2");
+    isLoadingAvailableRideTrips = false;
+  }
+
+  void loadAvailableRideTrips(BuildContext context) async {
+    isLoadingAvailableRideTrips = true;
+    debugPrint("loadAvailableRideTrips1");
+    emit(state.copyWith(availableRideTrips: []));
+    currentPage = 1;
+    newAvailableRideTrips.clear();
+    hasMoreData = true;
+    await getAvailableRideTrips(context);
+    debugPrint("loadAvailableRideTrips2");
     isLoadingAvailableRideTrips = false;
   }
 
@@ -2109,8 +2118,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (failure) {
         showErrorMessage(context, getFailureMessage(failure, context));
         isLoadingMore = false;
-        print("objectnewAvailableRideTripsEEEE");
-        print("Failure");
+        debugPrint("objectnewAvailableRideTripsEEEE");
+        debugPrint("Failure");
 
         emit(state.copyWith(failure: failure, status: DashboardsStates.error));
       },
@@ -2152,13 +2161,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   void loadPastRideTrips(BuildContext context, String type) async {
     isLoadingPastRideTrips = true;
-    print("loadPastRideTrips1");
+    debugPrint("loadPastRideTrips1");
     emit(state.copyWith(availableRideTrips: []));
     currentPastTripPage = 1;
     pastRideTrips.clear();
     hasMorePastTripData = true;
     await getPastTrips(context, type);
-    print("loadPastRideTrips2");
+    debugPrint("loadPastRideTrips2");
     isLoadingPastRideTrips = false;
   }
 
@@ -2180,7 +2189,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (pastTrips) {
-        print("pastTrips.data.trips ${pastTrips.data.trips}");
+        debugPrint("pastTrips.data.trips ${pastTrips.data.trips}");
         // availableRideTrips.addAll(state.availableRideTrips ?? []);
         pastRideTrips.addAll(pastTrips.data.trips);
         if (pastTrips.data.trips.length < pageSize) {
@@ -2212,8 +2221,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (failure) {
         currentContext.pop();
         log("Failure ${getFailureMessage(failure, currentContext)}");
-        showErrorMessage(
-            currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(
             status: DashboardsStates.error,
             failure: failure,
@@ -2422,7 +2429,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (trip) {
         currentContext.pop();
-        print("tripCancelled");
+        debugPrint("tripCancelled");
         changeIndex(0, currentContext, params);
         activeTrip = null;
         emit(state.copyWith(
@@ -2561,20 +2568,25 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   Future<void> updateSettings(
       BuildContext context,
       UpdateSettingsDashboardUsecaseParam param,
-      RideModeParams rideModeParams) async {
+  RideModeParams rideModeParams,
+  bool? showLoader
+      ) async {
     if (isClosed) {
       return;
     }
+    var currentContext =
+    AppPages.router.configuration.navigatorKey.currentContext!;
     emit(state.copyWith(status: DashboardsStates.loadingSettings));
-
+    if(showLoader == true){
+      showLoadingDialog(currentContext);
+    }
     final Either<Failure, bool> result =
         await updateSettingsDashboardUsecase(param);
 
     if (isClosed) return;
     result.fold(
       (failure) {
-        var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
+        if(showLoader == true)currentContext.pop();
         log("Failure ${getFailureName(failure, currentContext)}");
         String errorName = getFailureName(failure, currentContext);
         if (errorName == 'RideActiveTripError') {
@@ -2592,11 +2604,13 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
-      (settings) {
-        var currentContext =
-            AppPages.router.configuration.navigatorKey.currentContext!;
+      (settings) async {
         currentContext.read<MainCategoriesCubit>().getSettings(currentContext);
-
+        await getSettings(context);
+        if(showLoader == true)currentContext.pop();
+        if(rideModeParams.isSocket==true&&state.currentIndex==0&&param.isReady==true){
+          loadAvailableRideTrips(context);
+        }
         log("Suzccess");
         // emit(state.copyWith(status: DashboardsStates.success));
         // if (settings) {
@@ -2608,7 +2622,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         //     content: Text('Some thing went error!'),
         //   ));
         // }
-        getSettings(context);
       },
     );
   }
@@ -2942,7 +2955,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     );
   }
 
-  final bool _isRequestingPermission = false;
 
   Future<bool> _checkPermissions() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -3320,14 +3332,14 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     FocusScope.of(context).requestFocus(FocusNode());
     emit(state.copyWith(status: DashboardsStates.loadingSubmitRequest));
     bool hasPermission = await _checkPermissions();
-    print("hasPermission $hasPermission");
+    debugPrint("hasPermission $hasPermission");
     Position? currentPosition;
     if (hasPermission) {
       currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
     }
-    print("currentPosition ${currentPosition?.latitude}");
+    debugPrint("currentPosition ${currentPosition?.latitude}");
     final Either<Failure, bool> result = await emergencySupportUseCase(
         EmergencySupportParams(
             driverId: driverId,
@@ -3371,7 +3383,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           const RecordConfig(),
           path: tempPath,
         );
-        print("object");
+        debugPrint("object");
       } else {
         throw Exception('Microphone permission not granted');
       }

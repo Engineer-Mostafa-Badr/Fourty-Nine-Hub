@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +48,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
@@ -115,7 +113,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     SharedWebSocket.socket!.off('RIDE:DRIVER_STARTED_TRIP');
     SharedWebSocket.socket!.off('RIDE:TRIP_CANCELLED_BY_DRIVER');
     SharedWebSocket.socket!.off('RIDE:DRIVER_COMPLETED_TRIP');
-
     SharedWebSocket.socket!.off('RIDE:FINALIZE_DRIVER_TRIP_PRE_START');
     SharedWebSocket.socket!.off('RIDE:ACCEPTED_AUTO_TRIP');
     SharedWebSocket.socket!.off('RIDE:VIEWER_TRIPS');
