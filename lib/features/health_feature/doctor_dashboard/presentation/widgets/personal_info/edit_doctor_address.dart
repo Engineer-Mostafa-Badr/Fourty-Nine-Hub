@@ -7,7 +7,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_personal_info/edit_doctor_personal_info_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';

@@ -1,0 +1,98 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/health_feature/fast_booking/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/fast_booking/presentation/widgets/city_list_title.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../common/widgets/stateless/loaders/default_loader.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
+
+class DoctorCityFilterView extends StatefulWidget {
+  const DoctorCityFilterView({
+    super.key,
+    required this.type,
+  });
+  final String type;
+
+  @override
+  State<DoctorCityFilterView> createState() => _DoctorCityFilterViewState();
+}
+
+class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
+  @override
+  void initState() {
+    context.read<DoctorCityFilterCubit>().loadData(
+        governorateId: serviceLocator<HealthSharedData>()
+            .doctorSearchParams
+            .governorate
+            .id);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final doctorCityFilter = context.read<DoctorCityFilterCubit>();
+    return CustomScaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          isWithBackArrow: true,
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10.h,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Label(
+              text: LocaleKeys.city.localize,
+              style: Styles.headerText(),
+            ),
+            Sizer(),
+            DefaultTextFormField(
+              currentFocusNode: doctorCityFilter.searchFocusNode,
+              currentController: doctorCityFilter.searchController,
+              hint: LocaleKeys.search.localize,
+              prefixIcon: const Icon(Icons.search),
+              onChanged: (value) => doctorCityFilter.search(value),
+            ),
+            Sizer(
+              height: 30.h,
+            ),
+            BlocBuilder<DoctorCityFilterCubit, DoctorCityFilterState>(
+              builder: (context, state) {
+                switch (state) {
+                  case DoctorCityFilterLoaded _:
+                    return Expanded(
+                        child: ListView.builder(
+                      itemCount: state.cities.length,
+                      itemBuilder: (context, index) => CityListTitle(
+                        city: state.cities[index],
+                        type: widget.type,
+                      ),
+                    ));
+                  case DoctorCityFilterError _:
+                    return Center(child: Text(state.message));
+                  default:
+                    return Center(child: const DLoader());
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

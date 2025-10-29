@@ -29,10 +29,10 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/fil
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';

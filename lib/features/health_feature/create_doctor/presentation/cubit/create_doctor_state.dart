@@ -31,7 +31,7 @@ final class CreateDoctorCitiesLoaded extends CreateDoctorState {
 final class CreateDoctorCitiesLoading extends CreateDoctorState {}
 
 final class CreateDoctorGovernoratesLoaded extends CreateDoctorState {
-  final List<GovernorateEntity> governorates;
+  final List<create_doctor.GovernorateEntity> governorates;
   CreateDoctorGovernoratesLoaded(this.governorates);
 }
 

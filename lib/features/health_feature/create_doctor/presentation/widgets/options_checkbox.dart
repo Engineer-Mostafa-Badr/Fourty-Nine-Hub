@@ -38,7 +38,9 @@ class _CreateDoctorOptionsCheckboxState
                 _clinic = value!;
                 context.read<CreateDoctorCubit>().toggleClinic(value);
               },
-              title:context.isArabic?'زيارة عيادة': LocaleKeys.clinicVisit.tr(),
+              title: context.isArabic
+                  ? 'زيارة عيادة'
+                  : LocaleKeys.clinicVisit.tr(),
             );
             // return Checkbox(
             //   value: _clinic,
@@ -64,7 +66,7 @@ class _CreateDoctorOptionsCheckboxState
                 _call = value!;
                 context.read<CreateDoctorCubit>().toggleCallCheck(value);
               },
-              title: context.isArabic?"اتصال":LocaleKeys.call.tr(),
+              title: context.isArabic ? "اتصال" : LocaleKeys.call.tr(),
             );
             // return Checkbox(
             //   value: _call,
@@ -91,7 +93,8 @@ class _CreateDoctorOptionsCheckboxState
                 _homeVisit = value!;
                 context.read<CreateDoctorCubit>().toggleHomeVisit(value);
               },
-              title: context.isArabic?'زيارة منزلة':LocaleKeys.homeVisit.tr(),
+              title:
+                  context.isArabic ? 'زيارة منزل' : LocaleKeys.homeVisit.tr(),
             );
             // return Checkbox(
             //   value: _homeVisit,

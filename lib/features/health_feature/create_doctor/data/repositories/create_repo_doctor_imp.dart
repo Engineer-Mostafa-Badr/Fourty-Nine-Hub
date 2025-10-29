@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/datasources/create_doctor_remote_datasource.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/repositories/create_doctor_repo.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 
 class CreateDoctorRepoImpl implements CreateDoctorRepo {
   final CreateDoctorRemoteDataSource _createDoctorRemoteDataSource;

@@ -13,8 +13,8 @@ import '../features/health_feature/create_doctor/data/datasources/create_doctor_
 import '../features/health_feature/create_doctor/data/repositories/create_repo_doctor_imp.dart';
 import '../features/health_feature/create_doctor/domain/repositories/create_doctor_repo.dart';
 import '../features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
-import '../features/health_feature/create_doctor/domain/usecases/get_cities.dart';
-import '../features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import '../features/health_feature/shared/domain/usecases/get_cities.dart';
+import '../features/health_feature/shared/domain/usecases/get_governorates.dart';
 import '../features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import '../features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import '../features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';

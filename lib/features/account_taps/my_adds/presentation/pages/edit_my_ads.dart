@@ -18,9 +18,9 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/widgets
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';

@@ -27,8 +27,10 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
-import '../../../../create_doctor/domain/entities/governorate_entity.dart';
-import '../../../../create_doctor/domain/usecases/get_governorates.dart';
+import '../../../../create_doctor/domain/entities/governorate_entity.dart'
+    as create_doctor;
+import '../../../../shared/domain/usecases/get_governorates.dart';
+import '../../../../shared/domain/entities/governorate_entity.dart';
 import '../../../domain/entities/appointment_booking_entity.dart';
 import '../../../domain/entities/booking_entity.dart';
 import '../../../domain/entities/most_booking_entity.dart';
@@ -271,8 +273,17 @@ class HealthCubit extends Cubit<HealthState> {
           currentContext, getFailureMessage(failure, currentContext));
       emit(state.copyWith(failure: failure, status: HealthStates.error));
     }, (data) {
-      _healthShare.governorates = data;
-      emit(state.copyWith(status: HealthStates.initState, governorates: data));
+      // Convert from create_doctor GovernorateEntity to shared GovernorateEntity
+      final sharedGovernorates = data
+          .map((e) => GovernorateEntity(
+                id: e.id,
+                nameAr: e.nameAr,
+                nameEn: e.nameEn,
+              ))
+          .toList();
+      _healthShare.governorates = sharedGovernorates;
+      emit(state.copyWith(
+          status: HealthStates.initState, governorates: sharedGovernorates));
     });
     // } else {
     //   emit(state.copyWith(subCategories: _healthShare.subCategories));

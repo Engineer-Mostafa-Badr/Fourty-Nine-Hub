@@ -5,12 +5,16 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/enums/week_days.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../health_feature/create_doctor/data/models/doctor_day_model.dart';
-import '../../../../health_feature/create_doctor/domain/entities/city.dart';
+
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import '../../../../health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
-import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart'
+    as create_doctor;
+import '../../../../health_feature/shared/domain/entities/governorate_entity.dart';
+import '../../../../health_feature/shared/domain/entities/city_entity.dart';
 import '../../../../health_feature/create_doctor/domain/usecases/create_doctor.dart';
-import '../../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
-import '../../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import '../../../../health_feature/shared/domain/usecases/get_cities.dart';
+import '../../../../health_feature/shared/domain/usecases/get_governorates.dart';
 import '../../../../health_feature/health/domain/usecases/get_health_subcategories.dart';
 import '../../../../health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
@@ -79,8 +83,16 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(CreateResturantError("Can't Load Governorates"));
       }, (data) {
-        _shareCubit.governorates = data;
-        emit(CreateResturantGovernoratesLoaded(data));
+        // Convert from create_doctor GovernorateEntity to shared GovernorateEntity
+        final sharedGovernorates = data
+            .map((e) => GovernorateEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
+        _shareCubit.governorates = sharedGovernorates;
+        emit(CreateResturantGovernoratesLoaded(sharedGovernorates));
       });
     } else {
       emit(CreateResturantGovernoratesLoaded(_shareCubit.governorates));
@@ -99,7 +111,17 @@ class CreateResturantCubit extends Cubit<CreateResturantState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(CreateResturantError("Can't Load Cities"));
       },
-      (data) => emit(CreateResturantCitiesLoaded(data)),
+      (data) {
+        // Convert from create_doctor CityEntity to shared CityEntity
+        final sharedCities = data
+            .map((e) => CityEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
+        emit(CreateResturantCitiesLoaded(sharedCities));
+      },
     );
   }
 

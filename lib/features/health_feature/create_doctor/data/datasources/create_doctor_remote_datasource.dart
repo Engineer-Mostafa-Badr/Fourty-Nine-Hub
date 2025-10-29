@@ -3,10 +3,10 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/city_model.dart';
+import 'package:fourtyninehub/features/health_feature/shared/data/models/city_model.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 
 abstract class CreateDoctorRemoteDataSource {
   Future<Either<Failure, bool>> createDoctor(CreateDoctorParams params);
@@ -45,6 +45,7 @@ class CreateDoctorRemoteDataSourceImpl implements CreateDoctorRemoteDataSource {
       (failure) => Left(failure),
       (data) => Right(((data['data']?['cities'] ?? data['data']) as List)
           .map((e) => CityModel.fromJson(e))
+          .cast<CityEntity>()
           .toList()),
     );
   }

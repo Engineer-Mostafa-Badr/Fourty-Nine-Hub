@@ -1,4 +1,4 @@
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 
 class CityModel extends CityEntity {
   CityModel({required super.id, required super.nameAr, required super.nameEn});

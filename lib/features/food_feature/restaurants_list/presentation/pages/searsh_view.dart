@@ -11,7 +11,7 @@ import '../../domain/entities/food_category_entity.dart';
 import '../../domain/entities/restaurant.dart';
 import '../cubit/search_cubit/search_cubit.dart';
 import '../widgets/search_restaurant_card.dart';
-import '../../../../health_feature/create_doctor/domain/entities/city.dart';
+import '../../../../health_feature/shared/domain/entities/city_entity.dart';
 import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../res/style/app_colors.dart';

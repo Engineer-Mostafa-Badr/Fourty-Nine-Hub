@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart' as shared_city;
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -12,7 +13,7 @@ import '../../../../../res/style/styles.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CityListTitle extends StatelessWidget {
-  final CityEntity city;
+  final shared_city.CityEntity city;
 
   const CityListTitle({super.key, required this.city, required this.type});
 
@@ -28,7 +29,12 @@ class CityListTitle extends StatelessWidget {
       onTap: () {
         ManageVibration.vibrate();
         final healthSharedData = serviceLocator<HealthSharedData>();
-        healthSharedData.doctorSearchParams.city = city;
+        // Convert from create_doctor CityEntity to shared CityEntity
+        healthSharedData.doctorSearchParams.city = CityEntity(
+          id: city.id,
+          nameAr: city.nameAr,
+          nameEn: city.nameEn,
+        );
 
         // Get booking type from shared data
         final bookingType = healthSharedData.doctorSearchParams.bookingType;

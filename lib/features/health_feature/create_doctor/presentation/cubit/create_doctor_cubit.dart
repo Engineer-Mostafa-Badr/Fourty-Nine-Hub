@@ -4,22 +4,23 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart'
+    as create_doctor;
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'create_doctor_state.dart';
@@ -170,7 +171,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   }
 
   // ================================ dropdowns ===============================
-  Future<void> selectGovernorate(GovernorateEntity value) async {
+  Future<void> selectGovernorate(create_doctor.GovernorateEntity value) async {
     _createDoctorParams.address.governorateId = value.id;
     debugPrint('Governorate: ${value.nameEn} (${value.id})');
     await _getCities(value.id);
@@ -187,6 +188,67 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       _saveTextEditingControllers();
       _saveDetections();
       _saveDocumentsIfAvailable();
+
+      // Validate that at least one service type is selected
+      if (!hasCalls && !hasClinic && !hasHomeVisit) {
+        final errorMessage = context.isArabic
+            ? 'يجب اختيار نوع خدمة واحد على الأقل (زيارة عيادة، اتصال، أو زيارة منزل)'
+            : 'Please select at least one service type (Clinic visit, Call, or Home visit)';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate profile photo
+      if (_createDoctorParams.doctorProfilePicMediaId.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء رفع صورة الملف الشخصي'
+            : 'Please upload profile photo';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate ID photos (front and back)
+      if (_tempIdFront.isEmpty || _tempIdBehind.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء رفع صور الهوية (الوجه والظهر)'
+            : 'Please upload ID photos (Front and Back)';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate ID expiry date
+      if (_idExpiryDateIso.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء اختيار تاريخ انتهاء صلاحية الهوية'
+            : 'Please select ID expiry date';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate license photos (front and back)
+      if (_tempLicenseFront.isEmpty || _tempLicenseBehind.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء رفع صور الترخيص (الوجه والظهر)'
+            : 'Please upload license photos (Front and Back)';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate license expiry date
+      if (_licenseExpiryDateIso.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء اختيار تاريخ انتهاء صلاحية الترخيص'
+            : 'Please select license expiry date';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
       String? checkFilledMessage = _createDoctorParams.isFilled();
       if (checkFilledMessage == null) {
         emit(CreateDoctorLoading("Creating Account..."));
@@ -194,17 +256,56 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         emit(CreateDoctorCloseLoading());
         response.fold((failure) {
           var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+              AppPages.router.configuration.navigatorKey.currentContext;
+          if (currentContext != null) {
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+          }
           emit(CreateDoctorError("Can't Create Doctor"));
         }, (data) {
           emit(CreateDoctorSuccess(
               "You are submit successfully. Please wait admin approve and approval."));
-          context.go(Routes.VISITA);
+          // Navigation will be handled in BlocListener to avoid context issues
         });
       } else {
-        emit(CreateDoctorError(checkFilledMessage));
+        // Translate validation messages
+        String localizedMessage = checkFilledMessage;
+        if (context.isArabic) {
+          switch (checkFilledMessage) {
+            case 'Please choose your specialty':
+              localizedMessage = 'الرجاء اختيار التخصص';
+              break;
+            case 'Please upload your photo':
+              localizedMessage = 'الرجاء رفع صورتك';
+              break;
+            case 'Please enter your first name':
+              localizedMessage = 'الرجاء إدخال الاسم الأول';
+              break;
+            case 'Please enter your last name':
+              localizedMessage = 'الرجاء إدخال الاسم الأخير';
+              break;
+            case 'Please enter your phone number':
+              localizedMessage = 'الرجاء إدخال رقم الهاتف';
+              break;
+            case 'Please enter your description':
+              localizedMessage = 'الرجاء إدخال الوصف';
+              break;
+            case 'Please enter your governorate':
+              localizedMessage = 'الرجاء اختيار المحافظة';
+              break;
+            case 'Please enter your city':
+              localizedMessage = 'الرجاء اختيار المدينة';
+              break;
+            case 'Please enter your address':
+              localizedMessage = 'الرجاء إدخال العنوان';
+              break;
+            case 'Please add at least one detection type':
+              localizedMessage = 'الرجاء اختيار نوع خدمة واحد على الأقل';
+              break;
+          }
+        }
+        emit(CreateDoctorError(localizedMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
       }
     }
   }
@@ -311,11 +412,27 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(CreateDoctorError("Can't Load Governorates"));
       }, (data) {
-        _shareCubit.governorates = data;
+        // Convert from create_doctor GovernorateEntity to shared GovernorateEntity
+        final sharedGovernorates = data
+            .map((e) => GovernorateEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
+        _shareCubit.governorates = sharedGovernorates;
         emit(CreateDoctorGovernoratesLoaded(data));
       });
     } else {
-      emit(CreateDoctorGovernoratesLoaded(_shareCubit.governorates));
+      // Convert from shared GovernorateEntity to create_doctor GovernorateEntity
+      final createDoctorGovernorates = _shareCubit.governorates
+          .map((e) => create_doctor.GovernorateEntity(
+                id: e.id,
+                nameAr: e.nameAr,
+                nameEn: e.nameEn,
+              ))
+          .toList();
+      emit(CreateDoctorGovernoratesLoaded(createDoctorGovernorates));
     }
   }
 
@@ -475,7 +592,11 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       );
       emit(CreateDoctorCloseLoading());
     } else {
-      emit(CreateDoctorError("Select Subcategory First"));
+      final errorMessage = context.isArabic
+          ? 'الرجاء اختيار التخصص قبل رفع الصورة'
+          : 'Please select speciality before uploading image';
+      emit(CreateDoctorError(errorMessage));
+      // Error will be shown in BlocListener, no need to call showErrorMessage here
     }
   }
 }
