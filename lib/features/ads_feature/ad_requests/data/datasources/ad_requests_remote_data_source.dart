@@ -53,7 +53,7 @@ class AdRequestsRemoteDataSourceImpl extends AdRequestsRemoteDataSource {
 
     try {
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] as List)
+        return Right((data['data']['requests'] as List)
             .map((e) => RequestsLogByMainCategoryModel.fromJson(e))
             .toList());
       });
