@@ -162,6 +162,91 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     super.dispose();
   }
 
+  String _getEmptyMessage(BuildContext context) {
+    final healthSharedData = serviceLocator<HealthSharedData>();
+    final isArabic = context.isArabic;
+
+    // If it's a search, show search-specific message
+    if (widget.params.fromSearch == true) {
+      return isArabic ? 'لا توجد نتائج للبحث' : 'No search results found';
+    }
+
+    // Get specialty, governorate, city, and booking type information
+    final specialty = healthSharedData.doctorSearchParams.subCategory;
+    final governorate = healthSharedData.doctorSearchParams.governorate;
+    final city = healthSharedData.doctorSearchParams.city;
+    final bookingType = widget.params.bookingType ??
+        healthSharedData.doctorSearchParams.bookingType;
+
+    // Build the personalized message based on available data
+    String specialtyName = '';
+    String locationInfo = '';
+    String bookingTypeName = '';
+
+    // Get specialty name
+    if (specialty.id.isNotEmpty) {
+      specialtyName = isArabic ? specialty.nameAr : specialty.nameEn;
+    }
+
+    // Get booking type name
+    if (bookingType != null) {
+      switch (bookingType) {
+        case BookingTypes.call:
+          bookingTypeName = isArabic ? 'مكالمة' : 'call';
+          break;
+        case BookingTypes.videoCall:
+          bookingTypeName = isArabic ? 'مكالمة فيديو' : 'video call';
+          break;
+        case BookingTypes.clinic:
+          bookingTypeName = isArabic ? 'زيارة عيادة' : 'clinic visit';
+          break;
+        case BookingTypes.home:
+          bookingTypeName = isArabic ? 'زيارة منزل' : 'home visit';
+          break;
+        case BookingTypes.emergency:
+          bookingTypeName = isArabic ? 'طوارئ' : 'emergency';
+          break;
+      }
+    }
+
+    // Build location string
+    List<String> locationParts = [];
+    if (governorate.id.isNotEmpty && governorate.nameAr.isNotEmpty) {
+      locationParts.add(isArabic ? governorate.nameAr : governorate.nameEn);
+    }
+    if (city.id.isNotEmpty && city.nameAr.isNotEmpty) {
+      locationParts.add(isArabic ? city.nameAr : city.nameEn);
+    }
+
+    if (locationParts.isNotEmpty) {
+      locationInfo = locationParts.join(' - ');
+    }
+
+    // Build the final message
+    if (specialtyName.isNotEmpty &&
+        locationInfo.isNotEmpty &&
+        bookingTypeName.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح لـ $bookingTypeName في $locationInfo حالياً'
+          : 'No $specialtyName doctor available for $bookingTypeName in $locationInfo right now';
+    } else if (specialtyName.isNotEmpty && bookingTypeName.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح لـ $bookingTypeName حالياً'
+          : 'No $specialtyName doctor available for $bookingTypeName right now';
+    } else if (specialtyName.isNotEmpty && locationInfo.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح في $locationInfo حالياً'
+          : 'No $specialtyName doctor available in $locationInfo right now';
+    } else if (specialtyName.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح حالياً'
+          : 'No $specialtyName doctor available right now';
+    } else {
+      // Fallback to default message
+      return isArabic ? 'لا يوجد حجوزات سابقة' : 'No booking history';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // return BlocListener<HealthCubit, HealthState>(
@@ -194,13 +279,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                   child: (state.doctorsList?.isEmpty ?? true)
                       ? Center(
                           child: CustomEmptyWidget(
-                              label: widget.params.fromSearch == true
-                                  ? (context.isArabic
-                                      ? 'لا توجد نتائج للبحث'
-                                      : 'No search results found')
-                                  : (context.isArabic
-                                      ? 'لا يوجد حجوزات سابقة'
-                                      : 'No booking history')))
+                              label: _getEmptyMessage(context)))
                       : ListView.separated(
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.sizeOf(context).height * 0.35),
