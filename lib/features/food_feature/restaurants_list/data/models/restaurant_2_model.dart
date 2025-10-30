@@ -25,7 +25,7 @@ class GetAllRestaurantModel extends GetAllRestaurantEntity {
 
   factory GetAllRestaurantModel.fromJson(Map<String, dynamic> json) {
     return GetAllRestaurantModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       name: json['name'],
       subcategoryId: json['subcategoryId'] != null
           ? SubcategoryIdModel.fromJson(json['subcategoryId'])
@@ -76,7 +76,7 @@ class SubcategoryIdModel extends SubcategoryIdEntity {
 
   factory SubcategoryIdModel.fromJson(Map<String, dynamic> json) {
     return SubcategoryIdModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       nameAr: json['nameAr'],
       nameEn: json['nameEn'],
     );
@@ -101,7 +101,7 @@ class MainCategoryIdModel extends MainCategoryIdEntity {
 
   factory MainCategoryIdModel.fromJson(Map<String, dynamic> json) {
     return MainCategoryIdModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       nameAr: json['nameAr'],
       nameEn: json['nameEn'],
     );
@@ -125,7 +125,7 @@ class UserIdModel extends UserIdEntity {
 
   factory UserIdModel.fromJson(Map<String, dynamic> json) {
     return UserIdModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       twitterDocumentation: json['twitter_documentation'],
     );
   }
@@ -147,7 +147,7 @@ class RestaurantMediaModel extends RestaurantMediaEntity {
 
   factory RestaurantMediaModel.fromJson(Map<String, dynamic> json) {
     return RestaurantMediaModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       mediaKey: json['mediaKey'],
     );
   }
@@ -262,7 +262,7 @@ class MenuModel extends MenuEntity {
 
   factory MenuModel.fromJson(Map<String, dynamic> json) {
     return MenuModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       restaurantId: json['restaurantId'],
       foodName: json['foodName'],
       price: json['price'],
@@ -285,7 +285,7 @@ class PictureModel extends PictureEntity {
 
   factory PictureModel.fromJson(Map<String, dynamic> json) {
     return PictureModel(
-      id: json['_id'],
+      id: json['id'] ?? json['_id'],
       mediaKey: json['mediaKey'],
     );
   }

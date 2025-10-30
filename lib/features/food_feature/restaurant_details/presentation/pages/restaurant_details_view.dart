@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,16 +40,38 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
     final cubit = context.read<RestaurantDetailsCubit>();
-    cubit.loadData(id: widget.restaurant.id ?? '');
+
+    // Debug: Check if restaurant ID exists
+    final restaurantId = widget.restaurant.id;
+    log('Restaurant ID: $restaurantId');
+
+    if (restaurantId == null || restaurantId.isEmpty) {
+      log('ERROR: Restaurant ID is null or empty!');
+      // Show error to user
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(LocaleKeys.somethingWentWrong.tr()),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      });
+      return;
+    }
+
+    cubit.loadData(id: restaurantId);
     cubit.fetchCart(); // Load cart to show quantities
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context
-          .read<RestaurantDetailsCubit>()
-          .getMeals(id: widget.restaurant.id ?? '');
+      final restaurantId = widget.restaurant.id;
+      if (restaurantId != null && restaurantId.isNotEmpty) {
+        context.read<RestaurantDetailsCubit>().getMeals(id: restaurantId);
+      }
     }
   }
 

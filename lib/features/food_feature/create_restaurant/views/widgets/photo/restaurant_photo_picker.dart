@@ -121,9 +121,10 @@ Widget buildPhotoBox({
       color: AppColors.getFillColor(context),
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
-        color: isAddBox
-            ? AppColors.getRedColor(context).withOpacity(0.4)
-            : Colors.transparent,
+        // color: !isAddBox
+        //     ? AppColors.getRedColor(context).withOpacity(0.4)
+        //     : Colors.transparent,
+        color:  Colors.transparent,
         width: 2,
       ),
     ),
@@ -173,7 +174,7 @@ Widget buildPhotoBox({
                           LocaleKeys.addPhoto.localize,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 11.sp,
+                            fontSize: 22.sp,
                             color: context.isDarkMode
                                 ? AppColors.whiteColor
                                 : AppColors.black,
