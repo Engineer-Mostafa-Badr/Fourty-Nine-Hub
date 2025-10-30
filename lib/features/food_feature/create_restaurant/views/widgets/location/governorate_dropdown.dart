@@ -5,11 +5,11 @@ import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/utils/media_query_values.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
-import '../../../cubit/create_resturant_cubit.dart';
 import '../../../../../health_feature/shared/domain/entities/governorate_entity.dart';
 import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../res/style/app_colors.dart';
+import '../../../cubit/create_restaurant_cubit.dart';
 
 class CreateRestaurantGovernorateDropdown extends StatelessWidget {
   const CreateRestaurantGovernorateDropdown(

@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
+
 class CustomEmptyWidget extends StatelessWidget {
   const CustomEmptyWidget({
     super.key,
@@ -46,20 +48,20 @@ class CustomEmptyWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: context.isDarkMode ? Colors.white : Colors.grey,
             ),
-            SizedBox(height: 16.h),
-            Text(
-              label,
-              style: Styles.headerText(
-                fontWeight: FontWeight.bold,
-                color: context.isDarkMode ? Colors.white : Colors.grey,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: null,
-              overflow: TextOverflow.visible,
-              softWrap: true,
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            displayLabel,
+            style: Styles.headerText(
+              fontWeight: FontWeight.bold,
+              color: context.isDarkMode ? Colors.white : Colors.grey,
             ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+            maxLines: null,
+            overflow: TextOverflow.visible,
+            softWrap: true,
+          ),
+        ],
       ),
     );
   }
