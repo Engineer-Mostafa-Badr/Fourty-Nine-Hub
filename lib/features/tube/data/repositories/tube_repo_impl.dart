@@ -9,8 +9,10 @@ import 'package:fourtyninehub/features/tube/domain/usecases/create_comment_tube_
 import 'package:fourtyninehub/features/tube/domain/usecases/create_video_tube_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/get_all_tube_videos_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/get_related_tube_videos_use_case.dart';
+import 'package:fourtyninehub/features/tube/domain/usecases/rate_tube_video_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/search_tube_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/update_comment_tube_video_use_case.dart';
+import 'package:fourtyninehub/features/tube/domain/usecases/update_tube_video_use_case.dart';
 
 import '../../domain/repositories/tube_repo.dart';
 
@@ -104,6 +106,36 @@ class TubeRepoImpl implements TubeRepository {
   @override
   Future<Either<Failure, List<GetAllTubeVideosEntity>>> getMyTubeVideos({required GetAllTubeVideosParams params}) {
     return _remoteDataSource.getMyTubeVideos(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllTubeVideosEntity>>> getHistoryTubeVideos({required GetAllTubeVideosParams params}) {
+    return _remoteDataSource.getHistoryTubeVideos(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> deleteTubeVideo({required FavoriteTubeParams params}) {
+    return _remoteDataSource.deleteTubeVideo(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> updateTubeVideo({required UpdateTubeVideo params}) {
+    return _remoteDataSource.updateTubeVideo(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> addWatchLaterTube({required FavoriteTubeParams params}) {
+    return _remoteDataSource.addWatchLaterTube(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> removeWatchLaterTube({required FavoriteTubeParams params}) {
+    return _remoteDataSource.removeWatchLaterTube(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> rateTubeVideo({required RateTubeVideoParams params}) {
+    return _remoteDataSource.rateTubeVideo(params: params);
   }
 
 

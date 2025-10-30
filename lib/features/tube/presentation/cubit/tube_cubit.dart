@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/entities/get_active_category_entity.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/create_video_tube_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/delete_tube_comment_use_case.dart';
+import 'package:fourtyninehub/features/tube/domain/usecases/remove_watch_later_tube_use_case.dart';
 import 'package:just_audio/just_audio.dart';
 
 import 'package:video_player/video_player.dart';
@@ -24,20 +25,25 @@ import '../../domain/entities/add_favorite_tube_entity.dart';
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../../domain/entities/get_tube_video_commnets_entity.dart';
 import '../../domain/usecases/add_favorite_tube_use_case.dart';
+import '../../domain/usecases/add_watch_later_tube_use_case.dart';
 import '../../domain/usecases/create_comment_tube_video_use_case.dart';
+import '../../domain/usecases/delete_tube_video_use_case.dart';
 import '../../domain/usecases/dislike_tube_comment_use_case.dart';
 import '../../domain/usecases/dislike_tube_video_use_case.dart';
 import '../../domain/usecases/get_active_categories_use_case.dart';
 import '../../domain/usecases/get_all_tube_videos_use_case.dart';
+import '../../domain/usecases/get_history_tube_videos_use_case.dart';
 import '../../domain/usecases/get_my_tube_videos_use_case.dart';
 import '../../domain/usecases/get_related_tube_videos_use_case.dart';
 import '../../domain/usecases/get_tube_favorite_videos_use_case.dart';
 import '../../domain/usecases/get_tube_video_comments_use_case.dart';
 import '../../domain/usecases/like_tube_comment_use_case.dart';
 import '../../domain/usecases/like_tube_video_use_case.dart';
+import '../../domain/usecases/rate_tube_video_use_case.dart';
 import '../../domain/usecases/remove_favorite_tube_use_case.dart';
 import '../../domain/usecases/search_tube_use_case.dart';
 import '../../domain/usecases/update_comment_tube_video_use_case.dart';
+import '../../domain/usecases/update_tube_video_use_case.dart';
 import '../widgets/custom_tube_widget.dart';
 
 part 'tube_state.dart';
@@ -60,6 +66,12 @@ class TubeCubit extends Cubit<TubeState> {
   final GetActiveCategoriesUseCase getActiveCategoriesUseCase;
   final CreateVideoTubeUseCase createTubeVideoUseCase;
   final GetMyTubeVideosUseCase getMyTubeVideosUseCase;
+  final GetHistoryTubeVideosUseCase getHistoryTubeVideosUseCase;
+  final DeleteTubeVideoUseCase deleteTubeVideoUseCase;
+  final UpdateTubeVideoUseCase updateTubeVideoUseCase;
+  final RemoveWatchLaterTubeUseCase removeWatchLaterTubeUseCase;
+  final AddWatchLaterTubeUseCase addWatchLaterTubeUseCase;
+  final RateTubeVideoUseCase rateTubeVideoUseCase;
 
   TubeCubit(
     this.getAllTubeVideosUseCase,
@@ -73,8 +85,446 @@ class TubeCubit extends Cubit<TubeState> {
     this.updateCommentTubeVideoUseCase,
     this.likeTubeCommentUseCase,
     this.dislikeTubeCommentUseCase,
-    this.deleteTubeCommentUseCase, this.likeTubeVideoUseCase, this.dislikeTubeVideoUseCase, this.getActiveCategoriesUseCase, this.createTubeVideoUseCase, this.getMyTubeVideosUseCase,
+    this.deleteTubeCommentUseCase, this.likeTubeVideoUseCase, this.dislikeTubeVideoUseCase, this.getActiveCategoriesUseCase, this.createTubeVideoUseCase, this.getMyTubeVideosUseCase, this.getHistoryTubeVideosUseCase, this.deleteTubeVideoUseCase, this.updateTubeVideoUseCase, this.removeWatchLaterTubeUseCase, this.addWatchLaterTubeUseCase, this.rateTubeVideoUseCase,
   ) : super(TubeState());
+
+  Future<void> rateTubeVideo(String videoId, int rating) async {
+    if (rating < 1 || rating > 5) return;
+
+    // Find current video state
+    final targetVideo = _findVideoInAllLists(videoId);
+    if (targetVideo == null) return;
+
+    final bool wasRated = targetVideo.isRate ?? false;
+    final int? oldUserRating = targetVideo.userRating;
+
+    // Optimistic UI update
+    _updateVideoInAllLists(
+      videoId,
+      isRate: true,
+      userRating: rating,
+      // averageRating is NOT updated here — backend doesn't return it
+    );
+
+    final response = await rateTubeVideoUseCase(
+      RateTubeVideoParams(videoId: videoId, rate: rating),
+    );
+
+    response.fold(
+          (failure) {
+        // Revert on failure
+        _updateVideoInAllLists(
+          videoId,
+          isRate: wasRated,
+          userRating: oldUserRating,
+        );
+        emit(state.copyWith(
+          status: StateStatus.error,
+          failure: failure,
+        ));
+      },
+          (entity) {
+        // Success: only update what we know
+        _updateVideoInAllLists(
+          videoId,
+          isRate: true,
+          userRating: rating,
+          // Keep current averageRating (or null) — no new data from backend
+          averageRating: targetVideo.averageRating,
+        );
+
+        emit(state.copyWith(status: StateStatus.success));
+      },
+    );
+  }
+
+  Future<void> removeWatchLaterTubeVideo(String videoId) async {
+    // Optimistic UI update
+    _updateVideoInAllLists(videoId, isWatchLater: false);
+
+    final response = await removeWatchLaterTubeUseCase(FavoriteTubeParams(id: videoId));
+
+    response.fold(
+          (failure) {
+        // Revert on failure
+        _updateVideoInAllLists(videoId, isWatchLater: true);
+        emit(state.copyWith(
+          status: StateStatus.error,
+          failure: failure,
+        ));
+      },
+          (_) {
+        emit(state.copyWith(
+          status: StateStatus.success,
+        ));
+      },
+    );
+  }
+
+  Future<void> addWatchLaterTubeVideo(String videoId) async {
+    // Optimistic UI update
+    _updateVideoInAllLists(videoId, isWatchLater: true);
+
+    final response = await addWatchLaterTubeUseCase(FavoriteTubeParams(id: videoId));
+
+    response.fold(
+          (failure) {
+        // Revert on failure
+        _updateVideoInAllLists(videoId, isWatchLater: false);
+        emit(state.copyWith(
+          status: StateStatus.error,
+          failure: failure,
+        ));
+      },
+          (_) {
+        emit(state.copyWith(
+          status: StateStatus.success,
+        ));
+      },
+    );
+  }
+
+// Update the existing _updateVideoInAllLists method to include isWatchLater:
+  void _updateVideoInAllLists(
+      String videoId, {
+        bool? isLike,
+        bool? isDislike,
+        int? likes,
+        int? dislikes,
+        bool? isSubscribed,
+        int? subscriberCount,
+        bool? isWatchLater, // 👈 NEW PARAMETER
+        bool? isRate,               // NEW
+        int? userRating,            // NEW
+        double? averageRating,      // NEW
+      }) {
+    // Update myTubeVideos
+    myTubeVideos = myTubeVideos.map((v) {
+      if (v.id == videoId) {
+        return v.copyWith(
+          isLike: isLike,
+          isDislike: isDislike,
+          likes: likes,
+          dislikes: dislikes,
+          isSubscribed: isSubscribed,
+          subscriberCount: subscriberCount,
+          isWatchLater: isWatchLater, // 👈 ADD THIS
+          isRate: isRate,
+          userRating: userRating,
+          averageRating: averageRating,
+        );
+      }
+      return v;
+    }).toList();
+
+    // Update historyTubeVideos
+    historyTubeVideos = historyTubeVideos.map((v) {
+      if (v.id == videoId) {
+        return v.copyWith(
+          isLike: isLike,
+          isDislike: isDislike,
+          likes: likes,
+          dislikes: dislikes,
+          isSubscribed: isSubscribed,
+          subscriberCount: subscriberCount,
+          isWatchLater: isWatchLater, // 👈 ADD THIS
+          isRate: isRate,
+          userRating: userRating,
+          averageRating: averageRating,
+        );
+      }
+      return v;
+    }).toList();
+
+    // Update allTubeVideos
+    allTubeVideos = allTubeVideos.map((v) {
+      if (v.id == videoId) {
+        return v.copyWith(
+          isLike: isLike,
+          isDislike: isDislike,
+          likes: likes,
+          dislikes: dislikes,
+          isSubscribed: isSubscribed,
+          subscriberCount: subscriberCount,
+          isWatchLater: isWatchLater, // 👈 ADD THIS
+          isRate: isRate,
+          userRating: userRating,
+          averageRating: averageRating,
+        );
+      }
+      return v;
+    }).toList();
+
+    // Update favoriteTubeVideos
+    favoriteTubeVideos = favoriteTubeVideos.map((v) {
+      if (v.id == videoId) {
+        return v.copyWith(
+          isLike: isLike,
+          isDislike: isDislike,
+          likes: likes,
+          dislikes: dislikes,
+          isSubscribed: isSubscribed,
+          subscriberCount: subscriberCount,
+          isWatchLater: isWatchLater, // 👈 ADD THIS
+          isRate: isRate,
+          userRating: userRating,
+          averageRating: averageRating,
+        );
+      }
+      return v;
+    }).toList();
+
+    // Update searchTubeVideos
+    searchTubeVideos = searchTubeVideos.map((v) {
+      if (v.id == videoId) {
+        return v.copyWith(
+          isLike: isLike,
+          isDislike: isDislike,
+          likes: likes,
+          dislikes: dislikes,
+          isSubscribed: isSubscribed,
+          subscriberCount: subscriberCount,
+          isWatchLater: isWatchLater, // 👈 ADD THIS
+          isRate: isRate,
+          userRating: userRating,
+          averageRating: averageRating,
+        );
+      }
+      return v;
+    }).toList();
+
+    // Update relatedTubeVideos
+    relatedTubeVideos = relatedTubeVideos.map((v) {
+      if (v.id == videoId) {
+        return v.copyWith(
+          isLike: isLike,
+          isDislike: isDislike,
+          likes: likes,
+          dislikes: dislikes,
+          isSubscribed: isSubscribed,
+          subscriberCount: subscriberCount,
+          isWatchLater: isWatchLater, // 👈 ADD THIS
+          isRate: isRate,
+          userRating: userRating,
+          averageRating: averageRating,
+        );
+      }
+      return v;
+    }).toList();
+
+    // Update current video if it matches
+    GetAllTubeVideosEntity? updatedCurrentVideo = state.currentVideo;
+    if (state.currentVideo?.id == videoId) {
+      updatedCurrentVideo = state.currentVideo!.copyWith(
+        isLike: isLike,
+        isDislike: isDislike,
+        likes: likes,
+        dislikes: dislikes,
+        isSubscribed: isSubscribed,
+        subscriberCount: subscriberCount,
+        isWatchLater: isWatchLater, // 👈 ADD THIS
+      );
+    }
+
+    // Emit updated state
+    emit(state.copyWith(
+      getAllTubeVideosData: allTubeVideos,
+      getFavoriteTubeVideosData: favoriteTubeVideos,
+      searchTubeVideosData: searchTubeVideos,
+      relatedTubeVideosData: relatedTubeVideos,
+      currentVideo: updatedCurrentVideo,
+      getMyTubeVideosData: myTubeVideos,           // ADD THIS
+      historyTubeVideos : historyTubeVideos, // ADD THIS
+    ));
+  }
+
+
+  Future<void> updateTubeVideo({
+    required String videoId,
+    String? title,
+    String? description,
+    String? thumbnailMediaId,
+    String? localThumbnailPath,
+  }) async {
+    if (isClosed) return;
+
+    emit(state.copyWith(uploadStatus: StateStatus.loading));
+
+    final videoIndex = myTubeVideos.indexWhere((v) => v.id == videoId);
+    if (videoIndex == -1) {
+      emit(state.copyWith(uploadStatus: StateStatus.initial));
+      return;
+    }
+
+    final oldVideo = myTubeVideos[videoIndex];
+
+    // 1️⃣ Optimistic update
+    final optimisticVideo = oldVideo.copyWith(
+      title: title?.trim().isNotEmpty == true ? title!.trim() : oldVideo.title,
+      description: description?.trim().isNotEmpty == true
+          ? description!.trim()
+          : oldVideo.description,
+      localThumbnailPath: localThumbnailPath?.isNotEmpty == true
+          ? localThumbnailPath
+          : oldVideo.localThumbnailPath,
+    );
+
+    myTubeVideos[videoIndex] = optimisticVideo;
+
+    emit(state.copyWith(
+      uploadStatus: StateStatus.loading,
+      getAllTubeVideosData: List.from(myTubeVideos),
+    ));
+
+    // 2️⃣ Call backend
+    final params = UpdateTubeVideo(
+      videoId: videoId,
+      title: title?.trim().isNotEmpty == true ? title!.trim() : null,
+      description:
+      description?.trim().isNotEmpty == true ? description!.trim() : null,
+      thumbnail: thumbnailMediaId?.isNotEmpty == true ? thumbnailMediaId : null,
+    );
+
+    final result = await updateTubeVideoUseCase(params);
+
+    if (isClosed) return;
+
+    result.fold(
+      // ❌ Failure: revert to old video
+          (failure) {
+        myTubeVideos[videoIndex] = oldVideo;
+        emit(state.copyWith(
+          uploadStatus: StateStatus.error,
+          failure: failure,
+          getAllTubeVideosData: List.from(myTubeVideos),
+        ));
+      },
+      // ✅ Success
+          (_) {
+        final userId = oldVideo.owner?.id ?? 'unknown';
+
+        final refreshedVideo = myTubeVideos[videoIndex].copyWith(
+          localThumbnailPath: thumbnailMediaId?.isNotEmpty == true ? null : oldVideo.localThumbnailPath,
+          thumbnail: thumbnailMediaId?.isNotEmpty == true
+              ? "https://49hub-reels.s3.eu-central-1.amazonaws.com/Social/tube/$userId/$thumbnailMediaId.png"
+              : oldVideo.thumbnail,
+        );
+
+        myTubeVideos[videoIndex] = refreshedVideo;
+
+        // 👇 Emit success + showSnackbar = true
+        emit(state.copyWith(
+          uploadStatus: StateStatus.success,
+          showSnackbar: true,
+          getAllTubeVideosData: List.from(myTubeVideos),
+        ));
+
+        // 👇 Immediately reset flag so snackbar only shows once
+        emit(state.copyWith(showSnackbar: false));
+      },
+    );
+  }
+
+
+
+
+
+
+  Future<void> deleteTubeVideo(String videoId) async {
+    if (isClosed) return;
+    emit(state.copyWith(status: StateStatus.loading));
+
+    final response = await deleteTubeVideoUseCase(FavoriteTubeParams(id: videoId));
+
+    if (isClosed) return;
+    response.fold(
+          (failure) => emit(state.copyWith(
+        status: StateStatus.error,
+        failure: failure,
+      )),
+          (_) {
+        // ✅ Remove locally
+        myTubeVideos.removeWhere((v) => v.id == videoId);
+
+        if (!isClosed) {
+          emit(state.copyWith(
+            status: StateStatus.success,
+            getAllTubeVideosData: List.from(myTubeVideos),
+          ));
+        }
+      },
+    );
+  }
+
+
+
+  List<GetAllTubeVideosEntity> historyTubeVideos = [];
+  bool hasMoreHistoryTubeVideos = true;
+  int currentPageHistoryTubeVideos = 1;
+  bool isHistoryTubeVideosLoadingMore = false;
+  bool isHistoryTubeVideosInitialLoading = false;
+
+  Future<void> loadInitialHistoryTubeVideos() async {
+    debugPrint("📜 CUBIT: loadInitialHistoryTubeVideos(userId: $currentUserId)");
+
+    isHistoryTubeVideosInitialLoading = true;
+    historyTubeVideos.clear();
+    currentPageHistoryTubeVideos = 1;
+    hasMoreHistoryTubeVideos = true;
+
+    emit(state.copyWith(
+      status: StateStatus.loading,
+      historyTubeVideos: [],
+    ));
+
+    await getHistoryTubeVideos();
+    isHistoryTubeVideosInitialLoading = false;
+  }
+
+  Future<void> getHistoryTubeVideos() async {
+    if (!hasMoreHistoryTubeVideos || isHistoryTubeVideosLoadingMore) return;
+
+    isHistoryTubeVideosLoadingMore = true;
+    debugPrint("📥 Loading HISTORY videos | Page: $currentPageHistoryTubeVideos | userId: $currentUserId");
+
+    if (currentPageHistoryTubeVideos == 1) {
+      emit(state.copyWith(status: StateStatus.loading));
+    }
+
+    final response = await getHistoryTubeVideosUseCase(
+      GetAllTubeVideosParams(
+        page: currentPageHistoryTubeVideos,
+        limit: pageSize,
+        userId: currentUserId,
+      ),
+    );
+
+    response.fold(
+          (failure) {
+        isHistoryTubeVideosLoadingMore = false;
+        emit(state.copyWith(status: StateStatus.error, failure: failure));
+      },
+          (data) {
+        if (currentPageHistoryTubeVideos == 1) {
+          historyTubeVideos = List.from(data);
+        } else {
+          historyTubeVideos.addAll(data);
+        }
+
+        if (data.length < pageSize) {
+          hasMoreHistoryTubeVideos = false;
+        } else {
+          currentPageHistoryTubeVideos++;
+        }
+
+        isHistoryTubeVideosLoadingMore = false;
+        emit(state.copyWith(
+          status: StateStatus.success,
+          historyTubeVideos: historyTubeVideos,
+        ));
+      },
+    );
+  }
 
 
   List<GetAllTubeVideosEntity> myTubeVideos = [];
@@ -144,7 +594,7 @@ class TubeCubit extends Cubit<TubeState> {
         isMyTubeVideosLoadingMore = false;
         emit(state.copyWith(
           status: StateStatus.success,
-          getAllTubeVideosData: myTubeVideos,
+          getMyTubeVideosData: myTubeVideos,
         ));
       },
     );
@@ -229,8 +679,6 @@ class TubeCubit extends Cubit<TubeState> {
 
 
 
-
-
   List<GetAllTubeVideosEntity> currentVideoList = [];
   // In TubeCubit
 
@@ -285,7 +733,6 @@ class TubeCubit extends Cubit<TubeState> {
   }
 
   /// 🔄 Refresh comments without duplication or loading indicators
-  /// 🔄 Refresh comments without duplication or loading indicators
   Future<void> _silentlyRefreshComments(
       BuildContext context,
       String videoId,
@@ -334,48 +781,7 @@ class TubeCubit extends Cubit<TubeState> {
     }
   }
 
-  // Future<void> _silentlyRefreshComments(BuildContext context, String videoId) async {
-  //   try {
-  //     final response = await getTubeVideoCommentsUseCase(
-  //       GetRelatedTubeVideosParams(
-  //         id: videoId,
-  //         page: 1,
-  //         limit: pageSize,
-  //       ),
-  //     );
-  //
-  //     response.fold(
-  //           (failure) {
-  //         debugPrint("❌ Silent refresh failed");
-  //       },
-  //           (entity) {
-  //         final TubeVideoCommentsDataEntity? commentsData = entity.data;
-  //         final List<TubeCommentEntity> newComments = commentsData?.comments ?? [];
-  //
-  //         // Overwrite existing list to avoid duplicates
-  //         tubeVideoComments = List<TubeCommentEntity>.from(newComments);
-  //
-  //         // Pagination handling
-  //         hasMoreTubeVideoComments = newComments.length >= pageSize;
-  //         currentPageTubeVideoComments = hasMoreTubeVideoComments ? 2 : 1;
-  //
-  //         // Emit clean state
-  //         emit(state.copyWith(
-  //           status: StateStatus.success,
-  //           tubeVideoCommentsData: List<TubeCommentEntity>.from(tubeVideoComments),
-  //         ));
-  //
-  //         debugPrint("✅ Comments silently refreshed: ${tubeVideoComments.length}");
-  //       },
-  //     );
-  //   } catch (e) {
-  //     debugPrint("❌ Error in silent refresh: $e");
-  //   }
-  // }
 
-  /// ✏️ Update an existing comment
-  /// ✏️ Update an existing comment
-  /// ✏️ Update an existing comment
   /// ✏️ Update an existing comment
   Future<void> updateCommentOnTubeVideo({
     required BuildContext context,
@@ -526,7 +932,6 @@ class TubeCubit extends Cubit<TubeState> {
     );
   }
 
-  /// 👍 Like a comment (with optimistic UI update)
   /// 👍 Like a comment or reply (with optimistic UI update)
   void likeComment(String commentId, String videoId) {
     debugPrint("👍 LikeComment called for commentId=$commentId");
@@ -741,230 +1146,7 @@ class TubeCubit extends Cubit<TubeState> {
     );
   }
 
-/*
-  // In TubeCubit
-// Toggle the expanded state of a comment's replies
-// In TubeCubit
-  void toggleCommentReplies(String commentId) {
-    final currentState = state;
-    final expandedComments =
-        Map<String, bool>.from(currentState.expandedComments);
-    expandedComments[commentId] = !(expandedComments[commentId] ?? false);
-    emit(currentState.copyWith(expandedComments: expandedComments));
-  }
 
-  void addReplyToComment(String parentCommentId, TubeCommentEntity reply) {
-    final currentState = state;
-    // You might need to update your comments list here to include the new reply
-    // This depends on how you're storing comments in your state
-    emit(currentState.copyWith(lastRepliedCommentId: parentCommentId));
-  }
-
-  /// 💬 Create a new comment on a video
-  Future<void> createCommentOnTubeVideo({
-    required BuildContext context,
-    required String videoId,
-    required String content,
-    String? parentCommentId,
-  }) async {
-    debugPrint("💬 Creating comment on videoId=$videoId");
-
-    final response = await createCommentTubeVideoUseCase(
-      CreateCommentTubeParams(
-        content: content,
-        videoId: videoId,
-        parentCommentId: parentCommentId ?? '',
-      ),
-    );
-
-    response.fold(
-      (failure) {
-        debugPrint("❌ Failed to create comment");
-        // Silent failure, no state change
-      },
-      (entity) async {
-        debugPrint("✅ Comment created successfully!");
-
-        // If it's a reply, ensure parent is expanded
-        Map<String, bool> newExpandedComments =
-            Map.from(state.expandedComments);
-        if (parentCommentId != null) {
-          newExpandedComments[parentCommentId] = true;
-        }
-
-        // 🔹 Refresh from backend to get latest comments & replies
-        await _silentlyRefreshComments(context, videoId);
-
-        // 🔹 Emit updated expansion state
-        emit(state.copyWith(
-          expandedComments: newExpandedComments,
-          lastRepliedCommentId: parentCommentId,
-        ));
-      },
-    );
-  }
-
-  /// 🔄 Refresh comments without duplication or loading indicators
-  Future<void> _silentlyRefreshComments(
-      BuildContext context, String videoId) async {
-    try {
-      final response = await getTubeVideoCommentsUseCase(
-        GetRelatedTubeVideosParams(
-          id: videoId,
-          page: 1,
-          limit: pageSize,
-        ),
-      );
-
-      response.fold(
-        (failure) {
-          debugPrint("❌ Silent refresh failed");
-          // Silent fail: don't emit an error state
-        },
-        (entity) {
-          final TubeVideoCommentsDataEntity? commentsData = entity.data;
-          final List<TubeCommentEntity> newComments =
-              commentsData?.comments ?? [];
-
-          // 🚨 Overwrite (not append) existing list to avoid duplicates
-          tubeVideoComments = List<TubeCommentEntity>.from(newComments);
-
-          // Pagination handling
-          hasMoreTubeVideoComments = newComments.length >= pageSize;
-          currentPageTubeVideoComments = hasMoreTubeVideoComments ? 2 : 1;
-
-          // Emit clean, non-duplicated state
-          emit(state.copyWith(
-            status: StateStatus.success,
-            tubeVideoCommentsData:
-                List<TubeCommentEntity>.from(tubeVideoComments),
-          ));
-
-          debugPrint(
-              "✅ Comments silently refreshed: ${tubeVideoComments.length}");
-        },
-      );
-    } catch (e) {
-      debugPrint("❌ Error in silent refresh: $e");
-    }
-  }
-
-  /// ✏️ Update an existing comment
-  /// ✏️ Update an existing comment (SILENT VERSION)
-  Future<void> updateCommentOnTubeVideo({
-    required BuildContext context,
-    required String commentId,
-    required String videoId,
-    required String content,
-  }) async {
-    debugPrint("✏️ Updating comment id=$commentId");
-
-    final response = await updateCommentTubeVideoUseCase(
-      UpdateCommentTubeParams(
-        content: content,
-        videoId: videoId,
-      ),
-    );
-
-    response.fold(
-      (failure) {
-        debugPrint("❌ Failed to update comment");
-        // SILENT: No error handling
-      },
-      (entity) async {
-        debugPrint("✅ Comment updated successfully!");
-        // SILENT REFRESH
-        await _silentlyRefreshComments(context, videoId);
-      },
-    );
-  }
-
-  /// 🗑️ Delete a comment (SILENT VERSION)
-  Future<void> deleteTubeComment({
-    required BuildContext context,
-    required String commentId,
-    required String videoId,
-  }) async {
-    debugPrint("🗑️ Deleting comment id=$commentId for video=$videoId");
-
-    // Optimistically remove from UI
-    final commentIndex = tubeVideoComments.indexWhere((c) => c.id == commentId);
-    TubeCommentEntity? removedComment;
-
-    if (commentIndex != -1) {
-      removedComment = tubeVideoComments[commentIndex];
-      tubeVideoComments.removeAt(commentIndex);
-      emit(state.copyWith(
-        tubeVideoCommentsData: List.from(tubeVideoComments),
-      ));
-    }
-
-    final response = await deleteTubeCommentUseCase(
-      FavoriteTubeParams(id: commentId),
-    );
-
-    response.fold(
-      (failure) {
-        debugPrint("❌ Failed to delete comment");
-
-        // Restore comment on failure
-        if (removedComment != null && commentIndex != -1) {
-          tubeVideoComments.insert(commentIndex, removedComment);
-          emit(state.copyWith(
-            tubeVideoCommentsData: List.from(tubeVideoComments),
-          ));
-        }
-        // SILENT: No snackbar
-      },
-      (entity) {
-        debugPrint("✅ Comment deleted successfully!");
-        // SILENT: No snackbar, UI already updated optimistically
-        emit(state.copyWith(status: StateStatus.success));
-      },
-    );
-  }
-
-  /// 👍 Like a comment
-  Future<void> likeComment(String commentId) async {
-    debugPrint("👍 LikeComment called for commentId=$commentId");
-
-    final response = await likeTubeCommentUseCase(
-      FavoriteTubeParams(id: commentId),
-    );
-
-    response.fold(
-      (failure) {
-        debugPrint("❌ Failed to like comment");
-      },
-      (entity) {
-        debugPrint("✅ Comment liked successfully!");
-        // Update is handled optimistically in the UI
-      },
-    );
-  }
-
-  /// 👎 Dislike a comment
-  Future<void> dislikeComment(String commentId) async {
-    debugPrint("👎 DislikeComment called for commentId=$commentId");
-
-    final response = await dislikeTubeCommentUseCase(
-      FavoriteTubeParams(id: commentId),
-    );
-
-    response.fold(
-      (failure) {
-        debugPrint("❌ Failed to dislike comment");
-      },
-      (entity) {
-        debugPrint("✅ Comment disliked successfully!");
-        // Update is handled optimistically in the UI
-      },
-    );
-  }
-*/
-  // ========================================
-  // 🎬 VIDEO MANAGEMENT
-  // ========================================
 
   /// 👍 Like a video with optimistic UI update
   Future<void> likeTubeVideo(String videoId) async {
@@ -1072,6 +1254,8 @@ class TubeCubit extends Cubit<TubeState> {
       favoriteTubeVideos,
       searchTubeVideos,
       relatedTubeVideos,
+      myTubeVideos,
+      historyTubeVideos,
     ];
 
     for (final list in lists) {
@@ -1091,97 +1275,126 @@ class TubeCubit extends Cubit<TubeState> {
   }
 
   /// Helper: Update video in all lists
-  void _updateVideoInAllLists(
-      String videoId, {
-        bool? isLike,
-        bool? isDislike,
-        int? likes,
-        int? dislikes,
-        bool? isSubscribed,
-        int? subscriberCount,
-      }) {
-    // Update allTubeVideos
-    allTubeVideos = allTubeVideos.map((v) {
-      if (v.id == videoId) {
-        return v.copyWith(
-          isLike: isLike,
-          isDislike: isDislike,
-          likes: likes,
-          dislikes: dislikes,
-          isSubscribed: isSubscribed,
-          subscriberCount: subscriberCount,
-        );
-      }
-      return v;
-    }).toList();
-
-    // Update favoriteTubeVideos
-    favoriteTubeVideos = favoriteTubeVideos.map((v) {
-      if (v.id == videoId) {
-        return v.copyWith(
-          isLike: isLike,
-          isDislike: isDislike,
-          likes: likes,
-          dislikes: dislikes,
-          isSubscribed: isSubscribed,
-          subscriberCount: subscriberCount,
-        );
-      }
-      return v;
-    }).toList();
-
-    // Update searchTubeVideos
-    searchTubeVideos = searchTubeVideos.map((v) {
-      if (v.id == videoId) {
-        return v.copyWith(
-          isLike: isLike,
-          isDislike: isDislike,
-          likes: likes,
-          dislikes: dislikes,
-          isSubscribed: isSubscribed,
-          subscriberCount: subscriberCount,
-        );
-      }
-      return v;
-    }).toList();
-
-    // Update relatedTubeVideos
-    relatedTubeVideos = relatedTubeVideos.map((v) {
-      if (v.id == videoId) {
-        return v.copyWith(
-          isLike: isLike,
-          isDislike: isDislike,
-          likes: likes,
-          dislikes: dislikes,
-          isSubscribed: isSubscribed,
-          subscriberCount: subscriberCount,
-        );
-      }
-      return v;
-    }).toList();
-
-    // Update current video if it matches
-    GetAllTubeVideosEntity? updatedCurrentVideo = state.currentVideo;
-    if (state.currentVideo?.id == videoId) {
-      updatedCurrentVideo = state.currentVideo!.copyWith(
-        isLike: isLike,
-        isDislike: isDislike,
-        likes: likes,
-        dislikes: dislikes,
-        isSubscribed: isSubscribed,
-        subscriberCount: subscriberCount,
-      );
-    }
-
-    // Emit updated state
-    emit(state.copyWith(
-      getAllTubeVideosData: allTubeVideos,
-      getFavoriteTubeVideosData: favoriteTubeVideos,
-      searchTubeVideosData: searchTubeVideos,
-      relatedTubeVideosData: relatedTubeVideos,
-      currentVideo: updatedCurrentVideo,
-    ));
-  }
+  // void _updateVideoInAllLists(
+  //     String videoId, {
+  //       bool? isLike,
+  //       bool? isDislike,
+  //       int? likes,
+  //       int? dislikes,
+  //       bool? isSubscribed,
+  //       int? subscriberCount,
+  //       bool? isWatchLater,          // <-- NEW
+  //     }) {
+  //   // Update allTubeVideos
+  //   myTubeVideos = myTubeVideos.map((v) {
+  //     if (v.id == videoId) {
+  //       return v.copyWith(
+  //         isLike: isLike,
+  //         isDislike: isDislike,
+  //         likes: likes,
+  //         dislikes: dislikes,
+  //         isSubscribed: isSubscribed,
+  //         subscriberCount: subscriberCount,
+  //       );
+  //     }
+  //     return v;
+  //   }).toList();
+  //   historyTubeVideos = historyTubeVideos.map((v) {
+  //     if (v.id == videoId) {
+  //       return v.copyWith(
+  //         isLike: isLike,
+  //         isDislike: isDislike,
+  //         likes: likes,
+  //         dislikes: dislikes,
+  //         isSubscribed: isSubscribed,
+  //         subscriberCount: subscriberCount,
+  //         isWatchLater: isWatchLater,
+  //       );
+  //     }
+  //     return v;
+  //   }).toList();
+  //   allTubeVideos = allTubeVideos.map((v) {
+  //     if (v.id == videoId) {
+  //       return v.copyWith(
+  //         isLike: isLike,
+  //         isDislike: isDislike,
+  //         likes: likes,
+  //         dislikes: dislikes,
+  //         isSubscribed: isSubscribed,
+  //         subscriberCount: subscriberCount,
+  //         isWatchLater: isWatchLater,
+  //       );
+  //     }
+  //     return v;
+  //   }).toList();
+  //
+  //   // Update favoriteTubeVideos
+  //   favoriteTubeVideos = favoriteTubeVideos.map((v) {
+  //     if (v.id == videoId) {
+  //       return v.copyWith(
+  //         isLike: isLike,
+  //         isDislike: isDislike,
+  //         likes: likes,
+  //         dislikes: dislikes,
+  //         isSubscribed: isSubscribed,
+  //         subscriberCount: subscriberCount,
+  //       );
+  //     }
+  //     return v;
+  //   }).toList();
+  //
+  //   // Update searchTubeVideos
+  //   searchTubeVideos = searchTubeVideos.map((v) {
+  //     if (v.id == videoId) {
+  //       return v.copyWith(
+  //         isLike: isLike,
+  //         isDislike: isDislike,
+  //         likes: likes,
+  //         dislikes: dislikes,
+  //         isSubscribed: isSubscribed,
+  //         subscriberCount: subscriberCount,
+  //       );
+  //     }
+  //     return v;
+  //   }).toList();
+  //
+  //   // Update relatedTubeVideos
+  //   relatedTubeVideos = relatedTubeVideos.map((v) {
+  //     if (v.id == videoId) {
+  //       return v.copyWith(
+  //         isLike: isLike,
+  //         isDislike: isDislike,
+  //         likes: likes,
+  //         dislikes: dislikes,
+  //         isSubscribed: isSubscribed,
+  //         subscriberCount: subscriberCount,
+  //       );
+  //     }
+  //     return v;
+  //   }).toList();
+  //
+  //   // Update current video if it matches
+  //   GetAllTubeVideosEntity? updatedCurrentVideo = state.currentVideo;
+  //   if (state.currentVideo?.id == videoId) {
+  //     updatedCurrentVideo = state.currentVideo!.copyWith(
+  //       isLike: isLike,
+  //       isDislike: isDislike,
+  //       likes: likes,
+  //       dislikes: dislikes,
+  //       isSubscribed: isSubscribed,
+  //       subscriberCount: subscriberCount,
+  //     );
+  //   }
+  //
+  //   // Emit updated state
+  //   emit(state.copyWith(
+  //     getAllTubeVideosData: allTubeVideos,
+  //     getFavoriteTubeVideosData: favoriteTubeVideos,
+  //     searchTubeVideosData: searchTubeVideos,
+  //     relatedTubeVideosData: relatedTubeVideos,
+  //     currentVideo: updatedCurrentVideo,
+  //   ));
+  // }
 
   /// ➕ Subscribe to a channel
   Future<void> subscribeToChannel(String channelId, String videoId) async {
@@ -1564,74 +1777,6 @@ class TubeCubit extends Cubit<TubeState> {
     );
   }
 
-  Future<void> toggleFavoriteTubeVideo1(String videoId) async {
-    emit(state.copyWith(status: StateStatus.loading));
-
-    // Find the video in allTubeVideos or favoriteTubeVideos
-    final targetVideo = allTubeVideos.firstWhere(
-      (v) => v.id == videoId,
-      orElse: () => favoriteTubeVideos.firstWhere(
-        (v) => v.id == videoId,
-        orElse: () => GetAllTubeVideosEntity(id: videoId),
-      ),
-    );
-
-    final bool isCurrentlyFavorite = targetVideo.isFavorite ?? false;
-
-    final response = isCurrentlyFavorite
-        ? await removeFavoriteTubeUseCase(FavoriteTubeParams(id: videoId))
-        : await addFavoriteTubeUseCase(FavoriteTubeParams(id: videoId));
-
-    response.fold(
-      (failure) {
-        emit(state.copyWith(
-          failure: failure,
-          status: StateStatus.error,
-        ));
-      },
-      (entity) {
-        // ✅ Update allTubeVideos list
-        allTubeVideos = allTubeVideos.map((v) {
-          if (v.id == videoId) {
-            return v.copyWith(isFavorite: !isCurrentlyFavorite);
-          }
-          return v;
-        }).toList();
-
-        // ✅ Update searchTubeVideos
-        searchTubeVideos = searchTubeVideos.map((v) {
-          if (v.id == videoId) {
-            return v.copyWith(isFavorite: !isCurrentlyFavorite);
-          }
-          return v;
-        }).toList();
-        // ✅ Update favoriteTubeVideos list
-        final index = favoriteTubeVideos.indexWhere((v) => v.id == videoId);
-
-        if (index != -1) {
-          // Already in favorites → unfavorite → remove
-          favoriteTubeVideos =
-              favoriteTubeVideos.where((v) => v.id != videoId).toList();
-        } else {
-          // Not in favorites → favorite → add from allTubeVideos
-          final newFav = allTubeVideos.firstWhere(
-            (v) => v.id == videoId,
-            orElse: () => targetVideo,
-          );
-          favoriteTubeVideos = [
-            ...favoriteTubeVideos,
-            newFav.copyWith(isFavorite: true),
-          ];
-        }
-
-        // ✅ Emit updated state
-        emit(state.copyWith(
-          status: StateStatus.success,
-          getAllTubeVideosData: allTubeVideos,
-        ));
-      },
-    );
-  }
 
   // 📌 Pagination Fields
   List<GetAllTubeVideosEntity> favoriteTubeVideos = [];

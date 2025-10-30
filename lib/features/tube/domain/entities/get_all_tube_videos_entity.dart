@@ -1,3 +1,4 @@
+
 class GetAllTubeVideosEntity {
   final String? id;
   final String? userId;
@@ -16,10 +17,14 @@ class GetAllTubeVideosEntity {
   final bool? isLike;
   final bool? isDislike;
   final bool? isSubscribed;
-  final int? subscriberCount; // ✅ Added
+  final int? subscriberCount;
   final String? createdAt;
   final String? updatedAt;
   final bool? isFavorite;
+  final String? localThumbnailPath;
+  final int? userRating;        // <-- NEW: user's own rating (1-5)
+  // NEW: client-side only
+  final bool isWatchLater;
 
   const GetAllTubeVideosEntity({
     this.id,
@@ -39,13 +44,15 @@ class GetAllTubeVideosEntity {
     this.isLike,
     this.isDislike,
     this.isSubscribed,
-    this.subscriberCount, // ✅ Added
+    this.subscriberCount,
     this.createdAt,
     this.updatedAt,
     this.isFavorite,
+    this.localThumbnailPath,
+    this.isWatchLater = false, // default: not in watch later
+    this.userRating,            // <-- NEW
   });
 
-  /// ✅ Added `copyWith` method
   GetAllTubeVideosEntity copyWith({
     String? id,
     String? userId,
@@ -68,6 +75,9 @@ class GetAllTubeVideosEntity {
     String? createdAt,
     String? updatedAt,
     bool? isFavorite,
+    String? localThumbnailPath,
+    bool? isWatchLater,
+    int? userRating,            // <-- NEW
   }) {
     return GetAllTubeVideosEntity(
       id: id ?? this.id,
@@ -91,10 +101,12 @@ class GetAllTubeVideosEntity {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isFavorite: isFavorite ?? this.isFavorite,
+      localThumbnailPath: localThumbnailPath ?? this.localThumbnailPath,
+      isWatchLater: isWatchLater ?? this.isWatchLater,
+      userRating: userRating ?? this.userRating, // <-- NEW
     );
   }
 }
-
 class OwnerEntity {
   final String? id;
   final String? channelName;
