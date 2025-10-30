@@ -15,6 +15,9 @@ import '../features/health_feature/create_doctor/domain/repositories/create_doct
 import '../features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import '../features/health_feature/shared/domain/usecases/get_cities.dart';
 import '../features/health_feature/shared/domain/usecases/get_governorates.dart';
+import '../features/health_feature/shared/data/datasources/shared_address_remote_datasource.dart';
+import '../features/health_feature/shared/data/repositories/shared_address_repo_impl.dart';
+import '../features/health_feature/shared/domain/repositories/shared_address_repo.dart';
 import '../features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import '../features/health_feature/doctor_dashboard/data/datasources/remote_datasource.dart';
 import '../features/health_feature/doctor_dashboard/data/repositories/doctor_dashboard_repo_impl.dart';
@@ -52,6 +55,8 @@ import '../features/health_feature/doctor_details/domain/usecases/get_doctor_det
 import '../features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 import '../features/health_feature/doctor_details/domain/usecases/get_doctor_ratings.dart';
 import '../features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
+import '../features/health_feature/doctor_details/domain/usecases/get_booking_doctor_by_id_usecase.dart';
+import '../features/health_feature/doctor_details/domain/usecases/get_doctor_availabilities_usecase.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/doctor_filter/data/datasources/doctor_list_remote_datasource.dart';
 import '../features/health_feature/doctor_filter/data/repositories/doctor_list_repo_impl.dart';
@@ -121,6 +126,8 @@ class HealthServiceLocator {
 
     serviceLocator.registerLazySingleton<CreateDoctorRemoteDataSource>(
         () => CreateDoctorRemoteDataSourceImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<SharedAddressRemoteDataSource>(
+        () => SharedAddressRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<HealthEmergencyRemoteDataSource>(
         () => HealthEmergencyRemoteDataSourceImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<BookAppointmentRemoteDataSource>(
@@ -146,6 +153,8 @@ class HealthServiceLocator {
 
     serviceLocator.registerLazySingleton<CreateDoctorRepo>(
         () => CreateDoctorRepoImpl(serviceLocator()));
+    serviceLocator.registerLazySingleton<SharedAddressRepo>(
+        () => SharedAddressRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<HealthEmergencyRepo>(
         () => HealthEmergencyRepoImpl(serviceLocator()));
@@ -156,6 +165,16 @@ class HealthServiceLocator {
     // -------------------UseCases ----------------------
     serviceLocator.registerLazySingleton<GetDoctorDetailsUseCase>(
       () => GetDoctorDetailsUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetBookingDoctorByIdUseCase>(
+      () => GetBookingDoctorByIdUseCase(
+        serviceLocator(),
+      ),
+    );
+    serviceLocator.registerLazySingleton<GetDoctorAvailabilitiesUseCase>(
+      () => GetDoctorAvailabilitiesUseCase(
         serviceLocator(),
       ),
     );
@@ -284,6 +303,7 @@ class HealthServiceLocator {
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
         serviceLocator(),
         serviceLocator(),
+        // old details use cases removed
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usec
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_Id_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_details_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usecases/get_doctor_reviews.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/appointment_entity.dart';
 
 import '../../domain/repositories/doctor_details_repo.dart';
 import '../datasources/doctor_detail_remote_datasource.dart';
@@ -44,5 +45,25 @@ class DoctorDetailsRepoImpl implements DoctorDetailsRepo {
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(
       PaginationParams params) async {
     return await _remoteDataSource.getDoctorRatings(params);
+  }
+
+  @override
+  Future<Either<Failure, DoctorEntity>> getBookingDoctorById({
+    required String doctorId,
+  }) async {
+    return await _remoteDataSource.getBookingDoctorById(doctorId: doctorId);
+  }
+
+  @override
+  Future<Either<Failure, List<AppointmentEntity>>> getDoctorAvailabilities({
+    required String doctorId,
+    int page = 1,
+    int limit = 100,
+  }) async {
+    return await _remoteDataSource.getDoctorAvailabilities(
+      doctorId: doctorId,
+      page: page,
+      limit: limit,
+    );
   }
 }

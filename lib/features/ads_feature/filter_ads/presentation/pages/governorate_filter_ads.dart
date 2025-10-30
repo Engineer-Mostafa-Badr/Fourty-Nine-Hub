@@ -15,7 +15,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -56,8 +56,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
       return CustomScaffold(
         enableCustomAppBar: true,
         appBar: BackAppBar(
-            label:
-                "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+            label: "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
         body: Expanded(
           child: ListView(
             padding: EdgeInsets.all(16),
@@ -94,17 +93,18 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                         color: Colors.grey, // Border color
                       ),
                     ),
-
                   ),
                   hint: Text(LocaleKeys.selectGovernorate.tr()),
-                  value: null,
+                  initialValue: null,
                   onChanged: (GovernorateEntity? newValue) {
                     controller.selectGovernorate(newValue?.id ?? '');
                     print("state.governorate${state.governorate}");
                     print("state.city${state.city}");
                     controller.getCities(newValue?.id ?? '');
                   },
-                  dropdownColor:context.isDarkMode?AppColors.QUANTITY_COLOR: Colors.white,
+                  dropdownColor: context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
                   items: state.governorates
                       ?.map<DropdownMenuItem<GovernorateEntity>>(
                           (GovernorateEntity government) {
@@ -158,7 +158,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                                   ),
                                 ),
                                 hint: Text(LocaleKeys.selectCity.tr()),
-                                value: null,
+                                initialValue: null,
                                 onChanged: (CityEntity? newValue) {
                                   print(newValue?.id);
                                   controller.selectCity(newValue?.id ?? '');
@@ -166,7 +166,9 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                                       "state.governorate${state.governorate}");
                                   print("state.city${state.city}");
                                 },
-                                dropdownColor:context.isDarkMode?AppColors.QUANTITY_COLOR: Colors.white,
+                                dropdownColor: context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : Colors.white,
                                 items: state.cities
                                     ?.map<DropdownMenuItem<CityEntity>>(
                                         (CityEntity city) {
@@ -188,7 +190,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                   width: double.infinity,
                   label: LocaleKeys.filter.localize,
                   onPressed: () {
-              ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     controller.filterGovernorateAds(
                         categorize: widget.categorization, context: context);
                   }),

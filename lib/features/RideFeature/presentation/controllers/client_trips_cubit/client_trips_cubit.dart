@@ -31,7 +31,7 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
 import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
-import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import '../../../../health_feature/shared/domain/entities/governorate_entity.dart';
 import '../../../../health_feature/shared/domain/usecases/get_cities.dart';
 import '../../../../health_feature/shared/domain/usecases/get_governorates.dart';
 import '../../../domain/entities/client/client_all_rating_entity.dart';
@@ -422,7 +422,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       },
       (data) {
         clientAcceptedTripsData.addAll(data);
-        if ((data.length ) < 5) {
+        if ((data.length) < 5) {
           hasMoreClientAcceptedTrips = false;
           // emit(state.copyWith(isLoadingMore: false));
           emit(state.copyWith(status: ClientTripsStates.loading));
@@ -1221,11 +1221,9 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
 
   Future<bool> readNonTrackingOffer(String offerId) async {
     var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
-    final response = await readNonTrackingOfferUseCase(
-      offerId
-    );
+    final response = await readNonTrackingOfferUseCase(offerId);
     bool result = false;
     response.fold(
       (failure) {
@@ -1238,34 +1236,10 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
       (data) {
         currentContext.pop();
         result = true;
-        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.driverDetails?.isRead = true;
-        emit(state.copyWith(
-          status: ClientTripsStates.success,
-        ));
-      },
-    );
-    return result;
-  }
-  Future<bool> readLoadingOffer(String offerId) async {
-    var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
-    showLoadingDialog(currentContext);
-    final response = await readLoadingOfferUseCase(
-      offerId
-    );
-    bool result = false;
-    response.fold(
-      (failure) {
-        currentContext.pop();
-        showErrorMessage(
-            currentContext, getFailureMessage(failure, currentContext));
-        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
-        result = false;
-      },
-      (data) {
-        currentContext.pop();
-        result = true;
-        clientOfferTripsData.firstWhereOrNull((e) => e.id == offerId)?.driverDetails?.isRead = true;
+        clientOfferTripsData
+            .firstWhereOrNull((e) => e.id == offerId)
+            ?.driverDetails
+            ?.isRead = true;
         emit(state.copyWith(
           status: ClientTripsStates.success,
         ));
@@ -1274,6 +1248,34 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
     return result;
   }
 
+  Future<bool> readLoadingOffer(String offerId) async {
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
+    showLoadingDialog(currentContext);
+    final response = await readLoadingOfferUseCase(offerId);
+    bool result = false;
+    response.fold(
+      (failure) {
+        currentContext.pop();
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: ClientTripsStates.error));
+        result = false;
+      },
+      (data) {
+        currentContext.pop();
+        result = true;
+        clientOfferTripsData
+            .firstWhereOrNull((e) => e.id == offerId)
+            ?.driverDetails
+            ?.isRead = true;
+        emit(state.copyWith(
+          status: ClientTripsStates.success,
+        ));
+      },
+    );
+    return result;
+  }
 
   void resetCounter() {
     debugPrint("resetCounter called");
@@ -1302,8 +1304,7 @@ class ClientTripsCubit extends Cubit<ClientTripsState> {
           createNonTrackTripEntity: rateData,
           status: ClientTripsStates.success,
         ));
-        showSuccessMessage(
-            context, rateData.message);
+        showSuccessMessage(context, rateData.message);
       },
     );
   }

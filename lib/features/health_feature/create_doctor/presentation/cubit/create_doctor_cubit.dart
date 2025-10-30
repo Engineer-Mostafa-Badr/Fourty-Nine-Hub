@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/health_feature/shared/domain/entities/cit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart'
     as create_doctor;
-import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
 import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_governorates.dart';
@@ -412,16 +411,19 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(CreateDoctorError("Can't Load Governorates"));
       }, (data) {
-        // Convert from create_doctor GovernorateEntity to shared GovernorateEntity
-        final sharedGovernorates = data
-            .map((e) => GovernorateEntity(
+        // data is shared GovernorateEntity; cache as-is for shared store
+        _shareCubit.governorates = data;
+
+        // Convert to create_doctor GovernorateEntity for UI state that expects it
+        final createDoctorGovernorates = data
+            .map((e) => create_doctor.GovernorateEntity(
                   id: e.id,
                   nameAr: e.nameAr,
                   nameEn: e.nameEn,
                 ))
             .toList();
-        _shareCubit.governorates = sharedGovernorates;
-        emit(CreateDoctorGovernoratesLoaded(data));
+
+        emit(CreateDoctorGovernoratesLoaded(createDoctorGovernorates));
       });
     } else {
       // Convert from shared GovernorateEntity to create_doctor GovernorateEntity

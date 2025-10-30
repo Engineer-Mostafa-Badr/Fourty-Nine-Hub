@@ -30,6 +30,8 @@ import '../../../../core/widget/custom_circular_progress_indicator.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart'
+    as shared;
 
 class CreateRestaurantForm extends StatefulWidget {
   final String? from;
@@ -175,7 +177,10 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                         if (value != null) {
                           context
                               .read<CreateRestaurantCubit>()
-                              .selectGovernorate(value);
+                              .selectGovernorate(shared.GovernorateEntity(
+                                  id: value.id,
+                                  nameAr: value.nameAr,
+                                  nameEn: value.nameEn));
                         }
                       },
                     ),

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usec
 
 import '../../../../../core/error/failure.dart';
 import '../entities/doctor_entity.dart';
+import '../entities/appointment_entity.dart';
 
 abstract class DoctorDetailsRepo {
   Future<Either<Failure, DoctorEntity>> getDoctorDetails(
@@ -19,4 +20,15 @@ abstract class DoctorDetailsRepo {
   Future<Either<Failure, List<UserDoctorRateEntity>>> getDoctorRatings(
       PaginationParams params);
   Future<Either<Failure, bool>> addDoctorRating(AddDoctorRatingParams params);
+
+  // New booking endpoints
+  Future<Either<Failure, DoctorEntity>> getBookingDoctorById({
+    required String doctorId,
+  });
+
+  Future<Either<Failure, List<AppointmentEntity>>> getDoctorAvailabilities({
+    required String doctorId,
+    int page = 1,
+    int limit = 100,
+  });
 }
