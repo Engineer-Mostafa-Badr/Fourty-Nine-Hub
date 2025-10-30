@@ -251,6 +251,18 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                                 ),
                               ),
                             ),
+                            Baseline(
+                              baselineType: TextBaseline.alphabetic,
+                              baseline: context.isArabic ? 20 : 30,
+                              child: Text(
+                                ' ${context.isArabic ? widget.trip.paymentMethod=='cash'?'(نقدا)':'(فيزا)' : widget.trip.paymentMethod=='cash'?'(Cash)':'(Visa)'}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
                             if ((widget.trip.platformFee ?? 0) > 0) ...[
                               Sizer(
                                 width: 10,
