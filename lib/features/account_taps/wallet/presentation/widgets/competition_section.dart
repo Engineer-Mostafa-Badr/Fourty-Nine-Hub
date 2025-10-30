@@ -55,11 +55,12 @@ class CompetitionsSection extends StatelessWidget {
     ];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Label(
           text: LocaleKeys.competitions.localize,
           style: Styles.headerText(fontSize: 32),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
 
@@ -278,10 +279,13 @@ class _CompetitionCardState extends State<_CompetitionCard> {
 
                 const SizedBox(height: 12),
                 EllipsisTextWithDialog(
+                  title: widget.title,
                   text: widget.description,
+                  svgPath: widget.svgPath, // ✅ show same icon
                   style: Styles.mediumText(fontSize: 20),
                   maxLines: 3,
                 ),
+
 
                 const SizedBox(height: 12),
                 CustomButtonWalletAndGiftAndCashback(
@@ -293,15 +297,16 @@ class _CompetitionCardState extends State<_CompetitionCard> {
                 const SizedBox(height: 8),
                 if (widget.secondaryDescription.isNotEmpty)
                   EllipsisTextWithDialog(
+                    title: widget.title,
                     text: widget.secondaryDescription,
+                    svgPath: widget.svgPath, // ✅ show same icon
                     style: Styles.mediumText(
                       fontSize: 17,
-                      color: dark
-                          ? Colors.white70
-                          : Colors.black.withOpacity(0.7),
+                      color: dark ? Colors.white70 : Colors.black.withOpacity(0.7),
                     ),
                     maxLines: 2,
                   ),
+
 
               ],
             ),
@@ -335,20 +340,22 @@ String formatNumberAccordingToLocale(String number, bool isArabic) {
 
 class EllipsisTextWithDialog extends StatefulWidget {
   final String text;
+  final String? title;
   final TextStyle? style;
   final int maxLines;
   final TextAlign? textAlign;
   final Color? accentColor;
-  final IconData? expandIcon;
+  final String? svgPath; // ✅ new: path to the competition icon
 
   const EllipsisTextWithDialog({
     Key? key,
     required this.text,
+    this.title,
     this.style,
     this.maxLines = 1,
     this.textAlign,
     this.accentColor,
-    this.expandIcon,
+    this.svgPath, // ✅ new
   }) : super(key: key);
 
   @override
@@ -357,47 +364,6 @@ class EllipsisTextWithDialog extends StatefulWidget {
 
 class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
     with SingleTickerProviderStateMixin {
-  final _textKey = GlobalKey();
-  bool _isOverflowing = false;
-  late AnimationController _animController;
-  late Animation<double> _scaleAnimation;
-  bool _isHovering = false;
-
-  @override
-  void didUpdateWidget(covariant EllipsisTextWithDialog oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _animController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOut),
-    );
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
-  }
-
-  @override
-  void dispose() {
-    _animController.dispose();
-    super.dispose();
-  }
-
-  void _checkOverflow() {
-    final renderObject = _textKey.currentContext?.findRenderObject();
-    if (renderObject is RenderParagraph) {
-      final didOverflow = renderObject.didExceedMaxLines;
-      if (didOverflow != _isOverflowing) {
-        setState(() => _isOverflowing = didOverflow);
-      }
-    }
-  }
-
   void _showDialog() {
     if (widget.text.trim().isEmpty) return;
 
@@ -407,9 +373,7 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (ctx, anim1, anim2) {
-        return Container();
-      },
+      pageBuilder: (ctx, anim1, anim2) => Container(),
       transitionBuilder: (ctx, anim1, anim2, child) {
         final curvedAnim = CurvedAnimation(
           parent: anim1,
@@ -423,7 +387,8 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
             child: Dialog(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              insetPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 600),
                 decoration: BoxDecoration(
@@ -440,7 +405,7 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Header
+                    // ✅ Header with icon and title
                     Container(
                       padding: const EdgeInsets.fromLTRB(24, 20, 16, 16),
                       decoration: BoxDecoration(
@@ -454,47 +419,54 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: (widget.accentColor ?? Theme.of(ctx).primaryColor)
+                              color: (widget.accentColor ??
+                                  Theme.of(ctx).primaryColor)
                                   .withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
+                              shape: BoxShape.circle,
                             ),
-                            child: Icon(
-                              Icons.article_outlined,
+                            child: widget.svgPath != null
+                                ? SvgPicture.asset(
+                              widget.svgPath!,
+                              height: 24,
+                              width: 24,
+                            )
+                                : Icon(
+                              Icons.info_outline,
+                              color: widget.accentColor ??
+                                  Theme.of(ctx).primaryColor,
                               size: 24,
-                              color: widget.accentColor ?? Theme.of(ctx).primaryColor,
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Text(
-                                context.isArabic ? 'المحتوى الكامل' : 'Full Content',
-                                style: Theme.of(ctx).textTheme.titleLarge?.copyWith(
+                              widget.title ??
+                                  (context.isArabic
+                                      ? 'المحتوى الكامل'
+                                      : 'Full Content'),
+                              style: Theme.of(ctx)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: -0.5,
                               ),
                             ),
                           ),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => Navigator.of(ctx).pop(),
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                child: Icon(
-                                  Icons.close_rounded,
-                                  size: 24,
-                                  color: Theme.of(ctx).iconTheme.color?.withOpacity(0.7),
-                                ),
-                              ),
+                          InkWell(
+                            onTap: () => Navigator.of(ctx).pop(),
+                            borderRadius: BorderRadius.circular(12),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(Icons.close_rounded, size: 24),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    // Content
+                    // ✅ Content
                     Flexible(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.all(24),
@@ -502,13 +474,6 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
                         child: SelectableText(
                           widget.text,
                           style: Styles.mediumText(),
-                          // style: widget.style?.copyWith(
-                          //   height: 1.6,
-                          //   letterSpacing: 0.2,
-                          // ) ?? Theme.of(ctx).textTheme.bodyLarge?.copyWith(
-                          //   height: 1.6,
-                          //   letterSpacing: 0.2,
-                          // ),
                         ),
                       ),
                     ),
@@ -524,10 +489,7 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = widget.accentColor ?? Theme.of(context).primaryColor;
-
     final truncatedText = Text(
-      key: _textKey,
       widget.text,
       style: widget.style,
       maxLines: widget.maxLines,
@@ -535,73 +497,22 @@ class _EllipsisTextWithDialogState extends State<EllipsisTextWithDialog>
       textAlign: widget.textAlign,
     );
 
-    return MouseRegion(
-      onEnter: (_) {
-        if (_isOverflowing) {
-          setState(() => _isHovering = true);
-          _animController.forward();
-        }
-      },
-      onExit: (_) {
-        setState(() => _isHovering = false);
-        _animController.reverse();
-      },
-      child: GestureDetector(
-        onTap:  _showDialog ,
-        // onTap: _isOverflowing ? _showDialog : null,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(child: truncatedText),
-            if (_isOverflowing) ...[
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: _showDialog,
-
-                child: Icon(
-                  Icons.info_outline,
-                  size: 18,
-                  color: AppColors.PRIMARY_COLOR_DARK,
-                ),
-              ),
-              /*
-              ScaleTransition(
-                scale: _scaleAnimation,
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: _showDialog,
-                    borderRadius: BorderRadius.circular(20),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: _isHovering
-                            ? accentColor.withOpacity(0.15)
-                            : accentColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: _isHovering
-                              ? accentColor.withOpacity(0.3)
-                              : accentColor.withOpacity(0.2),
-                          width: 1,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.info_outline,
-                        size: 18,
-                        color: AppColors.PRIMARY_COLOR_DARK,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-               */
-            ],
-          ],
-        ),
+    return GestureDetector(
+      onTap: _showDialog,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(child: truncatedText),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: _showDialog,
+            child: Icon(
+              Icons.info_outline,
+              size: 18,
+              color: AppColors.PRIMARY_COLOR_DARK,
+            ),
+          ),
+        ],
       ),
     );
   }

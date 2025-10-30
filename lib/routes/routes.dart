@@ -124,6 +124,7 @@ abstract class Routes {
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
   static const SUCCESSFULLBOOKING = 'SucessfullBooking';
+  static const HEALTHFAVORITES = '/Visita/HealthFavorites';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const EDITDOCTORTIMETABLE = '/Visita/EditDoctorTimeTable';
@@ -140,7 +141,7 @@ abstract class Routes {
   static const LIFEEVENTSub = '/Social/LIFEEVENTSub';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
-  static const CusineRestaurants = '/Food/Cusine-Restaurants';
+  static const CuisineRestaurants = '/Food/Cuisine-Restaurants';
   static const SEARCHMEALS = '/Food/SearchMeals';
   static const ALLMEALCATEGORIES = '/Food/AllMealCategories';
   static const RestaurantDashboard = '/RestaurantDashboard';
@@ -323,14 +324,16 @@ abstract class Routes {
   static const socialLockedScreen = '/SocialLockedScreen';
   static const socialAnonymousScreen = '/socialAnonymousScreen';
   static const socialDeletedScreen = '/SocialDeletedScreen';
-  static const tubeProfile =  '/BeAStar/TubeProfile';
-  static const availableAuctionScreen =  '/AvailableAuctionScreen';
-  static const createAuctionScreen =  '/CreateAuctionScreen';
-  static const myAuctionScreen =  '/MyAuctionScreen';
-  static const auctionWinnersScreen =  '/AuctionWinnersScreen';
+  static const tubeProfile = '/BeAStar/TubeProfile';
+  static const availableAuctionScreen = '/AvailableAuctionScreen';
+  static const createAuctionScreen = '/CreateAuctionScreen';
+  static const myAuctionScreen = '/MyAuctionScreen';
+  static const auctionWinnersScreen = '/AuctionWinnersScreen';
   static const incorrectTime = '/IncorrectTime';
   static const spotLightScreen =  '/SpotLightScreen';
+  static const tubeScreens =  '/TubeScreens';
 
+  // static const spotLightScreen = '/SpotLightScreen';
 }
 
 abstract class Paths {
@@ -439,6 +442,7 @@ abstract class Paths {
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
   static const SUCCESSFULLBOOKING = 'SucessfullBooking';
+  static const HEALTHFAVORITES = 'HealthFavorites';
   static const CREATEDOCTOR = 'CreateDoctor';
   static const EDITDOCTORPROFILE = 'EditDoctorProfile';
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
@@ -459,7 +463,7 @@ abstract class Paths {
   static const CREATELIFEEVENT = 'CREATELIFEEVENT';
   static const LIFEEVENTSub = 'LIFEEVENTSub';
   static const CREATERESTURANT = 'CreateResturant';
-  static const CusineRestaurants = 'Cusine-Restaurants';
+  static const CuisineRestaurants = 'Cuisine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';
   static const RestaurantOrders = 'RestaurantOrders';
   static const SearchMeals = 'SearchMeals';
@@ -642,10 +646,10 @@ abstract class Paths {
 
   static const tubeProfile = 'TubeProfile';
 
-  static const availableAuctionScreen =  'AvailableAuctionScreen';
-  static const createAuctionScreen =  'CreateAuctionScreen';
-  static const myAuctionScreen =  'MyAuctionScreen';
-  static const auctionWinnersScreen =  'AuctionWinnersScreen';
-  static const spotLightScreen =  'SpotLightScreen';
-
+  static const availableAuctionScreen = 'AvailableAuctionScreen';
+  static const createAuctionScreen = 'CreateAuctionScreen';
+  static const myAuctionScreen = 'MyAuctionScreen';
+  static const auctionWinnersScreen = 'AuctionWinnersScreen';
+  static const spotLightScreen = 'SpotLightScreen';
+  static const tubeScreens =  'TubeScreens';
 }

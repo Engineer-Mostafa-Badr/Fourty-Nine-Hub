@@ -1,4 +1,4 @@
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 
 import 'option_entity.dart';
 import 'variation_entity.dart';

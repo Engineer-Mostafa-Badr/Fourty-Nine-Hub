@@ -98,7 +98,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                 fontSize: 16,
               ),
               decoration: InputDecoration(
-                hintText: context.isArabic ? 'ابحث عن عروض الرحلات...' : 'Search Trips...',
+                hintText: context.isArabic ? 'ابحث عن الرحلات' : 'Search Trips',
                 hintStyle: TextStyle(
                   color: AppColors.getTextColor(context).withValues(alpha: 0.6),
                   fontSize: 16,

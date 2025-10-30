@@ -4,7 +4,7 @@ import '../usecases/change_quantity_usecase.dart';
 import '../usecases/delete_food_from_cart_usecase.dart';
 import '../usecases/get_meals_usecase.dart';
 import '../../../restaurants_list/domain/entities/restaurant.dart';
-import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
+import '../../../restaurants_list/domain/entities/restaurant_menu.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -25,5 +25,14 @@ abstract class RestaurantDetailsRepo {
     required String restaurantId,
     required String foodId,
     required int quantity,
+  });
+  Future<Either<Failure, Map<String, dynamic>>> getCart();
+  Future<Either<Failure, Map<String, dynamic>>> createNormalOrder({
+    required String cartId,
+    required String phone,
+  });
+  Future<Either<Failure, Map<String, dynamic>>> createPremiumOrder({
+    required String cartId,
+    required String phone,
   });
 }

@@ -6,7 +6,7 @@ import '../../../food_cart/presentation/pages/cart_view.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';
-import '../widgets/subcatigories_restaurant_card.dart';
+import '../widgets/subcategories_restaurant_card.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
@@ -85,7 +85,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
 // import 'package:fourtyninehub/service_locator/service_locator.dart';
 // import '../../../../../common/widgets/dynamic/sizer.dart';
 // import '../cubit/restaurants_list_cubit.dart';
-// import '../widgets/subcatigories_restaurant_card.dart';
+// import '../widgets/subcategories_restaurant_card.dart';
 //
 // class RestaurantForSelectedMeal extends StatefulWidget {
 //   final String mealId;
@@ -168,7 +168,7 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
 // // import 'package:flutter/material.dart';
 // // import 'package:flutter_bloc/flutter_bloc.dart';
 // // import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-// // import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
+// // import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/widgets/subcategories_restaurant_card.dart';
 // // import '../../../../../common/widgets/dynamic/sizer.dart';
 // // import '../../../../../service_locator/service_locator.dart';
 // // import '../cubit/meal_cubit/restaurants_meal_list_cubit.dart';

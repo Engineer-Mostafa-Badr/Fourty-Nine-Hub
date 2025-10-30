@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/assets/assets.dart';
@@ -14,7 +15,7 @@ import '../../widgets/font_manager.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class EditPriceWidget extends StatefulWidget {
-  final AvailableRideTripEntity? tripEntity;
+  final AvailableTripEntity? tripEntity;
   const EditPriceWidget({super.key, this.tripEntity, required this.price, required this.onSendOffer});
   final num price;
   final Function(num offer) onSendOffer;
@@ -132,10 +133,10 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
             ],
           ),
           const SizedBox(height: 8),
-          _locationRow(widget.tripEntity?.fromAddress ?? "Tariaq Bedon Esm",
+          _locationRow(widget.tripEntity?.route?.pickupPoint?.address ?? "Tariaq Bedon Esm",
               Colors.blue, true),
           const SizedBox(height: 15),
-          _locationRow(widget.tripEntity?.toAddress ?? "Open Air Mall - Madinaty",
+          _locationRow(widget.tripEntity?.route?.dropPoint?.address ?? "Open Air Mall - Madinaty",
               Colors.green, false),
           const SizedBox(height: 25),
           AppButton(

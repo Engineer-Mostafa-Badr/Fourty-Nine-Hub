@@ -149,15 +149,13 @@ class _AdCardState extends State<AdCard> {
                             if (widget.item.isFavourite == false) {
                               var result = await widget.onFav(widget.item.id);
                               if (result == true) {
-                                widget.item.isFavourite =
-                                    !widget.item.isFavourite!;
+                                widget.item.isFavourite = true;
                               }
                             } else {
                               var result =
                                   await widget.onRemoveFav(widget.item.id);
                               if (result == true) {
-                                widget.item.isFavourite =
-                                    !widget.item.isFavourite!;
+                                widget.item.isFavourite = false;
                               }
                             }
                           }),

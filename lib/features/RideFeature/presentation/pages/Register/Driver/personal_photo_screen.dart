@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -24,10 +25,8 @@ class PersonalPhotoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(30),
-        child: HomeAppbar(),
-      ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(),
       body: Column(
         children: [
           Expanded(

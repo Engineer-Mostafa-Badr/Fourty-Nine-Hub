@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_subcategory_doctors_list_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/usecases/get_doctors_by_specialty_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
@@ -14,9 +13,8 @@ import '../../../domain/usecases/get_doctor_list_use_case.dart';
 part 'doctors_list_state.dart';
 
 class DoctorsListCubit extends Cubit<DoctorsListState> {
-  final HealthSharedData _healthSharedData;
   final GetDoctorListUseCase _getDoctorListUseCase;
-  final GetSubCategoryDoctorsListUseCase _getSubCategoryDoctorsListUseCase;
+  final GetDoctorsBySpecialtyUseCase _getDoctorsBySpecialtyUseCase;
   final SearchDoctorsUseCase _searchDoctorsUseCase;
 
   // void loadData() async {
@@ -75,8 +73,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   int pageSize = 10;
   DoctorsListCubit(
     this._getDoctorListUseCase,
-    this._healthSharedData,
-    this._getSubCategoryDoctorsListUseCase,
+    this._getDoctorsBySpecialtyUseCase,
     this._searchDoctorsUseCase,
   ) : super(const DoctorsListState());
 
@@ -109,18 +106,134 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
         isLoadingMore = false;
         emit(state.copyWith(
-            status: DoctorsListStates.success, doctorsList: data));
+            status: DoctorsListStates.success, doctorsList: doctorsList));
       },
     );
   }
+
   getDoctorsFromSearch(String name) async {
-    print("object");
+    print("Searching for: $name");
     if (!hasMoreData || isLoadingMore) return;
+
+    // Validate search query
+    if (name.trim().isEmpty) {
+      print("Empty search query provided");
+      return;
+    }
 
     isLoadingMore = true;
 
     final response = await _searchDoctorsUseCase.call(SearchDoctorsParams(
         name: name.trim(), page: currentPage, limit: pageSize));
+
+    response.fold(
+      (failure) {
+        var currentContext =
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        isLoadingMore = false;
+        emit(state.copyWith(failure: failure, status: DoctorsListStates.error));
+      },
+      (data) {
+        print('Search results received: ${data.length} items');
+        if (data.isNotEmpty) {
+          print('First item specialty: ${data.first.subCategory?.nameAr}');
+          print(
+              'First item name: ${data.first.firstName} ${data.first.lastName}');
+        }
+
+        // Filter results based on search query for better relevance
+        List<MostBookingEntity> filteredData = _filterSearchResults(data, name);
+        print('Filtered results: ${filteredData.length} items');
+        print('Search query: "$name"');
+
+        doctorsList.addAll(filteredData);
+
+        if (filteredData.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+
+        isLoadingMore = false;
+        emit(state.copyWith(
+            status: DoctorsListStates.success, doctorsList: doctorsList));
+      },
+    );
+  }
+
+  List<MostBookingEntity> _filterSearchResults(
+      List<MostBookingEntity> data, String searchQuery) {
+    if (searchQuery.trim().isEmpty) return data;
+
+    String query = searchQuery.toLowerCase().trim();
+    print('Filtering ${data.length} items with query: "$query"');
+
+    // If the API returned results, trust them more and apply minimal filtering
+    // The API should handle the main search logic
+    return data.where((doctor) {
+      // Check doctor name
+      String doctorName =
+          '${doctor.firstName ?? ''} ${doctor.lastName ?? ''}'.toLowerCase();
+      if (doctorName.contains(query)) return true;
+
+      // Check subcategory name in Arabic
+      if (doctor.subCategory?.nameAr != null) {
+        String subCategoryAr = doctor.subCategory!.nameAr!.toLowerCase();
+        if (subCategoryAr.contains(query)) return true;
+      }
+
+      // Check subcategory name in English
+      if (doctor.subCategory?.nameEn != null) {
+        String subCategoryEn = doctor.subCategory!.nameEn!.toLowerCase();
+        if (subCategoryEn.contains(query)) return true;
+      }
+
+      // Precise medical terms mapping for accurate search results
+      Map<String, List<String>> medicalTerms = {
+        'عيون': ['عيون', 'عين', 'eyes', 'ophthalmology', 'ophthalmologist'],
+        'قلب': ['قلب', 'cardiology', 'cardiologist', 'heart'],
+        'عظام': ['عظام', 'orthopedics', 'orthopedic', 'bones'],
+        'أطفال': ['أطفال', 'pediatrics', 'pediatric', 'children'],
+        'نساء': ['نساء', 'gynecology', 'gynecologist', 'women'],
+        'جلدية': ['جلدية', 'dermatology', 'dermatologist', 'skin'],
+        'أذن': ['أذن', 'اذن', 'ear', 'ent'],
+        'مخ': ['مخ', 'اعصاب', 'neurology', 'neurologist', 'brain'],
+        'انف': ['انف', 'nose', 'ent'],
+        'اذن': ['اذن', 'ear', 'ent'],
+        'اعصاب': ['اعصاب', 'neurology', 'neurologist'],
+      };
+
+      // Check if the search query matches any medical terms exactly
+      if (medicalTerms.containsKey(query)) {
+        List<String> terms = medicalTerms[query]!;
+        for (String term in terms) {
+          if (doctorName.contains(term) ||
+              (doctor.subCategory?.nameAr?.toLowerCase().contains(term) ??
+                  false) ||
+              (doctor.subCategory?.nameEn?.toLowerCase().contains(term) ??
+                  false)) {
+            return true;
+          }
+        }
+      }
+
+      // If no specific match found, don't include the result
+      // This ensures only relevant results are shown
+      return false;
+    }).toList();
+  }
+
+  getDoctorsBySpecialty(String specialtyId) async {
+    print("Getting doctors by specialty: $specialtyId");
+    if (!hasMoreData || isLoadingMore) return;
+
+    isLoadingMore = true;
+
+    final response = await _getDoctorsBySpecialtyUseCase.call(
+        GetDoctorsBySpecialtyParams(
+            specialtyId: specialtyId, page: currentPage, limit: pageSize));
 
     response.fold(
       (failure) {
@@ -141,18 +254,26 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
 
         isLoadingMore = false;
         emit(state.copyWith(
-            status: DoctorsListStates.success, doctorsList: data));
+            status: DoctorsListStates.success, doctorsList: doctorsList));
       },
     );
   }
 
-  void loadInitialData(String subCategory,bool fromSearch) async {
+  void loadInitialData(String subCategory, bool fromSearch) async {
     emit(state.copyWith(status: DoctorsListStates.loading));
     doctorsList.clear();
     currentPage = 1;
     hasMoreData = true;
-    if(fromSearch) await getDoctorsFromSearch(subCategory);
-    if(!fromSearch)await getDoctorsFromSubCategory(subCategory);
+    if (fromSearch) await getDoctorsFromSearch(subCategory);
+    if (!fromSearch) await getDoctorsFromSubCategory(subCategory);
+  }
+
+  void loadInitialDataBySpecialty(String specialtyId) async {
+    emit(state.copyWith(status: DoctorsListStates.loading));
+    doctorsList.clear();
+    currentPage = 1;
+    hasMoreData = true;
+    await getDoctorsBySpecialty(specialtyId);
   }
 }
 /*

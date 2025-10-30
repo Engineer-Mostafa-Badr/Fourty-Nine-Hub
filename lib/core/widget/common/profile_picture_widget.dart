@@ -47,7 +47,7 @@ class ProfilePictureWidget extends StatelessWidget {
                 children: [
                   Icon(Icons.star,color: Colors.yellowAccent,size: 12,),
                   SizedBox(width: 3,),
-                  Text('2',style: Styles.mediumText(color: Colors.white,fontSize: 20),)
+                  Text(rating.toString(),style: Styles.mediumText(color: Colors.white,fontSize: 20),)
                 ],
               )),
         ),

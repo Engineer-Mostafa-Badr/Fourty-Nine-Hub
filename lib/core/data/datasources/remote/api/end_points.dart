@@ -435,7 +435,7 @@ class EndPoints {
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
   static searchDoctors(SearchDoctorsParams params) =>
-      '/health/doctors/search/doctor?name=${params.name}&limit=${params.limit}&page=${params.page}';
+      '/health/doctor-search?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
 
@@ -1678,7 +1678,7 @@ class EndPoints {
   }
 
   static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
-    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
+    return '/ride/driver/trips/available?page=${params.page}&limit=${params.limit}';
   }
 
   static String acceptOfferByClient(String offerId) {
@@ -1698,6 +1698,7 @@ class EndPoints {
   static const addCarModel = '/ride/cars/models';
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
+  static const getDoctorsBySpecialty = '/health/booking/doctors/specialties';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
       '/ride/non-tracking/trips/client/pending';
@@ -1999,6 +2000,18 @@ class EndPoints {
   static String addLoveFind = '/find/profile/love/';
   static String fetchFind = '/find';
 
+  static String getMyProfileSpotlight = '/spotlight/profile/me';
+
+   static String getTubeFavorites = '/tube-favorite';
+ static String getTubeHomeVideos = '/tube-video/recommended-home';
+ static String getMyTubeVideo = '/tube-video/me';
+ static String addTubeFavorite = '/tube-favorite/video/';
+ static String searchTubeVideo = '/tube-video/search';
+ static String tubeRelatedVideos = '/tube-video/recommended/';
+ static String getTubeCommentVideo = '/tube-comment/video/';
+ static String addTubeComment = '/tube-comment';
+ static String addLikeTubeVideo = '/tube-video/';
+ static String uploadVideoTube = '/tube-video';
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';

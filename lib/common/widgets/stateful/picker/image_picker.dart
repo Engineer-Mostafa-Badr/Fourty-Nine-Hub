@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final String? tilte;

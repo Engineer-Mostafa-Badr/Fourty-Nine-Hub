@@ -1,5 +1,6 @@
 
 
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/listen_to_accept_loading_trip_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/loading/listen_to_remove_accepted_loading_trip_offer_use_case.dart';
 
@@ -135,10 +136,12 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<ListenToAcceptLoadingTripOfferUseCase>(() => ListenToAcceptLoadingTripOfferUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRemoveAcceptedLoadingTripOfferUseCase>(() => ListenToRemoveAcceptedLoadingTripOfferUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToClientComingTrackingUseCase>(() => ListenToClientComingTrackingUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToRemoveOfferUseCase>(() => ListenToRemoveOfferUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

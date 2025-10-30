@@ -22,11 +22,11 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_compress/video_compress.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
-import 'package:video_compress/video_compress.dart';
 
 class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
@@ -74,7 +74,7 @@ class UploadFile {
             rotate: 360,
           );
           if (result == null) {
-            context.pop();
+            if (context.mounted) context.pop();
           }
 
           final bytes = await result!.readAsBytes();
@@ -175,7 +175,7 @@ class UploadFile {
               return const Right(true);
               // });
             });
-            if (hasLoading != false) context.pop();
+            if (hasLoading != false && context.mounted) context.pop();
           });
         }
       });
@@ -243,7 +243,7 @@ class UploadFile {
         final size = bytes.length;
 
         // يظهر لودينغ إن أردت
-        if (hasLoading != false) {
+        if (hasLoading != false && context.mounted) {
           showLoadingDialog(context);
         }
 
@@ -280,11 +280,15 @@ class UploadFile {
         });
 
         // أغلق الـLoading
-        if (hasLoading != false) {
+        if (hasLoading != false && context.mounted) {
           context.pop();
         }
       } catch (e) {
         print('Error using wechat_assets_picker: $e');
+        // أغلق الـLoading في حالة الخطأ
+        if (hasLoading != false && context.mounted) {
+          context.pop();
+        }
         return null;
       }
     }
@@ -443,7 +447,7 @@ class UploadFile {
         // Send to W3 storage
         signedURLResponse.fold((l) {
           log("Test Loading 1");
-          context.pop();
+          if (context.mounted) context.pop();
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
@@ -456,11 +460,11 @@ class UploadFile {
 
             confirmUploadResponse.fold((l) {
               log("Test Loading 2");
-              context.pop();
+              if (context.mounted) context.pop();
               return Left(l);
             }, (data) {
               log("Test Loading 3");
-              context.pop();
+              if (context.mounted) context.pop();
               onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
               return const Right(true);
             });

@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 
 import '../domain/use_cases/get_all_secrets_use_case.dart';
 import 'secrets_state.dart';

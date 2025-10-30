@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 
-import '../../res/assets/assets.dart';
-import 'package:lottie/lottie.dart';
-
 class CustomCircularProgressIndicator extends StatelessWidget {
   const CustomCircularProgressIndicator(
       {super.key, this.value, this.color, this.strokeWidth, this.valueColor, this.backgroundColor});

@@ -75,15 +75,14 @@ import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cub
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/chance_view.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_restaurant_cubit.dart';
+import 'package:fourtyninehub/features/food_feature/create_restaurant/views/create_restaurant_view.dart';
+import 'package:fourtyninehub/features/food_feature/cuisine_restaurants/presentation/cubit/cuisine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
@@ -314,6 +313,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_create_ad_view.dart';
+import 'package:fourtyninehub/features/tube/presentation/cubit/tube_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/main.dart';
@@ -406,7 +406,7 @@ import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/exchange_currency/presentation/logic/currency_cubit.dart';
 import '../features/exchange_currency/presentation/views/currency_exchange_page.dart';
-import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
+import '../features/food_feature/cuisine_restaurants/presentation/pages/cuisine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
@@ -467,10 +467,13 @@ import '../features/social_media/social_posts/presentation/pages/other_account_v
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
+import '../features/spotlight/presentation/cubit/spotlight_cubit.dart';
+import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/presentation_exports.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/trip_join/view_all_trip_join/presentation/views/trip_join_view.dart';
+import '../features/tube/presentation/screens/tube_screen.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
@@ -2626,9 +2629,9 @@ class AppPages {
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<CreateResturantCubit>(
+                        BlocProvider<CreateRestaurantCubit>(
                           create: (context) => serviceLocator(),
-                          child: const CreateResturantView(),
+                          child: const CreateRestaurantForm(),
                         ),
                       ),
                     ),
@@ -2911,7 +2914,7 @@ class AppPages {
                         ),
                       ),
                   routes: [
-                    // CusineRestaurantsView
+                    // CuisineRestaurantsView
                     // GoRoute(
                     //   path: Paths.RestaurantDashboard,
                     //   name: Routes.RestaurantDashboard,
@@ -2923,14 +2926,14 @@ class AppPages {
                     //   ),
                     // ),
                     GoRoute(
-                      path: Paths.CusineRestaurants,
-                      name: Routes.CusineRestaurants,
+                      path: Paths.CuisineRestaurants,
+                      name: Routes.CuisineRestaurants,
                       pageBuilder: (context, state) => customTransition(
                         context,
                         state,
-                        BlocProvider<CusineRestaurantsCubit>(
+                        BlocProvider<CuisineRestaurantsCubit>(
                           create: (_) => serviceLocator(),
-                          child: const CusineRestaurantsView(),
+                          child: const CuisineRestaurantsView(),
                         ),
                       ),
                     ),
@@ -5036,7 +5039,20 @@ class AppPages {
                 path: Paths.spotLightScreen,
                 name: Routes.spotLightScreen,
                 builder: (context, state) {
-                  return SpotLightScreen();
+                  return BlocProvider(
+                    create: (context) => serviceLocator<SpotlightCubit>()..fetchMyProfileSpotlight(),
+                    child: SpotLightScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.tubeScreens,
+                name: Routes.tubeScreens,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (context) => serviceLocator<TubeCubit>(),
+                    child: TubeScreen(),
+                  );
                 },
               ),
             ],

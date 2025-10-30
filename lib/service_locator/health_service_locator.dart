@@ -89,6 +89,7 @@ import '../features/health_feature/booking/data/repositories/book_doctor_appoint
 import '../features/health_feature/booking/domain/repositories/book_doctor_appointment_repo.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
 import '../features/health_feature/doctor_filter/domain/usecases/get_doctor_list_use_case.dart';
+import '../features/health_feature/doctor_filter/domain/usecases/get_doctors_by_specialty_usecase.dart';
 import '../features/health_feature/health/domain/usecases/get_booking_use_case.dart';
 import '../features/health_feature/health/domain/usecases/get_most_booking_use_case.dart';
 
@@ -158,6 +159,12 @@ class HealthServiceLocator {
     );
     serviceLocator.registerLazySingleton<GetDoctorListUseCase>(
       () => GetDoctorListUseCase(
+        serviceLocator(),
+      ),
+    );
+
+    serviceLocator.registerLazySingleton<GetDoctorsBySpecialtyUseCase>(
+      () => GetDoctorsBySpecialtyUseCase(
         serviceLocator(),
       ),
     );
@@ -276,7 +283,6 @@ class HealthServiceLocator {
         serviceLocator(),
         serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

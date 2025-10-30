@@ -96,6 +96,9 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                       color: AppColors.SECONDARY_COLOR,
                       child: ListView.separated(
                         controller: _scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: false,
+                        primary: false,
                         separatorBuilder: (context, index) => const Sizer(),
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => Padding(
@@ -116,6 +119,7 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                           highlightColor: Colors.grey.shade100,
                           child: ListView.separated(
                             controller: _scrollController,
+                            physics: const BouncingScrollPhysics(),
                             separatorBuilder: (context, index) => const Sizer(),
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) => Container(
@@ -141,5 +145,11 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController?.dispose();
+    super.dispose();
   }
 }

@@ -7,7 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/interceptors/auth_interceptor.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/service_locator/new_tube_service_locator.dart';
 import 'package:fourtyninehub/service_locator/spot_light_service_locator.dart';
+import 'package:fourtyninehub/service_locator/spotlight_service_locator.dart';
 import '../core/data/datasources/json_parser.dart';
 import '../core/data/datasources/local/database/local_database_data_source.dart';
 import '../core/data/datasources/remote/api/api_consumer.dart';
@@ -401,8 +403,10 @@ class DI {
     TinderServiceLocator.execute(serviceLocator: serviceLocator);
     CompetitionServiceLocator.execute(serviceLocator: serviceLocator);
     NewTripJoinServiceLocation.execute(serviceLocator: serviceLocator);
-    SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
+    // SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
     FindServiceLocator.execute(serviceLocator: serviceLocator);
+    SpotlightServiceLocator.execute(serviceLocator: serviceLocator);
+    NewTubeServiceLocator.execute(serviceLocator: serviceLocator);
 
     //! Exchange Currency
     CurrencyServiceLocator.execute(serviceLocator: serviceLocator);

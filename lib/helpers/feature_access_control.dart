@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../features/authentication/domain/entities/user_entity.dart';
 import 'manage_vibration.dart';
 

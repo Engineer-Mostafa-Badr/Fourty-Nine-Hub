@@ -450,7 +450,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     );
   }
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout(BuildContext context, {String? refreshToken}) async {
     emit(state.copyWith(status: StateStatus.loading));
     print("isGuestMode $isGuestMode");
     if (isGuestMode) {
@@ -468,8 +468,9 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
         },
       );
     } else {
+      print("refreshTokenLog $refreshToken");
       // تسجيل خروج عادي
-      final result = await _signOutUseCase();
+      final result = await _signOutUseCase(refreshToken: refreshToken);
       result.fold(
         (l) {
           var currentContext =
@@ -538,6 +539,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       showErrorMessage( AppPages.router.configuration.navigatorKey.currentContext!, getFailureMessage(l, AppPages.router.configuration.navigatorKey.currentContext!));
       emit(state.copyWith(status: StateStatus.error));
     }, (r) {
+      sessions.clear();
       final List<SessionEntity> remoteSessions = r;
 
       final remoteIds = remoteSessions.map((s) => s.deviceId).toSet();

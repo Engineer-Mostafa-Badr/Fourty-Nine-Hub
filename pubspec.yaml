@@ -173,6 +173,7 @@ dependencies:
   ntp: ^2.0.0 # Network time — replaceable via HTTP NTP requests
   app_settings: ^5.1.1 # Open system settings — native only
   bottom_picker: ^4.1.1
+  just_audio_background:
 dependency_overrides:
   camera_android_camerax: 0.6.10+1
   record_linux: ^1.1.1

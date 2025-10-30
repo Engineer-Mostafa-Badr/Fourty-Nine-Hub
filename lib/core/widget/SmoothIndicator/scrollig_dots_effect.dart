@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/widget/SmoothIndicator/scrolling_dots_painter.dart';
 import 'package:fourtyninehub/core/widget/SmoothIndicator/scrolling_dots_painter_with_fixed_center.dart';
+
 import 'indicator_effect.dart';
 import 'indicator_painter.dart';
 

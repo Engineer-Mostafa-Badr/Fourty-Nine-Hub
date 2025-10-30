@@ -80,6 +80,7 @@ abstract class TripRepository {
    void listenToClientComing(Function(String tripId) params);
    void listenToEndTrip(Function(String tripId) params);
    void listenToRemoveUntrackedTrip(Function(String tripId) params);
+   void listenToRemoveOffer(Function(String tripId) params);
    void listenToRemoveLoading(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
    void listenToAcceptUntrackedTripOffer(Function(String tripId) params);

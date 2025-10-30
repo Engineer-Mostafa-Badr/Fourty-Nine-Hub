@@ -10,9 +10,15 @@ class HealthSubcategoryModel extends HealthSubcategoryEntity {
       required super.numberOfContent});
 
   factory HealthSubcategoryModel.fromJson(Map<String, dynamic> json) {
+    // Replace specific Arabic text
+    String nameAr = json['nameAr'];
+    if (nameAr == 'معمل اسنان') {
+      nameAr = 'عياده أسنان';
+    }
+
     return HealthSubcategoryModel(
         id: json['_id'],
-        nameAr: json['nameAr'],
+        nameAr: nameAr,
         nameEn: json['nameEn'],
         image: json['picture'] ?? '',
         isFavorite: json['isFavorite'] ?? false,
