@@ -94,11 +94,28 @@ class DoctorDetailsCard extends StatelessWidget {
             ? DoctorDetailsInfoCard(
                 icon: Icons.location_on,
                 color: AppColors.PRIMARY_COLOR,
-                label: doctor?.description.length.toString() ?? '',
+                label: _buildAddressLabel(context, doctorDetailsCubit),
               )
             : SizedBox(),
         const Sizer()
       ],
     );
   }
+}
+
+String _buildAddressLabel(BuildContext context, DoctorDetailsCubit cubit) {
+  final address = cubit.state.doctor?.address;
+  if (address == null) return '';
+  final gov = context.isArabic
+      ? (address.governorateNameAr ?? '')
+      : (address.governorateNameEn ?? '');
+  final city = context.isArabic
+      ? (address.cityNameAr ?? '')
+      : (address.cityNameEn ?? '');
+  final parts = [
+    if (city.isNotEmpty) city,
+    if (gov.isNotEmpty) gov,
+  ];
+  if (parts.isEmpty) return address.address;
+  return parts.join(', ');
 }

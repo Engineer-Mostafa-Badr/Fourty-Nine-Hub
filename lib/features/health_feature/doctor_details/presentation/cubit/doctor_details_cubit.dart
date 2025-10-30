@@ -14,6 +14,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/domain/usec
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/routes/pages.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/data/datasources/doctor_detail_remote_datasource.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 part 'doctor_details_state.dart';
 
@@ -181,11 +183,89 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
 
   Future<void> loadData(DoctorDetailsParams params) async {
     emit(state.copyWith(status: DoctorDetailsStates.loading));
-    params.fromSearch == false
-        ? await _getDoctorDetailsId(params)
-        : await _getDoctorDetails(params);
+    // Prefer new booking doctor details endpoint
+    try {
+      final remote = serviceLocator<DoctorDetailsRemoteDataSource>();
+      final bookingDetails =
+          await remote.getBookingDoctorById(doctorId: params.doctorId);
+      await bookingDetails.fold((failure) async {
+        // Fallback to legacy endpoints if booking API fails
+        if (params.fromSearch == false) {
+          await _getDoctorDetailsId(params);
+        } else {
+          await _getDoctorDetails(params);
+        }
+      }, (doctor) async {
+        emit(state.copyWith(doctor: doctor));
+      });
+    } catch (_) {
+      // Final fallback
+      if (params.fromSearch == false) {
+        await _getDoctorDetailsId(params);
+      } else {
+        await _getDoctorDetails(params);
+      }
+    }
+    // After fetching doctor, also fetch availabilities from booking API and inject as appointments
+    try {
+      final currentDoctor = state.doctor;
+      if (currentDoctor != null) {
+        // Use dedicated remote from service locator
+        final remote = serviceLocator<DoctorDetailsRemoteDataSource>();
+        final avails = await remote.getDoctorAvailabilities(
+          doctorId: params.doctorId,
+          page: 1,
+          limit: 100,
+        );
+        avails.fold(
+          (failure) {
+            // ignore silently for now; keep existing appointments if any
+          },
+          (appointments) {
+            final updated = DoctorEntity(
+              id: currentDoctor.id,
+              lastName: currentDoctor.lastName,
+              firstName: currentDoctor.firstName,
+              subCategory: currentDoctor.subCategory,
+              image: currentDoctor.image,
+              phone: currentDoctor.phone,
+              email: currentDoctor.email,
+              address: currentDoctor.address,
+              clinic: currentDoctor.clinic,
+              calls: currentDoctor.calls,
+              visitHome: currentDoctor.visitHome,
+              clinicPrice: currentDoctor.clinicPrice,
+              detectionPeriodClinic: currentDoctor.detectionPeriodClinic,
+              detectionPeriodCalls: currentDoctor.detectionPeriodCalls,
+              detectionPeriodvisitHome: currentDoctor.detectionPeriodvisitHome,
+              callsPrice: currentDoctor.callsPrice,
+              visitHomePrice: currentDoctor.visitHomePrice,
+              meetingData: currentDoctor.meetingData,
+              waitingTime: currentDoctor.waitingTime,
+              timeToStart: currentDoctor.timeToStart,
+              isActive: currentDoctor.isActive,
+              isPremium: currentDoctor.isPremium,
+              description: currentDoctor.description,
+              classification: currentDoctor.classification,
+              rating: currentDoctor.rating,
+              createdAt: currentDoctor.createdAt,
+              updatedAt: currentDoctor.updatedAt,
+              isAfterEnd: currentDoctor.isAfterEnd,
+              isBetweenStartAndEnd: currentDoctor.isBetweenStartAndEnd,
+              appointments: appointments,
+              clinicDays: currentDoctor.clinicDays,
+              callDays: currentDoctor.callDays,
+              currencyEn: currentDoctor.currencyEn,
+              currencyAr: currentDoctor.currencyAr,
+              homeVisitDays: currentDoctor.homeVisitDays,
+            );
+            emit(state.copyWith(doctor: updated));
+          },
+        );
+      }
+    } catch (e) {}
     await _checkCallAndChatButtons(params.doctorId);
-    fetchReviews(doctorId: params.doctorId, limit: 3, page: 1);
+    // Temporarily skip fetching reviews to avoid 404 for booking-only doctors
     emit(state.copyWith(status: DoctorDetailsStates.success));
   }
 

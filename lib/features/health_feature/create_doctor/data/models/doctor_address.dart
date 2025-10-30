@@ -6,19 +6,28 @@ class DoctorAddressModel extends DoctorAddressEntity {
       required super.cityId,
       required super.address,
       super.latitude,
-      super.longitude});
+      super.longitude,
+      super.governorateNameAr,
+      super.governorateNameEn,
+      super.cityNameAr,
+      super.cityNameEn});
 
   factory DoctorAddressModel.fromJson(Map<String, dynamic> json) {
+    final gov = json['governorate'];
+    final city = json['city'];
     return DoctorAddressModel(
-      governorateId: json['governorateId'] ??
-          (json['governorate'] is String
-              ? json['governorate']
-              : json['governorate']?['_id'] ?? ''),
-      cityId: json['cityId'] ??
-          (json['city'] is String ? json['city'] : json['city']?['_id'] ?? ''),
+      governorateId:
+          json['governorateId'] ?? (gov is String ? gov : gov?['_id'] ?? ''),
+      cityId: json['cityId'] ?? (city is String ? city : city?['_id'] ?? ''),
       address: json['address'] ?? '',
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
+      governorateNameAr:
+          (gov is Map<String, dynamic>) ? gov['governorateNameAr'] : null,
+      governorateNameEn:
+          (gov is Map<String, dynamic>) ? gov['governorateNameEn'] : null,
+      cityNameAr: (city is Map<String, dynamic>) ? city['cityNameAr'] : null,
+      cityNameEn: (city is Map<String, dynamic>) ? city['cityNameEn'] : null,
     );
   }
 

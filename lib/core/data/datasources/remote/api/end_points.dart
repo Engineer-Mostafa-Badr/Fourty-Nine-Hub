@@ -424,6 +424,13 @@ class EndPoints {
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
 
+  // Booking Doctors (new details + availabilities)
+  static String getBookingDoctorById(String doctorId) =>
+      '/health/booking/doctors/$doctorId';
+  static String getBookingDoctorAvailabilities(String doctorId,
+          {int page = 1, int limit = 100}) =>
+      '/health/booking/doctors/$doctorId/availabilities?page=$page&limit=$limit';
+
   static String toggleFavoriteCategory(String subCategoryId) =>
       '/favorite-category/$subCategoryId';
 
