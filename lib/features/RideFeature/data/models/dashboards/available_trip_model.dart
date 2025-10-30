@@ -11,6 +11,7 @@ class AvailableTripModel extends AvailableTripEntity {
     super.isComfort,
     super.isNonSmoking,
     super.price,
+    super.lastOffer,
     super.paymentMethod,
     super.description,
     super.createdAt,
@@ -33,6 +34,7 @@ class AvailableTripModel extends AvailableTripEntity {
       platformFee: json['platformFee'] as num?,
       isNonSmoking: json['isNonSmoking'] as bool?,
       price: (json['price'] as num?)?.toDouble(),
+      lastOffer: (json['price'] as num?),
       paymentMethod: json['paymentMethod'] as String?,
       description: json['description'] as String?,
       createdAt: json['createdAt'] != null
@@ -205,21 +207,19 @@ class AvailableTripStateModel extends AvailableTripStateEntity {
 }
 
 class OfferPriceRangeModel extends OfferPriceRangeEntity {
-  OfferPriceRangeModel({super.lowestFare,super.highestFare,super.lastOffer});
+  OfferPriceRangeModel({super.lowestFare,super.highestFare});
 
   factory OfferPriceRangeModel.fromJson(Map<String, dynamic>? json) {
     if (json == null) return OfferPriceRangeModel();
 
     return OfferPriceRangeModel(
       lowestFare: json['lowestFare'] as num?,
-      lastOffer: json['lowestFare'] as num?,
       highestFare: json['highestFare'] as num?,
     );
   }
 
   Map<String, dynamic> toJson() => {
     'lowestFare': lowestFare,
-    'lastOffer': lastOffer,
     'highestFare': highestFare,
   };
 }

@@ -820,54 +820,54 @@ class RideCubit extends Cubit<RideState> {
     state.toLocation = null;
     state.wayPointOne = null;
     state.wayPointTwo = null;
-    if (state.requestedTrip == null && state.rideExpectedPrice == null) {
-      await fetchUserLocation();
-    } else {
-      if (state.requestedTrip?.status == TripState.canceled.name ||
-          state.requestedTrip?.status == TripState.completed.name ||
-          state.requestedTrip!.status == TripState.cancelledByClient.name ||
-          state.requestedTrip!.status == TripState.cancelledByDriver.name) {
-        await fetchUserLocation();
-      } else {
-        if (state.requestedTrip?.targetCoordinates != null &&
-            (state.requestedTrip?.targetCoordinates?.length ?? 0) >= 2) {
-          updateToLocation(
-            lat: state.requestedTrip!.targetCoordinates!.first,
-            lng: state.requestedTrip!.targetCoordinates!.last,
-            address: state.requestedTrip!.to!,
-          );
-        }
-
-        if (state.requestedTrip!.startCoordinates != null &&
-            state.requestedTrip!.startCoordinates!.length >= 2) {
-          updateCurrentLocation(
-            lat: state.requestedTrip!.startCoordinates!.first,
-            lng: state.requestedTrip!.startCoordinates!.last,
-            address: state.requestedTrip!.from!,
-          );
-        }
-
-        if (state.requestedTrip?.wayPointOne != null &&
-            state.requestedTrip!.wayPointOne!.length >= 2 &&
-            state.requestedTrip!.wayPointOneTitle != null) {
-          updateWayPointOne(
-            lat: state.requestedTrip!.wayPointOne!.first,
-            lng: state.requestedTrip!.wayPointOne!.last,
-            address: state.requestedTrip!.wayPointOneTitle!,
-          );
-        }
-
-        if (state.requestedTrip?.wayPointTwo != null &&
-            state.requestedTrip!.wayPointTwo!.length >= 2 &&
-            state.requestedTrip!.wayPointTwoTitle != null) {
-          updateWayPointTwo(
-            lat: state.requestedTrip!.wayPointTwo!.first,
-            lng: state.requestedTrip!.wayPointTwo!.last,
-            address: state.requestedTrip!.wayPointTwoTitle!,
-          );
-        }
-      }
-    }
+    // if (state.requestedTrip == null && state.rideExpectedPrice == null) {
+    //   await fetchUserLocation();
+    // } else {
+    //   if (state.requestedTrip?.status == TripState.canceled.name ||
+    //       state.requestedTrip?.status == TripState.completed.name ||
+    //       state.requestedTrip!.status == TripState.cancelledByClient.name ||
+    //       state.requestedTrip!.status == TripState.cancelledByDriver.name) {
+    //     await fetchUserLocation();
+    //   } else {
+    //     if (state.requestedTrip?.targetCoordinates != null &&
+    //         (state.requestedTrip?.targetCoordinates?.length ?? 0) >= 2) {
+    //       updateToLocation(
+    //         lat: state.requestedTrip!.targetCoordinates!.first,
+    //         lng: state.requestedTrip!.targetCoordinates!.last,
+    //         address: state.requestedTrip!.to!,
+    //       );
+    //     }
+    //
+    //     if (state.requestedTrip!.startCoordinates != null &&
+    //         state.requestedTrip!.startCoordinates!.length >= 2) {
+    //       updateCurrentLocation(
+    //         lat: state.requestedTrip!.startCoordinates!.first,
+    //         lng: state.requestedTrip!.startCoordinates!.last,
+    //         address: state.requestedTrip!.from!,
+    //       );
+    //     }
+    //
+    //     if (state.requestedTrip?.wayPointOne != null &&
+    //         state.requestedTrip!.wayPointOne!.length >= 2 &&
+    //         state.requestedTrip!.wayPointOneTitle != null) {
+    //       updateWayPointOne(
+    //         lat: state.requestedTrip!.wayPointOne!.first,
+    //         lng: state.requestedTrip!.wayPointOne!.last,
+    //         address: state.requestedTrip!.wayPointOneTitle!,
+    //       );
+    //     }
+    //
+    //     if (state.requestedTrip?.wayPointTwo != null &&
+    //         state.requestedTrip!.wayPointTwo!.length >= 2 &&
+    //         state.requestedTrip!.wayPointTwoTitle != null) {
+    //       updateWayPointTwo(
+    //         lat: state.requestedTrip!.wayPointTwo!.first,
+    //         lng: state.requestedTrip!.wayPointTwo!.last,
+    //         address: state.requestedTrip!.wayPointTwoTitle!,
+    //       );
+    //     }
+    //   }
+    // }
     loadingHomeData = false;
     context.pop();
     emit(state.copyWith(status: RideStates.success));

@@ -421,7 +421,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
                                 print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
                               }
                               // You can call _removeCurrentCard() if desired
-                            },
+                            }, showRemoveButton: true,
                             ),
                           ),
                         ),

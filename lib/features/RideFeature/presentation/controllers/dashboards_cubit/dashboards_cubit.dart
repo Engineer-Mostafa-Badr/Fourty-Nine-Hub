@@ -2129,7 +2129,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         if (tripIds.isNotEmpty) emitWatchingTrips(tripIds);
         // availableRideTrips.addAll(state.availableRideTrips ?? []);
         newAvailableRideTrips.addAll(data);
-        List<RefuseModel> refuseModels = await Storage().getValidModels();
+        // List<RefuseModel> refuseModels = await Storage().getValidModels();
         // if (refuseModels.isNotEmpty) {
         //   newAvailableRideTrips = newAvailableRideTrips
         //       .where((element) => !refuseModels.any((e) => e.id == element.id))

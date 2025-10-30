@@ -8,6 +8,7 @@ class AvailableTripEntity {
   final bool? isComfort;
   final bool? isNonSmoking;
   double? price;
+  num? lastOffer;
   final num? platformFee;
   final String? paymentMethod;
   final String? description;
@@ -26,6 +27,7 @@ class AvailableTripEntity {
     this.isComfort,
     this.isNonSmoking,
     this.price,
+    this.lastOffer,
     this.platformFee,
     this.paymentMethod,
     this.description,
@@ -104,10 +106,9 @@ class AvailableTripStateEntity {
 
 class OfferPriceRangeEntity {
   final num? lowestFare;
-  num? lastOffer;
   final num? highestFare;
 
-  OfferPriceRangeEntity({required this.lowestFare,this.lastOffer ,required this.highestFare});
+  OfferPriceRangeEntity({required this.lowestFare,required this.highestFare});
 }
 
 class ClientDetailsEntity {

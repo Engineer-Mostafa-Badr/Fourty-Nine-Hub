@@ -438,13 +438,16 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               banners: bannersList,
                               items: List.generate(
                                   cubit.newAvailableRideTrips.length,
-                                      (index) => AvailableTripCard(trip:cubit.newAvailableRideTrips[index], params: widget.params,)
+                                      (index) => AvailableTripCard(trip:cubit.newAvailableRideTrips[index], params: widget.params,
+                                        onCancel: (trip) {
+                                        print("newAvailableRideTrips");
+                                          ManageVibration.vibrate();
+                                          cubit.refuseNewTripOffer(trip.id??'');
+                                        }, showRemoveButton: cubit.newAvailableRideTrips[index].isAutoAccept==true
+                                      )
                                   //         AvailableRideTripItem(
                                   //   tripEntity: cubit.availableRideTrips[index],
-                                  //   onRefuseTrip: (String id) {
-                                  //     ManageVibration.vibrate();
-                                  //     cubit.refuseTripOffer(id);
-                                  //   },
+
                                   //   params: widget.params,
                                   // )
                               ),

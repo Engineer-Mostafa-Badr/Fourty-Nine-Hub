@@ -25,8 +25,9 @@ import 'package:toastification/toastification.dart';
 
 class AvailableTripCard extends StatefulWidget {
   const AvailableTripCard(
-      {super.key, required this.trip, required this.params, this.onCancel});
+      {super.key, required this.trip, required this.params, this.onCancel, required this.showRemoveButton});
   final AvailableTripEntity trip;
+  final bool showRemoveButton;
   final RideModeParams params;
   final Function(AvailableTripEntity trip)? onCancel;
   @override
@@ -99,16 +100,84 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
     _timer?.cancel();
     super.dispose();
   }
+  String formatDuration(BuildContext context, int minutes) {
+    String numberToLocale(int number) {
+      if (!context.isArabic) return number.toString();
+
+      const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      return number
+          .toString()
+          .split('')
+          .map((char) =>
+      int.tryParse(char) != null ? arabicDigits[int.parse(char)] : char)
+          .join();
+    }
+
+    if (minutes < 0) return context.isArabic ? 'غير صالح' : 'Invalid';
+
+    if (minutes < 60) {
+      return context.isArabic
+          ? '${numberToLocale(minutes)} د'
+          : '$minutes m';
+    } else if (minutes < 1440) {
+      int hours = (minutes / 60).floor();
+      return context.isArabic
+          ? '${numberToLocale(hours)} س'
+          : '$hours h';
+    } else if (minutes < 10080) {
+      int days = (minutes / 1440).floor();
+      return context.isArabic
+          ? '${numberToLocale(days)} يوم'
+          : '$days d';
+    } else {
+      int weeks = (minutes / 10080).floor();
+      return context.isArabic
+          ? '${numberToLocale(weeks)} أسبوع'
+          : '$weeks w';
+    }
+  }
+
+  String formatDistance(BuildContext context, num meters) {
+    // دالة لتحويل الأرقام حسب اللغة
+    String numberToLocale(String input) {
+      if (!context.isArabic) return input;
+
+      const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      return input
+          .split('')
+          .map((char) =>
+      int.tryParse(char) != null ? arabicDigits[int.parse(char)] : char)
+          .join();
+    }
+
+    if (meters < 0) return context.isArabic ? 'غير صالح' : 'Invalid';
+
+    if (meters < 1000) {
+      int rounded = meters.round();
+      return context.isArabic
+          ? '${numberToLocale(rounded.toString())} م'
+          : '$rounded m';
+    } else {
+      double km = meters / 1000;
+      String formatted = km.toStringAsFixed(km < 10 ? 1 : 0); // مثال: 1.5 كم
+      return context.isArabic
+          ? '${numberToLocale(formatted)} كم'
+          : '$formatted km';
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DashboardsCubit, DashboardsState>(
         builder: (context, state) {
       var cubit = context.read<DashboardsCubit>();
-      num offer = (widget.trip.offerPriceRange?.lastOffer ?? 0) + 3 >
-              (widget.trip.offerPriceRange?.highestFare ?? 0)
-          ? (widget.trip.offerPriceRange?.highestFare ?? 0)
-          : (widget.trip.offerPriceRange?.lastOffer ?? 0);
+      num highRange = ((widget.trip.price ?? 0) + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 1)).floor();
+      bool enableIncrement = ((widget.trip.lastOffer ?? 0) + 3 )>highRange;
+      num offer = enableIncrement
+          ? highRange
+          : (widget.trip.lastOffer ?? 0);
       print("offer $offer");
       return Card(
         elevation: 4,
@@ -201,29 +270,13 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                           ],
                         ),
                         const SizedBox(height: 2),
-                        // Row(
-                        //   children: [
-                        //     Icon(Icons.star, size: 14, color: Colors.grey[600]),
-                        //     const SizedBox(width: 4),
-                        //     Text(
-                        //       '${person.serviceFee} ${context.isArabic?'صافي رسوم الخدمة':'Net service fees'}',
-                        //       style: TextStyle(
-                        //         fontSize: 12,
-                        //         color: Colors.grey[600],
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        // const SizedBox(height: 4),
-
-                        // Driver info
                         Row(
                           children: [
                             Flexible(
                               child: Text(
                                 context.isArabic
-                                    ? 'على بعد ${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.durationToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} د - (${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.distanceToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)}) كيلومتر'
-                                    : '${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.durationToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} min - (${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.distanceToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)}) km away',
+                                    ? 'على بعد ${formatDuration(context,(widget.trip.route?.driverPosition?.durationToPickup??0).toInt())} - ( ${formatDistance(context, widget.trip.route?.driverPosition?.distanceToPickup ?? 0)} )'
+                                    : '${formatDuration(context,(widget.trip.route?.driverPosition?.durationToPickup??0).toInt())} min - ( ${formatDistance(context, widget.trip.route?.driverPosition?.distanceToPickup ?? 0)} ) away',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey[600],
@@ -389,8 +442,8 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         // Trip details
                         Text(
                           context.isArabic
-                              ? 'مشوار لمدة ${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.durationFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} د - المسافة ${"( ${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.distanceFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)}"} كيلومتر)'
-                              : '${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.durationFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} minute walk - distance (${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.distanceFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} km)',
+                              ? 'مشوار لمدة ${formatDuration(context,(widget.trip.route?.dropPoint?.durationFromPickup??0).toInt())} - المسافة ${"( ${formatDistance(context, widget.trip.route?.dropPoint?.distanceFromPickup ?? 0)}"} )'
+                              : '${formatDuration(context,(widget.trip.route?.dropPoint?.durationFromPickup??0).toInt())} walk - distance ( ${formatDistance(context, widget.trip.route?.dropPoint?.distanceFromPickup ?? 0)} )',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -429,98 +482,59 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
               // Confirm button
               Row(
                 children: [
-                  ClickableWidget(
+                  if(widget.trip.isAutoAccept !=true)ClickableWidget(
                     onTap: () {
-                      if (_isButtonDisabled ||
-                          ((widget.trip.offerPriceRange?.lastOffer ?? 0) + 3 >
-                              (widget.trip.offerPriceRange?.highestFare ?? 0)))
+                      num range = ((widget.trip.price ?? 0) + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 1)).floor();
+
+                          // (widget.trip.price??0).floor() + ((widget.trip.offerPriceRange?.highestFare??0).floor()-(widget.trip.offerPriceRange?.lowestFare??0).floor());
+                      bool notAvailable= ((widget.trip.lastOffer??0)+3)>range;
+                      // ManageVibration.vibrate();
+                      // widget.trip.lastOffer =
+                      // ((widget.trip.lastOffer ??
+                      //     0)
+                      //     .ceil() +
+                      //     3);
+                      // setState(() {});
+                      // print("widget.trip.lastOffer ${widget.trip.lastOffer}");
+                      if (_isButtonDisabled || notAvailable ) {
+                        widget.trip.lastOffer = range;
+                        setState(() {});
                         return;
-                      ManageVibration.vibrate();
-                      if (widget.trip.isPremium == true ||
-                          widget.trip.state?.isButtonEnabled == true) {
-                        if (widget.trip.isAutoAccept == false) {
-                          cubit.createOffer(
-                              tripId: widget.trip.id ?? '',
-                              price:
-                                  ((widget.trip.offerPriceRange?.lastOffer ?? 0)
-                                          .ceil() +
-                                      3),
-                              context: context,
-                              subCategoryId: widget.trip.subcategory?.id ?? '',
-                              onSuccess: () {
-                                widget.trip.offerPriceRange?.lastOffer =
-                                    ((widget.trip.offerPriceRange?.lastOffer ??
-                                                0)
-                                            .ceil() +
-                                        3);
-                                // Save timer when offer is sent
-                                _saveOfferTimer();
-                                final currentContext = AppPages.router
-                                    .configuration.navigatorKey.currentContext!;
-                                currentContext.pop();
-                                toastification.show(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        currentContext.isArabic
-                                            ? "تم ارسال العرض بنجاح"
-                                            : "Offer sent successfully",
-                                        style: TextStyle(
-                                          color: currentContext.isDarkMode
-                                              ? AppColors.whiteColor
-                                              : AppColors.PRIMARY_COLOR,
-                                          fontSize: 32.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                  autoCloseDuration: const Duration(seconds: 5),
-                                  progressBarTheme: ProgressIndicatorThemeData(
-                                      color: AppColors.SECONDARY_COLOR),
-                                  primaryColor: AppColors.SECONDARY_COLOR,
-                                  backgroundColor: Theme.of(currentContext)
-                                      .dialogBackgroundColor,
-                                  showProgressBar: true,
-                                );
-                              });
-                        } else {
-                          cubit.autoAcceptTrip(
-                              context, widget.trip.id ?? '', widget.params);
-                        }
-                      } else {
-                        SubscriptionMethod().subscribe(
-                            subscribeId: widget.trip.subcategory?.id ?? '',
-                            showRegular: true,
-                            title: LocaleKeys.premiumRequest.localize);
                       }
+                      ManageVibration.vibrate();
+                      widget.trip.lastOffer =
+                      ((widget.trip.lastOffer ??
+                          0)
+                          .ceil() +
+                          3);
+                      setState(() {});
+                      return;
+                      // if (_isButtonDisabled ||
+                      //     ((widget.trip.lastOffer ?? 0) + 3 >
+                      //         ((widget.trip.price??0)+((widget.trip.offerPriceRange?.highestFare ?? 0)-(widget.trip.offerPriceRange?.highestFare ?? 0))))) {
+                      //   widget.trip.lastOffer = ((widget.trip.price??0)+((widget.trip.offerPriceRange?.highestFare ?? 0)-(widget.trip.offerPriceRange?.highestFare ?? 0))+(widget.trip.price??0)).floor();
+                      //   return;
+                      // }
+
                     },
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: (_isButtonDisabled && _remainingTime != null ||
-                                (((widget.trip.offerPriceRange?.lastOffer ??
-                                            0) +
-                                        3 >
-                                    (widget.trip.offerPriceRange?.highestFare ??
-                                        0))))
+                        color: ((_isButtonDisabled && _remainingTime != null )|| enableIncrement
+                        )
                             ? AppColors.GREY_DARK_COLOR
                             : AppColors.PRIMARY_COLOR,
                       ),
                       child: Text(
                         '+${FormatNumbers().convertNumberToLocalizedString('3', isArabic: context.isArabic)}',
                         style: Styles.mediumText(
-                            color: AppColors.whiteColor, fontSize: 30),
+                            color: AppColors.whiteColor, fontSize: 32),
                       ),
                     ),
                   ),
-                  Sizer(width: 8),
+                  if(widget.trip.isAutoAccept !=true)Sizer(width: 8),
                   Expanded(
                       child: SizedBox(
                     height: 40,
@@ -604,86 +618,33 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         _isButtonDisabled && _remainingTime != null
                             ? '${_remainingTime!.inSeconds} ${context.isArabic ? 'ث' : 's'}'
                             : context.isArabic
-                                ? 'القبول مقابل ${FormatNumbers().convertNumberToLocalizedString(offer.floor().toString(), isArabic: context.isArabic)} ج.م'
+                                ? 'القبول مقابل ${FormatNumbers().convertNumberToLocalizedString(widget.trip.isAutoAccept == true?(widget.trip.price??0).ceil().toString():offer.floor().toString(), isArabic: context.isArabic)} ج.م'
                                 : 'Accept for ${FormatNumbers().convertNumberToLocalizedString(offer.floor().toString(), isArabic: context.isArabic)} EGP',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   )),
-                  Sizer(width: 8),
-                  ClickableWidget(
+                  if(widget.trip.isAutoAccept !=true)Sizer(width: 8),
+                  if(widget.trip.isAutoAccept !=true)ClickableWidget(
                     onTap: () {
                       if (_isButtonDisabled ||
-                          (((widget.trip.offerPriceRange?.lastOffer ?? 0) - 3) <
-                              (widget.trip.offerPriceRange?.lowestFare ?? 0)))
+                          (((widget.trip.lastOffer ?? 0) - 3) <
+                              (widget.trip.price ?? 0))) {
+                        widget.trip.lastOffer = widget.trip.price;
+                        setState(() {});
                         return;
-                      ManageVibration.vibrate();
-                      if (widget.trip.isPremium == true ||
-                          widget.trip.state?.isButtonEnabled == true) {
-                        if (widget.trip.isAutoAccept == false) {
-                          cubit.createOffer(
-                              tripId: widget.trip.id ?? '',
-                              price:
-                                  ((widget.trip.offerPriceRange?.lastOffer ?? 0)
-                                          .ceil() -
-                                      3),
-                              context: context,
-                              subCategoryId: widget.trip.subcategory?.id ?? '',
-                              onSuccess: () {
-                                widget.trip.offerPriceRange?.lastOffer =
-                                    ((widget.trip.offerPriceRange?.lastOffer ??
-                                                0)
-                                            .ceil() -
-                                        3);
-                                // Save timer when offer is sent
-                                _saveOfferTimer();
-                                final currentContext = AppPages.router
-                                    .configuration.navigatorKey.currentContext!;
-                                currentContext.pop();
-                                toastification.show(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        currentContext.isArabic
-                                            ? "تم ارسال العرض بنجاح"
-                                            : "Offer sent successfully",
-                                        style: TextStyle(
-                                          color: currentContext.isDarkMode
-                                              ? AppColors.whiteColor
-                                              : AppColors.PRIMARY_COLOR,
-                                          fontSize: 32.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                  autoCloseDuration: const Duration(seconds: 5),
-                                  progressBarTheme: ProgressIndicatorThemeData(
-                                      color: AppColors.SECONDARY_COLOR),
-                                  primaryColor: AppColors.SECONDARY_COLOR,
-                                  backgroundColor: Theme.of(currentContext)
-                                      .dialogBackgroundColor,
-                                  showProgressBar: true,
-                                );
-                              });
-                        } else {
-                          cubit.autoAcceptTrip(
-                              context, widget.trip.id ?? '', widget.params);
-                        }
-                      } else {
-                        SubscriptionMethod().subscribe(
-                            subscribeId: widget.trip.subcategory?.id ?? '',
-                            showRegular: true,
-                            title: LocaleKeys.premiumRequest.localize);
                       }
+                      ManageVibration.vibrate();
+                      widget.trip.lastOffer =
+                      ((widget.trip.lastOffer ??
+                          0)
+                          .ceil() -
+                          3);
+                      setState(() {});
                     },
                     child: Container(
                       padding:
@@ -691,10 +652,9 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: (_isButtonDisabled && _remainingTime != null ||
-                                (((widget.trip.offerPriceRange?.lastOffer ?? 0)
-                                            .ceil() -
-                                        3) <
-                                    (widget.trip.offerPriceRange?.lowestFare ??
+                                ((widget.trip.lastOffer ?? 0)
+                                    .ceil() ==
+                                    (widget.trip.price ??
                                             0)
                                         .floor()))
                             ? AppColors.GREY_DARK_COLOR
@@ -703,7 +663,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                       child: Text(
                         '-${FormatNumbers().convertNumberToLocalizedString('3', isArabic: context.isArabic)}',
                         style: Styles.mediumText(
-                            color: AppColors.whiteColor, fontSize: 30),
+                            color: AppColors.whiteColor, fontSize: 32),
                       ),
                     ),
                   ),
@@ -712,7 +672,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
               SizedBox(
                 height: 4,
               ),
-              Row(
+              if(widget.trip.isAutoAccept !=true)Row(
                 children: [
                   Expanded(
                     flex: 1,
@@ -726,7 +686,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                             cubit.createOffer(
                                 tripId: widget.trip.id ?? '',
                                 price:
-                                    ((widget.trip.offerPriceRange?.lowestFare ??
+                                    ((widget.trip.price ??
                                                     0)
                                                 .ceil() +
                                             (((widget.trip.offerPriceRange
@@ -742,11 +702,9 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                                     widget.trip.subcategory?.id ?? '',
                                 onSuccess: () {
                                   // Save timer when offer is sent
-                                  widget.trip.offerPriceRange
-                                      ?.lastOffer = ((widget
+                                  widget.trip.lastOffer = ((widget
                                                   .trip
-                                                  .offerPriceRange
-                                                  ?.lowestFare ??
+                                                  .price ??
                                               0) +
                                           (((widget.trip.offerPriceRange
                                                               ?.highestFare ??
@@ -818,9 +776,9 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ),
                         child: Center(
                             child: Text(
-                          '${FormatNumbers().convertNumberToLocalizedString(((widget.trip.offerPriceRange?.lowestFare ?? 0).ceil() + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 0.2)).ceil().toString(), isArabic: context.isArabic)} ${context.isArabic ? 'ج.م' : 'EGP'}',
+                          '${FormatNumbers().convertNumberToLocalizedString(((widget.trip.price ?? 0).ceil() + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 0.2)).ceil().toString(), isArabic: context.isArabic)} ${context.isArabic ? 'ج.م' : 'EGP'}',
                           textAlign: TextAlign.center,
-                          style: Styles.mediumText(color: AppColors.whiteColor),
+                              style: Styles.mediumText(color: AppColors.whiteColor,fontSize: 32),
                         )),
                       ),
                     ),
@@ -841,7 +799,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                             cubit.createOffer(
                                 tripId: widget.trip.id ?? '',
                                 price:
-                                    ((widget.trip.offerPriceRange?.lowestFare ??
+                                    ((widget.trip.price ??
                                                     0)
                                                 .ceil() +
                                             (((widget.trip.offerPriceRange
@@ -856,11 +814,9 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                                 subCategoryId:
                                     widget.trip.subcategory?.id ?? '',
                                 onSuccess: () {
-                                  widget.trip.offerPriceRange
-                                      ?.lastOffer = ((widget
+                                  widget.trip.lastOffer = ((widget
                                                   .trip
-                                                  .offerPriceRange
-                                                  ?.lowestFare ??
+                                                  .price ??
                                               0) +
                                           (((widget.trip.offerPriceRange
                                                               ?.highestFare ??
@@ -933,9 +889,9 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ),
                         child: Center(
                             child: Text(
-                          '${FormatNumbers().convertNumberToLocalizedString(((widget.trip.offerPriceRange?.lowestFare ?? 0).ceil() + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 0.5)).ceil().toString(), isArabic: context.isArabic)} ${context.isArabic ? 'ج.م' : 'EGP'}',
+                          '${FormatNumbers().convertNumberToLocalizedString(((widget.trip.price ?? 0).ceil() + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 0.5)).ceil().toString(), isArabic: context.isArabic)} ${context.isArabic ? 'ج.م' : 'EGP'}',
                           textAlign: TextAlign.center,
-                          style: Styles.mediumText(color: AppColors.whiteColor),
+                          style: Styles.mediumText(color: AppColors.whiteColor,fontSize: 32),
                         )),
                       ),
                     ),
@@ -956,7 +912,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                             cubit.createOffer(
                                 tripId: widget.trip.id ?? '',
                                 price:
-                                    ((widget.trip.offerPriceRange?.lowestFare ??
+                                    ((widget.trip.price ??
                                                 0) +
                                             (((widget.trip.offerPriceRange
                                                             ?.highestFare ??
@@ -970,9 +926,8 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                                 subCategoryId:
                                     widget.trip.subcategory?.id ?? '',
                                 onSuccess: () {
-                                  widget.trip.offerPriceRange?.lastOffer =
-                                      ((widget.trip.offerPriceRange
-                                                      ?.lowestFare ??
+                                  widget.trip.lastOffer =
+                                      ((widget.trip.price ??
                                                   0) +
                                               (((widget.trip.offerPriceRange
                                                               ?.highestFare ??
@@ -1046,16 +1001,16 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ),
                         child: Center(
                             child: Text(
-                          '${FormatNumbers().convertNumberToLocalizedString(((widget.trip.offerPriceRange?.lowestFare ?? 0) + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 1)).floor().toString(), isArabic: context.isArabic)} ${context.isArabic ? 'ج.م' : 'EGP'}',
+                          '${FormatNumbers().convertNumberToLocalizedString(((widget.trip.price ?? 0) + (((widget.trip.offerPriceRange?.highestFare ?? 0) - (widget.trip.offerPriceRange?.lowestFare ?? 0)) * 1)).floor().toString(), isArabic: context.isArabic)} ${context.isArabic ? 'ج.م' : 'EGP'}',
                           textAlign: TextAlign.center,
-                          style: Styles.mediumText(color: AppColors.whiteColor),
+                              style: Styles.mediumText(color: AppColors.whiteColor,fontSize: 32),
                         )),
                       ),
                     ),
                   ),
                 ],
               ),
-              if (widget.onCancel != null) ...[
+              if (widget.showRemoveButton) ...[
                 SizedBox(
                   height: 4,
                 ),
@@ -1064,7 +1019,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      widget.onCancel!(widget.trip);
+                      widget.onCancel==null?(){}:widget.onCancel!(widget.trip);
                       // Handle confirm action
                     },
                     style: ElevatedButton.styleFrom(
@@ -1078,8 +1033,8 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                       context.isArabic ? 'اغلاق' : 'Cancel',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
