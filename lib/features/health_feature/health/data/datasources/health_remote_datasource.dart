@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/fav
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import '../../domain/usecases/search_doctors_by_booking_type_usecase.dart';
+import '../../domain/usecases/search_doctors_by_specialty_usecase.dart';
 
 import '../../domain/entities/most_booking_entity.dart';
 import '../../domain/usecases/get_booking_use_case.dart';
@@ -35,6 +36,8 @@ abstract class HealthRemoteDataSource {
       SearchDoctorsParams params);
   Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsByBookingType(
       SearchDoctorsByBookingTypeParams params);
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsBySpecialty(
+      SearchDoctorsBySpecialtyParams params);
   Future<Either<Failure, List<FavoriteCategoryBannersEntity>>>
       getFavoriteCategory();
 
@@ -87,11 +90,23 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
       String id) async {
     final response =
         await _apiConsumer.get(EndPoints.getHealthSubcategories(id));
-    return response.fold(
-        (failure) => Left(failure),
-        (data) => Right((data['data']['subcategories'] as List)
-            .map((e) => HealthSubcategoryModel.fromJson(e))
-            .toList()));
+    return response.fold((failure) => Left(failure), (data) {
+      try {
+        // Strictly parse the new API shape:
+        // { status: true, data: { speciality: [ ... ], pagination: {...} } }
+        final List<dynamic> list =
+            (data['data'] is Map && (data['data'] as Map)['speciality'] is List)
+                ? (data['data'] as Map)['speciality'] as List
+                : <dynamic>[];
+
+        return Right(list
+            .map((e) =>
+                HealthSubcategoryModel.fromJson(e as Map<String, dynamic>))
+            .toList());
+      } catch (_) {
+        return const Right([]);
+      }
+    });
   }
 
   @override
@@ -110,9 +125,9 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
   Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(
       SearchDoctorsParams params) async {
     final response = await _apiConsumer.get(
-      EndPoints.doctorSearch,
+      EndPoints.searchBookingDoctors,
       queryParameters: {
-        'name': params.name,
+        'query': params.name,
         'limit': params.limit,
         'page': params.page,
       },
@@ -132,6 +147,13 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
           return Right((data['data'] as List)
               .map((e) => MostBookingModel.fromJson(e))
               .toList());
+        } else if (data['data'] != null &&
+            data['data'] is Map &&
+            (data['data'] as Map).containsKey('doctors') &&
+            (data['data']['doctors'] is List)) {
+          final list = data['data']['doctors'] as List;
+          print('Data is in data.doctors, length: ${list.length}');
+          return Right(list.map((e) => MostBookingModel.fromJson(e)).toList());
         } else if (data is List) {
           print('Data is directly a list, length: ${data.length}');
           if (data.isNotEmpty) {
@@ -240,6 +262,41 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
         } catch (e) {
           print('❌ [ERROR] Error parsing booking type search results: $e');
           print('   - Stack trace: ${StackTrace.current}');
+          return Right([]);
+        }
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsBySpecialty(
+      SearchDoctorsBySpecialtyParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.searchDoctorsBySpecialty(params.specialtyId),
+      queryParameters: params.toQuery(),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (data) {
+        try {
+          if (data['data'] != null) {
+            if (data['data'] is List) {
+              return Right((data['data'] as List)
+                  .map((e) => MostBookingModel.fromJson(e))
+                  .toList());
+            } else if (data['data']['doctors'] != null) {
+              return Right((data['data']['doctors'] as List)
+                  .map((e) => MostBookingModel.fromJson(e))
+                  .toList());
+            }
+          }
+          if (data is List) {
+            return Right((data as List)
+                .map((e) => MostBookingModel.fromJson(e))
+                .toList());
+          }
+          return Right([]);
+        } catch (e) {
           return Right([]);
         }
       },

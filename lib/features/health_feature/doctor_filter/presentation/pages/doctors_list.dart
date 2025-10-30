@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:async';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -26,6 +27,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../health/domain/entities/most_booking_entity.dart';
@@ -60,6 +62,11 @@ class DoctorsListView extends StatefulWidget {
 
 class _DoctorsListViewState extends State<DoctorsListView> {
   late ScrollController _scrollController;
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  String? _specialtySearchQuery;
+  Timer? _searchDebounce;
+  bool _isFastBookingBaseFiltered = false;
 
   @override
   void initState() {
@@ -119,7 +126,41 @@ class _DoctorsListViewState extends State<DoctorsListView> {
       print("object");
       final healthSharedData = serviceLocator<HealthSharedData>();
 
-      if (widget.params.fromSearch == true) {
+      // If specialty search is active, paginate on it
+      if ((_specialtySearchQuery != null &&
+          _specialtySearchQuery!.trim().isNotEmpty)) {
+        final hasLocation = serviceLocator<HealthSharedData>()
+                .doctorSearchParams
+                .governorate
+                .id
+                .isNotEmpty ||
+            serviceLocator<HealthSharedData>()
+                .doctorSearchParams
+                .city
+                .id
+                .isNotEmpty ||
+            _isFastBookingBaseFiltered;
+        if (hasLocation) {
+          context
+              .read<DoctorsListCubit>()
+              .getDoctorsBySpecialtySearchFastBooking(
+                specialtyId: widget.params.subCategoryId,
+                name: _specialtySearchQuery!,
+              );
+        } else {
+          context.read<DoctorsListCubit>().getDoctorsBySpecialtySearch(
+                specialtyId: widget.params.subCategoryId,
+                name: _specialtySearchQuery!,
+              );
+        }
+        return;
+      }
+
+      if (_isFastBookingBaseFiltered) {
+        context
+            .read<DoctorsListCubit>()
+            .getDoctorsBySpecialtyFastBooking(widget.params.subCategoryId);
+      } else if (widget.params.fromSearch == true) {
         context
             .read<DoctorsListCubit>()
             .getDoctorsFromSearch(widget.params.name ?? '');
@@ -159,6 +200,8 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _searchDebounce?.cancel();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -258,49 +301,119 @@ class _DoctorsListViewState extends State<DoctorsListView> {
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
-          if (state.isLoading) {
-            return CustomLoadingSearchWidget();
-          } else {
-            return
-                // context.read<DoctorsListCubit>().doctors.isEmpty
-                //   ? Center(
-                //       child: Text(
-                //         LocaleKeys.noDoctorsFound.localize,
-                //         style: Styles.headerText(),
-                //       ),
-                //     )
-                //   :
-                Column(
+          return
+              // context.read<DoctorsListCubit>().doctors.isEmpty
+              //   ? Center(
+              //       child: Text(
+              //         LocaleKeys.noDoctorsFound.localize,
+              //         style: Styles.headerText(),
+              //       ),
+              //     )
+              //   :
+              GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
               children: [
-                Expanded(
-                  child: (state.doctorsList?.isEmpty ?? true)
-                      ? Center(
-                          child: CustomEmptyWidget(
-                              label: _getEmptyMessage(context)))
-                      : ListView.separated(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.sizeOf(context).height * 0.35),
-                          controller: _scrollController,
-                          itemCount: state.doctorsList?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            final booking = state.doctorsList![index];
-                            return Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: DoctorListCard(
-                                data: booking,
-                              ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: DefaultTextFormField(
+                    currentFocusNode: _searchFocusNode,
+                    currentController: _searchController,
+                    hint: context.isArabic
+                        ? 'بحث باسم الطبيب'
+                        : 'Search by doctor name',
+                    prefixIcon: const Icon(Icons.search),
+                    onChanged: (value) {
+                      final query = value.trim();
+                      _searchDebounce?.cancel();
+
+                      if (query.isEmpty) {
+                        setState(() {
+                          _specialtySearchQuery = null;
+                          _isFastBookingBaseFiltered = true;
+                        });
+                        context
+                            .read<DoctorsListCubit>()
+                            .loadInitialDataBySpecialtyFastBooking(
+                              widget.params.subCategoryId,
                             );
-                          },
-                          separatorBuilder: (context, index) => const Sizer(),
-                        ),
+                        return;
+                      }
+
+                      // Avoid searching on single letters; wait for 3+ chars with debounce
+                      if (query.length < 3) {
+                        setState(() {
+                          _specialtySearchQuery = query;
+                        });
+                        return;
+                      }
+
+                      _searchDebounce =
+                          Timer(const Duration(milliseconds: 400), () {
+                        setState(() {
+                          _specialtySearchQuery = query;
+                        });
+                        final healthSharedData =
+                            serviceLocator<HealthSharedData>();
+                        final hasLocation = healthSharedData
+                                .doctorSearchParams.governorate.id.isNotEmpty ||
+                            healthSharedData
+                                .doctorSearchParams.city.id.isNotEmpty ||
+                            _isFastBookingBaseFiltered;
+                        if (hasLocation) {
+                          context
+                              .read<DoctorsListCubit>()
+                              .loadInitialDataBySpecialtySearch(
+                                specialtyId: widget.params.subCategoryId,
+                                name: query,
+                              );
+                        } else {
+                          context
+                              .read<DoctorsListCubit>()
+                              .loadInitialDataBySpecialtySearch(
+                                specialtyId: widget.params.subCategoryId,
+                                name: query,
+                              );
+                        }
+                      });
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: state.isLoading
+                      ? CustomLoadingSearchWidget()
+                      : ((state.doctorsList?.isEmpty ?? true)
+                          ? Center(
+                              child: CustomEmptyWidget(
+                                  label: _getEmptyMessage(context)))
+                          : ListView.separated(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.sizeOf(context).height * 0.35),
+                              controller: _scrollController,
+                              itemCount: state.doctorsList?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                final booking = state.doctorsList![index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: DoctorListCard(
+                                    data: booking,
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const Sizer(),
+                            )),
                 ),
                 // if (context.read<DoctorsListCubit>().isLoadingMore)
                 //   const Center(
                 //     child: CustomCircularProgressIndicator(),
                 //   )
               ],
-            );
-          }
+            ),
+          );
         }),
       ),
     );

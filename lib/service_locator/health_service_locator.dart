@@ -93,6 +93,7 @@ import '../features/health_feature/doctor_filter/domain/usecases/get_doctor_list
 import '../features/health_feature/doctor_filter/domain/usecases/get_doctors_by_specialty_usecase.dart';
 import '../features/health_feature/health/domain/usecases/get_booking_use_case.dart';
 import '../features/health_feature/health/domain/usecases/get_most_booking_use_case.dart';
+import '../features/health_feature/health/domain/usecases/search_doctors_by_specialty_usecase.dart';
 
 class HealthServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
@@ -276,6 +277,8 @@ class HealthServiceLocator {
         () => SearchDoctorsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<SearchDoctorsByBookingTypeUseCase>(
         () => SearchDoctorsByBookingTypeUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<SearchDoctorsBySpecialtyUseCase>(
+        () => SearchDoctorsBySpecialtyUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
@@ -286,6 +289,7 @@ class HealthServiceLocator {
         serviceLocator(),
         serviceLocator()));
     serviceLocator.registerFactory<DoctorsListCubit>(() => DoctorsListCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

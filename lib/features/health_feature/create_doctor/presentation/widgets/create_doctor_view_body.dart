@@ -13,7 +13,6 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/create_doctor_waiting_time_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/email_field.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/location_fields.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
@@ -119,8 +118,6 @@ class _CreateDoctorViewBodyState extends State<CreateDoctorViewBody> {
             const CreateDoctorCitiesDropdowns(),
             const SizedBox(height: 8),
             const CreateDoctorAddressField(),
-            const SizedBox(height: 8),
-            const CreateDoctorLocationFields(),
             const SizedBox(height: 8),
             const CreateDoctorWaitingTimeField(),
             // Column(

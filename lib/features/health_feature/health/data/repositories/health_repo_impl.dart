@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_most_booking_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_by_booking_type_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/search_doctors_by_specialty_usecase.dart';
 
 import '../../domain/repositories/health_repo.dart';
 import '../datasources/health_remote_datasource.dart';
@@ -55,6 +56,12 @@ class HealthRepoImpl implements HealthRepo {
   Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsByBookingType(
       SearchDoctorsByBookingTypeParams params) {
     return _remoteDataSource.searchDoctorsByBookingType(params);
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsBySpecialty(
+      SearchDoctorsBySpecialtyParams params) {
+    return _remoteDataSource.searchDoctorsBySpecialty(params);
   }
 
   @override

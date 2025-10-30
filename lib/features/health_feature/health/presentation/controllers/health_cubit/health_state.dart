@@ -38,10 +38,10 @@ class HealthState {
     this.governorates,
     this.banner,
     this.isLoadingMoreBooking,
-     this.currentBookings,
-     this.historyBookings,
-     this.activeBookingType,
-     this.mostBooking,
+    this.currentBookings,
+    this.historyBookings,
+    this.activeBookingType,
+    this.mostBooking,
     this.isLoadingMoreMostBooking = false,
   });
 
@@ -79,7 +79,8 @@ class HealthState {
       historyBookings: historyBookings ?? this.historyBookings,
       activeBookingType: activeBookingType ?? this.activeBookingType,
       mostBooking: mostBooking ?? this.mostBooking,
-      isLoadingMoreMostBooking: isLoadingMoreMostBooking ?? this.isLoadingMoreMostBooking,
+      isLoadingMoreMostBooking:
+          isLoadingMoreMostBooking ?? this.isLoadingMoreMostBooking,
     );
   }
 }

@@ -11,6 +11,7 @@ import '../entities/most_booking_entity.dart';
 import '../usecases/get_booking_use_case.dart';
 import '../usecases/get_most_booking_use_case.dart';
 import '../usecases/search_doctors_by_booking_type_usecase.dart';
+import '../usecases/search_doctors_by_specialty_usecase.dart';
 
 abstract class HealthRepo {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getMyBookingsHistory();
@@ -28,8 +29,15 @@ abstract class HealthRepo {
   Future<Either<Failure, DoctorSettingEntity>> isDoctor();
   Future<Either<Failure, List<MostBookingEntity>>> searchDoctors(
       SearchDoctorsParams params);
+
+  //// search doctors by booking type
   Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsByBookingType(
       SearchDoctorsByBookingTypeParams params);
+
+  //// search doctors by specialty
+  Future<Either<Failure, List<MostBookingEntity>>> searchDoctorsBySpecialty(
+      SearchDoctorsBySpecialtyParams params);
+
   Future<Either<Failure, bool>> isDoctorApproval();
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
   Future<Either<Failure, bool>> cancelAppointment(String id);

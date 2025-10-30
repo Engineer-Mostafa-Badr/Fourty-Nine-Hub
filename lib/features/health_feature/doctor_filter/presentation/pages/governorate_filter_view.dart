@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/widgets/governorate_list_title.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -25,6 +26,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
         preferredSize: const Size.fromHeight(30),
         child: HomeAppbar(
           isWithBackArrow: true,
+          onBackPressed: ()=>context.pop(),
         ),
       ),
       body: Padding(

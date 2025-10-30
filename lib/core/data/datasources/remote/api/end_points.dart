@@ -428,7 +428,9 @@ class EndPoints {
       '/favorite-category/$subCategoryId';
 
   static getHealthSubcategories(String userId) =>
-      '/health/subCategories-health-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
+      // Use booking specialities listing for the health carousel
+      // Pagination is fixed here to match current UI usage
+      '/health/booking/speciality?page=1&limit=10';
 
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
@@ -436,6 +438,8 @@ class EndPoints {
       '/health/doctor-search?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
+  // New unified booking search endpoint (used by search bar)
+  static const searchBookingDoctors = '/health/booking/doctors/search';
 
   static String getUpcomingUserAppointments(String userId) =>
       '/health/book-appointment${userId.isNotEmpty ? "?userId=$userId" : ""}';
@@ -1697,6 +1701,8 @@ class EndPoints {
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
   static const getDoctorsBySpecialty = '/health/booking/doctors/specialties';
+  static String searchDoctorsBySpecialty(String specialtyId) =>
+      '/health/booking/doctors/search/specialties/$specialtyId';
   static const searchDoctorsByCalls = '/health/booking/doctors/search/calls';
   static const searchDoctorsByVideoCalls =
       '/health/booking/doctors/search/video-calls';
