@@ -120,6 +120,7 @@ class DI {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      await subscribeToGlobalTopic();
     } catch (e) {
       // Firebase might already be initialized, continue
     }
@@ -453,5 +454,24 @@ class DI {
     // serviceLocator.registerLazySingleton<CallWithNotificationHelper>(() =>
     //     CallWithNotificationHelper(
     //         serviceLocator(), serviceLocator(), serviceLocator()));
+  }
+}
+
+
+Future<void> subscribeToGlobalTopic() async {
+  try {
+    await FirebaseMessaging.instance.subscribeToTopic('all-devices');
+    print('✅ Subscribed to all-devices topic');
+  } catch (e) {
+    print('❌ Failed to subscribe to topic: $e');
+  }
+}
+
+Future<void> unsubscribeFromGlobalTopic() async {
+  try {
+    await FirebaseMessaging.instance.unsubscribeFromTopic('all-devices');
+    print('✅ Unsubscribed from all-devices topic');
+  } catch (e) {
+    print('❌ Failed to unsubscribe from topic: $e');
   }
 }

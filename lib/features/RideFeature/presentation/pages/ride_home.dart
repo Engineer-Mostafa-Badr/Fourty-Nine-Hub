@@ -1290,7 +1290,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return Container(
       width: double.infinity,
       height: state.requestedTrip != null
-          ? MediaQuery.of(context).size.height * 0.8
+          ? MediaQuery.of(context).size.height * 0.7
           : MediaQuery.of(context).size.height * 0.55,
       // Add this to fix rendering issues
       decoration: const BoxDecoration(
