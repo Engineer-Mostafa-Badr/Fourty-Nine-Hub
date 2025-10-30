@@ -225,7 +225,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                                     ? 'على بعد ${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.durationToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} د - (${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.distanceToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)}) كيلومتر'
                                     : '${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.durationToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} min - (${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.driverPosition?.distanceToPickup ?? 0).ceil().toString(), isArabic: context.isArabic)}) km away',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   color: Colors.grey[600],
                                 ),
                               ),
@@ -301,28 +301,31 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (widget.trip.clientDetails?.isAccountVerified ==
-                              true) ...[
-                            Icon(
-                              Icons.verified,
-                              color: Colors.blueAccent,
-                              size: 14,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (widget.trip.clientDetails?.isAccountVerified ==
+                                true) ...[
+                              Icon(
+                                Icons.verified,
+                                color: Colors.blueAccent,
+                                size: 14,
+                              ),
+                              Sizer(
+                                width: 10,
+                              )
+                            ],
+                            Text(
+                              widget.trip.clientDetails?.firstName ?? '',
+                              style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? AppColors.whiteColor
+                                      : AppColors.PRIMARY_COLOR),
                             ),
-                            Sizer(
-                              width: 10,
-                            )
                           ],
-                          Text(
-                            widget.trip.clientDetails?.firstName ?? '',
-                            style: Styles.mediumText(
-                                color: context.isDarkMode
-                                    ? AppColors.whiteColor
-                                    : AppColors.PRIMARY_COLOR),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -389,7 +392,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                               ? 'مشوار لمدة ${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.durationFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} د - المسافة ${"( ${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.distanceFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)}"} كيلومتر)'
                               : '${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.durationFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} minute walk - distance (${FormatNumbers().convertNumberToLocalizedString((widget.trip.route?.dropPoint?.distanceFromPickup ?? 0).ceil().toString(), isArabic: context.isArabic)} km)',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 14,
                             color: Colors.grey[600],
                           ),
                         ),

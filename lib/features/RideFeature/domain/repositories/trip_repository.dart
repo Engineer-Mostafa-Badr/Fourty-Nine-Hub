@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
@@ -75,7 +76,7 @@ abstract class TripRepository {
    Future<Either<Failure, RateResponseEntity>> addRateWithClientLoading(AddRateWithDriverLoadingParams params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
-   void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
+   void listenToNewTrip(Function(AvailableTripEntity trip) params);
    void listenToRemoveTrip(Function(String tripId) params);
    void listenToClientComing(Function(String tripId) params);
    void listenToEndTrip(Function(String tripId) params);

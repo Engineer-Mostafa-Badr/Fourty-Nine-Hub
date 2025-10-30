@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/loading/get_loadi
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/create_non_track_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
@@ -151,7 +152,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
+  void listenToNewTrip(Function(AvailableTripEntity trip) params) {
     remoteDataSource.listenToNewTrip(params);
   }
 

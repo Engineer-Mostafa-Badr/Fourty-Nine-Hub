@@ -251,6 +251,12 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                         );
                                       },
                                       activeColor: AppColors.PRIMARY_COLOR,
+                                      inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                                      trackOutlineColor: WidgetStateProperty.all<Color>(
+                                        AppColors.PRIMARY_COLOR,
+                                      ),
+                                      activeTrackColor: const Color(0xff19D176),
+                                      inactiveTrackColor: AppColors.whiteColor,
                                     ),
                                   ),
                                 ],

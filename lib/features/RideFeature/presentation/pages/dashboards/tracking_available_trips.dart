@@ -29,7 +29,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   CameraPosition? _initialCameraPosition;
   bool _isLoading = true;
 
-  List<AvailableTripEntity> _trips = [];
+  // List<AvailableTripEntity> _trips = [];
   AvailableTripEntity? _selectedTrip;
 
   static const String _manIconPath = 'assets/icons/man.png';
@@ -41,9 +41,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      context.read<DashboardsCubit>().loadAvailableTrips(context);
-    });
+
   }
 
   Future<void> _fitBounds(LatLngBounds bounds) async {
@@ -54,8 +52,8 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   }
 
   void _initializeFromTrips(List<AvailableTripEntity> trips) {
-    _trips = trips;
-    if (_trips.isEmpty) {
+    // _trips = trips;
+    if (context.read<DashboardsCubit>().newAvailableRideTrips.isEmpty) {
       _initialCameraPosition = const CameraPosition(
         target: LatLng(30.0444, 31.2357),
         zoom: 10.0,
@@ -67,8 +65,8 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
       setState(() {});
       return;
     }
-    _selectedTrip = _trips.first;
-    _initialCameraPosition = CameraPosition(
+    _selectedTrip = context.read<DashboardsCubit>().newAvailableRideTrips.first;
+      _initialCameraPosition = CameraPosition(
       target: LatLng(
         _selectedTrip?.route?.pickupPoint?.latitude ?? 30.0444,
         _selectedTrip?.route?.pickupPoint?.longitude ?? 31.2357,
@@ -79,9 +77,9 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   }
 
   void _setCustomMarkersFromTrips() async {
-    print("_setCustomMarkersFromTrips ${_trips.length}");
-    if (_trips.isEmpty) return;
-    final markerWidgets = _trips.map((t) {
+    print("_setCustomMarkersFromTrips ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
+    if (context.read<DashboardsCubit>().newAvailableRideTrips.isEmpty) return;
+    final markerWidgets = context.read<DashboardsCubit>().newAvailableRideTrips.map((t) {
       final isMale = (t.clientDetails?.gender?.toLowerCase() ?? '') == 'male';
       final name = (t.clientDetails?.firstName ?? '').isNotEmpty ? (t.clientDetails!.firstName!) : '';
       return BuildMapMarker(
@@ -94,15 +92,15 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
     print("markerWidgets ${markerWidgets.length}");
     MarkerGenerator(markerWidgets, (bitmaps) {
       final List<Marker> markersList = [];
-      for (int i = 0; i < _trips.length && i < bitmaps.length; i++) {
-        final trip = _trips[i];
+      for (int i = 0; i < context.read<DashboardsCubit>().newAvailableRideTrips.length && i < bitmaps.length; i++) {
+        final trip = context.read<DashboardsCubit>().newAvailableRideTrips[i];
         final pickup = trip.route?.pickupPoint;
         if (pickup?.latitude == null || pickup?.longitude == null) continue;
       markersList.add(Marker(
           markerId: MarkerId('trip_${trip.id ?? i}'),
           position: LatLng(pickup!.latitude!, pickup.longitude!),
           icon: BitmapDescriptor.fromBytes(bitmaps[i]),
-          onTap: () => _selectTrip(trip),
+          onTap: () => _onUserMarkerTap(trip),
         ));
       }
       if (mounted) {
@@ -156,27 +154,33 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
         .map((p) => LatLng(p.longitude, p.latitude))
         .toList();
     if (points.isNotEmpty) {
-      final polyline = Polyline(
+    final polyline = Polyline(
         polylineId: PolylineId('route_${trip.id ?? DateTime.now().millisecondsSinceEpoch}'),
-        points: points,
-        color: AppColors.SECONDARY_COLOR,
-        width: 5,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap,
-        geodesic: true,
-      );
-      setState(() {
-        _markers = markers.toSet();
-        _polylines = {polyline};
+      points: points,
+      color: AppColors.SECONDARY_COLOR,
+      width: 5,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+      geodesic: true,
+    );
+    setState(() {
+        _markers = {
+          ..._markers,
+          ...markers,
+        };
+      _polylines = {polyline};
         _isLoading = false;
       });
       _fitBounds(_calculateBoundsFromPolyline(points));
     } else {
-      setState(() {
-        _markers = markers.toSet();
+        setState(() {
+        _markers = {
+          ..._markers,
+          ...markers,
+        };
         _polylines = {};
-        _isLoading = false;
-      });
+          _isLoading = false;
+        });
       if (_controller.isCompleted && markers.isNotEmpty) {
         final controller = await _controller.future;
         controller.animateCamera(
@@ -191,6 +195,16 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
 
   void _selectTrip(AvailableTripEntity trip) {
     setState(() {
+      _selectedTrip = trip;
+    });
+    _renderMarkersAndPolyline(trip);
+  }
+
+  void _onUserMarkerTap(AvailableTripEntity trip) {
+    print("_onUserMarkerTap");
+    setState(() {
+      context.read<DashboardsCubit>().newAvailableRideTrips.removeWhere((t) => t.id == trip.id);
+      context.read<DashboardsCubit>().newAvailableRideTrips.insert(0, trip);
       _selectedTrip = trip;
     });
     _renderMarkersAndPolyline(trip);
@@ -256,29 +270,61 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
     final LatLng? startPoint = polyPoints.isNotEmpty ? polyPoints.first : null;
     if (startPoint == null) return;
 
-    final isMale = (trip.clientDetails?.gender?.toLowerCase() ?? '') == 'male';
-    final name = (trip.clientDetails?.firstName ?? '').isNotEmpty ? (trip.clientDetails!.firstName!) : '';
+    // final isMale = (trip.clientDetails?.gender?.toLowerCase() ?? '') == 'male';
+    // final name = (trip.clientDetails?.firstName ?? '').isNotEmpty ? (trip.clientDetails!.firstName!) : '';
 
-    final markerWidget = BuildMapMarker(
-      manIconPath: _manIconPath,
-      womanIconPath: _womanIconPath,
-      name: name,
-      isMale: isMale,
-    );
-
-    MarkerGenerator([markerWidget], (bitmaps) {
+    // final markerWidget = BuildMapMarker(
+    //   manIconPath: _manIconPath,
+    //   womanIconPath: _womanIconPath,
+    //   name: name,
+    //   isMale: isMale,
+    // );
+    Set<Marker> usersMarkers = {};
+    final markerWidgets = context.read<DashboardsCubit>().newAvailableRideTrips.map((t) {
+      final isMale = (t.clientDetails?.gender?.toLowerCase() ?? '') == 'male';
+      final name = (t.clientDetails?.firstName ?? '').isNotEmpty ? (t.clientDetails!.firstName!) : '';
+      LatLng position = LatLng(trip.route!.pickupPoint?.latitude??0, trip.route?.pickupPoint?.longitude??0);
+      usersMarkers.add(
+          Marker(
+            markerId: MarkerId('user_start_${trip.id ?? DateTime.now().millisecondsSinceEpoch}'),
+            position: position,
+            zIndex: 2.0,
+          )
+      );
+      return BuildMapMarker(
+        manIconPath: _manIconPath,
+        womanIconPath: _womanIconPath,
+        name: name,
+        isMale: isMale,
+      );
+    }).toList();
+    MarkerGenerator(markerWidgets, (bitmaps) {
       if (bitmaps.isEmpty) return;
-      final userIcon = BitmapDescriptor.fromBytes(bitmaps.first);
+
+      // Create a marker for each user
+      final List<Marker> userMarkers = [];
+
+      for (int i = 0; i < context.read<DashboardsCubit>().newAvailableRideTrips.length && i < bitmaps.length; i++) {
+        final trip = context.read<DashboardsCubit>().newAvailableRideTrips[i];
+        final pickup = trip.route?.pickupPoint;
+        if (pickup?.latitude == null || pickup?.longitude == null) continue;
+
+        userMarkers.add(
+          Marker(
+            markerId: MarkerId('user_${trip.id ?? i}'),
+            position: LatLng(pickup!.latitude!, pickup.longitude!),
+            icon: BitmapDescriptor.fromBytes(bitmaps[i]),
+            zIndex: 2.0,
+            onTap: () => _onUserMarkerTap(trip),
+      ),
+    );
+  }
+
       if (!mounted) return;
       setState(() {
         _markers = {
           ..._markers,
-          Marker(
-            markerId: MarkerId('user_start_${trip.id ?? DateTime.now().millisecondsSinceEpoch}'),
-            position: LatLng(trip.route!.pickupPoint?.latitude??0, trip.route?.pickupPoint?.longitude??0),
-            icon: userIcon,
-            zIndex: 2.0,
-          ),
+          ...userMarkers,
         };
       });
     }).generate(context);
@@ -318,58 +364,72 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
                 },
             ),
 
-            if (state.isLoadingAvailable || _isLoading)
+            if (context.read<DashboardsCubit>().isLoadingAvailableRideTrips)
             Container(
               color: Colors.black.withOpacity(0.3),
               child: const Center(
                 child: CustomCircularProgressIndicator(),
               ),
             ),
-          if (_trips.isNotEmpty && !_isLoading)Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              height: 420,
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                clipBehavior: Clip.none,
-                children: [
-                  for (int i = 0; i < _trips.length; i++)
-                    AnimatedPositioned(
-                      key: ValueKey(_trips[i].id),
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      // نزود المسافة بين كل كارت والتاني
-                      bottom: 15.0 * (_trips.length - 1 - i),
-                      left: 0,
-                      right: 0,
-                      child: Opacity(
-                        // الكروت اللي تحت تبقى أغمق شوية
-                        opacity: i == 0
-                            ? 1.0
-                            : 1.0 -
-                            (0.1 *
-                                i.clamp(0,
-                                    2)), // أول كارت واضح، اللي تحته أقل وضوحًا
-                        child: FractionallySizedBox(
-                          widthFactor:
+          if (context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty && !_isLoading)Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                height: 420,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  clipBehavior: Clip.none,
+                  children: [
+                  for (int i = 0; i < context.read<DashboardsCubit>().newAvailableRideTrips.length; i++)
+                      AnimatedPositioned(
+                      key: ValueKey(context.read<DashboardsCubit>().newAvailableRideTrips[i].id),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        // نزود المسافة بين كل كارت والتاني
+                      bottom: 15.0 * (context.read<DashboardsCubit>().newAvailableRideTrips.length - 1 - i),
+                        left: 0,
+                        right: 0,
+                        child: Opacity(
+                          // الكروت اللي تحت تبقى أغمق شوية
+                          opacity: i == 0
+                              ? 1.0
+                              : 1.0 -
+                                  (0.1 *
+                                      i.clamp(0,
+                                          2)), // أول كارت واضح، اللي تحته أقل وضوحًا
+                          child: FractionallySizedBox(
+                            widthFactor:
                           0.98, // نخلي كل الكروت عرضها أقل شوية عشان الحواف تبان
-                          alignment: Alignment.bottomCenter,
+                            alignment: Alignment.bottomCenter,
                           child: AvailableTripCard(
-                            trip: _selectedTrip ?? _trips.first,
+                            trip: context.read<DashboardsCubit>().newAvailableRideTrips[i],
                             params: widget.params,
                             onCancel: (_) {
+                              // setState(() {
+                              //   _trips.removeWhere((e)=>e.id==_trips[i].id);
+                              // });
+                              print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
+                              if(context.read<DashboardsCubit>().newAvailableRideTrips.length==1){
+                                context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
+                                context.read<DashboardsCubit>().getAvailableTrackingTrips(context);
+                                print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
+                              }
+                              if(context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty){
+                                context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
+                                _selectTrip(context.read<DashboardsCubit>().newAvailableRideTrips[i]);
+                                print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
+                              }
                               // You can call _removeCurrentCard() if desired
                             },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ].reversed.toList(),
+                  ].reversed.toList(),
+                ),
               ),
             ),
-          ),
             // if (_trips.isNotEmpty && !_isLoading)
             // Positioned(
             //   bottom: 0,
