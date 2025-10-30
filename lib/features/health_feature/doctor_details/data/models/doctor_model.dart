@@ -50,67 +50,116 @@ class DoctorModel extends DoctorEntity {
   });
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
+    // Support old and new booking doctor shapes
+    final Map<String, dynamic> data =
+        (json['doctor'] is Map<String, dynamic>) ? json['doctor'] : json;
+
+    // Map specialty if provided under 'speciality'
+    SubCategoryEntity subCategoryEntity;
+    if (data['subCategoryId'] != null) {
+      subCategoryEntity = SubCategoryModel.fromJson(data['subCategoryId']);
+    } else if (data['speciality'] is Map<String, dynamic>) {
+      final sp = data['speciality'] as Map<String, dynamic>;
+      subCategoryEntity = SubCategoryEntity(
+        id: (sp['id'] ?? sp['_id'] ?? '').toString(),
+        nameAr: (sp['nameAr'] ?? '').toString(),
+        nameEn: (sp['nameEn'] ?? '').toString(),
+        image: '',
+        isFavorite: false,
+      );
+    } else {
+      subCategoryEntity = SubCategoryEntity(
+        id: '',
+        nameAr: '',
+        nameEn: '',
+        image: '',
+        isFavorite: false,
+      );
+    }
+
+    // Detections mapping (booking doctor API)
+    String clinicPrice = '';
+    String callsPrice = '';
+    String visitHomePrice = '';
+    String detectionPeriodClinic = '';
+    String detectionPeriodCalls = '';
+    String detectionPeriodvisitHome = '';
+    if (data['detections'] is List) {
+      for (final det in (data['detections'] as List)) {
+        final type = (det['type'] ?? '').toString();
+        final price = (det['price'] ?? '').toString();
+        final period = (det['detectionPeriod'] ?? '').toString();
+        if (type == 'clinic_visit') {
+          clinicPrice = price;
+          detectionPeriodClinic = period;
+        } else if (type == 'video_call') {
+          callsPrice = price;
+          detectionPeriodCalls = period;
+        } else if (type == 'home_visit') {
+          visitHomePrice = price;
+          detectionPeriodvisitHome = period;
+        }
+      }
+    }
+
     return DoctorModel(
-      id: json['id']??json['_id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      description: json['description'] ?? '',
-      timeToStart: json['timeToStart'] ?? '0h 0m',
-      isAfterEnd: json['isAfterEnd'] ?? false,
-      isBetweenStartAndEnd: json['isBetweenStartAndEnd'] ?? false,
-      meetingData: json['roomMeeting'] != null
-          ? DoctorMeetingModel.fromJson(json['roomMeeting'])
+      id: data['id'] ?? data['_id'] ?? '',
+      firstName: data['firstName'] ?? '',
+      lastName: data['lastName'] ?? '',
+      description: data['description'] ?? '',
+      timeToStart: data['timeToStart'] ?? '0h 0m',
+      isAfterEnd: data['isAfterEnd'] ?? false,
+      isBetweenStartAndEnd: data['isBetweenStartAndEnd'] ?? false,
+      meetingData: data['roomMeeting'] != null
+          ? DoctorMeetingModel.fromJson(data['roomMeeting'])
           : null,
-      subCategory: json['subCategoryId'] != null
-          ? SubCategoryModel.fromJson(json['subCategoryId'])
-          : SubCategoryEntity(
-              id: '',
-              nameAr: '',
-              nameEn: '',
-              image: '',
-              isFavorite: false,
-            ),
-      image: json['mediaId']['mediaKey'] ?? '',
-      phone: json['phone'] ?? '',
-      email: json['email'] ?? '',
-      classification: json['classification'] ?? '',
-      address: json['address'] != null
-          ? DoctorAddressModel.fromJson(json['address'])
+      subCategory: subCategoryEntity,
+      image: (data['mediaId'] is Map && data['mediaId']['mediaKey'] != null)
+          ? data['mediaId']['mediaKey']
+          : (data['profilePicUrl'] ?? ''),
+      phone: (data['phone'] ?? data['phoneNumber'] ?? '').toString(),
+      email: data['email'] ?? '',
+      classification: data['classification'] ?? '',
+      address: data['address'] != null
+          ? DoctorAddressModel.fromJson(data['address'])
           : DoctorAddressEntity(governorateId: '', cityId: '', address: ''),
-      clinic: json['clinic'] ?? false,
-      calls: json['calls'] ?? false,
-      visitHome: json['visitHome'] ?? false,
-      currencyEn: json['currencyEn'] ?? '',
-      currencyAr: json['currencyAr'] ?? '',
-      clinicPrice: json['clinicPrice'].toString() ?? '',
-      detectionPeriodClinic: json['detectionPeriodClinic'] ?? '',
-      detectionPeriodCalls: json['detectionPeriodCalls'] ?? '',
-      detectionPeriodvisitHome: json['detectionPeriodvisitHome'] ?? '',
-      callsPrice: json['callsPrice'].toString() ?? '',
-      visitHomePrice: json['visitHomePrice'].toString() ?? '',
-      waitingTime: json['waitingTime'].toString() ?? '',
-      isActive: json['isActive'] ?? false,
-      isPremium: json['isPremium'] ?? false,
-      rating: json['rating'] ?? 1,
-      createdAt: json['createdAt'] ?? '',
-      updatedAt: json['updatedAt'] ?? '',
-      appointments: json['appointments'] != null
+      clinic: data['clinic'] ?? (clinicPrice.isNotEmpty),
+      calls: data['calls'] ?? (callsPrice.isNotEmpty),
+      visitHome: data['visitHome'] ?? (visitHomePrice.isNotEmpty),
+      currencyEn: data['currencyEn'] ?? '',
+      currencyAr: data['currencyAr'] ?? '',
+      clinicPrice: (data['clinicPrice']?.toString() ?? clinicPrice),
+      detectionPeriodClinic:
+          data['detectionPeriodClinic'] ?? detectionPeriodClinic,
+      detectionPeriodCalls:
+          data['detectionPeriodCalls'] ?? detectionPeriodCalls,
+      detectionPeriodvisitHome:
+          data['detectionPeriodvisitHome'] ?? detectionPeriodvisitHome,
+      callsPrice: (data['callsPrice']?.toString() ?? callsPrice),
+      visitHomePrice: (data['visitHomePrice']?.toString() ?? visitHomePrice),
+      waitingTime: (data['waitingTime']?.toString() ?? ''),
+      isActive: data['isActive'] ?? true,
+      isPremium: data['isPremium'] ?? false,
+      rating: data['rating'] ?? 1,
+      createdAt: data['createdAt'] ?? '',
+      updatedAt: data['updatedAt'] ?? '',
+      appointments: data['appointments'] != null
           ? List<AppointmentEntity>.from(
-              json['appointments'].map((x) => AppointmentModel.fromJson(x)),
+              data['appointments'].map((x) => AppointmentModel.fromJson(x)),
             )
           : [],
-      clinicDays: json['doctorAppointment'] != null
-          ? List<DoctorDayEntity>.from(json['doctorAppointment']['clinic']
+      clinicDays: data['doctorAppointment'] != null
+          ? List<DoctorDayEntity>.from(data['doctorAppointment']['clinic']
                   ['workDays']
               .map((x) => DoctorDayModel.fromJson(x)))
           : [],
-      callDays: json['doctorAppointment'] != null
-          ? List<DoctorDayEntity>.from(json['doctorAppointment']['calls']
+      callDays: data['doctorAppointment'] != null
+          ? List<DoctorDayEntity>.from(data['doctorAppointment']['calls']
                   ['workDays']
               .map((x) => DoctorDayModel.fromJson(x)))
           : [],
-      homeVisitDays: json['doctorAppointment'] != null
-          ? List<DoctorDayEntity>.from(json['doctorAppointment']['visitHome']
+      homeVisitDays: data['doctorAppointment'] != null
+          ? List<DoctorDayEntity>.from(data['doctorAppointment']['visitHome']
                   ['workDays']
               .map((x) => DoctorDayModel.fromJson(x)))
           : [],

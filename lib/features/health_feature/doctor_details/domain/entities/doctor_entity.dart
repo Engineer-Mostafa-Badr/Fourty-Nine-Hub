@@ -87,7 +87,7 @@ class DoctorEntity {
     String price = '';
     final bookingType =
         serviceLocator<HealthSharedData>().doctorSearchParams.bookingType;
-    if (bookingType == BookingTypes.call) {
+    if (bookingType == BookingTypes.videoCall) {
       price = callsPrice;
     } else if (bookingType == BookingTypes.clinic) {
       price = clinicPrice;

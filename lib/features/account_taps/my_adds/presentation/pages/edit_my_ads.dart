@@ -18,9 +18,9 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/widgets
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
@@ -142,7 +142,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                     child: BadgedLabel(
                                       label: '+',
                                       onTap: () {
-      ManageVibration.vibrate();
+                                        ManageVibration.vibrate();
                                         controller.uploadImage(
                                             subCategoryId: widget
                                                 .categorization.subCategory.id,
@@ -332,7 +332,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                           Expanded(
                               child: InkWell(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               setState(() {
                                 if (state.myAdById!.subCategory.hasAuction ==
                                     true) {
@@ -369,7 +369,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-      ManageVibration.vibrate();
+                                ManageVibration.vibrate();
                                 setState(() {
                                   if (state.myAdById!.subCategory.hasAuction ==
                                       true) {
@@ -522,7 +522,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                   : AppColors.GREY_DARK_COLOR,
                             ),
                           ),
-                          value: null,
+                          initialValue: null,
                           onChanged: (GovernorateEntity? newValue) {
                             controller.selectGovernorate(newValue?.id ?? '');
                             print("state.governorate${state.governorate}");
@@ -546,7 +546,8 @@ class _EditMyAdsState extends State<EditMyAds> {
                       ),
                       const Sizer(),
                       state.status == CreateAdStates.loadCities
-                          ? const Center(child: CustomCircularProgressIndicator())
+                          ? const Center(
+                              child: CustomCircularProgressIndicator())
                           : state.status == CreateAdStates.loadCitiesSuccess
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -590,7 +591,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                 : AppColors.GREY_DARK_COLOR,
                                           ),
                                         ),
-                                        value: null,
+                                        initialValue: null,
                                         onChanged: (CityEntity? newValue) {
                                           print(newValue?.id);
                                           controller
@@ -686,7 +687,7 @@ class _EditMyAdsState extends State<EditMyAds> {
                       DefaultButton(
                         label: LocaleKeys.edit.localize,
                         onPressed: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           controller.editMyAds(
                             categorization: widget.categorization,
                             selectedEducationLevel: selectedEducationLevel,

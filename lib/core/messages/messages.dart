@@ -37,44 +37,54 @@ showErrorMessage(BuildContext context, String message) {
   // Log the error message for debugging
   log('🚨 showErrorMessage: $message');
 
-  ScaffoldMessenger.of(context).clearSnackBars();
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      content: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              message,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: AppColors.getTextColor(context),
+  // Safely show error message by checking if context is still mounted
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (!context.mounted) return;
+
+    try {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  message,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.getTextColor(context),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: 10),
+              const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          const Icon(
-            Icons.error,
-            color: Colors.red,
+          backgroundColor: AppColors.getFillColor(context),
+          behavior: SnackBarBehavior.floating,
+          padding: EdgeInsets.symmetric(
+            vertical: 20.h,
+            horizontal: 20,
           ),
-        ],
-      ),
-      backgroundColor: AppColors.getFillColor(context),
-      behavior: SnackBarBehavior.floating,
-      padding: EdgeInsets.symmetric(
-        vertical: 20.h,
-        horizontal: 20,
-      ),
-      margin: const EdgeInsets.only(
-        bottom: 25,
-        right: 20,
-        left: 20,
-      ),
-    ),
-  );
+          margin: const EdgeInsets.only(
+            bottom: 25,
+            right: 20,
+            left: 20,
+          ),
+        ),
+      );
+    } catch (e) {
+      // Silently ignore if context is no longer valid
+      log('Error showing snackbar: $e');
+    }
+  });
 }
 
 showSuccessMessage(

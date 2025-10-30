@@ -17,11 +17,11 @@ class HealthSubcategoryModel extends HealthSubcategoryEntity {
     }
 
     return HealthSubcategoryModel(
-        id: json['_id'],
+        id: json['id'] ?? json['_id'],
         nameAr: nameAr,
         nameEn: json['nameEn'],
-        image: json['picture'] ?? '',
+        image: json['pictureUrl'] ?? json['picture'] ?? '',
         isFavorite: json['isFavorite'] ?? false,
-        numberOfContent: json['numberOfAds']);
+        numberOfContent: json['numberOfAds'] ?? 0);
   }
 }

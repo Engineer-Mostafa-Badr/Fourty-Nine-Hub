@@ -20,7 +20,6 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
-    final doctor = doctorDetailsCubit.state.doctor;
     final List<AppointmentEntity> callsAppointments =
         (doctorDetailsCubit.state.doctor?.appointments ?? [])
             .where((element) => element.appointmentType == 'calls')
@@ -40,59 +39,32 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
             text: LocaleKeys.chooseBookingTime.localize,
             style: Styles.headerText()),
         const Sizer(),
-        if (clinicAppointments.isNotEmpty) ...[
+        if (clinicAppointments.isNotEmpty || true) ...[
           const Sizer(),
           Text(LocaleKeys.clinicVisit.localize, style: Styles.mediumText()),
           const Sizer(),
           SizedBox(
-              height: kToolbarHeight * 2.5,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: clinicAppointments.length,
-                itemBuilder: (context, index) {
-                  return _DayScheduleWidget(
-                    item: clinicAppointments[index],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Sizer(),
-              ))
+            height: kToolbarHeight * 2.5,
+            child: _DaysRow(appointments: clinicAppointments),
+          )
         ],
-        if (callsAppointments.isNotEmpty) ...[
+        if (callsAppointments.isNotEmpty || true) ...[
           const Sizer(),
           Text(LocaleKeys.call.localize, style: Styles.mediumText()),
           const Sizer(),
           SizedBox(
-              height: kToolbarHeight * 2.5,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: callsAppointments.length,
-                itemBuilder: (context, index) {
-                  return _DayScheduleWidget(
-                    item: callsAppointments[index],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Sizer(),
-              ))
+            height: kToolbarHeight * 2.5,
+            child: _DaysRow(appointments: callsAppointments),
+          )
         ],
-        if (visitHomeAppointments.isNotEmpty) ...[
+        if (visitHomeAppointments.isNotEmpty || true) ...[
           const Sizer(),
           Text(LocaleKeys.homeVisit.localize, style: Styles.mediumText()),
           const Sizer(),
           SizedBox(
-              height: kToolbarHeight * 2.5,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: visitHomeAppointments.length,
-                itemBuilder: (context, index) {
-                  return _DayScheduleWidget(
-                    item: visitHomeAppointments[index],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Sizer(),
-              ))
+            height: kToolbarHeight * 2.5,
+            child: _DaysRow(appointments: visitHomeAppointments),
+          )
         ],
       ],
     );
@@ -122,12 +94,12 @@ DateTime? _safeParseDateTime(String dateTimeString) {
     if (dateTimeString.contains('T') && dateTimeString.contains('Z')) {
       return DateTime.parse(dateTimeString);
     }
-    
+
     // Handle ISO 8601 format without timezone (e.g., "2025-09-23T10:40:00")
     if (dateTimeString.contains('T')) {
       return DateTime.parse(dateTimeString);
     }
-    
+
     // Handle regular date format (e.g., "2025-09-23")
     return DateTime.parse(dateTimeString);
   } catch (e) {
@@ -137,78 +109,113 @@ DateTime? _safeParseDateTime(String dateTimeString) {
   }
 }
 
-bool _isTimeOfDayAfter(String dateTimeString) {
-  final dateTime = _safeParseDateTime(dateTimeString);
-  if (dateTime == null) {
-    return false;
-  }
-  
-  final now = DateTime.now().toUtc();
-  TimeOfDay t1 = TimeOfDay.fromDateTime(dateTime);
-  TimeOfDay t2 = TimeOfDay.now();
-  
-  if (dateTime.day > now.day) {
-    return true;
-  } else if (dateTime.day == now.day) {
-    return (t1.hour > t2.hour) || (t1.hour == t2.hour && t1.minute > t2.minute);
-  } else {
-    return false;
-  }
-}
+class _DaysRow extends StatelessWidget {
+  final List<AppointmentEntity> appointments;
+  const _DaysRow({required this.appointments});
 
-class _DayScheduleWidget extends StatelessWidget {
-  final AppointmentEntity item;
-  const _DayScheduleWidget({required this.item});
+  static const List<String> _daysOrder = [
+    'saturday',
+    'sunday',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+  ];
 
   @override
   Widget build(BuildContext context) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: _daysOrder.length,
+      separatorBuilder: (context, _) => const Sizer(),
+      itemBuilder: (context, index) {
+        final dayKey = _daysOrder[index];
+        final daySlots =
+            appointments.where((a) => a.day.toLowerCase() == dayKey).toList();
+        return _DaySlotsCard(dayKey: dayKey, slots: daySlots);
+      },
+    );
+  }
+}
+
+class _DaySlotsCard extends StatelessWidget {
+  final String dayKey;
+  final List<AppointmentEntity> slots;
+  const _DaySlotsCard({required this.dayKey, required this.slots});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasSlots = slots.isNotEmpty;
+    final first = hasSlots ? slots.first : null;
     return Container(
-      width: kToolbarHeight * 1.5,
+      width: kToolbarHeight * 1.8,
       margin: const EdgeInsets.symmetric(horizontal: 3),
       decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: .5,
-          ),
-          borderRadius: BorderRadius.circular(10)),
+        border: Border.all(color: Colors.grey, width: .5),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Column(
         children: [
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(5),
             decoration: const BoxDecoration(
-                color: AppColors.PRIMARY_COLOR,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
+              color: AppColors.PRIMARY_COLOR,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
             child: Label(
-                text: item.day.localize,
-                textAlign: TextAlign.center,
-                style: Styles.mediumText(color: Colors.white)),
+              text: dayKey.localize,
+              textAlign: TextAlign.center,
+              style: Styles.mediumText(color: Colors.white),
+            ),
           ),
           Expanded(
-              child: Center(
-            child: Label(
-              text:
-                  "${extractTime(item.startTime)} ${(extractPeriod(item.startTime).toLowerCase() == 'pm') ? (context.isArabic ? 'مساءا' : 'PM') : (context.isArabic ? 'صباحا' : 'AM')}",
-              textAlign: TextAlign.center,
+            child: Center(
+              child: hasSlots
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Label(
+                          text:
+                              "${context.isArabic ? 'من' : 'From'} ${first!.startTime}",
+                          textAlign: TextAlign.center,
+                          style: Styles.mediumText(),
+                        ),
+                        Label(
+                          text:
+                              "${context.isArabic ? 'إلى' : 'To'} ${first.endTime}",
+                          textAlign: TextAlign.center,
+                          style: Styles.mediumText(),
+                        ),
+                      ],
+                    )
+                  : Label(
+                      text: context.isArabic
+                          ? 'لا توجد مواعيد'
+                          : 'No Available Slots',
+                      textAlign: TextAlign.center,
+                    ),
             ),
-          )),
+          ),
           AppButton(
-              label: LocaleKeys.book.localize,
-              backColor: (item.isAvailable && _isTimeOfDayAfter(item.dateOfDay))
-                  ? AppColors.SECONDARY_COLOR
-                  : (context.isDarkMode
-                      ? AppColors.DARK_GRAY_COLOR
-                      : AppColors.LIGHT_GRAY_COLOR),
-              onPressed: () {
-                ManageVibration.vibrate();
-                if (item.isAvailable) {
-                  context.read<DoctorDetailsCubit>().selectedAppointment = item;
-                  context.push(Routes.VISITABOOKING,
-                      extra: context.read<DoctorDetailsCubit>());
-                }
-              })
+            label: LocaleKeys.book.localize,
+            radius: 10,
+            backColor: hasSlots
+                ? AppColors.SECONDARY_COLOR
+                : (context.isDarkMode
+                    ? AppColors.DARK_GRAY_COLOR
+                    : AppColors.LIGHT_GRAY_COLOR),
+            onPressed: () {
+              ManageVibration.vibrate();
+              if (hasSlots) {
+                context.read<DoctorDetailsCubit>().selectedAppointment = first!;
+                context.push(Routes.VISITABOOKING,
+                    extra: context.read<DoctorDetailsCubit>());
+              }
+            },
+          ),
         ],
       ),
     );

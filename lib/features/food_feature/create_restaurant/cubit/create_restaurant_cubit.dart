@@ -13,10 +13,12 @@ import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/abstract/use_case.dart';
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../health_feature/create_doctor/domain/entities/city.dart';
-import '../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import '../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
-import '../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
+import '../../../health_feature/create_doctor/domain/entities/governorate_entity.dart'
+    as create_doctor;
+import '../../../health_feature/shared/domain/usecases/get_cities.dart';
+import '../../../health_feature/shared/domain/usecases/get_governorates.dart';
 import '../../../social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 import '../../restaurant_dashboard/domain/usecases/update_restaurant_usecase.dart';
 import '../../restaurants_list/domain/entities/food_category_entity.dart';
@@ -406,11 +408,21 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(CreateRestaurantError(LocaleKeys.cantLoadGovernorates.tr()));
       }, (data) {
-        _shareCubit.governorates = data;
+        _shareCubit.governorates = data
+            .map((e) => create_doctor.GovernorateEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
         emit(CreateRestaurantGovernoratesLoaded(data));
       });
     } else {
-      emit(CreateRestaurantGovernoratesLoaded(_shareCubit.governorates));
+      final sharedGovs = _shareCubit.governorates
+          .map((e) =>
+              GovernorateEntity(id: e.id, nameAr: e.nameAr, nameEn: e.nameEn))
+          .toList();
+      emit(CreateRestaurantGovernoratesLoaded(sharedGovs));
     }
   }
 

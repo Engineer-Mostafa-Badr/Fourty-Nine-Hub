@@ -5,8 +5,8 @@ import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/utils/media_query_values.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
-import '../../../cubit/create_restaurant_cubit.dart';
-import '../../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import '../../../cubit/create_resturant_cubit.dart';
+import '../../../../../health_feature/shared/domain/entities/governorate_entity.dart';
 import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../res/style/app_colors.dart';
@@ -31,15 +31,14 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                 children: [
                   BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                       builder: (context, st) {
-                    return DropdownButtonFormField(
-                      icon:  Icon(
+                    return DropdownButtonFormField<GovernorateEntity>(
+                      icon: Icon(
                         Icons.keyboard_arrow_down_outlined,
                         color: AppColors.getTextColor(context),
                       ),
                       style: Styles.mediumText(
-                        color:AppColors.getTextColor(context)
-                      ),
-                      dropdownColor:  AppColors.getFillColor(context),
+                          color: AppColors.getTextColor(context)),
+                      dropdownColor: AppColors.getFillColor(context),
                       decoration: InputDecoration(
                         fillColor: AppColors.getFillColor(context),
                         enabledBorder: OutlineInputBorder(
@@ -90,7 +89,7 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                       ),
                       menuMaxHeight: context.height / 2,
                       items: state.governorates.map((e) {
-                        return DropdownMenuItem(
+                        return DropdownMenuItem<GovernorateEntity>(
                           value: e,
                           child: Text(context.isArabic ? e.nameAr : e.nameEn),
                         );

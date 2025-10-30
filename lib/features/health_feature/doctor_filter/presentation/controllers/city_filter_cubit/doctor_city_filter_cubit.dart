@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
