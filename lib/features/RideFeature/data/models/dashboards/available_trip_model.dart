@@ -225,7 +225,7 @@ class OfferPriceRangeModel extends OfferPriceRangeEntity {
 }
 
 class ClientDetailsModel extends ClientDetailsEntity {
-  ClientDetailsModel({super.id,super.username,super.firstName,super.lastName,super.gender,super.isAccountVerified,});
+  ClientDetailsModel({super.id,super.username,super.firstName,super.lastName,super.gender,super.isAccountVerified,super.ratingAverage,super.ratingCount,});
 
   factory ClientDetailsModel.fromJson(Map<String, dynamic>? json) {
     if (json == null) return ClientDetailsModel();
@@ -237,6 +237,8 @@ class ClientDetailsModel extends ClientDetailsEntity {
       lastName: json['lastName'] as String?,
       gender: json['gender'] as String?,
       isAccountVerified: json['isAccountVerified'] as bool?,
+      ratingAverage: json['rating']!=null?json['rating']['average']??0:0,
+      ratingCount: json['rating']!=null?json['rating']['ratingCount']??0:0,
     );
   }
 

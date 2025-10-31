@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
@@ -47,7 +48,8 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   Future<void> _fitBounds(LatLngBounds bounds) async {
     if (!_controller.isCompleted) return;
     final GoogleMapController controller = await _controller.future;
-    const double padding = 50.0;
+    // Increase padding when map height is reduced (0.4 of screen)
+    final double padding = context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty ? 100.0 : 50.0;
     controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, padding));
   }
 
@@ -117,10 +119,42 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
   }
 
   LatLngBounds _calculateBoundsFromPolyline(List<LatLng> points) {
+    if (points.isEmpty) {
+      return LatLngBounds(
+        southwest: const LatLng(30.0444, 31.2357),
+        northeast: const LatLng(30.0444, 31.2357),
+      );
+    }
     double minLat = points.map((p) => p.latitude).reduce(min);
     double maxLat = points.map((p) => p.latitude).reduce(max);
     double minLng = points.map((p) => p.longitude).reduce(min);
     double maxLng = points.map((p) => p.longitude).reduce(max);
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
+  }
+
+  LatLngBounds _calculateBoundsFromMarkersAndPolyline(List<LatLng> polylinePoints, List<Marker> markers) {
+    List<LatLng> allPoints = List.from(polylinePoints);
+    
+    // Add marker positions to the bounds calculation
+    for (var marker in markers) {
+      allPoints.add(marker.position);
+    }
+    
+    if (allPoints.isEmpty) {
+      return LatLngBounds(
+        southwest: const LatLng(30.0444, 31.2357),
+        northeast: const LatLng(30.0444, 31.2357),
+      );
+    }
+    
+    double minLat = allPoints.map((p) => p.latitude).reduce(min);
+    double maxLat = allPoints.map((p) => p.latitude).reduce(max);
+    double minLng = allPoints.map((p) => p.longitude).reduce(min);
+    double maxLng = allPoints.map((p) => p.longitude).reduce(max);
+    
     return LatLngBounds(
       southwest: LatLng(minLat, minLng),
       northeast: LatLng(maxLat, maxLng),
@@ -162,6 +196,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
       geodesic: true,
+      jointType: JointType.round
     );
     setState(() {
         _markers = {
@@ -171,7 +206,8 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
       _polylines = {polyline};
         _isLoading = false;
       });
-      _fitBounds(_calculateBoundsFromPolyline(points));
+      // Zoom out to fit both the polyline and all markers when polyline is shown
+      _fitBounds(_calculateBoundsFromMarkersAndPolyline(points, markers));
     } else {
         setState(() {
         _markers = {
@@ -345,108 +381,149 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
         }
       },
       builder: (context, state) {
-        return Stack(
-        children: [
-          if (_initialCameraPosition == null)
-            const Center(child: CustomCircularProgressIndicator())
-          else
-            GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: _initialCameraPosition!,
-              onMapCreated: _onMapCreated,
-              markers: _markers,
-              polylines: _polylines,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              zoomControlsEnabled: true,
-                onTap: (_) {
-                  // Optional: select different trip via tapping markers, etc.
-                },
-            ),
-
-            if (context.read<DashboardsCubit>().isLoadingAvailableRideTrips)
-            Container(
-              color: Colors.black.withOpacity(0.3),
-              child: const Center(
-                child: CustomCircularProgressIndicator(),
+        return SizedBox(
+          height: double.infinity,
+          child: Stack(
+          children: [
+            if (_initialCameraPosition == null)
+              const Center(child: CustomCircularProgressIndicator())
+            else
+              SizedBox(
+                height: context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty?MediaQuery.of(context).size.height*0.4:null,
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: _initialCameraPosition!,
+                  onMapCreated: _onMapCreated,
+                  markers: _markers,
+                  polylines: _polylines,
+                  myLocationEnabled: false,
+                  myLocationButtonEnabled: true,
+                  zoomControlsEnabled: false,
+                    rotateGesturesEnabled: false,
+                    tiltGesturesEnabled: false,
+                    compassEnabled: false,
+                    onTap: (_) {
+                      // Optional: select different trip via tapping markers, etc.
+                    },
+                ),
+              ),
+            PositionedDirectional(
+              top: 8,
+              start: 8,
+              child: Column(
+                children: [
+                  FloatingActionButton.small(
+                    heroTag: "zoom_in",
+                    onPressed: () async {
+                      final GoogleMapController controller =
+                      await _controller.future; // assuming you’re using Completer<GoogleMapController>
+                      controller.animateCamera(CameraUpdate.zoomIn());
+                    },
+                    backgroundColor: context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor,
+                    child: Icon(Icons.add,
+                      color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  FloatingActionButton.small(
+                    heroTag: "zoom_out",
+                    backgroundColor: context.isDarkMode?AppColors.PRIMARY_COLOR:AppColors.whiteColor,
+                    onPressed: () async {
+                      final GoogleMapController controller =
+                      await _controller.future;
+                      controller.animateCamera(CameraUpdate.zoomOut());
+                    },
+                    child: Icon(Icons.remove,
+                      color: context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR,
+                    ),
+                  ),
+                ],
               ),
             ),
-          if (context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty && !_isLoading)Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: SizedBox(
-                height: 420,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  clipBehavior: Clip.none,
-                  children: [
-                  for (int i = 0; i < context.read<DashboardsCubit>().newAvailableRideTrips.length; i++)
-                      AnimatedPositioned(
-                      key: ValueKey(context.read<DashboardsCubit>().newAvailableRideTrips[i].id),
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        // نزود المسافة بين كل كارت والتاني
-                      bottom: 15.0 * (context.read<DashboardsCubit>().newAvailableRideTrips.length - 1 - i),
-                        left: 0,
-                        right: 0,
-                        child: Opacity(
-                          // الكروت اللي تحت تبقى أغمق شوية
-                          opacity: i == 0
-                              ? 1.0
-                              : 1.0 -
-                                  (0.1 *
-                                      i.clamp(0,
-                                          2)), // أول كارت واضح، اللي تحته أقل وضوحًا
-                          child: FractionallySizedBox(
-                            widthFactor:
-                          0.98, // نخلي كل الكروت عرضها أقل شوية عشان الحواف تبان
-                            alignment: Alignment.bottomCenter,
-                          child: AvailableTripCard(
-                            trip: context.read<DashboardsCubit>().newAvailableRideTrips[i],
-                            params: widget.params,
-                            onCancel: (_) {
-                              // setState(() {
-                              //   _trips.removeWhere((e)=>e.id==_trips[i].id);
-                              // });
-                              print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
-                              if(context.read<DashboardsCubit>().newAvailableRideTrips.length==1){
-                                context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
-                                context.read<DashboardsCubit>().getAvailableTrackingTrips(context);
+              if (context.read<DashboardsCubit>().isLoadingAvailableRideTrips)
+              Container(
+                color: Colors.black.withOpacity(0.3),
+                child: const Center(
+                  child: CustomCircularProgressIndicator(),
+                ),
+              ),
+            if (context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty && !_isLoading)Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                  height: 420,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    clipBehavior: Clip.none,
+                    children: [
+                    for (int i = 0; i < context.read<DashboardsCubit>().newAvailableRideTrips.length; i++)
+                        AnimatedPositioned(
+                        // key: ValueKey(context.read<DashboardsCubit>().newAvailableRideTrips[i].id),
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          // نزود المسافة بين كل كارت والتاني
+                        bottom: 15.0 * (context.read<DashboardsCubit>().newAvailableRideTrips.length - 1 - i),
+                          left: 0,
+                          right: 0,
+                          child: Opacity(
+                            // الكروت اللي تحت تبقى أغمق شوية
+                            opacity: i == 0
+                                ? 1.0
+                                : 1.0 -
+                                    (0.1 *
+                                        i.clamp(0,
+                                            2)), // أول كارت واضح، اللي تحته أقل وضوحًا
+                            child: FractionallySizedBox(
+                              widthFactor:
+                            0.98, // نخلي كل الكروت عرضها أقل شوية عشان الحواف تبان
+                              alignment: Alignment.bottomCenter,
+                            child: AvailableTripCard(
+                              trip: context.read<DashboardsCubit>().newAvailableRideTrips[i],
+                              params: widget.params,
+                              onCancel: (_) {
+                                // setState(() {
+                                //   _trips.removeWhere((e)=>e.id==_trips[i].id);
+                                // });
                                 print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
-                              }
-                              if(context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty){
-                                context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
-                                _selectTrip(context.read<DashboardsCubit>().newAvailableRideTrips[i]);
-                                print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
-                              }
-                              // You can call _removeCurrentCard() if desired
-                            }, showRemoveButton: true,
+                                if(context.read<DashboardsCubit>().newAvailableRideTrips.length==1){
+                                  context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
+                                  context.read<DashboardsCubit>().getAvailableTrackingTrips(context);
+                                  print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
+                                }
+                                if(context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty){
+                                  context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
+                                  _selectTrip(context.read<DashboardsCubit>().newAvailableRideTrips[i]);
+                                  print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
+                                }
+                                // You can call _removeCurrentCard() if desired
+                              }, showRemoveButton: true,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                  ].reversed.toList(),
+                    ].reversed.toList(),
+                  ),
                 ),
               ),
-            ),
-            // if (_trips.isNotEmpty && !_isLoading)
-            // Positioned(
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(bottom: 12.0),
-            //       child: AvailableTripCard(
-            //         trip: _selectedTrip ?? _trips.first,
-            //         params: widget.params,
-            //         onCancel: (_) {
-            //           // You can call _removeCurrentCard() if desired
-            //         },
-            //       ),
-            //     ),
-            //   ),
-          ],
+              // if (_trips.isNotEmpty && !_isLoading)
+              // Positioned(
+              //   bottom: 0,
+              //   left: 0,
+              //   right: 0,
+              //     child: Padding(
+              //       padding: const EdgeInsets.only(bottom: 12.0),
+              //       child: AvailableTripCard(
+              //         trip: _selectedTrip ?? _trips.first,
+              //         params: widget.params,
+              //         onCancel: (_) {
+              //           // You can call _removeCurrentCard() if desired
+              //         },
+              //       ),
+              //     ),
+              //   ),
+            ],
+          ),
         );
       },
     );

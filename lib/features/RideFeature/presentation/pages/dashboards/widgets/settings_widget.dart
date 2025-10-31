@@ -142,21 +142,21 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       ): ListView(
         children: [
 
-          switchWidget(
-              title: LocaleKeys.ready.tr(),
-              subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
-              valuee: isReady,
-              onChanged: (value) async {
-                bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-                if(!serviceEnabled){
-                  showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
-                  return;
-                }
-                ManageVibration.vibrate();
-                setState(() {
-                  isReady = value;
-                });
-              }),
+          // switchWidget(
+          //     title: LocaleKeys.ready.tr(),
+          //     subText: isReady ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+          //     valuee: isReady,
+          //     onChanged: (value) async {
+          //       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+          //       if(!serviceEnabled){
+          //         showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
+          //         return;
+          //       }
+          //       ManageVibration.vibrate();
+          //       setState(() {
+          //         isReady = value;
+          //       });
+          //     }),
           switchWidget(
               title: LocaleKeys.comfort.tr(),
               subText: isComfort ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
@@ -190,22 +190,22 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   });
                 }),
 
-            switchWidget(
-                title: LocaleKeys.captainShare.tr(), //'Captain share',
-                subText:
-                    isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
-                valuee: isCaptainShare,
-                onChanged: (value) async {
-                  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-                  if(!serviceEnabled){
-                    showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
-                    return;
-                  }
-                  ManageVibration.vibrate();
-                  setState(() {
-                    isCaptainShare = value;
-                  });
-                }),
+            // switchWidget(
+            //     title: LocaleKeys.captainShare.tr(), //'Captain share',
+            //     subText:
+            //         isCaptainShare ? LocaleKeys.on.tr() : LocaleKeys.off.tr(),
+            //     valuee: isCaptainShare,
+            //     onChanged: (value) async {
+            //       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+            //       if(!serviceEnabled){
+            //         showErrorMessage(context, context.isArabic?'الرجاء تفعيل خدمة الموقع':'Please enable location service');
+            //         return;
+            //       }
+            //       ManageVibration.vibrate();
+            //       setState(() {
+            //         isCaptainShare = value;
+            //       });
+            //     }),
             if((widget.settings?.categoryIds.length ?? 0) >= 1)switchWidget(
                 title: widget
                     .settings?.categoryIds[0].pictureUrl, //Assets.greyCar,

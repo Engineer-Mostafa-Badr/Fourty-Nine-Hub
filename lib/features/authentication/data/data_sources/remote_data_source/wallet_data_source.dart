@@ -12,7 +12,7 @@ class WalletDataSource {
   WalletDataSource(this._apiConsumer);
   Future<Either<Failure, WalletModel>> getWallet() async {
     // var response = await dio.get(
-    //   "https://49backend.com/api/v1/main-wallet/66b4659d1c9c4b1cb35bfee4",
+    //   "https://07dbd6ba05fc.ngrok-free.app/api/v1/main-wallet/66b4659d1c9c4b1cb35bfee4",
     //   options: Options(
     //     headers: {
     //       "Authorization":
@@ -22,7 +22,7 @@ class WalletDataSource {
     // );
     // log(response.data.toString(), name: "WalletDio");
     final result = await _apiConsumer
-        .get("https://49backend.com/api/v1/main-wallet/66b4659d1c9c4b1cb35bfee4");
+        .get("https://07dbd6ba05fc.ngrok-free.app/api/v1/main-wallet/66b4659d1c9c4b1cb35bfee4");
 
     return result.fold((failure) {
       log(failure.toString(), name: "Walletfailure");
