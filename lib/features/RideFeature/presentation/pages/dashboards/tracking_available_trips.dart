@@ -137,24 +137,24 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
 
   LatLngBounds _calculateBoundsFromMarkersAndPolyline(List<LatLng> polylinePoints, List<Marker> markers) {
     List<LatLng> allPoints = List.from(polylinePoints);
-    
+
     // Add marker positions to the bounds calculation
     for (var marker in markers) {
       allPoints.add(marker.position);
     }
-    
+
     if (allPoints.isEmpty) {
       return LatLngBounds(
         southwest: const LatLng(30.0444, 31.2357),
         northeast: const LatLng(30.0444, 31.2357),
       );
     }
-    
+
     double minLat = allPoints.map((p) => p.latitude).reduce(min);
     double maxLat = allPoints.map((p) => p.latitude).reduce(max);
     double minLng = allPoints.map((p) => p.longitude).reduce(min);
     double maxLng = allPoints.map((p) => p.longitude).reduce(max);
-    
+
     return LatLngBounds(
       southwest: LatLng(minLat, minLng),
       northeast: LatLng(maxLat, maxLng),
@@ -186,7 +186,7 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
 
     final List<LatLng> points = (trip.route?.pickupToDropPolyline ?? [])
         .map((p) => LatLng(p.longitude, p.latitude))
-        .toList();
+        .toList(); // Reverse to ensure polyline goes from A (pickup) to B (dropoff)
     if (points.isNotEmpty) {
     final polyline = Polyline(
         polylineId: PolylineId('route_${trip.id ?? DateTime.now().millisecondsSinceEpoch}'),
@@ -485,14 +485,12 @@ class _TrackingAvailableTripsState extends State<TrackingAvailableTrips> {
                                 // setState(() {
                                 //   _trips.removeWhere((e)=>e.id==_trips[i].id);
                                 // });
-                                print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
                                 if(context.read<DashboardsCubit>().newAvailableRideTrips.length==1){
-                                  context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
+                                  context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'',context.read<DashboardsCubit>().newAvailableRideTrips[i].isAutoAccept==true);
                                   context.read<DashboardsCubit>().getAvailableTrackingTrips(context);
-                                  print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
                                 }
                                 if(context.read<DashboardsCubit>().newAvailableRideTrips.isNotEmpty){
-                                  context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'');
+                                  context.read<DashboardsCubit>().refuseNewTripOffer(context.read<DashboardsCubit>().newAvailableRideTrips[i].id??'',context.read<DashboardsCubit>().newAvailableRideTrips[i].isAutoAccept==true);
                                   _selectTrip(context.read<DashboardsCubit>().newAvailableRideTrips[i]);
                                   print("context.read<DashboardsCubit>().newAvailableRideTrips.length ${context.read<DashboardsCubit>().newAvailableRideTrips.length}");
                                 }

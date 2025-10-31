@@ -423,7 +423,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                       onCancel: (trip) {
                                       print("newAvailableRideTrips");
                                         ManageVibration.vibrate();
-                                        cubit.refuseNewTripOffer(trip.id??'');
+                                        cubit.refuseNewTripOffer(trip.id??'',trip.isAutoAccept==true);
                                       }, showRemoveButton: cubit.newAvailableRideTrips[index].isAutoAccept==true
                                     )
                                 //         AvailableRideTripItem(

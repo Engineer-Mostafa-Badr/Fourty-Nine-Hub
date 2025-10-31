@@ -15,7 +15,7 @@ class RequestHistoryRideCubit extends Cubit<RiderState> {
     try {
       print("hello from ==ride cubit \n");
       final response =
-          await apiConsumer.get("https://07dbd6ba05fc.ngrok-free.app/api/v1/ride/trips/user");
+          await apiConsumer.get("https://49backend.com/api/v1/ride/trips/user");
       print("ride response== $response\n");
       response.fold(
         (failure) {

@@ -62,12 +62,12 @@ class EndPoints {
   static const getAllSessions = '/auth/sessions?page=1&limit=100';
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://07dbd6ba05fc.ngrok-free.app';
-  //https://07dbd6ba05fc.ngrok-free.app
+  static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  //https://49backend.com
 
-  // static const developmentWebSocketBaseUrl = 'https://07dbd6ba05fc.ngrok-free.app';
-  static const developmentBaseUrl = 'https://07dbd6ba05fc.ngrok-free.app/api/v1';
-  static const productionBaseUrl = 'https://07dbd6ba05fc.ngrok-free.app/api/v1';
+  // static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  static const developmentBaseUrl = 'https://49backend.com/api/v1';
+  static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const loginWithPhone = '/auth/login/phone-number';
