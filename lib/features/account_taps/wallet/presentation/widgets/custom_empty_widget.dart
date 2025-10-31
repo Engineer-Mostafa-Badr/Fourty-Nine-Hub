@@ -49,18 +49,18 @@ class CustomEmptyWidget extends StatelessWidget {
               color: context.isDarkMode ? Colors.white : Colors.grey,
             ),
           ),
-          SizedBox(height: 16.h),
-          Text(
-            displayLabel,
-            style: Styles.headerText(
-              fontWeight: FontWeight.bold,
-              color: context.isDarkMode ? Colors.white : Colors.grey,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: null,
-            overflow: TextOverflow.visible,
-            softWrap: true,
-          ),
+          // SizedBox(height: 16.h),
+          // Text(
+          //   displayLabel,
+          //   style: Styles.headerText(
+          //     fontWeight: FontWeight.bold,
+          //     color: context.isDarkMode ? Colors.white : Colors.grey,
+          //   ),
+          //   textAlign: TextAlign.center,
+          //   maxLines: null,
+          //   overflow: TextOverflow.visible,
+          //   softWrap: true,
+          // ),
         ],
       ),
     );

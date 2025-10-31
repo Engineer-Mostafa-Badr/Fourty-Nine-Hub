@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/chance_feature/presentation/pages/create_chance_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/core/widget/common/tab_widget.dart';
@@ -23,6 +24,7 @@ import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 
+import '../../../exchange_currency/presentation/views/currency_exchange_page.dart';
 import 'chance_winners_view.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
@@ -373,6 +375,12 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                                       hintText: context.isArabic
                                           ? 'بحث...'
                                           : 'Search...',
+                                      hintStyle: TextStyle(
+                                        color: context.isDarkMode
+                                            ? Colors.grey[400]
+                                            : Colors.grey[600],
+                                        fontSize: 32.sp,
+                                      ),
                                       prefixIcon: const Icon(Icons.search),
                                       suffixIcon: IconButton(
                                         icon: const Icon(Icons.close),
@@ -390,7 +398,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                                         vertical: 12.h,
                                       ),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: context.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
                                   ),
                                 ),
@@ -402,17 +412,19 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                             child: Row(
                               children: [
                                 // Search Icon
-
                                 GestureDetector(
                                   onTap: () {
                                     ManageVibration.vibrate();
                                     _toggleSearch();
                                   },
-                                  child: SvgPicture.asset(
-                                    Assets.searchIcon,
-                                    color: context.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 10.h),
+                                    child: SvgPicture.asset(
+                                      Assets.searchIcon,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
@@ -627,11 +639,9 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
             : (state.chanceAds ?? []);
 
     if (ads.isEmpty) {
-      return Center(
-        child: Text(
-          context.isArabic ? 'لا توجد إعلانات متاحة' : 'No available ads',
-          style: const TextStyle(fontSize: 16, color: Colors.grey),
-        ),
+      return CustomEmptyWidget(
+        label: context.isArabic ? 'لا توجد إعلانات متاحة' : 'No available ads',
+        icon: Icons.search_off,
       );
     }
 
@@ -1289,7 +1299,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       ),
                       Sizer(width: 8.w),
                       Text(
-                        context.isArabic ? 'جنيه مصري' : 'EGP',
+                        context.isArabic ? 'ج.م' : 'EGP',
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
@@ -1300,7 +1310,7 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       Text(
                         endDate,
                         style: TextStyle(
-                          fontSize: 24.sp,
+                          fontSize: 26.sp,
                           fontWeight: FontWeight.w400,
                           // color: status == ChanceStatus.available
                           //     ? Colors.orange
@@ -1767,8 +1777,14 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                     controller: amountController,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      LocalizedNumberInputFormatter(
+                        isArabic: context.isArabic,
+                      ),
+                    ],
                     decoration: InputDecoration(
-                      hintText: 'أدخل المبلغ بالجنيه',
+                      hintText:
+                          context.isArabic ? 'أدخل المبلغ' : 'Enter amount',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 32.sp,
@@ -1790,20 +1806,22 @@ class _ChanceMainViewState extends State<_ChanceMainViewBody>
                       final inputText = amountController.text.trim();
                       final amount = double.tryParse(inputText);
 
-                      if (inputText.isEmpty) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(content: Text('من فضلك أدخل مبلغ')),
-                        );
-                      } else if (amount == null) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('من فضلك أدخل رقم صحيح')),
-                        );
+                      if (inputText.isEmpty || amount == null) {
+                        Navigator.pop(bottomSheetContext);
+
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? 'من فضلك أدخل مبلغ'
+                                : 'Please enter an amount');
                       } else if (amount < 1) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          const SnackBar(
-                              content: Text('الحد الأدنى للمساهمة 1 جنيه')),
-                        );
+                        Navigator.pop(bottomSheetContext);
+
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? 'الحد الادنى للمشاركة ١ جنيه'
+                                : 'Minimum amount is 1 EGP');
                       } else {
                         Navigator.pop(bottomSheetContext);
 

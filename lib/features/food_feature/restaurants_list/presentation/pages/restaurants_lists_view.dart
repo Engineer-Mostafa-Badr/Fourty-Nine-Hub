@@ -1011,7 +1011,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       child: AnimatedBuilder(
                         animation: _tabController,
                         builder: (context, _) {
-                          final isSelected = _tabController.index == index;
+                          // Determine if this tab is selected based on show flags
+                          final isSelected = (index == 0 && _showFavAds) ||
+                              (index == 1 && _showLog) ||
+                              (index == 2 && _showExpire);
 
                           // For Request Log tab, show badge
                           Widget tabWidget = TabWidget(
@@ -1028,14 +1031,26 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             onTap: () {
                               ManageVibration.vibrate();
                               if (context.read<UserCubit>().isLoggedIn) {
-                                _tabController.animateTo(index);
                                 setState(() {
                                   _showSearch = false;
-                                  _showFavAds = index == 0;
-                                  _showLog = index == 1;
-                                  _showExpire = index == 2;
 
-                                  if (!_showFavAds) {
+                                  // Toggle logic: if already selected, unselect it
+                                  if (isSelected) {
+                                    // Unselect: show main content
+                                    _showFavAds = false;
+                                    _showLog = false;
+                                    _showExpire = false;
+                                  } else {
+                                    // Select new tab
+                                    _showFavAds = index == 0;
+                                    _showLog = index == 1;
+                                    _showExpire = index == 2;
+                                  }
+
+                                  // Load main restaurants data when no tab is selected
+                                  if (!_showFavAds &&
+                                      !_showLog &&
+                                      !_showExpire) {
                                     context
                                         .read<RestaurantsCubit>()
                                         .loadInitialRestaurantsData('');
