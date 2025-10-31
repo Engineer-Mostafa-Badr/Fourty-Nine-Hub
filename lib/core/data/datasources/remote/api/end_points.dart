@@ -390,7 +390,8 @@ class EndPoints {
   // health
   static String getCities({required String governorateId}) =>
       '/health/booking/address/$governorateId/cities';
-  static const getGovernorates = '/health/booking/address';
+  static const getHealthGovernorates = '/health/booking/address';
+  static const getGovernorates = '/health/governorate';
   static const createDoctor = '/health/booking/doctors/register';
   static const uploadDoctorDocuments = '/health/booking/doctors/documents';
   static String doctorSearch =

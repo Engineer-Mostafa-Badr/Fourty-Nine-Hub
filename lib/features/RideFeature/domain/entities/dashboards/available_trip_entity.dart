@@ -118,6 +118,8 @@ class ClientDetailsEntity {
   final String? lastName;
   final String? gender;
   final bool? isAccountVerified;
+  final num? ratingAverage;
+  final num? ratingCount;
 
-  ClientDetailsEntity({required this.id, required this.username,required this.firstName,required this.lastName,required this.gender,required this.isAccountVerified,});
+  ClientDetailsEntity({required this.id, required this.username,required this.firstName,required this.lastName,required this.gender,required this.isAccountVerified,required this.ratingCount,required this.ratingAverage,});
 }

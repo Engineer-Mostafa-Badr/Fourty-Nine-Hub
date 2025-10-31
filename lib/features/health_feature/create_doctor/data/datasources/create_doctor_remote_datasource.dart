@@ -53,7 +53,7 @@ class CreateDoctorRemoteDataSourceImpl implements CreateDoctorRemoteDataSource {
   @override
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates() async {
     final response =
-        await _apiConsumer.get('${EndPoints.getGovernorates}?page=1&limit=10');
+        await _apiConsumer.get('${EndPoints.getHealthGovernorates}?page=1&limit=10');
     return response.fold(
         (failure) => Left(failure),
         (data) => Right(
