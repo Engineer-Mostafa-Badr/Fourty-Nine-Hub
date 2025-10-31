@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class AvailableTripEntity {
   final String? id;
   final bool? autoAcceptEnabled;
-  final bool? isAutoAccept;
+   bool? isAutoAccept;
   final bool? isPremium;
   final bool? isComfort;
   final bool? isNonSmoking;

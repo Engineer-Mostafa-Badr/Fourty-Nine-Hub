@@ -367,7 +367,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 10.0),
+                        padding: EdgeInsetsDirectional.only(end:(widget.trip.clientDetails?.firstName?.length??0)>=5?0: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -384,6 +384,8 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                             ],
                             Text(
                               widget.trip.clientDetails?.firstName ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: Styles.mediumText(
                                   color: context.isDarkMode
                                       ? AppColors.whiteColor
@@ -478,7 +480,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                 ],
               ),
               const SizedBox(height: 4),
-              ReadMoreText(
+              if(widget.trip.description?.isNotEmpty??false)...[ReadMoreText(
                 widget.trip.description ?? '',
                 trimMode: TrimMode.Line,
                 trimLines: 2,
@@ -490,7 +492,7 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ? AppColors.whiteColor
                         : AppColors.PRIMARY_COLOR),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 4)],
               // Confirm button
               Row(
                 children: [

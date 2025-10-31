@@ -2002,7 +2002,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     CliLogger.info('Listen To Update Trip Auto Accept');
     listenToUpdateTripAutoAcceptUseCase((trip) {
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.firstWhere((e) => e.id == trip.id).isAutoAccept = trip.isAutoAccept;
+      newAvailableRideTrips.firstWhere((e) => e.id == trip.id).isAutoAccept = trip.isAutoAccept;
       log(trip.toString());
       emit(state.copyWith(availableRideTrips: list));
     });
@@ -2015,7 +2015,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       CliLogger.info('Listen To Update TripId ${trip.tripId}');
 
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
-      list.firstWhere((e) => e.id == trip.tripId).price = trip.price;
+      newAvailableRideTrips.firstWhere((e) => e.id == trip.tripId).price = trip.price.toDouble();
+      newAvailableRideTrips.firstWhere((e) => e.id == trip.tripId).lastOffer = trip.price.toDouble();
       log(trip.toString());
       emit(state.copyWith(availableRideTrips: list));
     });
