@@ -18,8 +18,10 @@ import '../../domain/usecases/create_comment_tube_video_use_case.dart';
 import '../../domain/usecases/get_all_tube_videos_use_case.dart';
 import '../../domain/usecases/get_related_tube_videos_use_case.dart';
 import '../../domain/usecases/get_tube_video_comments_use_case.dart';
+import '../../domain/usecases/rate_tube_video_use_case.dart';
 import '../../domain/usecases/search_tube_use_case.dart';
 import '../../domain/usecases/update_comment_tube_video_use_case.dart';
+import '../../domain/usecases/update_tube_video_use_case.dart';
 import '../models/add_favorite_tube_model.dart';
 import '../models/get_all_tube_videos_model.dart';
 import '../models/get_tube_video_commnets_model.dart';
@@ -46,6 +48,14 @@ abstract class TubeRemoteDataSource {
   Future<Either<Failure, ActiveCategoryResponseEntity>> getActiveCategories();
   Future<Either<Failure, AddFavoriteTubeEntity>> createVideoTube({required CreateTubeVideoParams params});
   Future<Either<Failure, List<GetAllTubeVideosEntity>>> getMyTubeVideos({required GetAllTubeVideosParams params});
+  Future<Either<Failure, List<GetAllTubeVideosEntity>>> getHistoryTubeVideos({required GetAllTubeVideosParams params});
+  Future<Either<Failure, AddFavoriteTubeEntity>> deleteTubeVideo({required FavoriteTubeParams params});
+
+  Future<Either<Failure, AddFavoriteTubeEntity>> updateTubeVideo({required UpdateTubeVideo params});
+  Future<Either<Failure, AddFavoriteTubeEntity>> removeWatchLaterTube({required FavoriteTubeParams params});
+  Future<Either<Failure, AddFavoriteTubeEntity>> addWatchLaterTube({required FavoriteTubeParams params});
+  Future<Either<Failure, AddFavoriteTubeEntity>> rateTubeVideo({required RateTubeVideoParams params});
+
 
 }
 
@@ -324,6 +334,93 @@ class TubeRemoteDataSourceImpl
             .map((e) => GetAllTubeVideosModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllTubeVideosEntity>>> getHistoryTubeVideos({required GetAllTubeVideosParams params})async {
+    final url = "${EndPoints.getTubeHistory}?page=${params.page}&limit=${params.limit}&userId=${params.userId}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final rideList = (data['data'] as List)
+            .map((e) => GetAllTubeVideosModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(rideList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> deleteTubeVideo({required FavoriteTubeParams params}) async{
+    final url = "${EndPoints.addLikeTubeVideo}";
+    final response = await _apiConsumer.delete(url,);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AddFavoriteTubeModel.fromJson(data);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> updateTubeVideo({required UpdateTubeVideo params}) async{
+    final url = "${EndPoints.addLikeTubeVideo}${params.videoId}";
+    final response = await _apiConsumer.put(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AddFavoriteTubeModel.fromJson(data);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> addWatchLaterTube({required FavoriteTubeParams params}) async{
+    final url = "${EndPoints.tubeWatchLater}${params.id}";
+    final response = await _apiConsumer.post(url,);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AddFavoriteTubeModel.fromJson(data);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> removeWatchLaterTube({required FavoriteTubeParams params})async {
+    final url = "${EndPoints.tubeWatchLater}${params.id}";
+    final response = await _apiConsumer.delete(url,);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AddFavoriteTubeModel.fromJson(data);
+        return Right(blockRestaurantModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> rateTubeVideo({required RateTubeVideoParams params}) async{
+    final url = "${EndPoints.rateTubeVideo}";
+    final response = await _apiConsumer.post(url, data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockRestaurantModel = AddFavoriteTubeModel.fromJson(data);
+        return Right(blockRestaurantModel);
       },
     );
   }
