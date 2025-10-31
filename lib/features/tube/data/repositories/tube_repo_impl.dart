@@ -1,17 +1,22 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/tube/domain/entities/add_favorite_tube_entity.dart';
+import 'package:fourtyninehub/features/tube/domain/entities/get_active_category_entity.dart';
 import 'package:fourtyninehub/features/tube/domain/entities/get_all_tube_videos_entity.dart';
 import 'package:fourtyninehub/features/tube/domain/entities/get_tube_video_commnets_entity.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/add_favorite_tube_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/create_comment_tube_video_use_case.dart';
+import 'package:fourtyninehub/features/tube/domain/usecases/create_video_tube_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/get_all_tube_videos_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/get_related_tube_videos_use_case.dart';
+import 'package:fourtyninehub/features/tube/domain/usecases/rate_tube_video_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/search_tube_use_case.dart';
 import 'package:fourtyninehub/features/tube/domain/usecases/update_comment_tube_video_use_case.dart';
+import 'package:fourtyninehub/features/tube/domain/usecases/update_tube_video_use_case.dart';
 
 import '../../domain/repositories/tube_repo.dart';
 
+import '../../domain/usecases/get_tube_video_comments_use_case.dart';
 import '../datasource/tube_remote_datasource.dart';
 
 class TubeRepoImpl implements TubeRepository {
@@ -49,7 +54,7 @@ class TubeRepoImpl implements TubeRepository {
   }
 
   @override
-  Future<Either<Failure, TubeVideoCommentsEntity>> getTubeVideoComments({required GetRelatedTubeVideosParams params}) {
+  Future<Either<Failure, TubeVideoCommentsEntity>> getTubeVideoComments({required GetTubeCommentsParams params}) {
     return _remoteDataSource.getTubeVideoComments(params: params);
   }
 
@@ -69,6 +74,16 @@ class TubeRepoImpl implements TubeRepository {
   }
 
   @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> disLikeTubeComment({required FavoriteTubeParams params}) {
+    return _remoteDataSource.disLikeTubeComment(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> likeTubeComment({required FavoriteTubeParams params}) {
+    return _remoteDataSource.likeTubeComment(params: params);
+  }
+
+  @override
   Future<Either<Failure, AddFavoriteTubeEntity>> disLikeTubeVideo({required FavoriteTubeParams params}) {
     return _remoteDataSource.disLikeTubeVideo(params: params);
   }
@@ -76,6 +91,51 @@ class TubeRepoImpl implements TubeRepository {
   @override
   Future<Either<Failure, AddFavoriteTubeEntity>> likeTubeVideo({required FavoriteTubeParams params}) {
     return _remoteDataSource.likeTubeVideo(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> createVideoTube({required CreateTubeVideoParams params}) {
+    return _remoteDataSource.createVideoTube(params: params);
+  }
+
+  @override
+  Future<Either<Failure, ActiveCategoryResponseEntity>> getActiveCategories() {
+    return _remoteDataSource.getActiveCategories();
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllTubeVideosEntity>>> getMyTubeVideos({required GetAllTubeVideosParams params}) {
+    return _remoteDataSource.getMyTubeVideos(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllTubeVideosEntity>>> getHistoryTubeVideos({required GetAllTubeVideosParams params}) {
+    return _remoteDataSource.getHistoryTubeVideos(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> deleteTubeVideo({required FavoriteTubeParams params}) {
+    return _remoteDataSource.deleteTubeVideo(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> updateTubeVideo({required UpdateTubeVideo params}) {
+    return _remoteDataSource.updateTubeVideo(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> addWatchLaterTube({required FavoriteTubeParams params}) {
+    return _remoteDataSource.addWatchLaterTube(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> removeWatchLaterTube({required FavoriteTubeParams params}) {
+    return _remoteDataSource.removeWatchLaterTube(params: params);
+  }
+
+  @override
+  Future<Either<Failure, AddFavoriteTubeEntity>> rateTubeVideo({required RateTubeVideoParams params}) {
+    return _remoteDataSource.rateTubeVideo(params: params);
   }
 
 

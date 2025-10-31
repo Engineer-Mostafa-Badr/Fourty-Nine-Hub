@@ -1,88 +1,16 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/tube/presentation/screens/create_tube_video.dart';
 import 'package:fourtyninehub/features/tube/presentation/screens/tube_favorites_videos_screen.dart';
 import 'package:fourtyninehub/features/tube/presentation/screens/tube_home_videos_screen.dart';
-import 'package:fourtyninehub/features/tube/presentation/screens/tube_video_player_screen.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
-
+import 'package:fourtyninehub/features/tube/presentation/screens/tube_my_videos_screen.dart';
 import '../../../../core/enums/base_status_enum.dart';
-import '../../../../service_locator/service_locator.dart';
-import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../cubit/tube_cubit.dart';
 import '../widgets/video_card_widget.dart';
 import '../widgets/video_mini_player.dart';
+import 'tube_history_videos_screen.dart';
 
-// ==================== TUBE SCREEN WITH TABS ====================
-// class TubeScreen extends StatefulWidget {
-//   const TubeScreen({super.key});
-//
-//   @override
-//   State<TubeScreen> createState() => _TubeScreenState();
-// }
-//
-// class _TubeScreenState extends State<TubeScreen>
-//     with SingleTickerProviderStateMixin {
-//   late final TabController _tabController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(length: 3, vsync: this);
-//   }
-//
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<TubeCubit, TubeState>(
-//       builder: (context, state) {
-//         return Scaffold(
-//           appBar: AppBar(
-//             backgroundColor: Colors.black,
-//             title: const Text('Tube', style: TextStyle(color: Colors.white)),
-//             bottom: TabBar(
-//               controller: _tabController,
-//               labelColor: Colors.white,
-//               unselectedLabelColor: Colors.grey,
-//               indicatorColor: Colors.red,
-//               tabs: const [
-//                 Tab(text: 'All'),
-//                 Tab(text: 'Subscribed'),
-//                 Tab(text: 'Favorites'),
-//               ],
-//             ),
-//           ),
-//           body: Stack(
-//             children: [
-//               TabBarView(
-//                 controller: _tabController,
-//                 children: const [
-//                   HomeVideosTubeScreen(),
-//                   SubscribedTab(),
-//                   TubeFavoriteScreen(),
-//                 ],
-//               ),
-//               if (state.isMinimized &&
-//                   state.currentVideo != null &&
-//                   !state.isLoading)
-//                 const MiniPlayer(),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
-// ==================== TUBE SCREEN WITH SEARCH ====================
-// ==================== TUBE SCREEN WITH SEARCH ====================
 class TubeScreen extends StatefulWidget {
   const TubeScreen({super.key});
 
@@ -99,7 +27,7 @@ class _TubeScreenState extends State<TubeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4 , vsync: this);
 
     // ✅ Removed unnecessary favorite loader to prevent double API calls
     _tabController.addListener(() {
@@ -150,6 +78,9 @@ class _TubeScreenState extends State<TubeScreen>
           case 2:
           // ✅ Removed reload call here too
             break;
+            case 3:
+          // ✅ Removed reload call here too
+            break;
         }
       }
     });
@@ -160,6 +91,9 @@ class _TubeScreenState extends State<TubeScreen>
     return BlocBuilder<TubeCubit, TubeState>(
       builder: (context, state) {
         return Scaffold(
+          floatingActionButton: ElevatedButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateTubeScreen()));
+          }, child: Text("Crate Tube Video")),
           backgroundColor: Colors.black,
           appBar: AppBar(
             backgroundColor: Colors.black,
@@ -183,6 +117,7 @@ class _TubeScreenState extends State<TubeScreen>
                 Tab(text: 'All'),
                 Tab(text: 'Subscribed'),
                 Tab(text: 'Favorites'),
+                Tab(text: 'My Videos'),
               ],
             )
                 : null,
@@ -195,8 +130,9 @@ class _TubeScreenState extends State<TubeScreen>
                 controller: _tabController,
                 children: const [
                   HomeVideosTubeScreen(),
-                  SubscribedTab(),
                   TubeFavoriteScreen(),
+                  MyHistoryTubeVideos(),
+                  MyVideosTubeScreen(),
                 ],
               ),
               if (state.isMinimized &&
@@ -300,6 +236,7 @@ class _TubeScreenState extends State<TubeScreen>
                         return VideoCardTube(
                           video: video,
                           videoList: searchResults,
+
                         );
                       },
                     ),
@@ -314,35 +251,5 @@ class _TubeScreenState extends State<TubeScreen>
   }
 }
 
-class SubscribedTab extends StatefulWidget {
-  const SubscribedTab({super.key});
-
-  @override
-  State<SubscribedTab> createState() => _SubscribedTabState();
-}
-
-class _SubscribedTabState extends State<SubscribedTab> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    // TODO: implement your own pagination method for subscribed videos
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-        child: Text('Subscribed videos',
-            style: TextStyle(color: Colors.white70, fontSize: 16)));
-  }
-}
 
 

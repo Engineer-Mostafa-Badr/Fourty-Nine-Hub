@@ -1904,7 +1904,6 @@ class EndPoints {
       '/tube-video/$videoId/dislike';
   static String incrementTubeVideoView(String videoId) =>
       '/tube-video/$videoId/view';
-  static String rateTubeVideo = '/tube-rate';
 
   // Tube Video with pagination
   static String getAllTubeVideosWithPagination({int page = 1, int limit = 5}) =>
@@ -2023,13 +2022,19 @@ class EndPoints {
 
   static String getMyProfileSpotlight = '/spotlight/profile/me';
 
-  static String getTubeFavorites = '/tube-favorite';
-  static String getTubeHomeVideos = '/tube-video/recommended-home';
-  static String addTubeFavorite = '/tube-favorite/video/';
-  static String searchTubeVideo = '/tube-video/search';
-  static String tubeRelatedVideos = '/tube-video/recommended/';
-  static String getTubeCommentVideo = '/tube-comment/video/';
-  static String addTubeComment = '/tube-comment';
+   static String getTubeFavorites = '/tube-favorite';
+ static String getTubeHomeVideos = '/tube-video/recommended-home';
+ static String getTubeHistory = '/tube-video/history';
+ static String getMyTubeVideo = '/tube-video/me';
+ static String addTubeFavorite = '/tube-favorite/video/';
+ static String searchTubeVideo = '/tube-video/search';
+ static String tubeRelatedVideos = '/tube-video/recommended/';
+ static String getTubeCommentVideo = '/tube-comment/video/';
+ static String addTubeComment = '/tube-comment';
+ static String addLikeTubeVideo = '/tube-video/';
+ static String uploadVideoTube = '/tube-video';
+ static String tubeWatchLater = '/tube-watch-later/video/';
+ static String rateTubeVideo = '/tube-rate';
   static String getDriverRatings(String driverId) =>
       '/ride/trip/ratings/driver/$driverId';
   // static String getExchangeRates(String code) => '/exchange-currency/$code';

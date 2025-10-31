@@ -25,8 +25,9 @@ class TubeVideoCommentsDataModel extends TubeVideoCommentsDataEntity {
   factory TubeVideoCommentsDataModel.fromJson(Map<String, dynamic> json) {
     final commentsJson = json['comments'] as List<dynamic>? ?? [];
     return TubeVideoCommentsDataModel(
-      comments:
-      commentsJson.map((e) => TubeCommentModel.fromJson(e)).toList(),
+      comments: commentsJson
+          .map((e) => TubeCommentModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       pagination: json['pagination'] != null
           ? TubeCommentsPaginationModel.fromJson(json['pagination'])
           : null,
@@ -61,6 +62,11 @@ class TubeCommentModel extends TubeCommentEntity {
     required super.video,
     required super.likes,
     required super.dislikes,
+    required super.allLike,
+    required super.allDislike,
+    required super.isLike,
+    required super.isDislike,
+    required super.isMyComment,
     required super.replies,
     required super.createdAt,
     required super.updatedAt,
@@ -77,8 +83,17 @@ class TubeCommentModel extends TubeCommentEntity {
       video: json['video'] ?? '',
       likes: json['likes'] ?? 0,
       dislikes: json['dislikes'] ?? 0,
+      allLike: (json['allLike'] as List<dynamic>? ?? [])
+          .map((e) => e.toString())
+          .toList(),
+      allDislike: (json['allDislike'] as List<dynamic>? ?? [])
+          .map((e) => e.toString())
+          .toList(),
+      isLike: json['isLike'] ?? false,
+      isDislike: json['isDislike'] ?? false,
+      isMyComment: json['isMyComment'] ?? false,
       replies: (json['replies'] as List<dynamic>? ?? [])
-          .map((e) => TubeReplyModel.fromJson(e))
+          .map((e) => TubeReplyModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now(),
@@ -95,6 +110,9 @@ class TubeReplyModel extends TubeReplyEntity {
     required super.video,
     required super.likes,
     required super.dislikes,
+    required super.isLike,
+    required super.isDislike,
+    required super.isMyComment,
     super.parentComment,
     required super.replies,
     required super.createdAt,
@@ -110,8 +128,11 @@ class TubeReplyModel extends TubeReplyEntity {
           ? TubeCommentOwnerModel.fromJson(json['owner'])
           : null,
       video: json['video'] ?? '',
-      likes: (json['likes'] ?? []) as List<dynamic>,
-      dislikes: (json['dislikes'] ?? []) as List<dynamic>,
+      likes: json['likes'] ?? 0,
+      dislikes: json['dislikes'] ?? 0,
+      isLike: json['isLike'] ?? false,
+      isDislike: json['isDislike'] ?? false,
+      isMyComment: json['isMyComment'] ?? false,
       parentComment: json['parentComment'],
       replies: (json['replies'] ?? []) as List<dynamic>,
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
