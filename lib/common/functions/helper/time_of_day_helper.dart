@@ -5,6 +5,9 @@ extension TimeOfDayHelper on TimeOfDay {
   String get formattedIn12Hour =>
       DateFormat('hh:mm a').format(DateTime(1, 1, 1, hour, minute));
 
+  String get formattedIn24Hour =>
+      DateFormat('HH:mm').format(DateTime(1, 1, 1, hour, minute));
+
   bool isBefore(TimeOfDay other) =>
       ((hour < other.hour) || (hour == other.hour && minute < other.minute));
 

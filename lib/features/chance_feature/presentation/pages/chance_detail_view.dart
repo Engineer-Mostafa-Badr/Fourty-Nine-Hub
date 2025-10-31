@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
+import '../../../exchange_currency/presentation/views/currency_exchange_page.dart';
 import '../../domain/entity/chance_ad_entity.dart';
 import '../../domain/use_case/join_chance_ad_use_case.dart';
 import '../controller/cubit/chance_cubit.dart';
@@ -210,9 +213,8 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
       child: CustomScaffold(
         enableCustomAppBar: true,
         appBar: BackAppBar(
-          label: context.isArabic ? " الفرصة" : "Chance",
+          label: context.isArabic ? "فرصه" : "Chance",
         ),
-       
         body: Column(
           children: [
             // // Header
@@ -408,7 +410,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               ),
                               Text(
                                 context.isArabic
-                                    ? '${FormatNumbers().convertToArabicNumerals(_getCollectedAmount().toInt().toString())} جنيه مصري'
+                                    ? '${FormatNumbers().convertToArabicNumerals(_getCollectedAmount().toInt().toString())} ج.م'
                                     : '${_getCollectedAmount().toInt()} EGP',
                                 style: TextStyle(
                                   fontSize: 32.sp,
@@ -443,7 +445,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               ),
                               Text(
                                 context.isArabic
-                                    ? '${FormatNumbers().convertToArabicNumerals(widget.price.toString())} جنيه مصري'
+                                    ? '${FormatNumbers().convertToArabicNumerals(widget.price.toString())} ج.م'
                                     : '${widget.price} EGP',
                                 style: TextStyle(
                                   fontSize: 32.sp,
@@ -480,7 +482,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                               SizedBox(width: 10.w),
                               Label(
                                 text: context.isArabic
-                                    ? '${FormatNumbers().convertToArabicNumerals(_formatViews(currentViews).toString())} مشاهد'
+                                    ? '${FormatNumbers().convertToArabicNumerals(_formatViews(currentViews).toString())} مشاهده'
                                     : '${_formatViews(currentViews)} views',
                                 style: TextStyle(
                                   fontSize: 28.sp,
@@ -669,7 +671,7 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
 
     final amount = totalContributions.toStringAsFixed(0);
     return context.isArabic
-        ? '${FormatNumbers().convertToArabicNumerals(amount)} جنيه مصري'
+        ? '${FormatNumbers().convertToArabicNumerals(amount)} ج.م'
         : '$amount EGP';
   }
 
@@ -750,12 +752,16 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                   ),
                   child: TextField(
                     controller: amountController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LocalizedNumberInputFormatter(
+                        isArabic: context.isArabic,
+                        
+                      ),
+                    ],
                     decoration: InputDecoration(
-                      hintText: context.isArabic
-                          ? 'ادخل المبلغ بالجنه'
-                          : 'Enter the amount in EGP',
+                      hintText:
+                          context.isArabic ? 'ادخل المبلغ' : 'Enter the amount',
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 32.sp,
@@ -777,44 +783,51 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
                     onPressed: () {
                       ManageVibration.vibrate();
                       final inputText = amountController.text.trim();
-                      final amount = double.tryParse(inputText);
+                      // Convert Arabic digits to English for parsing using extension
+                      final englishText = inputText.toEnglishNumbers();
+                      final amount = int.tryParse(englishText);
 
                       print("Input text: $inputText");
+                      print("English text: $englishText");
                       print("Parsed amount: $amount");
 
-                      if (inputText.isEmpty) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                          SnackBar(content: Text(context.isArabic? 'من فضلك أدخل مبلغ' : 'Please enter an amount')),
-                        );
-                      } else if (amount == null) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                           SnackBar(
-                              content: Text(context.isArabic? 'من فضلك أدخل رقم صحيح' : 'Please enter a valid number')),
-                        );
+                      if (inputText.isEmpty || amount == null) {
+                        Navigator.pop(bottomSheetContext);
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? 'من فضلك أدخل مبلغ'
+                                : 'Please enter an amount');
                       } else if (amount <= 0) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                           SnackBar(
-                              content: Text( context.isArabic? 'المبلغ يجب أن يكون أكبر من صفر' : 'Amount must be greater than zero')),
-                        );
+                        Navigator.pop(bottomSheetContext);
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? 'المبلغ يجب أن يكون أكبر من صفر'
+                                : 'Amount must be greater than zero');
                       } else if (amount < 1) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                           SnackBar(
-                              content: Text( context.isArabic? 'الحد الأدنى للمساهمة 1 جنيه' : 'Minimum contribution is 1 EGP')),
-                        );
+                        Navigator.pop(bottomSheetContext);
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? 'الحد الأدنى للمساهمة 1 جنيه'
+                                : 'Minimum contribution is 1 EGP');
                       } else if (widget.chanceAd == null) {
-                        ScaffoldMessenger.of(bottomSheetContext).showSnackBar(
-                           SnackBar(
-                              content: Text( context.isArabic? 'خطاء في بيانات الإعلان' : 'Error in ad data')),
-                        );
+                        Navigator.pop(bottomSheetContext);
+                        showErrorMessage(
+                            context,
+                            context.isArabic
+                                ? 'خطاء في بيانات الإعلان'
+                                : 'Error in ad data');
                       } else {
                         Navigator.pop(bottomSheetContext);
                         // تخزين المساهمة المعلقة
-                        pendingContribution = amount;
+                        pendingContribution = amount.toDouble();
                         // استخدم الـ cubit مباشرة
                         cubit.joinChanceAd(
                           JoinChanceAdParams(
                             adId: widget.chanceAd!.id,
-                            amount: amount,
+                            amount: amount.toDouble(),
                           ),
                         );
                       }
@@ -848,6 +861,41 @@ class _ChanceDetailViewState extends State<ChanceDetailView>
   void dispose() {
     _countdownController.dispose();
     super.dispose();
+  }
+}
+
+// Custom TextInputFormatter للأرقام المترجمة حسب اللغة
+class _LocalizedNumberFormatter extends TextInputFormatter {
+  final BuildContext context;
+
+  _LocalizedNumberFormatter(this.context);
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    // Convert to localized numbers based on locale
+    final locale = Localizations.localeOf(context).languageCode;
+    if (locale == 'ar') {
+      // Convert English numbers to Arabic
+      final arabicText = newValue.text.toArabicNumbers(context);
+
+      // Preserve the cursor position
+      int offset = newValue.selection.baseOffset;
+      if (offset > arabicText.length) {
+        offset = arabicText.length;
+      }
+
+      return TextEditingValue(
+        text: arabicText,
+        selection: TextSelection.collapsed(offset: offset),
+      );
+    }
+
+    return newValue;
   }
 }
 

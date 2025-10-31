@@ -44,15 +44,21 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
 
   void _startAutoPlay() {
     _autoPlayTimer = Timer.periodic(widget.autoPlayInterval, (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       _currentPage++;
       if (_currentPage >= widget.widgets.length) {
         _currentPage = 0;
       }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+      if (mounted && _pageController.hasClients) {
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
     });
   }
 

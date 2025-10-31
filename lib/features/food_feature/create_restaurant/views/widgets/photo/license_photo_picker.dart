@@ -161,12 +161,15 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // الصندوق
-        buildPhotoBox(
-          context: context,
-          isAddBox: isAddBox,
-          image: fileIfAny,
-          onTap: onTap,
-          onDelete: onDelete,
+        SizedBox(
+          height: 200.h,
+          child: buildPhotoBox(
+            context: context,
+            isAddBox: isAddBox,
+            image: fileIfAny,
+            onTap: onTap,
+            onDelete: onDelete,
+          ),
         ),
         16.verticalSpace,
 

@@ -21,8 +21,8 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widgets/create_ad_text_form_field.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/custom_header_form.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:go_router/go_router.dart';
 

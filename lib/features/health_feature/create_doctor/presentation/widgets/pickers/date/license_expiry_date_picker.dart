@@ -18,19 +18,22 @@ class CreateDoctorLicenseExpiryDatePicker extends StatelessWidget {
     DateTime now = DateTime.now();
     return DatePickerField(
       title: LocaleKeys.licenseExpiryDate.localize,
-      backgroundColor:  AppColors.getFindFillColor(context),
+      backgroundColor: AppColors.getFindFillColor(context),
       borderColor: AppColors.getFindFillColor(context),
       textStyle: Styles.mediumText(
         fontSize: 32,
         height: 1.60,
       ),
-      icon: SvgPicture.asset(Assets.calendarIcon,color: context.isDarkMode?AppColors.getTextColor(context):null,),
+      icon: SvgPicture.asset(
+        Assets.calendarIcon,
+        color: context.isDarkMode ? AppColors.getTextColor(context) : null,
+      ),
       initialDate: now,
       minDate: now,
       maxDate: DateTime(now.year + 5, now.month, now.day),
       onDateSelected: (date) {
         if (date != null) {
-          context.read<CreateDoctorCubit>().pickPracticingExpiryDate(date);
+          context.read<CreateDoctorCubit>().pickPracticingExpiryDateNew(date);
         }
       },
     );

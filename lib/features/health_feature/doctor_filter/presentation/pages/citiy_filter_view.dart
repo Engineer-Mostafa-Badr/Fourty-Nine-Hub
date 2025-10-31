@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/loaders/default_loader.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -44,8 +45,9 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child:HomeAppbar(
+        child: HomeAppbar(
           isWithBackArrow: true,
+          onBackPressed: () => context.pop(),
         ),
       ),
       body: Padding(
@@ -56,7 +58,10 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Label(text: LocaleKeys.city.localize,style: Styles.headerText(),),
+            Label(
+              text: LocaleKeys.city.localize,
+              style: Styles.headerText(),
+            ),
             Sizer(),
             DefaultTextFormField(
               currentFocusNode: doctorCityFilter.searchFocusNode,

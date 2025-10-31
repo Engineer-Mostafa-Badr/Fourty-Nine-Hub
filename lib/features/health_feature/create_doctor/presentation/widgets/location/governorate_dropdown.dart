@@ -29,7 +29,9 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
         if (state is CreateDoctorGovernoratesLoaded) {
           return CustomDropdownHealth<GovernorateEntity>(
             items: state.governorates,
-            onItemSelected: onSelected!,
+            onItemSelected: (value) {
+              onSelected?.call(value as GovernorateEntity?);
+            },
             // (value) {
             //   if (value != null) {
             //     createDoctorCubit.selectSubcategory(value);

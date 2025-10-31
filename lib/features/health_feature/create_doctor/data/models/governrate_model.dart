@@ -6,9 +6,9 @@ class GovernorateModel extends GovernorateEntity {
 
   factory GovernorateModel.fromJson(Map<String, dynamic> json) {
     return GovernorateModel(
-        id: json['_id'],
-        nameAr: json['governorate_name_ar'],
-        nameEn: json['governorate_name_en']);
+        id: json['id'] ?? json['_id'],
+        nameAr: json['nameAr'] ?? json['governorate_name_ar'],
+        nameEn: json['nameEn'] ?? json['governorate_name_en']);
   }
 
   Map<String, dynamic> toJson() {

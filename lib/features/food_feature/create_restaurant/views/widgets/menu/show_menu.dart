@@ -245,23 +245,25 @@ class ShowMneu extends StatelessWidget {
                                       // التحقق هل الصورة فارغة أم لا
                                       final bool noImageYet = imagePath.isEmpty;
 
-                                      return buildPhotoBox(
-                                        // width: 200.w,
-                                        context: context,
-                                        isAddBox: noImageYet,
-                                        image: noImageYet
-                                            ? null
-                                            : XFile(imagePath),
-                                        onTap: () async {
-                                          ManageVibration.vibrate();
-                                          // نفس onTap أعلاه
-                                          await menuCubit.uploadMealImage(
-                                              context,
-                                              subcategoryId: subcategoryId ??
-                                                  "62c8babb8e28a58a3edf581d");
-                                        },
-                                        onDelete:
-                                            null, // لا يوجد حذف للصورة قبل إضافة العنصر
+                                      return SizedBox(
+                                        height: 200.w,
+                                        child: buildPhotoBox(
+                                          context: context,
+                                          isAddBox: noImageYet,
+                                          image: noImageYet
+                                              ? null
+                                              : XFile(imagePath),
+                                          onTap: () async {
+                                            ManageVibration.vibrate();
+                                            // نفس onTap أعلاه
+                                            await menuCubit.uploadMealImage(
+                                                context,
+                                                subcategoryId: subcategoryId ??
+                                                    "62c8babb8e28a58a3edf581d");
+                                          },
+                                          onDelete:
+                                              null, // لا يوجد حذف للصورة قبل إضافة العنصر
+                                        ),
                                       );
                                     },
                                   ),

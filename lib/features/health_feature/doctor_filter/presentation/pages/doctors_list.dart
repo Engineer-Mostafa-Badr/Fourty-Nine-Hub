@@ -12,6 +12,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:async';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -26,9 +27,13 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../helpers/subscription_method.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../health/domain/entities/most_booking_entity.dart';
+import '../../../health/domain/entities/appointment_booking_entity.dart';
+import '../../../health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class DoctorsListParams {
@@ -37,13 +42,15 @@ class DoctorsListParams {
   final String? type;
   final bool? fromSearch;
   final String? name;
+  final BookingTypes? bookingType;
 
   DoctorsListParams(
       {required this.fromHome,
       required this.subCategoryId,
       this.type = '',
       this.name = '',
-      this.fromSearch = false});
+      this.fromSearch = false,
+      this.bookingType});
 }
 
 class DoctorsListView extends StatefulWidget {
@@ -55,17 +62,55 @@ class DoctorsListView extends StatefulWidget {
 
 class _DoctorsListViewState extends State<DoctorsListView> {
   late ScrollController _scrollController;
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  String? _specialtySearchQuery;
+  Timer? _searchDebounce;
+  bool _isFastBookingBaseFiltered = false;
 
   @override
   void initState() {
     print("widget.params.name ${widget.params.name}");
     _scrollController = ScrollController()..addListener(_onScroll);
 
+    final healthSharedData = serviceLocator<HealthSharedData>();
+
     // Use the new specialty-based loading for subcategory navigation
     if (widget.params.fromSearch == true) {
       context
           .read<DoctorsListCubit>()
           .loadInitialData(widget.params.name ?? '', true);
+    } else if (widget.params.bookingType != null) {
+      // Use booking type search if booking type is provided
+      final bookingType = widget.params.bookingType ??
+          healthSharedData.doctorSearchParams.bookingType;
+      if (bookingType != null) {
+        // Get specialty ID - prioritize params, fallback to shared data
+        final specialtyId = widget.params.subCategoryId.isNotEmpty
+            ? widget.params.subCategoryId
+            : healthSharedData.doctorSearchParams.subCategory.id;
+
+        // Get governorate and city from shared data
+        final governorateId =
+            healthSharedData.doctorSearchParams.governorate.id.isNotEmpty
+                ? healthSharedData.doctorSearchParams.governorate.id
+                : null;
+        final cityId = healthSharedData.doctorSearchParams.city.id.isNotEmpty
+            ? healthSharedData.doctorSearchParams.city.id
+            : null;
+
+        context.read<DoctorsListCubit>().loadInitialDataByBookingType(
+              bookingType: bookingType,
+              specialtyId: specialtyId,
+              governorateId: governorateId,
+              cityId: cityId,
+            );
+      } else {
+        // Fallback to specialty-based search
+        context
+            .read<DoctorsListCubit>()
+            .loadInitialDataBySpecialty(widget.params.subCategoryId);
+      }
     } else {
       // Use the new specialty-based method for subcategory
       context
@@ -79,14 +124,73 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       print("object");
-      if (widget.params.fromSearch == false) {
+      final healthSharedData = serviceLocator<HealthSharedData>();
+
+      // If specialty search is active, paginate on it
+      if ((_specialtySearchQuery != null &&
+          _specialtySearchQuery!.trim().isNotEmpty)) {
+        final hasLocation = serviceLocator<HealthSharedData>()
+                .doctorSearchParams
+                .governorate
+                .id
+                .isNotEmpty ||
+            serviceLocator<HealthSharedData>()
+                .doctorSearchParams
+                .city
+                .id
+                .isNotEmpty ||
+            _isFastBookingBaseFiltered;
+        if (hasLocation) {
+          context
+              .read<DoctorsListCubit>()
+              .getDoctorsBySpecialtySearchFastBooking(
+                specialtyId: widget.params.subCategoryId,
+                name: _specialtySearchQuery!,
+              );
+        } else {
+          context.read<DoctorsListCubit>().getDoctorsBySpecialtySearch(
+                specialtyId: widget.params.subCategoryId,
+                name: _specialtySearchQuery!,
+              );
+        }
+        return;
+      }
+
+      if (_isFastBookingBaseFiltered) {
         context
             .read<DoctorsListCubit>()
-            .getDoctorsBySpecialty(widget.params.subCategoryId);
-      } else {
+            .getDoctorsBySpecialtyFastBooking(widget.params.subCategoryId);
+      } else if (widget.params.fromSearch == true) {
         context
             .read<DoctorsListCubit>()
             .getDoctorsFromSearch(widget.params.name ?? '');
+      } else if (widget.params.bookingType != null) {
+        // Use booking type search for pagination
+        final bookingType = widget.params.bookingType ??
+            healthSharedData.doctorSearchParams.bookingType;
+        if (bookingType != null) {
+          context.read<DoctorsListCubit>().getDoctorsByBookingType(
+                bookingType: bookingType,
+                specialtyId: widget.params.subCategoryId.isNotEmpty
+                    ? widget.params.subCategoryId
+                    : healthSharedData.doctorSearchParams.subCategory.id,
+                governorateId: healthSharedData
+                        .doctorSearchParams.governorate.id.isNotEmpty
+                    ? healthSharedData.doctorSearchParams.governorate.id
+                    : null,
+                cityId: healthSharedData.doctorSearchParams.city.id.isNotEmpty
+                    ? healthSharedData.doctorSearchParams.city.id
+                    : null,
+              );
+        } else {
+          context
+              .read<DoctorsListCubit>()
+              .getDoctorsBySpecialty(widget.params.subCategoryId);
+        }
+      } else {
+        context
+            .read<DoctorsListCubit>()
+            .getDoctorsBySpecialty(widget.params.subCategoryId);
       }
       print("object");
     }
@@ -96,7 +200,91 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _searchDebounce?.cancel();
+    _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  String _getEmptyMessage(BuildContext context) {
+    final healthSharedData = serviceLocator<HealthSharedData>();
+    final isArabic = context.isArabic;
+
+    // If it's a search, show search-specific message
+    if (widget.params.fromSearch == true) {
+      return isArabic ? 'لا توجد نتائج للبحث' : 'No search results found';
+    }
+
+    // Get specialty, governorate, city, and booking type information
+    final specialty = healthSharedData.doctorSearchParams.subCategory;
+    final governorate = healthSharedData.doctorSearchParams.governorate;
+    final city = healthSharedData.doctorSearchParams.city;
+    final bookingType = widget.params.bookingType ??
+        healthSharedData.doctorSearchParams.bookingType;
+
+    // Build the personalized message based on available data
+    String specialtyName = '';
+    String locationInfo = '';
+    String bookingTypeName = '';
+
+    // Get specialty name
+    if (specialty.id.isNotEmpty) {
+      specialtyName = isArabic ? specialty.nameAr : specialty.nameEn;
+    }
+
+    // Get booking type name
+    if (bookingType != null) {
+      switch (bookingType) {
+        case BookingTypes.videoCall:
+          bookingTypeName = isArabic ? 'مكالمة فيديو' : 'video call';
+          break;
+        case BookingTypes.clinic:
+          bookingTypeName = isArabic ? 'زيارة عيادة' : 'clinic visit';
+          break;
+        case BookingTypes.home:
+          bookingTypeName = isArabic ? 'زيارة منزل' : 'home visit';
+          break;
+        case BookingTypes.emergency:
+          bookingTypeName = isArabic ? 'طوارئ' : 'emergency';
+          break;
+      }
+    }
+
+    // Build location string
+    List<String> locationParts = [];
+    if (governorate.id.isNotEmpty && governorate.nameAr.isNotEmpty) {
+      locationParts.add(isArabic ? governorate.nameAr : governorate.nameEn);
+    }
+    if (city.id.isNotEmpty && city.nameAr.isNotEmpty) {
+      locationParts.add(isArabic ? city.nameAr : city.nameEn);
+    }
+
+    if (locationParts.isNotEmpty) {
+      locationInfo = locationParts.join(' - ');
+    }
+
+    // Build the final message
+    if (specialtyName.isNotEmpty &&
+        locationInfo.isNotEmpty &&
+        bookingTypeName.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح لـ $bookingTypeName في $locationInfo حالياً'
+          : 'No $specialtyName doctor available for $bookingTypeName in $locationInfo right now';
+    } else if (specialtyName.isNotEmpty && bookingTypeName.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح لـ $bookingTypeName حالياً'
+          : 'No $specialtyName doctor available for $bookingTypeName right now';
+    } else if (specialtyName.isNotEmpty && locationInfo.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح في $locationInfo حالياً'
+          : 'No $specialtyName doctor available in $locationInfo right now';
+    } else if (specialtyName.isNotEmpty) {
+      return isArabic
+          ? 'لا يوجد دكتور $specialtyName متاح حالياً'
+          : 'No $specialtyName doctor available right now';
+    } else {
+      // Fallback to default message
+      return isArabic ? 'لا يوجد حجوزات سابقة' : 'No booking history';
+    }
   }
 
   @override
@@ -113,55 +301,119 @@ class _DoctorsListViewState extends State<DoctorsListView> {
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
-          if (state.isLoading) {
-            return CustomLoadingSearchWidget();
-          } else {
-            return
-                // context.read<DoctorsListCubit>().doctors.isEmpty
-                //   ? Center(
-                //       child: Text(
-                //         LocaleKeys.noDoctorsFound.localize,
-                //         style: Styles.headerText(),
-                //       ),
-                //     )
-                //   :
-                Column(
+          return
+              // context.read<DoctorsListCubit>().doctors.isEmpty
+              //   ? Center(
+              //       child: Text(
+              //         LocaleKeys.noDoctorsFound.localize,
+              //         style: Styles.headerText(),
+              //       ),
+              //     )
+              //   :
+              GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
               children: [
-                Expanded(
-                  child: (state.doctorsList?.isEmpty ?? true)
-                      ? Center(
-                          child: CustomEmptyWidget(
-                              label: widget.params.fromSearch == true
-                                  ? (context.isArabic
-                                      ? 'لا توجد نتائج للبحث'
-                                      : 'No search results found')
-                                  : (context.isArabic
-                                      ? 'لا يوجد حجوزات سابقة'
-                                      : 'No booking history')))
-                      : ListView.separated(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.sizeOf(context).height * 0.35),
-                          controller: _scrollController,
-                          itemCount: state.doctorsList?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            final booking = state.doctorsList![index];
-                            return Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: DoctorListCard(
-                                data: booking,
-                              ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: DefaultTextFormField(
+                    currentFocusNode: _searchFocusNode,
+                    currentController: _searchController,
+                    hint: context.isArabic
+                        ? 'بحث باسم الطبيب'
+                        : 'Search by doctor name',
+                    prefixIcon: const Icon(Icons.search),
+                    onChanged: (value) {
+                      final query = value.trim();
+                      _searchDebounce?.cancel();
+
+                      if (query.isEmpty) {
+                        setState(() {
+                          _specialtySearchQuery = null;
+                          _isFastBookingBaseFiltered = true;
+                        });
+                        context
+                            .read<DoctorsListCubit>()
+                            .loadInitialDataBySpecialtyFastBooking(
+                              widget.params.subCategoryId,
                             );
-                          },
-                          separatorBuilder: (context, index) => const Sizer(),
-                        ),
+                        return;
+                      }
+
+                      // Avoid searching on single letters; wait for 3+ chars with debounce
+                      if (query.length < 3) {
+                        setState(() {
+                          _specialtySearchQuery = query;
+                        });
+                        return;
+                      }
+
+                      _searchDebounce =
+                          Timer(const Duration(milliseconds: 400), () {
+                        setState(() {
+                          _specialtySearchQuery = query;
+                        });
+                        final healthSharedData =
+                            serviceLocator<HealthSharedData>();
+                        final hasLocation = healthSharedData
+                                .doctorSearchParams.governorate.id.isNotEmpty ||
+                            healthSharedData
+                                .doctorSearchParams.city.id.isNotEmpty ||
+                            _isFastBookingBaseFiltered;
+                        if (hasLocation) {
+                          context
+                              .read<DoctorsListCubit>()
+                              .loadInitialDataBySpecialtySearch(
+                                specialtyId: widget.params.subCategoryId,
+                                name: query,
+                              );
+                        } else {
+                          context
+                              .read<DoctorsListCubit>()
+                              .loadInitialDataBySpecialtySearch(
+                                specialtyId: widget.params.subCategoryId,
+                                name: query,
+                              );
+                        }
+                      });
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: state.isLoading
+                      ? CustomLoadingSearchWidget()
+                      : ((state.doctorsList?.isEmpty ?? true)
+                          ? Center(
+                              child: CustomEmptyWidget(
+                                  label: _getEmptyMessage(context)))
+                          : ListView.separated(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.sizeOf(context).height * 0.35),
+                              controller: _scrollController,
+                              itemCount: state.doctorsList?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                final booking = state.doctorsList![index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: DoctorListCard(
+                                    data: booking,
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const Sizer(),
+                            )),
                 ),
                 // if (context.read<DoctorsListCubit>().isLoadingMore)
                 //   const Center(
                 //     child: CustomCircularProgressIndicator(),
                 //   )
               ],
-            );
-          }
+            ),
+          );
         }),
       ),
     );

@@ -4,21 +4,22 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/doctor_day_model.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/city_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart'
+    as create_doctor;
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/create_doctor.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_cities.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_health_subcategories.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'create_doctor_state.dart';
@@ -31,6 +32,8 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   final CreateDoctorUseCase _createDoctorUseCase;
 
   final CreateDoctorParams _createDoctorParams = CreateDoctorParams();
+
+  DoctorAddressModel get address => _createDoctorParams.address;
 
   // =============================== Timetables ===============================
   List<DoctorDayEntity> clinicTimetable = [
@@ -89,6 +92,8 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
 
   final phoneFocusNode = FocusNode();
 
+  final emailFocusNode = FocusNode();
+
   final homeVisitExamineDurationController = TextEditingController();
 
   final addressController = TextEditingController();
@@ -110,6 +115,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   final homeVisitPriceController = TextEditingController();
   final clinicPriceController = TextEditingController();
   final phoneController = TextEditingController();
+  final emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   CreateDoctorCubit(
       this._shareCubit,
@@ -133,6 +139,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     homeVisitDurationFocusNode.dispose();
     addressFocusNode.dispose();
     phoneFocusNode.dispose();
+    emailFocusNode.dispose();
     homeVisitExamineDurationController.dispose();
     addressController.dispose();
     callExamineDurationController.dispose();
@@ -145,6 +152,7 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
     homeVisitPriceController.dispose();
     clinicPriceController.dispose();
     phoneController.dispose();
+    emailController.dispose();
     return super.close();
   }
 
@@ -154,32 +162,92 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   }
 
   // ================================ DatePickers ===============================
-  void pickIDExpiryDate(DateTime value) {
-    _createDoctorParams.idExpiryDate = value.toIso8601String();
-  }
-
-  void pickPracticingExpiryDate(DateTime value) {
-    _createDoctorParams.practicingExpiryDate = value.toIso8601String();
-  }
+  // removed old date pickers; handled later with temporary fields
 
   void selectCity(CityEntity value) {
     _createDoctorParams.address.cityId = value.id;
+    debugPrint('City: ${value.nameEn} (${value.id})');
   }
 
   // ================================ dropdowns ===============================
-  Future<void> selectGovernorate(GovernorateEntity value) async {
+  Future<void> selectGovernorate(create_doctor.GovernorateEntity value) async {
     _createDoctorParams.address.governorateId = value.id;
+    debugPrint('Governorate: ${value.nameEn} (${value.id})');
     await _getCities(value.id);
   }
 
   void selectSubcategory(SubCategoryEntity subCategoryModel) {
-    _createDoctorParams.subCategoryId = subCategoryModel.id;
+    _createDoctorParams.specialityId = subCategoryModel.id;
+    debugPrint(
+        'Speciality: ${subCategoryModel.nameAr} (${subCategoryModel.id})');
   }
 
   Future<void> submit(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       _saveTextEditingControllers();
-      _saveWorkDays();
+      _saveDetections();
+      _saveDocumentsIfAvailable();
+
+      // Validate that at least one service type is selected
+      if (!hasCalls && !hasClinic && !hasHomeVisit) {
+        final errorMessage = context.isArabic
+            ? 'يجب اختيار نوع خدمة واحد على الأقل (زيارة عيادة، اتصال، أو زيارة منزل)'
+            : 'Please select at least one service type (Clinic visit, Call, or Home visit)';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate profile photo
+      if (_createDoctorParams.doctorProfilePicMediaId.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء رفع صورة الملف الشخصي'
+            : 'Please upload profile photo';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate ID photos (front and back)
+      if (_tempIdFront.isEmpty || _tempIdBehind.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء رفع صور الهوية (الوجه والظهر)'
+            : 'Please upload ID photos (Front and Back)';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate ID expiry date
+      if (_idExpiryDateIso.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء اختيار تاريخ انتهاء صلاحية الهوية'
+            : 'Please select ID expiry date';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate license photos (front and back)
+      if (_tempLicenseFront.isEmpty || _tempLicenseBehind.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء رفع صور الترخيص (الوجه والظهر)'
+            : 'Please upload license photos (Front and Back)';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
+      // Validate license expiry date
+      if (_licenseExpiryDateIso.isEmpty) {
+        final errorMessage = context.isArabic
+            ? 'الرجاء اختيار تاريخ انتهاء صلاحية الترخيص'
+            : 'Please select license expiry date';
+        emit(CreateDoctorError(errorMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
+        return;
+      }
+
       String? checkFilledMessage = _createDoctorParams.isFilled();
       if (checkFilledMessage == null) {
         emit(CreateDoctorLoading("Creating Account..."));
@@ -187,41 +255,89 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
         emit(CreateDoctorCloseLoading());
         response.fold((failure) {
           var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+              AppPages.router.configuration.navigatorKey.currentContext;
+          if (currentContext != null) {
+            showErrorMessage(
+                currentContext, getFailureMessage(failure, currentContext));
+          }
           emit(CreateDoctorError("Can't Create Doctor"));
         }, (data) {
           emit(CreateDoctorSuccess(
               "You are submit successfully. Please wait admin approve and approval."));
-          context.go(Routes.VISITA);
+          // Navigation will be handled in BlocListener to avoid context issues
         });
       } else {
-        emit(CreateDoctorError(checkFilledMessage));
+        // Translate validation messages
+        String localizedMessage = checkFilledMessage;
+        if (context.isArabic) {
+          switch (checkFilledMessage) {
+            case 'Please choose your specialty':
+              localizedMessage = 'الرجاء اختيار التخصص';
+              break;
+            case 'Please upload your photo':
+              localizedMessage = 'الرجاء رفع صورتك';
+              break;
+            case 'Please enter your first name':
+              localizedMessage = 'الرجاء إدخال الاسم الأول';
+              break;
+            case 'Please enter your last name':
+              localizedMessage = 'الرجاء إدخال الاسم الأخير';
+              break;
+            case 'Please enter your phone number':
+              localizedMessage = 'الرجاء إدخال رقم الهاتف';
+              break;
+            case 'Please enter your description':
+              localizedMessage = 'الرجاء إدخال الوصف';
+              break;
+            case 'Please enter your governorate':
+              localizedMessage = 'الرجاء اختيار المحافظة';
+              break;
+            case 'Please enter your city':
+              localizedMessage = 'الرجاء اختيار المدينة';
+              break;
+            case 'Please enter your address':
+              localizedMessage = 'الرجاء إدخال العنوان';
+              break;
+            case 'Please add at least one detection type':
+              localizedMessage = 'الرجاء اختيار نوع خدمة واحد على الأقل';
+              break;
+          }
+        }
+        emit(CreateDoctorError(localizedMessage));
+        // Error will be shown in BlocListener, no need to call showErrorMessage here
       }
     }
   }
 
+  bool hasCalls = false;
+  bool hasClinic = false;
+  bool hasHomeVisit = false;
+
   void toggleCallCheck(bool value) {
-    _createDoctorParams.hasCalls = value;
+    hasCalls = value;
+    debugPrint('Call toggle: $value');
     emit(CreateDoctorShowCall(value));
   }
   // ================================= toggles =================================
 
   void toggleClinic(bool value) {
-    _createDoctorParams.hasClinic = value;
+    hasClinic = value;
+    debugPrint('Clinic toggle: $value');
     emit(CreateDoctorShowClinic(value));
   }
 
   void toggleHomeVisit(bool value) {
-    _createDoctorParams.hasHomeVisit = value;
+    hasHomeVisit = value;
+    debugPrint('Home visit toggle: $value');
     emit(CreateDoctorShowHomeVisit(value));
   }
 
   Future<void> uploadIdBehindImage({required BuildContext context}) async {
     await _uploadImage(
         onUploaded: (media) {
-          _createDoctorParams.idBehindKey = media.mediaId;
+          // documents will be built before submit
+          _tempIdBehind = media.mediaId;
+          debugPrint('ID back mediaId: ${media.mediaId}');
           emit(CreateDoctorUploadIdBehindImage(media.file));
         },
         context: context);
@@ -230,7 +346,8 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   Future<void> uploadIdFrontImage({required BuildContext context}) async {
     await _uploadImage(
         onUploaded: (media) {
-          _createDoctorParams.idFrontKey = media.mediaId;
+          _tempIdFront = media.mediaId;
+          debugPrint('ID front mediaId: ${media.mediaId}');
           emit(CreateDoctorUploadIdFrontImage(media.file));
         },
         context: context);
@@ -240,7 +357,8 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       {required BuildContext context}) async {
     await _uploadImage(
         onUploaded: (media) {
-          _createDoctorParams.practicingBehind = media.mediaId;
+          _tempLicenseBehind = media.mediaId;
+          debugPrint('License back mediaId: ${media.mediaId}');
           emit(CreateDoctorUploadPracticingBehindImage(media.file));
         },
         context: context);
@@ -250,7 +368,8 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       {required BuildContext context}) async {
     await _uploadImage(
         onUploaded: (media) {
-          _createDoctorParams.practicingFront = media.mediaId;
+          _tempLicenseFront = media.mediaId;
+          debugPrint('License front mediaId: ${media.mediaId}');
           emit(CreateDoctorUploadPracticingFrontImage(media.file));
         },
         context: context);
@@ -259,7 +378,8 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   Future<void> uploadProfileImage({required BuildContext context}) async {
     await _uploadImage(
         onUploaded: (media) {
-          _createDoctorParams.mediaId = media.mediaId;
+          _createDoctorParams.doctorProfilePicMediaId = media.mediaId;
+          debugPrint('Profile mediaId: ${media.mediaId}');
           emit(CreateDoctorUploadProfileImage(media.file));
         },
         context: context);
@@ -291,11 +411,30 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(CreateDoctorError("Can't Load Governorates"));
       }, (data) {
+        // data is shared GovernorateEntity; cache as-is for shared store
         _shareCubit.governorates = data;
-        emit(CreateDoctorGovernoratesLoaded(data));
+
+        // Convert to create_doctor GovernorateEntity for UI state that expects it
+        final createDoctorGovernorates = data
+            .map((e) => create_doctor.GovernorateEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
+
+        emit(CreateDoctorGovernoratesLoaded(createDoctorGovernorates));
       });
     } else {
-      emit(CreateDoctorGovernoratesLoaded(_shareCubit.governorates));
+      // Convert from shared GovernorateEntity to create_doctor GovernorateEntity
+      final createDoctorGovernorates = _shareCubit.governorates
+          .map((e) => create_doctor.GovernorateEntity(
+                id: e.id,
+                nameAr: e.nameAr,
+                nameEn: e.nameEn,
+              ))
+          .toList();
+      emit(CreateDoctorGovernoratesLoaded(createDoctorGovernorates));
     }
   }
 
@@ -323,57 +462,131 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
   void _saveTextEditingControllers() {
     _createDoctorParams.firstName = firstNameController.text;
     _createDoctorParams.lastName = lastNameController.text;
-    _createDoctorParams.phone = phoneController.text;
+    _createDoctorParams.phoneNumber = phoneController.text;
+    _createDoctorParams.email = emailController.text;
     _createDoctorParams.address.address = addressController.text;
-    _createDoctorParams.detectionPeriodClinic =
-        clinicExamineDurationController.text;
-    _createDoctorParams.detectionPeriodCalls =
-        callExamineDurationController.text;
-    _createDoctorParams.detectionPeriodvisitHome = '84864';
-    _createDoctorParams.callsPrice = callPriceController.text;
-    _createDoctorParams.visitHomePrice = homeVisitPriceController.text;
-    _createDoctorParams.clinicPrice = clinicPriceController.text;
-    _createDoctorParams.waitingTime = waitingTimeController.text;
     _createDoctorParams.description = descriptionController.text;
+
+    debugPrint('First name: ${_createDoctorParams.firstName}');
+    debugPrint('Last name: ${_createDoctorParams.lastName}');
+    debugPrint('Phone: ${_createDoctorParams.phoneNumber}');
+    debugPrint('Email: ${_createDoctorParams.email}');
+    debugPrint('Address: ${_createDoctorParams.address.address}');
+    debugPrint('Description: ${_createDoctorParams.description}');
   }
 
-  void _saveWorkDays() {
-    _createDoctorParams.clinic?.workDays.clear();
-    _createDoctorParams.calls?.workDays.clear();
-    _createDoctorParams.visitHome?.workDays.clear();
-    for (var element in clinicTimetable) {
-      if (element.isAvailable == true) {
-        _createDoctorParams.clinic?.workDays
-            .add(DoctorDayModel.fromEntity(element));
-      }
+  String _idExpiryDateIso = '';
+  String _licenseExpiryDateIso = '';
+  String _tempIdFront = '';
+  String _tempIdBehind = '';
+  String _tempLicenseFront = '';
+  String _tempLicenseBehind = '';
+
+  void pickIDExpiryDateNew(DateTime value) {
+    _idExpiryDateIso = value.toIso8601String();
+    debugPrint('ID expiry: ${value.toIso8601String()}');
+  }
+
+  void pickPracticingExpiryDateNew(DateTime value) {
+    _licenseExpiryDateIso = value.toIso8601String();
+    debugPrint('License expiry: ${value.toIso8601String()}');
+  }
+
+  void _saveDetections() {
+    _createDoctorParams.detections.clear();
+
+    num parsePrice(String s) => num.tryParse(s.trim()) ?? 0;
+    int parsePeriod(String s) => int.tryParse(s.trim()) ?? 0;
+
+    if (hasClinic) {
+      final availability = clinicTimetable
+          .where((e) => e.isAvailable)
+          .map((e) => DoctorDayModel.fromEntity(e))
+          .toList();
+      final price = parsePrice(clinicPriceController.text);
+      final period = parsePeriod(clinicExamineDurationController.text);
+      _createDoctorParams.detections.add(DetectionParams(
+        type: 'clinic_visit',
+        price: price,
+        detectionPeriod: period,
+        description: 'كشف عيادة',
+        availability: availability,
+      ));
+      debugPrint(
+          'Clinic detection added - Price: $price, Period: $period, Days: ${availability.length}');
     }
 
-    for (var element in callTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.calls?.workDays
-            .add(DoctorDayModel.fromEntity(element));
-      }
+    if (hasCalls) {
+      final availability = callTimetable
+          .where((e) => e.isAvailable)
+          .map((e) => DoctorDayModel.fromEntity(e))
+          .toList();
+      final price = parsePrice(callPriceController.text);
+      final period = parsePeriod(callExamineDurationController.text);
+      _createDoctorParams.detections.add(DetectionParams(
+        type: 'video_call',
+        price: price,
+        detectionPeriod: period,
+        description: 'استشارة عبر مكالمة',
+        availability: availability,
+      ));
+      debugPrint(
+          'Call detection added - Price: $price, Period: $period, Days: ${availability.length}');
     }
 
-    for (var element in homeVisitTimetable) {
-      if (element.isAvailable) {
-        _createDoctorParams.visitHome?.workDays
-            .add(DoctorDayModel.fromEntity(element));
-      }
+    if (hasHomeVisit) {
+      final availability = homeVisitTimetable
+          .where((e) => e.isAvailable)
+          .map((e) => DoctorDayModel.fromEntity(e))
+          .toList();
+      final price = parsePrice(homeVisitPriceController.text);
+      final period = parsePeriod(homeVisitExamineDurationController.text.isEmpty
+          ? '0'
+          : homeVisitExamineDurationController.text);
+      _createDoctorParams.detections.add(DetectionParams(
+        type: 'home_visit',
+        price: price,
+        detectionPeriod: period,
+        description: 'زيارة منزلية',
+        availability: availability,
+      ));
+      debugPrint(
+          'Home visit detection added - Price: $price, Period: $period, Days: ${availability.length}');
     }
-    _createDoctorParams.clinic?.workDays.toSet().toList();
-    _createDoctorParams.calls?.workDays.toSet().toList();
-    _createDoctorParams.visitHome?.workDays.toSet().toList();
+  }
+
+  void _saveDocumentsIfAvailable() {
+    _createDoctorParams.documents.clear();
+    if (_tempIdFront.isNotEmpty &&
+        _tempIdBehind.isNotEmpty &&
+        _idExpiryDateIso.isNotEmpty) {
+      _createDoctorParams.documents.add(DocumentParams(
+        type: 'id_card',
+        frontMediaId: _tempIdFront,
+        backMediaId: _tempIdBehind,
+        expiryDate: _idExpiryDateIso,
+      ));
+    }
+    if (_tempLicenseFront.isNotEmpty &&
+        _tempLicenseBehind.isNotEmpty &&
+        _licenseExpiryDateIso.isNotEmpty) {
+      _createDoctorParams.documents.add(DocumentParams(
+        type: 'license',
+        frontMediaId: _tempLicenseFront,
+        backMediaId: _tempLicenseBehind,
+        expiryDate: _licenseExpiryDateIso,
+      ));
+    }
   }
 
   // ================================= upload images =================================
   Future<void> _uploadImage(
       {required dynamic Function(UploadFileEntity) onUploaded,
       required BuildContext context}) async {
-    if (_createDoctorParams.subCategoryId.isNotEmpty) {
+    if (_createDoctorParams.specialityId.isNotEmpty) {
       emit(CreateDoctorLoading("Uploading Image..."));
       await UploadFile().uploadImage(
-        subCategoryId: _createDoctorParams.subCategoryId,
+        subCategoryId: _createDoctorParams.specialityId,
         onUploaded: (value) {
           onUploaded(value);
         },
@@ -381,7 +594,11 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       );
       emit(CreateDoctorCloseLoading());
     } else {
-      emit(CreateDoctorError("Select Subcategory First"));
+      final errorMessage = context.isArabic
+          ? 'الرجاء اختيار التخصص قبل رفع الصورة'
+          : 'Please select speciality before uploading image';
+      emit(CreateDoctorError(errorMessage));
+      // Error will be shown in BlocListener, no need to call showErrorMessage here
     }
   }
 }

@@ -15,14 +15,65 @@ import '../logic/currency_cubit.dart';
 import '../widgets/exchange_rate_display_widget.dart';
 import '../widgets/refresh_settings_widget.dart';
 
-class ArabicNumberInputFormatter extends TextInputFormatter {
+class LocalizedNumberInputFormatter extends TextInputFormatter {
+  final bool isArabic;
+  final bool allowDecimals; // خيار للسماح بالكسور أو منعها
+
+  LocalizedNumberInputFormatter({
+    required this.isArabic,
+    this.allowDecimals = false, // افتراضياً ممنوع الكسور
+  });
+
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // Convert English numerals to Arabic numerals for display
-    String arabicText = newValue.text
+    if (newValue.text.isEmpty) {
+      return const TextEditingValue(
+        text: '',
+        selection: TextSelection.collapsed(offset: 0),
+      );
+    }
+
+    String filteredText;
+
+    if (allowDecimals) {
+      // السماح بالأرقام والنقطة العشرية فقط
+      filteredText = newValue.text.replaceAll(RegExp(r'[^\d٠-٩.]'), '');
+
+      // منع أكثر من نقطة عشرية واحدة
+      int dotCount = '.'.allMatches(filteredText).length;
+      if (dotCount > 1) {
+        // إذا كان هناك أكثر من نقطة، احتفظ بالأولى فقط
+        int firstDotIndex = filteredText.indexOf('.');
+        filteredText = filteredText.substring(0, firstDotIndex + 1) +
+            filteredText.substring(firstDotIndex + 1).replaceAll('.', '');
+      }
+
+      // منع النقطة في البداية
+      if (filteredText.startsWith('.')) {
+        filteredText = '0$filteredText';
+      }
+    } else {
+      // منع الكسور تماماً - أرقام صحيحة فقط
+      filteredText = newValue.text.replaceAll(RegExp(r'[^\d٠-٩]'), '');
+    }
+
+    // تحويل حسب اللغة
+    String formattedText = isArabic
+        ? _convertToArabicNumerals(filteredText)
+        : _convertToEnglishNumerals(filteredText);
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
+    );
+  }
+
+  // تحويل إلى أرقام عربية
+  String _convertToArabicNumerals(String input) {
+    return input
         .replaceAll('0', '٠')
         .replaceAll('1', '١')
         .replaceAll('2', '٢')
@@ -33,11 +84,21 @@ class ArabicNumberInputFormatter extends TextInputFormatter {
         .replaceAll('7', '٧')
         .replaceAll('8', '٨')
         .replaceAll('9', '٩');
+  }
 
-    return TextEditingValue(
-      text: arabicText,
-      selection: newValue.selection,
-    );
+  // تحويل إلى أرقام إنجليزية (إزالة الأرقام العربية إن وجدت)
+  String _convertToEnglishNumerals(String input) {
+    return input
+        .replaceAll('٠', '0')
+        .replaceAll('١', '1')
+        .replaceAll('٢', '2')
+        .replaceAll('٣', '3')
+        .replaceAll('٤', '4')
+        .replaceAll('٥', '5')
+        .replaceAll('٦', '6')
+        .replaceAll('٧', '7')
+        .replaceAll('٨', '8')
+        .replaceAll('٩', '9');
   }
 }
 
@@ -168,7 +229,7 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
     return CustomScaffold(
       enableCustomAppBar: true,
       appBar: BackAppBar(
-        label:context.isArabic ? 'تبديل العملات' : 'Exchange',
+        label: context.isArabic ? 'تبديل العملات' : 'Exchange',
       ),
       body: BlocConsumer<CurrencyCubit, CurrencyState>(
         listener: (context, state) {
@@ -512,9 +573,12 @@ class _CurrencyExchangePageState extends State<CurrencyExchangePage>
                                         controller: _amountController,
                                         keyboardType: const TextInputType
                                             .numberWithOptions(decimal: true),
-                                        inputFormatters: context.isArabic
-                                            ? [ArabicNumberInputFormatter()]
-                                            : null,
+                                        inputFormatters: [
+                                          LocalizedNumberInputFormatter(
+                                            isArabic: context.isArabic,
+                                            allowDecimals: true,
+                                          ),
+                                        ],
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontSize: 32.sp,

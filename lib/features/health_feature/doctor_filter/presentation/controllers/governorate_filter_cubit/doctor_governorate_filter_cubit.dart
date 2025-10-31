@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart'
+    as create_doctor;
+import 'package:fourtyninehub/features/health_feature/shared/domain/usecases/get_governorates.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
@@ -47,8 +49,16 @@ class DoctorGovernorateFilterCubit extends Cubit<DoctorGovernorateFilterState> {
         emit(DoctorGovernorateFilterError(Labels.errorHappened));
       },
       (data) {
-        _shareCubit.governorates = data;
-        emit(DoctorGovernorateFilterLoaded(data));
+        // Convert from create_doctor GovernorateEntity to shared GovernorateEntity
+        final sharedGovernorates = data
+            .map((e) => GovernorateEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
+        _shareCubit.governorates = sharedGovernorates;
+        emit(DoctorGovernorateFilterLoaded(sharedGovernorates));
       },
     );
     // } else {

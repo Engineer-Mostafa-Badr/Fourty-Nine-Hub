@@ -389,9 +389,10 @@ class EndPoints {
 
   // health
   static String getCities({required String governorateId}) =>
-      '/health/cities/$governorateId';
-  static const getGovernorates = '/health/governorate';
-  static const createDoctor = '/health/doctor';
+      '/health/booking/address/$governorateId/cities';
+  static const getGovernorates = '/health/booking/address';
+  static const createDoctor = '/health/booking/doctors/register';
+  static const uploadDoctorDocuments = '/health/booking/doctors/documents';
   static String doctorSearch =
       '/health/doctor-search${loggedUserId.isNotEmpty ? "?userId=$loggedUserId" : ""}';
   static const bookEmergency = '/health/book-emergency';
@@ -426,11 +427,20 @@ class EndPoints {
   static String getDoctorDetails(String doctorId) =>
       '/health/doctor/$doctorId?subCategory=62c8bae08e28a58a3edf5867';
 
+  // Booking Doctors (new details + availabilities)
+  static String getBookingDoctorById(String doctorId) =>
+      '/health/booking/doctors/$doctorId';
+  static String getBookingDoctorAvailabilities(String doctorId,
+          {int page = 1, int limit = 100}) =>
+      '/health/booking/doctors/$doctorId/availabilities?page=$page&limit=$limit';
+
   static String toggleFavoriteCategory(String subCategoryId) =>
       '/favorite-category/$subCategoryId';
 
   static getHealthSubcategories(String userId) =>
-      '/health/subCategories-health-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
+      // Use booking specialities listing for the health carousel
+      // Pagination is fixed here to match current UI usage
+      '/health/booking/speciality?page=1&limit=10';
 
   static getMedicalServices(String userId) =>
       '/health/subCategories-medicalServices-with-ads${userId.isNotEmpty ? "?userId=$userId" : ""}';
@@ -438,6 +448,8 @@ class EndPoints {
       '/health/doctor-search?name=${params.name}&limit=${params.limit}&page=${params.page}';
   static const getFavoriteCategory = '/favorite-category';
   static const getDoctorInfo = '/health/dashboard/doctor-infos';
+  // New unified booking search endpoint (used by search bar)
+  static const searchBookingDoctors = '/health/booking/doctors/search';
 
   static String getUpcomingUserAppointments(String userId) =>
       '/health/book-appointment${userId.isNotEmpty ? "?userId=$userId" : ""}';
@@ -1699,6 +1711,15 @@ class EndPoints {
   static const addCarBrand = '/ride/cars/brands';
   static const getDoctorList = '/health/doctors';
   static const getDoctorsBySpecialty = '/health/booking/doctors/specialties';
+  static String searchDoctorsBySpecialty(String specialtyId) =>
+      '/health/booking/doctors/search/specialties/$specialtyId';
+  static const searchDoctorsByCalls = '/health/booking/doctors/search/calls';
+  static const searchDoctorsByVideoCalls =
+      '/health/booking/doctors/search/video-calls';
+  static const searchDoctorsByHomeVisits =
+      '/health/booking/doctors/search/home-visits';
+  static const searchDoctorsByClinicVisits =
+      '/health/booking/doctors/search/clinic-visits';
   static const createNonTrackTrip = '/ride/non-tracking/trips/client';
   static const getClientPendingUntrackedTrips =
       '/ride/non-tracking/trips/client/pending';

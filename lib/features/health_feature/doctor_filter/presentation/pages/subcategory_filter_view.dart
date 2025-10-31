@@ -37,7 +37,9 @@ class _DoctorSubcategoryFilterViewState extends State<DoctorSubcategoryFilterVie
     final doctorSubcategoryFilter =
         context.read<DoctorSubcategoryFilterCubit>();
     return CustomScaffold(
+
       appBar: PreferredSize(
+        
         preferredSize: const Size.fromHeight(30),
         child: HomeAppbar(
           color: AppColors.whiteColor,

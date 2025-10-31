@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/presentation
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/create_doctor_phone_number_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/create_doctor_waiting_time_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/description_filed.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/email_field.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/fields/name_filed.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/cities_dropdowns.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/location/governorate_dropdown.dart';
@@ -88,13 +89,15 @@ class _CreateDoctorViewBodyState extends State<CreateDoctorViewBody> {
             const SizedBox(height: 8),
             const CreateDoctorPhoneNumberField(),
             const SizedBox(height: 8),
+            const CreateDoctorEmailField(),
+            const SizedBox(height: 8),
             const CreateDoctorProfilePhotoPicker(),
             const SizedBox(height: 8),
             const CreateDoctorIDPhotoPicker(),
             const SizedBox(height: 8),
             CreateDoctorIDExpiryDatePicker(
               onDateSelected: (date) {
-                context.read<CreateDoctorCubit>().pickIDExpiryDate(date!);
+                context.read<CreateDoctorCubit>().pickIDExpiryDateNew(date!);
               },
             ),
             const SizedBox(height: 8),

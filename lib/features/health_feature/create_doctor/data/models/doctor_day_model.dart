@@ -26,10 +26,10 @@ class DoctorDayModel extends DoctorDayEntity {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'day': day.name.toLowerCase(),
-      'workFrom': from.formattedIn12Hour,
-      'workTo': to.formattedIn12Hour,
-      'isAvailable': isAvailable
+      'dayOfWeek': day.name.toLowerCase(),
+      'startTime': from.formattedIn24Hour,
+      'endTime': to.formattedIn24Hour,
+      'isRecurring': true
     };
   }
 }
