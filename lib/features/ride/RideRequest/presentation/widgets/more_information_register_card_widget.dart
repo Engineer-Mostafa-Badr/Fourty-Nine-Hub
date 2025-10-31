@@ -5,7 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/features/health_feature/shared/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/validation_error_widget.dart';
@@ -177,11 +177,10 @@ class _MoreInformationRegisterCardWidgetState
                                     .map(
                                       (e) =>
                                           DropdownMenuItem<GovernorateEntity>(
-                                        value: e,
-                                        child: Text((context.isArabic
-                                                ? e.nameAr
-                                                : e.nameEn) ??
-                                            ""),
+                                        value: e as GovernorateEntity?,
+                                        child: Text(context.isArabic
+                                            ? e.nameAr
+                                            : e.nameEn),
                                       ),
                                     )
                                     .toList(),

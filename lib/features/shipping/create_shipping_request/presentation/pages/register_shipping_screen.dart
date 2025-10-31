@@ -13,7 +13,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
-import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import '../../../../health_feature/shared/domain/entities/governorate_entity.dart';
 import '../../../../health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import '../../../../ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
 import '../../../../ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
@@ -481,7 +481,7 @@ class _RegisterShippingScreenState extends State<RegisterShippingScreen> {
                             ),
                             label: LocaleKeys.submit.tr(),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (formKey.currentState!.validate()) {
                                 context.read<ShippingCubit>().register();
                               }
@@ -528,7 +528,7 @@ class _PickImageShippingCardState extends State<PickImageShippingCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         var pickedImage =
             await ImagePicker().pickImage(source: ImageSource.gallery);
         if (pickedImage != null) {

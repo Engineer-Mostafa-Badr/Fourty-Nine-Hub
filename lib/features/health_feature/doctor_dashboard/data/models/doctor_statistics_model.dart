@@ -22,7 +22,7 @@ class DoctorStatisticsModel extends DoctorStatisticsEntity {
         matchBookingType(BookingTypes.clinic));
 
     final call = DoctorStatisticsForBookingTypeModel.fromJson(
-        matchBookingType(BookingTypes.call));
+        matchBookingType(BookingTypes.videoCall));
 
     final home = DoctorStatisticsForBookingTypeModel.fromJson(
         matchBookingType(BookingTypes.home));

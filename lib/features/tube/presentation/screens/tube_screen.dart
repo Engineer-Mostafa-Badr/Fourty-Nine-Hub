@@ -8,6 +8,7 @@ import '../../../../core/enums/base_status_enum.dart';
 import '../cubit/tube_cubit.dart';
 import '../widgets/video_card_widget.dart';
 import '../widgets/video_mini_player.dart';
+import 'tube_history_videos_screen.dart';
 
 
 class TubeScreen extends StatefulWidget {
@@ -129,8 +130,8 @@ class _TubeScreenState extends State<TubeScreen>
                 controller: _tabController,
                 children: const [
                   HomeVideosTubeScreen(),
-                  SubscribedTab(),
                   TubeFavoriteScreen(),
+                  MyHistoryTubeVideos(),
                   MyVideosTubeScreen(),
                 ],
               ),
@@ -250,35 +251,5 @@ class _TubeScreenState extends State<TubeScreen>
   }
 }
 
-class SubscribedTab extends StatefulWidget {
-  const SubscribedTab({super.key});
-
-  @override
-  State<SubscribedTab> createState() => _SubscribedTabState();
-}
-
-class _SubscribedTabState extends State<SubscribedTab> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    // TODO: implement your own pagination method for subscribed videos
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-        child: Text('Subscribed videos',
-            style: TextStyle(color: Colors.white70, fontSize: 16)));
-  }
-}
 
 

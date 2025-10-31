@@ -9,14 +9,15 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
+
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../health_feature/create_doctor/domain/entities/city.dart';
-import '../../../../health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import '../../../../health_feature/create_doctor/domain/usecases/get_cities.dart';
-import '../../../../health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import '../../../../health_feature/shared/domain/entities/governorate_entity.dart';
+import '../../../../health_feature/shared/domain/entities/city_entity.dart';
+import '../../../../health_feature/shared/domain/usecases/get_cities.dart';
+import '../../../../health_feature/shared/domain/usecases/get_governorates.dart';
 import '../../../../health_feature/health/domain/usecases/get_health_subcategories.dart';
 import '../../../../health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
@@ -171,7 +172,18 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure));
       },
-      (data) => emit(state.copyWith(cities: data)),
+      (data) {
+        // Convert from create_doctor CityEntity to shared CityEntity
+        final sharedCities = (data as List)
+            .cast<dynamic>()
+            .map((e) => CityEntity(
+                  id: e.id.toString(),
+                  nameAr: e.nameAr.toString(),
+                  nameEn: e.nameEn.toString(),
+                ))
+            .toList();
+        emit(state.copyWith(cities: sharedCities));
+      },
     );
   }
 
@@ -185,8 +197,16 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
             currentContext, getFailureMessage(failure, currentContext));
         emit(state.copyWith(failure: failure));
       }, (data) {
-        _shareCubit.governorates = data;
-        emit(state.copyWith(governorates: data));
+        // Convert from create_doctor GovernorateEntity to shared GovernorateEntity
+        final sharedGovernorates = data
+            .map((e) => GovernorateEntity(
+                  id: e.id,
+                  nameAr: e.nameAr,
+                  nameEn: e.nameEn,
+                ))
+            .toList();
+        _shareCubit.governorates = sharedGovernorates;
+        emit(state.copyWith(governorates: sharedGovernorates));
       });
     } else {
       emit(state.copyWith(governorates: _shareCubit.governorates));
