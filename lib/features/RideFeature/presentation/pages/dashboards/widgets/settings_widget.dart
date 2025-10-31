@@ -333,7 +333,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                               subcategoryId:
                                               widget.settings!.categoryIds[index].id,
                                               isActive: index==0?isCaptain:index==1?isIntercity:isPremium)))
-                                      ,widget.params);
+                                      ,widget.params,false);
                                 },
                               ),
                             ),
@@ -593,7 +593,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   subcategoryId:
                                   widget.settings!.categoryIds[index].id,
                                   isActive: index==0?isCaptain:index==1?isIntercity:isPremium))
-                          ),widget.params);
+                          ),widget.params,false);
                     }),
               ),
             ],

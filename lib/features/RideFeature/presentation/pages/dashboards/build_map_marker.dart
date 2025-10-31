@@ -5,18 +5,19 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 class BuildMapMarker extends StatelessWidget {
   const BuildMapMarker({
     super.key,
-    required this.model,
     required this.manIconPath,
     required this.womanIconPath,
+    required this.name,
+    required this.isMale,
   });
 
-  final Person model;
   final String manIconPath;
   final String womanIconPath;
+  final String name;
+  final bool isMale;
 
   @override
   Widget build(BuildContext context) {
-    bool isMale = model.gender == 'Male';
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
@@ -38,7 +39,7 @@ class BuildMapMarker extends StatelessWidget {
             ),
           ),
         ),
-        if(model.name.isNotEmpty)PositionedDirectional(
+        if(name.isNotEmpty)PositionedDirectional(
           bottom: 0,
           end: 0,
           start: 0,
@@ -51,7 +52,7 @@ class BuildMapMarker extends StatelessWidget {
               border: Border.all(color: Colors.black, width: 0.5),
             ),
             alignment: Alignment.center,
-            child: Text(model.name[0].toUpperCase(),
+            child: Text(name[0].toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w500,

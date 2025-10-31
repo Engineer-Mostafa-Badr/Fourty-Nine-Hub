@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/accept_offer_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/energency_contact_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/running_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/support_details_model.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/support_details_entity.dart';
@@ -115,7 +117,7 @@ abstract class TripRemoteDataSource {
 
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
 
-  void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
+  void listenToNewTrip(Function(AvailableTripEntity trip) params);
 
   void listenToRemoveTrip(Function(String tripId) params);
   void listenToRemoveOffer(Function(String tripId) params);
@@ -386,7 +388,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
+  void listenToNewTrip(Function(AvailableTripEntity trip) params) {
     try {
       CliLogger.info("trip NewTrip ");
       log("trip NewTrip ");
@@ -397,7 +399,7 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         CliLogger.info("New Trip data :  $data");
         log("New Trip data :  $data");
         log("New Trip data['newAvailableTrip'] :  ${data['newAvailableTrip']}");
-        params(AvailableRideTripModel.fromJson(data['newAvailableTrip']));
+        params(AvailableTripModel.fromJson(data['newAvailableTrip']));
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

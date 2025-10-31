@@ -31,6 +31,7 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../loading_dashboard/accepted_non_socket_loading.dart';
 import '../loading_dashboard/available_loading_widget.dart';
 import '../loading_dashboard/past_loading_widget.dart';
@@ -214,6 +215,100 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         ),
                       ),
                     ),
+                    // Quick toggles: Ready and CaptainShare
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                              decoration: BoxDecoration(
+                                color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    LocaleKeys.ready.tr(),
+                                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                                  ),
+                                  Transform.scale(
+                                    scale: 0.8,
+                                    child: Switch.adaptive(
+                                      padding: EdgeInsets.zero,
+                                      value: state.settings?.isReady ?? false,
+                                      onChanged: (value) async {
+                                        ManageVibration.vibrate();
+                                        await cubit.updateSettings(
+                                          context,
+                                          UpdateSettingsDashboardUsecaseParam(
+                                            isReady: value,
+                                          ),
+                                          widget.params,
+                                            true
+                                        );
+                                      },
+                                      activeColor: AppColors.PRIMARY_COLOR,
+                                      inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                                      trackOutlineColor: WidgetStateProperty.all<Color>(
+                                        AppColors.PRIMARY_COLOR,
+                                      ),
+                                      activeTrackColor: const Color(0xff19D176),
+                                      inactiveTrackColor: AppColors.whiteColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                              decoration: BoxDecoration(
+                                color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    LocaleKeys.captainShare.tr(),
+                                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                                  ),
+                                  Transform.scale(
+                                    scale: 0.8,
+                                    child: Switch.adaptive(
+                                      value: state.settings?.isCaptainShareEnabled ?? false,
+                                      onChanged: (value) async {
+                                        ManageVibration.vibrate();
+                                        await cubit.updateSettings(
+                                          context,
+                                          UpdateSettingsDashboardUsecaseParam(
+                                            isCaptainShare: value,
+                                          ),
+                                          widget.params,
+                                            true
+                                        );
+                                      },
+                                      activeColor: AppColors.PRIMARY_COLOR,
+                                      inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                                      trackOutlineColor: WidgetStateProperty.all<Color>(
+                                        AppColors.PRIMARY_COLOR,
+                                      ),
+                                      activeTrackColor: const Color(0xff19D176),
+                                      inactiveTrackColor: AppColors.whiteColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -300,7 +395,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                     // Available Trips
                     if (cubit.state.currentIndex == 8)
                       Expanded(
-                        child: TrackingAvailableTrips(),
+                        child: TrackingAvailableTrips(params:widget.params),
                       ),
                     if (cubit.state.currentIndex == 0)
                       Expanded(
@@ -343,13 +438,16 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               banners: bannersList,
                               items: List.generate(
                                   cubit.newAvailableRideTrips.length,
-                                      (index) => AvailableTripCard(trip:cubit.newAvailableRideTrips[index], params: widget.params,)
+                                      (index) => AvailableTripCard(trip:cubit.newAvailableRideTrips[index], params: widget.params,
+                                        onCancel: (trip) {
+                                        print("newAvailableRideTrips");
+                                          ManageVibration.vibrate();
+                                          cubit.refuseNewTripOffer(trip.id??'');
+                                        }, showRemoveButton: cubit.newAvailableRideTrips[index].isAutoAccept==true
+                                      )
                                   //         AvailableRideTripItem(
                                   //   tripEntity: cubit.availableRideTrips[index],
-                                  //   onRefuseTrip: (String id) {
-                                  //     ManageVibration.vibrate();
-                                  //     cubit.refuseTripOffer(id);
-                                  //   },
+
                                   //   params: widget.params,
                                   // )
                               ),
