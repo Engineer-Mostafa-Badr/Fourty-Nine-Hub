@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../account_taps/wallet/presentation/widgets/winners_grid_view.dart';
 import '../../../account_taps/wallet/presentation/widgets/winner.dart';

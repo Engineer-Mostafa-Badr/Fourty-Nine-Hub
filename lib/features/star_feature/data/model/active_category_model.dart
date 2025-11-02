@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ActiveCategoryResponse {
   final bool status;
   final ActiveCategoryData data;
@@ -87,9 +85,9 @@ class ActiveCategory {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is ActiveCategory &&
-           other.id == id &&
-           other.nameEn == nameEn &&
-           other.nameAr == nameAr;
+        other.id == id &&
+        other.nameEn == nameEn &&
+        other.nameAr == nameAr;
   }
 
   @override

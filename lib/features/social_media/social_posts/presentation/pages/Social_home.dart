@@ -16,7 +16,6 @@ import '../../../twitter/presentation/twitter/presentation/pages/twitter_view.da
 import '../widgets/facebook_widgets/build_facebook_body.dart';
 import '../widgets/facebook_widgets/build_global_facebook_body.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
-import '../../../twitter/presentation/pages/twitter_view.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -25,9 +24,7 @@ import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../widgets/posts/create_post_banner.dart';

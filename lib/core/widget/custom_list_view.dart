@@ -51,7 +51,7 @@ class CustomListView<T> extends StatefulWidget {
   final double overscrollDistance;
 
   const CustomListView({
-    Key? key,
+    super.key,
     required this.items,
     required this.itemBuilder,
     this.padding,
@@ -81,7 +81,7 @@ class CustomListView<T> extends StatefulWidget {
     this.enableItemAnimation = true,
     this.enableHapticFeedback = true,
     this.overscrollDistance = 20.0,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomListView<T>> createState() => _CustomListViewState<T>();
@@ -371,7 +371,7 @@ class _CustomListViewState<T> extends State<CustomListView<T>>
 
 // مثال على كيفية الاستخدام
 class ExampleUsage extends StatelessWidget {
-  const ExampleUsage({Key? key}) : super(key: key);
+  const ExampleUsage({super.key});
 
   @override
   Widget build(BuildContext context) {

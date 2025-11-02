@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../ads/interstitial_ad_model.dart';
-import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';

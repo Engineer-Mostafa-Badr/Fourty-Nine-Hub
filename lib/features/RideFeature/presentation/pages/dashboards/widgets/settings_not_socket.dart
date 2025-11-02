@@ -33,14 +33,13 @@ class SettingsNotSocket extends StatefulWidget {
 }
 
 class _SettingsNotSocketState extends State<SettingsNotSocket> {
-
   @override
   void initState() {
     super.initState();
     // enableSound =  widget.settings?.enableNotificationSound ?? false;
     _initializeSettings();
-
   }
+
   late bool enableSound;
   late bool isReady;
 
@@ -53,6 +52,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
     originalEnableSound = enableSound;
     originalIsReady = isReady;
   }
+
   @override
   void didUpdateWidget(covariant SettingsNotSocket oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -64,6 +64,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
       });
     }
   }
+
   void submitChanges() {
     final params = UpdateDriverSettingsParams(
       isReady: isReady,
@@ -71,9 +72,9 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
     );
 
     context.read<DashboardsCubit>().updateDriverSettings(
-       params,
-       context,
-    );
+          params,
+          context,
+        );
 
     // Update original values
     setState(() {
@@ -81,9 +82,11 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
       originalIsReady = isReady;
     });
   }
+
   bool hasChanges() {
     return enableSound != originalEnableSound || isReady != originalIsReady;
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -166,7 +169,13 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                Text(formatPrice(widget.settings?.rating?.average == null ? 0 :widget.settings?.rating?.average?.toDouble() ?? 2.5, context),
+                Text(
+                    formatPrice(
+                        widget.settings?.rating?.average == null
+                            ? 0
+                            : widget.settings?.rating?.average?.toDouble() ??
+                                2.5,
+                        context),
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w700))
               ],
@@ -180,7 +189,8 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 Text(LocaleKeys.totalProfit.tr(), //'Total Profit',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text('${formatPrice(widget.settings?.profit ?? 0,context)} ${LocaleKeys.egp.tr()}',
+                Text(
+                    '${formatPrice(widget.settings?.profit ?? 0, context)} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500))
               ],
@@ -194,37 +204,43 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500)),
-                Text(formatPrice(widget.settings?.countTrips?.toDouble() ?? 0,context), //'38',
+                Text(
+                    formatPrice(widget.settings?.countTrips?.toDouble() ?? 0,
+                        context), //'38',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500))
               ],
             ),
           ),
           ClickableWidget(
-            onTap: () async {
-      ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
-                  child: PersonalDocumentsNonSocketScreen())));
-            },
-              child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6)),
+              onTap: () async {
+                ManageVibration.vibrate();
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                        value: serviceLocator<DashboardsCubit>(),
+                        child: PersonalDocumentsNonSocketScreen())));
+              },
+              child: UpdatePersonalInfoWidget(
+                  title: LocaleKeys.id.tr(), exdIn: 6)),
           ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
-                  child: DriversLicenseNonSocketScreen())));
+              ManageVibration.vibrate();
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: DriversLicenseNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.driversLicense.tr(), exdIn: 6),
           ),
 
-            ClickableWidget(
+          ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
-                  child: VehicleInformationNonSocketScreen())));
+              ManageVibration.vibrate();
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: VehicleInformationNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.carLicense.tr(), exdIn: 6),
@@ -233,33 +249,36 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
           // if(widget.settings?.isCriminalRecordEnabled == true)
           ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
-                  child: CriminalRecordNonSocketScreen())));
+              ManageVibration.vibrate();
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: CriminalRecordNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.criminalRecord.tr(), exdIn: 6),
           ),
           // if(widget.settings?.isVehicleRecordEnabled == true)
-            ClickableWidget(
+          ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
-                  child: TechnicalExaminationNonSocketScreen())));
+              ManageVibration.vibrate();
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: TechnicalExaminationNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.technicalExamination.tr(), exdIn: 6),
           ),
           // if(widget.settings?.isDrugAnalysisRecordEnabled == true)
 
-            ClickableWidget(
+          ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BlocProvider.value(
-                  value: serviceLocator<DashboardsCubit>(),
-                  child: DragAnalyticsNonSocketScreen())));
+              ManageVibration.vibrate();
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: serviceLocator<DashboardsCubit>(),
+                      child: DragAnalyticsNonSocketScreen())));
             },
             child: UpdatePersonalInfoWidget(
                 title: LocaleKeys.drugAnalysis.tr(), exdIn: 6),
@@ -274,8 +293,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
                     label: LocaleKeys.deleteRegistration.tr(),
                     backColor: AppColors.SECONDARY_COLOR_DARK2,
                     onPressed: () {
-
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                     }),
               ),
             ],
@@ -285,14 +303,12 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
     );
   }
 
-
-
   Widget switchWidget(
       {required String? title,
-        required String? subText,
-        required bool? valuee,
-        bool isText = true,
-        Function(bool)? onChanged}) {
+      required String? subText,
+      required bool? valuee,
+      bool isText = true,
+      Function(bool)? onChanged}) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 8.0),
       child: Row(
@@ -300,18 +316,18 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
         children: [
           isText
               ? Text(title ?? '',
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w500))
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500))
               : Image.network(title ?? '', width: 60, height: 25),
           const Spacer(),
           Text(subText ?? '',
               style:
-              const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                  const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
           Transform.scale(
             scale: 0.75,
             child: Switch(
               value: valuee ?? false,
-              activeColor: AppColors.PRIMARY_COLOR,
+              activeThumbColor: AppColors.PRIMARY_COLOR,
               inactiveThumbColor: AppColors.PRIMARY_COLOR,
               trackOutlineColor: WidgetStateProperty.all<Color>(
                 AppColors.PRIMARY_COLOR,
@@ -319,7 +335,7 @@ class _SettingsNotSocketState extends State<SettingsNotSocket> {
               activeTrackColor: const Color(0xff19D176),
               inactiveTrackColor: AppColors.whiteColor,
               onChanged: onChanged ??
-                      (value) {
+                  (value) {
                     setState(() {
                       valuee = value;
                     });

@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../cubit/create_restaurant_cubit.dart';
@@ -27,7 +27,7 @@ class CreateRestaurantSubcategoryDropdown extends StatelessWidget {
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return DropdownButtonFormField<FoodCategoryEntity>(
-                  icon:  Icon(
+                  icon: Icon(
                     Icons.keyboard_arrow_down_outlined,
                     color: AppColors.getTextColor(context),
                   ),
@@ -81,11 +81,11 @@ class CreateRestaurantSubcategoryDropdown extends StatelessWidget {
                           child: Text(
                             (context.isArabic ? e.nameAr : e.nameEn) ?? "",
                             style: Styles.mediumText(
-                              color:AppColors.getTextColor(context),
-                                // color: Theme.of(context)
-                                //     .textTheme
-                                //     .bodyMedium
-                                //     ?.color
+                              color: AppColors.getTextColor(context),
+                              // color: Theme.of(context)
+                              //     .textTheme
+                              //     .bodyMedium
+                              //     ?.color
                             ), // Add your desired text style here
                           )))
                       .toList(),

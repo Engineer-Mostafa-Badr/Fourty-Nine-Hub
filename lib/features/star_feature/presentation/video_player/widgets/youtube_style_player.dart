@@ -4,14 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../data/model/tube_video_models.dart';
 import '../../presentation_exports.dart';
-import 'talent_video_player.dart';
 
 // YouTube Style Video Player
 class YouTubeStyleVideoPlayer extends StatefulWidget {
@@ -449,34 +447,32 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                           color: Colors.black.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: _controller != null
-                            ? ValueListenableBuilder<VideoPlayerValue>(
-                                valueListenable: _controller,
-                                builder: (context, value, child) {
-                                  if (!_isPlaying && !_isDragging) {
-                                    return Text(
-                                      _formatDuration(value.duration),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    );
-                                  } else {
-                                    final remainingTime =
-                                        value.duration - value.position;
-                                    return Text(
-                                      _formatDuration(remainingTime),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    );
-                                  }
-                                },
-                              )
-                            : SizedBox.shrink(),
+                        child: ValueListenableBuilder<VideoPlayerValue>(
+                          valueListenable: _controller,
+                          builder: (context, value, child) {
+                            if (!_isPlaying && !_isDragging) {
+                              return Text(
+                                _formatDuration(value.duration),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              );
+                            } else {
+                              final remainingTime =
+                                  value.duration - value.position;
+                              return Text(
+                                _formatDuration(remainingTime),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
 
@@ -526,65 +522,54 @@ class _YouTubeStyleVideoPlayerState extends State<YouTubeStyleVideoPlayer> {
                                 ),
                               ),
                               // Progress Bar Fill
-                              _controller != null
-                                  ? ValueListenableBuilder<VideoPlayerValue>(
-                                      valueListenable: _controller,
-                                      builder: (context, value, child) {
-                                        final progress = value
-                                                    .duration.inMilliseconds >
-                                                0
-                                            ? value.position.inMilliseconds /
-                                                value.duration.inMilliseconds
-                                            : 0.0;
-                                        return Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Container(
-                                            height: 4,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                progress.clamp(0.0, 1.0),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : SizedBox.shrink(),
+                              ValueListenableBuilder<VideoPlayerValue>(
+                                valueListenable: _controller,
+                                builder: (context, value, child) {
+                                  final progress =
+                                      value.duration.inMilliseconds > 0
+                                          ? value.position.inMilliseconds /
+                                              value.duration.inMilliseconds
+                                          : 0.0;
+                                  return Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      height: 4,
+                                      width: MediaQuery.of(context).size.width *
+                                          progress.clamp(0.0, 1.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                               // Progress Indicator Circle
-                              _controller != null
-                                  ? ValueListenableBuilder<VideoPlayerValue>(
-                                      valueListenable: _controller,
-                                      builder: (context, value, child) {
-                                        final progress = value
-                                                    .duration.inMilliseconds >
-                                                0
-                                            ? value.position.inMilliseconds /
-                                                value.duration.inMilliseconds
-                                            : 0.0;
-                                        final clampedProgress =
-                                            progress.clamp(0.0, 1.0);
-                                        return Positioned(
-                                          left: (MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  clampedProgress) -
-                                              5,
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : SizedBox.shrink(),
+                              ValueListenableBuilder<VideoPlayerValue>(
+                                valueListenable: _controller,
+                                builder: (context, value, child) {
+                                  final progress =
+                                      value.duration.inMilliseconds > 0
+                                          ? value.position.inMilliseconds /
+                                              value.duration.inMilliseconds
+                                          : 0.0;
+                                  final clampedProgress =
+                                      progress.clamp(0.0, 1.0);
+                                  return Positioned(
+                                    left: (MediaQuery.of(context).size.width *
+                                            clampedProgress) -
+                                        5,
+                                    child: Container(
+                                      width: 10,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),

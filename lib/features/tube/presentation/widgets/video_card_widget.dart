@@ -338,9 +338,6 @@ class VideoCardTube extends StatelessWidget {
 }
 */
 
-
-
-
 class VideoCardTube extends StatelessWidget {
   final GetAllTubeVideosEntity video;
   final List<GetAllTubeVideosEntity>? videoList;
@@ -432,16 +429,17 @@ class VideoCardTube extends StatelessWidget {
           onTap: isRated
               ? null
               : () {
-            if (video.id == null) return;
-            cubit.rateTubeVideo(video.id!, starIndex);
-          },
+                  if (video.id == null) return;
+                  cubit.rateTubeVideo(video.id!, starIndex);
+                },
           child: Stack(
             alignment: Alignment.center,
             children: [
               // Base star (border or dim)
               Icon(
                 Icons.star_border,
-                color: isRated ? const Color(0xFF555555) : const Color(0xFF777777),
+                color:
+                    isRated ? const Color(0xFF555555) : const Color(0xFF777777),
                 size: 18,
               ),
 
@@ -449,7 +447,8 @@ class VideoCardTube extends StatelessWidget {
               if (showAverage && filledByAvg)
                 Icon(
                   Icons.star,
-                  color: const Color(0xFFFFC107).withOpacity(0.4), // light amber
+                  color:
+                      const Color(0xFFFFC107).withOpacity(0.4), // light amber
                   size: 18,
                 ),
 
@@ -474,6 +473,7 @@ class VideoCardTube extends StatelessWidget {
       }),
     );
   }
+
   Widget _buildRatingStars(BuildContext context, TubeCubit cubit) {
     final bool isRated = video.isRate ?? false;
     final int userRating = video.userRating ?? 0;
@@ -484,7 +484,8 @@ class VideoCardTube extends StatelessWidget {
       children: List.generate(5, (i) {
         final starIndex = i + 1;
         final bool filledByUser = isRated && starIndex <= userRating;
-        final bool filledByAvg = avgRating > 0 && starIndex <= avgRating.round();
+        final bool filledByAvg =
+            avgRating > 0 && starIndex <= avgRating.round();
 
         // Interactive only if NOT rated
         if (!isRated) {
@@ -495,7 +496,9 @@ class VideoCardTube extends StatelessWidget {
             },
             child: Icon(
               starIndex <= userRating ? Icons.star : Icons.star_border,
-              color: starIndex <= userRating ? Colors.amber : const Color(0xFF777777),
+              color: starIndex <= userRating
+                  ? Colors.amber
+                  : const Color(0xFF777777),
               size: 18,
             ),
           );
@@ -527,12 +530,14 @@ class VideoCardTube extends StatelessWidget {
   // ==================== AVERAGE RATING TEXT (next to stars) ====================
 
   Widget _buildAverageRatingText() {
-    if (video.averageRating == null || video.averageRating == 0) return const SizedBox.shrink();
+    if (video.averageRating == null || video.averageRating == 0) {
+      return const SizedBox.shrink();
+    }
 
     return Padding(
       padding: const EdgeInsets.only(left: 6),
       child: Text(
-        '${video.averageRating!.toStringAsFixed(1)}',
+        video.averageRating!.toStringAsFixed(1),
         style: const TextStyle(
           color: Color(0xFFFFC107),
           fontSize: 12,
@@ -567,7 +572,8 @@ class VideoCardTube extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.edit_outlined, color: Colors.white),
-                title: const Text('Edit Video', style: TextStyle(color: Colors.white, fontSize: 16)),
+                title: const Text('Edit Video',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   onEditPressed?.call();
@@ -576,7 +582,8 @@ class VideoCardTube extends StatelessWidget {
               const Divider(color: Color(0xFF2F2F2F), height: 1),
               ListTile(
                 leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text('Delete Video', style: TextStyle(color: Colors.red, fontSize: 16)),
+                title: const Text('Delete Video',
+                    style: TextStyle(color: Colors.red, fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   onDeletePressed?.call();
@@ -619,7 +626,9 @@ class VideoCardTube extends StatelessWidget {
                   color: Colors.white,
                 ),
                 title: Text(
-                  isWatchLater ? 'Remove from Watch Later' : 'Save to Watch Later',
+                  isWatchLater
+                      ? 'Remove from Watch Later'
+                      : 'Save to Watch Later',
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 onTap: () {
@@ -650,7 +659,8 @@ class VideoCardTube extends StatelessWidget {
               const Divider(color: Color(0xFF2F2F2F), height: 1),
               ListTile(
                 leading: const Icon(Icons.share_outlined, color: Colors.white),
-                title: const Text('Share', style: TextStyle(color: Colors.white, fontSize: 16)),
+                title: const Text('Share',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   // TODO: Share
@@ -659,7 +669,8 @@ class VideoCardTube extends StatelessWidget {
               const Divider(color: Color(0xFF2F2F2F), height: 1),
               ListTile(
                 leading: const Icon(Icons.report_outlined, color: Colors.white),
-                title: const Text('Report', style: TextStyle(color: Colors.white, fontSize: 16)),
+                title: const Text('Report',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   // TODO: Report
@@ -689,12 +700,13 @@ class VideoCardTube extends StatelessWidget {
           // Thumbnail
           GestureDetector(
             onTap: onTap ??
-                    () {
+                () {
                   if (state.currentVideo?.id == video.id &&
                       state.isMinimized &&
                       state.areControllersInitialized) {
                     cubit.maximizePlayer();
-                    if (state.isPlaying && state.videoPlayerController != null) {
+                    if (state.isPlaying &&
+                        state.videoPlayerController != null) {
                       state.videoPlayerController!.play();
                     }
                     Navigator.push(
@@ -702,7 +714,8 @@ class VideoCardTube extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
                           value: cubit,
-                          child: VideoPlayerPage(video: video, videoList: videoList),
+                          child: VideoPlayerPage(
+                              video: video, videoList: videoList),
                         ),
                       ),
                     );
@@ -713,7 +726,8 @@ class VideoCardTube extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
                           value: cubit,
-                          child: VideoPlayerPage(video: video, videoList: videoList),
+                          child: VideoPlayerPage(
+                              video: video, videoList: videoList),
                         ),
                       ),
                     );
@@ -736,7 +750,8 @@ class VideoCardTube extends StatelessWidget {
                         );
                       }
 
-                      if (video.thumbnail != null && video.thumbnail!.isNotEmpty) {
+                      if (video.thumbnail != null &&
+                          video.thumbnail!.isNotEmpty) {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(0),
                           child: Image.network(
@@ -748,9 +763,11 @@ class VideoCardTube extends StatelessWidget {
                                 color: const Color(0xFF0F0F0F),
                                 child: Center(
                                   child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
                                         : null,
                                     color: Colors.redAccent,
                                   ),
@@ -760,7 +777,8 @@ class VideoCardTube extends StatelessWidget {
                             errorBuilder: (_, __, ___) => Container(
                               color: const Color(0xFF0F0F0F),
                               child: const Center(
-                                child: Icon(Icons.videocam_off, color: Color(0xFF717171), size: 48),
+                                child: Icon(Icons.videocam_off,
+                                    color: Color(0xFF717171), size: 48),
                               ),
                             ),
                           ),
@@ -770,7 +788,8 @@ class VideoCardTube extends StatelessWidget {
                       return Container(
                         color: const Color(0xFF0F0F0F),
                         child: const Center(
-                          child: Icon(Icons.videocam_off, color: Color(0xFF717171), size: 48),
+                          child: Icon(Icons.videocam_off,
+                              color: Color(0xFF717171), size: 48),
                         ),
                       );
                     },
@@ -783,7 +802,8 @@ class VideoCardTube extends StatelessWidget {
                     bottom: 8,
                     right: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(4),
@@ -838,7 +858,8 @@ class VideoCardTube extends StatelessWidget {
                     top: 8,
                     left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.blue.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(4),
@@ -846,11 +867,15 @@ class VideoCardTube extends StatelessWidget {
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.watch_later, color: Colors.white, size: 14),
+                          Icon(Icons.watch_later,
+                              color: Colors.white, size: 14),
                           SizedBox(width: 4),
                           Text(
                             'Watch Later',
-                            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -871,7 +896,8 @@ class VideoCardTube extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const TubeChannelScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const TubeChannelScreen()),
                     );
                   },
                   child: Container(
@@ -892,7 +918,8 @@ class VideoCardTube extends StatelessWidget {
                       radius: 18,
                       backgroundColor: const Color(0xFF272727),
                       child: video.owner?.channelPicture == null
-                          ? const Icon(Icons.person, color: Color(0xFF717171), size: 20)
+                          ? const Icon(Icons.person,
+                              color: Color(0xFF717171), size: 20)
                           : null,
                     ),
                   ),
@@ -926,13 +953,15 @@ class VideoCardTube extends StatelessWidget {
                               video.owner?.channelName ?? 'Unknown Channel',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(color: Color(0xFFAAAAAA), fontSize: 12),
+                              style: const TextStyle(
+                                  color: Color(0xFFAAAAAA), fontSize: 12),
                             ),
                           ),
                           if (video.owner?.isAccountVerified == true)
                             const Padding(
                               padding: EdgeInsets.only(left: 4),
-                              child: Icon(Icons.check_circle, size: 12, color: Color(0xFFAAAAAA)),
+                              child: Icon(Icons.check_circle,
+                                  size: 12, color: Color(0xFFAAAAAA)),
                             ),
                         ],
                       ),
@@ -944,7 +973,8 @@ class VideoCardTube extends StatelessWidget {
                           _formatViews(video.views),
                           _formatTimeAgo(video.createdAt),
                         ].where((s) => s.isNotEmpty).join(' • '),
-                        style: const TextStyle(color: Color(0xFFAAAAAA), fontSize: 12),
+                        style: const TextStyle(
+                            color: Color(0xFFAAAAAA), fontSize: 12),
                       ),
 
                       const SizedBox(height: 6),
@@ -962,7 +992,8 @@ class VideoCardTube extends StatelessWidget {
 
                 // Menu
                 IconButton(
-                  icon: const Icon(Icons.more_vert, color: Color(0xFFF1F1F1), size: 20),
+                  icon: const Icon(Icons.more_vert,
+                      color: Color(0xFFF1F1F1), size: 20),
                   padding: const EdgeInsets.all(4),
                   constraints: const BoxConstraints(),
                   onPressed: () {

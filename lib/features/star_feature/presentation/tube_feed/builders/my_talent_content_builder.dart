@@ -6,8 +6,6 @@ import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.d
 
 import '../../../domain/entity/star_entity.dart';
 import '../../presentation_exports.dart';
-import '../helpers/navigation_helper.dart';
-import '../widgets/common/empty_state_widget.dart';
 
 class MyTalentContentBuilder {
   static Widget buildSliver({

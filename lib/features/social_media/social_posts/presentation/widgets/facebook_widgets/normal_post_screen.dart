@@ -47,11 +47,16 @@ class NormalPostScreen extends StatefulWidget {
 class _NormalPostScreenState extends State<NormalPostScreen> {
   void handlePostReact(PostEntity post, String newReaction) {
     String? currentReaction;
-    if (post.isLikes == true) currentReaction = 'like';
-    else if (post.isWow == true) currentReaction = 'wow';
-    else if (post.isHaha == true) currentReaction = 'haha';
-    else if (post.isLove == true) currentReaction = 'love';
-    else if (post.isSad == true) currentReaction = 'sad';
+    if (post.isLikes == true) {
+      currentReaction = 'like';
+    } else if (post.isWow == true)
+      currentReaction = 'wow';
+    else if (post.isHaha == true)
+      currentReaction = 'haha';
+    else if (post.isLove == true)
+      currentReaction = 'love';
+    else if (post.isSad == true)
+      currentReaction = 'sad';
     else if (post.isAngry == true) currentReaction = 'angry';
     if (currentReaction == newReaction) {
       _decrementReactionCount(post, newReaction);
@@ -113,7 +118,12 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    num totalReactions = (widget.postEntity.likesCount??0) + (widget.postEntity.hahaCount??0) + (widget.postEntity.loveCount??0) + (widget.postEntity.wowCount??0) + (widget.postEntity.sadCount??0) +(widget.postEntity.angryCount??0);
+    num totalReactions = (widget.postEntity.likesCount ?? 0) +
+        (widget.postEntity.hahaCount ?? 0) +
+        (widget.postEntity.loveCount ?? 0) +
+        (widget.postEntity.wowCount ?? 0) +
+        (widget.postEntity.sadCount ?? 0) +
+        (widget.postEntity.angryCount ?? 0);
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -126,11 +136,11 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
             child: BuildFacebookHeader(
               user: widget.postEntity.user,
-              sinceTime:
-             context.isArabic
+              sinceTime: context.isArabic
                   ? DateFormat('d MMM, h:mm a', 'ar')
                       .format(widget.postEntity.createdAt!)
-                  : DateFormat('MMM d, h:mm a').format(widget.postEntity.createdAt!),
+                  : DateFormat('MMM d, h:mm a')
+                      .format(widget.postEntity.createdAt!),
               activity: widget.postEntity.activity,
               feeling: widget.postEntity.feeling,
               users: widget.postEntity.users,
@@ -170,113 +180,147 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                 SizedBox(
                   height: 256,
                   width: double.infinity,
-                  child: _buildImageGrid(context, widget.postEntity.images ?? []),
+                  child:
+                      _buildImageGrid(context, widget.postEntity.images ?? []),
                 ),
             ],
           ),
           //const SizedBox(height: 12),
 
-          if(widget.postEntity.totalCount!=0)Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    if(widget.postEntity.likesCount!=0)Positioned(
-                      left: 14, // Adjust position for overlap
-                      child: Image.asset(
-                        Assets.loveReact,
-                        width: 20, // Set a fixed width
-                        height: 20, // Set a fixed height
+          if (widget.postEntity.totalCount != 0)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      if (widget.postEntity.likesCount != 0)
+                        Positioned(
+                          left: 14, // Adjust position for overlap
+                          child: Image.asset(
+                            Assets.loveReact,
+                            width: 20, // Set a fixed width
+                            height: 20, // Set a fixed height
+                          ),
+                        ),
+                      if (widget.postEntity.loveCount != 0)
+                        Image.asset(
+                          Assets.likeReact,
+                          width:
+                              20, // Set a fixed width to ensure it's not cut off
+                          height:
+                              20, // Set a fixed height to match the other image
+                        ),
+                      if (widget.postEntity.wowCount != 0)
+                        Image.asset(
+                          Assets.wowReaction,
+                          width:
+                              20, // Set a fixed width to ensure it's not cut off
+                          height:
+                              20, // Set a fixed height to match the other image
+                        ),
+                      if (widget.postEntity.hahaCount != 0)
+                        Image.asset(
+                          Assets.hahaReaction,
+                          width:
+                              20, // Set a fixed width to ensure it's not cut off
+                          height:
+                              20, // Set a fixed height to match the other image
+                        ),
+                      if (widget.postEntity.sadCount != 0)
+                        Image.asset(
+                          Assets.sadReaction,
+                          width:
+                              20, // Set a fixed width to ensure it's not cut off
+                          height:
+                              20, // Set a fixed height to match the other image
+                        ),
+                      if (widget.postEntity.angryCount != 0)
+                        Image.asset(
+                          Assets.angryReaction,
+                          width:
+                              20, // Set a fixed width to ensure it's not cut off
+                          height:
+                              20, // Set a fixed height to match the other image
+                        ),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  // Increased space between reactions and text
+                  Label(
+                    text: widget.postEntity.totalCount
+                            .toString()
+                            .toArabicNumbers(context) ??
+                        '',
+                    // "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'آخرين' : 'Others'}",
+                    style: TextStyle(
+                      color: context.isDarkMode
+                          ? Colors.grey[300]
+                          : Colors.grey[700],
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const SizedBox(height: 10.0),
+          if (totalReactions != 0)
+            Padding(
+              padding: EdgeInsets.only(bottom: 8, right: 8, left: 8),
+              child: Row(
+                children: [
+                  if ((widget.postEntity.angryCount ?? 0) > 0)
+                    Image.asset(
+                      Assets.angry,
+                      width: 20,
+                      height: 20,
+                    ),
+                  if ((widget.postEntity.sadCount ?? 0) > 0)
+                    Image.asset(
+                      Assets.sad,
+                      width: 20,
+                      height: 20,
+                    ),
+                  if ((widget.postEntity.wowCount ?? 0) > 0)
+                    Image.asset(
+                      Assets.wow,
+                      width: 20,
+                      height: 20,
+                    ),
+                  if ((widget.postEntity.loveCount ?? 0) > 0)
+                    Image.asset(
+                      Assets.heart,
+                      width: 20,
+                      height: 20,
+                    ),
+                  if ((widget.postEntity.hahaCount ?? 0) > 0)
+                    Image.asset(
+                      Assets.haha,
+                      width: 20,
+                      height: 20,
+                    ),
+                  if ((widget.postEntity.likesCount ?? 0) > 0)
+                    Image.asset(
+                      Assets.like,
+                      width: 20,
+                      height: 20,
+                    ),
+                  if (totalReactions > 0)
+                    Text(
+                      '$totalReactions',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: context.isDarkMode
+                            ? Colors.white60
+                            : const Color(0xFF65676B),
                       ),
                     ),
-                    if(widget.postEntity.loveCount!=0)Image.asset(
-                      Assets.likeReact,
-                      width: 20, // Set a fixed width to ensure it's not cut off
-                      height: 20, // Set a fixed height to match the other image
-                    ),
-                    if(widget.postEntity.wowCount!=0)Image.asset(
-                      Assets.wowReaction,
-                      width: 20, // Set a fixed width to ensure it's not cut off
-                      height: 20, // Set a fixed height to match the other image
-                    ),
-                    if(widget.postEntity.hahaCount!=0)Image.asset(
-                      Assets.hahaReaction,
-                      width: 20, // Set a fixed width to ensure it's not cut off
-                      height: 20, // Set a fixed height to match the other image
-                    ),
-                    if(widget.postEntity.sadCount!=0)Image.asset(
-                      Assets.sadReaction,
-                      width: 20, // Set a fixed width to ensure it's not cut off
-                      height: 20, // Set a fixed height to match the other image
-                    ),
-                    if(widget.postEntity.angryCount!=0)Image.asset(
-                      Assets.angryReaction,
-                      width: 20, // Set a fixed width to ensure it's not cut off
-                      height: 20, // Set a fixed height to match the other image
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 16),
-                // Increased space between reactions and text
-                Label(
-                  text:widget.postEntity.totalCount.toString().toArabicNumbers(context)??'',
-                     // "Claude-Arthur Mbonzi ${context.isArabic ? 'و' : 'and'} 276 ${context.isArabic ? 'آخرين' : 'Others'}",
-                  style: TextStyle(
-                    color: context.isDarkMode
-                        ? Colors.grey[300]
-                        : Colors.grey[700],
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 10.0),
-          if(totalReactions!=0)Padding(
-            padding: EdgeInsets.only(bottom: 8,right: 8,left: 8),
-            child: Row(
-              children: [
-                if((widget.postEntity.angryCount??0)>0)Image.asset(
-                  Assets.angry,
-                  width: 20,
-                  height: 20,
-                ),
-                if((widget.postEntity.sadCount??0)>0)Image.asset(
-                  Assets.sad,
-                  width: 20,
-                  height: 20,
-                ),
-                if((widget.postEntity.wowCount??0)>0)Image.asset(
-                  Assets.wow,
-                  width: 20,
-                  height: 20,
-                ),
-                if((widget.postEntity.loveCount??0)>0)Image.asset(
-                  Assets.heart,
-                  width: 20,
-                  height: 20,
-                ),
-                if((widget.postEntity.hahaCount??0)>0)Image.asset(
-                  Assets.haha,
-                  width: 20,
-                  height: 20,
-                ),
-                if((widget.postEntity.likesCount??0)>0)Image.asset(
-                  Assets.like,
-                  width: 20,
-                  height: 20,
-                ),
-                if(totalReactions>0)Text('$totalReactions',style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                ),),
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -299,12 +343,11 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                 // ),
                 SizedBox(
                   child: BuildReactionsButtons(
-                    post: widget.postEntity,
-                    from: "posts",
+                      post: widget.postEntity,
+                      from: "posts",
                       handleReaction: (String reaction) {
                         handlePostReact(widget.postEntity, reaction);
-                      }
-                  ),
+                      }),
                 ),
                 const SizedBox(width: 16), // Space between buttons
 
@@ -312,9 +355,9 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                 ClickableWidget(
                   onTap: () {
                     ManageVibration.vibrate();
-                    if(!context.read<UserCubit>().isLoggedIn){
-                    pleaseLoginDialog(context);
-                    return;
+                    if (!context.read<UserCubit>().isLoggedIn) {
+                      pleaseLoginDialog(context);
+                      return;
                     }
                     print("postEntity.id ${widget.postEntity.id}");
                     bottomSheet(
@@ -344,7 +387,9 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                               Align(
                                 alignment: AlignmentDirectional.topStart,
                                 child: Text(
-                                  context.isArabic?'الأكثر شيوعا':"Most Relevant",
+                                  context.isArabic
+                                      ? 'الأكثر شيوعا'
+                                      : "Most Relevant",
                                   style: TextStyle(
                                     color: AppColors.getTextColor(context),
                                     fontSize: 16,
@@ -357,39 +402,47 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                                 child: FacebookPostComments(
                                   postId: widget.postEntity.id,
                                   onAddComment: (PostCommentParams params) {
-                                    return context.read<SocialPostsCubit>().onPostComment(
-                                        params: params, from: 'feed');
+                                    return context
+                                        .read<SocialPostsCubit>()
+                                        .onPostComment(
+                                            params: params, from: 'feed');
                                   },
-                                  onCommentReply: (ReplyOnCommentParams params) {
-                                    return context.read<SocialPostsCubit>().replyOnComment(
-                                      params: ReplyOnCommentParams(
-                                          postId: params.postId,
-                                          content: params.content,
-                                          commentId:
-                                          params.commentId),
-                                      from: 'feed',
-                                    );
+                                  onCommentReply:
+                                      (ReplyOnCommentParams params) {
+                                    return context
+                                        .read<SocialPostsCubit>()
+                                        .replyOnComment(
+                                          params: ReplyOnCommentParams(
+                                              postId: params.postId,
+                                              content: params.content,
+                                              commentId: params.commentId),
+                                          from: 'feed',
+                                        );
                                   },
                                   onDeleteComment: (String id) async {
-                                    return await context.read<SocialPostsCubit>()
+                                    return await context
+                                        .read<SocialPostsCubit>()
                                         .deleteComment(
-                                        context: context,
-                                        commentId: id,
-                                        postId: widget.postEntity.id,
-                                        from: 'feed');
+                                            context: context,
+                                            commentId: id,
+                                            postId: widget.postEntity.id,
+                                            from: 'feed');
                                     // print(result);
                                   },
                                   onDeleteReply: (String id) async {
-                                    return await context.read<SocialPostsCubit>()
+                                    return await context
+                                        .read<SocialPostsCubit>()
                                         .deleteComment(
-                                        context: context,
-                                        commentId: id,
-                                        postId: widget.postEntity.id,
-                                        from: 'feed');
+                                            context: context,
+                                            commentId: id,
+                                            postId: widget.postEntity.id,
+                                            from: 'feed');
                                   },
                                   from: 'feed',
-                                  onEditComment: (PostCommentParams params) async {
-                                    var result = await context.read<SocialPostsCubit>()
+                                  onEditComment:
+                                      (PostCommentParams params) async {
+                                    var result = await context
+                                        .read<SocialPostsCubit>()
                                         .editComment(params: params);
                                     return result;
                                   },
@@ -421,9 +474,9 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
 
                 // Send button
                 ClickableWidget(
-                  onTap: (){
+                  onTap: () {
                     ManageVibration.vibrate();
-                    if(!context.read<UserCubit>().isLoggedIn){
+                    if (!context.read<UserCubit>().isLoggedIn) {
                       pleaseLoginDialog(context);
                       return;
                     }
@@ -452,9 +505,9 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
 
                 // Share button
                 ClickableWidget(
-                  onTap: (){
+                  onTap: () {
                     ManageVibration.vibrate();
-                    if(!context.read<UserCubit>().isLoggedIn){
+                    if (!context.read<UserCubit>().isLoggedIn) {
                       pleaseLoginDialog(context);
                       return;
                     }
@@ -490,7 +543,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
     if (media.length == 1) {
       return GestureDetector(
         onTap: () {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -515,7 +568,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -537,7 +590,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -564,7 +617,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
             flex: 2,
             child: GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -588,7 +641,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -611,7 +664,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -641,7 +694,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
             flex: 2,
             child: GestureDetector(
               onTap: () {
-      ManageVibration.vibrate();
+                ManageVibration.vibrate();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -667,7 +720,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -690,7 +743,7 @@ class _NormalPostScreenState extends State<NormalPostScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       showDialog(
                         context: context,
                         builder: (context) {

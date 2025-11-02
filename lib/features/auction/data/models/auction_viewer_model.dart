@@ -2,16 +2,11 @@ import '../../domain/entities/auction_viewer_entity.dart';
 
 class AuctionViewerModel extends AuctionViewerEntity {
   AuctionViewerModel({
-    String? firstName,
-    String? lastName,
-    String? profilePictureKey,
-    String? gender,
-  }) : super(
-    firstName: firstName,
-    lastName: lastName,
-    profilePictureKey: profilePictureKey,
-    gender: gender,
-  );
+    super.firstName,
+    super.lastName,
+    super.profilePictureKey,
+    super.gender,
+  });
 
   factory AuctionViewerModel.fromJson(Map<String, dynamic> json) {
     return AuctionViewerModel(

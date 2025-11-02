@@ -16,9 +16,9 @@ class TabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:onTap == null ? null : () {
+      onTap:() {
         ManageVibration.vibrate();
-        onTap!.call();
+        onTap.call();
       },
       child: Stack(
         children: [

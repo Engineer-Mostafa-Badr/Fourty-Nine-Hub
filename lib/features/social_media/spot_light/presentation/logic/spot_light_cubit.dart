@@ -11,7 +11,6 @@ import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/u
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_basic_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/user_with_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/repos/spotlight_repo.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 
 import '../../../../../core/error/failure.dart';
 
@@ -71,9 +70,11 @@ class SpotlightCubit extends Cubit<SpotLightState> {
   }
 
   // Friends Stories Methods
-  Future<void> getFriendsStories({bool forceRefresh = false, int page = 1, int limit = 50}) async {
+  Future<void> getFriendsStories(
+      {bool forceRefresh = false, int page = 1, int limit = 50}) async {
     if (_friendsStoriesCache != null && !forceRefresh && page == 1) {
-      emit(SpotlightFriendsStoriesLoaded(friendsStories: _friendsStoriesCache!));
+      emit(
+          SpotlightFriendsStoriesLoaded(friendsStories: _friendsStoriesCache!));
       return;
     }
 
@@ -91,7 +92,7 @@ class SpotlightCubit extends Cubit<SpotLightState> {
     );
   }
 
-   // Stories Action Methods
+  // Stories Action Methods
   Future<void> viewStory(String storyId) async {
     final result = await repository.markStoryAsViewed(storyId);
     result.fold(
@@ -153,35 +154,37 @@ class SpotlightCubit extends Cubit<SpotLightState> {
       );
 
       // Emit updated state
-      emit(SpotlightFriendsStoriesLoaded(friendsStories: _friendsStoriesCache!));
+      emit(
+          SpotlightFriendsStoriesLoaded(friendsStories: _friendsStoriesCache!));
     }
   }
 
   // Method to get specific user's stories for detailed view
   List<StoryBasicEntity> getUserStories(String userId) {
     if (_friendsStoriesCache == null) return [];
-    
+
     final userStories = _friendsStoriesCache!.stories.firstWhere(
       (userStory) => userStory.user.userId == userId,
       orElse: () => const UserWithStoriesEntity(
-        user: UserBasicEntity(userId: '', firstName: '', lastName: '', username: ''),
+        user: UserBasicEntity(
+            userId: '', firstName: '', lastName: '', username: ''),
         stories: [],
         storyCount: 0,
       ),
     );
-    
+
     return userStories.stories;
   }
 
   // Method to check if user has unviewed stories
   bool hasUnviewedStories(String userId) {
     if (_friendsStoriesCache == null) return false;
-    
+
     try {
       final userStories = _friendsStoriesCache!.stories.firstWhere(
         (userStory) => userStory.user.userId == userId,
       );
-      
+
       return userStories.stories.any((story) => !story.isViewed);
     } catch (e) {
       return false;
@@ -190,7 +193,9 @@ class SpotlightCubit extends Cubit<SpotLightState> {
 
   List<UserBasicEntity> getUsersWithStories() {
     if (_friendsStoriesCache == null) return [];
-    return _friendsStoriesCache!.stories.map((userStory) => userStory.user).toList();
+    return _friendsStoriesCache!.stories
+        .map((userStory) => userStory.user)
+        .toList();
   }
 
   // Media Methods

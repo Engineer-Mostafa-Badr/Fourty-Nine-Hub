@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/utils/enums.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/loading_indicator.dart';
 import '../../presentation_exports.dart';
 
 class ProfileWatchLaterTab extends StatefulWidget {

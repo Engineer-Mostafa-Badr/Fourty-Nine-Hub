@@ -6,12 +6,7 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import '../../../../../core/messages/messages.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
-import '../../controller/comment_cubit/comment_cubit.dart';
-import '../../controller/star_cubit/star_cubit.dart';
-import '../../shared/widgets/common/loading_indicator.dart';
-import '../../tube_feed/widgets/cards/talent_card.dart';
 import '../../presentation_exports.dart';
-import '../../video_player/widgets/talent_video_player.dart';
 
 import 'playlist_bottom_sheet.dart';
 import 'video/video_card_widget.dart';
@@ -204,8 +199,7 @@ class _ProfileHomeTabState extends State<ProfileHomeTab> {
     if (state.isLoading(TalentCategory.myTalents) && myVideos.isEmpty) {
       return SizedBox(
         height: 200,
-        child: Center(
-            child: StarLoadingIndicator()),
+        child: Center(child: StarLoadingIndicator()),
       );
     }
 

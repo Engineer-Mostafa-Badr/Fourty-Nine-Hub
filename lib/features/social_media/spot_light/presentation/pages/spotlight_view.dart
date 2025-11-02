@@ -731,23 +731,17 @@ import 'package:fourtyninehub/features/social_media/spot_light/presentation/widg
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/clickable_widget.dart';
 import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../helpers/manage_vibration.dart' as vibration;
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
 import '../logic/spot_light_cubit.dart';
-import '../widgets/friends_stories.dart';
-import 'other_profile_view.dart';
 import 'profile_view.dart';
 
 class SpotlightView extends StatefulWidget {

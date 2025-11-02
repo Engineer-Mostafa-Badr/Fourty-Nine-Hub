@@ -68,7 +68,7 @@ class CustomDropDown extends StatelessWidget {
             errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.GREY_DARK_COLOR)),
           ),
-          value: value,
+          initialValue: value,
           items: list.map((item) {
             return DropdownMenuItem<dynamic>(
               value: item,

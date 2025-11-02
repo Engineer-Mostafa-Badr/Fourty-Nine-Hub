@@ -13,10 +13,7 @@ import '../../../domain/use_case/get_profile_by_id_use_case.dart';
 import '../../../domain/use_case/subscribe_to_channel_use_case.dart';
 import '../../../domain/use_case/unsubscribe_from_channel_use_case.dart';
 import '../../../domain/use_case/update_profile_use_case.dart';
-import 'package:equatable/equatable.dart';
 
-import '../../../../../core/error/failure.dart';
-import '../../../domain/entity/profile_entity.dart';
 import '../../presentation_exports.dart';
 
 part 'profile_state.dart';

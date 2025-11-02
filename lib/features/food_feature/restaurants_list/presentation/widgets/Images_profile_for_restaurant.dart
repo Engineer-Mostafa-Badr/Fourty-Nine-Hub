@@ -4,7 +4,6 @@ import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../core/widget/common/dots_widget.dart';
 import '../../../../../core/widget/common/favorite_icon.dart';
 
-import '../../../../../res/style/app_colors.dart';
 import '../../domain/entities/restaurant.dart';
 
 class ImagesProfileForRestaurant extends StatefulWidget {

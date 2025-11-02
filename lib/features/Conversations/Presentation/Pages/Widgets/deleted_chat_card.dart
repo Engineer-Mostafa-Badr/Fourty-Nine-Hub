@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/utils/format_numbers.dart';
-import '../../../../../helpers/date_time_helper.dart';
 import '../../../../../helpers/manage_vibration.dart';
-import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/build_gradient_border.dart';
-import '../../../../social_media/tinder/data/shared/shared.dart';
 import '../../../Domain/Entities/conversation_entity.dart';
 import '../../Controllers/cubits/conversation_states.dart';
 import '../../Controllers/cubits/conversations_cubit.dart';

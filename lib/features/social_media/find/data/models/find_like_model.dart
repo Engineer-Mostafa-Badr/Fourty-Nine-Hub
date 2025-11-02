@@ -5,12 +5,9 @@ import 'package:fourtyninehub/features/social_media/find/domain/entity/find_like
 
 class FindLikeModel extends FindLikeEntity {
   const FindLikeModel({
-    bool? status,
-    String? message,
-  }) : super(
-    status: status,
-    message: message,
-  );
+    super.status,
+    super.message,
+  });
 
   factory FindLikeModel.fromJson(Map<String, dynamic> json) {
     return FindLikeModel(

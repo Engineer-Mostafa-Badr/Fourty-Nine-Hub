@@ -41,8 +41,6 @@ import '../features/star_feature/domain/use_case/like_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/dislike_tube_video_use_case.dart';
 import '../features/star_feature/domain/use_case/increment_tube_video_view_use_case.dart';
 // Presentation Layer - Cubits
-import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import '../features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import '../features/star_feature/presentation/presentation_exports.dart';
 
 class TubeServiceLocator {
@@ -317,7 +315,6 @@ class TubeServiceLocator {
         () => UpdatePlaylistUseCase(serviceLocator()),
       );
     }
-    
 
     //! Star Cubit with all dependencies
     // استخدم registerFactory بدلاً من registerLazySingleton للـ Cubit

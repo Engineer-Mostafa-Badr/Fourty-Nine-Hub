@@ -5,7 +5,6 @@ import '../cubit/reel_instagram_cubit/reel_instagram_cubit.dart';
 import '../cubit/suggest_follow_cubit/suggest_follow_cubit.dart';
 import '../widgets/instagram_view_body.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class InstagramView extends StatelessWidget {
   final bool hideAppBar;

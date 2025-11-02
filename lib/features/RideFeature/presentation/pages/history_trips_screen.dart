@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
@@ -14,9 +13,7 @@ import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_circle_widget.dart';
-import 'package:latlong2/latlong.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/utils/format_numbers.dart';
 import '../../../../core/widget/custom_loading_search_widget.dart';
 
 import '../../../../core/widget/olx_pagination/banner.dart';

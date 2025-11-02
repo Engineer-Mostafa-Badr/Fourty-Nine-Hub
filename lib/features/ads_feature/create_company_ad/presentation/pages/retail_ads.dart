@@ -75,7 +75,7 @@ class _RetailAdsState extends State<RetailAds> {
               ),
               hint: Text(
                   context.isArabic ? 'اختر القسم' : 'Select Main Category'),
-              value: null,
+              initialValue: null,
               onChanged: (MainCategoryEntity? newValue) {
                 context
                     .read<CreateCompanyAdCubit>()
@@ -138,7 +138,7 @@ class _RetailAdsState extends State<RetailAds> {
                         hint: Text(context.isArabic
                             ? 'اختر القسم'
                             : 'Select Sub Category'),
-                        value: null,
+                        initialValue: null,
                         onChanged: (SubCategoryEntity? newValue) {
                           context
                               .read<CreateCompanyAdCubit>()

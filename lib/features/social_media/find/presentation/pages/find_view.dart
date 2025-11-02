@@ -21,11 +21,8 @@ import '../cubit/find_cubit.dart'; // your cubit
 
 import '../cubit/find_state.dart';
 
-
-
-
 class FindScreen extends StatefulWidget {
-  const FindScreen({Key? key}) : super(key: key);
+  const FindScreen({super.key});
 
   @override
   State<FindScreen> createState() => _FindScreenState();
@@ -46,6 +43,7 @@ class _FindScreenState extends State<FindScreen> {
       if (mounted) setState(() => _showLoveAnimation = false);
     });
   }
+
   // @override
   // void initState() {
   //   super.initState();
@@ -77,8 +75,8 @@ class _FindScreenState extends State<FindScreen> {
     isLoggedIn = !(user?.isGuest ?? true);
     userId = isLoggedIn ? user!.id : "";
     print("User Name ${user?.firstName ?? ""}");
-    print("User is logged? ${isLoggedIn}");
-    print("User Id ${userId}");
+    print("User is logged? $isLoggedIn");
+    print("User Id $userId");
 
     // ✅ Determine the opposite gender
     String oppositeGender;
@@ -91,20 +89,19 @@ class _FindScreenState extends State<FindScreen> {
 
     // ✅ Load opposite gender profiles
     context.read<FindCubit>().loadInitialFindData(
-      context,
-      gender: oppositeGender,
-      userId: userId,
-      isLoggedIn: isLoggedIn,
-    );
+          context,
+          gender: oppositeGender,
+          userId: userId,
+          isLoggedIn: isLoggedIn,
+        );
   }
-
-
 
   @override
   void dispose() {
     _cardController.dispose();
     super.dispose();
   }
+
   bool isMaleSelected = true; // Add this to your State class
   @override
   Widget build(BuildContext context) {
@@ -117,7 +114,7 @@ class _FindScreenState extends State<FindScreen> {
             children: [
               IconButton(
                   visualDensity:
-                  const VisualDensity(horizontal: -2, vertical: -4),
+                      const VisualDensity(horizontal: -2, vertical: -4),
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(Icons.arrow_back)),
               // const Sizer(),
@@ -140,11 +137,11 @@ class _FindScreenState extends State<FindScreen> {
                 ManageVibration.vibrate();
 
                 setState(() {
-                  isMaleSelected = !isMaleSelected!;
+                  isMaleSelected = !isMaleSelected;
                   _currentCardIndex = 0;
 
                   // ✅ Update the selected gender string
-                  selectedGender = isMaleSelected! ? "male" : "female";
+                  selectedGender = isMaleSelected ? "male" : "female";
 
                   // ✅ Access the user info from UserCubit
                   final userState = context.read<UserCubit>().state;
@@ -154,18 +151,18 @@ class _FindScreenState extends State<FindScreen> {
 
                   // ✅ Reload data with the new gender and user info
                   context.read<FindCubit>().loadInitialFindData(
-                    context,
-                    gender: selectedGender,
-                    userId: userId,
-                    isLoggedIn: isLoggedIn,
-                  );
+                        context,
+                        gender: selectedGender,
+                        userId: userId,
+                        isLoggedIn: isLoggedIn,
+                      );
                 });
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    isMaleSelected!
+                    isMaleSelected
                         ? (context.isArabic ? "ذكر" : "Male")
                         : (context.isArabic ? "أنثى" : "Female"),
                     style: TextStyle(
@@ -178,7 +175,7 @@ class _FindScreenState extends State<FindScreen> {
                   ),
                   const SizedBox(width: 6),
                   Icon(
-                    isMaleSelected!
+                    isMaleSelected
                         ? FontAwesomeIcons.person
                         : FontAwesomeIcons.personDress,
                     color: context.isDarkMode ? Colors.white : Colors.red,
@@ -186,8 +183,6 @@ class _FindScreenState extends State<FindScreen> {
                 ],
               ),
             ),
-
-
           ],
         ),
       ),
@@ -196,7 +191,8 @@ class _FindScreenState extends State<FindScreen> {
         children: [
           BlocListener<FindCubit, FindState>(
             listenWhen: (previous, current) =>
-            previous.addedLove != current.addedLove && current.addedLove == true,
+                previous.addedLove != current.addedLove &&
+                current.addedLove == true,
             listener: (context, state) {
               _triggerLoveAnimation();
             },
@@ -208,7 +204,8 @@ class _FindScreenState extends State<FindScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (state.status == FindStates.failure && cubit.findData.isEmpty) {
+                if (state.status == FindStates.failure &&
+                    cubit.findData.isEmpty) {
                   return _buildErrorScreen(cubit);
                 }
 
@@ -228,16 +225,15 @@ class _FindScreenState extends State<FindScreen> {
             curve: Curves.easeInOut,
             child: _showLoveAnimation
                 ? Lottie.asset(
-              Assets.love,
-              width: 200,
-              height: 200,
-              repeat: false,
-            )
+                    Assets.love,
+                    width: 200,
+                    height: 200,
+                    repeat: false,
+                  )
                 : const SizedBox.shrink(),
           ),
         ],
       ),
-
     );
   }
 
@@ -325,7 +321,8 @@ class _FindScreenState extends State<FindScreen> {
     );
   }
 
-  Widget _buildCardSwiper(BuildContext context, List<FindEntity> people, FindCubit cubit) {
+  Widget _buildCardSwiper(
+      BuildContext context, List<FindEntity> people, FindCubit cubit) {
     if (_currentCardIndex >= people.length) _currentCardIndex = people.length;
 
     final visiblePeople = _currentCardIndex < people.length
@@ -347,9 +344,8 @@ class _FindScreenState extends State<FindScreen> {
           final user = userState.data;
           final bool isLoggedIn = !(user?.isGuest ?? true);
           final String userId = isLoggedIn ? user!.id : "";
-          final String gender = isLoggedIn
-              ? (user?.gender ?? selectedGender)
-              : selectedGender;
+          final String gender =
+              isLoggedIn ? (user?.gender ?? selectedGender) : selectedGender;
 
           // ✅ Load initial find data with user context
           cubit.loadInitialFindData(
@@ -392,7 +388,8 @@ class _FindScreenState extends State<FindScreen> {
         initialIndex: 0,
         cardsCount: visiblePeople.length,
         threshold: 30,
-        allowedSwipeDirection: AllowedSwipeDirection.only(left: true, right: true),
+        allowedSwipeDirection:
+            AllowedSwipeDirection.only(left: true, right: true),
         numberOfCardsDisplayed: numberOfCards,
         isLoop: false,
         padding: const EdgeInsets.only(bottom: 24),
@@ -407,19 +404,22 @@ class _FindScreenState extends State<FindScreen> {
             if (isLoggedIn && person.id != null) {
               cubit.addLikeFind(id: person.id!);
             } else {
-              debugPrint("⚠️ Cannot add like: user is logged out or person.id is null (${person.id})");
+              debugPrint(
+                  "⚠️ Cannot add like: user is logged out or person.id is null (${person.id})");
             }
-          }
-          else if (direction == CardSwiperDirection.left) {
-            if(isLoggedIn)
-            cubit.addDisLikeFind(id: person.id!);
+          } else if (direction == CardSwiperDirection.left) {
+            if (isLoggedIn) {
+              cubit.addDisLikeFind(id: person.id!);
+            }
           }
 
           setState(() => _currentCardIndex = actualIndex + 1);
 
           // Trigger pagination
           final remainingCards = people.length - _currentCardIndex;
-          if (remainingCards <= 5 && cubit.hasMoreFindData && !cubit.isFindDataLoadingMore) {
+          if (remainingCards <= 5 &&
+              cubit.hasMoreFindData &&
+              !cubit.isFindDataLoadingMore) {
             Future.microtask(() => cubit.getFindData(context));
           }
 
@@ -428,7 +428,8 @@ class _FindScreenState extends State<FindScreen> {
         onSwipeDirectionChange: (horizontal, vertical) {
           setState(() => _swipeDirection = horizontal);
         },
-        cardBuilder: (context, index, horizontalOffsetPercentage, verticalOffsetPercentage) {
+        cardBuilder: (context, index, horizontalOffsetPercentage,
+            verticalOffsetPercentage) {
           final actualIndex = _currentCardIndex + index;
           if (actualIndex >= people.length) return const SizedBox.shrink();
 
@@ -454,11 +455,15 @@ class _FindScreenState extends State<FindScreen> {
                 Positioned(
                   top: 60,
                   left: _swipeDirection == CardSwiperDirection.left ? null : 30,
-                  right: _swipeDirection == CardSwiperDirection.left ? 30 : null,
+                  right:
+                      _swipeDirection == CardSwiperDirection.left ? 30 : null,
                   child: Transform.rotate(
-                    angle: _swipeDirection == CardSwiperDirection.right ? -0.6 : 0.6,
+                    angle: _swipeDirection == CardSwiperDirection.right
+                        ? -0.6
+                        : 0.6,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         border: Border.all(color: labelColor!, width: 5),
                       ),
@@ -496,8 +501,9 @@ class _FindScreenState extends State<FindScreen> {
     );
   }
 
-  Widget _buildActions(BuildContext context, FindEntity person, CardSwiperController controller) {
-     return Positioned(
+  Widget _buildActions(BuildContext context, FindEntity person,
+      CardSwiperController controller) {
+    return Positioned(
       bottom: 8,
       right: 8,
       left: 8,
@@ -523,13 +529,14 @@ class _FindScreenState extends State<FindScreen> {
             ),
             _buildActionButton(
               context,
-              Image.asset(Assets.green_heart), () {
-                if(person.id != null) {
+              Image.asset(Assets.green_heart),
+              () {
+                if (person.id != null) {
                   context.read<FindCubit>().addLoveFind(id: person.id!);
-                }else{
+                } else {
                   print("id null");
                 }
-            },
+              },
               // !context.read<UserCubit>().isLoggedIn
               //     ? () => context.push(Routes.LOGIN)
               //     :  () => _navigateToUserProfile(context, cardUser),
@@ -543,27 +550,28 @@ class _FindScreenState extends State<FindScreen> {
               //     :  () => showGiftBottomSheet(context, receiverId: cardUser.id),
               color: AppColors.ACCENT_COLOR,
             ),
-            _buildActionButton(context, Image.asset(Assets.tinder_account),
-                    () => context.push(Routes.UserProfilePage),
-                hasStory: person.hasStory ?? false,
-                color: Colors.red,
-                isMini: true,
-
+            _buildActionButton(
+              context,
+              Image.asset(Assets.tinder_account),
+              () => context.push(Routes.UserProfilePage),
+              hasStory: person.hasStory ?? false,
+              color: Colors.red,
+              isMini: true,
             ),
           ],
         ),
       ),
     );
-
   }
+
   Widget _buildActionButton(
-      BuildContext context,
-      Widget child,
-      VoidCallback onPressed, {
-        Color? color,
-        bool? isMini,
-        bool hasStory = false,
-      }) {
+    BuildContext context,
+    Widget child,
+    VoidCallback onPressed, {
+    Color? color,
+    bool? isMini,
+    bool hasStory = false,
+  }) {
     final double outerSize = (isMini ?? false) ? 52 : 70; // total ring size
     final double innerSize = outerSize - 6; // white inner circle
 
@@ -576,10 +584,10 @@ class _FindScreenState extends State<FindScreen> {
           shape: BoxShape.circle,
           gradient: hasStory
               ? const LinearGradient(
-            colors: [Colors.red, Colors.orange, Colors.purple],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          )
+                  colors: [Colors.red, Colors.orange, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
               : null,
           color: hasStory ? null : Colors.white, // white if no story
         ),
@@ -601,15 +609,12 @@ class _FindScreenState extends State<FindScreen> {
       ),
     );
   }
-
-
-
 }
 
 class PersonCardContent extends StatefulWidget {
   final FindEntity person;
 
-  const PersonCardContent({Key? key, required this.person}) : super(key: key);
+  const PersonCardContent({super.key, required this.person});
 
   @override
   State<PersonCardContent> createState() => _PersonCardContentState();
@@ -624,13 +629,14 @@ class _PersonCardContentState extends State<PersonCardContent> {
   void initState() {
     super.initState();
     // Use real pictures if available, otherwise fallback to dummy images
-    _images = (widget.person.pictures != null && widget.person.pictures!.isNotEmpty)
-        ? widget.person.pictures!
-        : [
-      'https://picsum.photos/400/600?random=1',
-      'https://picsum.photos/400/600?random=2',
-      'https://picsum.photos/400/600?random=3',
-    ];
+    _images =
+        (widget.person.pictures != null && widget.person.pictures!.isNotEmpty)
+            ? widget.person.pictures!
+            : [
+                'https://picsum.photos/400/600?random=1',
+                'https://picsum.photos/400/600?random=2',
+                'https://picsum.photos/400/600?random=3',
+              ];
   }
 
   void _nextImage() {
@@ -659,7 +665,8 @@ class _PersonCardContentState extends State<PersonCardContent> {
     switch (index) {
       case 0:
         return {
-          'title': "${widget.person.firstName ?? ''} ${widget.person.lastName ?? ''}",
+          'title':
+              "${widget.person.firstName ?? ''} ${widget.person.lastName ?? ''}",
           'subtitle': '',
         };
       case 1:
@@ -712,8 +719,6 @@ class _PersonCardContentState extends State<PersonCardContent> {
             ),
           ),
 
-
-
           // Gradient overlay
           Positioned.fill(
             child: Container(
@@ -738,7 +743,7 @@ class _PersonCardContentState extends State<PersonCardContent> {
             child: Row(
               children: List.generate(
                 _images.length,
-                    (index) => Expanded(
+                (index) => Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2.0),
                     height: 4,
@@ -778,8 +783,7 @@ class _PersonCardContentState extends State<PersonCardContent> {
                       ],
                     ),
                   ),
-                if (info['subtitle']!.isNotEmpty)
-                  const SizedBox(height: 8),
+                if (info['subtitle']!.isNotEmpty) const SizedBox(height: 8),
                 if (info['subtitle']!.isNotEmpty)
                   Text(
                     info['subtitle']!,
@@ -803,9 +807,3 @@ class _PersonCardContentState extends State<PersonCardContent> {
     );
   }
 }
-
-
-
-
-
-

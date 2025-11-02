@@ -8,9 +8,7 @@ import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/usecases/add_reply_usecase.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
 import '../../cubit/social_posts_cubit.dart';
-import 'reply_card.dart';
 import '../../../../twitter/domain/entities/twitter_user_entity.dart';
-import '../../../../twitter/domain/usecases/twitter_report_usecase.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -142,7 +140,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                         size: 20,
                         isCircle: true,
                         onPressed: () async {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           CommentEntity data = await widget.onAddReply(
                               ReplyOnCommentParams(
                                   postId: widget.postId,
@@ -176,7 +174,8 @@ class _CommentRepliesState extends State<CommentReplies> {
                                 createdAt: DateTime.now(),
                                 image: user.profilePicture ?? '',
                                 email: user.email ?? '',
-                                isDocumented: false, hasStory: false,
+                                isDocumented: false,
+                                hasStory: false,
                               ),
                             ),
                           );

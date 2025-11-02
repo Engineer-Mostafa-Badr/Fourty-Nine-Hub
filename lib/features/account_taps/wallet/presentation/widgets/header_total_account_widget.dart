@@ -9,7 +9,6 @@ import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/holding_text.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';

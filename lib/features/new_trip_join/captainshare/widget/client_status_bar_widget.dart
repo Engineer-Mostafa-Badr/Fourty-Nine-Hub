@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,11 +14,17 @@ import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ClientStatusBarWidget extends StatefulWidget {
-  const ClientStatusBarWidget({super.key, required this.myRoute, this.model,this.statusDriver, required this.phoneController, this.onJoin, required this.formKey});
+  const ClientStatusBarWidget(
+      {super.key,
+      required this.myRoute,
+      this.model,
+      this.statusDriver,
+      required this.phoneController,
+      this.onJoin,
+      required this.formKey});
   final bool myRoute;
   final MyBookingEntity? model;
   final Function(String phone)? onJoin;
@@ -32,7 +37,6 @@ class ClientStatusBarWidget extends StatefulWidget {
 }
 
 class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
-
   String convertDigits(String input, {bool toArabic = false}) {
     const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -68,7 +72,8 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
     }
   }
 
-  Widget buildStep(String title, bool booked, String? imageUrl, Color pointColor,bool showSeat) {
+  Widget buildStep(String title, bool booked, String? imageUrl,
+      Color pointColor, bool showSeat) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -81,22 +86,23 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
         const SizedBox(height: 6),
 
         // Avatar (optional)
-        if (imageUrl != null||showSeat) ...[
-          if(showSeat)SvgPicture.asset(
-            Assets.freeIcon,
-            color: AppColors.getTextColor(context),
-            height: 30,
-            width: 30,
-          ),
-          if(!showSeat)ImageFromInternet(
-              image: imageUrl??'',
-              isCircle: true,
-              defaultLogo: false,
-              width: 30,
+        if (imageUrl != null || showSeat) ...[
+          if (showSeat)
+            SvgPicture.asset(
+              Assets.freeIcon,
+              color: AppColors.getTextColor(context),
               height: 30,
-              firstChar: '',
-              charPadding:0
-          ),
+              width: 30,
+            ),
+          if (!showSeat)
+            ImageFromInternet(
+                image: imageUrl ?? '',
+                isCircle: true,
+                defaultLogo: false,
+                width: 30,
+                height: 30,
+                firstChar: '',
+                charPadding: 0),
           const SizedBox(height: 6),
         ] else
           const SizedBox(height: 36), // keeps alignment when no image
@@ -110,17 +116,15 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
             shape: BoxShape.circle,
           ),
         ),
-
       ],
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80,
-      child:  Stack(
+      child: Stack(
         children: [
           PositionedDirectional(
             bottom: 6,
@@ -128,21 +132,27 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
             end: 0,
             child: SizedBox(
               // width: 80,
-              child: Divider(
-              ),
+              child: Divider(),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildStep(LocaleKeys.booked.localize, true, widget.myRoute?UserCubit.to.state.data?.profilePicture??'':'', Colors.red,false),
+              buildStep(
+                  LocaleKeys.booked.localize,
+                  true,
+                  widget.myRoute
+                      ? UserCubit.to.state.data?.profilePicture ?? ''
+                      : '',
+                  Colors.red,
+                  false),
               ClickableWidget(
                 onTap: () {
-                  if((widget.model?.availableSeats??0)<2){
+                  if ((widget.model?.availableSeats ?? 0) < 2) {
                     return;
                   }
-                  if ((widget.model?.clients ?? []).any(
-                          (e) => e.id == UserCubit.to.state.data?.id)) {
+                  if ((widget.model?.clients ?? [])
+                      .any((e) => e.id == UserCubit.to.state.data?.id)) {
                     return;
                   }
                   if (widget.onJoin != null) {
@@ -159,10 +169,8 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                       isScrollControlled: true,
                       builder: (BuildContext context) {
                         return AnimatedPadding(
-                          padding:
-                          MediaQuery.of(context).viewInsets,
-                          duration:
-                          const Duration(milliseconds: 50),
+                          padding: MediaQuery.of(context).viewInsets,
+                          duration: const Duration(milliseconds: 50),
                           child: Container(
                             height: 400.h,
                             padding: EdgeInsets.symmetric(
@@ -185,47 +193,32 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                   CustomPhoneTextFormField(
                                     currentFocusNode: FocusNode(),
                                     nextFocusNode: FocusNode(),
-                                    currentController:
-                                    widget.phoneController,
+                                    currentController: widget.phoneController,
                                     onInputChanged: (value) =>
-                                        widget.formKey.currentState!
-                                            .validate(),
+                                        widget.formKey.currentState!.validate(),
                                     inputFormatters: [
-                                      FilteringTextInputFormatter
-                                          .digitsOnly,
-                                      LengthLimitingTextInputFormatter(
-                                          11),
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(11),
                                     ],
                                     validator: (value) {
-                                      final input =
-                                          value?.trim() ?? '';
+                                      final input = value?.trim() ?? '';
 
                                       if (input.isEmpty) {
-                                        return LocaleKeys
-                                            .required.localize;
+                                        return LocaleKeys.required.localize;
                                       }
 
-                                      final numericValue =
-                                      convertDigits(input,
-                                          toArabic: false)
-                                          .replaceAll(
-                                          RegExp(r'[^0-9]'),
-                                          '');
+                                      final numericValue = convertDigits(input,
+                                              toArabic: false)
+                                          .replaceAll(RegExp(r'[^0-9]'), '');
 
-                                      if (numericValue.length !=
-                                          11) {
+                                      if (numericValue.length != 11) {
                                         return context.isArabic
                                             ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
                                             : 'Phone number must be exactly 11 digits.';
                                       }
 
-                                      if (![
-                                        '010',
-                                        '011',
-                                        '012',
-                                        '015'
-                                      ].any(numericValue
-                                          .startsWith)) {
+                                      if (!['010', '011', '012', '015']
+                                          .any(numericValue.startsWith)) {
                                         return context.isArabic
                                             ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
                                             : 'Phone number must start with 010, 011, 012, or 015.';
@@ -240,15 +233,11 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () async {
-                                              if (widget.formKey
-                                                  .currentState!
+                                              if (widget.formKey.currentState!
                                                   .validate()) {
-                                                Navigator.of(
-                                                    context)
-                                                    .pop();
-                                                widget.onJoin!(
-                                                    widget.phoneController
-                                                        .text);
+                                                Navigator.of(context).pop();
+                                                widget.onJoin!(widget
+                                                    .phoneController.text);
                                               }
                                               // if (messageController.text.isNotEmpty) {
                                               //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
@@ -266,25 +255,18 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                             child: Container(
                                               width: 100,
                                               height: 80.h,
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(5),
+                                              padding: const EdgeInsets.all(5),
                                               decoration: BoxDecoration(
-                                                  color: AppColors
-                                                      .PRIMARY_COLOR,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
                                                   borderRadius:
-                                                  BorderRadius
-                                                      .circular(
-                                                      15)),
-                                              alignment:
-                                              Alignment.center,
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              alignment: Alignment.center,
                                               child: Label(
-                                                text: LocaleKeys
-                                                    .join.localize,
-                                                style: Styles
-                                                    .headerText(
-                                                    color: Colors
-                                                        .white),
+                                                text: LocaleKeys.join.localize,
+                                                style: Styles.headerText(
+                                                    color: Colors.white),
                                               ),
                                             ),
                                           ),
@@ -296,10 +278,8 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                                   .pop(); // Close the dialog
                                             },
                                             child: Label(
-                                              text: LocaleKeys
-                                                  .cancel.localize,
-                                              style: Styles
-                                                  .headerText(),
+                                              text: LocaleKeys.cancel.localize,
+                                              style: Styles.headerText(),
                                             ),
                                           ),
                                         ),
@@ -315,16 +295,22 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                     );
                   }
                 },
-                child: buildStep(((widget.model?.availableSeats ?? 0) >= 2)
-                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : ''}${LocaleKeys.free.localize}")
-                    : LocaleKeys.booked.localize, true, '', Colors.red,(widget.model?.availableSeats ?? 0) >= 2),),
+                child: buildStep(
+                    ((widget.model?.availableSeats ?? 0) >= 2)
+                        ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : ''}${LocaleKeys.free.localize}")
+                        : LocaleKeys.booked.localize,
+                    true,
+                    '',
+                    Colors.red,
+                    (widget.model?.availableSeats ?? 0) >= 2),
+              ),
               ClickableWidget(
                 onTap: () {
-                  if((widget.model?.availableSeats??0)<1){
+                  if ((widget.model?.availableSeats ?? 0) < 1) {
                     return;
                   }
-                  if ((widget.model?.clients ?? []).any(
-                          (e) => e.id == UserCubit.to.state.data?.id)) {
+                  if ((widget.model?.clients ?? [])
+                      .any((e) => e.id == UserCubit.to.state.data?.id)) {
                     return;
                   }
                   if (widget.onJoin != null) {
@@ -341,10 +327,8 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                       isScrollControlled: true,
                       builder: (BuildContext context) {
                         return AnimatedPadding(
-                          padding:
-                          MediaQuery.of(context).viewInsets,
-                          duration:
-                          const Duration(milliseconds: 50),
+                          padding: MediaQuery.of(context).viewInsets,
+                          duration: const Duration(milliseconds: 50),
                           child: Container(
                             height: 400.h,
                             padding: EdgeInsets.symmetric(
@@ -367,46 +351,32 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                   CustomPhoneTextFormField(
                                     currentFocusNode: FocusNode(),
                                     nextFocusNode: FocusNode(),
-                                    currentController:
-                                    widget.phoneController,
+                                    currentController: widget.phoneController,
                                     onInputChanged: (value) =>
-                                        widget.formKey.currentState!
-                                            .validate(),
+                                        widget.formKey.currentState!.validate(),
                                     inputFormatters: [
-                                      FilteringTextInputFormatter
-                                          .digitsOnly,
-                                      LengthLimitingTextInputFormatter(
-                                          11),
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(11),
                                     ],
                                     validator: (value) {
-                                      final input =
-                                          value?.trim() ?? '';
+                                      final input = value?.trim() ?? '';
 
-                                      if (input.isEmpty)
-                                        return LocaleKeys
-                                            .required.localize;
+                                      if (input.isEmpty) {
+                                        return LocaleKeys.required.localize;
+                                      }
 
-                                      final numericValue =
-                                      convertDigits(input,
-                                          toArabic: false)
-                                          .replaceAll(
-                                          RegExp(r'[^0-9]'),
-                                          '');
+                                      final numericValue = convertDigits(input,
+                                              toArabic: false)
+                                          .replaceAll(RegExp(r'[^0-9]'), '');
 
-                                      if (numericValue.length !=
-                                          11) {
+                                      if (numericValue.length != 11) {
                                         return context.isArabic
                                             ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
                                             : 'Phone number must be exactly 11 digits.';
                                       }
 
-                                      if (![
-                                        '010',
-                                        '011',
-                                        '012',
-                                        '015'
-                                      ].any(numericValue
-                                          .startsWith)) {
+                                      if (!['010', '011', '012', '015']
+                                          .any(numericValue.startsWith)) {
                                         return context.isArabic
                                             ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
                                             : 'Phone number must start with 010, 011, 012, or 015.';
@@ -421,15 +391,11 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () async {
-                                              if (widget.formKey
-                                                  .currentState!
+                                              if (widget.formKey.currentState!
                                                   .validate()) {
-                                                Navigator.of(
-                                                    context)
-                                                    .pop();
-                                                widget.onJoin!(
-                                                    widget.phoneController
-                                                        .text);
+                                                Navigator.of(context).pop();
+                                                widget.onJoin!(widget
+                                                    .phoneController.text);
                                               }
                                               // if (messageController.text.isNotEmpty) {
                                               //   var result = await controller.sendGreetMessage(context: context, userId: controller.suggestUserPagingController.itemList![index].id, message: messageController.text);
@@ -447,25 +413,18 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                             child: Container(
                                               width: 100,
                                               height: 80.h,
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(5),
+                                              padding: const EdgeInsets.all(5),
                                               decoration: BoxDecoration(
-                                                  color: AppColors
-                                                      .PRIMARY_COLOR,
+                                                  color:
+                                                      AppColors.PRIMARY_COLOR,
                                                   borderRadius:
-                                                  BorderRadius
-                                                      .circular(
-                                                      15)),
-                                              alignment:
-                                              Alignment.center,
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              alignment: Alignment.center,
                                               child: Label(
-                                                text: LocaleKeys
-                                                    .join.localize,
-                                                style: Styles
-                                                    .headerText(
-                                                    color: Colors
-                                                        .white),
+                                                text: LocaleKeys.join.localize,
+                                                style: Styles.headerText(
+                                                    color: Colors.white),
                                               ),
                                             ),
                                           ),
@@ -477,10 +436,8 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                                                   .pop(); // Close the dialog
                                             },
                                             child: Label(
-                                              text: LocaleKeys
-                                                  .cancel.localize,
-                                              style: Styles
-                                                  .headerText(),
+                                              text: LocaleKeys.cancel.localize,
+                                              style: Styles.headerText(),
                                             ),
                                           ),
                                         ),
@@ -496,14 +453,19 @@ class _ClientStatusBarWidgetState extends State<ClientStatusBarWidget> {
                     );
                   }
                 },
-                child: buildStep( ((widget.model?.availableSeats ?? 0) >= 1)
-                    ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : ''}${LocaleKeys.free.localize}")
-                    : LocaleKeys.booked.localize, true, '', Colors.red,(widget.model?.availableSeats ?? 0) >= 1),
+                child: buildStep(
+                    ((widget.model?.availableSeats ?? 0) >= 1)
+                        ? ("${widget.model?.status == 'expired' ? context.isArabic ? 'كان ' : 'Was ' : ''}${LocaleKeys.free.localize}")
+                        : LocaleKeys.booked.localize,
+                    true,
+                    '',
+                    Colors.red,
+                    (widget.model?.availableSeats ?? 0) >= 1),
               ),
-              buildStep( getBookingStatus(widget.statusDriver ?? ""), false, null, Colors.blue,false),
+              buildStep(getBookingStatus(widget.statusDriver ?? ""), false,
+                  null, Colors.blue, false),
             ],
           ),
-
         ],
       ),
     );

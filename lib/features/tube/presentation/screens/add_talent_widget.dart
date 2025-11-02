@@ -61,7 +61,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
   Widget build(BuildContext context) {
     return BlocListener<TubeCubit, TubeState>(
       listener: (context, state) {
-        if (state.uploadStatus == StateStatus.success && state.addFavoriteTubeData != null) {
+        if (state.uploadStatus == StateStatus.success &&
+            state.addFavoriteTubeData != null) {
           showSuccessMessage(
             context,
             context.isArabic
@@ -74,7 +75,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
               Navigator.of(context).pop();
             }
           });
-        } else if (state.uploadStatus == StateStatus.error && state.failure != null) {
+        } else if (state.uploadStatus == StateStatus.error &&
+            state.failure != null) {
           // Improved error handling to show specific validation messages
           String errorMessage = getFailureMessage(state.failure!, context);
           if (state.failure is ServerFailure) {
@@ -83,8 +85,10 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
               final errors = serverFailure.name as List;
               errorMessage = errors
                   .map((e) => e is Map && e['message'] != null
-                  ? (context.isArabic ? e['message']['ar'] : e['message']['en'])
-                  : errorMessage)
+                      ? (context.isArabic
+                          ? e['message']['ar']
+                          : e['message']['en'])
+                      : errorMessage)
                   .join('\n');
             }
           }
@@ -109,7 +113,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: widget.titleController,
-                enabled: !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
+                enabled:
+                    !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -118,7 +123,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                 },
                 style: TextStyle(color: AppColors.getTextColor(context)),
                 decoration: InputDecoration(
-                  hintText: context.isArabic ? 'أدخل عنوان الفيديو' : 'Enter video title',
+                  hintText: context.isArabic
+                      ? 'أدخل عنوان الفيديو'
+                      : 'Enter video title',
                   hintStyle: TextStyle(
                     color: AppColors.getTextColor(context).withOpacity(0.5),
                   ),
@@ -155,7 +162,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: widget.descController,
-                enabled: !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
+                enabled:
+                    !_isUploading && !_isLoadingVideo && !_isLoadingThumbnail,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return LocaleKeys.emptyFieldNotValid.localize;
@@ -170,7 +178,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                 maxLines: 4,
                 style: TextStyle(color: AppColors.getTextColor(context)),
                 decoration: InputDecoration(
-                  hintText: context.isArabic ? 'أدخل وصف الفيديو' : 'Enter video description',
+                  hintText: context.isArabic
+                      ? 'أدخل وصف الفيديو'
+                      : 'Enter video description',
                   hintStyle: TextStyle(
                     color: AppColors.getTextColor(context).withOpacity(0.5),
                   ),
@@ -217,7 +227,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
               SizedBox(height: 20.h),
 
               // Thumbnail Section
-              _buildSectionTitle(context.isArabic ? 'الصورة المصغرة' : 'Thumbnail'),
+              _buildSectionTitle(
+                  context.isArabic ? 'الصورة المصغرة' : 'Thumbnail'),
               SizedBox(height: 8.h),
               _buildThumbnailSection(),
 
@@ -269,8 +280,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                 onPressed: (_isUploading || _preventDoubleSubmit)
                     ? null
                     : () async {
-                  await _handleSubmit();
-                },
+                        await _handleSubmit();
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isUploading
                       ? Colors.grey[300]
@@ -283,34 +294,37 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                 ),
                 child: _isUploading
                     ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    Text(
-                      context.isArabic ? 'جاري النشر...' : 'Publishing...',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.white),
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Text(
+                            context.isArabic
+                                ? 'جاري النشر...'
+                                : 'Publishing...',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      )
                     : Text(
-                  LocaleKeys.publish.localize,
-                  style: const TextStyle(
-                    color: AppColors.whiteColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                        LocaleKeys.publish.localize,
+                        style: const TextStyle(
+                          color: AppColors.whiteColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
 
               SizedBox(height: 20.h),
@@ -324,9 +338,7 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style:Styles.headerText(
-        color: AppColors.getTextColor(context)
-      ),
+      style: Styles.headerText(color: AppColors.getTextColor(context)),
     );
   }
 
@@ -344,108 +356,117 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
               width: 1.5,
             ),
           ),
-          child: state.status == StateStatus.loading && state.activeCategories == null
+          child: state.status == StateStatus.loading &&
+                  state.activeCategories == null
               ? Container(
-            height: 60.h,
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.getRedColor(context),
-                    ),
+                  height: 60.h,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.getRedColor(context),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Text(
+                        context.isArabic
+                            ? 'جاري تحميل الفئات...'
+                            : 'Loading categories...',
+                        style: Styles.mediumText(
+                          color:
+                              AppColors.getTextColor(context).withOpacity(0.5),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: 12.w),
-                Text(
-                  context.isArabic ? 'جاري تحميل الفئات...' : 'Loading categories...',
-                  style:Styles.mediumText(
-                    color: AppColors.getTextColor(context).withOpacity(0.5),
-                  ),
-                ),
-              ],
-            ),
-          )
+                )
               : DropdownButtonHideUnderline(
-            child: DropdownButtonFormField<ActiveCategoryEntity>(
-              isExpanded: false, // يمنعها من أخذ الشاشة كلها
-              menuMaxHeight: 300, // يحدد أقصى ارتفاع للقائمة
-              decoration: InputDecoration(
-                hintText: context.isArabic ? 'اختر فئة' : 'Select a category',
-                hintStyle: Styles.mediumText(
-                  color: AppColors.getTextColor(context).withOpacity(0.5),
-                ),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 16.h,
-                ),
-              ),
-              value: _selectedCategory,
-              items: state.activeCategories?.map((category) {
-                return DropdownMenuItem<ActiveCategoryEntity>(
-                  value: category,
-                  child: Text(
-                    context.isArabic ? category.nameAr : category.nameEn,
+                  child: DropdownButtonFormField<ActiveCategoryEntity>(
+                    isExpanded: false, // يمنعها من أخذ الشاشة كلها
+                    menuMaxHeight: 300, // يحدد أقصى ارتفاع للقائمة
+                    decoration: InputDecoration(
+                      hintText:
+                          context.isArabic ? 'اختر فئة' : 'Select a category',
+                      hintStyle: Styles.mediumText(
+                        color: AppColors.getTextColor(context).withOpacity(0.5),
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 16.h,
+                      ),
+                    ),
+                    initialValue: _selectedCategory,
+                    items: state.activeCategories?.map((category) {
+                          return DropdownMenuItem<ActiveCategoryEntity>(
+                            value: category,
+                            child: Text(
+                              context.isArabic
+                                  ? category.nameAr
+                                  : category.nameEn,
+                              style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black
+                                  // color: AppColors.getTextColor(context).withOpacity(0.5),
+                                  ),
+                            ),
+                          );
+                        }).toList() ??
+                        [],
+                    onChanged: _isUploading
+                        ? null
+                        : (ActiveCategoryEntity? newCategory) {
+                            setState(() {
+                              _selectedCategory = newCategory;
+                            });
+                          },
+                    validator: (value) {
+                      if (value == null) {
+                        return context.isArabic
+                            ? 'يرجى اختيار فئة'
+                            : 'Please select a category';
+                      }
+                      return null;
+                    },
+                    dropdownColor: AppColors.getFindFillColor(context),
                     style: Styles.mediumText(
-                      color: context.isDarkMode ? Colors.white : Colors.black
-                      // color: AppColors.getTextColor(context).withOpacity(0.5),
+                      color: AppColors.getTextColor(context).withOpacity(0.5),
+                    ),
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: AppColors.getTextColor(context).withOpacity(0.6),
                     ),
                   ),
-                );
-              }).toList() ??
-                  [],
-              onChanged: _isUploading
-                  ? null
-                  : (ActiveCategoryEntity? newCategory) {
-                setState(() {
-                  _selectedCategory = newCategory;
-                });
-              },
-              validator: (value) {
-                if (value == null) {
-                  return context.isArabic
-                      ? 'يرجى اختيار فئة'
-                      : 'Please select a category';
-                }
-                return null;
-              },
-              dropdownColor: AppColors.getFindFillColor(context),
-              style: Styles.mediumText(
-                color: AppColors.getTextColor(context).withOpacity(0.5),
-              ),
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColors.getTextColor(context).withOpacity(0.6),
-              ),
-            ),
-          ),
+                ),
         );
       },
     );
   }
 
-
   Widget _buildVideoSection() {
     return BlocBuilder<TubeCubit, TubeState>(
       builder: (context, state) {
-        final video = state.videos?.isNotEmpty == true ? state.videos!.first : null;
+        final video =
+            state.videos?.isNotEmpty == true ? state.videos!.first : null;
         return GestureDetector(
           onTap: (_isUploading || _isLoadingVideo)
               ? null
               : () async {
-            setState(() {
-              _isLoadingVideo = true;
-            });
-            await _pickVideo();
-            setState(() {
-              _isLoadingVideo = false;
-            });
-          },
+                  setState(() {
+                    _isLoadingVideo = true;
+                  });
+                  await _pickVideo();
+                  setState(() {
+                    _isLoadingVideo = false;
+                  });
+                },
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.all(16.w),
@@ -463,10 +484,10 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
             child: _isLoadingVideo
                 ? _buildVideoPreparingState()
                 : video != null
-                ? (_videoController?.value.isInitialized == true
-                ? _buildAdaptiveVideoPlayer()
-                : _buildVideoPreparingState())
-                : _buildVideoPlaceholder(),
+                    ? (_videoController?.value.isInitialized == true
+                        ? _buildAdaptiveVideoPlayer()
+                        : _buildVideoPreparingState())
+                    : _buildVideoPlaceholder(),
           ),
         );
       },
@@ -480,8 +501,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
     double containerHeight = isVertical
         ? MediaQuery.of(context).size.width / aspectRatio
         : isSquare
-        ? MediaQuery.of(context).size.width * 0.8
-        : 200.h;
+            ? MediaQuery.of(context).size.width * 0.8
+            : 200.h;
     containerHeight = containerHeight.clamp(200.h, 400.h);
 
     return SizedBox(
@@ -535,7 +556,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                       ? Colors.black.withOpacity(0.3)
                       : Colors.black.withOpacity(0.6),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withOpacity(0.5), width: 2),
+                  border: Border.all(
+                      color: Colors.white.withOpacity(0.5), width: 2),
                 ),
                 child: Icon(
                   _videoController!.value.isPlaying
@@ -568,7 +590,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(6.r),
@@ -577,7 +600,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          isVertical ? Icons.stay_current_portrait : Icons.stay_current_landscape,
+                          isVertical
+                              ? Icons.stay_current_portrait
+                              : Icons.stay_current_landscape,
                           color: Colors.white,
                           size: 14.w,
                         ),
@@ -597,14 +622,14 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
                     onTap: _isUploading
                         ? null
                         : () async {
-                      setState(() {
-                        _isLoadingVideo = true;
-                      });
-                      await _pickVideo();
-                      setState(() {
-                        _isLoadingVideo = false;
-                      });
-                    },
+                            setState(() {
+                              _isLoadingVideo = true;
+                            });
+                            await _pickVideo();
+                            setState(() {
+                              _isLoadingVideo = false;
+                            });
+                          },
                     child: Container(
                       padding: EdgeInsets.all(8.w),
                       decoration: BoxDecoration(
@@ -636,7 +661,8 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
             child: Container(
               height: 40.h,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(12.r)),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(12.r)),
                 gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
@@ -735,7 +761,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
           ),
           SizedBox(height: 4.h),
           Text(
-            context.isArabic ? 'MP4, MOV, AVI • حتى 500 ميجا' : 'MP4, MOV, AVI • Up to 500MB',
+            context.isArabic
+                ? 'MP4, MOV, AVI • حتى 500 ميجا'
+                : 'MP4, MOV, AVI • Up to 500MB',
             style: Styles.mediumText(),
           ),
         ],
@@ -779,14 +807,14 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
       onTap: (_isUploading || _isLoadingThumbnail)
           ? null
           : () async {
-        setState(() {
-          _isLoadingThumbnail = true;
-        });
-        await _pickThumbnail();
-        setState(() {
-          _isLoadingThumbnail = false;
-        });
-      },
+              setState(() {
+                _isLoadingThumbnail = true;
+              });
+              await _pickThumbnail();
+              setState(() {
+                _isLoadingThumbnail = false;
+              });
+            },
       child: Container(
         height: 200.h,
         width: double.infinity,
@@ -802,77 +830,79 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
         ),
         child: _isLoadingThumbnail
             ? Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              AppColors.getRedColor(context),
-            ),
-          ),
-        )
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.getRedColor(context),
+                  ),
+                ),
+              )
             : _selectedThumbnail != null
-            ? Stack(
-          fit: StackFit.expand,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: Image.file(
-                _selectedThumbnail!,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    color: AppColors.getTextColor(context),
-                    size: 48,
+                ? Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Image.file(
+                          _selectedThumbnail!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Center(
+                            child: Icon(
+                              Icons.error_outline,
+                              color: AppColors.getTextColor(context),
+                              size: 48,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: GestureDetector(
+                          onTap: _isUploading
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    _isLoadingThumbnail = true;
+                                  });
+                                  await _pickThumbnail();
+                                  setState(() {
+                                    _isLoadingThumbnail = false;
+                                  });
+                                },
+                          child: Container(
+                            padding: EdgeInsets.all(8.w),
+                            decoration: BoxDecoration(
+                              color: AppColors.getRedColor(context),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_outlined,
+                        size: 48,
+                        color: AppColors.getTextColor(context).withOpacity(0.4),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        context.isArabic
+                            ? 'اضغط لاختيار صورة'
+                            : 'Tap to select thumbnail',
+                        style: Styles.mediumText(),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: GestureDetector(
-                onTap: _isUploading
-                    ? null
-                    : () async {
-                  setState(() {
-                    _isLoadingThumbnail = true;
-                  });
-                  await _pickThumbnail();
-                  setState(() {
-                    _isLoadingThumbnail = false;
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.getRedColor(context),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        )
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.image_outlined,
-              size: 48,
-              color: AppColors.getTextColor(context).withOpacity(0.4),
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              context.isArabic ? 'اضغط لاختيار صورة' : 'Tap to select thumbnail',
-              style: Styles.mediumText(),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -979,7 +1009,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
     if (_selectedThumbnail == null) {
       showErrorMessage(
         context,
-        context.isArabic ? 'يرجى اختيار صورة مصغرة' : 'Please select a thumbnail',
+        context.isArabic
+            ? 'يرجى اختيار صورة مصغرة'
+            : 'Please select a thumbnail',
       );
       setState(() {
         _isUploading = false;
@@ -1011,7 +1043,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
       if (duration == null || duration <= 0) {
         showErrorMessage(
           context,
-          context.isArabic ? 'يرجى إدخال مدة فيديو صالحة' : 'Please provide a valid video duration',
+          context.isArabic
+              ? 'يرجى إدخال مدة فيديو صالحة'
+              : 'Please provide a valid video duration',
         );
         setState(() {
           _isUploading = false;
@@ -1062,14 +1096,14 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
       );
 
       bunnyResponse.fold(
-            (failure) {
+        (failure) {
           showErrorMessage(context, getFailureMessage(failure, context));
           setState(() {
             _isUploading = false;
             _preventDoubleSubmit = false;
           });
         },
-            (success) {
+        (success) {
           print("✅ Upload successful, checking database...");
           // Success case: mimic AddTalentWidget
           showSuccessMessage(
@@ -1089,7 +1123,9 @@ class _AddTubeWidgetState extends State<AddTubeWidget> {
     } catch (e) {
       showErrorMessage(
         context,
-        context.isArabic ? 'حدث خطأ غير متوقع: $e' : 'An unexpected error occurred: $e',
+        context.isArabic
+            ? 'حدث خطأ غير متوقع: $e'
+            : 'An unexpected error occurred: $e',
       );
       setState(() {
         _isUploading = false;

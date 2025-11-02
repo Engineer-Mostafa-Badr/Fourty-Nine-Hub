@@ -293,7 +293,7 @@ class _RefreshSettingsWidgetState extends State<RefreshSettingsWidget>
                                               cubit.disableAutoRefresh();
                                             }
                                           },
-                                          activeColor: Colors.green,
+                                          activeThumbColor: Colors.green,
                                           activeTrackColor:
                                               Colors.green.withOpacity(0.3),
                                         ),

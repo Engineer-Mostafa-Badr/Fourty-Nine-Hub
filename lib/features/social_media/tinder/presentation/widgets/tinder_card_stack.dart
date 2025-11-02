@@ -20,9 +20,6 @@ import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 
-import '../../../chat/chat_view/domain/entities/chat_entity.dart';
-import '../../../chat/chat_view/domain/usecases/get_chats_usecase.dart';
-import '../../../chat/chat_view/presentation/pages/chats_view.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
 class TinderCardStack extends StatefulWidget {
@@ -358,8 +355,6 @@ class _TinderCardStackState extends State<TinderCardStack> {
       ),
     );
   }
-
-
 }
 
 class SwipeCardDemo2 extends StatefulWidget {
@@ -492,10 +487,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     switch (index) {
       case 1:
         return _customListTile(
-            Assets.location,
-            context.isArabic ? 'يبعُد 10 كم' : '10 KM Away'
-
-        );
+            Assets.location, context.isArabic ? 'يبعُد 10 كم' : '10 KM Away');
       case 2:
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,10 +500,8 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
               const Sizer(
                 height: 10,
               ),
-              _customListTile(
-                  Assets.location,
-                  context.isArabic ? 'يبعُد 10 كم' : '10 KM Away'
-              ),
+              _customListTile(Assets.location,
+                  context.isArabic ? 'يبعُد 10 كم' : '10 KM Away'),
             ]);
       case 3:
         return Column(
@@ -634,7 +624,7 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(
               pictures.length,
-                  (dotIndex) => Expanded(
+              (dotIndex) => Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 2.0),
                   height: 4,
@@ -654,7 +644,6 @@ class SwipeCardDemo2State extends State<SwipeCardDemo2> {
     );
   }
 }
-
 
 class ChatBottomSheet extends StatelessWidget {
   final UserDataTinderEntity cardUser;
@@ -1086,4 +1075,3 @@ void showChatBottomSheet(BuildContext context, UserDataTinderEntity cardUser) {
             ),
           ));
 }
-

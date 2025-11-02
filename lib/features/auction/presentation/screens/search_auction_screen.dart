@@ -6,11 +6,8 @@ import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 
 import '../../../RideFeature/presentation/pages/widgets/font_manager.dart';
-import '../../domain/entities/get_all_auction_entity.dart';
 import '../cubit/auction_cubit.dart';
 // 📌 UPDATE IN YOUR AuctionScreen:
 // Replace this:

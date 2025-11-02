@@ -300,8 +300,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         RegisterRideSpecialEntity? cachedData =
             await Storage().getDriverEntity();
         String? brand = cachedData?.vehicleBrand;
-        if (brand != null && (brand.isNotEmpty))
+        if ((brand!.isNotEmpty)) {
           await onSelectBrand(brand, context, type: type);
+        }
         RideBrandEntity? selectedBrand =
             data.firstWhereOrNull((element) => element.id == brand);
         emit(state.copyWith(
@@ -330,7 +331,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
             await Storage().getDriverEntity();
         String? color = cachedData?.vehicleColor;
         RideColorEntity? selectedColor;
-        if (color != null && (color.isNotEmpty)) {
+        if ((color!.isNotEmpty)) {
           selectedColor = data.firstWhere((element) => element.id == color);
           onSelectColor(selectedColor);
         }
@@ -373,7 +374,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
           }
         }
         GovernorateEntity? selectedCity;
-        if (cityId != null && (cityId.isNotEmpty)) {
+        if ((cityId!.isNotEmpty)) {
           selectedCity =
               governorates.firstWhereOrNull((element) => element.id == cityId);
           onSelectGov(cityId);
@@ -387,8 +388,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   }
 
   Future<void> fetchLoaderInfo(BuildContext context, bool refresh) async {
-    if (isClosed)
+    if (isClosed) {
       return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideRegisterStates.loading));
 
     final Either<Failure, LoadingInfoEntity> result =
@@ -506,8 +508,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   }
 
   Future<void> fetchRideDriverInfo(BuildContext context, bool refresh) async {
-    if (isClosed)
+    if (isClosed) {
       return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideRegisterStates.loading));
 
     final Either<Failure, DriverInfoEntity> result =
@@ -545,8 +548,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   }
 
   Future<void> fetchRideDriverPictureOptional(BuildContext context) async {
-    if (isClosed)
+    if (isClosed) {
       return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideRegisterStates.loading));
 
     final Either<Failure, DriverPictureOptionalEntity> result =
@@ -601,10 +605,11 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
   fetchRideUploadedImagesData(
       BuildContext context, UploadRiderImagesParams? params) async {
-    if (params != null)
+    if (params != null) {
       emit(state.copyWith(
           isShipping: params.isShipping,
           registerType: params.isSocket == true ? 'socket' : 'noSocket'));
+    }
     emit(state.copyWith(status: RideRegisterStates.loading));
     await Future.wait([
       fetchRideDriverPictureOptional(context),
@@ -688,8 +693,9 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   }
 
   Future<void> getCostPerKm() async {
-    if (isClosed)
+    if (isClosed) {
       return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideRegisterStates.loading));
 
     final Either<Failure, CostPerKmEntity> result =
@@ -918,13 +924,14 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
   }
 
   String convertArabicToEnglishNumbers(String input) {
-    const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-    const english = ['0','1','2','3','4','5','6','7','8','9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     for (int i = 0; i < arabic.length; i++) {
       input = input.replaceAll(arabic[i], english[i]);
     }
     return input;
   }
+
   onRegister(BuildContext context, List<String> subCategoryIds, bool isSocket,
       bool isShipping) async {
     DriverInfoEntity? driverInfo = state.driverInfo;
@@ -1523,7 +1530,8 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
     String dateString = rideVehicleExpireDateController.text;
     dateString = convertArabicToEnglishNumbers(dateString);
     DateTime parsedDate = DateFormat('yyyy-MM-dd', 'en').parse(dateString);
-    String rideVehicleFormattedDate = DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
+    String rideVehicleFormattedDate =
+        DateFormat('yyyy-MM-dd', 'en').format(parsedDate);
 
     showLoadingDialog(context, canPop: false);
     params.isShipping == true
@@ -2106,8 +2114,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
 
       showLoadingDialog(context, canPop: false);
       await RideMethodHelper().uploadTechnicalExamination(
-          technicalExaminationDate:
-          formattedDate,
+          technicalExaminationDate: formattedDate,
           technicalExaminationImage: state.personalTechnicalExaminationPicture!,
           onSuccessUploaded: (bool isSuccess) async {
             if (isSuccess) {

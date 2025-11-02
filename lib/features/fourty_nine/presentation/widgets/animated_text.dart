@@ -9,7 +9,6 @@ import '../controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../service_locator/service_locator.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 import '../../../../core/utils/custom_show_dialog.dart';

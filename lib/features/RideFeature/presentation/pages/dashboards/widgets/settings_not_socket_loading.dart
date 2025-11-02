@@ -21,13 +21,13 @@ import 'drivers_license_loading_screen.dart';
 import 'update_personal_info_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
-
 class SettingsNotSocketLoading extends StatefulWidget {
   final DriverSettingLoadingEntity? settings;
   const SettingsNotSocketLoading({super.key, this.settings});
 
   @override
-  State<SettingsNotSocketLoading> createState() => _SettingsNotSocketLoadingState();
+  State<SettingsNotSocketLoading> createState() =>
+      _SettingsNotSocketLoadingState();
 }
 
 class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
@@ -74,9 +74,9 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
     );
 
     context.read<DashboardsCubit>().updateDriverLoadingSettings(
-      params: params,
-      context: context,
-    );
+          params: params,
+          context: context,
+        );
 
     // Update original values
     setState(() {
@@ -135,7 +135,8 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
               children: [
                 Text(
                   LocaleKeys.myRating.tr(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 const Spacer(),
                 RatingBar(
@@ -153,9 +154,11 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                formatPrice(widget.settings?.rating?.average?.toDouble() ?? 2.5,context),
-
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  formatPrice(
+                      widget.settings?.rating?.average?.toDouble() ?? 2.5,
+                      context),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w700),
                 )
               ],
             ),
@@ -167,11 +170,13 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
               children: [
                 Text(
                   LocaleKeys.totalProfit.tr(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  '${formatPrice(widget.settings?.profit ?? 0,context)} ${LocaleKeys.egp.tr()}',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  '${formatPrice(widget.settings?.profit ?? 0, context)} ${LocaleKeys.egp.tr()}',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 )
               ],
             ),
@@ -183,18 +188,20 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
               children: [
                 Text(
                   LocaleKeys.totalTrips.tr(),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  formatPrice(widget.settings?.countTrips ?? 0,context),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  formatPrice(widget.settings?.countTrips ?? 0, context),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 )
               ],
             ),
           ),
           ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
@@ -202,11 +209,12 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                 ),
               ));
             },
-            child: UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6),
+            child:
+                UpdatePersonalInfoWidget(title: LocaleKeys.id.tr(), exdIn: 6),
           ),
           ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
@@ -219,7 +227,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
           ),
           ClickableWidget(
             onTap: () async {
-      ManageVibration.vibrate();
+              ManageVibration.vibrate();
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: serviceLocator<DashboardsCubit>(),
@@ -240,8 +248,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
                   label: LocaleKeys.deleteRegistration.tr(),
                   backColor: AppColors.SECONDARY_COLOR_DARK2,
                   onPressed: () {
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   },
                 ),
               ),
@@ -266,9 +273,10 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
         children: [
           isText
               ? Text(
-            title ?? '',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          )
+                  title ?? '',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
+                )
               : Image.network(title ?? '', width: 60, height: 25),
           const Spacer(),
           Text(
@@ -279,7 +287,7 @@ class _SettingsNotSocketLoadingState extends State<SettingsNotSocketLoading> {
             scale: 0.75,
             child: Switch(
               value: valuee ?? false,
-              activeColor: AppColors.PRIMARY_COLOR,
+              activeThumbColor: AppColors.PRIMARY_COLOR,
               inactiveThumbColor: AppColors.PRIMARY_COLOR,
               trackOutlineColor: WidgetStateProperty.all<Color>(
                 AppColors.PRIMARY_COLOR,

@@ -9,9 +9,7 @@ import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../../data/model/tube_video_models.dart';
-import '../../controller/star_cubit/star_cubit.dart';
 import '../../presentation_exports.dart';
-import '../../shared/widgets/common/thumbnail_widget.dart';
 import 'playlist_bottom_sheet.dart';
 
 class ProfileVideoGrid extends StatelessWidget {

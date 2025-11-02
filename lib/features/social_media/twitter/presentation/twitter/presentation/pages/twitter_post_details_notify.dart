@@ -20,13 +20,11 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_comment_replied.dart';
-import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
- 
 class TwitterPostDetailsNotify extends StatefulWidget {
   TwitterPostDetailsNotify({
     super.key,
@@ -107,9 +105,9 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
           final controller = context.read<TwitterCubit>();
           return state.status == StateStatus.success
               ? TwitterPostCard(
-            onRepost: () => controller.onRepost(postId: state.postDetails!.id),
-
-            isDetailed: false,
+                  onRepost: () =>
+                      controller.onRepost(postId: state.postDetails!.id),
+                  isDetailed: false,
                   post: state.postDetails!,
                   onReact: () async {
                     if (context.read<UserCubit>().isLoggedIn) {

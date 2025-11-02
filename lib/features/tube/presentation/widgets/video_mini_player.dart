@@ -7,24 +7,7 @@ import 'package:video_player/video_player.dart';
 import '../cubit/tube_cubit.dart';
 import '../screens/tube_video_player_screen.dart';
 
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
-
-import '../cubit/tube_cubit.dart';
-import '../screens/tube_video_player_screen.dart';
-import '../../../../service_locator/service_locator.dart'; // Import your service locator
-
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
-
-import '../cubit/tube_cubit.dart';
-import '../screens/tube_video_player_screen.dart';
+// Import your service locator
 
 class MiniPlayer extends StatefulWidget {
   const MiniPlayer({super.key});
@@ -48,7 +31,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
   void _startPositionUpdates() {
     _positionUpdateTimer?.cancel();
-    _positionUpdateTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    _positionUpdateTimer =
+        Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (mounted && !_isClosing) {
         final cubit = context.read<TubeCubit>();
         final state = cubit.state;
@@ -106,20 +90,21 @@ class _MiniPlayerState extends State<MiniPlayer> {
         onPanUpdate: _isClosing
             ? null
             : (details) {
-          setState(() {
-            _xPosition += details.delta.dx;
-            _yPosition -= details.delta.dy;
-            _xPosition = _xPosition.clamp(0, screenWidth - 180);
-            _yPosition = _yPosition.clamp(0, screenHeight - 200);
-          });
-        },
+                setState(() {
+                  _xPosition += details.delta.dx;
+                  _yPosition -= details.delta.dy;
+                  _xPosition = _xPosition.clamp(0, screenWidth - 180);
+                  _yPosition = _yPosition.clamp(0, screenHeight - 200);
+                });
+              },
         onPanEnd: _isClosing
             ? null
             : (details) {
-          setState(() {
-            _xPosition = _xPosition < screenWidth / 2 - 90 ? 8 : screenWidth - 188;
-          });
-        },
+                setState(() {
+                  _xPosition =
+                      _xPosition < screenWidth / 2 - 90 ? 8 : screenWidth - 188;
+                });
+              },
         onTap: () {
           if (!_isClosing && state.currentVideo != null && !state.isLoading) {
             cubit.maximizePlayer();
@@ -206,15 +191,15 @@ class _MiniPlayerState extends State<MiniPlayer> {
             child: controller.value.isInitialized
                 ? VideoPlayer(controller)
                 : Image.network(
-              state.currentVideo!.thumbnail!,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                color: Colors.grey[800],
-                child: const Center(
-                  child: Icon(Icons.error, color: Colors.white),
-                ),
-              ),
-            ),
+                    state.currentVideo!.thumbnail!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey[800],
+                      child: const Center(
+                        child: Icon(Icons.error, color: Colors.white),
+                      ),
+                    ),
+                  ),
           ),
         ),
 
@@ -304,7 +289,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
                 // Time Display
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

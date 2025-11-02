@@ -4,9 +4,10 @@ class TwitterUserModel extends TwitterUserEntity {
   // Optional extras not present on TwitterUserEntity
   final String? gender;
   final int? profileViews;
-  final DateTime? joinedAt;          // alias of createdAt from backend ("joinedAt")
-  final bool? isAccountVerified;      // raw flag from backend
-  final String? profilePictureUrl;    // raw url from backend (also copied into image)
+  final DateTime? joinedAt; // alias of createdAt from backend ("joinedAt")
+  final bool? isAccountVerified; // raw flag from backend
+  final String?
+      profilePictureUrl; // raw url from backend (also copied into image)
 
   TwitterUserModel({
     // entity fields
@@ -34,7 +35,8 @@ class TwitterUserModel extends TwitterUserEntity {
   }
 
   /// Pull a nested mediaKey if present
-  static String? _mediaKeyFromUserProfile(Map<String, dynamic> map, String key) {
+  static String? _mediaKeyFromUserProfile(
+      Map<String, dynamic> map, String key) {
     final up = map['USER_PROFILE'];
     if (up is Map<String, dynamic>) {
       // Try profilePictureUrl.mediaKey
@@ -89,7 +91,7 @@ class TwitterUserModel extends TwitterUserEntity {
 
       // Names
       final rawFirst = (json['firstName'] ?? '').toString();
-      final rawLast  = (json['lastName'] ?? '').toString();
+      final rawLast = (json['lastName'] ?? '').toString();
 
       // Username / handle
       final handle = (json['username'] ?? json['userName'] ?? '').toString();
@@ -107,7 +109,8 @@ class TwitterUserModel extends TwitterUserEntity {
           false;
 
       // createdAt (fallback to joinedAt)
-      final createdAtStr = (json['createdAt'] ?? json['joinedAt'] ?? '').toString();
+      final createdAtStr =
+          (json['createdAt'] ?? json['joinedAt'] ?? '').toString();
       final createdAt = DateTime.tryParse(createdAtStr) ?? DateTime.now();
 
       // Extras (kept on model only)
@@ -119,11 +122,15 @@ class TwitterUserModel extends TwitterUserEntity {
         return null;
       }();
       final String? joinedAtStr = json['joinedAt']?.toString();
-      final DateTime? joinedAt = joinedAtStr != null ? DateTime.tryParse(joinedAtStr) : null;
-      final bool? isAccountVerified = json['isAccountVerified'] is bool ? json['isAccountVerified'] as bool : null;
-      final String? profilePictureUrl = (json['profilePictureUrl'] ?? '').toString().trim().isNotEmpty
-          ? (json['profilePictureUrl'] as String)
+      final DateTime? joinedAt =
+          joinedAtStr != null ? DateTime.tryParse(joinedAtStr) : null;
+      final bool? isAccountVerified = json['isAccountVerified'] is bool
+          ? json['isAccountVerified'] as bool
           : null;
+      final String? profilePictureUrl =
+          (json['profilePictureUrl'] ?? '').toString().trim().isNotEmpty
+              ? (json['profilePictureUrl'] as String)
+              : null;
 
       return TwitterUserModel(
         id: id,
@@ -159,14 +166,16 @@ class TwitterUserModel extends TwitterUserEntity {
   /// ✅ Safe handle
   String get handle {
     if ((userName ?? '').trim().isNotEmpty) return userName!.trim();
-    if ((email ?? '').contains('@')) return email!.split('@').first;
+    if ((email ?? '').contains('@')) return email.split('@').first;
     return id;
   }
 
   /// ✅ Safe avatar
   String? get avatar {
     if ((image ?? '').trim().isNotEmpty) return image!.trim();
-    if ((profilePictureUrl ?? '').trim().isNotEmpty) return profilePictureUrl!.trim();
+    if ((profilePictureUrl ?? '').trim().isNotEmpty) {
+      return profilePictureUrl!.trim();
+    }
     return null;
   }
 }

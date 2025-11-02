@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 /*
 class SpotLightScreen extends StatelessWidget {
   const SpotLightScreen({super.key});
@@ -362,8 +361,6 @@ class _InfoRow extends StatelessWidget {
   }
 }
 */
-import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -376,8 +373,6 @@ import '../../../../res/style/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../cubit/spotlight_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SpotLightScreen extends StatelessWidget {
   const SpotLightScreen({super.key});
@@ -387,7 +382,7 @@ class SpotLightScreen extends StatelessWidget {
   static const Color iconColor = Colors.black87;
   static const Color boxColor = Color(0xFFE7E7E7);
   static const TextStyle textStyle =
-  TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: textColor);
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: textColor);
 
   @override
   Widget build(BuildContext context) {
@@ -434,8 +429,12 @@ class SpotLightScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: kPadding),
                     Text(
-                      state.failure?.toString() ?? (context.isArabic ? 'خطأ غير معروف' : 'Unknown error'),
-                      style: textStyle.copyWith(color: Colors.grey, fontSize: 14),
+                      state.failure?.toString() ??
+                          (context.isArabic
+                              ? 'خطأ غير معروف'
+                              : 'Unknown error'),
+                      style:
+                          textStyle.copyWith(color: Colors.grey, fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: kPadding * 2),
@@ -447,7 +446,8 @@ class SpotLightScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: boxColor,
                         foregroundColor: textColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -470,7 +470,8 @@ class SpotLightScreen extends StatelessWidget {
         }
 
         // Handle success state
-        if (state.status == StateStatus.success && state.spotlightEntity != null) {
+        if (state.status == StateStatus.success &&
+            state.spotlightEntity != null) {
           final data = state.spotlightEntity!;
           return Scaffold(
             backgroundColor: Colors.white,
@@ -481,7 +482,8 @@ class SpotLightScreen extends StatelessWidget {
                 children: [
                   // ✅ Top Cover Image
                   TopImageSection(
-                    imageUrl: data.coverPictureUrl ?? 'https://via.placeholder.com/600x300',
+                    imageUrl: data.coverPictureUrl ??
+                        'https://via.placeholder.com/600x300',
                   ),
 
                   Padding(
@@ -508,7 +510,9 @@ class SpotLightScreen extends StatelessWidget {
                                     color: Colors.grey[200],
                                     image: DecorationImage(
                                       image: NetworkImage(
-                                        (data.profilePictureUrl != null && data.profilePictureUrl!.isNotEmpty)
+                                        (data.profilePictureUrl != null &&
+                                                data.profilePictureUrl!
+                                                    .isNotEmpty)
                                             ? data.profilePictureUrl!
                                             : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
                                       ),
@@ -520,9 +524,12 @@ class SpotLightScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             Column(
-                              crossAxisAlignment: context.isArabic ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                              crossAxisAlignment: context.isArabic
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
                               children: [
-                                Label(text: "${data.firstName} ${data.lastName}"),
+                                Label(
+                                    text: "${data.firstName} ${data.lastName}"),
                                 Label(text: "@${data.username}"),
                               ],
                             ),
@@ -536,7 +543,8 @@ class SpotLightScreen extends StatelessWidget {
                           InfoBox(children: [
                             IconText(
                               icon: Assets.tinder_search,
-                              text: context.isArabic ? 'يبحث عن' : 'Looking for',
+                              text:
+                                  context.isArabic ? 'يبحث عن' : 'Looking for',
                               iconSize: 12,
                               iconColor: Colors.black,
                             ),
@@ -551,14 +559,17 @@ class SpotLightScreen extends StatelessWidget {
                         // ✅ About Me
                         if (data.aboutMe != null) ...[
                           InfoBox(children: [
-                            SectionTitle(text: context.isArabic ? 'عني' : 'About Me'),
+                            SectionTitle(
+                                text: context.isArabic ? 'عني' : 'About Me'),
                             const SizedBox(height: 6),
                             Text(
                               data.aboutMe!,
                               style: textStyle.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
-                              textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                              textDirection: context.isArabic
+                                  ? TextDirection.rtl
+                                  : TextDirection.ltr,
                             ),
                           ]),
                           const SizedBox(height: kPadding),
@@ -574,21 +585,22 @@ class SpotLightScreen extends StatelessWidget {
                           if (data.distance != null)
                             InfoRow(
                               Icons.location_on_outlined,
-                              context.isArabic ? "${data.distance} ميل بعيدًا" : "${data.distance} miles away",
-
+                              context.isArabic
+                                  ? "${data.distance} ميل بعيدًا"
+                                  : "${data.distance} miles away",
                             ),
                           if (data.height != null)
                             InfoRow(
                               Icons.straighten,
-                              context.isArabic ? "${data.height} سم" : "${data.height} cm",
-
+                              context.isArabic
+                                  ? "${data.height} سم"
+                                  : "${data.height} cm",
                             ),
                           if (data.university != null)
                             InfoRow(
                               Icons.school_outlined,
                               data.university!,
                               showDivider: false,
-
                             ),
                         ]),
                         const SizedBox(height: 12),
@@ -603,20 +615,17 @@ class SpotLightScreen extends StatelessWidget {
                             InfoRow(
                               Icons.smoking_rooms_outlined,
                               data.smoking!,
-
                             ),
                           if (data.workout != null)
                             InfoRow(
                               Icons.fitness_center_outlined,
                               data.workout!,
-
                             ),
                           if (data.pets.isNotEmpty)
                             InfoRow(
                               Icons.pets_outlined,
                               data.pets.join(", "),
                               showDivider: false,
-
                             ),
                         ]),
                         const SizedBox(height: kPadding * 2),
@@ -625,18 +634,23 @@ class SpotLightScreen extends StatelessWidget {
                         if (data.interests.isNotEmpty) ...[
                           InfoBox(children: [
                             SectionTitle(
-                              text: context.isArabic ? 'الاهتمامات' : 'Interests',
+                              text:
+                                  context.isArabic ? 'الاهتمامات' : 'Interests',
                               icon: Icons.interests,
                             ),
                             const SizedBox(height: 8),
                             Wrap(
                               spacing: 8,
                               runSpacing: 8,
+                              direction: context.isArabic
+                                  ? Axis.horizontal
+                                  : Axis.horizontal,
+                              alignment: context.isArabic
+                                  ? WrapAlignment.end
+                                  : WrapAlignment.start,
                               children: data.interests
                                   .map((interest) => InterestChip(interest))
                                   .toList(),
-                              direction: context.isArabic ? Axis.horizontal : Axis.horizontal,
-                              alignment: context.isArabic ? WrapAlignment.end : WrapAlignment.start,
                             ),
                           ]),
                           const SizedBox(height: kPadding),
@@ -833,7 +847,6 @@ class SpotLightScreen extends StatelessWidget {
 //   }
 // }
 
-
 /// ===== Reusable Small Widgets =====
 
 class SectionTitle extends StatelessWidget {
@@ -901,10 +914,10 @@ class IconText extends StatelessWidget {
         children: [
           Image.asset(
             icon,
-            width: iconSize ?? 18,  // ✅ makes image smaller/larger
+            width: iconSize ?? 18, // ✅ makes image smaller/larger
             height: iconSize ?? 18, // ✅ maintain square size
-            color: iconColor,       // optional tint
-            fit: BoxFit.contain,    // keeps image clean and proportional
+            color: iconColor, // optional tint
+            fit: BoxFit.contain, // keeps image clean and proportional
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -923,7 +936,6 @@ class IconText extends StatelessWidget {
   }
 }
 
-
 /// ===== Reusable Containers =====
 
 class InfoBox extends StatelessWidget {
@@ -938,7 +950,8 @@ class InfoBox extends StatelessWidget {
         color: SpotLightScreen.boxColor,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, children: children),
     );
   }
 }
@@ -949,13 +962,13 @@ class InterestChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-    decoration: BoxDecoration(
-      color: const Color(0xFFC9C9C9),
-      borderRadius: BorderRadius.circular(200),
-    ),
-    child: Text(text, style: SpotLightScreen.textStyle),
-  );
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xFFC9C9C9),
+          borderRadius: BorderRadius.circular(200),
+        ),
+        child: Text(text, style: SpotLightScreen.textStyle),
+      );
 }
 
 class ActionButton extends StatelessWidget {
@@ -965,18 +978,18 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InfoBox(
-    children: [
-      Center(
-        child: Text(
-          text,
-          style: SpotLightScreen.textStyle.copyWith(
-            fontWeight: FontWeight.bold,
-            color: textColor ?? SpotLightScreen.textColor,
+        children: [
+          Center(
+            child: Text(
+              text,
+              style: SpotLightScreen.textStyle.copyWith(
+                fontWeight: FontWeight.bold,
+                color: textColor ?? SpotLightScreen.textColor,
+              ),
+            ),
           ),
-        ),
-      ),
-    ],
-  );
+        ],
+      );
 }
 
 /// ===== Top Image Section =====
@@ -1025,12 +1038,7 @@ class TopImageSection extends StatelessWidget {
   }
 }
 
-
-
-
 /// ===== Gradient Circle List =====
-
-
 
 /// ===== Profile Info Section =====
 
@@ -1039,26 +1047,27 @@ class ProfileInfoSections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(children: const [
-    ProfileInfoSection(
-      title: "Essentials",
-      icon: Icons.badge_outlined,
-      items: [
-        InfoRow(Icons.location_on_outlined, "10 miles away"),
-        InfoRow(Icons.straighten, "188cm"),
-        InfoRow(Icons.school_outlined, "Cairo University", showDivider: false),
-      ],
-    ),
-    SizedBox(height: 12),
-    ProfileInfoSection(
-      title: "Lifestyle",
-      icon: Icons.favorite_outline,
-      items: [
-        InfoRow(Icons.smoking_rooms_outlined, "Smoker"),
-        InfoRow(Icons.fitness_center_outlined, "Sometimes"),
-        InfoRow(Icons.pets_outlined, "Cat", showDivider: false),
-      ],
-    ),
-  ]);
+        ProfileInfoSection(
+          title: "Essentials",
+          icon: Icons.badge_outlined,
+          items: [
+            InfoRow(Icons.location_on_outlined, "10 miles away"),
+            InfoRow(Icons.straighten, "188cm"),
+            InfoRow(Icons.school_outlined, "Cairo University",
+                showDivider: false),
+          ],
+        ),
+        SizedBox(height: 12),
+        ProfileInfoSection(
+          title: "Lifestyle",
+          icon: Icons.favorite_outline,
+          items: [
+            InfoRow(Icons.smoking_rooms_outlined, "Smoker"),
+            InfoRow(Icons.fitness_center_outlined, "Sometimes"),
+            InfoRow(Icons.pets_outlined, "Cat", showDivider: false),
+          ],
+        ),
+      ]);
 }
 
 class ProfileInfoSection extends StatelessWidget {
@@ -1066,26 +1075,29 @@ class ProfileInfoSection extends StatelessWidget {
   final IconData icon;
   final List<InfoRow> items;
   const ProfileInfoSection(
-      {super.key, required this.title, required this.icon, required this.items});
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.items});
 
   @override
   Widget build(BuildContext context) => InfoBox(children: [
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(children: [
-          Icon(icon, color: SpotLightScreen.iconColor),
-          const SizedBox(width: 6),
-          Text(title,
-              style: SpotLightScreen.textStyle
-                  .copyWith(fontWeight: FontWeight.bold)),
-        ]),
-        const Icon(Icons.more_horiz, color: Colors.black54),
-      ],
-    ),
-    const SizedBox(height: 8),
-    ...items,
-  ]);
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              Icon(icon, color: SpotLightScreen.iconColor),
+              const SizedBox(width: 6),
+              Text(title,
+                  style: SpotLightScreen.textStyle
+                      .copyWith(fontWeight: FontWeight.bold)),
+            ]),
+            const Icon(Icons.more_horiz, color: Colors.black54),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ...items,
+      ]);
 }
 
 class InfoRow extends StatelessWidget {
@@ -1096,18 +1108,18 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    children: [
-      Row(
         children: [
-          Icon(icon, color: SpotLightScreen.iconColor, size: 18),
-          const SizedBox(width: 8),
-          Text(text, style: SpotLightScreen.textStyle),
+          Row(
+            children: [
+              Icon(icon, color: SpotLightScreen.iconColor, size: 18),
+              const SizedBox(width: 8),
+              Text(text, style: SpotLightScreen.textStyle),
+            ],
+          ),
+          if (showDivider)
+            const Divider(color: Colors.black26, height: 16, thickness: 0.5),
         ],
-      ),
-      if (showDivider)
-        const Divider(color: Colors.black26, height: 16, thickness: 0.5),
-    ],
-  );
+      );
 }
 
 class GradientCircleList extends StatelessWidget {
@@ -1120,13 +1132,14 @@ class GradientCircleList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 10,
-        padding:  EdgeInsets.zero,
+        padding: EdgeInsets.zero,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ProfileCard(
               name: 'Ahmed Mohamed',
-              imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+              imageUrl:
+                  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
             ),
           );
         },
@@ -1134,11 +1147,12 @@ class GradientCircleList extends StatelessWidget {
     );
   }
 }
+
 class ProfileCard extends StatelessWidget {
   final String name;
   final String imageUrl;
 
-  const ProfileCard({required this.name, required this.imageUrl});
+  const ProfileCard({super.key, required this.name, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -1149,9 +1163,19 @@ class ProfileCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.08), offset: const Offset(0, 4), blurRadius: 8, spreadRadius: 1),
-          BoxShadow(color: Colors.black.withOpacity(0.06), offset: const Offset(4, 0), blurRadius: 6),
-          BoxShadow(color: Colors.black.withOpacity(0.06), offset: const Offset(-4, 0), blurRadius: 6),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              offset: const Offset(0, 4),
+              blurRadius: 8,
+              spreadRadius: 1),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              offset: const Offset(4, 0),
+              blurRadius: 6),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              offset: const Offset(-4, 0),
+              blurRadius: 6),
         ],
       ),
       child: Column(
@@ -1197,7 +1221,8 @@ class ProfileCard extends StatelessWidget {
             backColor: AppColors.cEDEDED,
             color: AppColors.PRIMARY_COLOR,
             style: Styles.mediumText(fontWeight: FontWeight.w500),
-            iconWidget: Icon(Icons.add, color: AppColors.PRIMARY_COLOR, size: 14),
+            iconWidget:
+                Icon(Icons.add, color: AppColors.PRIMARY_COLOR, size: 14),
             onPressed: () {},
           ),
           const SizedBox(height: 8),
@@ -1739,5 +1764,3 @@ class InfoRow extends StatelessWidget {
   }
 }
 */
-
-

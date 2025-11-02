@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'my_story_instagram_header_item.dart';
 import 'story_instagram_header_item.dart';
 import '../../../../../routes/routes.dart';

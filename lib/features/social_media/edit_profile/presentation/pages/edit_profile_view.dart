@@ -12,13 +12,11 @@ import '../../../../../core/loading/custom_loading.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../../domain/entities/edit_profile_entity.dart';
 import '../cubit/edit_profile_cubit.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/pages.dart';
-import '../../../../../service_locator/service_locator.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/stateful/picker/date_picker.dart';

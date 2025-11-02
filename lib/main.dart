@@ -17,10 +17,7 @@ import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/handle_navigation.dart';
 import 'package:fourtyninehub/core/utils/location_service_listener.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
-import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
@@ -72,7 +69,7 @@ void main() async {
     await LocalizationService.init(); // Initialize Easy Localization
 
     await CacheManager.init();
-  } catch (e, stackTrace) {
+  } catch (e) {
     return; // Exit if initialization fails
   }
   timeago.setLocaleMessages('en', timeago.EnMessages());
@@ -103,7 +100,7 @@ void main() async {
     await CacheServiceImpl.init();
     await DI.execute();
     serviceLocator<FcmNotificationHelper>().getFcmToken();
-  } catch (e, stackTrace) {
+  } catch (e) {
     return; // Exit if service initialization fails
   }
   try {
@@ -123,7 +120,7 @@ void main() async {
     ]);
     final customPageCubit = serviceLocator<CustomPageCubit>();
     await customPageCubit.fetchActivate();
-  } catch (e, stackTrace) {
+  } catch (e) {
     return; // Exit if post-service initialization fails
   }
 
@@ -151,7 +148,7 @@ void main() async {
         ),
       ),
     );
-  } catch (e, stackTrace) {
+  } catch (e) {
     return; // Exit if final initialization fails
   }
 }

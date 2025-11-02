@@ -18,10 +18,6 @@ import '../../presentation_exports.dart';
 import '../widgets/my_video_details/modals/comments_modal.dart'
     as my_comments_modal;
 import '../widgets/my_video_details/modals/viewers_modal.dart';
-import '../widgets/my_video_details/video_actions_section.dart';
-import '../widgets/my_video_details/video_details_app_bar.dart';
-import '../widgets/my_video_details/video_info_section.dart';
-import '../widgets/my_video_details/video_player_widget.dart';
 
 class VideoDetailsView extends StatefulWidget {
   final StarEntity talent;
@@ -169,7 +165,8 @@ class _VideoDetailsViewState extends State<VideoDetailsView>
             cubit:
                 widget.cubit ?? GetIt.instance<StarCubit>(), // Provide fallback
             onViewersPressed: () => _showViewersModal(context, state.viewers),
-            onCommentsPressed: () => _showCommentsModal(context, state.comments),
+            onCommentsPressed: () =>
+                _showCommentsModal(context, state.comments),
             onDeletePressed: _handleDelete,
           ),
         ],

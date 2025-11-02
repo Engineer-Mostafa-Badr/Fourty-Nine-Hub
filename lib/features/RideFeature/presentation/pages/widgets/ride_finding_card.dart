@@ -118,7 +118,7 @@ class _RideFindingCardState extends State<RideFindingCard> {
                   switchAcceptFirstDriver = value;
                   setState(() {});
                 },
-                activeColor: AppColors.PRIMARY_COLOR,
+                activeThumbColor: AppColors.PRIMARY_COLOR,
                 activeTrackColor: AppColors.LightWHATS_APP_COLOR,
                 inactiveThumbColor: AppColors.PRIMARY_COLOR,
                 inactiveTrackColor: AppColors.LIGHT_GRAY_COLOR,

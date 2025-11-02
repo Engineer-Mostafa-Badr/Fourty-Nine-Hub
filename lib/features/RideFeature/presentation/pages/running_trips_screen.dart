@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
@@ -17,13 +15,10 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pe
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:latlong2/latlong.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../core/utils/format_numbers.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
-import '../../../../res/style/app_colors.dart';
 import '../../../new_trip_join/captainshare/screen/custom_map.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;

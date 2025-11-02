@@ -23,15 +23,11 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/holding_text.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_failure_widget.dart';
 import '../cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
 import 'history_wallet_sliver_list.dart';
-import 'dart:ui';
-import 'dart:math' as math;
 
 class WalletViewBody extends StatefulWidget {
   const WalletViewBody({super.key});

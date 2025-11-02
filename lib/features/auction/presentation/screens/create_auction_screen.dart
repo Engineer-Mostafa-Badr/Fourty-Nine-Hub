@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
@@ -69,9 +68,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
               onPrimary: Colors.white, // text/icon on primary
               onSurface: isDark ? Colors.white : Colors.black, // text on background
               surface: isDark ? Colors.black : Colors.white,
-              background: isDark ? Colors.black : Colors.white,
-            ),
-            dialogBackgroundColor: isDark ? Colors.black : Colors.white,
+            ), dialogTheme: DialogThemeData(backgroundColor: isDark ? Colors.black : Colors.white),
           ),
           child: child!,
         );
@@ -93,8 +90,7 @@ class _CreateAuctionScreenState extends State<CreateAuctionScreen> {
               hourMinuteTextColor: isDark ? AppColors.PRIMARY_COLOR_DARK : Colors.black,
               dayPeriodTextColor: isDark ?  AppColors.PRIMARY_COLOR_DARK : Colors.black,
               entryModeIconColor: isDark ?  AppColors.PRIMARY_COLOR_DARK : Colors.black,
-            ),
-            dialogBackgroundColor: isDark ? Colors.black : Colors.white,
+            ), dialogTheme: DialogThemeData(backgroundColor: isDark ? Colors.black : Colors.white),
           ),
           child: child!,
         );

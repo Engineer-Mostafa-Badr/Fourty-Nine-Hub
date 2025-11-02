@@ -11,8 +11,6 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../presentation_exports.dart';
 
-import '../../shared/widgets/common/error_widget.dart';
-import '../../shared/widgets/common/loading_indicator.dart';
 import 'playlist/playlist_card.dart';
 import 'playlist_details_page.dart';
 

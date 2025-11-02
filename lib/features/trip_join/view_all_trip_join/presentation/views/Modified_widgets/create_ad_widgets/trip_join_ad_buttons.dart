@@ -7,8 +7,6 @@ import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
 
 import '../../../../../../../helpers/manage_vibration.dart';
-import '../../../../../../../helpers/manage_vibration.dart';
-
 
 class PremiumAndRequestWidget extends StatelessWidget {
   const PremiumAndRequestWidget({
@@ -31,11 +29,11 @@ class PremiumAndRequestWidget extends StatelessWidget {
               ManageVibration.vibrate();
             },
             child: Center(
-              child: Text(
-                context.isArabic?'نشر مميز':'Premium Publish',
-                style:Styles.headerText(color:context.isDarkMode?Colors.black: Colors.white,
-                  fontWeight: FontWeight.bold, fontSize: 30)
-              ),
+              child: Text(context.isArabic ? 'نشر مميز' : 'Premium Publish',
+                  style: Styles.headerText(
+                      color: context.isDarkMode ? Colors.black : Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30)),
             ),
           ),
         ),
@@ -43,7 +41,7 @@ class PremiumAndRequestWidget extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor:AppColors.getButtonPrimaryColor(context),
+              backgroundColor: AppColors.getButtonPrimaryColor(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -54,8 +52,10 @@ class PremiumAndRequestWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 LocaleKeys.publish.localize,
-                style: Styles.headerText(color:context.isDarkMode?Colors.black: Colors.white,
-                  fontWeight: FontWeight.bold,fontSize: 30),
+                style: Styles.headerText(
+                    color: context.isDarkMode ? Colors.black : Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
               ),
             ),
           ),
@@ -64,7 +64,6 @@ class PremiumAndRequestWidget extends StatelessWidget {
     );
   }
 }
-
 
 class PremiumAndRequestTripWidget extends StatelessWidget {
   final VoidCallback onPremiumPressed;

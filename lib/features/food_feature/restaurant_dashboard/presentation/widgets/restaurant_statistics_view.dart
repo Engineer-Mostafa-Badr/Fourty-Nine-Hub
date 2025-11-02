@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/numbers_extensions.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -74,7 +74,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
             ),
             GestureDetector(
               onTap: () => _showUpdateNumberBottomSheet(
-                  context, state.info?.phone, numberFocusNode), 
+                  context, state.info?.phone, numberFocusNode),
               // Call bottom sheet method
               child: Container(
                 width: double.infinity,
@@ -229,7 +229,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                           fontSize: 32,
                           color: AppColors.getReversedTextColor(context)),
                       onPressed: () async {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (numberController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -379,7 +379,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           setState(() {
                             _isGovernorateExpanded = !_isGovernorateExpanded;
                           });
@@ -454,7 +454,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                                       fontSize: 14),
                                 ),
                                 onTap: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   setState(() {
                                     _selectedGovernorateId = gov.id;
                                     _selectedCityId = null;
@@ -481,7 +481,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () {
-      ManageVibration.vibrate();
+                          ManageVibration.vibrate();
                           setState(() {
                             _isCityExpanded = !_isCityExpanded;
                           });
@@ -547,7 +547,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                                       fontSize: 14),
                                 ),
                                 onTap: () {
-      ManageVibration.vibrate();
+                                  ManageVibration.vibrate();
                                   setState(() {
                                     _selectedCityId = city.id;
                                     _isCityExpanded = false;

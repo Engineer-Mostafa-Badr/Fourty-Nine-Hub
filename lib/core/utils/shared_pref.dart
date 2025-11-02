@@ -5,17 +5,18 @@ import 'dart:developer';
 import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_socket_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class CacheManager {
   static late SharedPreferences prefs;
-  static final StreamController<bool> _activationStreamController = StreamController<bool>.broadcast();
-  
+  static final StreamController<bool> _activationStreamController =
+      StreamController<bool>.broadcast();
+
   static init() async {
     prefs = await SharedPreferences.getInstance();
   }
-  
+
   // Stream to listen for activation changes
-  static Stream<bool> get activationStream => _activationStreamController.stream;
+  static Stream<bool> get activationStream =>
+      _activationStreamController.stream;
 
   static const _accessTokenKey = 'accessToken';
   static const _refreshTokenKey = 'refreshToken';
@@ -54,7 +55,6 @@ class CacheManager {
     await prefs.setString(_refreshTokenKey, token);
   }
 
-
   // Retrieve access token
   static Future<String?> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -92,24 +92,20 @@ class CacheManager {
   static Future<bool> logoutKeepingSettings() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Save current settings before clearing
       bool? isDarkMode = prefs.getBool(themeDarkKey);
       bool? hasSeenOnboarding = prefs.getBool(showOnboarding);
-      
+
       // Clear tokens and login status
       await prefs.remove(_accessTokenKey);
       await prefs.remove(_refreshTokenKey);
       await prefs.setBool("ISLOGIN", false);
-      
+
       // Restore important settings
-      if (isDarkMode != null) {
-        await prefs.setBool(themeDarkKey, isDarkMode);
-      }
-      if (hasSeenOnboarding != null) {
-        await prefs.setBool(showOnboarding, hasSeenOnboarding);
-      }
-      
+      await prefs.setBool(themeDarkKey, isDarkMode!);
+      await prefs.setBool(showOnboarding, hasSeenOnboarding!);
+
       log("Logout completed keeping settings - ref token :${prefs.getString(_refreshTokenKey)} , access token : ${prefs.getString(_accessTokenKey)}");
       return true;
     } catch (e) {
@@ -152,6 +148,7 @@ class CacheManager {
       return false;
     }
   }
+
   static Future<bool> isChoiceRulerOpen(bool value) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -184,6 +181,7 @@ class CacheManager {
       return false;
     }
   }
+
   static Future<bool> isFloatingNavigatorEnabledOpen(bool value) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -203,6 +201,7 @@ class CacheManager {
       return false;
     }
   }
+
   static Future<bool> getFloatingNavigator() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -212,15 +211,18 @@ class CacheManager {
       return false;
     }
   }
+
   static Future<bool> getFloatingNavigatorEnable() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      print('isFloatingNavigatorEnabled ${prefs.getBool(isFloatingNavigatorEnabled)}');
+      print(
+          'isFloatingNavigatorEnabled ${prefs.getBool(isFloatingNavigatorEnabled)}');
       return prefs.getBool(isFloatingNavigatorEnabled) ?? false;
     } catch (e) {
       return false;
     }
   }
+
   static Future<bool> getChoiceRuler() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -230,6 +232,7 @@ class CacheManager {
       return false;
     }
   }
+
   static Future<bool> getEnabledChoiceRuler() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -239,6 +242,7 @@ class CacheManager {
       return false;
     }
   }
+
   static Future<bool> getShowOnboarding() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -253,7 +257,8 @@ class CacheManager {
   static Future<bool> saveForgotPasswordTimer(DateTime timerEnd) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      return await prefs.setString(forgotPasswordTimerKey, timerEnd.toIso8601String());
+      return await prefs.setString(
+          forgotPasswordTimerKey, timerEnd.toIso8601String());
     } catch (e) {
       return false;
     }
@@ -341,16 +346,17 @@ class CacheManager {
   }
 
   // Trip offer timer management
-  static Future<bool> saveTripOfferTimer(String tripId, DateTime expireTime) async {
+  static Future<bool> saveTripOfferTimer(
+      String tripId, DateTime expireTime) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final data = prefs.getString(tripOfferTimersKey);
       Map<String, dynamic> timers = {};
-      
+
       if (data != null) {
         timers = jsonDecode(data) as Map<String, dynamic>;
       }
-      
+
       timers[tripId] = expireTime.toIso8601String();
       return await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
     } catch (e) {
@@ -364,23 +370,23 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       final data = prefs.getString(tripOfferTimersKey);
-      
+
       if (data == null) return null;
-      
+
       final timers = jsonDecode(data) as Map<String, dynamic>;
       if (!timers.containsKey(tripId)) return null;
-      
+
       final expireTimeStr = timers[tripId] as String;
       final expireTime = DateTime.parse(expireTimeStr);
       final now = DateTime.now();
-      
+
       if (now.isAfter(expireTime)) {
         // Timer has expired, remove it
         timers.remove(tripId);
         await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
         return null;
       }
-      
+
       return expireTime.difference(now);
     } catch (e) {
       log("Error getting trip offer remaining time: $e");
@@ -404,23 +410,23 @@ class CacheManager {
       final prefs = await SharedPreferences.getInstance();
       final data = prefs.getString(tripOfferTimersKey);
       print("tripOfferTimersKey $data");
-      if (data == null||data.isEmpty) return;
-      
+      if (data == null || data.isEmpty) return;
+
       final timers = jsonDecode(data) as Map<String, dynamic>;
       final now = DateTime.now();
       final expiredKeys = <String>[];
-      
+
       timers.forEach((tripId, expireTimeStr) {
         final expireTime = DateTime.parse(expireTimeStr as String);
         if (now.isAfter(expireTime)) {
           expiredKeys.add(tripId);
         }
       });
-      
+
       for (final key in expiredKeys) {
         timers.remove(key);
       }
-      
+
       await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
     } catch (e) {
       log("Error cleaning up expired timers: $e");
@@ -432,12 +438,12 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       final data = prefs.getString(tripOfferTimersKey);
-      
+
       if (data == null) return true;
-      
+
       final timers = jsonDecode(data) as Map<String, dynamic>;
       timers.remove(tripId);
-      
+
       return await prefs.setString(tripOfferTimersKey, jsonEncode(timers));
     } catch (e) {
       log("Error removing trip offer timer: $e");

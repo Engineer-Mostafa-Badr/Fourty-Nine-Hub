@@ -27,8 +27,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
-import '../../../../create_doctor/domain/entities/governorate_entity.dart'
-    as create_doctor;
 import '../../../../shared/domain/usecases/get_governorates.dart';
 import '../../../../shared/domain/entities/governorate_entity.dart';
 import '../../../domain/entities/appointment_booking_entity.dart';

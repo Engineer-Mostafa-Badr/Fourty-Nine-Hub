@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_suggest_reels_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/vedio_suggest_reels_item.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -9,7 +8,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 class SuggestReelsFaceBookSection extends StatefulWidget {
@@ -48,8 +46,8 @@ class _SuggestReelsFaceBookSectionState
   void _initVideoControllers() {
     for (var reel in widget.reels) {
       print("reel.videoMedia ${reel.videoMedia}");
-      final controller =
-      VideoPlayerController.networkUrl(Uri.parse('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'))
+      final controller = VideoPlayerController.networkUrl(Uri.parse(
+          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'))
         ..setVolume(0.0) // تعطيل الصوت
         ..initialize().then((_) {
           if (mounted) setState(() {});

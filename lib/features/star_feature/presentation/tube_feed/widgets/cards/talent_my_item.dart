@@ -9,12 +9,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/utils/custom_show_dialog.dart';
-import '../../../../../../helpers/manage_vibration.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../data/model/tube_video_models.dart';

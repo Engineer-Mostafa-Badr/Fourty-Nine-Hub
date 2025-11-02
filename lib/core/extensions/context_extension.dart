@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 
 extension ContextExtensions on BuildContext {
   // Get the current theme mode

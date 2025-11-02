@@ -36,7 +36,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../../../trip_join/helpers/print_helper.dart';
 import '../../../domain/entities/session_entity.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/get_all_sessions_use_case.dart';
@@ -44,7 +43,6 @@ import '../../../domain/use_cases/get_user_use_case.dart';
 import '../../../domain/use_cases/sign_out_from_all_devicec_use_case.dart';
 import '../../../domain/use_cases/sign_out_usecase.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 
 class UserCubit extends Cubit<BasicState<UserEntity>> {
   static UserCubit to = AppPages

@@ -6,13 +6,11 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
-import 'edit_price_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AvailableTripsWidget extends StatelessWidget {

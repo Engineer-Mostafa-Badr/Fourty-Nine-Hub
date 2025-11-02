@@ -1,13 +1,11 @@
 {
   "cmake.ignoreCMakeListsMissing": true,
   // "dart.flutterSdkPath": "D:\\flutter_3.27.3\\flutter",
-  "cSpell.words": [
-    "انتظر"
-  ],
+  "cSpell.words": ["انتظر"],
   "flutterTools.displayGetxContextMenu": false,
   "flutterTools.displayMobxContextMenu": false,
   "flutterTools.displayRiverpodContextMenu": false,
   "flutterTools.displayModularContextMenu": false,
   "java.configuration.updateBuildConfiguration": "interactive",
-  "dart.flutterSdkPath": "~/Desktop/flutterSDK3.27.2/flutter"
+  "dart.flutterSdkPath": "C:\\Users\\Ninja zone\\flutter\\Flutter sdk\\flutter"
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
@@ -8,7 +7,6 @@ import '../../res/style/app_colors.dart';
 import '../utils/flutter_markdown.dart';
 import 'text_input_widget_usecases.dart';
 import '../utils/provider_wrapper.dart';
-import '../../helpers/manage_vibration.dart';
 import '../../helpers/manage_vibration.dart';
 
 // ================== CustomScaffold Basic ==================
@@ -151,7 +149,7 @@ Widget customScaffoldBasicWidget(BuildContext context) {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('CustomScaffold Demo Button Pressed!'),
@@ -379,7 +377,7 @@ Widget customScaffoldWithFABWidget(BuildContext context) {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('FAB Pressed!')),
             );

@@ -3,13 +3,12 @@ import 'package:bloc/bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_info_entity.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_price_distance_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as latlng;
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 part 'fetch_price_distance_state.dart';
+
 class FetchPriceDistanceCubit extends Cubit<FetchPriceDistanceState> {
   final FetchPriceDistanceUsecase fetchPriceDistanceUsecase;
   List<latlng.LatLng>? polyline;
@@ -27,13 +26,14 @@ class FetchPriceDistanceCubit extends Cubit<FetchPriceDistanceState> {
       destiantionLocation: destiantionLocation,
     );
     response.fold(
-      (Failure failure){
+      (Failure failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         emit(
-        FetchPriceDistanceFaild(errorMessage: getFailureMessage(failure, currentContext)),
+          FetchPriceDistanceFaild(
+              errorMessage: getFailureMessage(failure, currentContext)),
         );
       },
       (TripInfoEntity tripInfo) {

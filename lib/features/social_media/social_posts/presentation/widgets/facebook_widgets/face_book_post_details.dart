@@ -23,14 +23,11 @@ import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../data/models/comment_model.dart';
 import '../../../domain/entities/comment_entity.dart';
-import '../../../domain/entities/post_entity.dart';
 import '../../../domain/usecases/add_reply_usecase.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
 import '../../cubit/social_posts_cubit.dart';
-import '../../pages/post_details_page.dart';
 import '../posts/comment_card.dart';
 import '../posts/comment_replies.dart';
-import '../posts/facebook_post_card.dart';
 import '../../../../twitter/domain/entities/twitter_user_entity.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
@@ -101,17 +98,20 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
       body: BlocConsumer<SocialPostsCubit, SocialPostsState>(
           listener: (context, state) {},
           builder: (context, state) {
-            print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
+            print(
+                "state.postDetails!.createdAt ${state.postDetails?.createdAt}");
             final controller = context.read<SocialPostsCubit>();
 
             if (state.status == StateStatus.loading) {
-              print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
+              print(
+                  "state.postDetails!.createdAt ${state.postDetails?.createdAt}");
               return const Center(
                 child: CustomCircularProgressIndicator(),
               );
             } else if (state.status == StateStatus.error ||
                 state.postDetails == null) {
-              print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
+              print(
+                  "state.postDetails!.createdAt ${state.postDetails?.createdAt}");
               return Center(
                 child: Label(
                   text: getFailureMessage(
@@ -121,7 +121,8 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                 ),
               );
             } else {
-              print("state.postDetails!.createdAt ${state.postDetails?.createdAt}");
+              print(
+                  "state.postDetails!.createdAt ${state.postDetails?.createdAt}");
               return Column(
                 children: [
                   Expanded(
@@ -133,14 +134,16 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 16),
                                   child: BuildFacebookHeader(
                                     user: state.postDetails!.user,
-                                    sinceTime:
-                                    context.isArabic
+                                    sinceTime: context.isArabic
                                         ? DateFormat('d MMM, h:mm a', 'ar')
-                                        .format(state.postDetails!.createdAt!)
-                                        : DateFormat('MMM d, h:mm a').format(state.postDetails!.createdAt!),
+                                            .format(
+                                                state.postDetails!.createdAt!)
+                                        : DateFormat('MMM d, h:mm a').format(
+                                            state.postDetails!.createdAt!),
                                     activity: state.postDetails!.activity,
                                     feeling: state.postDetails!.feeling,
                                     users: state.postDetails!.users,
@@ -152,17 +155,21 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                 // if (postEntity.images?.isNotEmpty??false)
                                 Column(
                                   children: [
-                                    if (state.postDetails!.content?.isNotEmpty ?? false)
+                                    if (state
+                                            .postDetails!.content?.isNotEmpty ??
+                                        false)
                                       Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 10, left: 10, bottom: 16),
+                                        padding: const EdgeInsets.only(
+                                            right: 10, left: 10, bottom: 16),
                                         child: ReadMoreLabel(
-                                          text: state.postDetails!.content ?? '',
+                                          text:
+                                              state.postDetails!.content ?? '',
                                           // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
-                                              color: AppColors.getTextColor(context)),
+                                              color: AppColors.getTextColor(
+                                                  context)),
                                         ),
                                       ),
                                     // if(state.postDetails!.type=="live_event_post")FacebookLifeEventWidget(state.postDetails!: state.postDetails!,),
@@ -176,15 +183,16 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                         fit: BoxFit.cover,
                                       ),
                                     if (state.postDetails!.images.isNotEmpty &&
-                                        state.postDetails!.type == "normal_post")
+                                        state.postDetails!.type ==
+                                            "normal_post")
                                       SizedBox(
                                         height: 256,
                                         width: double.infinity,
-                                        child: _buildImageGrid(context, state.postDetails!.images ?? []),
+                                        child: _buildImageGrid(context,
+                                            state.postDetails!.images ?? []),
                                       ),
                                   ],
                                 ),
-
                               ],
                             ),
                           ),
@@ -271,7 +279,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                       ProfileImage(
                         size: 40.sp,
                         accountId: 0,
-                        userId: state.postDetails?.user.id??'',
+                        userId: state.postDetails?.user.id ?? '',
                         imageURL: user?.profilePicture,
                         fromProfile: true,
                       ),
@@ -302,7 +310,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                           size: 20,
                           isCircle: true,
                           onPressed: () async {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             setState(() {
                               loading = true;
                             });
@@ -340,7 +348,8 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                   createdAt: DateTime.now(),
                                   image: user.profilePicture ?? '',
                                   email: user.email ?? '',
-                                  isDocumented: false, hasStory: false,
+                                  isDocumented: false,
+                                  hasStory: false,
                                 ),
                               ),
                             );
@@ -360,6 +369,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
           }),
     );
   }
+
   Widget _buildImageGrid(BuildContext context, List<String> media) {
     if (media.length == 1) {
       return GestureDetector(
@@ -379,7 +389,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
           imageUrl: media[0],
           fit: BoxFit.cover,
           placeholder: (context, url) =>
-          const Center(child: CustomCircularProgressIndicator()),
+              const Center(child: CustomCircularProgressIndicator()),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       );
@@ -618,7 +628,9 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
         isScrollControlled: true,
         widget: BlocProvider.value(
           value: serviceLocator<SocialPostsCubit>()
-            ..loadCommentRepliesData(context:context,commentId:  widget.comment?.reply ?? '',
+            ..loadCommentRepliesData(
+                context: context,
+                commentId: widget.comment?.reply ?? '',
                 comment: widget.comment),
           child: CommentReplies(
             replies: const [],
@@ -685,9 +697,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
                   onPressed: () {
-
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   }))
       ],
     );

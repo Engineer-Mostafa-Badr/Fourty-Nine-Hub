@@ -21,7 +21,6 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../domain/entities/song_entity.dart';
 import '../cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
 
 class MiniAudioEqualizer extends StatefulWidget {
   final bool isPlaying;

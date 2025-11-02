@@ -3,17 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/messages/messages.dart';
 import '../../../../../service_locator/service_locator.dart';
-import '../../controller/star_cubit/star_cubit.dart';
-import '../../shared/widgets/common/loading_indicator.dart';
 import '../../presentation_exports.dart';
-import '../../video_player/widgets/talent_video_player.dart';
-
-import 'profile_video_grid.dart';
 
 class ProfileVideosTab extends StatefulWidget {
   final List<StarEntity> videos; // fallback data for other users

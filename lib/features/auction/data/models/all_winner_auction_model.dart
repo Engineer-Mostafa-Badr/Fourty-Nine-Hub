@@ -5,50 +5,28 @@ import '../../domain/entities/all_winner_auction_entity.dart';
 
 class AuctionAllWinnerModel extends AuctionAllWinnerEntity {
   const AuctionAllWinnerModel({
-    String? id,
-    String? auctionOwner,
-    String? mainCategoryId,
-    String? subCategoryId,
-    String? title,
-    String? description,
-    num? minBiddingPrice,
-    num? price,
-    num? lastPrice,
-    String? startAt,
-    String? endAt,
-    List<String>? media,
-    int? numberOfParticipants,
-    List<String>? views,
-    int? viewsCount,
-    String? status,
-    bool? isPremium,
-    String? adminApprovalStatus,
-    WinnerModel? winner,
-    String? createdAt,
-    String? updatedAt,
-  }) : super(
-    id: id,
-    auctionOwner: auctionOwner,
-    mainCategoryId: mainCategoryId,
-    subCategoryId: subCategoryId,
-    title: title,
-    description: description,
-    minBiddingPrice: minBiddingPrice,
-    price: price,
-    lastPrice: lastPrice,
-    startAt: startAt,
-    endAt: endAt,
-    media: media,
-    numberOfParticipants: numberOfParticipants,
-    views: views,
-    viewsCount: viewsCount,
-    status: status,
-    isPremium: isPremium,
-    adminApprovalStatus: adminApprovalStatus,
-    winner: winner,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-  );
+    super.id,
+    super.auctionOwner,
+    super.mainCategoryId,
+    super.subCategoryId,
+    super.title,
+    super.description,
+    super.minBiddingPrice,
+    super.price,
+    super.lastPrice,
+    super.startAt,
+    super.endAt,
+    super.media,
+    super.numberOfParticipants,
+    super.views,
+    super.viewsCount,
+    super.status,
+    super.isPremium,
+    super.adminApprovalStatus,
+    WinnerModel? super.winner,
+    super.createdAt,
+    super.updatedAt,
+  });
 
   factory AuctionAllWinnerModel.fromJson(Map<String, dynamic> json) {
     return AuctionAllWinnerModel(
@@ -107,11 +85,11 @@ class AuctionAllWinnerModel extends AuctionAllWinnerEntity {
 
 class WinnerModel extends WinnerEntity {
   const WinnerModel({
-    String? id,
-    String? firstName,
-    String? lastName,
-    UserProfileModel? userProfile,
-  }) : super(id: id, firstName: firstName, lastName: lastName, userProfile: userProfile);
+    super.id,
+    super.firstName,
+    super.lastName,
+    UserProfileModel? super.userProfile,
+  });
 
   factory WinnerModel.fromJson(Map<String, dynamic> json) {
     return WinnerModel(
@@ -136,10 +114,10 @@ class WinnerModel extends WinnerEntity {
 
 class UserProfileModel extends UserProfileEntity {
   const UserProfileModel({
-    String? id,
-    String? userId,
-    ProfilePictureModel? profilePicture,
-  }) : super(id: id, userId: userId, profilePicture: profilePicture);
+    super.id,
+    super.userId,
+    ProfilePictureModel? super.profilePicture,
+  });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
@@ -162,9 +140,9 @@ class UserProfileModel extends UserProfileEntity {
 
 class ProfilePictureModel extends ProfilePictureEntity {
   const ProfilePictureModel({
-    String? id,
-    String? mediaKey,
-  }) : super(id: id, mediaKey: mediaKey);
+    super.id,
+    super.mediaKey,
+  });
 
   factory ProfilePictureModel.fromJson(Map<String, dynamic> json) {
     return ProfilePictureModel(

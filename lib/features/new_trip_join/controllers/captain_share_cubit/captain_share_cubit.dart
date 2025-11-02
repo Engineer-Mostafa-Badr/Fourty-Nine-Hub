@@ -43,7 +43,6 @@ import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_n
 import 'package:fourtyninehub/features/new_trip_join/domain/usecases/listen_to_update_route_use_case.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';

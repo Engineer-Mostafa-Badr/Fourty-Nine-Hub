@@ -121,7 +121,7 @@ class _CamViewState extends State<_CamView> {
                         return _BaseIcon(
                           icon: Icons.close,
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             context.pop();
                             context.pop();
                           },
@@ -192,7 +192,7 @@ class _CamViewState extends State<_CamView> {
                         return _BaseIcon(
                           icon: Icons.check,
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             final media = context
                                 .read<CameraPickerCubit>()
                                 .state
@@ -229,7 +229,7 @@ class _CamViewState extends State<_CamView> {
                         if (state.pickMode == PickMode.photo) {
                           return IconButton(
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               controller.takePicture();
                             },
                             icon: _pickIcon,
@@ -238,7 +238,7 @@ class _CamViewState extends State<_CamView> {
                             CameraPickerStatus.startVideo) {
                           return InkWell(
                             onTap: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               controller.stopVideoRecording();
                             },
                             child: Stack(
@@ -257,7 +257,7 @@ class _CamViewState extends State<_CamView> {
                         } else {
                           return IconButton(
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               controller.startVideoRecording();
                             },
                             icon: _pickIcon,
@@ -274,7 +274,7 @@ class _CamViewState extends State<_CamView> {
                           state.status != CameraPickerStatus.startVideo) {
                         return _BaseIcon(
                           onTap: () {
-      ManageVibration.vibrate();
+                            ManageVibration.vibrate();
                             CliLogger.info('Flip camera');
                             controller.flipCamera();
                           },
@@ -313,7 +313,7 @@ class _CamViewState extends State<_CamView> {
   Widget _permissionButton(String label) {
     return InkWell(
         onTap: () async {
-      ManageVibration.vibrate();
+          ManageVibration.vibrate();
           openAppSettings().then((value) {
             if (value) {
               context.read<CameraPickerCubit>().init();
@@ -332,7 +332,7 @@ class _BaseIcon extends StatelessWidget {
   final double? iconSize;
   final void Function()? onTap;
 
-  const _BaseIcon({required this.icon, this.color, this.iconSize,this.onTap});
+  const _BaseIcon({required this.icon, this.onTap, this.color, this.iconSize});
 
   @override
   Widget build(BuildContext context) {
@@ -442,7 +442,7 @@ class _ImagesListState extends State<_ImagesList> {
                           ? AppColors.SECONDARY_COLOR
                           : null,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         if (controller.state.status !=
                             CameraPickerStatus.startVideo) {
                           controller.emitPhotoPickMode();
@@ -462,7 +462,7 @@ class _ImagesListState extends State<_ImagesList> {
                           ? AppColors.SECONDARY_COLOR
                           : null,
                       onPressed: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         controller.emitVideoPickMode();
                       },
                     );
@@ -484,7 +484,7 @@ class _ImagesListState extends State<_ImagesList> {
       bool isPhoto = true}) {
     return InkWell(
       onTap: () {
-      ManageVibration.vibrate();
+        ManageVibration.vibrate();
         if (mounted &&
             context.read<CameraPickerCubit>().state.status !=
                 CameraPickerStatus.startVideo) {

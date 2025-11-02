@@ -3,7 +3,6 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
-import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/single_post_instagram_entity.dart';
 import '../../../domain/usecases/get_single_post_instagram_use_case.dart';
 

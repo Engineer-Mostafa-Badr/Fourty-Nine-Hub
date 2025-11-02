@@ -17,7 +17,6 @@ import '../bloc/twitter_bloc.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -36,10 +35,11 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
   var formKey = GlobalKey<FormState>();
 
   @override
-  initState(){
+  initState() {
     context.read<TwitterCubit>().getVerification();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -152,8 +152,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                                   label: '',
                                   text: LocaleKeys.front.localize,
                                   onTap: () {
-                                    controller.uploadFrontId(
-                                        context: context);
+                                    controller.uploadFrontId(context: context);
                                   },
                                   onRemove: () {
                                     controller.removeFrontId();
@@ -185,41 +184,42 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                     ),
                     _buildButton(onTap: () async {
                       // if (formKey.currentState!.validate()) {
-                      if(state.isVerified==false){
+                      if (state.isVerified == false) {
                         SubscriptionMethod().subscribe(
-                          subscribeId: '66bb94c3083de8342c9d4f38',
-                          title: context.isArabic?"توثيق الحساب":"Verify Account",
-                          onSubscribe: (success) {
-                            context.pop();
-                            if(success)controller.getVerification();
-                          }
-                        );
+                            subscribeId: '66bb94c3083de8342c9d4f38',
+                            title: context.isArabic
+                                ? "توثيق الحساب"
+                                : "Verify Account",
+                            onSubscribe: (success) {
+                              context.pop();
+                              if (success) controller.getVerification();
+                            });
                         return;
                       }
-                        if (state.personalPhoto == null) {
-                          showErrorMessage(context, "Select Personal Photo");
-                        } else if (state.frontId == null) {
-                          showErrorMessage(context, "Select Front ID");
-                        } else if (state.backId == null) {
-                          showErrorMessage(context, "Select Back ID");
-                        } else {
-                          List<String> mediaIds = [];
-                          mediaIds.add(state.personalPhoto!.mediaId);
-                          mediaIds.add(state.frontId!.mediaId);
-                          mediaIds.add(state.backId!.mediaId);
+                      if (state.personalPhoto == null) {
+                        showErrorMessage(context, "Select Personal Photo");
+                      } else if (state.frontId == null) {
+                        showErrorMessage(context, "Select Front ID");
+                      } else if (state.backId == null) {
+                        showErrorMessage(context, "Select Back ID");
+                      } else {
+                        List<String> mediaIds = [];
+                        mediaIds.add(state.personalPhoto!.mediaId);
+                        mediaIds.add(state.frontId!.mediaId);
+                        mediaIds.add(state.backId!.mediaId);
 
-                          await controller.onRequestVerification(
-                            params: TwitterDocumentationParams(
-                              idImageFront: state.frontId!.mediaId,
-                              idImageBack: state.backId!.mediaId,
-                              personalImage: state.personalPhoto!.mediaId,
-                            ),
-                          );
+                        await controller.onRequestVerification(
+                          params: TwitterDocumentationParams(
+                            idImageFront: state.frontId!.mediaId,
+                            idImageBack: state.backId!.mediaId,
+                            personalImage: state.personalPhoto!.mediaId,
+                          ),
+                        );
 
-                          showSuccessMessage(context,
-                              LocaleKeys.documentSuccessfully.localize);
-                          context.pop();
-                        }
+                        showSuccessMessage(
+                            context, LocaleKeys.documentSuccessfully.localize);
+                        context.pop();
+                      }
                       // }
                       // onSendRequest();
                     }),

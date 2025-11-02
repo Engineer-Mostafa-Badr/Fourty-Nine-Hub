@@ -10,7 +10,6 @@ import '../shared/fourty_nine_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../../../subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 

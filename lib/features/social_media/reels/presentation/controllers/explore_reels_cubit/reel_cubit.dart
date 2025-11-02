@@ -32,8 +32,6 @@ import '../../pages/recording/media_preview.dart';
 import '../../../../../../res/style/const.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import '../../../data/models/new_reels_model.dart';
 

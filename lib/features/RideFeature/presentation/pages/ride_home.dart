@@ -135,7 +135,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
-
                 color: context.isDarkMode
                     ? AppColors.QUANTITY_COLOR
                     : AppColors.whiteColor,
@@ -724,10 +723,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                   TextInputFormatter
                                                       .withFunction(
                                                           (oldValue, newValue) {
-                                                    if (newValue.text.isEmpty)
+                                                    if (newValue.text.isEmpty) {
                                                       return newValue;
-                                                    if (newValue.text == '0')
+                                                    }
+                                                    if (newValue.text == '0') {
                                                       return newValue;
+                                                    }
                                                     if (newValue.text
                                                         .startsWith('0')) {
                                                       return oldValue;
@@ -2191,7 +2192,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   children: [
                                     // From Location Field
                                     Padding(
-                                      padding: EdgeInsets.only(left: context.isArabic? 0 : 48.w, right: context.isArabic? 48.w : 0),
+                                      padding: EdgeInsets.only(
+                                          left: context.isArabic ? 0 : 48.w,
+                                          right: context.isArabic ? 48.w : 0),
                                       child: _customLocationField(
                                         isTo: false,
                                         color: Colors.green,
@@ -2203,13 +2206,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               Routes.GoogleMapsSearchAndPick,
                                               extra:
                                                   RideGoogleMapSearchAndPickParams(
-                                                    initialPosition: state.currentLocation == null
+                                                initialPosition:
+                                                    state.currentLocation ==
+                                                            null
                                                         ? null
                                                         : gmap.LatLng(
-                                                      state.currentLocation!.lat!,
-                                                      state.currentLocation!.lng!,
-                                                    ),
-                                                initialAddress: state.currentLocation?.address,
+                                                            state
+                                                                .currentLocation!
+                                                                .lat!,
+                                                            state
+                                                                .currentLocation!
+                                                                .lng!,
+                                                          ),
+                                                initialAddress: state
+                                                    .currentLocation?.address,
                                                 minDistanceReferencePoint: state
                                                             .toLocation ==
                                                         null
@@ -2248,7 +2258,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                     ),
                                     // To Location Field
                                     Padding(
-                                      padding: EdgeInsets.only(left: context.isArabic? 0 : 48.w, right: context.isArabic? 48.w : 0),
+                                      padding: EdgeInsets.only(
+                                          left: context.isArabic ? 0 : 48.w,
+                                          right: context.isArabic ? 48.w : 0),
                                       child: _customLocationField(
                                         isTo: true,
                                         color: Colors.blue,
@@ -2260,13 +2272,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                               Routes.GoogleMapsSearchAndPick,
                                               extra:
                                                   RideGoogleMapSearchAndPickParams(
-                                                    initialPosition: state.toLocation == null
-                                                        ? null
-                                                        : gmap.LatLng(
-                                                      state.toLocation!.lat!,
-                                                      state.toLocation!.lng!,
-                                                    ),
-                                                initialAddress: state.toLocation?.address,
+                                                initialPosition: state
+                                                            .toLocation ==
+                                                        null
+                                                    ? null
+                                                    : gmap.LatLng(
+                                                        state.toLocation!.lat!,
+                                                        state.toLocation!.lng!,
+                                                      ),
+                                                initialAddress:
+                                                    state.toLocation?.address,
                                                 minDistanceReferencePoint: state
                                                             .currentLocation ==
                                                         null
@@ -2553,49 +2568,75 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                   height: 20),
                                                               Theme(
                                                                 data: ThemeData(
-                                                                  inputDecorationTheme: InputDecorationTheme(
-                                                                    border: OutlineInputBorder(
-                                                                      borderRadius: BorderRadius.circular(12.0),
-                                                                      borderSide: const BorderSide(
-                                                                          color: AppColors.PRIMARY_COLOR),
-                                                                    ),
-
-                                                                    enabledBorder: OutlineInputBorder(
-                                                                      borderRadius: BorderRadius.circular(12.0),
-                                                                      borderSide: const BorderSide(
-                                                                          color: AppColors.PRIMARY_COLOR),
-                                                                    ),
-                                                                  )
-                                                                ),
-                                                                child: TextField(
-                                                                  controller: _descriptionController,
+                                                                    inputDecorationTheme:
+                                                                        InputDecorationTheme(
+                                                                  border:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12.0),
+                                                                    borderSide:
+                                                                        const BorderSide(
+                                                                            color:
+                                                                                AppColors.PRIMARY_COLOR),
+                                                                  ),
+                                                                  enabledBorder:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12.0),
+                                                                    borderSide:
+                                                                        const BorderSide(
+                                                                            color:
+                                                                                AppColors.PRIMARY_COLOR),
+                                                                  ),
+                                                                )),
+                                                                child:
+                                                                    TextField(
+                                                                  controller:
+                                                                      _descriptionController,
                                                                   maxLines: 5,
                                                                   minLines: 3,
-                                                                  cursorColor: AppColors.PRIMARY_COLOR,
-                                                                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                                                  cursorColor:
+                                                                      AppColors
+                                                                          .PRIMARY_COLOR,
+                                                                  onTapOutside: (event) => FocusManager
+                                                                      .instance
+                                                                      .primaryFocus
+                                                                      ?.unfocus(),
                                                                   decoration:
-                                                                       InputDecoration(
-
+                                                                      InputDecoration(
                                                                     border:
                                                                         OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.circular(12.0),
-                                                                          borderSide: const BorderSide(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              12.0),
+                                                                      borderSide:
+                                                                          const BorderSide(
                                                                               color: AppColors.PRIMARY_COLOR),
-
-                                                                        ),
-
-                                                                         enabledBorder: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.circular(12.0),
-                                                                          borderSide: const BorderSide(
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              12.0),
+                                                                      borderSide:
+                                                                          const BorderSide(
                                                                               color: AppColors.PRIMARY_COLOR),
-                                                                         ),
-
-                                                                         focusedBorder: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.circular(12.0),
-                                                                          borderSide: const BorderSide(
+                                                                    ),
+                                                                    focusedBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              12.0),
+                                                                      borderSide:
+                                                                          const BorderSide(
                                                                               color: AppColors.PRIMARY_COLOR),
-                                                                         ),
-                                                                         hintText: context.isArabic? "أكتب تعليق للسائق..." : "Write a comment for the driver...",
+                                                                    ),
+                                                                    hintText: context
+                                                                            .isArabic
+                                                                        ? "أكتب تعليق للسائق..."
+                                                                        : "Write a comment for the driver...",
                                                                   ),
                                                                 ),
                                                               ),
@@ -2697,7 +2738,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         .subCategoryId ??
                                                     '',
                                                 isPremium: true,
-                                                    description: _descriptionController.text.trim() == '' ? null : _descriptionController.text.trim(),
+                                                description:
+                                                    _descriptionController.text
+                                                                .trim() ==
+                                                            ''
+                                                        ? null
+                                                        : _descriptionController
+                                                            .text
+                                                            .trim(),
                                               ),
                                             );
                                           },
@@ -2899,50 +2947,69 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                                 const SizedBox(
                                                                     height: 20),
                                                                 Theme(
-                                                                  data: ThemeData(
-                                                                      inputDecorationTheme: InputDecorationTheme(
-                                                                        border: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.circular(12.0),
-                                                                          borderSide: const BorderSide(
+                                                                  data:
+                                                                      ThemeData(
+                                                                          inputDecorationTheme:
+                                                                              InputDecorationTheme(
+                                                                    border:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              12.0),
+                                                                      borderSide:
+                                                                          const BorderSide(
                                                                               color: AppColors.PRIMARY_COLOR),
-                                                                        ),
-
-                                                                        enabledBorder: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.circular(12.0),
-                                                                          borderSide: const BorderSide(
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              12.0),
+                                                                      borderSide:
+                                                                          const BorderSide(
                                                                               color: AppColors.PRIMARY_COLOR),
-                                                                        ),
-                                                                      )
-                                                                  ),
-                                                                  child: TextField(
-                                                                    controller: _descriptionController,
+                                                                    ),
+                                                                  )),
+                                                                  child:
+                                                                      TextField(
+                                                                    controller:
+                                                                        _descriptionController,
                                                                     maxLines: 5,
                                                                     minLines: 3,
-                                                                    cursorColor: AppColors.PRIMARY_COLOR,
-                                                                    onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                                                    cursorColor:
+                                                                        AppColors
+                                                                            .PRIMARY_COLOR,
+                                                                    onTapOutside: (event) => FocusManager
+                                                                        .instance
+                                                                        .primaryFocus
+                                                                        ?.unfocus(),
                                                                     decoration:
-                                                                    InputDecoration(
-
+                                                                        InputDecoration(
                                                                       border:
-                                                                      OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12.0),
-                                                                        borderSide: const BorderSide(
-                                                                            color: AppColors.PRIMARY_COLOR),
-
+                                                                          OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(12.0),
+                                                                        borderSide:
+                                                                            const BorderSide(color: AppColors.PRIMARY_COLOR),
                                                                       ),
-
-                                                                      enabledBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12.0),
-                                                                        borderSide: const BorderSide(
-                                                                            color: AppColors.PRIMARY_COLOR),
+                                                                      enabledBorder:
+                                                                          OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(12.0),
+                                                                        borderSide:
+                                                                            const BorderSide(color: AppColors.PRIMARY_COLOR),
                                                                       ),
-
-                                                                      focusedBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12.0),
-                                                                        borderSide: const BorderSide(
-                                                                            color: AppColors.PRIMARY_COLOR),
+                                                                      focusedBorder:
+                                                                          OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(12.0),
+                                                                        borderSide:
+                                                                            const BorderSide(color: AppColors.PRIMARY_COLOR),
                                                                       ),
-                                                                      hintText: context.isArabic? "أكتب تعليق للسائق..." : "Write a comment for the driver...",
+                                                                      hintText: context
+                                                                              .isArabic
+                                                                          ? "أكتب تعليق للسائق..."
+                                                                          : "Write a comment for the driver...",
                                                                     ),
                                                                   ),
                                                                 ),
@@ -3045,7 +3112,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                             .subCategoryId ??
                                                         '',
                                                     isPremium: false,
-                                                        description: _descriptionController.text.trim() == '' ? null : _descriptionController.text.trim(),
+                                                    description:
+                                                        _descriptionController
+                                                                    .text
+                                                                    .trim() ==
+                                                                ''
+                                                            ? null
+                                                            : _descriptionController
+                                                                .text
+                                                                .trim(),
                                                   ),
                                                 );
                                               },
@@ -3161,9 +3236,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               0, subCategories.removeAt(index));
                           if (!serviceLocator<RideCubit>()
                                   .selectedCategoryIsSocket &&
-                              type == "ride")
+                              type == "ride") {
                             serviceLocator<RideCubit>()
                                 .returnToSoketFromSwitch();
+                          }
                         }
                         serviceLocator<RideCubit>().subCategoryId =
                             subCategory.subCategoryId;
@@ -3467,7 +3543,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           title: LocaleKeys.options.tr());
                     }
                   },
-
                   child: SizedBox(
                     height: 25,
                     child: Icon(

@@ -319,8 +319,9 @@ Widget emailInputWidget(BuildContext context) {
     ],
     labelBuilder: (type) {
       if (type == TextFieldValidatorType.email) return 'Email';
-      if (type == TextFieldValidatorType.emailOrPhoneNumber)
+      if (type == TextFieldValidatorType.emailOrPhoneNumber) {
         return 'Email or Phone';
+      }
       if (type == TextFieldValidatorType.optional) return 'Optional';
       return 'Unknown';
     },
@@ -452,8 +453,9 @@ Widget passwordInputWidget(BuildContext context) {
     ],
     labelBuilder: (type) {
       if (type == TextFieldValidatorType.password) return 'Password';
-      if (type == TextFieldValidatorType.confirmPassword)
+      if (type == TextFieldValidatorType.confirmPassword) {
         return 'Confirm Password';
+      }
       if (type == TextFieldValidatorType.optional) return 'Optional';
       return 'Unknown';
     },

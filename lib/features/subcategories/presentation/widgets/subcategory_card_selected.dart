@@ -6,7 +6,6 @@ import '../../../../core/extensions/context_extension.dart';
 import '../../../fourty_nine/domain/entities/main_category_entity.dart';
 import '../../domain/entities/sub_category_entity.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../helpers/manage_vibration.dart';
 
 class SubcategoryCardSelected extends StatefulWidget {
   final SubCategoryEntity item;

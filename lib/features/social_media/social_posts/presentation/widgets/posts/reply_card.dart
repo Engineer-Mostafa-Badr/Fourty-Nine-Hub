@@ -48,11 +48,16 @@ class _ReplyCardState extends State<ReplyCard> {
 
   void handleCommentReact(CommentEntity comment, String newReaction) {
     String? currentReaction;
-    if (comment.isLikes == true) currentReaction = 'like';
-    else if (comment.isWow == true) currentReaction = 'wow';
-    else if (comment.isHaha == true) currentReaction = 'haha';
-    else if (comment.isLove == true) currentReaction = 'love';
-    else if (comment.isSad == true) currentReaction = 'sad';
+    if (comment.isLikes == true) {
+      currentReaction = 'like';
+    } else if (comment.isWow == true)
+      currentReaction = 'wow';
+    else if (comment.isHaha == true)
+      currentReaction = 'haha';
+    else if (comment.isLove == true)
+      currentReaction = 'love';
+    else if (comment.isSad == true)
+      currentReaction = 'sad';
     else if (comment.isAngry == true) currentReaction = 'angry';
     if (currentReaction == newReaction) {
       _decrementReactionCount(comment, newReaction);
@@ -112,16 +117,21 @@ class _ReplyCardState extends State<ReplyCard> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    print("widget.reply.commentOwnerId ${widget.reply.commentOwnerId}  ==>  ${widget.reply.user.id}");
+    print(
+        "widget.reply.commentOwnerId ${widget.reply.commentOwnerId}  ==>  ${widget.reply.user.id}");
     final user = context.read<UserCubit>().state.data;
     // Keep sizes synced with CommentCard so the connector lines align visually
     final double mainAvatarSize = 36.w;
     final double replyAvatarSize = 28.w;
     final double avatarContentGap = 12.w;
-    num totalReactions = (widget.reply.likesCount??0) + (widget.reply.hahaCount??0) + (widget.reply.loveCount??0) + (widget.reply.wowCount??0) + (widget.reply.sadCount??0) +(widget.reply.angryCount??0);
+    num totalReactions = (widget.reply.likesCount ?? 0) +
+        (widget.reply.hahaCount ?? 0) +
+        (widget.reply.loveCount ?? 0) +
+        (widget.reply.wowCount ?? 0) +
+        (widget.reply.sadCount ?? 0) +
+        (widget.reply.angryCount ?? 0);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 8.h),
@@ -162,7 +172,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   children: [
                     // Reply Bubble - smaller and more subtle than main comments
                     ClickableWidget(
-                      onLongPress: (){
+                      onLongPress: () {
                         ManageVibration.vibrate();
                         bottomSheet(
                           context: context,
@@ -173,7 +183,8 @@ class _ReplyCardState extends State<ReplyCard> {
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 14.w, vertical: 10.h),
                         decoration: BoxDecoration(
                           color: context.isDarkMode
                               ? AppColors.QUANTITY_COLOR.withOpacity(0.6)
@@ -208,17 +219,19 @@ class _ReplyCardState extends State<ReplyCard> {
                                 ),
                               ],
                             ),
-                            if((widget.reply.commentOwnerId?.isNotEmpty??false)&&((widget.reply.commentOwnerId??'')!=(widget.reply.user.id)))...[
+                            if ((widget.reply.commentOwnerId?.isNotEmpty ??
+                                    false) &&
+                                ((widget.reply.commentOwnerId ?? '') !=
+                                    (widget.reply.user.id))) ...[
                               SizedBox(height: 3.h),
-                            // Reply content
-                            Text(
-                              "${widget.reply.commentOwnerFirstName} ${widget.reply.commentOwnerLastName}",
-                              style: TextStyle(
-                                fontSize: 14,
-                                height: 1.3,
-                                color: AppColors.LIGHT_BLUE),
+                              // Reply content
+                              Text(
+                                "${widget.reply.commentOwnerFirstName} ${widget.reply.commentOwnerLastName}",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    height: 1.3,
+                                    color: AppColors.LIGHT_BLUE),
                               ),
-
                             ],
                             SizedBox(height: 3.h),
                             // Reply content
@@ -260,52 +273,61 @@ class _ReplyCardState extends State<ReplyCard> {
                                   from: 'comments',
                                   showTitle: true,
                                   showIcon: false,
-                                  handleReaction: (reaction){
+                                  handleReaction: (reaction) {
                                     handleCommentReact(widget.reply, reaction);
-                                    setState(() {
-
-                                    });
+                                    setState(() {});
                                   },
                                 ),
                               ],
                             ),
                           ),
-                          if(totalReactions>0)Text('$totalReactions',style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                          ),),
-                          if((widget.reply.angryCount??0)>0)Image.asset(
-                            Assets.angry,
-                            width: 20,
-                            height: 20,
-                          ),
-                          if((widget.reply.sadCount??0)>0)Image.asset(
-                            Assets.sad,
-                            width: 20,
-                            height: 20,
-                          ),
-                          if((widget.reply.wowCount??0)>0)Image.asset(
-                            Assets.wow,
-                            width: 20,
-                            height: 20,
-                          ),
-                          if((widget.reply.loveCount??0)>0)Image.asset(
-                            Assets.heart,
-                            width: 20,
-                            height: 20,
-                          ),
-                          if((widget.reply.hahaCount??0)>0)Image.asset(
-                            Assets.haha,
-                            width: 20,
-                            height: 20,
-                          ),
-                          if((widget.reply.likesCount??0)>0)Image.asset(
-                            Assets.like,
-                            width: 20,
-                            height: 20,
-                          ),
-
+                          if (totalReactions > 0)
+                            Text(
+                              '$totalReactions',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: context.isDarkMode
+                                    ? Colors.white60
+                                    : const Color(0xFF65676B),
+                              ),
+                            ),
+                          if ((widget.reply.angryCount ?? 0) > 0)
+                            Image.asset(
+                              Assets.angry,
+                              width: 20,
+                              height: 20,
+                            ),
+                          if ((widget.reply.sadCount ?? 0) > 0)
+                            Image.asset(
+                              Assets.sad,
+                              width: 20,
+                              height: 20,
+                            ),
+                          if ((widget.reply.wowCount ?? 0) > 0)
+                            Image.asset(
+                              Assets.wow,
+                              width: 20,
+                              height: 20,
+                            ),
+                          if ((widget.reply.loveCount ?? 0) > 0)
+                            Image.asset(
+                              Assets.heart,
+                              width: 20,
+                              height: 20,
+                            ),
+                          if ((widget.reply.hahaCount ?? 0) > 0)
+                            Image.asset(
+                              Assets.haha,
+                              width: 20,
+                              height: 20,
+                            ),
+                          if ((widget.reply.likesCount ?? 0) > 0)
+                            Image.asset(
+                              Assets.like,
+                              width: 20,
+                              height: 20,
+                            ),
                         ],
                       ),
                     ),
@@ -325,9 +347,12 @@ class _ReplyCardState extends State<ReplyCard> {
               ),
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(25),
-              ),              child: Row(
+              ),
+              child: Row(
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -358,16 +383,21 @@ class _ReplyCardState extends State<ReplyCard> {
                       },
                       style: const TextStyle(fontSize: 13),
                       decoration: InputDecoration(
-                        hintText: context.isArabic ? 'تعديل الرد...' : 'Edit reply...',
+                        hintText: context.isArabic
+                            ? 'تعديل الرد...'
+                            : 'Edit reply...',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
-                        fillColor: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.grey.shade200,
+                        fillColor: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.grey.shade200,
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         focusedErrorBorder: InputBorder.none,
                         isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                       ),
                     ),
                   ),
@@ -388,7 +418,9 @@ class _ReplyCardState extends State<ReplyCard> {
                       child: Icon(
                         Icons.send,
                         size: 18,
-                        color: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode
+                            ? AppColors.SECONDARY_COLOR
+                            : AppColors.PRIMARY_COLOR,
                       ),
                     ),
                 ],
@@ -451,7 +483,9 @@ class _ReplyCardState extends State<ReplyCard> {
           if (isMyComment)
             _buildOptionTile(
               icon: Icons.edit_outlined,
-              iconColor: context.isDarkMode ? AppColors.SECONDARY_COLOR : AppColors.PRIMARY_COLOR,
+              iconColor: context.isDarkMode
+                  ? AppColors.SECONDARY_COLOR
+                  : AppColors.PRIMARY_COLOR,
               title: LocaleKeys.editReply.localize,
               subTitle: LocaleKeys.youWillEditReply.localize,
               onTap: () {
@@ -499,7 +533,8 @@ class _ReplyCardState extends State<ReplyCard> {
           padding: EdgeInsets.all(8.w),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: (iconColor ?? Theme.of(context).primaryColor).withOpacity(0.1),
+            color:
+                (iconColor ?? Theme.of(context).primaryColor).withOpacity(0.1),
           ),
           child: Icon(
             icon,
@@ -512,7 +547,8 @@ class _ReplyCardState extends State<ReplyCard> {
           child: Text(
             subTitle,
             style: TextStyle(
-              color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
+              color:
+                  context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
               fontSize: 11,
             ),
           ),

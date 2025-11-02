@@ -52,11 +52,14 @@ abstract class TwitterRemoteDataSource {
   });
 
   // REACTIONS / SHARE / REPORT
-  Future<Either<Failure, bool>> reactOnPost({required TwitterPostReactParams params});
+  Future<Either<Failure, bool>> reactOnPost(
+      {required TwitterPostReactParams params});
   Future<Either<Failure, bool>> getVerification();
-  Future<Either<Failure, bool>> reactOnComment({required TwitterCommentReactParams params});
+  Future<Either<Failure, bool>> reactOnComment(
+      {required TwitterCommentReactParams params});
   Future<Either<Failure, bool>> sharePost({required String params}); // postId
-  Future<Either<Failure, bool>> addReport({required TwitterReportParams params});
+  Future<Either<Failure, bool>> addReport(
+      {required TwitterReportParams params});
 
   // COMMENTS / REPLIES
   Future<Either<Failure, TwitterPostCommentEntity>> commentOnTwitterPost({
@@ -82,7 +85,8 @@ abstract class TwitterRemoteDataSource {
     required int limit,
   });
 
-  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>> getThreadRepliesPage({
+  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>>
+      getThreadRepliesPage({
     required String threadId,
     required int page,
     required int limit,
@@ -102,11 +106,12 @@ abstract class TwitterRemoteDataSource {
   });
 
   // FOLLOW COUNTS
-  Future<Either<Failure, int>> getFollowersCount({required String subCategoryId});
-  Future<Either<Failure, int>> getFollowingCount({required String subCategoryId});
+  Future<Either<Failure, int>> getFollowersCount(
+      {required String subCategoryId});
+  Future<Either<Failure, int>> getFollowingCount(
+      {required String subCategoryId});
 
   Future<Either<Failure, String>> repostPost(String postId);
-
 }
 
 class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
@@ -140,8 +145,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, TwitterPage<TwitterPostEntity>>> getGlobalFeed({
     required TwitterFeedParams params,
-  }) async
-  {
+  }) async {
     final uri = Uri.parse('/twitter/threads').replace(queryParameters: {
       'page': '${params.page}',
       'limit': '${params.limit}',
@@ -151,9 +155,10 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
     return response.fold(
       Left.new,
-          (data) {
+      (data) {
         final root = (data is Map<String, dynamic>) ? data : const {};
-        final dataWrap = (root['data'] as Map?)?.cast<String, dynamic>() ?? const {};
+        final dataWrap =
+            (root['data'] as Map?)?.cast<String, dynamic>() ?? const {};
 
         // posts
         final threads = (dataWrap['threads'] as List? ?? const [])
@@ -164,9 +169,11 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
         }
 
         // pagination
-        final pg = (dataWrap['pagination'] as Map?)?.cast<String, dynamic>() ?? const {};
+        final pg = (dataWrap['pagination'] as Map?)?.cast<String, dynamic>() ??
+            const {};
         final hasNext = pg['hasNextPage'] == true;
-        final int? next = (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
+        final int? next =
+            (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
 
         return Right(TwitterPage<TwitterPostEntity>(
           items: posts,
@@ -202,33 +209,39 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
       for (final t in threads) {
         // Normalize blocks
-        final owner  = (t['owner']  is Map) ? (t['owner']  as Map).cast<String, dynamic>() : const <String, dynamic>{};
-        final thread = (t['thread'] is Map) ? (t['thread'] as Map).cast<String, dynamic>() : const <String, dynamic>{};
-        final orig   = (t['originalPost'] is Map) ? (t['originalPost'] as Map).cast<String, dynamic>() : const <String, dynamic>{};
+        final owner = (t['owner'] is Map)
+            ? (t['owner'] as Map).cast<String, dynamic>()
+            : const <String, dynamic>{};
+        final thread = (t['thread'] is Map)
+            ? (t['thread'] as Map).cast<String, dynamic>()
+            : const <String, dynamic>{};
+        final orig = (t['originalPost'] is Map)
+            ? (t['originalPost'] as Map).cast<String, dynamic>()
+            : const <String, dynamic>{};
 
         // Build a synthetic "post" block for the repost row (your payload has the post fields at top level)
         final syntheticPost = <String, dynamic>{
-          'id'          : t['id'],
-          'content'     : t['content'],
-          'media'       : t['media'] ?? const [],
-          'likesCount'  : t['likesCount'] ?? 0,
+          'id': t['id'],
+          'content': t['content'],
+          'media': t['media'] ?? const [],
+          'likesCount': t['likesCount'] ?? 0,
           'repliesCount': t['repliesCount'] ?? 0,
           'repostsCount': t['repostsCount'] ?? 0,
-          'createdAt'   : t['createdAt'],
-          'youLiked'    : t['youLiked'] ?? false,
-          'yourReposted'    : t['yourReposted'] ?? false,
+          'createdAt': t['createdAt'],
+          'youLiked': t['youLiked'] ?? false,
+          'yourReposted': t['yourReposted'] ?? false,
         };
 
         final hasOriginal = orig.isNotEmpty;
 
         if (hasOriginal) {
-           final adapted = <String, dynamic>{
-            'threadId' : thread['id'] ?? thread['_id'],
+          final adapted = <String, dynamic>{
+            'threadId': thread['id'] ?? thread['_id'],
             'createdAt': thread['createdAt'],
             'updatedAt': thread['updatedAt'] ?? thread['createdAt'],
-            'owner'    : owner,
+            'owner': owner,
             'originalPost': orig,
-            'post'        : syntheticPost,
+            'post': syntheticPost,
           };
           posts.add(TwitterPostModel.fromRepostThread(adapted));
         } else {
@@ -240,11 +253,11 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
           final threadMeta = thread.isNotEmpty
               ? thread
               : {
-            'threadId' : t['id'],        // mild fallback
-            'createdAt': t['createdAt'],
-            'updatedAt': t['updatedAt'] ?? t['createdAt'],
-            'owner'    : owner,
-          };
+                  'threadId': t['id'], // mild fallback
+                  'createdAt': t['createdAt'],
+                  'updatedAt': t['updatedAt'] ?? t['createdAt'],
+                  'owner': owner,
+                };
 
           posts.add(TwitterPostModel.fromOwnerAndPost(owner, post, threadMeta));
         }
@@ -253,8 +266,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       final pg =
           (dataWrap['pagination'] as Map?)?.cast<String, dynamic>() ?? const {};
       final hasNext = pg['hasNextPage'] == true;
-      final int? next =
-      (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
+      final int? next = (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
 
       return Right(TwitterPage<TwitterPostEntity>(
         items: posts,
@@ -270,7 +282,8 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     required int page,
     required int limit,
   }) async {
-    final uri = Uri.parse('/twitter/threads/users/$userId').replace(queryParameters: {
+    final uri =
+        Uri.parse('/twitter/threads/users/$userId').replace(queryParameters: {
       'page': '$page',
       'limit': '$limit',
     });
@@ -304,10 +317,10 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
             : const <String, dynamic>{};
 
         final threadMeta = <String, dynamic>{
-          'threadId' : t['id'],
+          'threadId': t['id'],
           'createdAt': t['createdAt'],
           'updatedAt': t['updatedAt'] ?? t['createdAt'],
-          'owner'    : owner,
+          'owner': owner,
         };
 
         if (orig.isNotEmpty) {
@@ -315,7 +328,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
           final adapted = <String, dynamic>{
             ...threadMeta,
             'originalPost': orig,
-            'post'        : post,
+            'post': post,
           };
           posts.add(TwitterPostModel.fromRepostThread(adapted));
         } else {
@@ -327,8 +340,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       final pg =
           (dataWrap['pagination'] as Map?)?.cast<String, dynamic>() ?? const {};
       final hasNext = pg['hasNextPage'] == true;
-      final int? next =
-      (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
+      final int? next = (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
 
       return Right(TwitterPage<TwitterPostEntity>(
         items: posts,
@@ -338,15 +350,14 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     });
   }
 
-
-
   @override
-  Future<Either<Failure, TwitterPostEntity>> getTwitterPost({required String postId}) async {
+  Future<Either<Failure, TwitterPostEntity>> getTwitterPost(
+      {required String postId}) async {
     final response = await _apiConsumer.get("/twitter/threads/$postId");
 
     return response.fold(Left.new, (data) {
       // shape: { status, message, data: { thread: {...}, pagination: {...} } }
-      final root   = (data ?? {}) as Map<String, dynamic>;
+      final root = (data ?? {});
       final thread = (root['data']?['thread'] ?? {}) as Map<String, dynamic>;
       if (thread.isEmpty) {
         return Left(UnknownFailure('Empty thread payload'));
@@ -363,20 +374,25 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       // ---- main post (position == 0) ----
       Map<String, dynamic> mainPost = posts.first as Map<String, dynamic>;
       for (final p in posts.whereType<Map<String, dynamic>>()) {
-        if ((p['position'] ?? 9999) == 0) { mainPost = p; break; }
+        if ((p['position'] ?? 9999) == 0) {
+          mainPost = p;
+          break;
+        }
       }
       final main = TwitterPostModel.fromOwnerAndPost(owner, mainPost, thread);
 
       // ---- other posts in the same thread (excluding main) ----
       final otherPostModels = posts
           .whereType<Map<String, dynamic>>()
-          .where((p) => (p['id'] ?? p['_id']) != (mainPost['id'] ?? mainPost['_id']))
+          .where((p) =>
+              (p['id'] ?? p['_id']) != (mainPost['id'] ?? mainPost['_id']))
           .map((p) => TwitterPostModel.fromOwnerAndPost(owner, p, thread))
           .toList();
 
-       final replyModels = replies
+      final replyModels = replies
           .whereType<Map<String, dynamic>>()
-          .map((r) => TwitterPostModel.commentFromThreadReply(r.cast<String, dynamic>()))
+          .map((r) => TwitterPostModel.commentFromThreadReply(
+              r.cast<String, dynamic>()))
           .toList();
 
       // attach extras to the same model we return
@@ -396,8 +412,8 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     required int page,
     required int limit,
   }) async {
-    final uri = Uri.parse('/twitter/threads/$threadId')
-        .replace(queryParameters: {
+    final uri =
+        Uri.parse('/twitter/threads/$threadId').replace(queryParameters: {
       'pagePosts': '$page',
       'limitPosts': '$limit',
       // keep replies on page 1 (or omit if backend ignores)
@@ -408,7 +424,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     final response = await _apiConsumer.get(uri.toString());
 
     return response.fold(Left.new, (data) {
-      final root   = (data ?? {}) as Map<String, dynamic>;
+      final root = (data ?? {});
       final thread = (root['data']?['thread'] ?? {}) as Map<String, dynamic>;
       if (thread.isEmpty) return Left(UnknownFailure('Empty thread payload'));
 
@@ -418,23 +434,28 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       // main post detection
       Map<String, dynamic>? mainRaw;
       for (final p in posts.whereType<Map<String, dynamic>>()) {
-        if ((p['position'] ?? 9999) == 0) { mainRaw = p; break; }
+        if ((p['position'] ?? 9999) == 0) {
+          mainRaw = p;
+          break;
+        }
       }
       // map posts page (backend should already paginate posts list)
       final items = posts
           .whereType<Map<String, dynamic>>()
           .where((p) {
-        // exclude main if present
-        if (mainRaw == null) return true;
-        final id = (p['id'] ?? p['_id']).toString();
-        final mid = (mainRaw['id'] ?? mainRaw['_id']).toString();
-        return id != mid;
-      })
+            // exclude main if present
+            if (mainRaw == null) return true;
+            final id = (p['id'] ?? p['_id']).toString();
+            final mid = (mainRaw['id'] ?? mainRaw['_id']).toString();
+            return id != mid;
+          })
           .map((p) => TwitterPostModel.fromOwnerAndPost(owner, p, thread))
           .toList();
 
       // pagination block (expecting it from backend)
-      final pg = (root['data']?['pagination'] as Map?)?.cast<String, dynamic>() ?? const {};
+      final pg =
+          (root['data']?['pagination'] as Map?)?.cast<String, dynamic>() ??
+              const {};
       final hasNext = pg['hasNextPage'] == true;
       final int? next = (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
 
@@ -447,13 +468,14 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>> getThreadRepliesPage({
+  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>>
+      getThreadRepliesPage({
     required String threadId,
     required int page,
     required int limit,
   }) async {
-    final uri = Uri.parse('/twitter/threads/$threadId')
-        .replace(queryParameters: {
+    final uri =
+        Uri.parse('/twitter/threads/$threadId').replace(queryParameters: {
       'pageReplies': '$page',
       'limitReplies': '$limit',
       // keep posts on page 1 (or omit if backend ignores)
@@ -464,7 +486,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     final response = await _apiConsumer.get(uri.toString());
 
     return response.fold(Left.new, (data) {
-      final root   = (data ?? {}) as Map<String, dynamic>;
+      final root = (data ?? {});
       final thread = (root['data']?['thread'] ?? {}) as Map<String, dynamic>;
       if (thread.isEmpty) return Left(UnknownFailure('Empty thread payload'));
 
@@ -473,13 +495,15 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       final items = replies
           .whereType<Map<String, dynamic>>()
           .map((r) => TwitterPostModel.commentFromThreadReply(
-        (r as Map).cast<String, dynamic>(),
-      ))
+                (r as Map).cast<String, dynamic>(),
+              ))
           .toList();
 
       // if backend returns a separate pagination for replies, great. If not,
       // you can return false/next=null OR ask backend to add it.
-      final pg = (root['data']?['pagination'] as Map?)?.cast<String, dynamic>() ?? const {};
+      final pg =
+          (root['data']?['pagination'] as Map?)?.cast<String, dynamic>() ??
+              const {};
       final hasNext = pg['hasNextPage'] == true;
       final int? next = (pg['nextPage'] is int) ? pg['nextPage'] as int : null;
 
@@ -490,7 +514,6 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
       ));
     });
   }
-
 
   @override
   Future<Either<Failure, List<TwitterPostEntity>>> getUserPosts(
@@ -515,9 +538,10 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   @override
   Future<Either<Failure, bool>> getVerification() async {
     final response = await _apiConsumer.get(
-        EndPoints.getVerification,
-        );
-    return response.fold((l) => Left(l), (data) => Right(data['data']??false));
+      EndPoints.getVerification,
+    );
+    return response.fold(
+        (l) => Left(l), (data) => Right(data['data'] ?? false));
   }
 
   @override
@@ -561,8 +585,7 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
 
   @override
   Future<Either<Failure, List<TwitterPostCommentEntity>>> getPostComments(
-      {required PostCommentsParams params}) async
-  {
+      {required PostCommentsParams params}) async {
     final response =
         await _apiConsumer.get(EndPoints.getTwitterPostComments(params));
     return response.fold(
@@ -633,25 +656,27 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, int>> getFollowersCount({required String subCategoryId}) async {
+  Future<Either<Failure, int>> getFollowersCount(
+      {required String subCategoryId}) async {
     final res = await _apiConsumer.get("");
     return res.fold(
       Left.new,
-          (data) {
+      (data) {
         // shape: { "status": true, "data": 7 }
-        final count = (data?['data'] is num) ? (data['data'] as num).toInt() : 0;
+        final count = (data['data'] is num) ? (data['data'] as num).toInt() : 0;
         return Right(count);
       },
     );
   }
 
   @override
-  Future<Either<Failure, int>> getFollowingCount({required String subCategoryId}) async {
+  Future<Either<Failure, int>> getFollowingCount(
+      {required String subCategoryId}) async {
     final res = await _apiConsumer.get("");
     return res.fold(
       Left.new,
-          (data) {
-        final count = (data?['data'] is num) ? (data['data'] as num).toInt() : 0;
+      (data) {
+        final count = (data['data'] is num) ? (data['data'] as num).toInt() : 0;
         return Right(count);
       },
     );
@@ -666,9 +691,10 @@ class TwitterRemoteDataSourceImpl implements TwitterRemoteDataSource {
     return response.fold(Left.new, (data) {
       final root = (data is Map<String, dynamic>) ? data : const {};
       final repostId = root['data']?['repostId']?.toString() ?? '';
-      if (repostId.isEmpty) return Left(ServerFailure(message: 'No repostId returned'));
+      if (repostId.isEmpty) {
+        return Left(ServerFailure(message: 'No repostId returned'));
+      }
       return Right(repostId);
     });
   }
-
 }

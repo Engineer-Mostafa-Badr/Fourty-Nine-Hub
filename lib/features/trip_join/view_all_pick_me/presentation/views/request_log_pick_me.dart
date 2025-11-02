@@ -18,7 +18,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,7 +40,8 @@ class PickMeRequestLogTripJoinWidget extends StatefulWidget {
   });
 
   @override
-  State<PickMeRequestLogTripJoinWidget> createState() => _PickMeRequestLogTripJoinWidgetState();
+  State<PickMeRequestLogTripJoinWidget> createState() =>
+      _PickMeRequestLogTripJoinWidgetState();
 }
 
 extension OfferTypeFormatter on GetRequestTripJoinEntity {
@@ -59,11 +59,13 @@ extension OfferTypeFormatter on GetRequestTripJoinEntity {
   }
 }
 
-class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoinWidget> with TickerProviderStateMixin{
+class _PickMeRequestLogTripJoinWidgetState
+    extends State<PickMeRequestLogTripJoinWidget>
+    with TickerProviderStateMixin {
   late ScrollController _scrollController;
   bool isFloatingButtonVisible = true;
 
-  bool _isVisible = true;
+  final bool _isVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -76,60 +78,70 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: isFloatingButtonVisible
-            ? buildFloatingAction(context,child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.push(Routes.pickMeInfoScreen);
-                },
-                child: Container(
-                  height: 48.h,
-                  width: 48.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.getButtonPrimaryColor(context),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    size: 19,
-                    Icons.question_mark,
-                    color: context.isDarkMode
-                        ? AppColors.black
-                        : Colors.white,
+            ? buildFloatingAction(context,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context.push(Routes.pickMeInfoScreen);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.push(Routes.TRIP_JOIN, extra: true);
+                          },
+                          backgoundColor:
+                              AppColors.getButtonPrimaryColor(context),
+                          child: Label(
+                            text: context.isArabic
+                                ? "انشر رحلتك +"
+                                : "Post your ride +",
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ))
+                    ],
                   ),
-                ),
-              ),
-              CustomElevatedButton(
-                  onPressed: () {
-                    ManageVibration.vibrate();
-                    context.push(Routes.TRIP_JOIN, extra: true);
-                  },
-                  backgoundColor: AppColors.getButtonPrimaryColor(context),
-                  child: Label(
-                    text: context.isArabic ? "انشر رحلتك +" : "Post your ride +",
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.getReversedTextColor(context),
-                    ),
-                  ))
-            ],
-          ),
-        ), () {
-          ManageVibration.vibrate();
-          context.push(Routes.TRIP_JOIN, extra: true);
-        })
+                ), () {
+                ManageVibration.vibrate();
+                context.push(Routes.TRIP_JOIN, extra: true);
+              })
             : null,
         body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
-            if (context.read<ViewAllTripJoinCubit>().isLoadingRequestPickMe == true) {
+            if (context.read<ViewAllTripJoinCubit>().isLoadingRequestPickMe ==
+                true) {
               return const Center(
                 child: CustomLoadingSearchWidget(),
               );
             }
 
-            if (context.read<ViewAllTripJoinCubit>().requestPickMeData.isEmpty) {
-              return Center(child: CustomEmptyWidget(label:LocaleKeys.noRequests.localize));
+            if (context
+                .read<ViewAllTripJoinCubit>()
+                .requestPickMeData
+                .isEmpty) {
+              return Center(
+                  child:
+                      CustomEmptyWidget(label: LocaleKeys.noRequests.localize));
             }
             return OlxPaginationWidget(
               scrollController: _scrollController,
@@ -140,8 +152,10 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
               banners: bannersList,
               items: List.generate(
                 context.read<ViewAllTripJoinCubit>().requestPickMeData.length,
-                    (index) {
-                  GetRequestTripJoinEntity data = context.read<ViewAllTripJoinCubit>().requestPickMeData[index];
+                (index) {
+                  GetRequestTripJoinEntity data = context
+                      .read<ViewAllTripJoinCubit>()
+                      .requestPickMeData[index];
                   return Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: 10.h,
@@ -154,71 +168,107 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                             InkWell(
                               onTap: () {
                                 ManageVibration.vibrate();
-                                context.read<ViewAllTripJoinCubit>().applyReadRequestPickMe(data.id!);
+                                context
+                                    .read<ViewAllTripJoinCubit>()
+                                    .applyReadRequestPickMe(data.id!);
                               },
                               child: CustomCard(
                                 // color: data.isRead  == true  ? AppColors.whiteColor : AppColors.grey.shade300,
                                 color: data.isRead == true
-                                    ? (context.isDarkMode ? Colors.transparent : AppColors.whiteColor)
-                                    : (context.isDarkMode ? AppColors.grey : AppColors.grey.shade300),
+                                    ? (context.isDarkMode
+                                        ? Colors.transparent
+                                        : AppColors.whiteColor)
+                                    : (context.isDarkMode
+                                        ? AppColors.grey
+                                        : AppColors.grey.shade300),
 
                                 radius: 20,
                                 children: [
                                   // Text("${data.read}"),
                                   const Sizer(),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 32.0.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 32.0.h),
                                     child: Row(
                                       children: [
                                         Expanded(
                                           child: ClickableWidget(
                                             onTap: () {
-                                              if((data.lastViewers?.length??0)>0) {
+                                              if ((data.lastViewers?.length ??
+                                                      0) >
+                                                  0) {
                                                 ManageVibration.vibrate();
                                                 showModalBottomSheet(
-                                                  backgroundColor: context.isDarkMode
-                                                      ? AppColors.DARK_BLUE_COLOR
-                                                      .withOpacity(0.95)
+                                                  backgroundColor: context
+                                                          .isDarkMode
+                                                      ? AppColors
+                                                          .DARK_BLUE_COLOR
+                                                          .withOpacity(0.95)
                                                       : AppColors.LIGHT_COLOR,
                                                   constraints: BoxConstraints(
-                                                    maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                                    maxHeight:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.3,
                                                   ),
                                                   context: context,
-                                                  shape: const RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                      topLeft: Radius.circular(32.0),
-                                                      topRight: Radius.circular(32.0),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(32.0),
+                                                      topRight:
+                                                          Radius.circular(32.0),
                                                     ),
                                                   ),
                                                   isDismissible: true,
                                                   // isScrollControlled: true,
-                                                  builder: (BuildContext context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return Padding(
-                                                      padding: const EdgeInsets.all(8.0),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
                                                       child: Column(
                                                         children: [
-                                                          Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                          Text(
+                                                            context.isArabic
+                                                                ? 'المشاهدون'
+                                                                : 'Viewers',
+                                                            style: Styles.headerText(
+                                                                color: context
+                                                                        .isDarkMode
+                                                                    ? Colors
+                                                                        .white
+                                                                    : AppColors
+                                                                        .PRIMARY_COLOR),
+                                                          ),
                                                           Expanded(
                                                             child: ListView(
                                                               shrinkWrap: true,
-                                                              children: List.generate(data.lastViewers?.length??0, (i)=>Container(
-                                                                padding: EdgeInsets.only(bottom: 10),
-                                                                child: Row(
-                                                                  children: [
-                                                                    ImageFromInternet(
-                                                                        image: '',
-                                                                        isCircle: true,
-                                                                        defaultLogo: false,
-                                                                        isMale: data.lastViewers?[i].gender=='male',
-                                                                        width: 40,
-                                                                        height: 40,
-                                                                        firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
-                                                                        charPadding: 0),
-                                                                    const Sizer(),
-                                                                    Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                                  ],
-                                                                ),
-                                                              )),
+                                                              children:
+                                                                  List.generate(
+                                                                      data.lastViewers
+                                                                              ?.length ??
+                                                                          0,
+                                                                      (i) =>
+                                                                          Container(
+                                                                            padding:
+                                                                                EdgeInsets.only(bottom: 10),
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                ImageFromInternet(image: '', isCircle: true, defaultLogo: false, isMale: data.lastViewers?[i].gender == 'male', width: 40, height: 40, firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(), charPadding: 0),
+                                                                                const Sizer(),
+                                                                                Text(
+                                                                                  data.lastViewers?[i].firstName ?? '',
+                                                                                  style: Styles.mediumText(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          )),
                                                             ),
                                                           ),
                                                         ],
@@ -232,15 +282,22 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                                               children: [
                                                 Icon(
                                                   Icons.remove_red_eye_sharp,
-                                                  color: context.isDarkMode ? AppColors.whiteColor : AppColors.DARK_GRAY_COLOR,
+                                                  color: context.isDarkMode
+                                                      ? AppColors.whiteColor
+                                                      : AppColors
+                                                          .DARK_GRAY_COLOR,
                                                 ),
                                                 const Sizer(),
                                                 Label(
                                                   // text: '${formatViews( 100, context)} ${LocaleKeys.views.localize}',
-                                                  text: '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
+                                                  text:
+                                                      '${formatPrice(formatViews(data.views ?? 0, context).toInt, context)} ${LocaleKeys.views.localize}',
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
-                                                    color: context.isDarkMode ? AppColors.whiteColor : AppColors.DARK_GRAY_COLOR,
+                                                    color: context.isDarkMode
+                                                        ? AppColors.whiteColor
+                                                        : AppColors
+                                                            .DARK_GRAY_COLOR,
                                                   ),
                                                 ),
                                               ],
@@ -249,16 +306,23 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                                         ),
                                         Text(
                                           data.formattedOfferType,
-                                          style: Styles.headerText(color: AppColors.getRedColor(context), fontSize: 32),
+                                          style: Styles.headerText(
+                                              color: AppColors.getRedColor(
+                                                  context),
+                                              fontSize: 32),
                                         ),
                                       ],
                                     ),
                                   ),
                                   const Divider(),
                                   TripCardInfoWidget(
-                                    price: formatPrice(data.pricePerSeat?.round() ?? 10, context),
+                                    price: formatPrice(
+                                        data.pricePerSeat?.round() ?? 10,
+                                        context),
                                     title: data.firstName ?? "",
-                                    icon: data.gender == "male" ? Assets.maleUser : Assets.femaleUser,
+                                    icon: data.gender == "male"
+                                        ? Assets.maleUser
+                                        : Assets.femaleUser,
                                     seats: LocaleKeys.eachSeat.localize,
                                     isMale: data.gender == "male",
                                     // icon:   Assets.maleUser,
@@ -269,20 +333,30 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                                   const Sizer(
                                     height: 30,
                                   ),
-                                  _locationWidget(title: data.location?.start?.address ?? "", iconColor: AppColors.LIGHT_BLUE),
+                                  _locationWidget(
+                                      title:
+                                          data.location?.start?.address ?? "",
+                                      iconColor: AppColors.LIGHT_BLUE),
                                   const Sizer(),
-                                  _locationWidget(title: data.location?.target?.address ?? "", iconColor: AppColors.CHECK_MARK_COLOR),
+                                  _locationWidget(
+                                      title:
+                                          data.location?.target?.address ?? "",
+                                      iconColor: AppColors.CHECK_MARK_COLOR),
                                   const Sizer(),
                                   Padding(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 32.0.h,
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          formatTimestamp12(data.createdAt!, context),
-                                          style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
+                                          formatTimestamp12(
+                                              data.createdAt!, context),
+                                          style: Styles.headerText(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           // data.trip.passengers == 1
@@ -291,13 +365,17 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                                           // '${data.passengers} ${LocaleKeys.seat.localize}',
                                           "${formatPrice(data.totalPassengers ?? 1, context)}  ${LocaleKeys.seat.localize}",
 
-                                          style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
+                                          style: Styles.headerText(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           // data.isRepeat ? LocaleKeys.repeated.localize :
                                           LocaleKeys.oneTime.localize,
                                           // widget.status,
-                                          style: Styles.headerText(fontSize: 32, fontWeight: FontWeight.bold),
+                                          style: Styles.headerText(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     ),
@@ -309,8 +387,13 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                                     ),
                                     child: ContactsTripButtons(
                                       // isPremium: false,
-                                      subscriptionTitle:LocaleKeys.pickMe.localize,
-                                      isPremium: data.isPremium == true || data.isButtonEnabled!.state == true ? true : false,
+                                      subscriptionTitle:
+                                          LocaleKeys.pickMe.localize,
+                                      isPremium: data.isPremium == true ||
+                                              data.isButtonEnabled!.state ==
+                                                  true
+                                          ? true
+                                          : false,
                                       otherUserId: '2',
                                       subcategoryId: '2',
                                       phone: data.phoneNumber ?? "123",
@@ -361,7 +444,6 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
 
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-
   }
 
   TripCardInfoWidget({
@@ -399,10 +481,17 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
             children: [
               RichText(
                   text: TextSpan(children: [
-                TextSpan(text: "$price  ", style: Styles.headerText(color: AppColors.getTextColor(context), fontWeight: FontWeight.bold)),
+                TextSpan(
+                    text: "$price  ",
+                    style: Styles.headerText(
+                        color: AppColors.getTextColor(context),
+                        fontWeight: FontWeight.bold)),
                 TextSpan(
                   text: context.isArabic ? 'ج.م' : 'EGP',
-                  style: Styles.mediumText(fontSize: context.locale.languageCode == "ar" ? 35 : 28, fontWeight: FontWeight.w500, color: AppColors.getRedColor(context)),
+                  style: Styles.mediumText(
+                      fontSize: context.locale.languageCode == "ar" ? 35 : 28,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.getRedColor(context)),
                 )
               ])),
               Row(
@@ -410,7 +499,9 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
                 children: [
                   Label(
                     text: seats,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.getTextColor(context)),
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getTextColor(context)),
                   ),
                 ],
               )
@@ -468,13 +559,12 @@ class _PickMeRequestLogTripJoinWidgetState extends State<PickMeRequestLogTripJoi
   }
 
   void _scrollListener() {
-
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       isFloatingButtonVisible = false;
     } else {
       isFloatingButtonVisible = true;
     }
-    setState((){});
-    }
+    setState(() {});
+  }
 }

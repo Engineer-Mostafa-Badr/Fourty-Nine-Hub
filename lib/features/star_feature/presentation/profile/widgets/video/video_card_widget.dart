@@ -8,18 +8,13 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/thumbnail_widget.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/options_bottom_sheet.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../../core/messages/messages.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../../../data/model/tube_video_models.dart';
-import '../../../controller/comment_cubit/comment_cubit.dart';
-import '../../../controller/star_cubit/star_cubit.dart';
 import '../../../presentation_exports.dart';
-import '../../../video_player/widgets/talent_video_player.dart';
 import '../playlist_bottom_sheet.dart';
 import '../play_next_queue_manager.dart';
 
@@ -239,9 +234,7 @@ class _VideoCardWidgetState extends State<VideoCardWidget> {
 
   Widget _buildProfilePicture(BuildContext context) {
     // Get gender from video owner
-    final isMale = widget.video is TubeVideoModel
-        ? (widget.video).user.gender.toLowerCase() != 'female'
-        : true;
+    final isMale = (widget.video).user.gender.toLowerCase() != 'female';
 
     return GestureDetector(
       onTap: () => ManageVibration.vibrate(),

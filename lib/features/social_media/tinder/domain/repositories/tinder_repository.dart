@@ -6,9 +6,7 @@ import '../../data/models/gift_model.dart';
 import '../../data/models/near_by_model.dart';
 import '../../data/models/profile_user_model.dart';
 import '../domain/last_seen_entity.dart';
-import '../domain/tinder_like_entity.dart';
 import '../domain/user_data_tinder_entity.dart';
-import '../use_case/add_like_tinder_use_case.dart';
 import '../use_case/get_user_data_use_case.dart';
 import '../use_case/send_geft_use_case.dart';
 import '../use_case/upload_tinder_picture_use_case.dart';
@@ -35,5 +33,4 @@ abstract class TinderRepository {
   // Future<Either<Failure, TinderLikeEntity>> addTinderLike({required AddLikeParams params});
   // Future<Either<Failure, TinderLikeEntity>> addTinderDisLike({required AddLikeParams params});
   // Future<Either<Failure, TinderLikeEntity>> addTinderLove({required AddLikeParams params});
-
 }

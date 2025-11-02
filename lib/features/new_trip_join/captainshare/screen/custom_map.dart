@@ -1011,11 +1011,9 @@
 
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:fourtyninehub/core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_marker_on_client_side_google_widget.dart';
@@ -1060,7 +1058,8 @@ class CustomGoogleMap extends StatefulWidget {
   State<CustomGoogleMap> createState() => _CustomGoogleMapState();
 }
 
-class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderStateMixin {
+class _CustomGoogleMapState extends State<CustomGoogleMap>
+    with TickerProviderStateMixin {
   GoogleMapController? _mapController;
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
@@ -1083,7 +1082,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
   // 🔥 Animation for target marker scaling
   late AnimationController _targetScaleController; // new
   late Animation<double> _targetScaleAnimation; // new
-  double _targetScale = 1.0; // current scale value
+  final double _targetScale = 1.0; // current scale value
 
   final LatLngBounds egyptBounds = LatLngBounds(
     southwest: const LatLng(22.0, 24.7),
@@ -1217,14 +1216,19 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       _cachedMarkerSize = markerSize;
 
       try {
-        _startMarkerIcon = await _createMarkerWithLetter('A', Colors.blue, markerSize);
-        _waypoint1MarkerIcon = await _createMarkerWithLetter('B', Colors.red, markerSize);
-        _waypoint2MarkerIcon = await _createMarkerWithLetter('C', Colors.red, markerSize);
-        _targetMarkerIcon =
-        await _createMarkerWithLetter(_getTargetLetter(), Colors.green, markerSize);
+        _startMarkerIcon =
+            await _createMarkerWithLetter('A', Colors.blue, markerSize);
+        _waypoint1MarkerIcon =
+            await _createMarkerWithLetter('B', Colors.red, markerSize);
+        _waypoint2MarkerIcon =
+            await _createMarkerWithLetter('C', Colors.red, markerSize);
+        _targetMarkerIcon = await _createMarkerWithLetter(
+            _getTargetLetter(), Colors.green, markerSize);
       } catch (e) {
-        _startMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-        _targetMarkerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+        _startMarkerIcon =
+            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+        _targetMarkerIcon =
+            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
       }
     }
 
@@ -1246,13 +1250,15 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       final mainPaint = Paint()
         ..color = color
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(Offset(size / 2, size / 2), (size / 2) * 0.7, mainPaint);
+      canvas.drawCircle(
+          Offset(size / 2, size / 2), (size / 2) * 0.7, mainPaint);
 
       final borderPaint = Paint()
         ..color = Colors.white
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.0;
-      canvas.drawCircle(Offset(size / 2, size / 2), (size / 2) * 0.7, borderPaint);
+      canvas.drawCircle(
+          Offset(size / 2, size / 2), (size / 2) * 0.7, borderPaint);
 
       final textPainter = TextPainter(
         text: TextSpan(
@@ -1267,8 +1273,10 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       );
 
       textPainter.layout();
-      textPainter.paint(canvas,
-          Offset((size - textPainter.width) / 2, (size - textPainter.height) / 2));
+      textPainter.paint(
+          canvas,
+          Offset(
+              (size - textPainter.width) / 2, (size - textPainter.height) / 2));
 
       final picture = recorder.endRecording();
       final image = await picture.toImage(size.toInt(), size.toInt());
@@ -1306,8 +1314,10 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
 
     // Handle status changes
     if (widget.status != oldWidget.status) {
-      if (_mapController != null && widget.startLocation != null &&
-          widget.targetLocation != null && widget.status != TripState.started.name) {
+      if (_mapController != null &&
+          widget.startLocation != null &&
+          widget.targetLocation != null &&
+          widget.status != TripState.started.name) {
         shouldMoveCameraToFitStartTarget = true;
       }
     }
@@ -1348,7 +1358,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
           if (!_isDisposed && mounted) {
             _moveCameraToFitStartAndTarget();
             Future.delayed(const Duration(milliseconds: 500), () {
-              if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) { // 🔥 تأكد إن فيه polyline
+              if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) {
+                // 🔥 تأكد إن فيه polyline
                 _animationController.forward(from: 0.0);
               }
             });
@@ -1359,7 +1370,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
           if (mounted && !_isDisposed) {
             _moveCameraToFitAllPoints();
             Future.delayed(const Duration(milliseconds: 500), () {
-              if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) { // 🔥 تأكد إن فيه polyline
+              if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) {
+                // 🔥 تأكد إن فيه polyline
                 _animationController.forward(from: 0.0);
               }
             });
@@ -1367,7 +1379,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
         });
       } else {
         Future.delayed(const Duration(milliseconds: 300), () {
-          if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) { // 🔥 تأكد إن فيه polyline
+          if (mounted && !_isDisposed && widget.polylinePoints.isNotEmpty) {
+            // 🔥 تأكد إن فيه polyline
             _animationController.forward(from: 0.0);
           }
         });
@@ -1378,9 +1391,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
   bool _hasSignificantChanges(CustomGoogleMap oldWidget) {
     return widget.targetLocation != oldWidget.targetLocation ||
         widget.startLocation != oldWidget.startLocation ||
-        !_areLatLngListsEqual(widget.polylinePoints, oldWidget.polylinePoints) ||
-        !_areLatLngListsEqual(widget.clientLocations, oldWidget.clientLocations) ||
-        !_areStringListsEqualUnordered(widget.clientAddresses, oldWidget.clientAddresses) ||
+        !_areLatLngListsEqual(
+            widget.polylinePoints, oldWidget.polylinePoints) ||
+        !_areLatLngListsEqual(
+            widget.clientLocations, oldWidget.clientLocations) ||
+        !_areStringListsEqualUnordered(
+            widget.clientAddresses, oldWidget.clientAddresses) ||
         widget.startAddress != oldWidget.startAddress ||
         widget.targetAddress != oldWidget.targetAddress ||
         widget.fromClient != oldWidget.fromClient ||
@@ -1402,8 +1418,12 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
   }
 
   void _moveCameraToFitStartAndTarget() {
-    if (_mapController == null || widget.startLocation == null ||
-        widget.targetLocation == null || _isDisposed) return;
+    if (_mapController == null ||
+        widget.startLocation == null ||
+        widget.targetLocation == null ||
+        _isDisposed) {
+      return;
+    }
 
     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
@@ -1470,7 +1490,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     }
 
     double padding = _calculateDynamicPaddingForTop(size.height, size.width);
-    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, padding));
+    _mapController!
+        .animateCamera(CameraUpdate.newLatLngBounds(bounds, padding));
   }
 
   double _calculateDynamicPaddingForTop(double mapHeight, double mapWidth) {
@@ -1530,7 +1551,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
       var darkStyle = await DefaultAssetBundle.of(context)
           .loadString('assets/map_styles/dark_map_style.json');
 
-      await _mapController?.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
+      await _mapController
+          ?.setMapStyle(context.isDarkMode ? darkStyle : lightStyle);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!_isDisposed) _moveCameraToFitAllPoints();
@@ -1548,14 +1570,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     double deltaLngRad = (point2.longitude - point1.longitude) * pi / 180;
 
     double a = sin(deltaLatRad / 2) * sin(deltaLatRad / 2) +
-        cos(lat1Rad) * cos(lat2Rad) *
-            sin(deltaLngRad / 2) * sin(deltaLngRad / 2);
+        cos(lat1Rad) *
+            cos(lat2Rad) *
+            sin(deltaLngRad / 2) *
+            sin(deltaLngRad / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
     return earthRadius * c;
   }
 
-  List<LatLng> _generateStepPoints(LatLng start, LatLng end, double stepDistance) {
+  List<LatLng> _generateStepPoints(
+      LatLng start, LatLng end, double stepDistance) {
     List<LatLng> stepPoints = [];
 
     double totalDistance = _calculateDistance(start, end);
@@ -1592,10 +1617,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     if (widget.startLocation != null && circleCount < maxCircles) {
       LatLng polylineStart = widget.polylinePoints.first;
       List<LatLng> startSteps = _generateStepPoints(
-          widget.startLocation!,
-          polylineStart,
-          stepDistance
-      );
+          widget.startLocation!, polylineStart, stepDistance);
 
       for (int i = 0; i < startSteps.length && circleCount < maxCircles; i++) {
         _circles.add(Circle(
@@ -1613,10 +1635,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     if (widget.targetLocation != null && circleCount < maxCircles) {
       LatLng polylineEnd = widget.polylinePoints.last;
       List<LatLng> endSteps = _generateStepPoints(
-          polylineEnd,
-          widget.targetLocation!,
-          stepDistance
-      );
+          polylineEnd, widget.targetLocation!, stepDistance);
 
       for (int i = 0; i < endSteps.length && circleCount < maxCircles; i++) {
         _circles.add(Circle(
@@ -1737,24 +1756,15 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     Color startColor = context.isDarkMode
         ? AppColors.PRIMARY_COLOR_DARK
         : AppColors.PRIMARY_COLOR_DARK;
-    Color endColor = context.isDarkMode
-        ? AppColors.blueColor
-        : AppColors.PRIMARY_COLOR;
+    Color endColor =
+        context.isDarkMode ? AppColors.blueColor : AppColors.PRIMARY_COLOR;
 
     _polylines.addAll(_buildAnimatedPolyline(
-        widget.polylinePoints,
-        startColor,
-        endColor,
-        animationValue
-    ));
+        widget.polylinePoints, startColor, endColor, animationValue));
   }
 
-  List<Polyline> _buildAnimatedPolyline(
-      List<LatLng> points,
-      Color startColor,
-      Color endColor,
-      double animationValue
-      ) {
+  List<Polyline> _buildAnimatedPolyline(List<LatLng> points, Color startColor,
+      Color endColor, double animationValue) {
     List<Polyline> polylines = [];
     if (points.length < 2) return polylines;
 
@@ -1769,7 +1779,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
 
       // 🔥 بسّط الحسابات
       final double wavePosition = (routePosition - animationValue + 1.0) % 1.0;
-      final Color segmentColor = Color.lerp(startColor, endColor, wavePosition)!;
+      final Color segmentColor =
+          Color.lerp(startColor, endColor, wavePosition)!;
 
       polylines.add(
         Polyline(
@@ -1815,9 +1826,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
     if (widget.startLocation != null && widget.targetLocation != null) {
       final url = Uri.parse(
         'https://www.google.com/maps/dir/?api=1'
-            '&origin=${widget.startLocation!.latitude},${widget.startLocation!.longitude}'
-            '&destination=${widget.targetLocation!.latitude},${widget.targetLocation!.longitude}'
-            '&travelmode=driving',
+        '&origin=${widget.startLocation!.latitude},${widget.startLocation!.longitude}'
+        '&destination=${widget.targetLocation!.latitude},${widget.targetLocation!.longitude}'
+        '&travelmode=driving',
       );
       if (await canLaunchUrl(url)) {
         await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -1837,10 +1848,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
 
     Widget mapWidget = GoogleMap(
       onMapCreated: _onMapCreated,
-      initialCameraPosition: CameraPosition(
-          target: _getInitialCenter(),
-          zoom: _currentZoom
-      ),
+      initialCameraPosition:
+          CameraPosition(target: _getInitialCenter(), zoom: _currentZoom),
       markers: _markers,
       polylines: _polylines,
       circles: _circles,
@@ -1873,7 +1882,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
         SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: widget.enableScrolling ? mapWidget : IgnorePointer(child: mapWidget),
+          child: widget.enableScrolling
+              ? mapWidget
+              : IgnorePointer(child: mapWidget),
         ),
         if (widget.fromClient == true && _mapController != null && !_isDisposed)
           GoogleMapCarMarkerWidget(
@@ -1881,14 +1892,18 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> with TickerProviderSt
             mapController: _mapController!,
             size: _currentZoom,
           ),
-        if (widget.fromClient == false && _mapController != null && !_isDisposed)
+        if (widget.fromClient == false &&
+            _mapController != null &&
+            !_isDisposed)
           DriverCarMarkerWidget(
             onCarMarkerUpdated: _updateCarMarker,
             mapController: _mapController!,
             size: _currentZoom,
             time: widget.estimatedTime,
           ),
-        if (widget.fromCaptainShare == true && _mapController != null && !_isDisposed)
+        if (widget.fromCaptainShare == true &&
+            _mapController != null &&
+            !_isDisposed)
           CarMarkerOnClientSideCaptainShare(
             onCarMarkerUpdated: _updateCarMarker,
             mapController: _mapController!,

@@ -2,12 +2,9 @@ import 'package:fourtyninehub/features/auction/domain/entities/add_favorite_auct
 
 class AddFavoriteAuctionModel extends AddFavoriteAuctionEntity {
   const AddFavoriteAuctionModel({
-    bool? status,
-    String? message,
-  }) : super(
-    status: status,
-    message: message,
-  );
+    super.status,
+    super.message,
+  });
 
   factory AddFavoriteAuctionModel.fromJson(Map<String, dynamic> json) {
     return AddFavoriteAuctionModel(
@@ -26,14 +23,10 @@ class AddFavoriteAuctionModel extends AddFavoriteAuctionEntity {
 // MODEL
 class CreateAuctionModel extends CreateAuctionEntity {
   const CreateAuctionModel({
-    bool? status,
-    String? message,
-    AuctionSubscriptionData? data,
-  }) : super(
-    status: status,
-    message: message,
-    data: data,
-  );
+    super.status,
+    super.message,
+    super.data,
+  });
 
   factory CreateAuctionModel.fromJson(Map<String, dynamic> json) {
     return CreateAuctionModel(
@@ -56,16 +49,11 @@ class CreateAuctionModel extends CreateAuctionEntity {
 
 class AuctionSubscriptionDataModel extends AuctionSubscriptionData {
   const AuctionSubscriptionDataModel({
-    bool? endPointSubscription,
-    bool? userSubscription,
-    String? subCategoryId,
-    List<String>? paymentMethod,
-  }) : super(
-    endPointSubscription: endPointSubscription,
-    userSubscription: userSubscription,
-    subCategoryId: subCategoryId,
-    paymentMethod: paymentMethod,
-  );
+    super.endPointSubscription,
+    super.userSubscription,
+    super.subCategoryId,
+    super.paymentMethod,
+  });
 
   factory AuctionSubscriptionDataModel.fromJson(Map<String, dynamic> json) {
     return AuctionSubscriptionDataModel(

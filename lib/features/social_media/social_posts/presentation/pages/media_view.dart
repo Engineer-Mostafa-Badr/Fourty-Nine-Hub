@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
@@ -79,7 +79,7 @@ class _MediaViewState extends State<MediaView> {
                         padding: EdgeInsets.only(top: 5.h, left: 5.w),
                         child: GestureDetector(
                           onTap: () {
-      manageVibration.ManageVibration.vibrate();
+                            manageVibration.ManageVibration.vibrate();
                             // Pass the selected image and the sorted list to the next screen
                             Navigator.push(
                               context,

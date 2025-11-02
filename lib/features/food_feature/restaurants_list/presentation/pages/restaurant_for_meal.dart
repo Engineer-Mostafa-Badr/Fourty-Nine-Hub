@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../food_cart/presentation/pages/cart_view.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';

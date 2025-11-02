@@ -5,7 +5,6 @@ import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../helpers/manage_vibration.dart';
-import '../../../../../../helpers/manage_vibration.dart';
 
 class TripJoinCardButton extends StatelessWidget {
   final void Function()? onTap;

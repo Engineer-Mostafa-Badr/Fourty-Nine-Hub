@@ -6,7 +6,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../../../res/assets/assets.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class TripOptionWidget extends StatelessWidget {
   final String imagePath;

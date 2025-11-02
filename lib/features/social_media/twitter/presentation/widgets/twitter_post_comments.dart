@@ -32,7 +32,6 @@ import '../twitter/presentation/pages/create_reply_screen.dart';
 import 'twitter_comment_replied.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
-
 class TwitterPostComments extends StatefulWidget {
   final List<TwitterPostCommentEntity> comments;
   final String postId;
@@ -74,32 +73,38 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
   void _openFullReplyComposer() {
     final cubit = context.read<TwitterCubit>();
     final paging = cubit.commentsPagingController;
-print("////////////////////////");
-print(widget.user);
-     String ownerName = '';
+    print("////////////////////////");
+    print(widget.user);
+    String ownerName = '';
     String ownerHandle = 'user';
 
-    String _nameFrom(dynamic u) {
+    String nameFrom(dynamic u) {
       if (u == null) return '';
       try {
         if (u is TwitterUserModel) {
           final first = (u.firstName ?? '').trim();
-          final last  = (u.lastName ?? '').trim();
-          final name  = '$first $last'.trim();
+          final last = (u.lastName ?? '').trim();
+          final name = '$first $last'.trim();
           if (name.isNotEmpty) return name;
           return (u.userName ?? u.email ?? u.id ?? '').toString();
         } else if (u is Map) {
           final first = (u['firstName'] ?? '').toString().trim();
-          final last  = (u['lastName'] ?? '').toString().trim();
-          final name  = '$first $last'.trim();
+          final last = (u['lastName'] ?? '').toString().trim();
+          final name = '$first $last'.trim();
           if (name.isNotEmpty) return name;
-          return (u['userName'] ?? u['username'] ?? u['email'] ?? u['_id'] ?? u['id'] ?? '').toString();
+          return (u['userName'] ??
+                  u['username'] ??
+                  u['email'] ??
+                  u['_id'] ??
+                  u['id'] ??
+                  '')
+              .toString();
         }
       } catch (_) {}
       return '';
     }
 
-    String _handleFrom(dynamic u) {
+    String handleFrom(dynamic u) {
       if (u == null) return 'user';
       try {
         if (u is TwitterUserModel) {
@@ -129,18 +134,18 @@ print(widget.user);
       final me = context.read<UserCubit>().state.data;
       postOwner = {
         'firstName': me?.firstName ?? '',
-        'lastName' : me?.lastName ?? '',
-        'userName' : '',
-        'email'    : me?.email ?? '',
-        'id'       : me?.id ?? '',
+        'lastName': me?.lastName ?? '',
+        'userName': '',
+        'email': me?.email ?? '',
+        'id': me?.id ?? '',
       };
     }
 
-    ownerName   = _nameFrom(postOwner);
-    ownerHandle = _handleFrom(postOwner);
-print("/////////////" );
-print(ownerName );
-print(ownerHandle );
+    ownerName = nameFrom(postOwner);
+    ownerHandle = handleFrom(postOwner);
+    print("/////////////");
+    print(ownerName);
+    print(ownerHandle);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -150,10 +155,9 @@ print(ownerHandle );
             postId: widget.postId,
             // If you want to reply to the POST (not a specific comment) pass null.
             // If you want to reply to a particular comment, pass its id.
-             ownerName: ownerName,
+            ownerName: ownerName,
             ownerHandle: ownerHandle,
-            onReplied: (_) {
-             },
+            onReplied: (_) {},
           ),
         ),
       ),
@@ -168,8 +172,7 @@ print(ownerHandle );
         final cubit = context.read<TwitterCubit>();
         final paging = cubit.commentsPagingController;
 
-        return
-          CustomScaffold(
+        return CustomScaffold(
           appBar: AppBar(
             toolbarHeight: 100.h,
             elevation: 0,
@@ -213,7 +216,7 @@ print(ownerHandle );
                       return CommentCard(
                         comment: comment,
                         onReact: () {
-                           widget.onCommentReact(
+                          widget.onCommentReact(
                             TwitterCommentReactParams(
                               commentId: comment.post,
                               react: 'love',
@@ -278,8 +281,9 @@ print(ownerHandle );
               InkWell(
                 onTap: () {
                   ManageVibration.vibrate();
-                   _openFullReplyComposer();
-                },                child: Container(
+                  _openFullReplyComposer();
+                },
+                child: Container(
                   height: kToolbarHeight,
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
                   decoration: BoxDecoration(
@@ -299,8 +303,12 @@ print(ownerHandle );
                           fit: BoxFit.cover,
                           // nice fallbacks:
                           defaultLogo: false,
-                          isMale: (user?.gender ?? '').toLowerCase() != 'female',
-                          firstChar: (user?.firstName ?? 'U').characters.first.toUpperCase(),
+                          isMale:
+                              (user?.gender ?? '').toLowerCase() != 'female',
+                          firstChar: (user?.firstName ?? 'U')
+                              .characters
+                              .first
+                              .toUpperCase(),
                           charPadding: 5,
                         ),
                       ),
@@ -314,14 +322,18 @@ print(ownerHandle );
                             _openFullReplyComposer();
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 12),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.dark
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
                                   ? const Color(0xFF1E1E1E)
                                   : const Color(0xFFF5F6F8),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: Theme.of(context).dividerColor.withOpacity(0.25),
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withOpacity(0.25),
                                 width: 1,
                               ),
                             ),
@@ -330,7 +342,11 @@ print(ownerHandle );
                               '${LocaleKeys.typeYourComment.localize} …',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.color
+                                    ?.withOpacity(0.6),
                               ),
                             ),
                           ),
@@ -369,7 +385,8 @@ print(ownerHandle );
                                   isDocumented: false,
                                   createdAt: DateTime.now(),
                                   hasStory: false,
-                                 ), yourReposted: false,
+                                ),
+                                yourReposted: false,
                               ),
                             );
                             commentTextController.clear();
@@ -393,6 +410,7 @@ print(ownerHandle );
 
 class CommentCard extends StatelessWidget {
   const CommentCard({
+    super.key,
     required this.comment,
     required this.onReact,
     required this.onReply,
@@ -421,10 +439,8 @@ class CommentCard extends StatelessWidget {
       return formatter.format(createdAt);
     }
 
-    final sinceEn =
-        createdAt != null ? formatSince(createdAt, locale: 'en') : '';
-    final sinceAr =
-        createdAt != null ? formatSince(createdAt, locale: 'ar') : '';
+    final sinceEn = formatSince(createdAt, locale: 'en');
+    final sinceAr = formatSince(createdAt, locale: 'ar');
 
     final u = comment.user;
     String displayName = '';
@@ -474,12 +490,12 @@ class CommentCard extends StatelessWidget {
     final loveCount = comment.loveCount ?? (comment.love.length ?? 0);
     final cubit = context.read<TwitterCubit>();
     final bool isArabic = context.isArabic;
-    bool _isMyComment(BuildContext context, TwitterPostCommentEntity c) {
-      final meId = context.read<UserCubit>().state.data?.id?.toString() ?? '';
+    bool isMyComment(BuildContext context, TwitterPostCommentEntity c) {
+      final meId = context.read<UserCubit>().state.data?.id.toString() ?? '';
       if (meId.isEmpty) return false;
 
       // Prefer typed ownerData if present
-      final ownerIdFromOwnerData = c.ownerData?.id?.toString();
+      final ownerIdFromOwnerData = c.ownerData?.id.toString();
       if (ownerIdFromOwnerData != null && ownerIdFromOwnerData.isNotEmpty) {
         return ownerIdFromOwnerData == meId;
       }
@@ -495,7 +511,8 @@ class CommentCard extends StatelessWidget {
 
       return false;
     }
-     final bool mine = _isMyComment(context, comment);
+
+    final bool mine = isMyComment(context, comment);
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
@@ -538,136 +555,143 @@ class CommentCard extends StatelessWidget {
                 ],
               ),
               Spacer(),
+              PopupMenuButton<String>(
+                color: Colors.grey.shade200,
+                icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
+                onSelected: (v) async {
+                  // block edit/delete for non-owners
+                  if ((v == 'edit' || v == 'delete') && !mine) {
+                    showErrorMessage(
+                      context,
+                      isArabic
+                          ? 'لا يمكنك تعديل أو حذف تعليق ليس لك'
+                          : 'You can only edit or delete your own comment',
+                    );
+                    return;
+                  }
 
-    PopupMenuButton<String>(
-      color: Colors.grey.shade200,
-      icon: const Icon(Icons.more_vert, color: Colors.grey, size: 18),
-      onSelected: (v) async {
-        // block edit/delete for non-owners
-        if ((v == 'edit' || v == 'delete') && !mine) {
-          showErrorMessage(
-            context,
-            isArabic
-                ? 'لا يمكنك تعديل أو حذف تعليق ليس لك'
-                : 'You can only edit or delete your own comment',
-          );
-          return;
-        }
+                  if (v == 'edit') {
+                    final edited = await _showEditCommentDialog(
+                      context,
+                      initial: comment.content ?? '',
+                    );
+                    if (edited != null && edited.trim().isNotEmpty) {
+                      await onEdit(
+                        TwitterPostCommentParams(
+                          postId: comment.post,
+                          // commentId: comment.id, // add if your API needs it
+                          content: edited.trim(),
+                        ),
+                      );
+                      comment.content = edited.trim(); // optimistic
+                      (context as Element).markNeedsBuild();
+                      showSuccessMessage(
+                        context,
+                        isArabic
+                            ? 'تم تعديل التعليق بنجاح'
+                            : 'Comment edited successfully',
+                      );
+                    }
+                  } else if (v == 'delete') {
+                    // optional confirm
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (dCtx) => AlertDialog(
+                        title:
+                            Text(isArabic ? 'حذف التعليق؟' : 'Delete comment?'),
+                        content: Text(isArabic
+                            ? 'لا يمكن التراجع عن هذه العملية.'
+                            : 'This action cannot be undone.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(dCtx, false),
+                            child: Text(isArabic ? 'إلغاء' : 'Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(dCtx, true),
+                            child: Text(isArabic ? 'حذف' : 'Delete',
+                                style: const TextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      ),
+                    );
 
-        if (v == 'edit') {
-          final edited = await _showEditCommentDialog(
-            context,
-            initial: comment.content ?? '',
-          );
-          if (edited != null && edited.trim().isNotEmpty) {
-            await onEdit(
-              TwitterPostCommentParams(
-                postId: comment.post,
-                // commentId: comment.id, // add if your API needs it
-                content: edited.trim(),
+                    if (confirm == true) {
+                      // optimistic remove from the paging list
+                      final cubit = context.read<TwitterCubit>();
+                      final list = cubit.commentsPagingController.itemList;
+                      final idx =
+                          list?.indexWhere((e) => e.id == comment.id) ?? -1;
+                      TwitterPostCommentEntity? backup;
+                      if (idx >= 0 && list != null) {
+                        backup = list[idx];
+                        list.removeAt(idx);
+                        cubit.commentsPagingController.notifyListeners();
+                      }
+                      print(comment.id);
+                      print("==========");
+                      print(comment.post);
+                      final ok = await cubit.deleteComment(
+                        context: context,
+                        commentId: comment.post,
+                        postId: comment.post,
+                        from: 'details',
+                      );
+                      if (ok) {
+                        showSuccessMessage(
+                          context,
+                          isArabic ? 'تم حذف التعليق' : 'Comment deleted',
+                        );
+                      } else {
+                        if (idx >= 0 && backup != null && list != null) {
+                          list.insert(idx, backup);
+                          cubit.commentsPagingController.notifyListeners();
+                        }
+                        showErrorMessage(
+                          context,
+                          isArabic
+                              ? 'فشل حذف التعليق'
+                              : 'Failed to delete comment',
+                        );
+                      }
+                    }
+                  } else if (v == 'report') {
+                    ManageVibration.vibrate();
+                    bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: comment.id,
+                        categoryId: "66a3583454e6e337915514db",
+                      ),
+                    );
+                  }
+                },
+                itemBuilder: (context) {
+                  final items = <PopupMenuEntry<String>>[];
+
+                  if (mine) {
+                    items.addAll([
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Text(LocaleKeys.edit.localize),
+                      ),
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Text(LocaleKeys.deleteReply.localize),
+                      ),
+                    ]);
+                  }
+
+                  items.add(
+                    PopupMenuItem(
+                      value: 'report',
+                      child: Text(LocaleKeys.report.localize),
+                    ),
+                  );
+
+                  return items;
+                },
               ),
-            );
-            comment.content = edited.trim(); // optimistic
-            (context as Element).markNeedsBuild();
-            showSuccessMessage(
-              context,
-              isArabic ? 'تم تعديل التعليق بنجاح' : 'Comment edited successfully',
-            );
-          }
-        } else if (v == 'delete') {
-          // optional confirm
-          final confirm = await showDialog<bool>(
-            context: context,
-            builder: (dCtx) => AlertDialog(
-              title: Text(isArabic ? 'حذف التعليق؟' : 'Delete comment?'),
-              content: Text(isArabic
-                  ? 'لا يمكن التراجع عن هذه العملية.'
-                  : 'This action cannot be undone.'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dCtx, false),
-                  child: Text(isArabic ? 'إلغاء' : 'Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(dCtx, true),
-                  child: Text(isArabic ? 'حذف' : 'Delete',
-                      style: const TextStyle(color: Colors.red)),
-                ),
-              ],
-            ),
-          );
-
-          if (confirm == true) {
-            // optimistic remove from the paging list
-            final cubit = context.read<TwitterCubit>();
-            final list = cubit.commentsPagingController.itemList;
-            final idx = list?.indexWhere((e) => e.id == comment.id) ?? -1;
-            TwitterPostCommentEntity? backup;
-            if (idx >= 0 && list != null) {
-              backup = list[idx];
-              list.removeAt(idx);
-              cubit.commentsPagingController.notifyListeners();
-            }
-print(comment.id);
-print("==========");
-print(comment.post);
-            final ok = await cubit.deleteComment( context: context,
-              commentId: comment.post,
-              postId: comment.post,
-              from: 'details',);
-            if (ok) {
-              showSuccessMessage(
-                context,
-                isArabic ? 'تم حذف التعليق' : 'Comment deleted',
-              );
-            } else {
-               if (idx >= 0 && backup != null && list != null) {
-                list.insert(idx, backup);
-                cubit.commentsPagingController.notifyListeners();
-              }
-              showErrorMessage(
-                context,
-                isArabic ? 'فشل حذف التعليق' : 'Failed to delete comment',
-              );
-            }
-          }
-        } else if (v == 'report') {
-          ManageVibration.vibrate();
-          bottomSheet(
-            context: context,
-            widget: ReportView(
-              id: comment.id,
-              categoryId: "66a3583454e6e337915514db",
-            ),
-          );
-        }
-      },
-      itemBuilder: (context) {
-        final items = <PopupMenuEntry<String>>[];
-
-        if (mine) {
-          items.addAll([
-            PopupMenuItem(
-              value: 'edit',
-              child: Text(LocaleKeys.edit.localize),
-            ),
-            PopupMenuItem(
-              value: 'delete',
-              child: Text(LocaleKeys.deleteReply.localize),
-            ),
-          ]);
-        }
-
-        items.add(
-          PopupMenuItem(
-            value: 'report',
-            child: Text(LocaleKeys.report.localize),
-          ),
-        );
-
-        return items;
-      },
-    ),
             ],
           ),
 
@@ -689,23 +713,21 @@ print(comment.post);
                 const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 2),
             child: Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: _miniStatItem(
                     icon: isReact ? Icons.favorite : Icons.favorite_outline,
-                    label: '${loveCount}',
+                    label: '$loveCount',
                     iconColor: isReact ? Colors.red : Colors.grey,
                     onTap: onReact,
                   ),
                 ),
-
                 Expanded(
                   child: _miniStatItem(
                     icon: FontAwesomeIcons.retweet,
                     label: '', // keep compact
                     onTap: () {
                       ManageVibration.vibrate();
-                       cubit.onRepost(postId: comment.post);
-
+                      cubit.onRepost(postId: comment.post);
                     },
                   ),
                 ),
@@ -735,10 +757,11 @@ print(comment.post);
       ),
     );
   }
+
   Future<String?> _showEditCommentDialog(
-      BuildContext context, {
-        required String initial,
-      }) async {
+    BuildContext context, {
+    required String initial,
+  }) async {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final ctrl = TextEditingController(text: initial);
     String current = initial;
@@ -779,14 +802,16 @@ print(comment.post);
 
                   // Header
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
                       children: [
                         Text(
                           LocaleKeys.editComment.localize,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         const Spacer(),
                         // Cancel
@@ -816,7 +841,7 @@ print(comment.post);
                       decoration: InputDecoration(
                         hintText: LocaleKeys.typeYourComment.localize,
                         counterText:
-                        '${ctrl.text.characters.length}/$maxLen', // manual counter
+                            '${ctrl.text.characters.length}/$maxLen', // manual counter
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

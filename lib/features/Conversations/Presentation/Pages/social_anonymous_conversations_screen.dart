@@ -14,7 +14,6 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../social_media/chat/chat_view/presentation/widgets/end_to_end_Encrypted_widget.dart';
 import '../Controllers/cubits/conversation_states.dart';
 import 'Widgets/chat_card.dart';
 

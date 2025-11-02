@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../core/utils/format_numbers.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';

@@ -7,7 +7,6 @@ import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../controllers/preload_cubit/preload_bloc.dart';
 import '../controllers/preload_cubit/preload_state.dart';
 import '../widgets/components/reels_widget.dart';
-import '../widgets/components/tiktok_bar.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';

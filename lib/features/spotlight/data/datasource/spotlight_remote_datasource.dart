@@ -1,20 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/spotlight/data/models/spotlight_model.dart';
 import 'package:fourtyninehub/features/spotlight/domain/entities/spotlight_entity.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/data/models/trip_join_card_model/available_trip_join_model.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
-import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/error/failure.dart';
-import '../../../../shared_web_socket.dart';
-
-
 
 abstract class SpotlightRemoteDataSource {
   /*
@@ -43,15 +33,12 @@ abstract class SpotlightRemoteDataSource {
   Future<Either<Failure, List<AuctionAllWinnerEntity>>> getAuctionWinners({required GetAuctionParams params});
 */
   Future<Either<Failure, SpotlightEntity>> getSpotLight();
-
 }
 
-class SpotlightRemoteDataSourceImpl
-    implements SpotlightRemoteDataSource {
+class SpotlightRemoteDataSourceImpl implements SpotlightRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
   SpotlightRemoteDataSourceImpl(this._apiConsumer);
-
 
   // @override
   // Future<Either<Failure, GetAvailableAuctionEntity>> getSingleAuction({required SingleAuctionParams params}) async{
@@ -68,21 +55,19 @@ class SpotlightRemoteDataSourceImpl
   // }
 
   @override
-  Future<Either<Failure, SpotlightEntity>> getSpotLight() async{
-    final url = "${EndPoints.getMyProfileSpotlight}";
-    final response = await _apiConsumer.get(url,);
+  Future<Either<Failure, SpotlightEntity>> getSpotLight() async {
+    final url = EndPoints.getMyProfileSpotlight;
+    final response = await _apiConsumer.get(
+      url,
+    );
 
     return response.fold(
-          (l) => Left(l),
-          (data) {
-        final blockRestaurantModel = SpotlightModel.fromJson(data["data"]["profile"]);
+      (l) => Left(l),
+      (data) {
+        final blockRestaurantModel =
+            SpotlightModel.fromJson(data["data"]["profile"]);
         return Right(blockRestaurantModel);
       },
     );
   }
-
-
-
-
-
 }

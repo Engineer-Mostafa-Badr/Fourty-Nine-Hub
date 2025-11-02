@@ -33,7 +33,7 @@ class WinnerOverlayWidget extends StatelessWidget {
   final WinnerDataEntity winner;
   final VoidCallback onClose;
 
-  const WinnerOverlayWidget({
+  const WinnerOverlayWidget({super.key, 
     required this.winner,
     required this.onClose,
   });

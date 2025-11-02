@@ -1,32 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 // import 'package:deepar_flutter_plus/deepar_flutter_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../../../../core/extensions/context_extension.dart';
-import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../cubit/snap_cubit.dart';
-import '../cubit/snap_states.dart';
-import 'media_preview_screen.dart';
-import '../../../social_posts/presentation/pages/search_app_users.dart';
-import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import '../../../../../res/style/app_colors.dart';
-import '../../../../../res/style/const.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
-import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../../core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-
-import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

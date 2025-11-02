@@ -249,63 +249,44 @@ class CreateDoctorCubit extends Cubit<CreateDoctorState> {
       }
 
       String? checkFilledMessage = _createDoctorParams.isFilled();
-      if (checkFilledMessage == null) {
-        emit(CreateDoctorLoading("Creating Account..."));
-        final response = await _createDoctorUseCase.call(_createDoctorParams);
-        emit(CreateDoctorCloseLoading());
-        response.fold((failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext;
-          if (currentContext != null) {
-            showErrorMessage(
-                currentContext, getFailureMessage(failure, currentContext));
-          }
-          emit(CreateDoctorError("Can't Create Doctor"));
-        }, (data) {
-          emit(CreateDoctorSuccess(
-              "You are submit successfully. Please wait admin approve and approval."));
-          // Navigation will be handled in BlocListener to avoid context issues
-        });
-      } else {
-        // Translate validation messages
-        String localizedMessage = checkFilledMessage;
-        if (context.isArabic) {
-          switch (checkFilledMessage) {
-            case 'Please choose your specialty':
-              localizedMessage = 'الرجاء اختيار التخصص';
-              break;
-            case 'Please upload your photo':
-              localizedMessage = 'الرجاء رفع صورتك';
-              break;
-            case 'Please enter your first name':
-              localizedMessage = 'الرجاء إدخال الاسم الأول';
-              break;
-            case 'Please enter your last name':
-              localizedMessage = 'الرجاء إدخال الاسم الأخير';
-              break;
-            case 'Please enter your phone number':
-              localizedMessage = 'الرجاء إدخال رقم الهاتف';
-              break;
-            case 'Please enter your description':
-              localizedMessage = 'الرجاء إدخال الوصف';
-              break;
-            case 'Please enter your governorate':
-              localizedMessage = 'الرجاء اختيار المحافظة';
-              break;
-            case 'Please enter your city':
-              localizedMessage = 'الرجاء اختيار المدينة';
-              break;
-            case 'Please enter your address':
-              localizedMessage = 'الرجاء إدخال العنوان';
-              break;
-            case 'Please add at least one detection type':
-              localizedMessage = 'الرجاء اختيار نوع خدمة واحد على الأقل';
-              break;
-          }
+      // Translate validation messages
+      String? localizedMessage = checkFilledMessage;
+      if (context.isArabic) {
+        switch (checkFilledMessage) {
+          case 'Please choose your specialty':
+            localizedMessage = 'الرجاء اختيار التخصص';
+            break;
+          case 'Please upload your photo':
+            localizedMessage = 'الرجاء رفع صورتك';
+            break;
+          case 'Please enter your first name':
+            localizedMessage = 'الرجاء إدخال الاسم الأول';
+            break;
+          case 'Please enter your last name':
+            localizedMessage = 'الرجاء إدخال الاسم الأخير';
+            break;
+          case 'Please enter your phone number':
+            localizedMessage = 'الرجاء إدخال رقم الهاتف';
+            break;
+          case 'Please enter your description':
+            localizedMessage = 'الرجاء إدخال الوصف';
+            break;
+          case 'Please enter your governorate':
+            localizedMessage = 'الرجاء اختيار المحافظة';
+            break;
+          case 'Please enter your city':
+            localizedMessage = 'الرجاء اختيار المدينة';
+            break;
+          case 'Please enter your address':
+            localizedMessage = 'الرجاء إدخال العنوان';
+            break;
+          case 'Please add at least one detection type':
+            localizedMessage = 'الرجاء اختيار نوع خدمة واحد على الأقل';
+            break;
         }
-        emit(CreateDoctorError(localizedMessage));
-        // Error will be shown in BlocListener, no need to call showErrorMessage here
       }
+      emit(CreateDoctorError(localizedMessage!));
+      // Error will be shown in BlocListener, no need to call showErrorMessage here
     }
   }
 

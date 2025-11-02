@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../core/widget/clickable_widget.dart';
 import '../../../../../../../core/widget/custom_scaffold.dart';
@@ -11,28 +10,17 @@ import '../../../../../../../res/assets/assets.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../routes/routes.dart';
 import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
- import '../../../../../create_post/domain/entities/activity_entity.dart';
-import '../../../../../create_post/domain/entities/feeling_entity.dart';
 import '../../../../../create_post/domain/entities/life_event_entity.dart';
-import '../../../../../create_post/domain/entities/place_entity.dart';
 import '../../../../../create_post/presentation/cubit/create_post_cubit.dart';
-import '../../../../../create_post/presentation/pages/build_life_event_view.dart';
-import '../../../../../create_post/presentation/pages/select_activity_view.dart';
-import '../../../../../create_post/presentation/pages/select_feeling_view.dart';
-import '../../../../../create_post/presentation/widgets/build_colors_ballet.dart';
 import '../../../../../create_post/presentation/widgets/build_create_post.dart';
 import '../../../../../create_post/presentation/widgets/build_create_post_app_bar.dart';
 import '../../../../../create_post/presentation/widgets/build_create_post_header.dart';
 import '../../../../../create_post/presentation/widgets/build_media_card.dart';
-import '../../../../../create_post/presentation/widgets/build_search_friends.dart';
 import '../../../../../create_post/presentation/widgets/build_sheet_item.dart';
 import '../../../../../social_posts/presentation/pages/Social_home.dart';
 import '../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 
 class CreatePostTwitter extends StatefulWidget {
@@ -69,9 +57,6 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
     super.dispose();
   }
 
- 
- 
- 
   @override
   Widget build(BuildContext context) {
     final controller = context.read<CreatePostCubit>();
@@ -192,7 +177,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                   ),
                   IgnorePointer(
                     ignoring:
-                    (sheetController.state?.currentScrollOffset ?? 0) > 0,
+                        (sheetController.state?.currentScrollOffset ?? 0) > 0,
                     child: SnappingBottomSheet(
                       controller: sheetController,
                       duration: const Duration(milliseconds: 500),
@@ -229,7 +214,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                               )),
                           const Divider(),
                           if ((state.gifImage == null ||
-                              (state.gifImage?.isEmpty ?? false)) &&
+                                  (state.gifImage?.isEmpty ?? false)) &&
                               (state.selectedLifeEvent == null ||
                                   (state.selectedLifeEvent?.id.isEmpty ??
                                       false)))
@@ -245,7 +230,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                                   sheetController.collapse();
                                 },
                                 hasDivider: true),
-                   /*       BuildSheetItem(
+                          /*       BuildSheetItem(
                               icon: Assets.tagIcon,
                               title: context.isArabic
                                   ? 'اشارة لأشخاص'
@@ -326,12 +311,12 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                                 // }else{
                                // PlaceEntity address =
                               //  await fetchLocationAndAddress();
-                                *//*if (address.name.isNotEmpty) {
+                                */ /*if (address.name.isNotEmpty) {
                                   context
                                       .read<CreatePostCubit>()
                                       .setAddress(address);
                                   sheetController.collapse();
-                                }*//*
+                                }*/ /*
                                 // }
                               },
                               hasDivider: true),*/
@@ -340,7 +325,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                           //     title: "Live video",
                           //     onTap: () {},
                           //     hasDivider: true),
-                       /*   if ((state.gifImage == null &&
+                          /*   if ((state.gifImage == null &&
                               (state.gifImage?.isEmpty ?? false)) &&
                               state.selectedLifeEvent == null &&
                               (state.selectedLifeEvent?.id.isEmpty ?? false))
@@ -356,7 +341,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                                 },
                                 hasDivider: true),*/
                           if ((state.gifImage == null ||
-                              (state.gifImage?.isEmpty ?? false)) &&
+                                  (state.gifImage?.isEmpty ?? false)) &&
                               (state.selectedLifeEvent == null ||
                                   (state.selectedLifeEvent?.id.isEmpty ??
                                       false)))
@@ -372,7 +357,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                                 },
                                 hasDivider: true),
                           if ((state.images == null ||
-                              (state.images?.isEmpty ?? false)) &&
+                                  (state.images?.isEmpty ?? false)) &&
                               (state.selectedLifeEvent == null ||
                                   (state.selectedLifeEvent?.id.isEmpty ??
                                       false)))
@@ -389,7 +374,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                                   final gif = await GiphyGet.getGif(
                                     context: context,
                                     apiKey:
-                                    "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
+                                        "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
                                     lang: context.isArabic
                                         ? GiphyLanguage.arabic
                                         : GiphyLanguage.english,
@@ -409,7 +394,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
                                   }
                                 },
                                 hasDivider: true),
-                    /*      if ((state.images == null ||
+                          /*      if ((state.images == null ||
                               (state.images?.isEmpty ?? false)) &&
                               (state.gifImage == null ||
                                   (state.gifImage?.isEmpty ?? false)))
@@ -446,6 +431,7 @@ class _CreatePostTwitterState extends State<CreatePostTwitter> {
     );
   }
 }
+
 /// Response model from backend create-thread
 class CreateThreadResult {
   final bool status;
@@ -470,7 +456,9 @@ class CreateThreadResult {
       message: (json['message'] ?? '').toString(),
       threadId: (data?['threadId'] ?? json['threadId'])?.toString(),
       postId: (data?['postId'] ?? json['postId'])?.toString(),
-      postJson: (data?['post'] is Map) ? (data!['post'] as Map).cast<String, dynamic>() : null,
+      postJson: (data?['post'] is Map)
+          ? (data!['post'] as Map).cast<String, dynamic>()
+          : null,
     );
   }
 }

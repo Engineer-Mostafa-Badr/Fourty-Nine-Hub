@@ -389,8 +389,9 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         print("isDriverLady $isDriverLady");
         if (isReady) {
           updateDriverLocation();
-          if (listenToSocket == true)
+          if (listenToSocket == true) {
             listenToNewTrip(context, settings.data.enableNotificationSound);
+          }
           if (listenToSocket == true) listenToAcceptOffer(context);
         }
         emit(state.copyWith(

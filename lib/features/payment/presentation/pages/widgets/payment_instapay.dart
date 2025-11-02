@@ -161,7 +161,7 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                     const Sizer(),
                     DropdownButtonFormField<ListBankEntity>(
                       isExpanded: true,
-                      value: selectedBank,
+                      initialValue: selectedBank,
                       iconSize: 40.sp,
                       hint: Text(
                         context.locale == Locales.english
@@ -263,7 +263,7 @@ class _PaymentInstapayState extends State<PaymentInstapay> {
                   const Sizer(),
                   InkWell(
                     onTap: () {
-      ManageVibration.vibrate();
+                      ManageVibration.vibrate();
                       _submitForm(context);
                     },
                     child: Container(

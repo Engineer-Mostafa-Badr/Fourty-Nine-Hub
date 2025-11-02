@@ -5,8 +5,6 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/custom_map.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/widget/build_running_trip_sheet.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
-import 'package:fourtyninehub/features/new_trip_join/domain/entities/my_booking_entity.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

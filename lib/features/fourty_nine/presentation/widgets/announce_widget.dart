@@ -9,13 +9,11 @@ import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/slider_item_entity.dart';
-import '../controllers/slider_cubit.dart/slider_cubit.dart';
 import '../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../core/states/basic_state.dart';
 import '../../../../routes/routes.dart';
 import '../../../payment/presentation/pages/widgets/payment_yellow_card.dart';
 import '../../../../helpers/manage_vibration.dart';

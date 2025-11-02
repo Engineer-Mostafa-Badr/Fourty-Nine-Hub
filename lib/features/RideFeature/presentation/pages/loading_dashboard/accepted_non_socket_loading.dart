@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
@@ -11,17 +9,14 @@ import 'package:fourtyninehub/core/widget/common/trip_location_widget.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../common/widgets/stateless/verified_widget.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../data/models/loading/get_loading_accepted_model.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'loading_dashboard_details_screen.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class AcceptedNonSocketLoadingWidget extends StatelessWidget {
   // final String modeType;
@@ -29,8 +24,8 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
 
   const AcceptedNonSocketLoadingWidget(
       {super.key,
-        // this.modeType = 'truk',
-        this.offers});
+      // this.modeType = 'truk',
+      this.offers});
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +68,12 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
           hasBottomSide: true,
           otherUserId: '',
           phone: '',
-          reportId: offers?.client?.id??'',
-          subcategoryId: offers?.tripDetails?.category?.id??'',
+          reportId: offers?.client?.id ?? '',
+          subcategoryId: offers?.tripDetails?.category?.id ?? '',
           // isButtonEnabled: offers.,
-          subCategoryTitle: context.isArabic?offers?.tripDetails?.category?.nameAr??'':offers?.tripDetails?.category?.nameEn??'',
+          subCategoryTitle: context.isArabic
+              ? offers?.tripDetails?.category?.nameAr ?? ''
+              : offers?.tripDetails?.category?.nameEn ?? '',
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -86,41 +83,49 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                   children: [
                     Expanded(
                         child: Column(children: [
-                          Row(
-                            children: [
-                              ClickableWidget(
-                                onTap: (){},
-                                child: ProfilePictureWidget(
-                                  rating:(offers?.client?.rating?.averageRating??0).toInt(),
-                                  image: offers?.client?.profilePictureKey??'',
-                                  hasStories: false,
-                                ),
-                              ),
-                              Sizer(),
-                              Expanded(
-                                child: Label(
-                                    text: offers?.client?.firstName ?? '',
-                                    style: Styles.mediumText()),
-                              ),
-                            ],
+                      Row(
+                        children: [
+                          ClickableWidget(
+                            onTap: () {},
+                            child: ProfilePictureWidget(
+                              rating:
+                                  (offers?.client?.rating?.averageRating ?? 0)
+                                      .toInt(),
+                              image: offers?.client?.profilePictureKey ?? '',
+                              hasStories: false,
+                            ),
                           ),
                           Sizer(),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TripLocationWidget(isFrom: true, title: offers?.tripDetails?.location?.fromTitle
-                                  ??
-                                  'From Location',fontSize:28),
-                              TripLocationWidget(isFrom: false, title: offers?.tripDetails?.location?.toTitle
-                                  ??
-                                  'Cairo International Airport',fontSize:28),
-                            ],
+                          Expanded(
+                            child: Label(
+                                text: offers?.client?.firstName ?? '',
+                                style: Styles.mediumText()),
                           ),
-                          Label(
-                              text:
-                              "${context.isArabic?"وصف الحمولة":"Cargo Description"} : ${offers?.tripDetails?.cargoDescription??''} ",
-                              style: Styles.mediumText(),maxLines: 2,),
-                        ])),
+                        ],
+                      ),
+                      Sizer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TripLocationWidget(
+                              isFrom: true,
+                              title: offers?.tripDetails?.location?.fromTitle ??
+                                  'From Location',
+                              fontSize: 28),
+                          TripLocationWidget(
+                              isFrom: false,
+                              title: offers?.tripDetails?.location?.toTitle ??
+                                  'Cairo International Airport',
+                              fontSize: 28),
+                        ],
+                      ),
+                      Label(
+                        text:
+                            "${context.isArabic ? "وصف الحمولة" : "Cargo Description"} : ${offers?.tripDetails?.cargoDescription ?? ''} ",
+                        style: Styles.mediumText(),
+                        maxLines: 2,
+                      ),
+                    ])),
                     const Sizer(width: 32),
                     Column(
                       spacing: 4,
@@ -182,8 +187,12 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                           children: [
                             Label(
                               text: formatPrice(
-                                  (offers?.tripDetails?.price??0)>0?(offers?.tripDetails?.price??0):(offers?.tripDetails?.price ?? 0), context),
-                              style: Styles.mediumText(fontWeight: FontWeight.w700),
+                                  (offers?.tripDetails?.price ?? 0) > 0
+                                      ? (offers?.tripDetails?.price ?? 0)
+                                      : (offers?.tripDetails?.price ?? 0),
+                                  context),
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.w700),
                             ),
                             const Sizer(width: 4),
                             Label(
@@ -202,15 +211,17 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                             //     width: 40, height: 40, fit: BoxFit.cover)
                             //     :
                             ImageFromInternet(
-                                image:
-                                offers?.tripDetails?.category?.picture ?? '',
+                                image: offers?.tripDetails?.category?.picture ??
+                                    '',
                                 width: 40,
                                 height: 40,
                                 fit: BoxFit.contain),
                             Label(
                                 text: context.isArabic
-                                    ? (offers?.tripDetails?.category?.nameAr ?? '')
-                                    : (offers?.tripDetails?.category?.nameEn ?? ''),
+                                    ? (offers?.tripDetails?.category?.nameAr ??
+                                        '')
+                                    : (offers?.tripDetails?.category?.nameEn ??
+                                        ''),
                                 style: Styles.mediumText(fontSize: 25))
                           ],
                         ),
@@ -223,15 +234,14 @@ class AcceptedNonSocketLoadingWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Label(
-                      text:
-                      formatTimeOnly(offers?.tripDetails?.date, context),
+                      text: formatTimeOnly(offers?.tripDetails?.date, context),
                       style: Styles.mediumText(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Label(
-                      text: formatPickupDate(
-                          offers?.tripDetails?.date, context),
+                      text:
+                          formatPickupDate(offers?.tripDetails?.date, context),
                       style: Styles.mediumText(
                         fontWeight: FontWeight.w700,
                       ),

@@ -2,7 +2,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/abstract/use_case.dart';
 import '../../../../core/error/failure.dart';
-import '../entity/comment_entity.dart';
 import '../repository/star_repository.dart';
 import '../../data/model/comment_model.dart';
 
@@ -51,13 +50,15 @@ class GetCommentsParams {
   });
 }
 
-class GetCommentsUseCase extends UseCase<CommentsListResponse, GetCommentsParams> {
+class GetCommentsUseCase
+    extends UseCase<CommentsListResponse, GetCommentsParams> {
   final StarRepository _repository;
 
   GetCommentsUseCase(this._repository);
 
   @override
-  Future<Either<Failure, CommentsListResponse>> call(GetCommentsParams params) async {
+  Future<Either<Failure, CommentsListResponse>> call(
+      GetCommentsParams params) async {
     return await _repository.getVideoComments(params);
   }
 }

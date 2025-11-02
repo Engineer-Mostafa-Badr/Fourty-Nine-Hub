@@ -1,21 +1,15 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/auction/auction_helper.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/available_trip_join_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
-import '../../../../common/functions/global/upload_image.dart';
-import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/error/failure.dart';
-import '../../../../core/messages/messages.dart';
-import '../../../../shared_web_socket.dart';
 import '../../domain/entities/add_favorite_auction_entity.dart';
 import '../../domain/entities/all_winner_auction_entity.dart';
 import '../../domain/entities/auction_all_winner_entity.dart';
@@ -23,7 +17,6 @@ import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
-import '../../domain/entities/auction_viewer_entity.dart';
 import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';

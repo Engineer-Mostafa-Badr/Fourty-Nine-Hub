@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,47 +94,47 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final SearchUsersUsecase _searchUsersUsecase;
 
   SocialPostsCubit(
-      this._getFeedUseCase,
-      this._getUserPostsUseCase,
-      this._postReactUseCase,
-      this._getPostCommentsUseCase,
-      this._postCommentUseCase,
-      this._deletePostUseCase,
-      this._hidePostUseCase,
-      this._suggestedFriendsUseCase,
-      this._friedRequestUseCase,
-      this._followUserUseCase,
-      this._sendGreetMessageUseCase,
-      this._removeSuggestUserUseCase,
-      this._sharePostUseCase,
-      this._commentReactUseCase,
-      this._getPostCommentRepliesUseCase,
-      this._replyOnCommentUseCase,
-      this._getTwitterFeedUseCase,
-      this._advertisementUseCase,
-      this._advertisementGlobalUseCase,
-      this._getPostUseCase,
-      this._deleteCommentUseCase,
-      this._userProfileUseCase,
-      this._unFollowUserUseCase,
-      this._removeFriedRequestUseCase,
-      this._blocUserUseCase,
-      this._editCommentUseCase,
-      this._acceptRejectFriendRequestUseCase,
-      this._deleteFriendUseCase,
-      this._getGlobalFeedUseCase,
-      this._viewProfileUseCase,
-      this._searchUsersUsecase,
-      this._getExploreReelsUseCase,
-      this._getGlobalReelsUseCase,
-      ) : super(const SocialPostsState());
+    this._getFeedUseCase,
+    this._getUserPostsUseCase,
+    this._postReactUseCase,
+    this._getPostCommentsUseCase,
+    this._postCommentUseCase,
+    this._deletePostUseCase,
+    this._hidePostUseCase,
+    this._suggestedFriendsUseCase,
+    this._friedRequestUseCase,
+    this._followUserUseCase,
+    this._sendGreetMessageUseCase,
+    this._removeSuggestUserUseCase,
+    this._sharePostUseCase,
+    this._commentReactUseCase,
+    this._getPostCommentRepliesUseCase,
+    this._replyOnCommentUseCase,
+    this._getTwitterFeedUseCase,
+    this._advertisementUseCase,
+    this._advertisementGlobalUseCase,
+    this._getPostUseCase,
+    this._deleteCommentUseCase,
+    this._userProfileUseCase,
+    this._unFollowUserUseCase,
+    this._removeFriedRequestUseCase,
+    this._blocUserUseCase,
+    this._editCommentUseCase,
+    this._acceptRejectFriendRequestUseCase,
+    this._deleteFriendUseCase,
+    this._getGlobalFeedUseCase,
+    this._viewProfileUseCase,
+    this._searchUsersUsecase,
+    this._getExploreReelsUseCase,
+    this._getGlobalReelsUseCase,
+  ) : super(const SocialPostsState());
 
   final shareFormKey = GlobalKey<FormState>();
 
   void loadData() async {
     print("UserCubit.to.isLoggedIn ${UserCubit.to.isLoggedIn}");
-    if(UserCubit.to.isLoggedIn)await loadInitialData();
-    if(!UserCubit.to.isLoggedIn)await loadInitialGlobalData();
+    if (UserCubit.to.isLoggedIn) await loadInitialData();
+    if (!UserCubit.to.isLoggedIn) await loadInitialGlobalData();
   }
 
   void loadGlobalData() async {
@@ -195,17 +194,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   bool onLoadingPostDetails = false;
   void loadPostDetails(BuildContext context, String postId,
       {CommentEntity? comment}) async {
-    onLoadingPostDetails=true;
+    onLoadingPostDetails = true;
     print("objectCOOOMMM$comment");
     await getPostDetails(postId);
-    loadPostComments=true;
+    loadPostComments = true;
     postComments.clear();
     postCommentsPage = 1;
     hasMorePostCommentsData = true;
     await getPostComments(
         context: context, postId: postId, page: 1, comment: comment);
-    loadPostComments=false;
-    onLoadingPostDetails=false;
+    loadPostComments = false;
+    onLoadingPostDetails = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
 
@@ -255,15 +254,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future loadUsersSearchData({
     required String search,
   }) async {
-    loadUsersSearch=true;
+    loadUsersSearch = true;
     usersSearch.clear();
     usersSearchPage = 1;
     hasMoreUsersSearchData = true;
     emit(state.copyWith(status: StateStatus.loading));
     await getUsersSearch(search: search);
-    loadUsersSearch=false;
+    loadUsersSearch = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
+
   bool isLoadingUsersSearchMore = false;
   bool hasMoreUsersSearchData = true;
   int usersSearchPage = 1;
@@ -275,21 +275,21 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     if (!hasMoreUsersSearchData || isLoadingUsersSearchMore) return;
     isLoadingUsersSearchMore = true;
     emit(state.copyWith(status: StateStatus.loading));
-    final response = await _searchUsersUsecase
-        .call(TwitterFeedParams(page: usersSearchPage, limit: pageSize, search: search));
+    final response = await _searchUsersUsecase.call(TwitterFeedParams(
+        page: usersSearchPage, limit: pageSize, search: search));
 
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          usersSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreUsersSearchData = false;
-          } else {
-            usersSearchPage++;
-          }
-          isLoadingUsersSearchMore = false;
-          emit(state.copyWith(status: StateStatus.initial));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      usersSearch.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreUsersSearchData = false;
+      } else {
+        usersSearchPage++;
+      }
+      isLoadingUsersSearchMore = false;
+      emit(state.copyWith(status: StateStatus.initial));
+    });
   }
   // Future<void> searchUsers(int page, String search) async {
   //   final response = await _searchUsersUsecase
@@ -349,7 +349,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 //   }
   bool loadFaceData = false;
   Future loadInitialData() async {
-    loadFaceData=true;
+    loadFaceData = true;
     allFeed.clear();
     facePage = 1;
     hasMoreFaceData = true;
@@ -357,13 +357,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     Future.wait([
       getAllFeed(),
     ]);
-    loadFaceData=false;
+    loadFaceData = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
 
   Future loadInitialGlobalData() async {
     print("loadInitialGlobalData");
-    loadFaceData=true;
+    loadFaceData = true;
     allFeed.clear();
     facePage = 1;
     hasMoreFaceData = true;
@@ -371,9 +371,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     Future.wait([
       getGlobalFeed(),
     ]);
-    loadFaceData=false;
+    loadFaceData = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
+
   bool isLoadingFaceMore = false;
   bool hasMoreFaceData = true;
   int facePage = 1;
@@ -385,62 +386,66 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     isLoadingFaceMore = true;
     emit(state.copyWith(status: StateStatus.loading));
     final response =
-    await _getFeedUseCase(TwitterFeedParams(limit: 4, page: facePage));
+        await _getFeedUseCase(TwitterFeedParams(limit: 4, page: facePage));
     List<PostEntity> tweets = [];
     List<PostEntity> advertisements = [];
     List<Reel> reels = [];
     List<SuggestUserEntity> suggestedFriends = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          // if(facePage.isEven&&(facePage % 3 != 0)){
-          reels = await fetchReels();
-          // }
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      // if(facePage.isEven&&(facePage % 3 != 0)){
+      reels = await fetchReels();
+      // }
 
-          if(facePage.isOdd&&(facePage != 3 || facePage % 3 != 0)){
-            suggestedFriends = await getSuggestedFriends();
-          }
+      if (facePage.isOdd && (facePage != 3 || facePage % 3 != 0)) {
+        suggestedFriends = await getSuggestedFriends();
+      }
 
-          // if(facePage == 3 || facePage % 3 == 0){
-          advertisements = await getAdvertisements((facePage == 3 || facePage % 3 == 0)?4:1);
-          // }
-          // tweets = await getTwitterFeed();
+      // if(facePage == 3 || facePage % 3 == 0){
+      advertisements =
+          await getAdvertisements((facePage == 3 || facePage % 3 == 0) ? 4 : 1);
+      // }
+      // tweets = await getTwitterFeed();
 
-          // suggestedFriends = await getSuggestedFriends();
-          // }
-          List<FacebookFeedEntity> totalPosts = [];
-          FacebookFeedEntity feed = FacebookFeedEntity(
-              tweets: tweets,
-              posts: data,
-              ads: advertisements,
-              reels: reels,
-              suggestedFriends: suggestedFriends
-          );
-          totalPosts.add(feed);
-          allFeed.add(feed);
-          if (tweets.isEmpty&&data.isEmpty&&advertisements.isEmpty&&reels.isEmpty&&suggestedFriends.isEmpty) {
-            hasMoreFaceData = false;
-          } else {
-            facePage++;
-          }
-          isLoadingFaceMore = false;
-          // totalPosts.addAll(tweets);
-          // totalPosts.addAll(advertisements);
-          // final isLastPage = totalPosts.length < (5);
-          // if (facePage == 1) {
-          //   print("page == 1 $facePage");
-          //   facebookFeedPagingController.itemList = [];
-          // }
-          // if (isLastPage) {
-          //   print("isLastPage = $isLastPage");
-          //   facebookFeedPagingController.appendLastPage(totalPosts);
-          // } else {
-          //   print("isNotLastPage = $isLastPage");
-          //   final nextPageKey = facePage + 1;
-          //   facebookFeedPagingController.appendPage(totalPosts, nextPageKey);
-          // }
-          emit(state.copyWith(posts: data,status: StateStatus.initial));
-        });
+      // suggestedFriends = await getSuggestedFriends();
+      // }
+      List<FacebookFeedEntity> totalPosts = [];
+      FacebookFeedEntity feed = FacebookFeedEntity(
+          tweets: tweets,
+          posts: data,
+          ads: advertisements,
+          reels: reels,
+          suggestedFriends: suggestedFriends);
+      totalPosts.add(feed);
+      allFeed.add(feed);
+      if (tweets.isEmpty &&
+          data.isEmpty &&
+          advertisements.isEmpty &&
+          reels.isEmpty &&
+          suggestedFriends.isEmpty) {
+        hasMoreFaceData = false;
+      } else {
+        facePage++;
+      }
+      isLoadingFaceMore = false;
+      // totalPosts.addAll(tweets);
+      // totalPosts.addAll(advertisements);
+      // final isLastPage = totalPosts.length < (5);
+      // if (facePage == 1) {
+      //   print("page == 1 $facePage");
+      //   facebookFeedPagingController.itemList = [];
+      // }
+      // if (isLastPage) {
+      //   print("isLastPage = $isLastPage");
+      //   facebookFeedPagingController.appendLastPage(totalPosts);
+      // } else {
+      //   print("isNotLastPage = $isLastPage");
+      //   final nextPageKey = facePage + 1;
+      //   facebookFeedPagingController.appendPage(totalPosts, nextPageKey);
+      // }
+      emit(state.copyWith(posts: data, status: StateStatus.initial));
+    });
   }
 
   Future<List<Reel>> fetchReels() async {
@@ -450,15 +455,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         PaginationParams(page: facePage, limit: 4));
 
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
-          (data) {
+      (data) {
         reels.addAll(data.data.reels);
         emit(state.copyWith(status: StateStatus.success));
       },
     );
     return reels;
   }
+
   Future<List<Reel>> fetchGlobalReels() async {
     List<Reel> reels = [];
     emit(state.copyWith(status: StateStatus.loading));
@@ -466,15 +472,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         PaginationParams(page: facePage, limit: 4));
 
     result.fold(
-          (failure) =>
+      (failure) =>
           emit(state.copyWith(failure: failure, status: StateStatus.error)),
-          (data) {
+      (data) {
         reels.addAll(data.data.reels);
         emit(state.copyWith(status: StateStatus.success));
       },
     );
     return reels;
   }
+
   // get global feed posts
   Future<void> getGlobalFeed() async {
     print("hasMoreFaceData $hasMoreFaceData");
@@ -482,64 +489,68 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     if (!hasMoreFaceData || isLoadingFaceMore) return;
     isLoadingFaceMore = true;
     emit(state.copyWith(status: StateStatus.loading));
-    final response =
-    await _getGlobalFeedUseCase(TwitterFeedParams(limit: 15, page: facePage));
+    final response = await _getGlobalFeedUseCase(
+        TwitterFeedParams(limit: 15, page: facePage));
     List<PostEntity> tweets = [];
     List<PostEntity> advertisements = [];
     List<Reel> reels = [];
     List<SuggestUserEntity> suggestedFriends = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          // if(facePage.isEven&&(facePage % 3 != 0)){
-          reels = await fetchGlobalReels();
-          // reels = await fetchReels();
-          // }
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      // if(facePage.isEven&&(facePage % 3 != 0)){
+      reels = await fetchGlobalReels();
+      // reels = await fetchReels();
+      // }
 
-          // if(facePage.isOdd&&(facePage != 3 || facePage % 3 != 0)){
-          //   suggestedFriends = await getSuggestedFriends();
-          // }
+      // if(facePage.isOdd&&(facePage != 3 || facePage % 3 != 0)){
+      //   suggestedFriends = await getSuggestedFriends();
+      // }
 
-          // if(facePage == 3 || facePage % 3 == 0){
-          advertisements = await getGlobalAdvertisements((facePage == 3 || facePage % 3 == 0)?4:1);
-          // }
-          // tweets = await getTwitterFeed();
+      // if(facePage == 3 || facePage % 3 == 0){
+      advertisements = await getGlobalAdvertisements(
+          (facePage == 3 || facePage % 3 == 0) ? 4 : 1);
+      // }
+      // tweets = await getTwitterFeed();
 
-          // suggestedFriends = await getSuggestedFriends();
-          // }
-          List<FacebookFeedEntity> totalPosts = [];
-          FacebookFeedEntity feed = FacebookFeedEntity(
-              tweets: tweets,
-              posts: data,
-              ads: advertisements,
-              reels: reels,
-              suggestedFriends: suggestedFriends
-          );
-          totalPosts.add(feed);
-          allFeed.add(feed);
-          if (tweets.isEmpty&&data.isEmpty&&advertisements.isEmpty&&reels.isEmpty&&suggestedFriends.isEmpty) {
-            hasMoreFaceData = false;
-          } else {
-            facePage++;
-          }
-          isLoadingFaceMore = false;
-          // totalPosts.addAll(tweets);
-          // totalPosts.addAll(advertisements);
-          // final isLastPage = totalPosts.length < (5);
-          // if (facePage == 1) {
-          //   print("page == 1 $facePage");
-          //   facebookFeedPagingController.itemList = [];
-          // }
-          // if (isLastPage) {
-          //   print("isLastPage = $isLastPage");
-          //   facebookFeedPagingController.appendLastPage(totalPosts);
-          // } else {
-          //   print("isNotLastPage = $isLastPage");
-          //   final nextPageKey = facePage + 1;
-          //   facebookFeedPagingController.appendPage(totalPosts, nextPageKey);
-          // }
-          emit(state.copyWith(posts: data,status: StateStatus.initial));
-        });
+      // suggestedFriends = await getSuggestedFriends();
+      // }
+      List<FacebookFeedEntity> totalPosts = [];
+      FacebookFeedEntity feed = FacebookFeedEntity(
+          tweets: tweets,
+          posts: data,
+          ads: advertisements,
+          reels: reels,
+          suggestedFriends: suggestedFriends);
+      totalPosts.add(feed);
+      allFeed.add(feed);
+      if (tweets.isEmpty &&
+          data.isEmpty &&
+          advertisements.isEmpty &&
+          reels.isEmpty &&
+          suggestedFriends.isEmpty) {
+        hasMoreFaceData = false;
+      } else {
+        facePage++;
+      }
+      isLoadingFaceMore = false;
+      // totalPosts.addAll(tweets);
+      // totalPosts.addAll(advertisements);
+      // final isLastPage = totalPosts.length < (5);
+      // if (facePage == 1) {
+      //   print("page == 1 $facePage");
+      //   facebookFeedPagingController.itemList = [];
+      // }
+      // if (isLastPage) {
+      //   print("isLastPage = $isLastPage");
+      //   facebookFeedPagingController.appendLastPage(totalPosts);
+      // } else {
+      //   print("isNotLastPage = $isLastPage");
+      //   final nextPageKey = facePage + 1;
+      //   facebookFeedPagingController.appendPage(totalPosts, nextPageKey);
+      // }
+      emit(state.copyWith(posts: data, status: StateStatus.initial));
+    });
   }
   // getGlobalFeed(int page) async {
   //   final response =
@@ -569,11 +580,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPostUseCase(postId);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          emit(state.copyWith(postDetails: data, status: StateStatus.initial));
-          print('data:: ${data.content}');
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      emit(state.copyWith(postDetails: data, status: StateStatus.initial));
+      print('data:: ${data.content}');
+    });
   }
 
   // get advertisements
@@ -582,13 +593,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         TwitterFeedParams(limit: limit, page: facePage));
     List<PostEntity> advertisements = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          advertisements.addAll(data);
-          int? page = state.advertisementsPage! + 1;
-          emit(state.copyWith(
-              advertisementsPage: page, posts: data, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      advertisements.addAll(data);
+      int? page = state.advertisementsPage! + 1;
+      emit(state.copyWith(
+          advertisementsPage: page, posts: data, status: StateStatus.success));
+    });
     print("advertisements:${advertisements.length}");
     return advertisements;
   }
@@ -599,13 +610,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         TwitterFeedParams(limit: limit, page: facePage));
     List<PostEntity> advertisements = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          advertisements.addAll(data);
-          int? page = state.advertisementsPage! + 1;
-          emit(state.copyWith(
-              advertisementsPage: page, posts: data, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      advertisements.addAll(data);
+      int? page = state.advertisementsPage! + 1;
+      emit(state.copyWith(
+          advertisementsPage: page, posts: data, status: StateStatus.success));
+    });
     print("advertisements:${advertisements.length}");
     return advertisements;
   }
@@ -615,13 +626,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         TwitterFeedParams(limit: 1, page: facePage));
     List<PostEntity> tweets = [];
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          tweets.addAll(data);
-          int? page = state.tweetPage! + 1;
-          emit(state.copyWith(
-              tweetPage: page, posts: data, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      tweets.addAll(data);
+      int? page = state.tweetPage! + 1;
+      emit(state.copyWith(
+          tweetPage: page, posts: data, status: StateStatus.success));
+    });
     print("tweets:${tweets.length}");
     return tweets;
   }
@@ -651,6 +662,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     await getSuggestedFriends();
     emit(state.copyWith(status: StateStatus.updated));
   }
+
   Future<List<SuggestUserEntity>> getSuggestedFriends() async {
     // if (!hasMorePeopleData || isLoadingPeopleMore) return;
     // isLoadingPeopleMore = true;
@@ -659,27 +671,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     final response = await _suggestedFriendsUseCase(
         SuggestedFriendsParams(limit: 6, page: facePage));
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          // if (data.length < 15||suggestedFriends.length>=60) {
-          //   hasMorePeopleData = false;
-          // } else {
-          //   suggestPeoplePage++;
-          // }
-          // isLoadingPeopleMore = false;
-          suggestedFriends.addAll(data);
-          emit(state.copyWith(
-              suggestedFriends: data, status: StateStatus.initial));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      // if (data.length < 15||suggestedFriends.length>=60) {
+      //   hasMorePeopleData = false;
+      // } else {
+      //   suggestPeoplePage++;
+      // }
+      // isLoadingPeopleMore = false;
+      suggestedFriends.addAll(data);
+      emit(state.copyWith(suggestedFriends: data, status: StateStatus.initial));
+    });
     return suggestedFriends;
   }
-
 
   List<SuggestUserEntity> facebookSuggestPeople = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
-
 
   void loadInitialSuggestPeople() async {
     facebookSuggestPeople.clear();
@@ -699,9 +708,9 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     );
 
     response.fold(
-          (failure) => emit(
-          state.copyWith(failure: failure, status: StateStatus.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+      (data) {
         facebookSuggestPeople.addAll(data);
 
         if (data.length < pageSize) {
@@ -716,7 +725,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     );
   }
 
-  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
+  uploadPhoto({bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? image;
@@ -732,12 +741,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             data: {'profilePictureId': data.mediaId},
           );
           return response.fold(
-                (failure) {
+            (failure) {
               print('=======>data Fal}');
 
               return Left(failure);
             },
-                (data) {
+            (data) {
               emit(state.copyWith(newImage: image));
               UserCubit.to.getUser();
               print("newImage====>${state.newImage?.mediaId}");
@@ -747,13 +756,14 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         });
   }
 
-  uploadCoverPhoto({bool isGallery = true,required BuildContext context}) async {
+  uploadCoverPhoto(
+      {bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print('=======>data Hiii');
     UploadFileEntity? cover;
 
     await upload.uploadImage(
-        context:context,
+        context: context,
         isGallery: isGallery,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) async {
@@ -764,11 +774,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             data: {'coverPictureId': data.mediaId},
           );
           return response.fold(
-                (failure) {
+            (failure) {
               print('=======>data Fal}');
               return Left(failure);
             },
-                (data) {
+            (data) {
               emit(state.copyWith(newCover: cover));
               print("newCover====>${state.newCover?.mediaId}");
 
@@ -784,15 +794,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   Future loadMyPostsData({
     required String userId,
   }) async {
-    loadMyPosts=true;
+    loadMyPosts = true;
     myPosts.clear();
     myPostsPage = 1;
     hasMoreMyPostsData = true;
     emit(state.copyWith(status: StateStatus.loading));
     await getMyPosts(userId: userId);
-    loadMyPosts=false;
+    loadMyPosts = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
+
   bool isLoadingMyPostsMore = false;
   bool hasMoreMyPostsData = true;
   int myPostsPage = 1;
@@ -808,17 +819,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         UserPostsParams(page: myPostsPage, limit: pageSize, userId: userId));
 
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          myPosts.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreMyPostsData = false;
-          } else {
-            myPostsPage++;
-          }
-          isLoadingMyPostsMore = false;
-          emit(state.copyWith(status: StateStatus.initial));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      myPosts.addAll(data);
+      if (data.length < pageSize) {
+        hasMoreMyPostsData = false;
+      } else {
+        myPostsPage++;
+      }
+      isLoadingMyPostsMore = false;
+      emit(state.copyWith(status: StateStatus.initial));
+    });
   }
 
   // Future<void> getMyPosts(int page, String userId) async {
@@ -850,14 +861,14 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _userProfileUseCase(id);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          if (UserCubit.to.state.data != null) {
-            viewProfile(id: id);
-          }
-          loadInstaSuggestedPeople();
-          emit(state.copyWith(profileData: data, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      if (UserCubit.to.state.data != null) {
+        viewProfile(id: id);
+      }
+      loadInstaSuggestedPeople();
+      emit(state.copyWith(profileData: data, status: StateStatus.success));
+    });
   }
 
   // get user profile
@@ -866,11 +877,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     final response = await _viewProfileUseCase(id);
     bool result = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) {
-          result = data;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) {
+      result = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return result;
   }
 
@@ -884,28 +895,26 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _postReactUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          if(from == 'comments'){
-
-          }
-          if (from == 'details') {
-            // changeReaction(state.postDetails, params.react);
-          } else if (from == 'userPosts') {
-            // var currentUserPost = userPostsPagingController.itemList
-            //     ?.firstWhere((element) => element.id == params.postId);
-            // changeReaction(currentUserPost, params.react);
-          } else {
-            // var currentPost = allFeed
-            //     .firstWhere((element) => element.id == params.postId);
-            // changeReaction(currentPost, params.react);
-            // changeReaction(state.postDetails, params.react);
-            // changeReaction(currentUserPost, params.react);
-          }
-          value = r;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (r) {
+      if (from == 'comments') {}
+      if (from == 'details') {
+        // changeReaction(state.postDetails, params.react);
+      } else if (from == 'userPosts') {
+        // var currentUserPost = userPostsPagingController.itemList
+        //     ?.firstWhere((element) => element.id == params.postId);
+        // changeReaction(currentUserPost, params.react);
+      } else {
+        // var currentPost = allFeed
+        //     .firstWhere((element) => element.id == params.postId);
+        // changeReaction(currentPost, params.react);
+        // changeReaction(state.postDetails, params.react);
+        // changeReaction(currentUserPost, params.react);
+      }
+      value = r;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return value;
   }
 
@@ -914,18 +923,18 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _commentReactUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          print(params.postId);
-          // var currentComment = commentsPagingController.itemList
-          //     ?.firstWhere((element) => element.id == params.postId);
-          // var currentReply = repliesPagingController.itemList
-          //     ?.firstWhere((element) => element.id == params.postId);
-          // changeReaction(currentComment, params.react);
-          // changeReaction(currentReply, params.react);
-          value = r;
-        });
+        (r) {
+      print(params.postId);
+      // var currentComment = commentsPagingController.itemList
+      //     ?.firstWhere((element) => element.id == params.postId);
+      // var currentReply = repliesPagingController.itemList
+      //     ?.firstWhere((element) => element.id == params.postId);
+      // changeReaction(currentComment, params.react);
+      // changeReaction(currentReply, params.react);
+      value = r;
+    });
     return value;
   }
 
@@ -934,11 +943,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _editCommentUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 
@@ -948,11 +957,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _acceptRejectFriendRequestUseCase(params);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 
@@ -961,29 +970,29 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     var response = await _deleteFriendUseCase(userId);
     bool value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (r) {
-          value = r;
-        });
+        (r) {
+      value = r;
+    });
     return value;
   }
 
 // add comment
   Future<CommentEntity> onPostComment(
       {required PostCommentParams params, required String from}) async {
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
 
     var response = await _postCommentUseCase(params);
     CommentEntity? model;
-    response.fold(
-            (failure) {
-          currentContext.pop();
-          emit(
-            state.copyWith(failure: failure, status: StateStatus.error),
-          );
-        }, (data) {
+    response.fold((failure) {
+      currentContext.pop();
+      emit(
+        state.copyWith(failure: failure, status: StateStatus.error),
+      );
+    }, (data) {
       model = data;
       currentContext.pop();
       if (from == 'feed') {
@@ -1002,17 +1011,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // add reply
   Future<CommentEntity?> replyOnComment(
       {required ReplyOnCommentParams params, required String from}) async {
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     var response = await _replyOnCommentUseCase(params);
     CommentEntity? model;
-    response.fold(
-            (failure) {
-          currentContext.pop();
-          emit(
-            state.copyWith(failure: failure, status: StateStatus.error),
-          );
-        }, (data) {
+    response.fold((failure) {
+      currentContext.pop();
+      emit(
+        state.copyWith(failure: failure, status: StateStatus.error),
+      );
+    }, (data) {
       currentContext.pop();
       model = data;
       if (from == 'feed') {
@@ -1040,15 +1049,16 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     required String postId,
     CommentEntity? comment,
   }) async {
-    loadPostComments=true;
+    loadPostComments = true;
     postComments.clear();
     postCommentsPage = 1;
     hasMorePostCommentsData = true;
     emit(state.copyWith(status: StateStatus.loading));
     await getPostComments(context: context, postId: postId, comment: comment);
-    loadPostComments=false;
+    loadPostComments = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
+
   bool isLoadingPostCommentsMore = false;
   bool hasMorePostCommentsData = true;
   int postCommentsPage = 1;
@@ -1066,26 +1076,24 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     emit(state.copyWith(status: StateStatus.loading));
     final response = await _getPostCommentsUseCase(
       PostCommentsParams(
-          page: page??postCommentsPage,
+          page: page ?? postCommentsPage,
           limit: pageSize,
           postId: postId,
-          id: (postComments.isNotEmpty)?postComments.last.id:null
-      ),
+          id: (postComments.isNotEmpty) ? postComments.last.id : null),
     );
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          postComments.addAll(data);
-          if (data.length < pageSize) {
-            hasMorePostCommentsData = false;
-          } else {
-            postCommentsPage++;
-          }
-          isLoadingPostCommentsMore = false;
-          emit(state.copyWith(status: StateStatus.initial));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      postComments.addAll(data);
+      if (data.length < pageSize) {
+        hasMorePostCommentsData = false;
+      } else {
+        postCommentsPage++;
+      }
+      isLoadingPostCommentsMore = false;
+      emit(state.copyWith(status: StateStatus.initial));
+    });
   }
-
 
   // Future<void> getPostComments(
   //     {required BuildContext context,
@@ -1141,15 +1149,17 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     required String commentId,
     CommentEntity? comment,
   }) async {
-    loadCommentReplies=true;
+    loadCommentReplies = true;
     commentReplies.clear();
     commentRepliesPage = 1;
     hasMoreCommentRepliesData = true;
     emit(state.copyWith(status: StateStatus.loading));
-    await getCommentReplies(context: context, commentId: commentId, comment: comment);
-    loadCommentReplies=false;
+    await getCommentReplies(
+        context: context, commentId: commentId, comment: comment);
+    loadCommentReplies = false;
     emit(state.copyWith(status: StateStatus.updated));
   }
+
   bool isLoadingCommentRepliesMore = false;
   bool hasMoreCommentRepliesData = true;
   int commentRepliesPage = 1;
@@ -1160,7 +1170,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     CommentEntity? comment,
   }) async {
     print("comment?.repliesCount ${comment?.repliesCount}");
-    if(comment?.remainingRepliesCount==0){
+    if (comment?.remainingRepliesCount == 0) {
       return;
     }
     // print(hasMoreCommentRepliesData);
@@ -1173,77 +1183,78 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
           page: commentRepliesPage,
           limit: 4,
           postId: commentId,
-          id: (comment?.replies?.isNotEmpty??false)?(comment?.replies??[]).last.id:null
-      ),
+          id: (comment?.replies?.isNotEmpty ?? false)
+              ? (comment?.replies ?? []).last.id
+              : null),
     );
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (data) async {
-          if(comment?.replies==null||(comment?.replies?.isEmpty??false)){
-            comment?.replies =[];
-            comment?.replies?.addAll(data);
-          }
-          for(var element in data){
-            if(comment?.replies?.any((e)=>e.id==element.id)??false){
-            }else{
-              comment?.replies?.add(element);
-            }
-          }
-          if((comment?.remainingRepliesCount??0)<=4){
-            comment?.remainingRepliesCount =0;
-          }else{
-            comment?.remainingRepliesCount = (comment.remainingRepliesCount??0)-data.length;
-          }
-          commentReplies.addAll(data);
-          if (data.length < 4) {
-
-            hasMoreCommentRepliesData = false;
-          } else {
-            commentRepliesPage++;
-          }
-          isLoadingCommentRepliesMore = false;
-          emit(state.copyWith(status: StateStatus.initial));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      if (comment?.replies == null || (comment?.replies?.isEmpty ?? false)) {
+        comment?.replies = [];
+        comment?.replies?.addAll(data);
+      }
+      for (var element in data) {
+        if (comment?.replies?.any((e) => e.id == element.id) ?? false) {
+        } else {
+          comment?.replies?.add(element);
+        }
+      }
+      if ((comment?.remainingRepliesCount ?? 0) <= 4) {
+        comment?.remainingRepliesCount = 0;
+      } else {
+        comment?.remainingRepliesCount =
+            (comment.remainingRepliesCount ?? 0) - data.length;
+      }
+      commentReplies.addAll(data);
+      if (data.length < 4) {
+        hasMoreCommentRepliesData = false;
+      } else {
+        commentRepliesPage++;
+      }
+      isLoadingCommentRepliesMore = false;
+      emit(state.copyWith(status: StateStatus.initial));
+    });
   }
 
   Future<void> deletePost(
       {required BuildContext context, required String postId}) async {
     final response = await _deletePostUseCase(postId);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          // feedPagingController.itemList?.removeWhere((e) => e.id == postId);
-          // emit(state.copyWith(posts: feedPagingController.itemList));
-          showSuccessMessage(context, "Post delete successfully");
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      // feedPagingController.itemList?.removeWhere((e) => e.id == postId);
+      // emit(state.copyWith(posts: feedPagingController.itemList));
+      showSuccessMessage(context, "Post delete successfully");
+    });
   }
 
   Future<bool> deleteComment(
       {required BuildContext context,
-        required String commentId,
-        required String postId,
-        required String from}) async {
+      required String commentId,
+      required String postId,
+      required String from}) async {
     final response = await _deleteCommentUseCase(commentId);
     bool result = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          result = r;
-          if (from == 'feed') {
-            // var currentPost = feedPagingController.itemList
-            //     ?.firstWhere((element) => element.id == postId);
-            // print("commmmmment count${currentPost?.commentsCount}");
-            //
-            // currentPost?.commentsCount = (currentPost.commentsCount - 1);
-          } else {
-            if (state.postDetails != null) {
-              // state.postDetails?.commentsCount =
-              //     (state.postDetails!.commentsCount - 1);
-            }
-          }
-          emit(state.copyWith(status: StateStatus.success));
-          showSuccessMessage(context, "Comment delete successfully");
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      result = r;
+      if (from == 'feed') {
+        // var currentPost = feedPagingController.itemList
+        //     ?.firstWhere((element) => element.id == postId);
+        // print("commmmmment count${currentPost?.commentsCount}");
+        //
+        // currentPost?.commentsCount = (currentPost.commentsCount - 1);
+      } else {
+        if (state.postDetails != null) {
+          // state.postDetails?.commentsCount =
+          //     (state.postDetails!.commentsCount - 1);
+        }
+      }
+      emit(state.copyWith(status: StateStatus.success));
+      showSuccessMessage(context, "Comment delete successfully");
+    });
     return result;
   }
 
@@ -1251,49 +1262,47 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       {required BuildContext context, required String postId}) async {
     final response = await _hidePostUseCase(postId);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          // feedPagingController.itemList?.removeWhere((e) => e.id == postId);
-          // emit(state.copyWith(posts: feedPagingController.itemList));
-          showSuccessMessage(context, "Post hide successfully");
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      // feedPagingController.itemList?.removeWhere((e) => e.id == postId);
+      // emit(state.copyWith(posts: feedPagingController.itemList));
+      showSuccessMessage(context, "Post hide successfully");
+    });
   }
 
   Future<bool> friendRequest(
       {required BuildContext context, required String userId}) async {
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     final response = await _friedRequestUseCase(userId);
     bool isAdd = false;
-    response.fold(
-            (l) {
-          currentContext.pop();
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-            (r) {
-          currentContext.pop();
-          isAdd = r;
-          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
-        });
+    response.fold((l) {
+      currentContext.pop();
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
+      currentContext.pop();
+      isAdd = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
     return isAdd;
   }
 
   Future<bool> removeFriendRequest(
       {required BuildContext context, required String userId}) async {
-    var currentContext = AppPages.router.configuration.navigatorKey.currentContext!;
+    var currentContext =
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     final response = await _removeFriedRequestUseCase(userId);
     bool isRemoved = false;
-    response.fold(
-            (l) {
-          currentContext.pop();
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-            (r) {
-          currentContext.pop();
-          isRemoved = r;
-          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
-        });
+    response.fold((l) {
+      currentContext.pop();
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
+      currentContext.pop();
+      isRemoved = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
     return isRemoved;
   }
 
@@ -1332,30 +1341,30 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     final response = await _unFollowUserUseCase(userId);
     bool unFollow = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          unFollow = r;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      unFollow = r;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return unFollow;
   }
 
   Future<bool> sendGreetMessage(
       {required BuildContext context,
-        required String userId,
-        required String message}) async {
+      required String userId,
+      required String message}) async {
     final response = await _sendGreetMessageUseCase(SendGreetMessageParams(
       userId: userId,
       message: message,
     ));
     bool isAdd = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          print("object $r}");
-          isAdd = r;
-          emit(state.copyWith(friendRequest: r, status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(friendRequest: r, status: StateStatus.success));
+    });
     print(isAdd);
     return isAdd;
   }
@@ -1365,12 +1374,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     final response = await _removeSuggestUserUseCase(userId);
     bool isAdd = false;
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-            (r) {
-          print("object $r}");
-          isAdd = r;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (r) {
+      print("object $r}");
+      isAdd = r;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     print(isAdd);
     return isAdd;
   }
@@ -1381,12 +1390,12 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         SharePostParams(postId: postId, content: content ?? ''));
     var value = false;
     response.fold(
-            (failure) =>
+        (failure) =>
             emit(state.copyWith(failure: failure, status: StateStatus.error)),
-            (data) {
-          value = data;
-          emit(state.copyWith(status: StateStatus.success));
-        });
+        (data) {
+      value = data;
+      emit(state.copyWith(status: StateStatus.success));
+    });
     return value;
   }
 

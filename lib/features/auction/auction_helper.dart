@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
@@ -9,12 +8,10 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../core/error/failure.dart';
 
-import '../../common/functions/global/upload_file.dart';
 import '../../common/functions/helper/file_picker_helper.dart';
 import '../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../core/data/datasources/remote/api/end_points.dart';
 import '../../service_locator/service_locator.dart';
-
 
 class UploadImage {
   /// Pick an image and upload it to the server
@@ -26,7 +23,8 @@ class UploadImage {
   }) async {
     try {
       // Pick image from gallery or camera
-      final XFile? file = await FilePickerHelper().pickImage(isGallery: isGallery);
+      final XFile? file =
+          await FilePickerHelper().pickImage(isGallery: isGallery);
       if (file == null) return null;
 
       final bytes = await file.readAsBytes();
@@ -38,7 +36,8 @@ class UploadImage {
         data: {
           "type": "image/${file.mimeType ?? 'png'}",
           "size": size,
-          "subcategoryId": "62c8bb908e28a58a3edf59bd", // replace with your subcategoryId
+          "subcategoryId":
+              "62c8bb908e28a58a3edf59bd", // replace with your subcategoryId
         },
       );
 
@@ -67,6 +66,7 @@ class UploadImage {
       print("Error uploading image: $e");
       return null;
     }
+    return null;
   }
 
   /// Helper to send the actual image bytes
@@ -105,7 +105,8 @@ class UploadVideo {
   }) async {
     try {
       // Pick video from gallery or camera
-      final XFile? file = await FilePickerHelper().pickVideo(isGallery: isGallery);
+      final XFile? file =
+          await FilePickerHelper().pickVideo(isGallery: isGallery);
 
       if (file == null) return null;
 
@@ -118,7 +119,8 @@ class UploadVideo {
         data: {
           "type": "video/${file.mimeType ?? 'mp4'}",
           "size": size,
-          "subcategoryId": "62c8bb908e28a58a3edf59bd" // replace with your subcategoryId
+          "subcategoryId":
+              "62c8bb908e28a58a3edf59bd" // replace with your subcategoryId
         },
       );
 
@@ -136,7 +138,7 @@ class UploadVideo {
 
         // Optionally confirm upload
         await serviceLocator<ApiConsumer>().put(
-         EndPoints.confirmUpload(mediaId),
+          EndPoints.confirmUpload(mediaId),
         );
 
         // Call callback with mediaId and file
@@ -147,6 +149,7 @@ class UploadVideo {
       print("Error uploading video: $e");
       return null;
     }
+    return null;
   }
 
   /// Helper to send the actual video bytes
@@ -182,7 +185,6 @@ class UploadFileEntity {
   UploadFileEntity({required this.mediaId, required this.file});
 }
 
-
 class UploadMediaHelper {
   /// Upload image or video
   static Future<Either<Failure, bool>?> uploadMedia({
@@ -203,7 +205,8 @@ class UploadMediaHelper {
       final signedURLResponse = await serviceLocator<ApiConsumer>().post(
         EndPoints.mediaUrl,
         data: {
-          "type": "${isImage ? 'image' : 'video'}/${file.mimeType ?? (isImage ? 'png' : 'mp4')}",
+          "type":
+              "${isImage ? 'image' : 'video'}/${file.mimeType ?? (isImage ? 'png' : 'mp4')}",
           "size": size,
           "subcategoryId": "62c8bb908e28a58a3edf59bd",
         },
@@ -218,7 +221,8 @@ class UploadMediaHelper {
         await _sendBinaryFileData(file: file, signedUrl: signedUrl);
 
         // Confirm upload
-        await serviceLocator<ApiConsumer>().put(EndPoints.confirmUpload(mediaId));
+        await serviceLocator<ApiConsumer>()
+            .put(EndPoints.confirmUpload(mediaId));
 
         // Return via callback
         onUploaded(UploadFileEntity(mediaId: mediaId, file: file));

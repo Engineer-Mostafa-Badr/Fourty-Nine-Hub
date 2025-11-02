@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 
 class MessagesListView extends StatelessWidget {
   const MessagesListView({super.key});

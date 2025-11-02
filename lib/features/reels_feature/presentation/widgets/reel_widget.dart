@@ -41,16 +41,16 @@ class _ReelWidgetState extends State<ReelWidget> {
         children: [
           // Video Player
           _buildVideoPlayer(),
-          
+
           // Gradient overlay for better text visibility
           _buildGradientOverlay(),
-          
+
           // Content overlay
           _buildContentOverlay(),
-          
+
           // Action buttons
           _buildActionButtons(),
-          
+
           // Bottom info
           _buildBottomInfo(),
         ],
@@ -61,7 +61,7 @@ class _ReelWidgetState extends State<ReelWidget> {
   Widget _buildVideoPlayer() {
     try {
       if (widget.chewieController != null) {
-        return Container(
+        return SizedBox(
           width: double.infinity,
           height: double.infinity,
           child: Chewie(controller: widget.chewieController!),
@@ -166,7 +166,8 @@ class _ReelWidgetState extends State<ReelWidget> {
               ),
               SizedBox(height: 8.h),
             ],
-            if (widget.reel.description != null && widget.reel.description!.isNotEmpty) ...[
+            if (widget.reel.description != null &&
+                widget.reel.description!.isNotEmpty) ...[
               Text(
                 widget.reel.description!,
                 style: TextStyle(
@@ -191,7 +192,8 @@ class _ReelWidgetState extends State<ReelWidget> {
         children: [
           // Profile/Avatar
           _buildActionButton(
-            icon: widget.reel.authorAvatar != null && widget.reel.authorAvatar!.isNotEmpty
+            icon: widget.reel.authorAvatar != null &&
+                    widget.reel.authorAvatar!.isNotEmpty
                 ? CircleAvatar(
                     backgroundImage: NetworkImage(widget.reel.authorAvatar!),
                     radius: 20.r,
@@ -212,7 +214,7 @@ class _ReelWidgetState extends State<ReelWidget> {
             label: 'Follow',
           ),
           SizedBox(height: 16.h),
-          
+
           // Like button
           _buildActionButton(
             icon: Icon(
@@ -224,7 +226,7 @@ class _ReelWidgetState extends State<ReelWidget> {
             label: _formatCount(widget.reel.likes),
           ),
           SizedBox(height: 16.h),
-          
+
           // Comment button
           _buildActionButton(
             icon: Icon(
@@ -236,7 +238,7 @@ class _ReelWidgetState extends State<ReelWidget> {
             label: _formatCount(widget.reel.comments),
           ),
           SizedBox(height: 16.h),
-          
+
           // Share button
           _buildActionButton(
             icon: Icon(
@@ -301,7 +303,8 @@ class _ReelWidgetState extends State<ReelWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Author info
-            if (widget.reel.authorName != null && widget.reel.authorName!.isNotEmpty) ...[
+            if (widget.reel.authorName != null &&
+                widget.reel.authorName!.isNotEmpty) ...[
               Row(
                 children: [
                   Text(
@@ -345,7 +348,7 @@ class _ReelWidgetState extends State<ReelWidget> {
               ),
               SizedBox(height: 8.h),
             ],
-            
+
             // Video duration
             Row(
               children: [

@@ -21,7 +21,6 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../presentation_exports.dart';
-import '../pages/add_talent_widget.dart';
 
 class CreateStar extends StatefulWidget {
   const CreateStar({super.key});
@@ -149,6 +148,4 @@ class _CreateStarState extends State<CreateStar> {
           ),
         ],
       );
-
-
 }

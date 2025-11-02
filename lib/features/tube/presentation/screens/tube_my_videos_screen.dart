@@ -7,16 +7,13 @@ import 'package:fourtyninehub/features/tube/presentation/cubit/tube_cubit.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../common/functions/global/upload_file.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/enums/base_status_enum.dart';
 import '../../domain/entities/get_all_tube_videos_entity.dart';
 import '../widgets/video_card_widget.dart';
 
-
-
-
 class MyVideosTubeScreen extends StatefulWidget {
   const MyVideosTubeScreen({super.key});
-  @override State<MyVideosTubeScreen> createState() => _MyVideosTubeScreenState();
+  @override
+  State<MyVideosTubeScreen> createState() => _MyVideosTubeScreenState();
 }
 
 class _MyVideosTubeScreenState extends State<MyVideosTubeScreen> {
@@ -82,66 +79,70 @@ class _MyVideosTubeScreenState extends State<MyVideosTubeScreen> {
         // }
       },
 
-        builder: (context, state) {
-          final videos = state.getMyTubeVideosData ?? [];
+      builder: (context, state) {
+        final videos = state.getMyTubeVideosData ?? [];
 
-          return Container(
-            color: Colors.black,
-            child: RefreshIndicator(
-              onRefresh: _cubit.loadInitialMyTubeVideos,
-              child: ListView.builder(
-                itemCount: videos.length + (_cubit.hasMoreMyTubeVideos ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index >= videos.length) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Center(child: CircularProgressIndicator(color: Colors.red)),
-                    );
-                  }
-                  return VideoCardTube(
-                    video: videos[index],
-                    videoList: videos,
-                    isMyVideo: true,
-                    onEditPressed: () => _showEditDialog(videos[index]),
-                    onDeletePressed: () async {
-                      final confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          backgroundColor: const Color(0xFF1A1A1A),
-                          title: const Text('Delete video?', style: TextStyle(color: Colors.white)),
-                          content: const Text(
-                            'This action cannot be undone.',
-                            style: TextStyle(color: Colors.white70),
+        return Container(
+          color: Colors.black,
+          child: RefreshIndicator(
+            onRefresh: _cubit.loadInitialMyTubeVideos,
+            child: ListView.builder(
+              itemCount: videos.length + (_cubit.hasMoreMyTubeVideos ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index >= videos.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(
+                        child: CircularProgressIndicator(color: Colors.red)),
+                  );
+                }
+                return VideoCardTube(
+                  video: videos[index],
+                  videoList: videos,
+                  isMyVideo: true,
+                  onEditPressed: () => _showEditDialog(videos[index]),
+                  onDeletePressed: () async {
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        backgroundColor: const Color(0xFF1A1A1A),
+                        title: const Text('Delete video?',
+                            style: TextStyle(color: Colors.white)),
+                        content: const Text(
+                          'This action cannot be undone.',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: const Text('Cancel',
+                                style: TextStyle(color: Colors.white70)),
+                            onPressed: () => Navigator.pop(ctx, false),
                           ),
-                          actions: [
-                            TextButton(
-                              child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
-                              onPressed: () => Navigator.pop(ctx, false),
-                            ),
-                            TextButton(
-                              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                              onPressed: () => Navigator.pop(ctx, true),
-                            ),
-                          ],
+                          TextButton(
+                            child: const Text('Delete',
+                                style: TextStyle(color: Colors.red)),
+                            onPressed: () => Navigator.pop(ctx, true),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirm == true) {
+                      await _cubit.deleteTubeVideo(videos[index].id!);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Video deleted successfully'),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
                         ),
                       );
-                      if (confirm == true) {
-                        await _cubit.deleteTubeVideo( videos[index].id!);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Video deleted successfully'),
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
+                    }
+                  },
+                );
+              },
             ),
-          );
-        },
+          ),
+        );
+      },
       // builder: (context, state) {
       //   // FIXED: Use state.getAllTubeVideosData instead of cubit.myTubeVideos
       //   final videos = state.getMyTubeVideosData ?? _cubit.myTubeVideos;
@@ -213,8 +214,6 @@ class _MyVideosTubeScreenState extends State<MyVideosTubeScreen> {
     );
   }
 }
-
-
 
 class EditVideoBottomSheet extends StatefulWidget {
   final GetAllTubeVideosEntity video;
@@ -365,9 +364,10 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
     debugPrint('Current _uploadedMediaId value: $_uploadedMediaId');
     debugPrint('Original thumbnail URL: ${widget.video.thumbnail}');
 
-    final hasChanges = _titleCtrl.text.trim() != (widget.video.title ?? '').trim() ||
-        _descCtrl.text.trim() != (widget.video.description ?? '').trim() ||
-        _uploadedMediaId != null;
+    final hasChanges =
+        _titleCtrl.text.trim() != (widget.video.title ?? '').trim() ||
+            _descCtrl.text.trim() != (widget.video.description ?? '').trim() ||
+            _uploadedMediaId != null;
 
     if (!hasChanges) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -518,7 +518,9 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                       const SizedBox(height: 10),
 
                       GestureDetector(
-                        onTap: _uploadingThumbnail ? null : _pickAndUploadThumbnail,
+                        onTap: _uploadingThumbnail
+                            ? null
+                            : _pickAndUploadThumbnail,
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           height: 180,
@@ -564,7 +566,8 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                                 if (_uploadingThumbnail)
                                   Center(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: const [
                                         SizedBox(
                                           width: 48,
@@ -596,15 +599,18 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                                   ),
 
                                 // Empty thumbnail prompt
-                                if (!_uploadingThumbnail && thumbnailImage == null)
+                                if (!_uploadingThumbnail &&
+                                    thumbnailImage == null)
                                   Center(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.all(16),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.1),
+                                            color:
+                                                Colors.white.withOpacity(0.1),
                                             shape: BoxShape.circle,
                                           ),
                                           child: const Icon(
@@ -635,7 +641,8 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                                   ),
 
                                 // “Change” button
-                                if (!_uploadingThumbnail && thumbnailImage != null)
+                                if (!_uploadingThumbnail &&
+                                    thumbnailImage != null)
                                   Positioned(
                                     bottom: 12,
                                     right: 12,
@@ -707,7 +714,8 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         'Thumbnail ready',
@@ -721,7 +729,8 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                                       Text(
                                         'ID: $_uploadedMediaId',
                                         style: TextStyle(
-                                          color: const Color(0xFF10B981).withOpacity(0.8),
+                                          color: const Color(0xFF10B981)
+                                              .withOpacity(0.8),
                                           fontSize: 11,
                                         ),
                                         overflow: TextOverflow.ellipsis,
@@ -804,7 +813,8 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                                   ? null
                                   : () => Navigator.pop(context),
                               style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -829,7 +839,8 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 disabledBackgroundColor: Colors.grey.shade800,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -837,23 +848,23 @@ class _EditVideoBottomSheetState extends State<EditVideoBottomSheet>
                               ),
                               child: _isSaving
                                   ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
                                   : Text(
-                                _uploadingThumbnail
-                                    ? 'Uploading...'
-                                    : 'Save Changes',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                                      _uploadingThumbnail
+                                          ? 'Uploading...'
+                                          : 'Save Changes',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],

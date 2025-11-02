@@ -7,7 +7,6 @@ import '../../../domain/usecases/get_instagram_profile_use_case.dart';
 import '../../../domain/usecases/get_instagram_reels_specific_user_use_case.dart';
 import '../../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import '../../../domain/usecases/post_follow_user_instagram_use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 

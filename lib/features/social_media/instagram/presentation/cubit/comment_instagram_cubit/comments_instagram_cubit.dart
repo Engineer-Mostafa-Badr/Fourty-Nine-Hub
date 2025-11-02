@@ -4,7 +4,6 @@ import '../../../domain/entities/comment_instagram_entity.dart';
 import '../../../domain/usecases/add_comment_use_case.dart';
 import '../../../domain/usecases/delete_comment_use_case.dart';
 import '../../../domain/usecases/get_comment_use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 

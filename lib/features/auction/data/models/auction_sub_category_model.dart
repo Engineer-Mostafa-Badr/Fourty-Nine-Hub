@@ -4,16 +4,11 @@ import '../../domain/entities/auction_sub_category_entity.dart';
 
 class AuctionSubCategoryModel extends AuctionSubCategoryEntity {
   const AuctionSubCategoryModel({
-    String? id,
-    String? picture,
-    String? nameAr,
-    String? nameEn,
-  }) : super(
-    id: id,
-    picture: picture,
-    nameAr: nameAr,
-    nameEn: nameEn,
-  );
+    super.id,
+    super.picture,
+    super.nameAr,
+    super.nameEn,
+  });
 
   factory AuctionSubCategoryModel.fromJson(Map<String, dynamic> json) {
     return AuctionSubCategoryModel(

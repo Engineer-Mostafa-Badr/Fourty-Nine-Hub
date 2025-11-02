@@ -4,12 +4,9 @@ import '../../domain/entities/auction_banner_entity.dart';
 
 class AuctionBannerModel extends AuctionBannerEntity {
   const AuctionBannerModel({
-    bool? status,
-    String? data,
-  }) : super(
-    status: status,
-    data: data,
-  );
+    super.status,
+    super.data,
+  });
 
   factory AuctionBannerModel.fromJson(Map<String, dynamic> json) {
     return AuctionBannerModel(

@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import '../../../../res/style/const.dart';
 
 import '../../../subcategories/domain/entities/sub_category_entity.dart';

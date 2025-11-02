@@ -32,7 +32,7 @@ class NewPhoneNumberTextFormField extends MainTextFormField {
     super.minLines,
     super.obscureText,
     super.fillColor,
-    final int? maxLength,
+    super.maxLength,
     super.suffixIcon,
     super.prefixIcon,
     final String? Function(String?)? validator,
@@ -46,7 +46,6 @@ class NewPhoneNumberTextFormField extends MainTextFormField {
               validator?.call(v) ?? (isRequired ? validatorPhone(v) : null),
           hintText: LocaleKeys.phoneNumber.localize + (isRequired ? '*' : ''),
           textCapitalization: TextCapitalization.words,
-          maxLength: maxLength,
           inputFormatters: inputFormatter ?? [FilteringTextInputFormatter.digitsOnly],
         );
 }

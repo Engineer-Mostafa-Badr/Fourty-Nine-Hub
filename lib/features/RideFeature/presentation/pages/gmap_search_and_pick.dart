@@ -19,7 +19,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../core/loading/custom_loading.dart';
-import '../../../../core/widget/custom_circular_progress_indicator.dart';
 
 class PickedData {
   final String address;

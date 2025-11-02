@@ -370,7 +370,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           videoThumbnail = firstVideo.mediaUrl.first.mediaKey;
         }
 
-        if (videoThumbnail != null && videoThumbnail.isNotEmpty) {
+        if (videoThumbnail!.isNotEmpty) {
           print('🖼️ Using first video thumbnail: $videoThumbnail');
           return Image.network(
             videoThumbnail,
@@ -434,7 +434,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
             videoThumbnail = firstVideo.mediaUrl.first.mediaKey;
           }
 
-          if (videoThumbnail != null && videoThumbnail.isNotEmpty) {
+          if (videoThumbnail!.isNotEmpty) {
             return Image.network(
               videoThumbnail,
               width: 120,

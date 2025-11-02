@@ -12,14 +12,14 @@ class LocationInfoWidget extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
 
   const LocationInfoWidget({
-    Key? key,
+    super.key,
     required this.from,
     required this.to,
     this.wayPointOne,
     this.wayPointTwo,
     this.hasTitle,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,6 @@ class LocationInfoWidget extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-
                           Expanded(
                             child: Text(
                               wayPointTwo!,
@@ -163,14 +162,12 @@ class LocationInfoWidget extends StatelessWidget {
           // Connecting dots
           ...List.generate(
             3,
-                (index) => Container(
+            (index) => Container(
               margin: const EdgeInsets.symmetric(vertical: 2),
               width: 4,
               height: 4,
               decoration: BoxDecoration(
-                color: context.isDarkMode
-                    ? Colors.grey[600]
-                    : Colors.grey[400],
+                color: context.isDarkMode ? Colors.grey[600] : Colors.grey[400],
                 shape: BoxShape.circle,
               ),
             ),
@@ -188,17 +185,15 @@ class LocationInfoWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-
             ...List.generate(
               3,
-                  (index) => Container(
+              (index) => Container(
                 margin: const EdgeInsets.symmetric(vertical: 2),
                 width: 4,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: context.isDarkMode
-                      ? Colors.grey[600]
-                      : Colors.grey[400],
+                  color:
+                      context.isDarkMode ? Colors.grey[600] : Colors.grey[400],
                   shape: BoxShape.circle,
                 ),
               ),
@@ -219,14 +214,13 @@ class LocationInfoWidget extends StatelessWidget {
             const SizedBox(height: 4),
             ...List.generate(
               3,
-                  (index) => Container(
+              (index) => Container(
                 margin: const EdgeInsets.symmetric(vertical: 2),
                 width: 4,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: context.isDarkMode
-                      ? Colors.grey[600]
-                      : Colors.grey[400],
+                  color:
+                      context.isDarkMode ? Colors.grey[600] : Colors.grey[400],
                   shape: BoxShape.circle,
                 ),
               ),

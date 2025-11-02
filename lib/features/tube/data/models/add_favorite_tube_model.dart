@@ -1,14 +1,10 @@
-
 import '../../domain/entities/add_favorite_tube_entity.dart';
 
 class AddFavoriteTubeModel extends AddFavoriteTubeEntity {
   const AddFavoriteTubeModel({
-    bool? status,
-    String? message,
-  }) : super(
-    status: status,
-    message: message,
-  );
+    super.status,
+    super.message,
+  });
 
   factory AddFavoriteTubeModel.fromJson(Map<String, dynamic> json) {
     return AddFavoriteTubeModel(

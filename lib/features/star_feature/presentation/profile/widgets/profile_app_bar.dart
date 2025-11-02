@@ -6,7 +6,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../core/messages/messages.dart';
 import '../../../domain/entity/user_star_entity.dart';
-import '../../../domain/entity/profile_entity.dart';
 import '../../presentation_exports.dart';
 
 class ProfileAppBar extends StatelessWidget {

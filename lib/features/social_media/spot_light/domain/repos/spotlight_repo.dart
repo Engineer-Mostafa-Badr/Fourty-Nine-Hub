@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/social_media/spot_light/data/models/friends_response_model.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/friends_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/paginated_response_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/spotlight_media_entity.dart';

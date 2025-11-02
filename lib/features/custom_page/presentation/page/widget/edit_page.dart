@@ -15,7 +15,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import 'custom_Page_categories.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});

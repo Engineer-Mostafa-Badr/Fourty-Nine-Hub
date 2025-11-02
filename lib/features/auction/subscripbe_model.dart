@@ -2,16 +2,11 @@ import 'package:fourtyninehub/features/auction/subscripbe_entity.dart';
 
 class SubscriptionModel extends SubscriptionEntity {
   SubscriptionModel({
-    bool? endPointSubscription,
-    bool? userSubscription,
-    String? subCategoryId,
-    List<String>? paymentMethod,
-  }) : super(
-    endPointSubscription: endPointSubscription,
-    userSubscription: userSubscription,
-    subCategoryId: subCategoryId,
-    paymentMethod: paymentMethod,
-  );
+    super.endPointSubscription,
+    super.userSubscription,
+    super.subCategoryId,
+    super.paymentMethod,
+  });
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) {
     return SubscriptionModel(

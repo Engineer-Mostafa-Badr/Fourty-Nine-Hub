@@ -26,15 +26,14 @@ part 'create_post_instagram_state.dart';
 
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   CreatePostInstagramCubit(
-      this.createPostInstagramUseCase,
-      this.postConfirmWebhookUseCase,
-      this.getForYouSongsUseCase,
-      this.getTrendingSongsUseCase,
-      this.getSavedSongsUseCase,
-      this.addRemoveSongsFromFavsUseCase,
-      this.searchSongsUseCase,
-      )
-      : super( CreatePostInstagramState());
+    this.createPostInstagramUseCase,
+    this.postConfirmWebhookUseCase,
+    this.getForYouSongsUseCase,
+    this.getTrendingSongsUseCase,
+    this.getSavedSongsUseCase,
+    this.addRemoveSongsFromFavsUseCase,
+    this.searchSongsUseCase,
+  ) : super(CreatePostInstagramState());
 
   final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
   final PostConfirmWebhookUseCase postConfirmWebhookUseCase;
@@ -47,7 +46,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   TextEditingController searchController = TextEditingController();
   List<SongEntity> searchSongs = [];
 
-  void clearSearch(){
+  void clearSearch() {
     searchController.clear();
     searchSongs = [];
     emit(state.copyWith(
@@ -80,7 +79,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   }
 
   void changeMusicSection(SongsEnum song) {
-    if(state.selectedSong == song) return;
+    if (state.selectedSong == song) return;
     emit(state.copyWith(
       selectedSong: song,
     ));
@@ -99,10 +98,11 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
       },
       (data) {
         song.isSaved = !song.isSaved;
-        if(song.isSaved){
-          if(favoriteSongs.where((e) => e.id == song.id).isEmpty) favoriteSongs.add(song);
-        }
-        else{
+        if (song.isSaved) {
+          if (favoriteSongs.where((e) => e.id == song.id).isEmpty) {
+            favoriteSongs.add(song);
+          }
+        } else {
           favoriteSongs.removeWhere((e) => e.id == song.id);
         }
         emit(
@@ -114,8 +114,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     );
   }
 
-
-  Future<void> refreshUI() async{
+  Future<void> refreshUI() async {
     await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith());
   }
@@ -140,7 +139,6 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     _audioPlayer.pause();
     emit(state.copyWith(isPlaying: false));
   }
-
 
   Future<void> togglePlayPause() async {
     emit(state.copyWith(isPlaying: !state.isPlaying));
@@ -172,10 +170,9 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   // favorite songs
   List<SongEntity> favoriteSongs = [];
   bool isLoadingMoreFavorite = false;
-  bool hasMoreDataFavorite= true;
-  int currentPageFavorite= 1;
+  bool hasMoreDataFavorite = true;
+  int currentPageFavorite = 1;
   int pageSize = 10;
-
 
   // for you
   Future<void> loadInitialForYouSongs() async {
@@ -192,6 +189,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     emit(state.copyWith(status: CreatePostInstagramStates.loading));
     await _fetchForYouSongs();
   }
+
   Future<void> _fetchForYouSongs() async {
     final result = await getForYouSongsUseCase(
       params: SongsPaginationParams(
@@ -201,11 +199,12 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     );
 
     result.fold(
-          (l) {
+      (l) {
         isLoadingMoreForYou = false; // Reset loading state on error
-        emit(state.copyWith(status: CreatePostInstagramStates.failure, failure: l));
+        emit(state.copyWith(
+            status: CreatePostInstagramStates.failure, failure: l));
       },
-          (data) {
+      (data) {
         forYouSongs.addAll(data);
 
         if (data.length < pageSize) {
@@ -234,6 +233,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     emit(state.copyWith(status: CreatePostInstagramStates.loading));
     await _fetchTrendingSongs();
   }
+
   Future<void> _fetchTrendingSongs() async {
     final result = await getTrendingSongsUseCase(
       params: SongsPaginationParams(
@@ -243,11 +243,12 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     );
 
     result.fold(
-          (l) {
+      (l) {
         isLoadingMoreTrending = false; // Reset loading state on error
-        emit(state.copyWith(status: CreatePostInstagramStates.failure, failure: l));
+        emit(state.copyWith(
+            status: CreatePostInstagramStates.failure, failure: l));
       },
-          (data) {
+      (data) {
         trendingSongs.addAll(data);
 
         if (data.length < pageSize) {
@@ -276,6 +277,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     emit(state.copyWith(status: CreatePostInstagramStates.loading));
     await _fetchFavoriteSongs();
   }
+
   Future<void> _fetchFavoriteSongs() async {
     final result = await getSavedSongsUseCase(
       params: SongsPaginationParams(
@@ -285,11 +287,12 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     );
 
     result.fold(
-          (l) {
+      (l) {
         isLoadingMoreFavorite = false; // Reset loading state on error
-        emit(state.copyWith(status: CreatePostInstagramStates.failure, failure: l));
+        emit(state.copyWith(
+            status: CreatePostInstagramStates.failure, failure: l));
       },
-          (data) {
+      (data) {
         favoriteSongs.addAll(data);
 
         if (data.length < pageSize) {
@@ -429,9 +432,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
 
   Future<int> _getAssetFileSize(AssetEntity entity) async {
     File? file = await entity.file;
-    if (file != null) {
-      return await file.length();
-    }
+    return await file!.length();
     return 0;
   }
 
@@ -477,7 +478,8 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     final alreadyExists = updatedTags.any((u) => u.id == user.id);
 
     if (!alreadyExists) {
-      print('Adding user tag with position: $position, imageIndex: $imageIndex');
+      print(
+          'Adding user tag with position: $position, imageIndex: $imageIndex');
 
       final userWithPositionAndIndex = user.copyWith(
         position: position != null
@@ -508,13 +510,13 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     List<Map<String, dynamic>> userTags = state.usersTag
         .where((user) => user.position != null && user.imageIndex != null)
         .map((user) => {
-      'id': user.id,
-      'imageId': (user.imageIndex! + 1).toString() ,
-      'position': {
-        'x': user.position!.x,
-        'y': user.position!.y,
-      },
-    })
+              'id': user.id,
+              'imageId': (user.imageIndex! + 1).toString(),
+              'position': {
+                'x': user.position!.x,
+                'y': user.position!.y,
+              },
+            })
         .toList();
 
     print('Sending userTags: $userTags');
@@ -528,7 +530,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
           uploadMedia.map((AssetEntity e) async {
             final num size = await _getAssetFileSize(e);
             return MediaCreatePostInstagramParams(
-              itemId: (uploadMedia.indexOf(e) + 1 ).toString(),
+              itemId: (uploadMedia.indexOf(e) + 1).toString(),
               type: e.mimeType ?? '',
               size: size,
             );
@@ -1013,9 +1015,9 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     //     assets.add(asset);
     //     // _file = path[0];
     //   }
-      // if (asset.type == AssetType.image) {
-      //
-      // }
+    // if (asset.type == AssetType.image) {
+    //
+    // }
     // }
     return assets;
     // final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(

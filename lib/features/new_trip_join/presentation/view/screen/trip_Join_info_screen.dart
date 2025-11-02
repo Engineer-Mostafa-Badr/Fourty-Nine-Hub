@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
-import '../../../../../routes/routes.dart';
 import '../../../captainshare/screen/captain_share_info_screen.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 

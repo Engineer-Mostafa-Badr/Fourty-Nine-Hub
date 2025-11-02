@@ -60,7 +60,6 @@ class AuctionMediaModel extends AuctionMediaEntity {
   }
 }
 */
-import '../../domain/entities/get_all_auction_entity.dart';
 
 class GetAvailableAuctionModel extends GetAvailableAuctionEntity {
   const GetAvailableAuctionModel({

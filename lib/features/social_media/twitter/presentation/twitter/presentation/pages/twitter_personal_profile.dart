@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:vibration/vibration.dart';
 import '../../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
-import '../../../../../../../routes/routes.dart';
 import '../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../data/models/profile_model.dart';
 import '../../../../domain/entities/twitter_post_entity.dart';
@@ -110,7 +107,7 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
     }
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     if (_activeController == null) {
       return const Scaffold(body: Center(child: CupertinoActivityIndicator()));
@@ -118,11 +115,13 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
 
     return BlocBuilder<TwitterCubit, TwitterState>(
       builder: (context, state) {
-        final headerProfile =
-            state.profile ?? widget.initialProfile ?? _fallbackFromUserCubit(context);
+        final headerProfile = state.profile ??
+            widget.initialProfile ??
+            _fallbackFromUserCubit(context);
 
         if (headerProfile == null) {
-          return const Scaffold(body: Center(child: CupertinoActivityIndicator()));
+          return const Scaffold(
+              body: Center(child: CupertinoActivityIndicator()));
         }
 
         final bool countsReady =
@@ -131,7 +130,8 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
         final controller = _activeController!;
 
         // 👇 Debug prints عشان نتاكد ان الكنترولر فيه بيانات
-        debugPrint("📌 Controller items length: ${controller.itemList?.length}");
+        debugPrint(
+            "📌 Controller items length: ${controller.itemList?.length}");
         if (controller.itemList != null) {
           for (var i = 0; i < controller.itemList!.length; i++) {
             debugPrint("   ▶ Post[$i] = ${controller.itemList![i].content}");
@@ -151,19 +151,21 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
                         coverUrl: headerProfile.coverUrl,
                         avatarUrl: headerProfile.avatarUrl,
                         isPersonal: _viewingMe,
-
                       ),
                       _UserInfo(
-                        displayName: _composeDisplayName(context, headerProfile),
+                        displayName:
+                            _composeDisplayName(context, headerProfile),
                         handle: '@${headerProfile.userName}',
                         isVerified: headerProfile.isVerified == true,
                         isPersonal: _viewingMe,
-                         gender: widget.initialProfile!.gender,                 // String?  (e.g. "male"/"female")
-                        profileViews: widget.initialProfile!.profileViews,     // int?
-                        joinedAt: headerProfile.joinedAt,             // DateTime?
+                        gender: widget.initialProfile!
+                            .gender, // String?  (e.g. "male"/"female")
+                        profileViews:
+                            widget.initialProfile!.profileViews, // int?
+                        joinedAt: headerProfile.joinedAt, // DateTime?
                       ),
 
-                    //  if (!_viewingMe) const _CustomFollowRow(),
+                      //  if (!_viewingMe) const _CustomFollowRow(),
                       if (countsReady)
 /*
                         Padding(
@@ -191,7 +193,7 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
                           ),
                         ),
 */
-                      const Divider(height: 1),
+                        const Divider(height: 1),
                       const _PostsSectionTitle(),
                     ],
                   ),
@@ -205,8 +207,10 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
                 PagedSliverList<int, TwitterPostEntity>(
                   pagingController: controller,
                   builderDelegate: PagedChildBuilderDelegate<TwitterPostEntity>(
-                    firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-                    newPageProgressIndicatorBuilder: (_) => const _CenteredLoader(),
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        const SizedBox.shrink(),
+                    newPageProgressIndicatorBuilder: (_) =>
+                        const _CenteredLoader(),
                     noItemsFoundIndicatorBuilder: (_) =>
                         _NoItems(text: LocaleKeys.noPosts.localize),
                     noMoreItemsIndicatorBuilder: (_) => const SizedBox.shrink(),
@@ -215,9 +219,11 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
                     itemBuilder: (context, post, index) {
                       debugPrint("🎯 Rendering Post[$index]: ${post.content}");
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
                         child: TwitterPostCard(
-                          onRepost: () => cubit.onRepost(postId: post.id),   // 👈 Repost هنا
+                          onRepost: () =>
+                              cubit.onRepost(postId: post.id), // 👈 Repost هنا
 
                           isDetailed: false,
                           post: post,
@@ -235,8 +241,9 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
                                 final wasLiked = p.isLiked ?? false;
                                 p.isLiked = !wasLiked;
                                 final cur = p.loveCount ?? 0;
-                                p.loveCount =
-                                wasLiked ? (cur > 0 ? cur - 1 : 0) : cur + 1;
+                                p.loveCount = wasLiked
+                                    ? (cur > 0 ? cur - 1 : 0)
+                                    : cur + 1;
                                 controller.notifyListeners();
                               }
                             }
@@ -285,8 +292,8 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
       followersCount: 0,
       followingCount: 0,
       // NEW (null-safe; set if UserCubit exposes them)
-      gender: u.gender,                 // String?
-      profileViews: u.friendsCount,     // int?
+      gender: u.gender, // String?
+      profileViews: u.friendsCount, // int?
     );
   }
 
@@ -304,11 +311,10 @@ class _TwitterPersonalProfileState extends State<TwitterPersonalProfile> {
 // ---------- UI bits ----------
 
 class _Header extends StatelessWidget {
-  const _Header({
-    required this.coverUrl,
-    required this.isPersonal,
-
-    required this.avatarUrl});
+  const _Header(
+      {required this.coverUrl,
+      required this.isPersonal,
+      required this.avatarUrl});
   final String? coverUrl;
   final String? avatarUrl;
   final bool isPersonal;
@@ -329,7 +335,7 @@ class _Header extends StatelessWidget {
               image: (coverUrl?.isNotEmpty == true)
                   ? NetworkImage(coverUrl!)
                   : const NetworkImage(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s'),
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUPIfiGgUML8G3ZqsNLHfaCnZK3I5g4tJabQ&s'),
               fit: BoxFit.cover,
             ),
           ),
@@ -364,32 +370,30 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-       isPersonal? Positioned(
-          right: 16,
-          top: 45,
-          child:
-          OutlinedButton(
-            onPressed: () {
-              Vibration.vibrate();
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black,
-               backgroundColor: Colors.black38
-            ),
-            child: Text(
-              Localizations.localeOf(context).languageCode == 'ar'
-                  ? 'تعديل الملف'
-                  : 'Edit Profile',
-              style:  TextStyle(color: Colors.white),
-            ),
-          ),
-        ):Container(),
-
+        isPersonal
+            ? Positioned(
+                right: 16,
+                top: 45,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Vibration.vibrate();
+                  },
+                  style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.black38),
+                  child: Text(
+                    Localizations.localeOf(context).languageCode == 'ar'
+                        ? 'تعديل الملف'
+                        : 'Edit Profile',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }
 }
-
 
 class _UserInfo extends StatelessWidget {
   const _UserInfo({
@@ -408,15 +412,15 @@ class _UserInfo extends StatelessWidget {
   final bool isPersonal;
 
   // NEW
-  final String? gender;        // "male" / "female" / etc
-  final int? profileViews;     // e.g. 10
-  final DateTime? joinedAt;    // actual join date
+  final String? gender; // "male" / "female" / etc
+  final int? profileViews; // e.g. 10
+  final DateTime? joinedAt; // actual join date
 
   String _formatJoined(BuildContext context, DateTime? dt) {
     if (dt == null) return '';
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
     final formatted = DateFormat('MMM yyyy').format(dt);
-    return isAr ? 'انضم ${formatted}' : 'Joined $formatted';
+    return isAr ? 'انضم $formatted' : 'Joined $formatted';
   }
 
   IconData _genderIcon(String? g) {
@@ -445,21 +449,21 @@ class _UserInfo extends StatelessWidget {
   }
 
   Widget _chip(IconData icon, String text) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-    margin: const EdgeInsets.only(right: 8, top: 6),
-    decoration: BoxDecoration(
-      color: Colors.grey.withOpacity(0.12),
-      borderRadius: BorderRadius.circular(999),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 14, color: Colors.grey[700]),
-        const SizedBox(width: 6),
-        Text(text, style: const TextStyle(color: Colors.black87)),
-      ],
-    ),
-  );
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        margin: const EdgeInsets.only(right: 8, top: 6),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: Colors.grey[700]),
+            const SizedBox(width: 6),
+            Text(text, style: const TextStyle(color: Colors.black87)),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -487,7 +491,7 @@ class _UserInfo extends StatelessWidget {
               if (isVerified)
                 const Icon(Icons.verified, color: Colors.blue, size: 18),
               const Spacer(),
-             ],
+            ],
           ),
 
           // @handle
@@ -557,7 +561,8 @@ class _CustomFollowRow extends StatelessWidget {
             padding: const EdgeInsets.all(.7),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(500),
-              gradient: const LinearGradient(colors: [Colors.black, Colors.red]),
+              gradient:
+                  const LinearGradient(colors: [Colors.black, Colors.red]),
             ),
             child: OutlinedButton(
               onPressed: () {},
@@ -565,14 +570,13 @@ class _CustomFollowRow extends StatelessWidget {
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.white,
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 side: BorderSide.none,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50)),
               ),
               child: const Text('Following',
-                  style:
-                  TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ),
         ],

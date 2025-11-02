@@ -17,7 +17,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,14 +41,15 @@ class MyPickMeOffersWidget extends StatefulWidget {
   State<MyPickMeOffersWidget> createState() => _MyPickMeOffersWidgetState();
 }
 
-class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with TickerProviderStateMixin{
+class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget>
+    with TickerProviderStateMixin {
   late ScrollController _scrollController;
   late AnimationController _animationController;
   late Animation<double> _slideAnimation;
   late Animation<double> _rotationAnimation;
   late Animation<double> _opacityAnimation;
 
-  bool _isVisible = true;
+  final bool _isVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -62,60 +62,67 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: isFloatingButtonVisible
-            ? buildFloatingAction(context,child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.push(Routes.pickMeInfoScreen);
-                },
-                child: Container(
-                  height: 48.h,
-                  width: 48.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.getButtonPrimaryColor(context),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    size: 19,
-                    Icons.question_mark,
-                    color: context.isDarkMode
-                        ? AppColors.black
-                        : Colors.white,
+            ? buildFloatingAction(context,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context.push(Routes.pickMeInfoScreen);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.push(Routes.TRIP_JOIN, extra: true);
+                          },
+                          backgoundColor:
+                              AppColors.getButtonPrimaryColor(context),
+                          child: Label(
+                            text: context.isArabic
+                                ? "انشر رحلتك +"
+                                : "Post your ride +",
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ))
+                    ],
                   ),
-                ),
-              ),
-              CustomElevatedButton(
-                  onPressed: () {
-                    ManageVibration.vibrate();
-                    context.push(Routes.TRIP_JOIN, extra: true);
-                  },
-                  backgoundColor: AppColors.getButtonPrimaryColor(context),
-                  child: Label(
-                    text: context.isArabic ? "انشر رحلتك +" : "Post your ride +",
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.getReversedTextColor(context),
-                    ),
-                  ))
-            ],
-          ),
-        ), () {
-          ManageVibration.vibrate();
-          context.push(Routes.TRIP_JOIN, extra: true);
-        })
+                ), () {
+                ManageVibration.vibrate();
+                context.push(Routes.TRIP_JOIN, extra: true);
+              })
             : null,
         body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
-            if (context.read<ViewAllTripJoinCubit>().isLoadingPickMeMyAds == true) {
+            if (context.read<ViewAllTripJoinCubit>().isLoadingPickMeMyAds ==
+                true) {
               return const Center(
                 child: CustomLoadingSearchWidget(),
               );
             }
 
             if (context.read<ViewAllTripJoinCubit>().myPickMeAdsData.isEmpty) {
-              return Center(child: CustomEmptyWidget(label:LocaleKeys.youHaveNoAds.localize));
+              return Center(
+                  child: CustomEmptyWidget(
+                      label: LocaleKeys.youHaveNoAds.localize));
             }
             return OlxPaginationWidget(
               scrollController: _scrollController,
@@ -126,9 +133,10 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
               banners: bannersList,
               items: List.generate(
                 context.read<ViewAllTripJoinCubit>().myPickMeAdsData.length,
-                    (index) {
-                  MyAdsTripDocEntity data =
-                  context.read<ViewAllTripJoinCubit>().myPickMeAdsData[index];
+                (index) {
+                  MyAdsTripDocEntity data = context
+                      .read<ViewAllTripJoinCubit>()
+                      .myPickMeAdsData[index];
 
                   return Padding(
                     padding: EdgeInsets.symmetric(
@@ -147,58 +155,85 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.symmetric(horizontal: 32.0.h),
+                                      EdgeInsets.symmetric(horizontal: 32.0.h),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: ClickableWidget(
                                           onTap: () {
-                                            if((data.lastViewers?.length??0)>0) {
+                                            if ((data.lastViewers?.length ??
+                                                    0) >
+                                                0) {
                                               ManageVibration.vibrate();
                                               showModalBottomSheet(
-                                                backgroundColor: context.isDarkMode
+                                                backgroundColor: context
+                                                        .isDarkMode
                                                     ? AppColors.DARK_BLUE_COLOR
-                                                    .withOpacity(0.95)
+                                                        .withOpacity(0.95)
                                                     : AppColors.LIGHT_COLOR,
                                                 constraints: BoxConstraints(
-                                                  maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                                  maxHeight:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.3,
                                                 ),
                                                 context: context,
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(32.0),
-                                                    topRight: Radius.circular(32.0),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(32.0),
+                                                    topRight:
+                                                        Radius.circular(32.0),
                                                   ),
                                                 ),
                                                 isDismissible: true,
                                                 // isScrollControlled: true,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Column(
                                                       children: [
-                                                        Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                        Text(
+                                                          context.isArabic
+                                                              ? 'المشاهدون'
+                                                              : 'Viewers',
+                                                          style: Styles.headerText(
+                                                              color: context
+                                                                      .isDarkMode
+                                                                  ? Colors.white
+                                                                  : AppColors
+                                                                      .PRIMARY_COLOR),
+                                                        ),
                                                         Expanded(
                                                           child: ListView(
                                                             shrinkWrap: true,
-                                                            children: List.generate(data.lastViewers?.length??0, (i)=>Container(
-                                                              padding: EdgeInsets.only(bottom: 10),
-                                                              child: Row(
-                                                                children: [
-                                                                  ImageFromInternet(
-                                                                      image: '',
-                                                                      isCircle: true,
-                                                                      defaultLogo: false,
-                                                                      isMale: data.lastViewers?[i].gender=='male',
-                                                                      width: 40,
-                                                                      height: 40,
-                                                                      firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
-                                                                      charPadding: 0),
-                                                                  const Sizer(),
-                                                                  Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                                ],
-                                                              ),
-                                                            )),
+                                                            children:
+                                                                List.generate(
+                                                                    data.lastViewers
+                                                                            ?.length ??
+                                                                        0,
+                                                                    (i) =>
+                                                                        Container(
+                                                                          padding:
+                                                                              EdgeInsets.only(bottom: 10),
+                                                                          child:
+                                                                              Row(
+                                                                            children: [
+                                                                              ImageFromInternet(image: '', isCircle: true, defaultLogo: false, isMale: data.lastViewers?[i].gender == 'male', width: 40, height: 40, firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(), charPadding: 0),
+                                                                              const Sizer(),
+                                                                              Text(
+                                                                                data.lastViewers?[i].firstName ?? '',
+                                                                                style: Styles.mediumText(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        )),
                                                           ),
                                                         ),
                                                       ],
@@ -219,12 +254,13 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                                               const Sizer(),
                                               Label(
                                                 text:
-                                                '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
+                                                    '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
                                                 style: Styles.mediumText(
                                                   fontSize: 24,
                                                   color: context.isDarkMode
                                                       ? AppColors.whiteColor
-                                                      : AppColors.DARK_GRAY_COLOR,
+                                                      : AppColors
+                                                          .DARK_GRAY_COLOR,
                                                 ),
                                               ),
                                             ],
@@ -235,7 +271,7 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                                         data.formattedOfferType,
                                         style: Styles.headerText(
                                             color:
-                                            AppColors.getRedColor(context),
+                                                AppColors.getRedColor(context),
                                             fontSize: 32),
                                       ),
                                     ],
@@ -255,12 +291,12 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                                         data.pricePerSeat?.round() ?? 0,
                                         context),
                                     seats: LocaleKeys.eachSeat.localize
-                                  // icon: widget.iconCar
-                                  //     ? Assets.tripJoinCarIcon
-                                  //     : widget.isMale
-                                  //     ? Assets.maleUser
-                                  //     : Assets.femaleUser,
-                                ),
+                                    // icon: widget.iconCar
+                                    //     ? Assets.tripJoinCarIcon
+                                    //     : widget.isMale
+                                    //     ? Assets.maleUser
+                                    //     : Assets.femaleUser,
+                                    ),
                                 const Sizer(
                                   height: 30,
                                 ),
@@ -278,11 +314,11 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         formatTimestamp(
-                                            data.startDate??'', context),
+                                            data.startDate ?? '', context),
                                         style: Styles.headerText(
                                             fontSize: 32,
                                             fontWeight: FontWeight.bold),
@@ -320,7 +356,7 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                                       context
                                           .read<ViewAllTripJoinCubit>()
                                           .deleteMyAdsPickMe(
-                                          data.id ?? "", context);
+                                              data.id ?? "", context);
                                     },
                                     label: LocaleKeys.deleteRequest.localize,
                                   ),
@@ -331,7 +367,7 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                           ],
                         ),
                         data.isPremium == true ||
-                            data.isButtonEnabled!.state == true
+                                data.isButtonEnabled!.state == true
                             ? SizedBox()
                             : TripCardSubscribeText(),
                       ],
@@ -340,7 +376,6 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
                 },
               ),
             );
-
           },
         ),
       ),
@@ -393,7 +428,6 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
     // Start with visible state
     _animationController.forward();
     super.initState();
-
   }
 
   TripCardInfoWidget({
@@ -524,18 +558,18 @@ class _MyPickMeOffersWidgetState extends State<MyPickMeOffersWidget> with Ticker
       ),
     );
   }
+
   bool isFloatingButtonVisible = true;
 
   void _scrollListener() {
-
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       isFloatingButtonVisible = false;
     } else {
       isFloatingButtonVisible = true;
     }
-    setState((){});
-    }
+    setState(() {});
+  }
 }
 
 extension OfferTypeFormatter on MyAdsTripDocEntity {

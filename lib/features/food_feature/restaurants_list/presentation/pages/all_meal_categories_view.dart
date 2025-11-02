@@ -6,7 +6,6 @@ import '../../../../../ads/interstitial_ad_model.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../cubit/restaurants_list_cubit.dart';
 import 'widgets/restaurant_list/meal_category_card.dart';
 

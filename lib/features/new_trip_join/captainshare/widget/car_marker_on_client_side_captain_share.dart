@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_cubit/captain_share_cubit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../../core/enums/trip_states_enum.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CarMarkerOnClientSideCaptainShare extends StatefulWidget {

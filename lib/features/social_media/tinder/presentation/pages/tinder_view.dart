@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/clickable_widget.dart';
@@ -25,6 +24,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../helpers/manage_vibration.dart';
+
 class TinderView extends StatelessWidget {
   const TinderView({super.key});
 
@@ -35,19 +35,19 @@ class TinderView extends StatelessWidget {
       isMaleSelected:
           context.read<UserCubit>().state.data?.gender == 'male' ? false : true,
     );*/
-      MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
-          // BlocProvider(create: (_) => serviceLocator<ChatRoomCubit>()),
-          BlocProvider(create: (_) => serviceLocator<UserCubit>()),
-          //  BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
-        ],
-        child: TinderScreen1(
-          isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
-              ? false
-              : true,
-        ),
-      );
+        MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => serviceLocator<TinderViewCubit>()),
+        // BlocProvider(create: (_) => serviceLocator<ChatRoomCubit>()),
+        BlocProvider(create: (_) => serviceLocator<UserCubit>()),
+        //  BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
+      ],
+      child: TinderScreen1(
+        isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
+            ? false
+            : true,
+      ),
+    );
   }
 }
 
@@ -84,11 +84,15 @@ class _TinderScreen1State extends State<TinderScreen1> {
     super.dispose();
   }
 
-
   void _initializeTinderData() {
     final tinderCubit = context.read<TinderViewCubit>();
     tinderCubit
-      ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
+      ..fetchUserData(
+          gender: isMaleSelected! ? 'female' : 'male',
+          isLoggedIn: context.isUserLoggedIn,
+          userId: context.isUserLoggedIn
+              ? context.read<UserCubit>().state.data!.id
+              : "")
       ..fetchSubCategoryData()
       ..fetchFavorites();
     // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
@@ -105,7 +109,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
             children: [
               IconButton(
                   visualDensity:
-                  const VisualDensity(horizontal: -2, vertical: -4),
+                      const VisualDensity(horizontal: -2, vertical: -4),
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(Icons.arrow_back)),
               // const Sizer(),
@@ -127,11 +131,11 @@ class _TinderScreen1State extends State<TinderScreen1> {
             Text(
               isMaleSelected!
                   ? context.isArabic
-                  ? "ذكر"
-                  : 'Male'
+                      ? "ذكر"
+                      : 'Male'
                   : context.isArabic
-                  ? "انثى"
-                  : 'Female',
+                      ? "انثى"
+                      : 'Female',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -147,8 +151,13 @@ class _TinderScreen1State extends State<TinderScreen1> {
                   isMaleSelected = !isMaleSelected!; // Toggle the state
                   final tinderCubit = context.read<TinderViewCubit>();
                   tinderCubit
-                    ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-                  // ..fetchSubCategoryData()
+                    ..fetchUserData(
+                        gender: isMaleSelected! ? 'female' : 'male',
+                        isLoggedIn: context.isUserLoggedIn,
+                        userId: context.isUserLoggedIn
+                            ? context.read<UserCubit>().state.data!.id
+                            : "")
+                    // ..fetchSubCategoryData()
                     ..fetchFavorites();
                 });
               },
@@ -167,8 +176,7 @@ class _TinderScreen1State extends State<TinderScreen1> {
           ],
         ),
       ),
-      body:
-      BlocBuilder<TinderViewCubit, TinderViewState>(
+      body: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {
           if (state.status == TinderStates.success) {
             return _buildLoggedInContent(context, state);
@@ -179,15 +187,12 @@ class _TinderScreen1State extends State<TinderScreen1> {
     );
   }
 
-  Widget _buildLoggedInContent(
-      BuildContext context,
-      state
-      ) {
+  Widget _buildLoggedInContent(BuildContext context, state) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: SingleChildScrollView(
         controller: _scrollController,
-        child:   Column(
+        child: Column(
           children: [
             if (state.userData0 != null && state.userData0!.isNotEmpty)
               TinderCardStack()
@@ -218,7 +223,8 @@ class _TinderScreen1State extends State<TinderScreen1> {
             BlocBuilder<TinderViewCubit, TinderViewState>(
               builder: (context, state) {
                 final controller = context.read<TinderViewCubit>();
-                if(state.subCategoryData !=null && state.mainCategoryResponse !=null) {
+                if (state.subCategoryData != null &&
+                    state.mainCategoryResponse != null) {
                   return Padding(
                     padding: EdgeInsets.all(8.0.w),
                     child: GridView.builder(
@@ -226,7 +232,8 @@ class _TinderScreen1State extends State<TinderScreen1> {
                       shrinkWrap: true,
                       itemCount: state.subCategoryData?.length ?? 0,
                       controller: _scrollController,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         childAspectRatio: 1,
                       ),
@@ -234,7 +241,8 @@ class _TinderScreen1State extends State<TinderScreen1> {
                         mainCategory: state.mainCategoryResponse!,
                         item: state.subCategoryData![index],
                         onFav: () async {
-                          var result = await controller.toggleSubCategoryToFavorites(
+                          var result =
+                              await controller.toggleSubCategoryToFavorites(
                             state.subCategoryData![index].id,
                           );
                           return result;
@@ -253,4 +261,3 @@ class _TinderScreen1State extends State<TinderScreen1> {
     );
   }
 }
-

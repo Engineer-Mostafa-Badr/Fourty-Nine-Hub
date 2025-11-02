@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/form/text_fields/first_name_text_form_field.dart';
@@ -12,7 +13,6 @@ import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../../common/widgets/stateless/labels/info_text.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../health_feature/create_doctor/presentation/widgets/pickers/date/id_expiry_date_picker.dart';
@@ -912,7 +912,7 @@ class _EditDriverScreenState extends State<EditDriverScreen> {
                             ),
                             label: LocaleKeys.update.tr(),
                             onPressed: () {
-      ManageVibration.vibrate();
+                              ManageVibration.vibrate();
                               if (formKey.currentState!.validate()) {
                                 shippingcubit.model.firstName =
                                     firstNameController.text;

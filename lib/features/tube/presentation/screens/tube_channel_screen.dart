@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TubeChannelScreen extends StatefulWidget {
-  const TubeChannelScreen({Key? key}) : super(key: key);
+  const TubeChannelScreen({super.key});
 
   @override
   State<TubeChannelScreen> createState() => _TubeChannelScreenState();
@@ -72,6 +72,8 @@ class _TubeChannelScreenState extends State<TubeChannelScreen>
 
 // ======================== Channel Header ========================
 class ChannelHeader extends StatelessWidget {
+  const ChannelHeader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -145,7 +147,7 @@ class ChannelHeader extends StatelessWidget {
 // ======================== Tab Pages ========================
 
 class HomeTab extends StatelessWidget {
-  const HomeTab({Key? key}) : super(key: key);
+  const HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +207,7 @@ class HomeTab extends StatelessWidget {
 }
 
 class MyVideosTab extends StatelessWidget {
-  const MyVideosTab({Key? key}) : super(key: key);
+  const MyVideosTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +239,8 @@ class MyVideosTab extends StatelessWidget {
                 bottom: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   color: Colors.black.withOpacity(0.8),
                   child: const Text(
                     "10:24",
@@ -258,7 +261,8 @@ class MyVideosTab extends StatelessWidget {
                     children: [
                       Text(
                         "How to Build a Full YouTube Clone in Flutter",
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 15),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -281,7 +285,7 @@ class MyVideosTab extends StatelessWidget {
 }
 
 class WatchLaterTab extends StatelessWidget {
-  const WatchLaterTab({Key? key}) : super(key: key);
+  const WatchLaterTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -328,7 +332,8 @@ class WatchLaterTab extends StatelessWidget {
                 bottom: 4,
                 right: 4,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                   color: Colors.black.withOpacity(0.7),
                   child: const Text(
                     "12:30",
@@ -365,7 +370,7 @@ class WatchLaterTab extends StatelessWidget {
 }
 
 class PlaylistsTab extends StatelessWidget {
-  const PlaylistsTab({Key? key}) : super(key: key);
+  const PlaylistsTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -392,14 +397,16 @@ class PlaylistsTab extends StatelessWidget {
                 height: 68,
                 color: Colors.grey[300],
                 child: const Center(
-                  child: Icon(Icons.playlist_play, size: 40, color: Colors.white),
+                  child:
+                      Icon(Icons.playlist_play, size: 40, color: Colors.white),
                 ),
               ),
               Positioned(
                 bottom: 0,
                 right: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                   color: Colors.black.withOpacity(0.8),
                   child: Text(
                     "$videoCount",
@@ -416,7 +423,8 @@ class PlaylistsTab extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 15),
                 ),
                 const SizedBox(height: 4),
                 Text(

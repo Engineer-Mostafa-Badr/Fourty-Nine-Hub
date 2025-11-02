@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../presentation_exports.dart';
-import '../constants/tube_constants.dart';
 
 /// Mixin for handling search functionality in tube feed
 mixin SearchMixin<T extends StatefulWidget> on State<T> {

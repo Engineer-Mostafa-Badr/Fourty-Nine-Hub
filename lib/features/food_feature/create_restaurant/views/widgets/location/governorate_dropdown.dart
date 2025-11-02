@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/utils/media_query_values.dart';
 import '../../../../../../core/extensions/string_extension.dart';
-import '../../../../../../core/utils/media_query_values.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../health_feature/shared/domain/entities/governorate_entity.dart';
 import '../../../../../../res/style/styles.dart';

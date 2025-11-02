@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
   final String title;
@@ -44,7 +43,7 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: padding ?? 8),
           child: Label(
-            text: "${title}",
+            text: title,
             style: Styles.headerText(
               color: context.isDarkMode ? Colors.white : Colors.white,
               fontSize: 32,

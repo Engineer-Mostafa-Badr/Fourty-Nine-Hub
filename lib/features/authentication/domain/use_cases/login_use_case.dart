@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_token
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
 import '../../../../core/utils/device_id.dart';
-import '../../presentation/services/get_loaction_for_login.dart';
 
 class LoginUseCase extends UseCase<UserTokensEntity, LoginParams> {
   final AuthRepository _repository;

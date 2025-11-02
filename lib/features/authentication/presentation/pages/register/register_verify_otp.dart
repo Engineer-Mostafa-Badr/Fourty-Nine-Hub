@@ -22,7 +22,6 @@ import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class RegisterVerifyOTP extends StatefulWidget {
   final String email;

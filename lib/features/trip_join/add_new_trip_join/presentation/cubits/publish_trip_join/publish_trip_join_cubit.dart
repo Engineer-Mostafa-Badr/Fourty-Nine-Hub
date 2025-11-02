@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/trip_join_publish_param.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/publish_trip_join_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 part 'publish_trip_join_state.dart';
@@ -23,12 +21,13 @@ class PublishTripJoinCubit extends Cubit<PublishTripJoinState> {
     response.fold(
       (Failure failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(
-        PublishTripJoinFailed(getFailureMessage(failure, currentContext)),
-      );},
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(
+          PublishTripJoinFailed(getFailureMessage(failure, currentContext)),
+        );
+      },
       (_) {
         emit(PublishTripJoinSuccess());
       },

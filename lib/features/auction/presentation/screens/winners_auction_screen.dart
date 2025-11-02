@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/rendering.dart';
@@ -6,39 +5,20 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/common/winner_grid_view_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/auction/domain/entities/all_winner_auction_entity.dart';
 import 'package:fourtyninehub/features/auction/presentation/cubit/auction_cubit.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/winners_grid_view.dart';
 
 
 import 'package:fourtyninehub/res/assets/assets.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
 
-import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:easy_localization/easy_localization.dart';
 
-import '../../../../core/widget/common/default_app_bar.dart';
-import '../../../../helpers/manage_vibration.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 
 
 class WinnersAuctionScreen extends StatefulWidget {

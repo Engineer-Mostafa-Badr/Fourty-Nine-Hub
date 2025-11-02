@@ -5,7 +5,6 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 
 import '../../../../../../helpers/manage_vibration.dart';
-import '../../../../../../helpers/manage_vibration.dart';
 
 class AvaialbleTripsButton extends StatelessWidget {
   const AvaialbleTripsButton({
@@ -44,12 +43,14 @@ class AvaialbleTripsButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon != null
-                ? Icon(icon, color: AppColors.getReversedTextColor(context), size: 20)
+                ? Icon(icon,
+                    color: AppColors.getReversedTextColor(context), size: 20)
                 : const SizedBox(),
             const Sizer(width: 5),
             Text(
               title,
-              style: Styles.headerText(color: AppColors.getReversedTextColor(context), fontSize: 30),
+              style: Styles.headerText(
+                  color: AppColors.getReversedTextColor(context), fontSize: 30),
               textAlign: TextAlign.center,
             ),
           ],

@@ -6,20 +6,16 @@ import '../../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
 import '../../../../../core/extensions/context_extension.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../new_trip_join/captainshare/screen/captain_share_screen.dart';
 import '../../../../new_trip_join/presentation/view/widget/trip_option_widget.dart';
 import '../../../view_all_pick_me/presentation/views/all_pickme_view.dart';
 import '../cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'trip_join_content.dart';
-import 'Modified_widgets/trip_join_floating_action_button.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../helpers/manage_vibration.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
 class TripJoinView extends StatefulWidget {
@@ -109,7 +105,7 @@ class _TripJoinViewState extends State<TripJoinView>
     return SharedScaffold(
       mainCategoryId: 1,
       isWithBackArrow: true,
-      onBackPressed: ()=>context.pop(),
+      onBackPressed: () => context.pop(),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(

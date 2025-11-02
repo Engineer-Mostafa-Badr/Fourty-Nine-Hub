@@ -19,7 +19,6 @@ import '../../../../twitter/domain/usecases/post_comment_usecase.dart';
 import '../../../../twitter/domain/usecases/post_react_usecase.dart';
 import '../../../../twitter/domain/usecases/twitter_report_usecase.dart';
 import '../../../../twitter/presentation/bloc/twitter_bloc.dart';
-import '../../../../twitter/presentation/widgets/twitter_post_card.dart';
 import '../../../../twitter/presentation/widgets/twitter_post_comments.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
@@ -71,8 +70,8 @@ class _UserTweetsState extends State<UserTweets> {
                 final user = context.read<UserCubit>().state.data;
                 return state.status == StateStatus.success
                     ? TwitterPostCard(
-                  isDetailed:false,
-                  onRepost:   (){},
+                        isDetailed: false,
+                        onRepost: () {},
                         fromProfile: user?.id == widget.userData.id,
                         post: controller
                             .userTweetsPagingController.itemList![index],

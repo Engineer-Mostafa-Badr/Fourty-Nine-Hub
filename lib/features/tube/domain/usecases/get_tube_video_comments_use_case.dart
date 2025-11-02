@@ -4,9 +4,9 @@ import '../../../../core/abstract/use_case.dart';
 import '../../../../core/error/failure.dart';
 import '../entities/get_tube_video_commnets_entity.dart';
 import '../repositories/tube_repo.dart';
-import 'get_related_tube_videos_use_case.dart';
 
-class GetTubeVideoCommentsUseCase extends UseCase<TubeVideoCommentsEntity, GetTubeCommentsParams> {
+class GetTubeVideoCommentsUseCase
+    extends UseCase<TubeVideoCommentsEntity, GetTubeCommentsParams> {
   final TubeRepository _repo;
 
   GetTubeVideoCommentsUseCase(this._repo);
@@ -17,6 +17,7 @@ class GetTubeVideoCommentsUseCase extends UseCase<TubeVideoCommentsEntity, GetTu
     return await _repo.getTubeVideoComments(params: params);
   }
 }
+
 class GetTubeCommentsParams {
   final int page;
   final int limit;
@@ -25,7 +26,6 @@ class GetTubeCommentsParams {
 
   GetTubeCommentsParams({
     required this.id,
-
     required this.page,
     required this.limit,
     this.userId, // ✅ Not required
@@ -36,7 +36,6 @@ class GetTubeCommentsParams {
       "page": page,
       "limit": limit,
     };
-
 
     return data;
   }

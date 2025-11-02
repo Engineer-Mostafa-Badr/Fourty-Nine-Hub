@@ -15,8 +15,7 @@ class DriverHeaderWidget extends StatelessWidget {
   final String? carName;
   final String carNumber;
 
-
-   static List<ColorModel> colorList = [
+  static List<ColorModel> colorList = [
     ColorModel(
       id: "677409f87167cb520348f4d5",
       nameEnglish: "Black",
@@ -144,12 +143,11 @@ class DriverHeaderWidget extends StatelessWidget {
     required bool isArabic,
   }) {
     final color = colorList.firstWhere(
-          (color) => color.id == id,
+      (color) => color.id == id,
     );
 
-    return color == null ? null : (isArabic ? color.nameArabic : color.nameEnglish);
+    return (isArabic ? color.nameArabic : color.nameEnglish);
   }
-
 
   const DriverHeaderWidget({
     super.key,
@@ -176,65 +174,61 @@ class DriverHeaderWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-
-
                     if (carName != null)
                       Text(
                         '$carName',
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s14,
                           fontWeight: FontWeight.bold,
                           color: context.isDarkMode
                               ? AppColors.whiteColor
-                              :  AppColors.PRIMARY_COLOR,
+                              : AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     if (carModel != null && carName != null)
-                       Text(
+                      Text(
                         ' - ',
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s14,
                           fontWeight: FontWeight.bold,
-                          color:  context.isDarkMode
+                          color: context.isDarkMode
                               ? AppColors.whiteColor
-                              :  AppColors.PRIMARY_COLOR,
+                              : AppColors.PRIMARY_COLOR,
                         ),
                       ),
                     if (carModel != null)
                       Text(
                         '$carModel',
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s14,
                           fontWeight: FontWeight.bold,
-                          color:  context.isDarkMode
+                          color: context.isDarkMode
                               ? AppColors.whiteColor
-                              :  AppColors.PRIMARY_COLOR,
+                              : AppColors.PRIMARY_COLOR,
                         ),
                       ),
-
                     if (carColor != null && carModel != null)
-                       Text(
+                      Text(
                         ' - ',
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s14,
                           fontWeight: FontWeight.bold,
-                          color:  context.isDarkMode
+                          color: context.isDarkMode
                               ? AppColors.whiteColor
-                              :  AppColors.PRIMARY_COLOR,
+                              : AppColors.PRIMARY_COLOR,
                         ),
                       ),
-
                     if (carColor != null)
                       Text(
                         // '$carColor',
                         // '${HexColor(carColor!)}',
                         '${getColorNameById(id: carColor!, isArabic: context.isArabic)}',
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: FontSize.s14,
                           fontWeight: FontWeight.bold,
-                          color:  context.isDarkMode
-                        ? AppColors.whiteColor
-                            :  AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode
+                              ? AppColors.whiteColor
+                              : AppColors.PRIMARY_COLOR,
                         ),
                       ),
                   ],
@@ -245,16 +239,14 @@ class DriverHeaderWidget extends StatelessWidget {
           Column(
             children: [
               Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0.2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                ),
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0.2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ]),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
@@ -359,24 +351,23 @@ class _DriverArrivalCountdownState extends State<DriverArrivalCountdown> {
 
     return widget.isInLocation
         ? Text(
-      context.isArabic ? "لقد وصل السائق" : "The Driver has Arrived",
-      style: const TextStyle(
-        fontSize: FontSize.s14,
-        fontWeight: FontWeight.bold,
-      ),
-    )
+            context.isArabic ? "لقد وصل السائق" : "The Driver has Arrived",
+            style: const TextStyle(
+              fontSize: FontSize.s14,
+              fontWeight: FontWeight.bold,
+            ),
+          )
         : Text(
-      context.isArabic
-          ? "سوف يصل السائق في $arrivalText"
-          : "Driver is arriving in $arrivalText",
-      style: const TextStyle(
-        fontSize: FontSize.s14,
-        fontWeight: FontWeight.bold,
-      ),
-    );
+            context.isArabic
+                ? "سوف يصل السائق في $arrivalText"
+                : "Driver is arriving in $arrivalText",
+            style: const TextStyle(
+              fontSize: FontSize.s14,
+              fontWeight: FontWeight.bold,
+            ),
+          );
   }
 }
-
 
 class TripDurationCountdown extends StatefulWidget {
   final double? tripDurationSeconds;
@@ -424,7 +415,8 @@ class _TripDurationCountdownState extends State<TripDurationCountdown> {
   @override
   void didUpdateWidget(covariant TripDurationCountdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.tripDurationSeconds?.toInt() != oldWidget.tripDurationSeconds?.toInt()) {
+    if (widget.tripDurationSeconds?.toInt() !=
+        oldWidget.tripDurationSeconds?.toInt()) {
       _timer?.cancel();
       _initializeCountdown();
     }

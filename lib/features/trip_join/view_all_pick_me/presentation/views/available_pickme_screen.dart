@@ -12,31 +12,20 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/core/widget/common/app_loader_widget.dart';
 import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_loading_search_widget.dart';
-import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/loading_dashboard/loading_dashboard_details_screen.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/floating_add_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/widgets/available_pick_me_body.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/trip_join/request_log_widget.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -52,7 +41,8 @@ class AvailablePickMeCard extends StatefulWidget {
   State<AvailablePickMeCard> createState() => _AvailablePickMeCardState();
 }
 
-class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerProviderStateMixin{
+class _AvailablePickMeCardState extends State<AvailablePickMeCard>
+    with TickerProviderStateMixin {
   late ScrollController _scrollController;
   final TextEditingController _searchController = TextEditingController();
   bool _hasSearchText = false;
@@ -64,9 +54,9 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
 
     super.initState();
   }
+
   bool isFloatingButtonVisible = true;
   void _scrollListener() {
-
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       isFloatingButtonVisible = false;
@@ -75,6 +65,7 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
     }
     setState(() {});
   }
+
   String convertDigits(String input, {bool toArabic = false}) {
     const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -88,8 +79,6 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
 
     return input;
   }
-
-
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController phoneController = TextEditingController();
@@ -148,10 +137,17 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
             children: [
               RichText(
                   text: TextSpan(children: [
-                TextSpan(text: "$price  ", style: Styles.headerText(color: AppColors.getTextColor(context), fontWeight: FontWeight.bold)),
+                TextSpan(
+                    text: "$price  ",
+                    style: Styles.headerText(
+                        color: AppColors.getTextColor(context),
+                        fontWeight: FontWeight.bold)),
                 TextSpan(
                   text: context.isArabic ? 'ج.م' : 'EGP',
-                  style: Styles.mediumText(fontSize: context.locale.languageCode == "ar" ? 35 : 28, fontWeight: FontWeight.w500, color: AppColors.getRedColor(context)),
+                  style: Styles.mediumText(
+                      fontSize: context.locale.languageCode == "ar" ? 35 : 28,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.getRedColor(context)),
                 )
               ])),
               Row(
@@ -159,7 +155,9 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
                 children: [
                   Label(
                     text: seats,
-                    style: Styles.mediumText(fontWeight: FontWeight.bold, color: AppColors.getTextColor(context)),
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getTextColor(context)),
                   ),
                 ],
               )
@@ -283,7 +281,9 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
               textInputAction: TextInputAction.search,
               onChanged: (value) {
                 if (value.isEmpty) {
-                  context.read<ViewAllTripJoinCubit>().loadInitialPickMe(false, '');
+                  context
+                      .read<ViewAllTripJoinCubit>()
+                      .loadInitialPickMe(false, '');
                 }
                 setState(() => _hasSearchText = value.isNotEmpty);
               },
@@ -301,7 +301,15 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
               child: GestureDetector(
                 onTap: () {
                   ManageVibration.vibrate();
-                  if (context.read<ViewAllTripJoinCubit>().state.offersFromSearch == true) context.read<ViewAllTripJoinCubit>().loadInitialPickMe(false, '');
+                  if (context
+                          .read<ViewAllTripJoinCubit>()
+                          .state
+                          .offersFromSearch ==
+                      true) {
+                    context
+                        .read<ViewAllTripJoinCubit>()
+                        .loadInitialPickMe(false, '');
+                  }
                   _searchController.clear();
                   setState(() {
                     _hasSearchText = false;
@@ -327,7 +335,9 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
               child: GestureDetector(
                 onTap: () {
                   ManageVibration.vibrate();
-                  context.read<ViewAllTripJoinCubit>().loadInitialPickMe(true, _searchController.text);
+                  context
+                      .read<ViewAllTripJoinCubit>()
+                      .loadInitialPickMe(true, _searchController.text);
                   // _performSearch(_searchController.text);
                 },
                 child: Container(
@@ -356,319 +366,438 @@ class _AvailablePickMeCardState extends State<AvailablePickMeCard> with TickerPr
       color: AppColors.whiteColor,
       backgroundColor: AppColors.PRIMARY_COLOR,
       onRefresh: () async {
-        context.read<ViewAllTripJoinCubit>().loadInitialPickMe(_searchController.text.isNotEmpty,_searchController.text);
+        context.read<ViewAllTripJoinCubit>().loadInitialPickMe(
+            _searchController.text.isNotEmpty, _searchController.text);
       },
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: isFloatingButtonVisible
-            ? buildFloatingAction(context,child: Padding(
-              padding: const EdgeInsetsDirectional.only(start: 0),
-              child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-              GestureDetector(
-                onTap: () async {
-                  context.push(Routes.pickMeInfoScreen);
-                },
-                child: Container(
-                  height: 48.h,
-                  width: 48.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.getButtonPrimaryColor(context),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    size: 19,
-                    Icons.question_mark,
-                    color: context.isDarkMode
-                        ? AppColors.black
-                        : Colors.white,
+            ? buildFloatingAction(context,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          context.push(Routes.pickMeInfoScreen);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () async {
+                            ManageVibration.vibrate();
+                            var data = await context.push(Routes.TRIP_JOIN,
+                                extra: true);
+                            if (data == true) {
+                              context
+                                  .read<ViewAllTripJoinCubit>()
+                                  .loadInitialPickMe(
+                                      _searchController.text.isNotEmpty,
+                                      _searchController.text);
+                            }
+                          },
+                          backgoundColor:
+                              AppColors.getButtonPrimaryColor(context),
+                          child: Label(
+                            text: context.isArabic
+                                ? "انشر رحلتك +"
+                                : "Post your ride +",
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ))
+                    ],
                   ),
-                ),
-              ),
-                        CustomElevatedButton(
-                            onPressed: () async {
-                              ManageVibration.vibrate();
-                              var data = await context.push(Routes.TRIP_JOIN, extra: true);
-                              if(data == true){
-                                context.read<ViewAllTripJoinCubit>().loadInitialPickMe(_searchController.text.isNotEmpty, _searchController.text);
-                              }
-                            },
-                            backgoundColor: AppColors.getButtonPrimaryColor(context),
-                            child: Label(
-                              text: context.isArabic ? "انشر رحلتك +" : "Post your ride +",
-                              style: Styles.mediumText(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.getReversedTextColor(context),
-                              ),
-                            ))
-                      ],
-                    ),
-            ), () {
-          ManageVibration.vibrate();
-          context.push(Routes.TRIP_JOIN, extra: true);
-        })
+                ), () {
+                ManageVibration.vibrate();
+                context.push(Routes.TRIP_JOIN, extra: true);
+              })
             : null,
-        body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(builder: (context, state) {
+        body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
+            builder: (context, state) {
           return Stack(
             children: [
               Column(
                 children: [
                   _buildSearchField(),
                   Expanded(
-                      child: context.read<ViewAllTripJoinCubit>().isLoadingPickMe == true?const Center(
-                        child: CustomLoadingSearchWidget(),
-                      ):context.read<ViewAllTripJoinCubit>().pickMeData.isEmpty?
-                      Center(child: CustomEmptyWidget(label: LocaleKeys.noTripsAvailable.localize))
-                          :OlxPaginationWidget(
-                        scrollController: _scrollController,
-                        itemsPerPage: 3,
-                        loadPage: (page) async {
-                          context.read<ViewAllTripJoinCubit>().getPickMe();
-                        },
-                        banners: [],
-                        items: List.generate(
-                          context.read<ViewAllTripJoinCubit>().pickMeData.length,
-                              (index) {
-                            var data = context.read<ViewAllTripJoinCubit>().pickMeData[index];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10.h,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      GlobalCard(
-                                        subcategoryId: '62ea008d69ea29c91dfc3908',
-                                        phone: data.phoneNumber ?? "1234",
-                                        reportId: context.read<UserCubit>().state.data?.id??'',
-                                        otherUserId: '',
-                                        onSubscribe: (bool success){
-                                          context.pop();
-                                          if(success){
-                                            // data.isButtonEnabled?.state = true;
-                                            for (var item in context.read<ViewAllTripJoinCubit>().pickMeData) {
-                                              item.isButtonEnabled?.state = true;
-                                            }
-                                            setState(() {
-                                            });
-                                          }
-                                        },
-                                        onTap: (){
-                                          print("data.isView ${data.isView} LoggedId ${UserCubit.to.state.data?.id} creatorId ${data.creatorId}");
-                                          print ("value ${data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)}");
-                                          if (data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)) {
-                                            return;
-                                          }
-                                          ManageVibration.vibrate();
-                                          context.read<ViewAllTripJoinCubit>().applyPickMe(data.id!);
-                                        },
-                                        isButtonEnabled: data.isButtonEnabled?.state??false,
-                                        isPremium: data.isPremium,
-                                        hasReport: true,
-                                        hasTopSide: true,
-                                        hasBottomSide: true,
-                                        isView: data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId),
-                                        subscriptionType: data.formattedOfferType,
-                                        views: data.viewerIds??0,
-                                        onRequest:(((UserCubit.to.state.data?.id ?? '') == data.creatorId)||(data.isNormalRequested==true&&data.isPremiumRequested==true))?null: (){
-                                          if (!context.read<UserCubit>().isLoggedIn) {
-                                            ManageVibration.vibrate();
-                                            pleaseLoginDialog(context);
-                                            return;
-                                          }
-                                          ManageVibration.vibrate();
-                                          showModalBottomSheet(
-                                            backgroundColor: Colors.white,
-                                            context: context,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(32.0),
-                                                topRight: Radius.circular(32.0),
-                                              ),
-                                            ),
-                                            isDismissible: true,
-                                            isScrollControlled: true,
-                                            builder: (BuildContext context) {
-                                              return BlocProvider.value(
-                                                value: serviceLocator<ViewAllTripJoinCubit>(),
-                                                child: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(builder: (context, state) {
-                                                  return AnimatedPadding(
-                                                    padding: MediaQuery.of(context).viewInsets,
-                                                    duration: const Duration(milliseconds: 50),
-                                                    child: Container(
-                                                      height: 400.h,
-                                                      padding: EdgeInsets.symmetric(
-                                                        vertical: 10.h,
-                                                        horizontal: 10,
-                                                      ),
-                                                      child: Form(
-                                                        key: formKey,
-                                                        child: Column(
-                                                          children: [
-                                                            Label(
-                                                              text: context.isArabic ? "ادخل رقم هاتفك" : "Enter your phone number",
-                                                              style: Styles.headerText(),
-                                                            ),
-                                                            Sizer(
-                                                              height: 30.h,
-                                                            ),
-                                                            CustomPhoneTextFormField(
-                                                              currentFocusNode: FocusNode(),
-                                                              nextFocusNode: FocusNode(),
-                                                              currentController: phoneController,
-                                                              onInputChanged: (value) => formKey.currentState!.validate(),
-                                                              inputFormatters: [
-                                                                FilteringTextInputFormatter.digitsOnly,
-                                                                LengthLimitingTextInputFormatter(11),
-                                                              ],
-                                                              validator: (value) {
-                                                                final input = value?.trim() ?? '';
-
-                                                                if (input.isEmpty) {
-                                                                  return LocaleKeys.required.localize;
-                                                                }
-
-                                                                final numericValue = convertDigits(input, toArabic: false).replaceAll(RegExp(r'[^0-9]'), '');
-
-                                                                if (numericValue.length != 11) {
-                                                                  return context.isArabic
-                                                                      ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا'
-                                                                      : 'Phone number must be exactly 11 digits.';
-                                                                }
-
-                                                                if (!['010', '011', '012', '015'].any(numericValue.startsWith)) {
-                                                                  return context.isArabic
-                                                                      ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015'
-                                                                      : 'Phone number must start with 010, 011, 012, or 015.';
-                                                                }
-
-                                                                return null;
-                                                              },
-                                                            ),
-                                                            Expanded(
-                                                              child: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    child: InkWell(
-                                                                      onTap: () async {
-                                                                        if (data.isNormalRequested == true) {
-                                                                          context.pop();
-                                                                          showErrorMessage(context,
-                                                                              context.isArabic ? 'لقد تم ارسال الطلب من قبل' : 'This trip has already been requested');
-                                                                          return;
-                                                                        }
-                                                                        if (formKey.currentState!.validate()) {
-                                                                          bool result = await context
-                                                                              .read<ViewAllTripJoinCubit>()
-                                                                              .createPickMeRequest(data.id ?? '', false, phoneController.text);
-                                                                          if (result == true) {
-                                                                            data.isNormalRequested = true;
-                                                                            data.isButtonEnabled?.state=true;
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      child: Container(
-                                                                        width: 100,
-                                                                        height: 80.h,
-                                                                        padding: const EdgeInsets.all(5),
-                                                                        decoration: BoxDecoration(
-                                                                            color: data.isNormalRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.PRIMARY_COLOR,
-                                                                            borderRadius: BorderRadius.circular(15)),
-                                                                        alignment: Alignment.center,
-                                                                        child: Label(
-                                                                          text: LocaleKeys.request.localize,
-                                                                          style: Styles.headerText(color: Colors.white),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Sizer(),
-                                                                  Expanded(
-                                                                    child: InkWell(
-                                                                      onTap: () async {
-                                                                        if (data.isPremiumRequested == true) {
-                                                                          return;
-                                                                        }
-                                                                        if (formKey.currentState!.validate()) {
-                                                                          bool result = await context
-                                                                              .read<ViewAllTripJoinCubit>()
-                                                                              .createPickMeRequest(data.id ?? '', true, phoneController.text);
-                                                                          if (result == true) {
-                                                                            data.isPremiumRequested = true;
-                                                                            data.isButtonEnabled?.state=true;
-                                                                          }
-                                                                          setState(() {});
-                                                                          // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
-                                                                        }
-                                                                      },
-                                                                      child: Container(
-                                                                        width: 100,
-                                                                        height: 80.h,
-                                                                        padding: const EdgeInsets.all(5),
-                                                                        decoration: BoxDecoration(
-                                                                            color:
-                                                                            data.isPremiumRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.SECONDARY_COLOR,
-                                                                            borderRadius: BorderRadius.circular(15)),
-                                                                        alignment: Alignment.center,
-                                                                        child: Label(
-                                                                          text: LocaleKeys.premium_request.localize,
-                                                                          style: Styles.headerText(color: Colors.white),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
+                      child: context
+                                  .read<ViewAllTripJoinCubit>()
+                                  .isLoadingPickMe ==
+                              true
+                          ? const Center(
+                              child: CustomLoadingSearchWidget(),
+                            )
+                          : context
+                                  .read<ViewAllTripJoinCubit>()
+                                  .pickMeData
+                                  .isEmpty
+                              ? Center(
+                                  child: CustomEmptyWidget(
+                                      label:
+                                          LocaleKeys.noTripsAvailable.localize))
+                              : OlxPaginationWidget(
+                                  scrollController: _scrollController,
+                                  itemsPerPage: 3,
+                                  loadPage: (page) async {
+                                    context
+                                        .read<ViewAllTripJoinCubit>()
+                                        .getPickMe();
+                                  },
+                                  banners: [],
+                                  items: List.generate(
+                                    context
+                                        .read<ViewAllTripJoinCubit>()
+                                        .pickMeData
+                                        .length,
+                                    (index) {
+                                      var data = context
+                                          .read<ViewAllTripJoinCubit>()
+                                          .pickMeData[index];
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 10.h,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Stack(
+                                              children: [
+                                                GlobalCard(
+                                                  subcategoryId:
+                                                      '62ea008d69ea29c91dfc3908',
+                                                  phone: data.phoneNumber ??
+                                                      "1234",
+                                                  reportId: context
+                                                          .read<UserCubit>()
+                                                          .state
+                                                          .data
+                                                          ?.id ??
+                                                      '',
+                                                  otherUserId: '',
+                                                  onSubscribe: (bool success) {
+                                                    context.pop();
+                                                    if (success) {
+                                                      // data.isButtonEnabled?.state = true;
+                                                      for (var item in context
+                                                          .read<
+                                                              ViewAllTripJoinCubit>()
+                                                          .pickMeData) {
+                                                        item.isButtonEnabled
+                                                            ?.state = true;
+                                                      }
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                                  onTap: () {
+                                                    print(
+                                                        "data.isView ${data.isView} LoggedId ${UserCubit.to.state.data?.id} creatorId ${data.creatorId}");
+                                                    print(
+                                                        "value ${data.isView == true || ((UserCubit.to.state.data?.id ?? '') == data.creatorId)}");
+                                                    if (data.isView == true ||
+                                                        ((UserCubit.to.state
+                                                                    .data?.id ??
+                                                                '') ==
+                                                            data.creatorId)) {
+                                                      return;
+                                                    }
+                                                    ManageVibration.vibrate();
+                                                    context
+                                                        .read<
+                                                            ViewAllTripJoinCubit>()
+                                                        .applyPickMe(data.id!);
+                                                  },
+                                                  isButtonEnabled: data
+                                                          .isButtonEnabled
+                                                          ?.state ??
+                                                      false,
+                                                  isPremium: data.isPremium,
+                                                  hasReport: true,
+                                                  hasTopSide: true,
+                                                  hasBottomSide: true,
+                                                  isView: data.isView == true ||
+                                                      ((UserCubit.to.state.data
+                                                                  ?.id ??
+                                                              '') ==
+                                                          data.creatorId),
+                                                  subscriptionType:
+                                                      data.formattedOfferType,
+                                                  views: data.viewerIds ?? 0,
+                                                  onRequest: (((UserCubit
+                                                                      .to
+                                                                      .state
+                                                                      .data
+                                                                      ?.id ??
+                                                                  '') ==
+                                                              data.creatorId) ||
+                                                          (data.isNormalRequested ==
+                                                                  true &&
+                                                              data.isPremiumRequested ==
+                                                                  true))
+                                                      ? null
+                                                      : () {
+                                                          if (!context
+                                                              .read<UserCubit>()
+                                                              .isLoggedIn) {
+                                                            ManageVibration
+                                                                .vibrate();
+                                                            pleaseLoginDialog(
+                                                                context);
+                                                            return;
+                                                          }
+                                                          ManageVibration
+                                                              .vibrate();
+                                                          showModalBottomSheet(
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            context: context,
+                                                            shape:
+                                                                const RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        32.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        32.0),
                                                               ),
                                                             ),
-                                                          ],
+                                                            isDismissible: true,
+                                                            isScrollControlled:
+                                                                true,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return BlocProvider
+                                                                  .value(
+                                                                value: serviceLocator<
+                                                                    ViewAllTripJoinCubit>(),
+                                                                child: BlocBuilder<
+                                                                        ViewAllTripJoinCubit,
+                                                                        ViewAllTripJoinState>(
+                                                                    builder:
+                                                                        (context,
+                                                                            state) {
+                                                                  return AnimatedPadding(
+                                                                    padding: MediaQuery.of(
+                                                                            context)
+                                                                        .viewInsets,
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            50),
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          400.h,
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .symmetric(
+                                                                        vertical:
+                                                                            10.h,
+                                                                        horizontal:
+                                                                            10,
+                                                                      ),
+                                                                      child:
+                                                                          Form(
+                                                                        key:
+                                                                            formKey,
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            Label(
+                                                                              text: context.isArabic ? "ادخل رقم هاتفك" : "Enter your phone number",
+                                                                              style: Styles.headerText(),
+                                                                            ),
+                                                                            Sizer(
+                                                                              height: 30.h,
+                                                                            ),
+                                                                            CustomPhoneTextFormField(
+                                                                              currentFocusNode: FocusNode(),
+                                                                              nextFocusNode: FocusNode(),
+                                                                              currentController: phoneController,
+                                                                              onInputChanged: (value) => formKey.currentState!.validate(),
+                                                                              inputFormatters: [
+                                                                                FilteringTextInputFormatter.digitsOnly,
+                                                                                LengthLimitingTextInputFormatter(11),
+                                                                              ],
+                                                                              validator: (value) {
+                                                                                final input = value?.trim() ?? '';
+
+                                                                                if (input.isEmpty) {
+                                                                                  return LocaleKeys.required.localize;
+                                                                                }
+
+                                                                                final numericValue = convertDigits(input, toArabic: false).replaceAll(RegExp(r'[^0-9]'), '');
+
+                                                                                if (numericValue.length != 11) {
+                                                                                  return context.isArabic ? 'يجب أن يحتوي رقم الهاتف على 11 رقمًا' : 'Phone number must be exactly 11 digits.';
+                                                                                }
+
+                                                                                if (![
+                                                                                  '010',
+                                                                                  '011',
+                                                                                  '012',
+                                                                                  '015'
+                                                                                ].any(numericValue.startsWith)) {
+                                                                                  return context.isArabic ? 'رقم الهاتف يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015' : 'Phone number must start with 010, 011, 012, or 015.';
+                                                                                }
+
+                                                                                return null;
+                                                                              },
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        if (data.isNormalRequested == true) {
+                                                                                          context.pop();
+                                                                                          showErrorMessage(context, context.isArabic ? 'لقد تم ارسال الطلب من قبل' : 'This trip has already been requested');
+                                                                                          return;
+                                                                                        }
+                                                                                        if (formKey.currentState!.validate()) {
+                                                                                          bool result = await context.read<ViewAllTripJoinCubit>().createPickMeRequest(data.id ?? '', false, phoneController.text);
+                                                                                          if (result == true) {
+                                                                                            data.isNormalRequested = true;
+                                                                                            data.isButtonEnabled?.state = true;
+                                                                                          }
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 100,
+                                                                                        height: 80.h,
+                                                                                        padding: const EdgeInsets.all(5),
+                                                                                        decoration: BoxDecoration(color: data.isNormalRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.PRIMARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                                                                                        alignment: Alignment.center,
+                                                                                        child: Label(
+                                                                                          text: LocaleKeys.request.localize,
+                                                                                          style: Styles.headerText(color: Colors.white),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Sizer(),
+                                                                                  Expanded(
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        if (data.isPremiumRequested == true) {
+                                                                                          return;
+                                                                                        }
+                                                                                        if (formKey.currentState!.validate()) {
+                                                                                          bool result = await context.read<ViewAllTripJoinCubit>().createPickMeRequest(data.id ?? '', true, phoneController.text);
+                                                                                          if (result == true) {
+                                                                                            data.isPremiumRequested = true;
+                                                                                            data.isButtonEnabled?.state = true;
+                                                                                          }
+                                                                                          setState(() {});
+                                                                                          // context.read<ViewAllTripJoinCubit>().createPickMeRequest();
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 100,
+                                                                                        height: 80.h,
+                                                                                        padding: const EdgeInsets.all(5),
+                                                                                        decoration: BoxDecoration(color: data.isPremiumRequested == true ? AppColors.GREY_DARK_COLOR : AppColors.SECONDARY_COLOR, borderRadius: BorderRadius.circular(15)),
+                                                                                        alignment: Alignment.center,
+                                                                                        child: Label(
+                                                                                          text: LocaleKeys.premium_request.localize,
+                                                                                          style: Styles.headerText(color: Colors.white),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                  onShowViewers: () {
+                                                    if ((data.lastViewers
+                                                                ?.length ??
+                                                            0) >
+                                                        0) {
+                                                      ManageVibration.vibrate();
+                                                      showModalBottomSheet(
+                                                        backgroundColor: context
+                                                                .isDarkMode
+                                                            ? AppColors
+                                                                .DARK_BLUE_COLOR
+                                                                .withOpacity(
+                                                                    0.95)
+                                                            : AppColors
+                                                                .LIGHT_COLOR,
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxHeight:
+                                                              MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.32,
                                                         ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        onShowViewers: (){
-                                          if((data.lastViewers?.length??0)>0) {
-                                            ManageVibration.vibrate();
-                                            showModalBottomSheet(
-                                              backgroundColor: context.isDarkMode
-                                                  ? AppColors.DARK_BLUE_COLOR
-                                                  .withOpacity(0.95)
-                                                  : AppColors.LIGHT_COLOR,
-                                              constraints: BoxConstraints(
-                                                maxHeight: MediaQuery.of(context).size.height * 0.32,
-                                              ),
-                                              context: context,
-                                              shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(32.0),
-                                                  topRight: Radius.circular(32.0),
+                                                        context: context,
+                                                        shape:
+                                                            const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    32.0),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    32.0),
+                                                          ),
+                                                        ),
+                                                        isDismissible: true,
+                                                        // isScrollControlled: true,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return LastViewersWidget(
+                                                            lastViewers: data
+                                                                .lastViewers,
+                                                          );
+                                                        },
+                                                      );
+                                                    }
+                                                  },
+                                                  body: AvailablePickMeBody(
+                                                      data: data),
                                                 ),
-                                              ),
-                                              isDismissible: true,
-                                              // isScrollControlled: true,
-                                              builder: (BuildContext context) {
-                                                return LastViewersWidget(lastViewers: data.lastViewers,);
-                                              },
-                                            );
-                                          }
-                                        },
-                                        body:AvailablePickMeBody(data:data),
-                                      ),
-                                    ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                  ),
+                                )),
                 ],
               ),
             ],

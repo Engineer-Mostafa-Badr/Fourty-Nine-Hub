@@ -14,13 +14,10 @@ import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../helpers/manage_vibration.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../cubit/auction_cubit.dart';
-import 'create_auction_screen.dart';
 class ExpiredAuctionScreen extends StatefulWidget {
-   ExpiredAuctionScreen({super.key});
+   const ExpiredAuctionScreen({super.key});
 
   @override
   State<ExpiredAuctionScreen> createState() => _ExpiredAuctionScreenState();

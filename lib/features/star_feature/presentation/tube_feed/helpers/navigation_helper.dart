@@ -7,8 +7,6 @@ import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../domain/entity/star_entity.dart';
 import '../../presentation_exports.dart';
-import '../../video_player/widgets/talent_video_player.dart';
-import '../constants/tube_constants.dart';
 
 class TubeNavigationHelper {
   /// Navigate to video player with video URL and talent

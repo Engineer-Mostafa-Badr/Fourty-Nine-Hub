@@ -12,7 +12,11 @@ import '../../../../../res/style/app_colors.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class OptionsBottomsheetWidget extends StatefulWidget {
-  const OptionsBottomsheetWidget({super.key, required this.rideCubit, required this.selectedCategoryPrice, required this.selectedCategoryName});
+  const OptionsBottomsheetWidget(
+      {super.key,
+      required this.rideCubit,
+      required this.selectedCategoryPrice,
+      required this.selectedCategoryName});
 
   final RideCubit rideCubit;
   final double selectedCategoryPrice;
@@ -91,7 +95,7 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                   width: double.infinity,
                   label: context.isArabic ? "تفعيل" : "Apply",
                   onPressed: () {
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                     widget.rideCubit.isComfort = _isComfort;
                     widget.rideCubit.isNonSmoker = _isNonSmoker;
                     widget.rideCubit.isAutoAccept = _isAutoAccept;
@@ -122,26 +126,34 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
           text ?? '',
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         ),
-
         Spacer(),
-        if(index == 1)
-          Image.asset(Assets.airConditioner,
+        if (index == 1)
+          Image.asset(
+            Assets.airConditioner,
             height: 20,
-            width: 40,),
-        if(index == 2)
-          Image.asset(Assets.noSmokingIcon,
+            width: 40,
+          ),
+        if (index == 2)
+          Image.asset(
+            Assets.noSmokingIcon,
             height: 20,
-            width: 40,),
-        if(index == 3)
-          Icon(Icons.autorenew, size: 20,),
-        if(index == 3)
-          SizedBox(width: 12,),
+            width: 40,
+          ),
+        if (index == 3)
+          Icon(
+            Icons.autorenew,
+            size: 20,
+          ),
+        if (index == 3)
+          SizedBox(
+            width: 12,
+          ),
         Transform.scale(
           scale: 0.75,
           child: Switch(
             value: value,
             padding: const EdgeInsets.all(0),
-            activeColor: AppColors.PRIMARY_COLOR,
+            activeThumbColor: AppColors.PRIMARY_COLOR,
             inactiveThumbColor: AppColors.PRIMARY_COLOR,
             trackOutlineColor: WidgetStateProperty.all<Color>(
               AppColors.PRIMARY_COLOR,

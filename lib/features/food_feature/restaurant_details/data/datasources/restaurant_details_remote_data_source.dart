@@ -130,7 +130,7 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
     final response = await _apiConsumer.get(url);
     return response.fold(
       (failure) => Left(failure),
-      (data) => Right(data as Map<String, dynamic>),
+      (data) => Right(data),
     );
   }
 
@@ -147,7 +147,7 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
     final response = await _apiConsumer.post(url, data: data);
     return response.fold(
       (failure) => Left(failure),
-      (data) => Right(data as Map<String, dynamic>),
+      (data) => Right(data),
     );
   }
 
@@ -164,7 +164,7 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
     final response = await _apiConsumer.post(url, data: data);
     return response.fold(
       (failure) => Left(failure),
-      (data) => Right(data as Map<String, dynamic>),
+      (data) => Right(data),
     );
   }
 }

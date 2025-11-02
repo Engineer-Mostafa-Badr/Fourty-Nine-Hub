@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entities/car_year_type_entity.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_car_year_type_usecase.dart';
-import 'package:fourtyninehub/res/strings/labels.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
@@ -27,14 +25,15 @@ class FetchCarYearTypeCubit extends Cubit<FetchCarYearTypeState> {
       model: model,
     );
     response.fold(
-      (Failure failure){
+      (Failure failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
-         emit(
-        FetchCarYearTypeFailed(getFailureMessage(failure, currentContext)),
-      );},
+        emit(
+          FetchCarYearTypeFailed(getFailureMessage(failure, currentContext)),
+        );
+      },
       (List<CarYearTypeEntity> models) {
         carYears = [];
         carYears = models;

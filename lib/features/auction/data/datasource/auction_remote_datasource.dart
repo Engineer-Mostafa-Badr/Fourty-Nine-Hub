@@ -18,7 +18,6 @@ import '../../domain/entities/auction_banner_entity.dart';
 import '../../domain/entities/auction_main_category_entity.dart';
 import '../../domain/entities/auction_participants_entity.dart';
 import '../../domain/entities/auction_sub_category_entity.dart';
-import '../../domain/entities/auction_viewer_entity.dart';
 import '../../domain/entities/error_bid_auction_entity.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
 import '../../domain/entities/listen_winner_bid_entity.dart';
@@ -37,7 +36,6 @@ import '../models/auction_banner_model.dart';
 import '../models/auction_main_category_model.dart';
 import '../models/auction_participants_model.dart';
 import '../models/auction_sub_category_model.dart';
-import '../models/auction_viewer_model.dart';
 import '../models/error_bid_auction_model.dart';
 import '../models/get_all_auction_model.dart';
 import '../models/listen_winner_bid_model.dart';
@@ -257,7 +255,7 @@ class AuctionRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, CreateAuctionEntity >> createAuction({required CreateAuctionParams params}) async{
-    final url = "${EndPoints.createAuction2}";
+    final url = EndPoints.createAuction2;
     final response = await _apiConsumer.post(url,data: params.toJson());
 
     return response.fold(
@@ -288,7 +286,7 @@ class AuctionRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, AuctionBannerEntity>> bannerAuction() async{
-    final url = "${EndPoints.auctionBanner}";
+    final url = EndPoints.auctionBanner;
     final response = await _apiConsumer.get(url);
 
     return response.fold(
@@ -302,7 +300,7 @@ class AuctionRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, AuctionWinnerDataEntity>> getAllWinnerAuction() async{
-    final url = "${EndPoints.auctionAllWinner}";
+    final url = EndPoints.auctionAllWinner;
     final response = await _apiConsumer.get(url);
 
     return response.fold(

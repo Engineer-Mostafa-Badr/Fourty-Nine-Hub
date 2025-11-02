@@ -2,11 +2,8 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/abstract/use_case.dart';
 import '../../../../core/error/failure.dart';
-import '../entities/auction_main_category_entity.dart';
 import '../entities/auction_sub_category_entity.dart';
-import '../entities/get_all_auction_entity.dart';
 import '../repositories/auction_repo.dart';
-import 'fetch_available_auction_use_case.dart';
 
 class GetAuctionSubCategoryUseCase extends UseCase<List<AuctionSubCategoryEntity >, GetSubCategoryAuctionParams> {
   final AuctionRepository _repo;

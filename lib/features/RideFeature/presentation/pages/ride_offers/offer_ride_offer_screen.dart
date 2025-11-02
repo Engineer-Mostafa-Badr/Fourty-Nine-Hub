@@ -22,7 +22,6 @@ import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_loading_search_widget.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../domain/entities/get_client_offer_trips_entity.dart';
 import '../../controllers/client_trips_cubit/client_trips_cubit.dart';

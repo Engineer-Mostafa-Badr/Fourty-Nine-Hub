@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
@@ -14,19 +11,16 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_image_slider.dart';
 import 'package:fourtyninehub/features/auction/presentation/screens/widgets/winner_overlay_widget.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/enums/base_status_enum.dart';
 import '../../../../core/widget/common/profile_picture_widget.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
 import '../../../../shared_web_socket.dart';
 import '../../domain/entities/get_all_auction_entity.dart';
-import '../../domain/entities/listen_winner_bid_entity.dart';
 import '../cubit/auction_cubit.dart';
 
 import 'dart:async';
@@ -162,7 +156,7 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
         ),
         BlocListener<AuctionCubit, AuctionState>(
           listenWhen: (previous, current) =>
-          previous.bidWinner != current.bidWinner &&
+              previous.bidWinner != current.bidWinner &&
               current.bidWinner != null,
           listener: (context, state) {
             final winner = state.bidWinner;
@@ -181,7 +175,8 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
                     },
                   );
                 },
-                transitionBuilder: (context, animation, secondaryAnimation, child) {
+                transitionBuilder:
+                    (context, animation, secondaryAnimation, child) {
                   // optional: fade + scale animation
                   return FadeTransition(
                     opacity: animation,
@@ -195,7 +190,6 @@ class _SingleAuctionScreenState extends State<SingleAuctionScreen> {
             }
           },
         ),
-
       ],
       child: WillPopScope(
         onWillPop: () async {
@@ -557,26 +551,22 @@ class _AuctionDetailsWithParticipantsState
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: _buildTimeBox(
-                              "${_formatNumber(context, days)}",
+                          child: _buildTimeBox(_formatNumber(context, days),
                               LocaleKeys.day.localize),
                         ),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: _buildTimeBox(
-                              "${_formatNumber(context, hours)}",
+                          child: _buildTimeBox(_formatNumber(context, hours),
                               LocaleKeys.hour.localize),
                         ),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: _buildTimeBox(
-                              "${_formatNumber(context, minutes)}",
+                          child: _buildTimeBox(_formatNumber(context, minutes),
                               LocaleKeys.minuteLoc.localize),
                         ),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: _buildTimeBox(
-                              "${_formatNumber(context, seconds)}",
+                          child: _buildTimeBox(_formatNumber(context, seconds),
                               LocaleKeys.timer_seconds.localize),
                         ),
                       ],
@@ -602,7 +592,7 @@ class _AuctionDetailsWithParticipantsState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Label(
-                          text: "${LocaleKeys.liveAuction.localize}",
+                          text: LocaleKeys.liveAuction.localize,
                           style: Styles.mediumText(fontWeight: FontWeight.w600),
                         ),
                         Label(
@@ -846,15 +836,7 @@ class _AuctionDetailsWithParticipantsState
 
     return formatted;
   }
-
 }
-
-
-
-
-
-
-
 
 class ArabicEnglishDigitsOnlyFormatter extends TextInputFormatter {
   @override

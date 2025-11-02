@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -14,12 +13,8 @@ import '../../../../../authentication/presentation/controllers/user_cubit/user_c
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../data/model/tube_video_models.dart';
 import '../../../profile/widgets/playlist_bottom_sheet.dart';
-import 'talent_card_info_section.dart';
-import 'talent_card_overlay_controls.dart';
-import '../../../../../../helpers/manage_vibration.dart';
 import '../../../../domain/entity/star_entity.dart';
 import '../../../presentation_exports.dart';
-import '../../../video_player/widgets/talent_video_player.dart';
 
 class TalentCard extends StatefulWidget {
   final StarEntity talent;

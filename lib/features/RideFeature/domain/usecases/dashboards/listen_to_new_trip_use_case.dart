@@ -1,5 +1,4 @@
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/trip_repository.dart';
 

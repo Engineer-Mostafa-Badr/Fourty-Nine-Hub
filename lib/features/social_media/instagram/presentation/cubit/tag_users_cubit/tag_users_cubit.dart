@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/user_tag_entity.dart';
 import '../../../domain/usecases/get_user_tag_use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 

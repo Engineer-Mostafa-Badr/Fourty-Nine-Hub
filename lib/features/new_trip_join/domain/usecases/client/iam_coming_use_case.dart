@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/new_trip_join/domain/entities/pickup_entity.dart';
 import 'package:fourtyninehub/features/new_trip_join/domain/repositories/captain_share_repository.dart';
 
 class IamComingUseCase {

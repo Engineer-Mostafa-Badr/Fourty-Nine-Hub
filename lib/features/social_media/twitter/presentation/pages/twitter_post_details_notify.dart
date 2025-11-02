@@ -26,7 +26,6 @@ import '../../domain/usecases/twitter_report_usecase.dart';
 import '../bloc/twitter_bloc.dart';
 import '../twitter/presentation/pages/twitter_view.dart';
 import '../widgets/twitter_comment_replied.dart';
-import '../widgets/twitter_post_card.dart';
 import '../widgets/twitter_post_comments.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -132,7 +131,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
       body: BlocConsumer<TwitterCubit, TwitterState>(
         // correct order: (previous, current)
         buildWhen: (previous, current) =>
-        previous.status != current.status || current.postDetails != null,
+            previous.status != current.status || current.postDetails != null,
         listener: (context, state) {
           if (state.status == StateStatus.error) {
             showErrorMessage(
@@ -150,7 +149,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
           }
 
           return TwitterPostCard(
-            onRepost: () => cubit.onRepost(postId: post.id),   // 👈 Repost هنا
+            onRepost: () => cubit.onRepost(postId: post.id), // 👈 Repost هنا
 
             isDetailed: false,
             post: post,
@@ -169,7 +168,9 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
                 setState(() {
                   post.isReact = !(post.isReact ?? false);
                   final current = post.loveCount ?? 0;
-                  post.loveCount = (post.isReact ?? false) ? current + 1 : (current - 1).clamp(0, 1 << 31);
+                  post.loveCount = (post.isReact ?? false)
+                      ? current + 1
+                      : (current - 1).clamp(0, 1 << 31);
                 });
               }
             },
@@ -195,8 +196,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
               cubit.hidePost(context: context, postId: id);
               context.pop();
             },
-            onDeleteComment: (String id)
-            async {
+            onDeleteComment: (String id) async {
               final res = await cubit.deleteComment(
                 context: context,
                 commentId: id,
@@ -211,7 +211,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
               return res;
             },
             onEditComment: (TwitterPostCommentParams params) async =>
-            await cubit.editComment(params: params),
+                await cubit.editComment(params: params),
           );
         },
       ),
@@ -237,8 +237,9 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
           postId: postId,
           user: user,
           onAddComment: (TwitterPostCommentParams params) async {
-            final result =
-            await context.read<TwitterCubit>().onPostComment(params: params);
+            final result = await context
+                .read<TwitterCubit>()
+                .onPostComment(params: params);
             setState(() {}); // allow quick visual refresh
             return result;
           },
@@ -262,11 +263,14 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
             context.read<TwitterCubit>().onReport(params);
           },
           onEditComment: (TwitterPostCommentParams params) async =>
-          await context.read<TwitterCubit>().editComment(params: params),
+              await context.read<TwitterCubit>().editComment(params: params),
           onDeleteComment: (id) async => await context
               .read<TwitterCubit>()
               .deleteComment(
-              context: context, commentId: id, postId: postId, from: 'posts'),
+                  context: context,
+                  commentId: id,
+                  postId: postId,
+                  from: 'posts'),
         ),
       ),
     );
@@ -293,8 +297,9 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
         child: TwitterCommentReplies(
           replies: const [],
           onAddReply: (TwitterCommentReplyParams params) async {
-            final result =
-            await context.read<TwitterCubit>().onCommentReply(params: params);
+            final result = await context
+                .read<TwitterCubit>()
+                .onCommentReply(params: params);
             final pd = context.read<TwitterCubit>().state.postDetails;
             if (pd != null) {
               setState(() => pd.commentsCount = (pd.commentsCount ?? 0) + 1);
@@ -305,21 +310,23 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
           postId: widget.postId ?? '',
           onReplyReact: (String id) {
             context.read<TwitterCubit>().onCommentReact(
-              params: TwitterCommentReactParams(commentId: id, react: 'love'),
-            );
+                  params:
+                      TwitterCommentReactParams(commentId: id, react: 'love'),
+                );
           },
           onReport: (TwitterReportParams params) {
             context.read<TwitterCubit>().onReport(params);
           },
           onEditReply: (TwitterPostCommentParams params) async =>
-          await context.read<TwitterCubit>().editComment(params: params),
+              await context.read<TwitterCubit>().editComment(params: params),
           onDeleteReply: (id) async {
             final res = await context.read<TwitterCubit>().deleteComment(
-              context: context,
-              commentId: id,
-              postId: context.read<TwitterCubit>().state.postDetails?.id ?? '',
-              from: 'details',
-            );
+                  context: context,
+                  commentId: id,
+                  postId:
+                      context.read<TwitterCubit>().state.postDetails?.id ?? '',
+                  from: 'details',
+                );
             final pd = context.read<TwitterCubit>().state.postDetails;
             if (res && pd != null) {
               setState(() => pd.commentsCount = (pd.commentsCount ?? 1) - 1);

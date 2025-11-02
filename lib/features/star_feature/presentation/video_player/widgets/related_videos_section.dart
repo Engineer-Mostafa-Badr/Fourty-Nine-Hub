@@ -1,14 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
-import '../../../../../service_locator/service_locator.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../presentation_exports.dart';
-import 'talent_video_player.dart';
 
 class RelatedVideosSection extends StatelessWidget {
   final List<StarEntity> recommendedVideos;
@@ -80,7 +77,6 @@ class _RelatedVideoCard extends StatefulWidget {
   final VoidCallback onTap;
 
   const _RelatedVideoCard({
-    super.key,
     required this.talent,
     required this.starCubit,
     required this.onTap,

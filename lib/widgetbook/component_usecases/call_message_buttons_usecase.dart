@@ -8,7 +8,6 @@ import '../utils/flutter_markdown.dart';
 import '../utils/provider_wrapper.dart';
 import 'text_input_widget_usecases.dart';
 import '../../helpers/manage_vibration.dart';
-import '../../helpers/manage_vibration.dart';
 
 // CallMessageButtons Widgetbook Implementation
 @widgetbook.UseCase(

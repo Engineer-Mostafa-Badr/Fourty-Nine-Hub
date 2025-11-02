@@ -5,9 +5,6 @@ import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 
 import '../../presentation_exports.dart';
-import '../helpers/navigation_helper.dart';
-import '../widgets/cards/talent_card.dart';
-import '../widgets/common/empty_state_widget.dart';
 
 class FavoriteContentBuilder {
   static Widget buildSliver({

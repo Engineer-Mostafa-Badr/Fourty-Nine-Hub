@@ -4,8 +4,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entit
 
 import '../../../../core/abstract/use_case.dart';
 import '../../../../core/error/failure.dart';
-import '../entities/add_favorite_auction_entity.dart';
-import '../entities/auction_viewer_entity.dart';
 import '../repositories/auction_repo.dart';
 import 'add_favorite_auction_use_case.dart';
 

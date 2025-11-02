@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/constants/subscription_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -12,21 +11,13 @@ import 'package:fourtyninehub/core/widget/common/global_card.dart';
 import 'package:fourtyninehub/core/widget/common/last_viewers_widget.dart';
 import 'package:fourtyninehub/core/widget/common/profile_picture_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/auction/presentation/screens/widgets/auction_card.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/enums/base_status_enum.dart';
-import '../../../../core/utils/format_numbers.dart';
 import '../../../../core/widget/custom_circular_progress_indicator.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../routes/routes.dart';
-import '../../../ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
-import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../cubit/auction_cubit.dart';
-import 'create_auction_screen.dart';
 
 class MyBiddersScreen extends StatefulWidget {
   const MyBiddersScreen({super.key});
@@ -36,14 +27,12 @@ class MyBiddersScreen extends StatefulWidget {
 }
 
 class _MyBiddersScreenState extends State<MyBiddersScreen> {
-
-   @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     context.read<AuctionCubit>().loadInitialMyBidders();
-
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +51,9 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
         print("   - State Status: ${state.status}");
 
         if (state.status == StateStatus.error) {
-          return  Center(
+          return Center(
             child: Text(
-                "${LocaleKeys.somethingWentWrong.localize}",
+              LocaleKeys.somethingWentWrong.localize,
               style: TextStyle(color: Colors.red),
             ),
           );
@@ -76,7 +65,12 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
 
         if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message");
-          return  Center(child: CustomEmptyWidget(label:   context.isArabic ? 'لا يوجد مزايدون متاحون' : 'No Bidders available',));
+          return Center(
+              child: CustomEmptyWidget(
+            label: context.isArabic
+                ? 'لا يوجد مزايدون متاحون'
+                : 'No Bidders available',
+          ));
         }
 
         return ListView.separated(
@@ -86,33 +80,32 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
           separatorBuilder: (_, __) => const SizedBox(height: 0),
           itemBuilder: (context, index) {
             final auction = auctions[index];
-            print("🎯 Rendering auction at index $index: ${auction.toString()}");
+            print(
+                "🎯 Rendering auction at index $index: ${auction.toString()}");
             return Container(
               margin: EdgeInsets.all(8),
               child: GlobalCard(
-
                 subcategoryId: '',
-                phone: auctions[index].phone??'',
+                phone: auctions[index].phone ?? '',
                 reportId: '',
                 otherUserId: '',
-                onTap: () {
-
-
-                },
+                onTap: () {},
                 hasTopSide: true,
                 hasBottomSide: true,
-                subscriptionType:  auction.subscriptionType == SubscriptionStatus.premium.status
+                subscriptionType: auction.subscriptionType ==
+                        SubscriptionStatus.premium.status
                     ? LocaleKeys.premium2.localize
-                    : auction.subscriptionType == SubscriptionStatus.regular.status
-                    ? LocaleKeys.regular.localize
-                    : LocaleKeys.notSubscribed.localize,
+                    : auction.subscriptionType ==
+                            SubscriptionStatus.regular.status
+                        ? LocaleKeys.regular.localize
+                        : LocaleKeys.notSubscribed.localize,
 
                 views: auction.views,
                 onShowViewers: () async {
                   final cubit = context.read<AuctionCubit>();
 
                   // Fetch viewers first
-                  if((auction.views??0)>0){
+                  if ((auction.views ?? 0) > 0) {
                     await cubit.fetchViewerEntity(id: auction.auctionId!);
 
                     final viewers = cubit.state.auctionViewerData;
@@ -120,8 +113,7 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                     if (viewers != null && viewers.isNotEmpty) {
                       showModalBottomSheet(
                         backgroundColor: context.isDarkMode
-                            ? AppColors.DARK_BLUE_COLOR
-                            .withOpacity(0.95)
+                            ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
                             : AppColors.LIGHT_COLOR,
                         constraints: BoxConstraints(
                           maxHeight: MediaQuery.of(context).size.height * 0.32,
@@ -136,7 +128,9 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                         isDismissible: true,
                         // isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return LastViewersWidget(lastViewers: viewers,);
+                          return LastViewersWidget(
+                            lastViewers: viewers,
+                          );
                         },
                       );
                     } else {
@@ -150,9 +144,8 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                           ),
                         ),
                       );
-
                     }
-                  }else{
+                  } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -162,21 +155,20 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                         ),
                       ),
                     );
-
                   }
                 },
                 // onSubscribe: (){
                 //   context.pop();
                 // },
-                body:Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: 15.w, vertical: 10.h),
+                body: Container(
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                   child: Column(
                     children: [
                       Row(
                         children: [
                           ProfilePictureWidget(
-                            isMale: auction.gender ==  'male' ? true : false,
+                            isMale: auction.gender == 'male' ? true : false,
                           ),
                           // Container(
                           //   height: 40,
@@ -194,7 +186,8 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                           SizedBox(width: 16.w),
                           Flexible(
                             child: Label(
-                              text: auction.username ?? (context.isArabic ? 'غير معروف' : 'Unknown'),
+                              text: auction.username ??
+                                  (context.isArabic ? 'غير معروف' : 'Unknown'),
                               style: Styles.headerText(
                                 color: context.isDarkMode
                                     ? AppColors.whiteColor
@@ -209,7 +202,7 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
                       const SizedBox(height: 16),
                       Label(
                         text: "${LocaleKeys.wonTheAuction.localize}"
-                            " ${auction.auctionTitle ?? "${context.isArabic ? 'لا يوجد عنوان' : 'No title'}"} ${LocaleKeys.forAuction.localize} ${auction.price} ${LocaleKeys.EGP.localize}",
+                            " ${auction.auctionTitle ?? (context.isArabic ? 'لا يوجد عنوان' : 'No title')} ${LocaleKeys.forAuction.localize} ${auction.price} ${LocaleKeys.EGP.localize}",
                         style: Styles.mediumText(
                           color: context.isDarkMode
                               ? AppColors.whiteColor
@@ -238,8 +231,8 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
 
     // Ensure Arabic-Indic digits when app is Arabic
     if (context.isArabic) {
-      const english = ['0','1','2','3','4','5','6','7','8','9'];
-      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
       for (int i = 0; i < english.length; i++) {
         formatted = formatted.replaceAll(english[i], arabic[i]);
@@ -249,4 +242,3 @@ class _MyBiddersScreenState extends State<MyBiddersScreen> {
     return formatted;
   }
 }
-

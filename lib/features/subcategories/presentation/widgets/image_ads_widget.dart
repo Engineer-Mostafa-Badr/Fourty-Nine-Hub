@@ -1,21 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/widget/common/dots_widget.dart';
 import 'package:fourtyninehub/core/widget/common/favorite_icon.dart';
-import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/extensions/context_extension.dart';
-import '../../../../core/extensions/string_extension.dart';
-import '../../../../core/localization/locale_keys.g.dart';
 import '../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-
-import '../../../../core/widget/SmoothIndicator/scrollig_dots_effect.dart';
-import '../../../../core/widget/SmoothIndicator/smooth_page_indicator.dart';
 
 class ImageAdsWidget extends StatefulWidget {
   const ImageAdsWidget({
@@ -110,7 +102,6 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     if (widget.images.isEmpty) {
       return SizedBox(
         height: kToolbarHeight * 4,
@@ -126,7 +117,9 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
     }
 
     return ClipRRect(
-      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20.r),
+          bottomRight: Radius.circular(20.r)),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
@@ -156,7 +149,9 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                           image: widget.images[index],
                           defaultLogo: true,
                           fit: BoxFit.fill,
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20.r),
+                              bottomRight: Radius.circular(20.r)),
                         ),
                         // if (index == 3)
                         //   Positioned.fill(
@@ -183,7 +178,9 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 child: Container(
                   decoration: BoxDecoration(
                     // color: Colors.red,
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.r),bottomRight: Radius.circular(20.r)),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20.r),
+                        bottomRight: Radius.circular(20.r)),
                     border: Border.all(
                       color: context.isDarkMode
                           ? AppColors.LIGHT_COLOR
@@ -231,17 +228,21 @@ class _ImageAdsWidgetState extends State<ImageAdsWidget> {
                 ),
 
               //! Favourite
-              if(!widget.isMyAd)PositionedDirectional(
-                end: 16,
-                top: 16,
-                child: FavoriteIcon(isFavourite: widget.isFavourite, onPressedFavorite: widget.onPressedFavorite),
-              ),
+              if (!widget.isMyAd)
+                PositionedDirectional(
+                  end: 16,
+                  top: 16,
+                  child: FavoriteIcon(
+                      isFavourite: widget.isFavourite,
+                      onPressedFavorite: widget.onPressedFavorite),
+                ),
             ],
           ),
           if (widget.images.length > 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: DotsWidget(length: widget.images.length,currentIndex:currentIndex),
+              child: DotsWidget(
+                  length: widget.images.length, currentIndex: currentIndex),
             ),
         ],
       ),

@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/error_widget.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/shared/widgets/common/loading_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';

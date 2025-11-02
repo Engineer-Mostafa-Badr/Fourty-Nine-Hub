@@ -9,7 +9,6 @@ import '../../data/models/near_by_model.dart';
 import '../../data/models/normal_chat_model.dart';
 import '../../data/models/profile_user_model.dart';
 import '../../domain/domain/last_seen_entity.dart';
-import '../../domain/domain/tinder_like_entity.dart';
 import '../../domain/domain/user_data_tinder_entity.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 
@@ -28,7 +27,7 @@ extension DataStateExtension on TinderViewState {
   bool get isLoading => status == TinderStates.loading;
 }
 
-  class TinderViewState {
+class TinderViewState {
   final TinderStates status;
   final Failure? failure;
   final List<UserDataTinderEntity>? userData0;

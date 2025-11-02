@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/accept_offer_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/energency_contact_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/running_trip_model.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update_trip_price_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/arrived_to_client_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/emergency_contact_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/running_trip_entity.dart';

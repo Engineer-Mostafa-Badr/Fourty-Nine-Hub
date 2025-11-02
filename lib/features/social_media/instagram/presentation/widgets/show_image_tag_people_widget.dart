@@ -174,16 +174,11 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -213,7 +208,8 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
 
   @override
   void initState() {
-    images = serviceLocator<CreatePostInstagramCubit>().state.selectedGalleryPost;
+    images =
+        serviceLocator<CreatePostInstagramCubit>().state.selectedGalleryPost;
     _pageController = PageController();
     super.initState();
   }
@@ -226,7 +222,8 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
 
   /// تقوم باستقبال موقع الضغط
   void _handleTapDown(TapDownDetails details) {
-    print('Tap detected at: ${details.localPosition} on image: $currentImageIndex');
+    print(
+        'Tap detected at: ${details.localPosition} on image: $currentImageIndex');
 
     // حفظ موقع النقر مؤقتاً وإظهار label "من هذا؟"
     setState(() {
@@ -263,9 +260,8 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
               text: username,
               style: Styles.mediumText(
                 fontSize: 18,
-                color: context.isDarkMode
-                    ? const Color(0xFF0D0D0D)
-                    : Colors.white,
+                color:
+                    context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.white,
               ),
             ),
           ),
@@ -317,7 +313,7 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
               ],
             ),
             child: Label(
-              text:context.isArabic? 'من هذا؟' : "Who is this?",
+              text: context.isArabic ? 'من هذا؟' : "Who is this?",
               style: Styles.mediumText(
                 fontSize: 18,
                 color: Colors.white,
@@ -369,7 +365,8 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
           itemBuilder: (context, index) {
             // الحصول على التاجز الخاصة بهذه الصورة
             final imageTagsForCurrentImage = state.usersTag
-                .where((user) => user.imageIndex == index && user.position != null)
+                .where(
+                    (user) => user.imageIndex == index && user.position != null)
                 .toList();
 
             print('Image $index has ${imageTagsForCurrentImage.length} tags');
@@ -392,7 +389,7 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
                     Offset(user.position!.x, user.position!.y),
                     user.username,
                   );
-                }).toList(),
+                }),
 
                 // عرض label "من هذا؟" المؤقت في مكان النقر
                 if (temporaryTapPosition != null && index == currentImageIndex)
@@ -408,7 +405,7 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         images.length,
-                            (dotIndex) => Container(
+                        (dotIndex) => Container(
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           width: 8,
                           height: 8,

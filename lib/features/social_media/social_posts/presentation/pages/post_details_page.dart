@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
@@ -19,17 +17,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import '../../../../../core/enums/base_status_enum.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../domain/entities/post_entity.dart';
 import '../../domain/usecases/add_reply_usecase.dart';
 import '../cubit/social_posts_cubit.dart';
-import '../widgets/posts/facebook_post_card.dart';
 import '../../../twitter/domain/entities/twitter_user_entity.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
@@ -83,11 +75,16 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
   void handlePostReact(PostEntity post, String newReaction) {
     String? currentReaction;
-    if (post.isLikes == true) currentReaction = 'like';
-    else if (post.isWow == true) currentReaction = 'wow';
-    else if (post.isHaha == true) currentReaction = 'haha';
-    else if (post.isLove == true) currentReaction = 'love';
-    else if (post.isSad == true) currentReaction = 'sad';
+    if (post.isLikes == true) {
+      currentReaction = 'like';
+    } else if (post.isWow == true)
+      currentReaction = 'wow';
+    else if (post.isHaha == true)
+      currentReaction = 'haha';
+    else if (post.isLove == true)
+      currentReaction = 'love';
+    else if (post.isSad == true)
+      currentReaction = 'sad';
     else if (post.isAngry == true) currentReaction = 'angry';
     if (currentReaction == newReaction) {
       _decrementReactionCount(post, newReaction);
@@ -147,7 +144,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
@@ -159,7 +155,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         );
         return false; // Prevent default pop, since we already handled it
       },
-
       child: CustomScaffold(
         appBar: AppBar(
           elevation: 0,
@@ -167,40 +162,47 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(text: 'Post', style: Styles.mediumText()),
           leading: IconButton(
-              onPressed: () => Navigator.of(context).pop(context.read<SocialPostsCubit>().state.postDetails), icon: const Icon(Icons.clear)),
+              onPressed: () => Navigator.of(context)
+                  .pop(context.read<SocialPostsCubit>().state.postDetails),
+              icon: const Icon(Icons.clear)),
           centerTitle: true,
         ),
         body: BlocConsumer<SocialPostsCubit, SocialPostsState>(
             listener: (context, state) {},
             builder: (context, state) {
               final controller = context.read<SocialPostsCubit>();
-      
+
               if (controller.onLoadingPostDetails) {
                 return const Center(
                   child: CustomCircularProgressIndicator(),
                 );
-              }  else {
-                num totalReactions = (state.postDetails?.likesCount??0) + (state.postDetails?.hahaCount??0) + (state.postDetails?.loveCount??0) + (state.postDetails?.wowCount??0) + (state.postDetails?.sadCount??0) +(state.postDetails?.angryCount??0);
+              } else {
+                num totalReactions = (state.postDetails?.likesCount ?? 0) +
+                    (state.postDetails?.hahaCount ?? 0) +
+                    (state.postDetails?.loveCount ?? 0) +
+                    (state.postDetails?.wowCount ?? 0) +
+                    (state.postDetails?.sadCount ?? 0) +
+                    (state.postDetails?.angryCount ?? 0);
                 return Column(
                   children: [
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: () async {
-      
-                        },
+                        onRefresh: () async {},
                         child: Column(
                           children: [
                             Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 16),
                                   child: BuildFacebookHeader(
                                     user: state.postDetails!.user,
-                                    sinceTime:
-                                    context.isArabic
+                                    sinceTime: context.isArabic
                                         ? DateFormat('d MMM, h:mm a', 'ar')
-                                        .format(state.postDetails!.createdAt!)
-                                        : DateFormat('MMM d, h:mm a').format(state.postDetails!.createdAt!),
+                                            .format(
+                                                state.postDetails!.createdAt!)
+                                        : DateFormat('MMM d, h:mm a').format(
+                                            state.postDetails!.createdAt!),
                                     activity: state.postDetails!.activity,
                                     feeling: state.postDetails!.feeling,
                                     users: state.postDetails!.users,
@@ -212,17 +214,21 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                 // if (postEntity.images?.isNotEmpty??false)
                                 Column(
                                   children: [
-                                    if (state.postDetails!.content?.isNotEmpty ?? false)
+                                    if (state
+                                            .postDetails!.content?.isNotEmpty ??
+                                        false)
                                       Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 10, left: 10, bottom: 16),
+                                        padding: const EdgeInsets.only(
+                                            right: 10, left: 10, bottom: 16),
                                         child: ReadMoreLabel(
-                                          text: state.postDetails!.content ?? '',
+                                          text:
+                                              state.postDetails!.content ?? '',
                                           // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
-                                              color: AppColors.getTextColor(context)),
+                                              color: AppColors.getTextColor(
+                                                  context)),
                                         ),
                                       ),
                                     // if(state.postDetails!.type=="live_event_post")FacebookLifeEventWidget(state.postDetails!: state.postDetails!,),
@@ -236,56 +242,85 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                         fit: BoxFit.cover,
                                       ),
                                     if (state.postDetails!.images.isNotEmpty &&
-                                        state.postDetails!.type == "normal_post")
+                                        state.postDetails!.type ==
+                                            "normal_post")
                                       SizedBox(
                                         height: 256,
                                         width: double.infinity,
-                                        child: _buildImageGrid(context, state.postDetails!.images ?? []),
+                                        child: _buildImageGrid(context,
+                                            state.postDetails!.images ?? []),
                                       ),
                                   ],
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 8,right: 8,left: 8),
+                                  padding: EdgeInsets.only(
+                                      bottom: 8, right: 8, left: 8),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: Row(
                                           children: [
-                                            if((state.postDetails?.angryCount??0)>0)Image.asset(
-                                              Assets.angry,
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                            if((state.postDetails?.sadCount??0)>0)Image.asset(
-                                              Assets.sad,
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                            if((state.postDetails?.wowCount??0)>0)Image.asset(
-                                              Assets.wow,
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                            if((state.postDetails?.loveCount??0)>0)Image.asset(
-                                              Assets.heart,
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                            if((state.postDetails?.hahaCount??0)>0)Image.asset(
-                                              Assets.haha,
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                            if((state.postDetails?.likesCount??0)>0)Image.asset(
-                                              Assets.like,
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                            if(totalReactions>0)Text('$totalReactions',style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600,
-                                              color: context.isDarkMode ? Colors.white60 : const Color(0xFF65676B),
-                                            ),),
+                                            if ((state.postDetails
+                                                        ?.angryCount ??
+                                                    0) >
+                                                0)
+                                              Image.asset(
+                                                Assets.angry,
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            if ((state.postDetails?.sadCount ??
+                                                    0) >
+                                                0)
+                                              Image.asset(
+                                                Assets.sad,
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            if ((state.postDetails?.wowCount ??
+                                                    0) >
+                                                0)
+                                              Image.asset(
+                                                Assets.wow,
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            if ((state.postDetails?.loveCount ??
+                                                    0) >
+                                                0)
+                                              Image.asset(
+                                                Assets.heart,
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            if ((state.postDetails?.hahaCount ??
+                                                    0) >
+                                                0)
+                                              Image.asset(
+                                                Assets.haha,
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            if ((state.postDetails
+                                                        ?.likesCount ??
+                                                    0) >
+                                                0)
+                                              Image.asset(
+                                                Assets.like,
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            if (totalReactions > 0)
+                                              Text(
+                                                '$totalReactions',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white60
+                                                      : const Color(0xFF65676B),
+                                                ),
+                                              ),
                                           ],
                                         ),
                                       ),
@@ -293,9 +328,11 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     // Align the items to the start
                                     children: [
                                       // Like button
@@ -314,21 +351,24 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                       // ),
                                       SizedBox(
                                         child: BuildReactionsButtons(
-                                          post: state.postDetails!,
-                                          from: "posts",
-                                          handleReaction: (String reaction) {
-                                            handlePostReact(state.postDetails!, reaction);
-                                          }
-                                        ),
+                                            post: state.postDetails!,
+                                            from: "posts",
+                                            handleReaction: (String reaction) {
+                                              handlePostReact(
+                                                  state.postDetails!, reaction);
+                                            }),
                                       ),
-                                      const SizedBox(width: 16), // Space between buttons
+                                      const SizedBox(
+                                          width: 16), // Space between buttons
 
                                       // Send button
                                       Row(
                                         children: [
                                           SvgPicture.asset(
                                             Assets.sendIcon,
-                                            color: context.isDarkMode ? Colors.white : null,
+                                            color: context.isDarkMode
+                                                ? Colors.white
+                                                : null,
                                           ),
                                           // Send Icon
                                           SizedBox(width: 8.w),
@@ -336,27 +376,32 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                           Label(
                                             text: LocaleKeys.send.localize,
                                             style: TextStyle(
-                                                color: AppColors.getTextColor(context),
+                                                color: AppColors.getTextColor(
+                                                    context),
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400),
                                           ),
                                           // Send Text
                                         ],
                                       ),
-                                      const SizedBox(width: 16), // Space between buttons
+                                      const SizedBox(
+                                          width: 16), // Space between buttons
 
                                       // Share button
                                       Row(
                                         children: [
                                           SvgPicture.asset(Assets.shareIcon,
-                                              color: context.isDarkMode ? Colors.white : null),
+                                              color: context.isDarkMode
+                                                  ? Colors.white
+                                                  : null),
                                           // Share Icon
                                           SizedBox(width: 8.w),
                                           // Space between icon and text
                                           Label(
                                             text: LocaleKeys.share.localize,
                                             style: TextStyle(
-                                                color: AppColors.getTextColor(context),
+                                                color: AppColors.getTextColor(
+                                                    context),
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400),
                                           ),
@@ -367,39 +412,59 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   ),
                                 ),
                                 const Divider(),
-
                               ],
                             ),
                             Expanded(
-                              child: OlxPaginationWidget(items: List.generate(controller.postComments.length, (i)=>CommentCard(comment: controller.postComments[i],
-                                  onAddReply: (data)=>controller.replyOnComment(params: data, from: 'comments'),
-                                  onDeleteComment: (data)=>controller.deleteComment(context: context, commentId: data, postId: state.postDetails!.id, from: 'details'),
-                                  onDeleteReply: (s)=>controller.deleteComment(context: context, commentId: s, postId: state.postDetails!.id, from: 'details'),
-                                  from: 'details',
-                                  onEditComment: (data)=>controller.editComment(params: data)
-                              )),
+                              child: OlxPaginationWidget(
+                                  items: List.generate(
+                                      controller.postComments.length,
+                                      (i) => CommentCard(
+                                          comment: controller.postComments[i],
+                                          onAddReply: (data) =>
+                                              controller.replyOnComment(
+                                                  params: data,
+                                                  from: 'comments'),
+                                          onDeleteComment: (data) =>
+                                              controller.deleteComment(
+                                                  context: context,
+                                                  commentId: data,
+                                                  postId: state.postDetails!.id,
+                                                  from: 'details'),
+                                          onDeleteReply: (s) =>
+                                              controller.deleteComment(
+                                                  context: context,
+                                                  commentId: s,
+                                                  postId: state.postDetails!.id,
+                                                  from: 'details'),
+                                          from: 'details',
+                                          onEditComment: (data) => controller
+                                              .editComment(params: data))),
                                   itemsPerPage: 2,
                                   loadPage: (page) async {
                                     {
-                                      controller.getPostComments(context: context,postId: widget.postId);
-
+                                      controller.getPostComments(
+                                          context: context,
+                                          postId: widget.postId);
                                     }
                                   },
                                   banners: bannersList,
-                                  scrollController: scrollController
-                              ),
+                                  scrollController: scrollController),
                             ),
-
                           ],
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      margin: const EdgeInsets.only(top: 12,bottom: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      margin: const EdgeInsets.only(top: 12, bottom: 12),
                       decoration: BoxDecoration(
-                        color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.grey.shade200, // Light background like Facebook
-                        borderRadius: BorderRadius.circular(25), // Fully rounded
+                        color: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.grey
+                                .shade200, // Light background like Facebook
+                        borderRadius:
+                            BorderRadius.circular(25), // Fully rounded
                       ),
                       child: Row(
                         children: [
@@ -417,16 +482,22 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               maxLines: null,
                               style: const TextStyle(fontSize: 15),
                               decoration: InputDecoration(
-                                hintText: context.isArabic?'اكتب تعليق...':'Write a comment...',
-                                hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                                fillColor: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.grey.shade200,
+                                hintText: context.isArabic
+                                    ? 'اكتب تعليق...'
+                                    : 'Write a comment...',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                                fillColor: context.isDarkMode
+                                    ? AppColors.QUANTITY_COLOR
+                                    : Colors.grey.shade200,
                                 border: InputBorder.none, // Removes border
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
                                 errorBorder: InputBorder.none,
                                 focusedErrorBorder: InputBorder.none,
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal:8),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 8),
                               ),
                               onChanged: (_) => setState(() {}),
                             ),
@@ -475,7 +546,11 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                 FocusScope.of(context).unfocus();
                                 setState(() {});
                               },
-                              child: Icon(Icons.send, size: 25, color: context.isDarkMode?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR),
+                              child: Icon(Icons.send,
+                                  size: 25,
+                                  color: context.isDarkMode
+                                      ? AppColors.SECONDARY_COLOR
+                                      : AppColors.PRIMARY_COLOR),
                             ),
                         ],
                       ),
@@ -487,6 +562,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       ),
     );
   }
+
   Widget _buildImageGrid(BuildContext context, List<String> media) {
     if (media.length == 1) {
       return GestureDetector(
@@ -506,7 +582,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           imageUrl: media[0],
           fit: BoxFit.cover,
           placeholder: (context, url) =>
-          const Center(child: CustomCircularProgressIndicator()),
+              const Center(child: CustomCircularProgressIndicator()),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       );
@@ -767,8 +843,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               child: TextAppButton(
                   label: 'show ${comment.repliesCount} replies',
                   onPressed: () {
-
-      ManageVibration.vibrate();
+                    ManageVibration.vibrate();
                   }))
       ],
     );

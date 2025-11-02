@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 class CaptainShareInfoScreen extends StatefulWidget {
   const CaptainShareInfoScreen({super.key});

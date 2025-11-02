@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/numbers_extensions.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/controller/star_cubit/star_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,8 +14,6 @@ import '../../../data/model/comment_model.dart';
 import '../../../data/model/tube_video_models.dart';
 import '../../../domain/use_case/comment_use_cases.dart';
 import '../../presentation_exports.dart';
-import 'comments_modal.dart';
-import 'floating_video_player.dart';
 import 'related_videos_section.dart';
 import 'video_info_section.dart' as video_info;
 import '../../profile/widgets/play_next_queue_manager.dart';
@@ -375,8 +369,9 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   }
 
   void _togglePlayPause() {
-    if (!widget.talent.isApproved || !_isInitialized || _controller == null)
+    if (!widget.talent.isApproved || !_isInitialized || _controller == null) {
       return;
+    }
 
     setState(() {
       if (_controller!.value.isPlaying) {
@@ -481,8 +476,9 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
   }
 
   void _seekToPosition(double localX, double maxWidth) {
-    if (!widget.talent.isApproved || !_isInitialized || _controller == null)
+    if (!widget.talent.isApproved || !_isInitialized || _controller == null) {
       return;
+    }
 
     if (_controller!.value.duration.inMilliseconds > 0) {
       final position = (localX / maxWidth).clamp(0.0, 1.0);
@@ -578,8 +574,9 @@ class _TalentVideoPlayerState extends State<TalentVideoPlayer>
 
     return GestureDetector(
       onTap: () {
-        if (!isVideoAvailable)
+        if (!isVideoAvailable) {
           return; // Prevent interaction if video is not available
+        }
         setState(() => _showControls = !_showControls);
         if (_showControls) {
           _startHideControlsTimer();

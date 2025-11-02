@@ -21,8 +21,7 @@ import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../../helpers/manage_vibration.dart';
-import '../../../spot_light/data/models/friends_response_model.dart';
-import '../../../stories/data/models/friends_stories_model.dart'; 
+import '../../../stories/data/models/friends_stories_model.dart';
 
 class FriendsStories extends StatefulWidget {
   const FriendsStories({super.key});
@@ -67,7 +66,7 @@ class _FriendsStoriesState extends State<FriendsStories> {
                   } else if (state is SpotlightError) {
                     return _buildErrorWidget(context);
                   }
-                  
+
                   // Default fallback or initial state
                   return _buildEmptyStories();
                 },
@@ -298,7 +297,8 @@ class _FriendsStoriesState extends State<FriendsStories> {
     );
   }
 
-  Widget _buildStoryItem(BuildContext context, UserWithStoriesEntity userWithStories, int index) {
+  Widget _buildStoryItem(
+      BuildContext context, UserWithStoriesEntity userWithStories, int index) {
     final userController = StoryController();
 
     return FittedBox(
@@ -313,7 +313,8 @@ class _FriendsStoriesState extends State<FriendsStories> {
                     builder: (context) => BlocProvider.value(
                       value: serviceLocator<StoryCubit>(),
                       child: StoryViewScreen(
-                        stories: _convertUserWithStoriesToUserStories([userWithStories]), // Convert the type
+                        stories: _convertUserWithStoriesToUserStories(
+                            [userWithStories]), // Convert the type
                         initialUserIndex: 0,
                       ),
                     ),
@@ -352,7 +353,8 @@ class _FriendsStoriesState extends State<FriendsStories> {
                           Positioned.fill(
                             child: CircleAvatar(
                               backgroundColor: AppColors.PRIMARY_COLOR,
-                              backgroundImage: _getProfileImage(userWithStories.user),
+                              backgroundImage:
+                                  _getProfileImage(userWithStories.user),
                             ),
                           ),
                           if (userWithStories.storyCount > 1)
@@ -391,7 +393,8 @@ class _FriendsStoriesState extends State<FriendsStories> {
                     text: '${userWithStories.user.firstName}\n',
                     style: Styles.mediumText(
                         fontWeight: FontWeight.w400,
-                        color: context.isDarkMode ? Colors.white : Colors.black),
+                        color:
+                            context.isDarkMode ? Colors.white : Colors.black),
                   ),
                   TextSpan(
                     text: "@${userWithStories.user.username}",
@@ -410,7 +413,8 @@ class _FriendsStoriesState extends State<FriendsStories> {
   }
 
   // Helper method to convert UserWithStoriesEntity to UserStories
-  List<UserStories> _convertUserWithStoriesToUserStories(List<UserWithStoriesEntity> userWithStoriesList) {
+  List<UserStories> _convertUserWithStoriesToUserStories(
+      List<UserWithStoriesEntity> userWithStoriesList) {
     return userWithStoriesList.map((userWithStories) {
       return UserStories(
         user: UserData(
@@ -439,8 +443,9 @@ class _FriendsStoriesState extends State<FriendsStories> {
 
   LinearGradient _getStoryGradient(UserWithStoriesEntity userWithStories) {
     // Check if user has any unviewed stories
-    final hasUnviewedStories = userWithStories.stories.any((story) => !story.isViewed);
-    
+    final hasUnviewedStories =
+        userWithStories.stories.any((story) => !story.isViewed);
+
     if (hasUnviewedStories) {
       // Colorful gradient for unviewed stories
       return const LinearGradient(
@@ -457,7 +462,6 @@ class _FriendsStoriesState extends State<FriendsStories> {
       );
     }
   }
-
 
   ImageProvider _getProfileImage(UserBasicEntity user) {
     if (user.userProfileUrl != null && user.userProfileUrl!.isNotEmpty) {

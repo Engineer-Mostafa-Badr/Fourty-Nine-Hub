@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/core/abstract/use_case.dart';
 import '../../../social_posts/domain/usecases/get_post_comments_usecase.dart';
-import '../../data/models/profile_model.dart';
 import '../../presentation/bloc/twitter_bloc.dart';
 import '../entities/twitter_comment_reply_entity.dart';
 import '../entities/twitter_post_comment_entity.dart';
@@ -56,14 +54,17 @@ abstract class TwitterRepo {
     required int limit,
   });
 
-  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>> getThreadRepliesPage({
+  Future<Either<Failure, TwitterPage<TwitterPostCommentEntity>>>
+      getThreadRepliesPage({
     required String threadId,
     required int page,
     required int limit,
   });
 
-  Future<Either<Failure, int>> getFollowersCount({required String subCategoryId});
-  Future<Either<Failure, int>> getFollowingCount({required String subCategoryId});
+  Future<Either<Failure, int>> getFollowersCount(
+      {required String subCategoryId});
+  Future<Either<Failure, int>> getFollowingCount(
+      {required String subCategoryId});
 
   // twitter_repo.dart
 
@@ -79,6 +80,4 @@ abstract class TwitterRepo {
   });
 
   Future<Either<Failure, String>> repostPost(String postId);
-
-
 }

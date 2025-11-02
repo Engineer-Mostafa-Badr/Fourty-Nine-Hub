@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/friends_stories_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/pagination_details_entity.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/domain/entities/story_basic_entity.dart';

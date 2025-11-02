@@ -12,7 +12,6 @@ import '../../../domain/entity/star_entity.dart';
 import '../../../domain/entity/viewer_entity.dart';
 import '../../../domain/use_case/comment_use_cases.dart';
 import '../../../data/model/comment_model.dart';
-import '../../controller/star_cubit/star_cubit.dart';
 import '../../presentation_exports.dart';
 
 part 'video_details_state.dart';

@@ -902,7 +902,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with TickerPr
     }
   }
 
-  Widget _buildCategoryChats({bool isSecret = false}) {
+  Widget _buildCategoryChats() {
     return Expanded(
       child: Scrollbar(
         // isAlwaysShown: true,  // Ensures the scrollbar is always visible

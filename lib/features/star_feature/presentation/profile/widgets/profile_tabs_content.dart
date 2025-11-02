@@ -4,10 +4,6 @@ import 'package:fourtyninehub/features/star_feature/domain/entity/star_entity.da
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../presentation_exports.dart';
-import 'profile_home_tab.dart';
-import 'profile_playlists_tab.dart';
-import 'profile_videos_tab.dart';
-import 'profile_watch_later_tab.dart';
 
 class ProfileTabsContent extends StatelessWidget {
   final TabController tabController;
@@ -53,7 +49,8 @@ class ProfileTabsContent extends StatelessWidget {
         ),
     ];
 
-    print('📋 ProfileTabsContent: Creating ${children.length} tab views for isCurrentUser: $isCurrentUser');
+    print(
+        '📋 ProfileTabsContent: Creating ${children.length} tab views for isCurrentUser: $isCurrentUser');
     print('📋 TabController length: ${tabController.length}');
 
     return TabBarView(

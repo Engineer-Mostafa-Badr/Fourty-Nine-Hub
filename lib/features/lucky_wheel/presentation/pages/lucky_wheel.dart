@@ -20,7 +20,6 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
-import 'package:fourtyninehub/core/widget/common/default_app_bar.dart';
 
 import '../../../../core/enums/wheel.dart';
 import '../../../../core/widget/custom_scaffold.dart';

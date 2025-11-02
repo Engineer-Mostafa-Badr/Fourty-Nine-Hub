@@ -11,7 +11,6 @@ import '../../../../core/utils/custom_show_dialog.dart';
 import '../../../../helpers/manage_vibration.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../helpers/manage_vibration.dart';
 
 class ExitWidget extends StatelessWidget {
   final Widget child;
@@ -131,7 +130,6 @@ class ExitWidget extends StatelessWidget {
                   ),
                 ],
               ),
-
             )) ??
         false;
     // return await showDialog<bool>(

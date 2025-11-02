@@ -159,8 +159,9 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
           if (data.isNotEmpty) {
             //print('First item structure: ${data.first}');
           }
-          return Right(
-              (data as List).map((e) => MostBookingModel.fromJson(e)).toList());
+          return Right((data['data'] as List)
+              .map((e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
+              .toList());
         } else {
           print('Unexpected data structure');
           return Right([]);
@@ -253,7 +254,8 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
           // Fallback: try direct list
           if (data is List) {
             return Right((data as List)
-                .map((e) => MostBookingModel.fromJson(e))
+                .map(
+                    (e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
                 .toList());
           }
           print(
@@ -292,7 +294,8 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
           }
           if (data is List) {
             return Right((data as List)
-                .map((e) => MostBookingModel.fromJson(e))
+                .map(
+                    (e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
                 .toList());
           }
           return Right([]);

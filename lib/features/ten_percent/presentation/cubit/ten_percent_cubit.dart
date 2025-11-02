@@ -7,8 +7,6 @@ import '../../../../core/messages/messages.dart';
 import '../../domain/usecases/send_bill_request_use_case.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/error/failure.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
 part 'ten_percent_state.dart';
@@ -22,7 +20,8 @@ class TenPercentCubit extends Cubit<TenPercentState> {
   TenPercentCubit(this._sentBillRequestUseCase)
       : super(const TenPercentState());
 
-  uploadMobileBill({bool isGallery = true,required BuildContext context}) async {
+  uploadMobileBill(
+      {bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -37,11 +36,13 @@ class TenPercentCubit extends Cubit<TenPercentState> {
               mobileId: data.mediaId,
               // backColor: '#FFFFFFFF',
               status: TenPercentStates.success));
-        }, context: context);
+        },
+        context: context);
     print("length${state.mobileId}");
   }
 
-  uploadElectricityBill({bool isGallery = true,required BuildContext context}) async {
+  uploadElectricityBill(
+      {bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -56,11 +57,13 @@ class TenPercentCubit extends Cubit<TenPercentState> {
               electricityId: data.mediaId,
               // backColor: '#FFFFFFFF',
               status: TenPercentStates.success));
-        }, context: context);
+        },
+        context: context);
     print("length${state.electricityId}");
   }
 
-  uploadTrafficBill({bool isGallery = true,required BuildContext context}) async {
+  uploadTrafficBill(
+      {bool isGallery = true, required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -75,7 +78,8 @@ class TenPercentCubit extends Cubit<TenPercentState> {
               trafficId: data.mediaId,
               // backColor: '#FFFFFFFF',
               status: TenPercentStates.success));
-        }, context: context);
+        },
+        context: context);
     print("length${state.trafficId}");
   }
   // Future<void> uploadProfileImage() async {
@@ -101,9 +105,9 @@ class TenPercentCubit extends Cubit<TenPercentState> {
     response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
         showErrorMessage(context, getFailureMessage(failure, context));
 
         emit(state.copyWith(failure: failure, status: TenPercentStates.error));

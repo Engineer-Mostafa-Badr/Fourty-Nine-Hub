@@ -2,10 +2,10 @@ import '../../domain/entities/get_client_accepted_trips_entity.dart';
 
 class ClientAcceptedTripModel extends ClientAcceptedTripEntity {
   ClientAcceptedTripModel({
-    TripDetailsModel? tripDetails,
-    bool? isButtonEnabled,
-    DriverDetailsModel? driverDetails,
-  }) : super(tripDetails: tripDetails,isButtonEnabled:isButtonEnabled, driverDetails: driverDetails);
+    TripDetailsModel? super.tripDetails,
+    super.isButtonEnabled,
+    DriverDetailsModel? super.driverDetails,
+  });
 
   factory ClientAcceptedTripModel.fromJson(Map<String, dynamic> json) {
     return ClientAcceptedTripModel(
@@ -13,7 +13,7 @@ class ClientAcceptedTripModel extends ClientAcceptedTripEntity {
           ? TripDetailsModel.fromJson(json['tripDetails'])
           : null,
       isButtonEnabled: json['state'] != null
-          ? json['state']['isButtonEnabled']??false
+          ? json['state']['isButtonEnabled'] ?? false
           : false,
       driverDetails: json['driverDetails'] != null
           ? DriverDetailsModel.fromJson(json['driverDetails'])
@@ -43,7 +43,6 @@ class TripDetailsModel extends TripDetailsEntity {
       isPremium: json['isPremium'],
       price: json['price'],
       passengers: json['passengers']?.toInt(),
-
       date: json['date'],
       note: json['note'],
       location: json['location'] != null
@@ -69,14 +68,14 @@ class LocationModel extends LocationEntity {
 }
 
 class CategoryModel extends CategoryEntity {
-  CategoryModel({super.nameAr,super.id, super.nameEn, super.picture});
+  CategoryModel({super.nameAr, super.id, super.nameEn, super.picture});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      id: json['id']??'',
-      nameAr: json['nameAr']??'',
-      nameEn: json['nameEn']??'',
-      picture: json['picture']??json['pictureUrl']??'',
+      id: json['id'] ?? '',
+      nameAr: json['nameAr'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+      picture: json['picture'] ?? json['pictureUrl'] ?? '',
     );
   }
 }
@@ -96,21 +95,22 @@ class DriverDetailsModel extends DriverDetailsEntity {
 
   factory DriverDetailsModel.fromJson(Map<String, dynamic> json) {
     return DriverDetailsModel(
-      id: json['id']??'',
-      firstName: json['firstName']??'',
-      phoneNumber: json['phoneNumber']??'',
-      countTrips: json['countTrips']??0,
-      verifiedBadge: json['verifiedBadge']??false,
-      picture: json['picture']??'',
-      lastName: json['lastName']??'',
+      id: json['id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
+      countTrips: json['countTrips'] ?? 0,
+      verifiedBadge: json['verifiedBadge'] ?? false,
+      picture: json['picture'] ?? '',
+      lastName: json['lastName'] ?? '',
       rating:
-      json['rating'] != null ? RatingModel.fromJson(json['rating']) : null,
+          json['rating'] != null ? RatingModel.fromJson(json['rating']) : null,
       vehicleDetails: json['vehicleDetails'] != null
           ? VehicleDetailsModel.fromJson(json['vehicleDetails'])
           : null,
     );
   }
 }
+
 class VehicleDetailsModel extends VehicleDetailsEntity {
   VehicleDetailsModel({
     super.brandAr,
@@ -132,15 +132,15 @@ class VehicleDetailsModel extends VehicleDetailsEntity {
     );
   }
 }
+
 class RatingModel extends RatingEntity {
   RatingModel({super.average, super.count});
 
   factory RatingModel.fromJson(Map<String, dynamic> json) {
     return RatingModel(
-      average: json['average'] != null
-          ? (json['average'] as num).toDouble()
-          : null,
-      count: json['count']??json['total']??0,
+      average:
+          json['average'] != null ? (json['average'] as num).toDouble() : null,
+      count: json['count'] ?? json['total'] ?? 0,
     );
   }
 }

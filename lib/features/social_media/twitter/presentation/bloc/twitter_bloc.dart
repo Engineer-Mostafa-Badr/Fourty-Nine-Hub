@@ -1,13 +1,10 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_verification_usecase.dart';
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../social_posts/domain/usecases/get_post_comments_usecase.dart';
@@ -40,6 +37,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
 part 'twitter_state.dart';
+
 class TwitterPage<T> {
   final List<T> items;
   final bool hasNextPage;
@@ -96,16 +94,15 @@ class TwitterCubit extends Cubit<TwitterState> {
     this._deleteTwitterCommentUseCase,
     this._editTwitterCommentUseCase,
     this._getTwitterGlobalFeedUseCase,
-      this._getThreadPostsPageUseCase,
-      this._getThreadRepliesPageUseCase,
-       this._getFollowersCountUseCase,
-      this._getFollowingCountUseCase,
-      this._getMyThreadsPageUseCase,
-      this._getUserThreadsPageUseCase,
-      this._getVerificationUseCase,
-      this._repostUseCase,
-      ) : super(const TwitterState());
-
+    this._getThreadPostsPageUseCase,
+    this._getThreadRepliesPageUseCase,
+    this._getFollowersCountUseCase,
+    this._getFollowingCountUseCase,
+    this._getMyThreadsPageUseCase,
+    this._getUserThreadsPageUseCase,
+    this._getVerificationUseCase,
+    this._repostUseCase,
+  ) : super(const TwitterState());
 
   void loadGlobalData() async {
     //   await getFeed(1);
@@ -171,19 +168,18 @@ class TwitterCubit extends Cubit<TwitterState> {
   final PagingController<int, TwitterPostEntity> userTweetsPagingController =
       PagingController(firstPageKey: 1);
 
-
   // get global feed posts
   Future<void> getGlobalFeed(int page) async {
     final response = await _getTwitterGlobalFeedUseCase(
       TwitterFeedParams(limit: pageSize, page: page),
     );
     response.fold(
-          (l) {
+      (l) {
         final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(ctx, getFailureMessage(l, ctx));
         emit(state.copyWith(failure: l, status: StateStatus.error));
       },
-          (pageData) {
+      (pageData) {
         final items = pageData.items;
         final hasNext = pageData.hasNextPage;
         final next = pageData.nextPage;
@@ -202,26 +198,26 @@ class TwitterCubit extends Cubit<TwitterState> {
       },
     );
   }
+
   Future<void> getVerification() async {
     print("getVerification");
     // bool verified = false;
     final response = await _getVerificationUseCase(NoParams());
     response.fold(
-          (l) {
-            // verified=true;
+      (l) {
+        // verified=true;
         final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(ctx, getFailureMessage(l, ctx));
         emit(state.copyWith(failure: l, status: StateStatus.error));
       },
-          (data) {
-        emit(state.copyWith(isVerified:data,status: StateStatus.success));
+      (data) {
+        emit(state.copyWith(isVerified: data, status: StateStatus.success));
       },
     );
     // return verified;
   }
 
-
-   Future<void> loadMyPosts(int page) async {
+  Future<void> loadMyPosts(int page) async {
     final res = await _getMyThreadsPageUseCase(
       MyThreadsPageParams(page: page, limit: pageSize),
     );
@@ -241,10 +237,12 @@ class TwitterCubit extends Cubit<TwitterState> {
         postsPagingController.appendPage(pageData.items, pageData.nextPage!);
       }
 
-      debugPrint("📌 postsPagingController now has: ${postsPagingController.itemList?.length}");
+      debugPrint(
+          "📌 postsPagingController now has: ${postsPagingController.itemList?.length}");
       postsPagingController.notifyListeners();
 
-      emit(state.copyWith(myPosts: pageData.items, status: StateStatus.success));
+      emit(
+          state.copyWith(myPosts: pageData.items, status: StateStatus.success));
     });
   }
 
@@ -263,13 +261,13 @@ class TwitterCubit extends Cubit<TwitterState> {
       if (!pageData.hasNextPage || pageData.nextPage == null) {
         userTweetsPagingController.appendLastPage(pageData.items);
       } else {
-        userTweetsPagingController.appendPage(pageData.items, pageData.nextPage);
+        userTweetsPagingController.appendPage(
+            pageData.items, pageData.nextPage);
       }
-      emit(state.copyWith(userTweets: pageData.items, status: StateStatus.success));
+      emit(state.copyWith(
+          userTweets: pageData.items, status: StateStatus.success));
     });
   }
-
-
 
   // // get global feed posts
   // getGlobalFeed(int page) async {
@@ -298,15 +296,12 @@ class TwitterCubit extends Cubit<TwitterState> {
   Future<void> getUserTweets(int page, String userId) async {
     final response = await _getUserTweetsUseCase(
         GetUserTweetsParams(page: page, userId: userId));
-    response.fold(
-        (l) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (data) {
       final isLastPage = data.length < pageSize;
       if (page == 1) {
         print("page == 1 $page");
@@ -325,31 +320,34 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
 // TwitterCubit
-  Future<void> getTwitterPost(BuildContext context, String postId, String newCommentId,
-      ) async
-  {
+  Future<void> getTwitterPost(
+    BuildContext context,
+    String postId,
+    String newCommentId,
+  ) async {
     emit(state.copyWith(status: StateStatus.loading, failure: null));
 
     final response = await _getTwitterPostUseCase(postId);
     response.fold(
-          (l) {
+      (l) {
         final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(ctx, getFailureMessage(l, ctx));
         emit(state.copyWith(failure: l, status: StateStatus.error));
       },
-          (data) {
+      (data) {
         // data is TwitterPostEntity; if it’s our model, pull the extras
         List<TwitterPostEntity> others = const [];
         List<TwitterPostCommentEntity> replies = const [];
         if (data is TwitterPostModel) {
-          others  = List<TwitterPostEntity>.from(data.threadExtraPosts);
-          replies = List<TwitterPostCommentEntity>.from(data.threadExtraReplies);
+          others = List<TwitterPostEntity>.from(data.threadExtraPosts);
+          replies =
+              List<TwitterPostCommentEntity>.from(data.threadExtraReplies);
         }
 
         emit(state.copyWith(
-          postDetails: data,        // main post
-          threadPosts: others,      // other posts in the thread
-          threadReplies: replies,   // replies to main
+          postDetails: data, // main post
+          threadPosts: others, // other posts in the thread
+          threadReplies: replies, // replies to main
           status: StateStatus.success,
         ));
       },
@@ -357,14 +355,17 @@ class TwitterCubit extends Cubit<TwitterState> {
   }
 
   final PagingController<int, TwitterPostEntity> threadPostsPagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
 
-  final PagingController<int, TwitterPostCommentEntity> threadRepliesPagingController =
-  PagingController(firstPageKey: 1);
+  final PagingController<int, TwitterPostCommentEntity>
+      threadRepliesPagingController = PagingController(firstPageKey: 1);
 
   void loadThread(String threadId) async {
     // header details (main post) — optional, keep your existing call
-    await getTwitterPost(AppPages.router.configuration.navigatorKey.currentContext!, threadId, '');
+    await getTwitterPost(
+        AppPages.router.configuration.navigatorKey.currentContext!,
+        threadId,
+        '');
 
     // page 1 for both lists
     getThreadPostsPage(threadId, 1);
@@ -389,9 +390,9 @@ class TwitterCubit extends Cubit<TwitterState> {
       threadPostsPagingController.error = l;
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (pageData) {
-      final items  = pageData.items;
+      final items = pageData.items;
       final hasNext = pageData.hasNextPage;
-      final next    = pageData.nextPage;
+      final next = pageData.nextPage;
 
       if (page == 1) threadPostsPagingController.itemList = [];
 
@@ -418,9 +419,9 @@ class TwitterCubit extends Cubit<TwitterState> {
       threadRepliesPagingController.error = l;
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (pageData) {
-      final items  = pageData.items;
+      final items = pageData.items;
       final hasNext = pageData.hasNextPage;
-      final next    = pageData.nextPage;
+      final next = pageData.nextPage;
 
       if (page == 1) threadRepliesPagingController.itemList = [];
 
@@ -437,21 +438,17 @@ class TwitterCubit extends Cubit<TwitterState> {
     });
   }
 
-
-
   // react on a post
   Future<bool> onReact({required TwitterPostReactParams params}) async {
     var response = await _twitterPostReactUseCase(params);
     bool result = false;
-    response.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
       result = data;
       emit(state.copyWith(status: StateStatus.success));
       print(data);
@@ -462,14 +459,14 @@ class TwitterCubit extends Cubit<TwitterState> {
   // share post
   void onShare({required String postId}) async {
     var response = await _twitterSharePostUseCase(postId);
-    response.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-           emit(state.copyWith(
-            shareSuccess: false, failure: failure, status: StateStatus.error));},
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(
+          shareSuccess: false, failure: failure, status: StateStatus.error));
+    },
         (data) => emit(
             state.copyWith(shareSuccess: true, status: StateStatus.success)));
   }
@@ -478,15 +475,13 @@ class TwitterCubit extends Cubit<TwitterState> {
   Future<bool> onReport(TwitterReportParams params) async {
     var response = await _twitterReportUseCase(params);
 
-    response.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
       emit(state.copyWith(reported: data, status: StateStatus.success));
       print(data);
     });
@@ -505,16 +500,16 @@ class TwitterCubit extends Cubit<TwitterState> {
     response.fold(
       (l) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-        
-         emit(
-        state.copyWith(
-          failure: l,
-          status: StateStatus.error,
-        ),
-      );},
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+
+        emit(
+          state.copyWith(
+            failure: l,
+            status: StateStatus.error,
+          ),
+        );
+      },
       (data) => emit(
         state.copyWith(
           reportSuccess: data,
@@ -539,15 +534,13 @@ class TwitterCubit extends Cubit<TwitterState> {
         postId: postId,
       ),
     );
-    response.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
       List<TwitterPostCommentEntity> list =
           data.where((element) => element.id != comment?.id).toList();
 
@@ -593,15 +586,13 @@ class TwitterCubit extends Cubit<TwitterState> {
         postId: postId,
       ),
     );
-    response.fold(
-        (failure) {
-          var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
       List<TwitterCommentReplyEntity> list =
           data.where((element) => element.id != reply?.id).toList();
       final isLastPage = data.length < pageSize;
@@ -636,10 +627,10 @@ class TwitterCubit extends Cubit<TwitterState> {
     response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
       (data) {
         postsPagingController.itemList
@@ -666,10 +657,10 @@ class TwitterCubit extends Cubit<TwitterState> {
     response.fold(
       (failure) {
         var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
+            AppPages.router.configuration.navigatorKey.currentContext!;
+        showErrorMessage(
+            currentContext, getFailureMessage(failure, currentContext));
+        emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
       (data) {
         postsPagingController.itemList
@@ -703,7 +694,8 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("PersonalPhotoId: ${data.mediaId}");
           emit(
               state.copyWith(personalPhoto: data, status: StateStatus.success));
-        }, context: context);
+        },
+        context: context);
   }
 
   removePersonalPhoto() {
@@ -730,7 +722,8 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("FrontId name ${data.file}");
           print("FrontId: ${data.mediaId}");
           emit(state.copyWith(frontId: data, status: StateStatus.success));
-        }, context: context);
+        },
+        context: context);
   }
 
   uploadBackId({required BuildContext context}) {
@@ -741,18 +734,17 @@ class TwitterCubit extends Cubit<TwitterState> {
           print("BackId name ${data.file}");
           print("BackId: ${data.mediaId}");
           emit(state.copyWith(backId: data, status: StateStatus.success));
-        }, context: context);
+        },
+        context: context);
   }
 
   void deletePost(
-      {required BuildContext context, required String postId}) async
-  {
+      {required BuildContext context, required String postId}) async {
     final response = await _deleteTwitterPostUseCase(postId);
     response.fold((l) {
       var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
       emit(state.copyWith(failure: l, status: StateStatus.error));
     }, (r) {
       postsPagingController.itemList?.removeWhere((e) => e.id == postId);
@@ -760,6 +752,7 @@ class TwitterCubit extends Cubit<TwitterState> {
       showSuccessMessage(context, "Post delete successfully");
     });
   }
+
 // In TwitterCubit
   Future<bool> deletePostAsync(String postId, BuildContext ctx) async {
     final res = await _deleteTwitterPostUseCase(postId);
@@ -771,15 +764,12 @@ class TwitterCubit extends Cubit<TwitterState> {
 
   void hidePost({required BuildContext context, required String postId}) async {
     final response = await _hideTwitterPostUseCase(postId);
-    response.fold(
-      (l) {
-        var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-      },
-        (r) {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
       postsPagingController.itemList?.removeWhere((e) => e.id == postId);
       emit(state.copyWith(posts: postsPagingController.itemList));
       showSuccessMessage(context, "Post hide successfully");
@@ -790,15 +780,13 @@ class TwitterCubit extends Cubit<TwitterState> {
   Future<bool> editComment({required TwitterPostCommentParams params}) async {
     var response = await _editTwitterCommentUseCase(params);
     bool value = false;
-    response.fold(
-      (failure) {
-        var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(failure, currentContext));
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-      },
-        (r) {
+    response.fold((failure) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(
+          currentContext, getFailureMessage(failure, currentContext));
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (r) {
       value = r;
     });
     return value;
@@ -811,15 +799,12 @@ class TwitterCubit extends Cubit<TwitterState> {
       required String from}) async {
     final response = await _deleteTwitterCommentUseCase(commentId);
     bool result = false;
-    response.fold(
-      (l) {
-        var currentContext =
-              AppPages.router.configuration.navigatorKey.currentContext!;
-          showErrorMessage(
-              currentContext, getFailureMessage(l, currentContext));
-          emit(state.copyWith(failure: l, status: StateStatus.error));
-      },
-        (r) {
+    response.fold((l) {
+      var currentContext =
+          AppPages.router.configuration.navigatorKey.currentContext!;
+      showErrorMessage(currentContext, getFailureMessage(l, currentContext));
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (r) {
       result = r;
       if (from == 'posts') {
         var currentPost = postsPagingController.itemList
@@ -839,10 +824,9 @@ class TwitterCubit extends Cubit<TwitterState> {
   // follow
 
   Future<void> loadMyProfileFromUserCubit(
-      BuildContext context, {
-        required String subCategoryId,
-      }) async
-  {
+    BuildContext context, {
+    required String subCategoryId,
+  }) async {
     emit(state.copyWith(profileStatus: StateStatus.loading));
 
     final user = context.read<UserCubit>().state.data;
@@ -860,23 +844,23 @@ class TwitterCubit extends Cubit<TwitterState> {
     int followers = 0;
     int following = 0;
 
-    final followersEither = results[0] as Either<Failure, int>;
-    final followingEither = results[1] as Either<Failure, int>;
+    final followersEither = results[0];
+    final followingEither = results[1];
 
     followersEither.fold(
-          (l) {
+      (l) {
         final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(ctx, getFailureMessage(l, ctx));
       },
-          (r) => followers = r,
+      (r) => followers = r,
     );
 
     followingEither.fold(
-          (l) {
+      (l) {
         final ctx = AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(ctx, getFailureMessage(l, ctx));
       },
-          (r) => following = r,
+      (r) => following = r,
     );
 
     // Compose profile from UserCubit + counts
@@ -884,7 +868,9 @@ class TwitterCubit extends Cubit<TwitterState> {
       id: user.id ?? '',
       firstName: user.firstName ?? '',
       lastName: user.lastName ?? '',
-      userName: (user.username ?? user.username ?? user.email?.split('@').first ?? '').toString(),
+      userName:
+          (user.username ?? user.username ?? user.email?.split('@').first ?? '')
+              .toString(),
       bio: user.bio,
       avatarUrl: user.profilePicture,
       coverUrl: user.profileCover,
@@ -934,45 +920,44 @@ class TwitterCubit extends Cubit<TwitterState> {
     ));
   }
 
-
   Future<void> onRepost({required String postId}) async {
     final result = await _repostUseCase(postId);
 
     result.fold((failure) {
       emit(state.copyWith(failure: failure, status: StateStatus.error));
-     }, (repostId) {
+    }, (repostId) {
       // 1) update lists held in state (feed, myPosts, userTweets)
-      List<TwitterPostEntity> _bump(List<TwitterPostEntity> src) => src.map((p) {
-        if (p.id != postId) return p;
-        final already = p.isReposted ?? false;
-        return TwitterPostEntity(
-          id: p.id,
-          content: p.content,
-          isLiked: p.isLiked,
-          postShare: p.postShare,
-          images: p.images,
-          shares: p.shares,
-          love: p.love,
-          isReact: p.isReact,
-          user: p.user,
-          commentPrivacy: p.commentPrivacy,
-          isShared: p.isShared,
-          commentsCount: p.commentsCount,
-          sharesCount: p.sharesCount,
-          loveCount: p.loveCount,
-          mainPost: p.mainPost,
-          photo: p.photo,
-          thread: p.thread,
-          createdAt: p.createdAt,
-          comments: p.comments,
-          repostCount: (p.repostCount ?? 0) + (already ? -1 : 1),
-          isReposted: !already,
-        );
-      }).toList();
+      List<TwitterPostEntity> bump(List<TwitterPostEntity> src) => src.map((p) {
+            if (p.id != postId) return p;
+            final already = p.isReposted ?? false;
+            return TwitterPostEntity(
+              id: p.id,
+              content: p.content,
+              isLiked: p.isLiked,
+              postShare: p.postShare,
+              images: p.images,
+              shares: p.shares,
+              love: p.love,
+              isReact: p.isReact,
+              user: p.user,
+              commentPrivacy: p.commentPrivacy,
+              isShared: p.isShared,
+              commentsCount: p.commentsCount,
+              sharesCount: p.sharesCount,
+              loveCount: p.loveCount,
+              mainPost: p.mainPost,
+              photo: p.photo,
+              thread: p.thread,
+              createdAt: p.createdAt,
+              comments: p.comments,
+              repostCount: (p.repostCount ?? 0) + (already ? -1 : 1),
+              isReposted: !already,
+            );
+          }).toList();
 
-      final newPosts     = _bump(state.posts);
-      final newMyPosts   = _bump(state.myPosts);
-      final newUserPosts = _bump(state.userTweets);
+      final newPosts = bump(state.posts);
+      final newMyPosts = bump(state.myPosts);
+      final newUserPosts = bump(state.userTweets);
 
       emit(state.copyWith(
         status: StateStatus.success,
@@ -983,14 +968,14 @@ class TwitterCubit extends Cubit<TwitterState> {
       ));
 
       // 2) also update the PagingControllers currently on screen
-      void _touch(PagingController<int, TwitterPostEntity> pc) {
+      void touch(PagingController<int, TwitterPostEntity> pc) {
         final list = pc.itemList;
         if (list == null) return;
         for (var i = 0; i < list.length; i++) {
           if (list[i].id == postId) {
             final p = list[i];
             final already = p.isReposted ?? false;
-            p.isReposted  = !already;
+            p.isReposted = !already;
             p.repostCount = (p.repostCount ?? 0) + (already ? -1 : 1);
             break;
           }
@@ -998,11 +983,9 @@ class TwitterCubit extends Cubit<TwitterState> {
         pc.notifyListeners();
       }
 
-      _touch(globalPostsPagingController);
-      _touch(postsPagingController);
-      _touch(userTweetsPagingController);
+      touch(globalPostsPagingController);
+      touch(postsPagingController);
+      touch(userTweetsPagingController);
     });
   }
-
-
 }

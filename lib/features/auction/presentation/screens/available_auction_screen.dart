@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -18,13 +16,10 @@ import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../helpers/manage_vibration.dart';
-import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../../../RideFeature/presentation/pages/widgets/font_manager.dart';
-import '../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
 import '../cubit/auction_cubit.dart';
-import 'create_auction_screen.dart';
+
 class AvailableAuctionScreen extends StatefulWidget {
   const AvailableAuctionScreen({super.key});
 
@@ -53,12 +48,10 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
 
     // Trigger initial load
     context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction(context);
-
   }
 
   bool isFloatingButtonVisible = true;
   void _scrollListener() {
-
     if (_auctionScrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       isFloatingButtonVisible = false;
@@ -71,7 +64,9 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
   Future<void> _addAuction() async {
     final result = await context.push(Routes.createAuctionScreen);
     if (result == true) {
-      context.read<AuctionCubit>().loadInitialAvailableNonSocketAuction(context);
+      context
+          .read<AuctionCubit>()
+          .loadInitialAvailableNonSocketAuction(context);
     }
   }
 
@@ -81,9 +76,8 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
         if (state.status == StateStatus.error) {
-          final errorMessage =
-              getFailureMessage(state.failure!, context) ??
-                  "Something went wrong";
+          final errorMessage = getFailureMessage(state.failure!, context) ??
+              "Something went wrong";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(errorMessage),
@@ -104,7 +98,9 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
         } else if (!cubit.isAuctionInitialLoading && auctions.isEmpty) {
           body = Center(
             child: Text(
-              context.isArabic ? 'لا يوجد مزادات متاحة' : 'No Available Auctions',
+              context.isArabic
+                  ? 'لا يوجد مزادات متاحة'
+                  : 'No Available Auctions',
               style: Styles.mediumText(),
             ),
           );
@@ -114,39 +110,41 @@ class _AvailableAuctionScreenState extends State<AvailableAuctionScreen> {
             scrollController: _auctionScrollController,
             banners: bannersList, // 👉 add banner list if needed
             loadPage: (page) {
-              return context.read<AuctionCubit>().getAvailableNonSocketAuction(context);
+              return context
+                  .read<AuctionCubit>()
+                  .getAvailableNonSocketAuction(context);
             },
 
             items: List.generate(
               auctions.length,
-                  (index) {
+              (index) {
                 final auction = auctions[index];
                 return AuctionCard(auction: auction);
               },
             ),
           );
-        }else if (auctions.isEmpty){
-
+        } else if (auctions.isEmpty) {
           print("📭 Showing 'No auctions available' message");
-          return  Center(child: CustomEmptyWidget(label: LocaleKeys.noAuctionAvailable.localize,));
-
-      } else {
-          body =  Center(child: Text("${LocaleKeys.somethingWentWrong.localize}"));
+          return Center(
+              child: CustomEmptyWidget(
+            label: LocaleKeys.noAuctionAvailable.localize,
+          ));
+        } else {
+          body = Center(child: Text(LocaleKeys.somethingWentWrong.localize));
         }
 
         return Scaffold(
           // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: isFloatingButtonVisible
-              ? buildFloatingAction(context,title:  "${LocaleKeys.addAuction.localize} +", () {
-            ManageVibration.vibrate();
-            _addAuction();
-          })
+              ? buildFloatingAction(context,
+                  title: "${LocaleKeys.addAuction.localize} +", () {
+                  ManageVibration.vibrate();
+                  _addAuction();
+                })
               : null,
           body: body,
-
         );
       },
     );
   }
 }
-

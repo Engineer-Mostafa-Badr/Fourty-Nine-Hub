@@ -31,7 +31,6 @@ import '../../Modified_widgets/cards/available_trips_card.dart';
 import '../../Modified_widgets/trip_join_card.dart';
 import '../../Modified_widgets/trip_join_dialog/dialog_content.dart';
 import '../../Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
-import '../../Modified_widgets/trip_join_floating_action_button.dart';
 import 'request_log_widget.dart';
 
 class MyAdsTripWidget extends StatefulWidget {
@@ -45,7 +44,7 @@ class MyAdsTripWidget extends StatefulWidget {
 class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
   late ScrollController _scrollController;
 
-  bool _isVisible = true;
+  final bool _isVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -58,49 +57,53 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: isFloatingButtonVisible
-            ? buildFloatingAction(context,child: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.push(Routes.tripJoinInfoScreen);
-                },
-                child: Container(
-                  height: 48.h,
-                  width: 48.h,
-                  decoration: BoxDecoration(
-                      color: AppColors.getButtonPrimaryColor(context),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    size: 19,
-                    Icons.question_mark,
-                    color: context.isDarkMode
-                        ? AppColors.black
-                        : Colors.white,
+            ? buildFloatingAction(context,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context.push(Routes.tripJoinInfoScreen);
+                        },
+                        child: Container(
+                          height: 48.h,
+                          width: 48.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.getButtonPrimaryColor(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            size: 19,
+                            Icons.question_mark,
+                            color: context.isDarkMode
+                                ? AppColors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () {
+                            ManageVibration.vibrate();
+                            context.push(Routes.TRIP_JOIN, extra: false);
+                          },
+                          backgoundColor:
+                              AppColors.getButtonPrimaryColor(context),
+                          child: Label(
+                            text: context.isArabic
+                                ? "أعلن عن سيارنك +"
+                                : "Advertise your car +",
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getReversedTextColor(context),
+                            ),
+                          ))
+                    ],
                   ),
-                ),
-              ),
-              CustomElevatedButton(
-                  onPressed: () {
-                    ManageVibration.vibrate();
-                    context.push(Routes.TRIP_JOIN, extra: false);
-                  },
-                  backgoundColor: AppColors.getButtonPrimaryColor(context),
-                  child: Label(
-                    text: context.isArabic ? "أعلن عن سيارنك +" : "Advertise your car +",
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.getReversedTextColor(context),
-                    ),
-                  ))
-            ],
-          ),
-        ), () {
-          ManageVibration.vibrate();
-          context.push(Routes.TRIP_JOIN, extra: false);
-        })
+                ), () {
+                ManageVibration.vibrate();
+                context.push(Routes.TRIP_JOIN, extra: false);
+              })
             : null,
         body: BlocBuilder<ViewAllTripJoinCubit, ViewAllTripJoinState>(
           builder: (context, state) {
@@ -111,7 +114,9 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
             }
 
             if (context.read<ViewAllTripJoinCubit>().myAdsData.isEmpty) {
-              return Center(child: CustomEmptyWidget(label:LocaleKeys.youHaveNoAds.localize));
+              return Center(
+                  child: CustomEmptyWidget(
+                      label: LocaleKeys.youHaveNoAds.localize));
             }
 
             return OlxPaginationWidget(
@@ -123,9 +128,9 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
               banners: bannersList,
               items: List.generate(
                 context.read<ViewAllTripJoinCubit>().myAdsData.length,
-                    (index) {
+                (index) {
                   MyAdsTripDocEntity data =
-                  context.read<ViewAllTripJoinCubit>().myAdsData[index];
+                      context.read<ViewAllTripJoinCubit>().myAdsData[index];
                   return Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: 10.h,
@@ -143,58 +148,85 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.symmetric(horizontal: 32.0.h),
+                                      EdgeInsets.symmetric(horizontal: 32.0.h),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: ClickableWidget(
                                           onTap: () {
-                                            if((data.lastViewers?.length??0)>0) {
+                                            if ((data.lastViewers?.length ??
+                                                    0) >
+                                                0) {
                                               ManageVibration.vibrate();
                                               showModalBottomSheet(
-                                                backgroundColor: context.isDarkMode
+                                                backgroundColor: context
+                                                        .isDarkMode
                                                     ? AppColors.DARK_BLUE_COLOR
-                                                    .withOpacity(0.95)
+                                                        .withOpacity(0.95)
                                                     : AppColors.LIGHT_COLOR,
                                                 constraints: BoxConstraints(
-                                                  maxHeight: MediaQuery.of(context).size.height * 0.3,
+                                                  maxHeight:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.3,
                                                 ),
                                                 context: context,
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(32.0),
-                                                    topRight: Radius.circular(32.0),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(32.0),
+                                                    topRight:
+                                                        Radius.circular(32.0),
                                                   ),
                                                 ),
                                                 isDismissible: true,
                                                 // isScrollControlled: true,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Column(
                                                       children: [
-                                                        Text(context.isArabic?'المشاهدون':'Viewers',style: Styles.headerText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
+                                                        Text(
+                                                          context.isArabic
+                                                              ? 'المشاهدون'
+                                                              : 'Viewers',
+                                                          style: Styles.headerText(
+                                                              color: context
+                                                                      .isDarkMode
+                                                                  ? Colors.white
+                                                                  : AppColors
+                                                                      .PRIMARY_COLOR),
+                                                        ),
                                                         Expanded(
                                                           child: ListView(
                                                             shrinkWrap: true,
-                                                            children: List.generate(data.lastViewers?.length??0, (i)=>Container(
-                                                              padding: EdgeInsets.only(bottom: 10),
-                                                              child: Row(
-                                                                children: [
-                                                                  ImageFromInternet(
-                                                                      image: '',
-                                                                      isCircle: true,
-                                                                      defaultLogo: false,
-                                                                      isMale: data.lastViewers?[i].gender=='male',
-                                                                      width: 40,
-                                                                      height: 40,
-                                                                      firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(),
-                                                                      charPadding: 0),
-                                                                  const Sizer(),
-                                                                  Text(data.lastViewers?[i].firstName??'',style: Styles.mediumText(color: context.isDarkMode?Colors.white:AppColors.PRIMARY_COLOR),),
-                                                                ],
-                                                              ),
-                                                            )),
+                                                            children:
+                                                                List.generate(
+                                                                    data.lastViewers
+                                                                            ?.length ??
+                                                                        0,
+                                                                    (i) =>
+                                                                        Container(
+                                                                          padding:
+                                                                              EdgeInsets.only(bottom: 10),
+                                                                          child:
+                                                                              Row(
+                                                                            children: [
+                                                                              ImageFromInternet(image: '', isCircle: true, defaultLogo: false, isMale: data.lastViewers?[i].gender == 'male', width: 40, height: 40, firstChar: data.lastViewers?[i].firstName?[0].toUpperCase(), charPadding: 0),
+                                                                              const Sizer(),
+                                                                              Text(
+                                                                                data.lastViewers?[i].firstName ?? '',
+                                                                                style: Styles.mediumText(color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        )),
                                                           ),
                                                         ),
                                                       ],
@@ -215,12 +247,13 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                               const Sizer(),
                                               Label(
                                                 text:
-                                                '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
+                                                    '${formatViews(data.views ?? 0, context)} ${LocaleKeys.views.localize}',
                                                 style: Styles.mediumText(
                                                   fontSize: 24,
                                                   color: context.isDarkMode
                                                       ? AppColors.whiteColor
-                                                      : AppColors.DARK_GRAY_COLOR,
+                                                      : AppColors
+                                                          .DARK_GRAY_COLOR,
                                                 ),
                                               ),
                                             ],
@@ -231,7 +264,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                         data.formattedOfferType,
                                         style: Styles.headerText(
                                             color:
-                                            AppColors.getRedColor(context),
+                                                AppColors.getRedColor(context),
                                             fontSize: 32),
                                       ),
                                     ],
@@ -251,12 +284,12 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                         data.pricePerSeat?.round() ?? 1,
                                         context),
                                     seats: LocaleKeys.eachSeat.localize
-                                  // icon: widget.iconCar
-                                  //     ? Assets.tripJoinCarIcon
-                                  //     : widget.isMale
-                                  //     ? Assets.maleUser
-                                  //     : Assets.femaleUser,
-                                ),
+                                    // icon: widget.iconCar
+                                    //     ? Assets.tripJoinCarIcon
+                                    //     : widget.isMale
+                                    //     ? Assets.maleUser
+                                    //     : Assets.femaleUser,
+                                    ),
                                 const Sizer(
                                   height: 30,
                                 ),
@@ -274,7 +307,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         formatTimestamp(
@@ -287,9 +320,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                         // data.passengers == 1
                                         //     ? '${data.passengers} ${LocaleKeys.seat.localize}'
                                         //     : ''
-                                        '${formatPrice(
-                                            (data.passengers??1).round(),
-                                            context)} ${LocaleKeys.seat.localize}',
+                                        '${formatPrice((data.passengers ?? 1).round(), context)} ${LocaleKeys.seat.localize}',
                                         style: Styles.headerText(
                                             fontSize: 32,
                                             fontWeight: FontWeight.bold),
@@ -318,7 +349,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                                       context
                                           .read<ViewAllTripJoinCubit>()
                                           .deleteMyAdsTrip(
-                                          data.id ?? "", context);
+                                              data.id ?? "", context);
                                     },
                                     label: LocaleKeys.deleteRequest.localize,
                                   ),
@@ -329,7 +360,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                           ],
                         ),
                         data.isPremium == true ||
-                            data.isButtonEnabled!.state == true
+                                data.isButtonEnabled!.state == true
                             ? SizedBox()
                             : TripCardSubscribeText(),
                       ],
@@ -423,7 +454,7 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
                 spacing: 5,
                 children: [
                   Label(
-                    text:seats,
+                    text: seats,
                     style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
                         color: AppColors.getTextColor(context)),
@@ -485,15 +516,14 @@ class _MyAdsTripWidgetState extends State<MyAdsTripWidget> {
 
   bool isFloatingButtonVisible = true;
   void _scrollListener() {
-
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       isFloatingButtonVisible = false;
     } else {
       isFloatingButtonVisible = true;
     }
-    setState((){});
-    }
+    setState(() {});
+  }
 }
 
 extension OfferTypeFormatter on MyAdsTripDocEntity {

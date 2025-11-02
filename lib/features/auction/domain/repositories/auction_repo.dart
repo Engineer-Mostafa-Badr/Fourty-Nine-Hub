@@ -9,7 +9,6 @@ import '../entities/auction_banner_entity.dart';
 import '../entities/auction_main_category_entity.dart';
 import '../entities/auction_participants_entity.dart';
 import '../entities/auction_sub_category_entity.dart';
-import '../entities/auction_viewer_entity.dart';
 import '../entities/error_bid_auction_entity.dart';
 import '../entities/get_all_auction_entity.dart';
 import '../entities/listen_winner_bid_entity.dart';

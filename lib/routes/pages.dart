@@ -236,8 +236,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/chat_feature/presentation/pages/chat_home_page.dart';
 import 'package:fourtyninehub/features/chat_feature/presentation/controllers/chat_cubit.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
-import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event_sub_categories.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
@@ -314,8 +312,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_create_ad_view.dart';
 import 'package:fourtyninehub/features/tube/presentation/cubit/tube_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
-import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
@@ -449,8 +445,6 @@ import '../features/shipping/create_shipping_request/presentation/cubit/favorite
 import '../features/shipping/create_shipping_request/presentation/cubit/favorite_shipping_cubit.dart';
 import '../features/shipping/create_shipping_request/presentation/cubit/get_all_request_by_my_trip_cubit.dart';
 import '../features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
-import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
-import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
@@ -468,7 +462,6 @@ import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 import '../features/spotlight/presentation/cubit/spotlight_cubit.dart';
-import '../features/star_feature/presentation/controller/comment_cubit/comment_cubit.dart';
 import '../features/star_feature/presentation/presentation_exports.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
@@ -476,8 +469,6 @@ import '../features/trip_join/view_all_trip_join/presentation/views/trip_join_vi
 import '../features/tube/presentation/screens/tube_screen.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
-import '../features/zoom/presentation/pages/meeting_room.dart';
-import '../features/zoom/presentation/pages/meeting_view.dart';
 import '../service_locator/service_locator.dart';
 import 'routes.dart';
 import '../core/widget/incorrect_time_screen.dart';
@@ -2442,7 +2433,6 @@ class AppPages {
                   ),
                 ),
               ),
-
 
               GoRoute(
                 path: Paths.conversationScreen,
@@ -5040,7 +5030,8 @@ class AppPages {
                 name: Routes.spotLightScreen,
                 builder: (context, state) {
                   return BlocProvider(
-                    create: (context) => serviceLocator<SpotlightCubit>()..fetchMyProfileSpotlight(),
+                    create: (context) => serviceLocator<SpotlightCubit>()
+                      ..fetchMyProfileSpotlight(),
                     child: SpotLightScreen(),
                   );
                 },

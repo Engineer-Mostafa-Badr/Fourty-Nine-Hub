@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import 'package:fourtyninehub/features/RideFeature/data/models/ride_brand_model.
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_car_model_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_brand_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/add_car_model_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/entities/trip_join_card_entity.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_read_request_pick_me_use_case.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/apply_view_pick_me_use_case.dart';
@@ -91,7 +89,6 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
   bool isLoadingMyAds = false;
   bool isLoadingPickMeMyAds = false;
-
 
   List<GetRequestTripJoinEntity> requestTripJoinData = [];
   List<GetRequestTripJoinEntity> requestPickMeData = [];
@@ -182,7 +179,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) async {
-        requestTripJoinData.firstWhere((e)=>e.id==tripId).isRead=true;
+        requestTripJoinData.firstWhere((e) => e.id == tripId).isRead = true;
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -194,6 +191,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
   Future<void> applyReadRequestPickMe(String tripId) async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
 
@@ -211,7 +209,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) async {
-        requestPickMeData.firstWhere((e)=>e.id==tripId).isRead=true;
+        requestPickMeData.firstWhere((e) => e.id == tripId).isRead = true;
         emit(state.copyWith(
           deleteMyPickMeEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -242,8 +240,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) {
-        tripJoinData.firstWhere((e)=>e.id==tripId).isView=true;
-        tripJoinData.firstWhere((e)=>e.id==tripId).viewerIds=(tripJoinData.firstWhere((e)=>e.id==tripId).viewerIds??0)+1;
+        tripJoinData.firstWhere((e) => e.id == tripId).isView = true;
+        tripJoinData.firstWhere((e) => e.id == tripId).viewerIds =
+            (tripJoinData.firstWhere((e) => e.id == tripId).viewerIds ?? 0) + 1;
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -270,8 +269,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
             failure: failure, status: ViewAllTripJoinStatus.failure));
       },
       (tripData) {
-        pickMeData.firstWhere((e)=>e.id==tripId).isView=true;
-        pickMeData.firstWhere((e)=>e.id==tripId).viewerIds=(pickMeData.firstWhere((e)=>e.id==tripId).viewerIds??0)+1;
+        pickMeData.firstWhere((e) => e.id == tripId).isView = true;
+        pickMeData.firstWhere((e) => e.id == tripId).viewerIds =
+            (pickMeData.firstWhere((e) => e.id == tripId).viewerIds ?? 0) + 1;
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -280,37 +280,37 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     );
   }
 
-
   Future<bool> createPickMeRequest(
-    String tripId,
-      bool isPremium,
-      String phone
-  ) async {
-    bool isSuccess=false;
+      String tripId, bool isPremium, String phone) async {
+    bool isSuccess = false;
     var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     showLoadingDialog(currentContext);
     final response = await createPickMeRequestUseCase(
-      CreateRequestParams(offerId: tripId,phoneNumber: phone,isPremium: isPremium),
+      CreateRequestParams(
+          offerId: tripId, phoneNumber: phone, isPremium: isPremium),
     );
     response.fold(
       (failure) {
-        isSuccess=false;
+        isSuccess = false;
         currentContext.pop();
         currentContext.pop();
         String name = getFailureName(failure, currentContext);
-        if(name == 'SubscribeError'){
-          showSubscribeDialog(currentContext, '62c8ba9f8e28a58a3edf57ee',
-              title: currentContext.isArabic?'اشترك أولا حتي تتمكن من ارسال طلب مميز':'Subscribe first to be able to send a premium request',
-          // onSubscribe: (success){
-          //   print("isPremium==true $isPremium");
-          //   currentContext.pop();
-          //   // if(isPremium==true)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isPremiumRequested=true;
-          //   // if(isPremium==false)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isNormalRequested=true;
-          // }
+        if (name == 'SubscribeError') {
+          showSubscribeDialog(
+            currentContext, '62c8ba9f8e28a58a3edf57ee',
+            title: currentContext.isArabic
+                ? 'اشترك أولا حتي تتمكن من ارسال طلب مميز'
+                : 'Subscribe first to be able to send a premium request',
+            // onSubscribe: (success){
+            //   print("isPremium==true $isPremium");
+            //   currentContext.pop();
+            //   // if(isPremium==true)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isPremiumRequested=true;
+            //   // if(isPremium==false)pickMeData.firstWhereOrNull((e)=>e.id==tripId)?.isNormalRequested=true;
+            // }
           );
-        }else{
+        } else {
           showErrorMessage(
               currentContext, getFailureMessage(failure, currentContext));
         }
@@ -320,8 +320,12 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       (tripData) {
         currentContext.pop();
         currentContext.pop();
-        isSuccess=true;
-        showSuccessMessage(currentContext, currentContext.isArabic?"تم ارسال طلبك بنجاح":"Your request has been sent successfully");
+        isSuccess = true;
+        showSuccessMessage(
+            currentContext,
+            currentContext.isArabic
+                ? "تم ارسال طلبك بنجاح"
+                : "Your request has been sent successfully");
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -332,17 +336,14 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   }
 
   Future<void> createTripJoinRequest(
-    String tripId,
-      bool isPremium,
-      String phone
-
-  ) async {
+      String tripId, bool isPremium, String phone) async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
 
     final response = await createTripJoinRequestUseCase(
-      CreateRequestParams(offerId: tripId,phoneNumber: phone,isPremium: isPremium),
+      CreateRequestParams(
+          offerId: tripId, phoneNumber: phone, isPremium: isPremium),
     );
     response.fold(
       (failure) {
@@ -353,7 +354,11 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
       (tripData) {
         currentContext.pop();
-        showSuccessMessage(currentContext, currentContext.isArabic?"تم ارسال طلبك بنجاح":"Your request has been sent successfully");
+        showSuccessMessage(
+            currentContext,
+            currentContext.isArabic
+                ? "تم ارسال طلبك بنجاح"
+                : "Your request has been sent successfully");
         emit(state.copyWith(
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
@@ -368,7 +373,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
   Future<void> createTripJoinOffer(
       CreateTripJoinParams params, BuildContext context) async {
     var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     showLoadingDialog(currentContext);
     final response = await createTripJoinOfferUseCase(params);
@@ -386,7 +391,11 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
         ));
-        showSuccessMessage(currentContext, currentContext.isArabic?'تم انشاء الرحلة بنجاح':'Your Trip has been created successfully');
+        showSuccessMessage(
+            currentContext,
+            currentContext.isArabic
+                ? 'تم انشاء الرحلة بنجاح'
+                : 'Your Trip has been created successfully');
       },
     );
   }
@@ -395,7 +404,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       CreatePickMeParams params, BuildContext context) async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
     var currentContext =
-    AppPages.router.configuration.navigatorKey.currentContext!;
+        AppPages.router.configuration.navigatorKey.currentContext!;
     showLoadingDialog(currentContext);
     final response = await createPickMeOfferUseCase(params);
     response.fold(
@@ -412,7 +421,11 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
           deleteMyTripJoinEntity: tripData,
           status: ViewAllTripJoinStatus.success,
         ));
-        showSuccessMessage(currentContext, currentContext.isArabic?'تم انشاء الرحلة بنجاح':'Your Trip has been created successfully');
+        showSuccessMessage(
+            currentContext,
+            currentContext.isArabic
+                ? 'تم انشاء الرحلة بنجاح'
+                : 'Your Trip has been created successfully');
         currentContext.pop(true);
       },
     );
@@ -451,11 +464,12 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
   Future<void> deleteMyAdsPickMe(String tripId, BuildContext context) async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
 
     final response = await deleteMyPickMeUseCase(
-       tripId,
+      tripId,
     );
 
     response.fold(
@@ -627,6 +641,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
   Future<void> getPickMeMyAds() async {
     if (!hasMorePickMeMyAds || isLoadingMorePickMeMyAds) return;
 
@@ -692,6 +707,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
   Future<void> getPickMeRequestCount() async {
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
 
@@ -761,6 +777,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
+
   Future<void> getRequestPickMe() async {
     print("hasMoreRequestPickMe $hasMoreRequestPickMe");
     print("isLoadingMoreRequestPickMe $isLoadingMoreRequestPickMe");
@@ -811,7 +828,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
   // pagination method
   Future<void> getTripJoin() async {
-    print("state.tripsFromSearch ${state.tripsFromSearch} state.tripsSearchText ${state.tripsSearchText}");
+    print(
+        "state.tripsFromSearch ${state.tripsFromSearch} state.tripsSearchText ${state.tripsSearchText}");
     if (!hasMoreTripJoin || isLoadingMoreTripJoin) return;
 
     isLoadingMoreTripJoin = true;
@@ -819,10 +837,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
     final response = await getAvailableTripJoinUseCase(
       CarBrandParams(
-        page: currentPageTripJoin,
-        limit: 15,
-          id: state.tripsFromSearch==true?state.tripsSearchText:""
-      ),
+          page: currentPageTripJoin,
+          limit: 15,
+          id: state.tripsFromSearch == true ? state.tripsSearchText : ""),
     );
 
     response.fold(
@@ -865,10 +882,9 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
 
     final response = await getAvailablePickMeUseCase(
       CarBrandParams(
-        page: currentPagePickMe,
-        limit: 15,
-        id: state.offersFromSearch==true?state.searchText:""
-      ),
+          page: currentPagePickMe,
+          limit: 15,
+          id: state.offersFromSearch == true ? state.searchText : ""),
     );
 
     response.fold(
@@ -978,6 +994,7 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     isLoadingMyAds = false;
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
+
   Future<void> loadInitialPickMeMyAds() async {
     isLoadingPickMeMyAds = true;
     myPickMeAdsData.clear();
@@ -1010,9 +1027,10 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
 
-  Future<void> loadInitialTripJoin(bool fromSearch,String searchText) async {
+  Future<void> loadInitialTripJoin(bool fromSearch, String searchText) async {
     print("fromSearch $fromSearch searchText $searchText");
-    emit(state.copyWith(tripsFromSearch:fromSearch,tripsSearchText:searchText));
+    emit(state.copyWith(
+        tripsFromSearch: fromSearch, tripsSearchText: searchText));
     isLoadingTripJoin = true;
     tripJoinData.clear();
     currentPageTripJoin = 1;
@@ -1022,8 +1040,8 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     emit(state.copyWith(status: ViewAllTripJoinStatus.success));
   }
 
-  Future<void> loadInitialPickMe(bool fromSearch,String searchText) async {
-    emit(state.copyWith(offersFromSearch:fromSearch,searchText:searchText));
+  Future<void> loadInitialPickMe(bool fromSearch, String searchText) async {
+    emit(state.copyWith(offersFromSearch: fromSearch, searchText: searchText));
     isLoadingPickMe = true;
     pickMeData.clear();
     currentPagePickMe = 1;
@@ -1065,29 +1083,28 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     );
   }
 
-
   Future<void> addNewBrand(
       {required BuildContext context, required String brandName}) async {
     //addCarModelUseCase
     showLoadingDialog(context);
     emit(state.copyWith(
-        status: ViewAllTripJoinStatus.loading,
-        // selectedBrand: RideBrandEntity(
-        //     id: '', brandNameEn: '', brandNameAr: '', logoUrl: '')
+      status: ViewAllTripJoinStatus.loading,
+      // selectedBrand: RideBrandEntity(
+      //     id: '', brandNameEn: '', brandNameAr: '', logoUrl: '')
     ));
     final Either<Failure, String> result = await addCarBrandUseCase(brandName);
 
     result.fold(
-          (failure) {
+      (failure) {
         var currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         context.pop();
-        emit(
-            state.copyWith(status: ViewAllTripJoinStatus.failure, failure: failure));
+        emit(state.copyWith(
+            status: ViewAllTripJoinStatus.failure, failure: failure));
       },
-          (data) async {
+      (data) async {
         context.pop();
         showSuccessMessage(
             context,
@@ -1106,37 +1123,34 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
     );
   }
 
-  onRemoveBrand(){
+  onRemoveBrand() {
     emit(state.copyWith(
         status: ViewAllTripJoinStatus.loading,
         newBrand: RideBrandModel(
-            id: '', brandNameEn: '', brandNameAr: '', logoUrl: '')
-    ));
+            id: '', brandNameEn: '', brandNameAr: '', logoUrl: '')));
   }
 
   Future<void> addNewModel(
       {required BuildContext context,
-        required String modelName,
-        required String brandId}) async {
+      required String modelName,
+      required String brandId}) async {
     showLoadingDialog(context);
     emit(state.copyWith(status: ViewAllTripJoinStatus.loading));
-    final Either<Failure, String> result =
-    await addCarModelUseCase(AddCarModelParams(
-        modelName: modelName,
-        type: "car",
-        carBrandId: brandId));
+    final Either<Failure, String> result = await addCarModelUseCase(
+        AddCarModelParams(
+            modelName: modelName, type: "car", carBrandId: brandId));
 
     result.fold(
-          (failure) {
+      (failure) {
         var currentContext =
-        AppPages.router.configuration.navigatorKey.currentContext!;
+            AppPages.router.configuration.navigatorKey.currentContext!;
         showErrorMessage(
             currentContext, getFailureMessage(failure, currentContext));
         context.pop();
-        emit(
-            state.copyWith(status: ViewAllTripJoinStatus.failure, failure: failure));
+        emit(state.copyWith(
+            status: ViewAllTripJoinStatus.failure, failure: failure));
       },
-          (data) async {
+      (data) async {
         context.pop();
         showSuccessMessage(
             context,
@@ -1153,5 +1167,4 @@ class ViewAllTripJoinCubit extends Cubit<ViewAllTripJoinState> {
       },
     );
   }
-
 }

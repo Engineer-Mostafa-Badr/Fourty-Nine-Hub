@@ -3,30 +3,18 @@ import 'package:fourtyninehub/features/social_media/find/domain/entity/find_enti
 
 class FindModel extends FindEntity {
   const FindModel({
-    String? id,
-    String? firstName,
-    String? lastName,
-    String? birthday,
-    LocationModel? location,
-    int? followingCount,
-    int? followersCount,
-    int? friendsCount,
-    bool? areFriends,
-    List<String>? pictures,
-    bool? hasStory,
-  }) : super(
-    id: id,
-    firstName: firstName,
-    lastName: lastName,
-    birthday: birthday,
-    location: location,
-    followingCount: followingCount,
-    followersCount: followersCount,
-    friendsCount: friendsCount,
-    areFriends: areFriends,
-    pictures: pictures,
-    hasStory: hasStory,
-  );
+    super.id,
+    super.firstName,
+    super.lastName,
+    super.birthday,
+    LocationModel? super.location,
+    super.followingCount,
+    super.followersCount,
+    super.friendsCount,
+    super.areFriends,
+    super.pictures,
+    super.hasStory,
+  });
 
   factory FindModel.fromJson(Map<String, dynamic> json) {
     return FindModel(
@@ -68,9 +56,9 @@ class FindModel extends FindEntity {
 
 class LocationModel extends LocationEntity {
   const LocationModel({
-    String? type,
-    List<double>? coordinates,
-  }) : super(type: type, coordinates: coordinates);
+    super.type,
+    super.coordinates,
+  });
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(

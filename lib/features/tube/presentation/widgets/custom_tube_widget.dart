@@ -32,6 +32,7 @@ class CustomVideoControls extends StatefulWidget {
   @override
   State<CustomVideoControls> createState() => _CustomVideoControlsState();
 }
+
 class _CustomVideoControlsState extends State<CustomVideoControls>
     with SingleTickerProviderStateMixin {
   VideoPlayerController? _previewController;
@@ -45,7 +46,7 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
   bool _showControls = true;
   double _currentPlaybackSpeed = 1.0;
   Duration _currentPosition = Duration.zero;
-  int _currentQuality = 720;
+  final int _currentQuality = 720;
   String? _currentVideoUrl;
 
   @override
@@ -105,7 +106,9 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
 
   void _startHideTimer(VideoPlayerController? playerController) {
     _hideTimer?.cancel();
-    if (playerController != null && playerController.value.isPlaying && !_isDragging) {
+    if (playerController != null &&
+        playerController.value.isPlaying &&
+        !_isDragging) {
       _hideTimer = Timer(const Duration(seconds: 3), () {
         if (mounted && !_isDragging) {
           setState(() => _showControls = false);
@@ -158,16 +161,22 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
         final chewieController = state.chewieController;
         final playerController = state.videoPlayerController;
 
-        if (chewieController == null || playerController == null || !playerController.value.isInitialized) {
+        if (chewieController == null ||
+            playerController == null ||
+            !playerController.value.isInitialized) {
           return const Center(child: CircularProgressIndicator());
         }
 
         // Add listener to update position
         _addPositionListener(playerController);
 
-        final position = _isDragging ? Duration(milliseconds: _dragValue.toInt()) : _currentPosition;
+        final position = _isDragging
+            ? Duration(milliseconds: _dragValue.toInt())
+            : _currentPosition;
         final duration = playerController.value.duration;
-        final currentValue = _isDragging ? _dragValue : _currentPosition.inMilliseconds.toDouble();
+        final currentValue = _isDragging
+            ? _dragValue
+            : _currentPosition.inMilliseconds.toDouble();
 
         if (playerController.value.isPlaying && _showControls && !_isDragging) {
           _startHideTimer(playerController);
@@ -178,22 +187,28 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
             setState(() {
               _showControls = !_showControls;
             });
-            if (_showControls && playerController.value.isPlaying && !_isDragging) {
+            if (_showControls &&
+                playerController.value.isPlaying &&
+                !_isDragging) {
               _startHideTimer(playerController);
             }
           },
           onDoubleTapDown: _showControls
               ? (details) {
-            final tapPosition = details.localPosition.dx;
-            final screenWidth = MediaQuery.of(context).size.width;
-            if (tapPosition < screenWidth / 2) {
-              _animationController?.forward().then((_) => _animationController?.reverse());
-              widget.onDoubleTapLeft();
-            } else {
-              _animationController?.forward().then((_) => _animationController?.reverse());
-              widget.onDoubleTapRight();
-            }
-          }
+                  final tapPosition = details.localPosition.dx;
+                  final screenWidth = MediaQuery.of(context).size.width;
+                  if (tapPosition < screenWidth / 2) {
+                    _animationController
+                        ?.forward()
+                        .then((_) => _animationController?.reverse());
+                    widget.onDoubleTapLeft();
+                  } else {
+                    _animationController
+                        ?.forward()
+                        .then((_) => _animationController?.reverse());
+                    widget.onDoubleTapRight();
+                  }
+                }
               : null,
           child: Stack(
             alignment: Alignment.center,
@@ -204,7 +219,11 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                   start: 20,
                   child: FadeTransition(
                     opacity: _fadeAnimation!,
-                    child: _indicatorWidget(Icons.fast_forward, context.isArabic ? 'تقديم 20 ثانية' : 'Fast Forward 20s'),
+                    child: _indicatorWidget(
+                        Icons.fast_forward,
+                        context.isArabic
+                            ? 'تقديم 20 ثانية'
+                            : 'Fast Forward 20s'),
                   ),
                 ),
               if (state.showBackwardIndicator)
@@ -212,11 +231,13 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                   end: 20,
                   child: FadeTransition(
                     opacity: _fadeAnimation!,
-                    child: _indicatorWidget(Icons.fast_rewind, context.isArabic ? 'رجوع 20 ثانية' : 'Rewind 20s'),
+                    child: _indicatorWidget(Icons.fast_rewind,
+                        context.isArabic ? 'رجوع 20 ثانية' : 'Rewind 20s'),
                   ),
                 ),
               if (_showControls)
-                _buildControls(context, playerController, chewieController, duration, currentValue, position),
+                _buildControls(context, playerController, chewieController,
+                    duration, currentValue, position),
             ],
           ),
         );
@@ -236,20 +257,24 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
         children: [
           Icon(icon, color: Colors.white, size: 24),
           const SizedBox(width: 8),
-          Text(text, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+          Text(text,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 
   Widget _buildControls(
-      BuildContext context,
-      VideoPlayerController playerController,
-      ChewieController chewieController,
-      Duration duration,
-      double currentValue,
-      Duration position,
-      ) {
+    BuildContext context,
+    VideoPlayerController playerController,
+    ChewieController chewieController,
+    Duration duration,
+    double currentValue,
+    Duration position,
+  ) {
     return AnimatedOpacity(
       opacity: _showControls ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 300),
@@ -270,7 +295,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
             children: [
               _topControls(context, playerController),
               _centerControls(context, playerController, chewieController),
-              _bottomControls(context, playerController, chewieController, duration, currentValue, position),
+              _bottomControls(context, playerController, chewieController,
+                  duration, currentValue, position),
             ],
           ),
         ),
@@ -278,7 +304,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
     );
   }
 
-  Widget _topControls(BuildContext context, VideoPlayerController playerController) {
+  Widget _topControls(
+      BuildContext context, VideoPlayerController playerController) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -289,7 +316,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
               children: [
                 const Icon(Icons.speed, color: Colors.white),
                 const SizedBox(width: 4),
-                Text('${_currentPlaybackSpeed}x', style: const TextStyle(color: Colors.white)),
+                Text('${_currentPlaybackSpeed}x',
+                    style: const TextStyle(color: Colors.white)),
               ],
             ),
             onSelected: (value) {
@@ -309,10 +337,10 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
   }
 
   Widget _centerControls(
-      BuildContext context,
-      VideoPlayerController playerController,
-      ChewieController chewieController,
-      ) {
+    BuildContext context,
+    VideoPlayerController playerController,
+    ChewieController chewieController,
+  ) {
     final hasPrevious = widget.hasPrevious();
     final hasNext = widget.hasNext();
 
@@ -327,8 +355,11 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               iconSize: 40,
-              icon: Icon(context.isArabic ? Icons.skip_next : Icons.skip_previous,
-                  color: hasPrevious ? Colors.white : Colors.grey.withOpacity(0.5)),
+              icon: Icon(
+                  context.isArabic ? Icons.skip_next : Icons.skip_previous,
+                  color: hasPrevious
+                      ? Colors.white
+                      : Colors.grey.withOpacity(0.5)),
               onPressed: hasPrevious ? widget.onPrevious : null,
             ),
           ),
@@ -350,8 +381,9 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                   _showControls = true;
                   if (!playerController.value.isPlaying) _hideTimer?.cancel();
                 });
-                if (playerController.value.isPlaying && !_isDragging)
+                if (playerController.value.isPlaying && !_isDragging) {
                   _startHideTimer(playerController);
+                }
               },
             ),
           ),
@@ -361,7 +393,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               iconSize: 40,
-              icon: Icon(context.isArabic ? Icons.skip_previous : Icons.skip_next,
+              icon: Icon(
+                  context.isArabic ? Icons.skip_previous : Icons.skip_next,
                   color: hasNext ? Colors.white : Colors.grey.withOpacity(0.5)),
               onPressed: hasNext ? widget.onNext : null,
             ),
@@ -372,13 +405,13 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
   }
 
   Widget _bottomControls(
-      BuildContext context,
-      VideoPlayerController playerController,
-      ChewieController chewieController,
-      Duration duration,
-      double currentValue,
-      Duration position,
-      ) {
+    BuildContext context,
+    VideoPlayerController playerController,
+    ChewieController chewieController,
+    Duration duration,
+    double currentValue,
+    Duration position,
+  ) {
     return Column(
       children: [
         Padding(
@@ -391,15 +424,19 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                   activeTrackColor: Colors.red,
                   inactiveTrackColor: Colors.white.withOpacity(0.3),
                   thumbColor: Colors.red,
-                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+                  thumbShape:
+                      const RoundSliderThumbShape(enabledThumbRadius: 6),
                   overlayColor: Colors.red.withOpacity(0.2),
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
+                  overlayShape:
+                      const RoundSliderOverlayShape(overlayRadius: 14),
                   trackHeight: 3,
                 ),
                 child: Slider(
                   value: currentValue,
                   min: 0.0,
-                  max: duration.inMilliseconds.toDouble() > 0 ? duration.inMilliseconds.toDouble() : 1.0,
+                  max: duration.inMilliseconds.toDouble() > 0
+                      ? duration.inMilliseconds.toDouble()
+                      : 1.0,
                   onChangeStart: (value) async {
                     setState(() {
                       _isDragging = true;
@@ -411,7 +448,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                       await playerController.pause();
                     }
                     if (_previewController != null && _isPreviewReady) {
-                      await _previewController!.seekTo(Duration(milliseconds: value.toInt()));
+                      await _previewController!
+                          .seekTo(Duration(milliseconds: value.toInt()));
                       await _previewController!.setLooping(true);
                     }
                   },
@@ -422,16 +460,19 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                       final box = context.findRenderObject() as RenderBox?;
                       if (box != null) {
                         final width = box.size.width;
-                        final percentage = value / duration.inMilliseconds.toDouble();
+                        final percentage =
+                            value / duration.inMilliseconds.toDouble();
                         _dragPosition = Offset(width * percentage, 0);
                       }
                     });
                     if (_previewController != null && _isPreviewReady) {
-                      await _previewController!.seekTo(Duration(milliseconds: value.toInt()));
+                      await _previewController!
+                          .seekTo(Duration(milliseconds: value.toInt()));
                     }
                   },
                   onChangeEnd: (value) async {
-                    await playerController.seekTo(Duration(milliseconds: value.toInt()));
+                    await playerController
+                        .seekTo(Duration(milliseconds: value.toInt()));
                     if (chewieController.isPlaying) {
                       await playerController.play();
                     }
@@ -452,7 +493,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
               ),
               if (_isDragging && _dragPosition != null && _isPreviewReady)
                 Positioned(
-                  left: (_dragPosition!.dx - 60).clamp(0.0, MediaQuery.of(context).size.width - 120),
+                  left: (_dragPosition!.dx - 60)
+                      .clamp(0.0, MediaQuery.of(context).size.width - 120),
                   top: -100,
                   child: Material(
                     elevation: 8,
@@ -463,7 +505,8 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withOpacity(0.6), width: 2),
+                        border: Border.all(
+                            color: Colors.white.withOpacity(0.6), width: 2),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -477,13 +520,15 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
                               top: 4,
                               right: 4,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: Colors.black.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  _formatDuration(Duration(milliseconds: _dragValue.toInt())),
+                                  _formatDuration(Duration(
+                                      milliseconds: _dragValue.toInt())),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 11,
@@ -515,18 +560,23 @@ class _CustomVideoControlsState extends State<CustomVideoControls>
               const Spacer(),
               IconButton(
                 icon: Icon(
-                  playerController.value.volume > 0 ? Icons.volume_up : Icons.volume_off,
+                  playerController.value.volume > 0
+                      ? Icons.volume_up
+                      : Icons.volume_off,
                   color: Colors.white,
                   size: 24,
                 ),
                 onPressed: () {
-                  playerController.setVolume(playerController.value.volume > 0 ? 0.0 : 1.0);
+                  playerController
+                      .setVolume(playerController.value.volume > 0 ? 0.0 : 1.0);
                   setState(() {});
                 },
               ),
               IconButton(
                 icon: Icon(
-                  chewieController.isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                  chewieController.isFullScreen
+                      ? Icons.fullscreen_exit
+                      : Icons.fullscreen,
                   color: Colors.white,
                   size: 24,
                 ),

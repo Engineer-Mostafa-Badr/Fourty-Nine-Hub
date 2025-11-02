@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/extensions/string_extension.dart';
 import '../controller/club_voice_bloc.dart';
-import '../widgets/zego_audio_room_widget.dart';
 // import '../../../live_streaming/presentation/widgets/components/zego_uikit/src/services/uikit_service.dart';
 import 'package:go_router/go_router.dart';
 
@@ -97,7 +96,7 @@ class AudioStreamScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-      ManageVibration.vibrate();
+                        ManageVibration.vibrate();
                         isHost
                             ? _endRoom(context)
                             : context.read<ClubVoiceCubit>().leaveRoom(liveId);

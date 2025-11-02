@@ -1,28 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/banner.dart';
 import 'package:fourtyninehub/core/widget/olx_pagination/olx_pagination_widget.dart';
-import '../../../../../../core/extensions/string_extension.dart';
-import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../data/models/comment_model.dart';
 import '../../../domain/usecases/add_reply_usecase.dart';
 import '../../cubit/social_posts_cubit.dart';
 import '../../../../twitter/domain/entities/twitter_user_entity.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
-import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
-import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
-import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
 import 'comment_card.dart';
@@ -61,7 +51,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       final user = context.read<UserCubit>().state.data;
-      if(controller.loadPostComments){
+      if (controller.loadPostComments) {
         return Center(
           child: CustomCircularProgressIndicator(),
         );
@@ -82,18 +72,20 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         // ),
         body: Column(
           children: [
-            Expanded(child: OlxPaginationWidget(
+            Expanded(
+                child: OlxPaginationWidget(
               scrollController: ScrollController(),
               itemsPerPage: 2,
               loadPage: (page) async {
                 {
-                  controller.getPostComments(context: context,postId: widget.postId);
+                  controller.getPostComments(
+                      context: context, postId: widget.postId);
                 }
               },
               banners: bannersList,
               items: List.generate(
                 controller.postComments.length,
-                    (index) {
+                (index) {
                   return BlocConsumer<SocialPostsCubit, SocialPostsState>(
                     listener: (context, state) {},
                     builder: (context, state) {
@@ -102,7 +94,8 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         onDeleteComment: (String id) async {
                           var result = await widget.onDeleteComment(id);
                           if (result == true) {
-                            controller.postComments.removeWhere((e) => e.id == id);
+                            controller.postComments
+                                .removeWhere((e) => e.id == id);
                             setState(() {});
                           }
                         },
@@ -117,7 +110,9 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               margin: const EdgeInsets.only(top: 12),
               decoration: BoxDecoration(
-                color: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.grey.shade200, // Light background like Facebook
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : Colors.grey.shade200, // Light background like Facebook
                 borderRadius: BorderRadius.circular(25), // Fully rounded
               ),
               child: Row(
@@ -136,16 +131,21 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                       maxLines: null,
                       style: const TextStyle(fontSize: 15),
                       decoration: InputDecoration(
-                        hintText: context.isArabic?'اكتب تعليق...':'Write a comment...',
+                        hintText: context.isArabic
+                            ? 'اكتب تعليق...'
+                            : 'Write a comment...',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                        fillColor: context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.grey.shade200,
+                        fillColor: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.grey.shade200,
                         border: InputBorder.none, // Removes border
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         focusedErrorBorder: InputBorder.none,
                         isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal:8),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                       ),
                       onChanged: (_) => setState(() {}),
                     ),
@@ -194,7 +194,11 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
                         FocusScope.of(context).unfocus();
                         setState(() {});
                       },
-                      child: Icon(Icons.send, size: 25, color: context.isDarkMode?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR),
+                      child: Icon(Icons.send,
+                          size: 25,
+                          color: context.isDarkMode
+                              ? AppColors.SECONDARY_COLOR
+                              : AppColors.PRIMARY_COLOR),
                     ),
                 ],
               ),
@@ -224,7 +228,6 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
             onEditComment: (PostCommentParams params) =>
                 widget.onEditComment(params),
           ),
-
         ],
       ),
     );

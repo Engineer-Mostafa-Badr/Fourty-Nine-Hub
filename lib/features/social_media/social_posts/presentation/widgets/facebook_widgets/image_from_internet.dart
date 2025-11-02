@@ -6,8 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 
-import '../../../../../../res/style/const.dart';
-
 class ImageFromInternet extends StatelessWidget {
   const ImageFromInternet({
     super.key,

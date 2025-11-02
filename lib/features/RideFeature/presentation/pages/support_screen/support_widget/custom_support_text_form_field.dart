@@ -10,13 +10,23 @@ class CustomSupportTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Function(String?) validator;
 
-  const CustomSupportTextField({Key? key, required this.hintText, this.labelText, required this.controller, required this.validator, this.enabled, this.keyboardType, this.inputFormatters}) : super(key: key);
+  const CustomSupportTextField(
+      {super.key,
+      required this.hintText,
+      this.labelText,
+      required this.controller,
+      required this.validator,
+      this.enabled,
+      this.keyboardType,
+      this.inputFormatters});
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final Color borderColor = isDarkMode ? Colors.grey.shade900 : Colors.grey.shade100;
-    final Color fillColor = isDarkMode ? Colors.grey.shade900 : Colors.grey.shade100;
+    final Color borderColor =
+        isDarkMode ? Colors.grey.shade900 : Colors.grey.shade100;
+    final Color fillColor =
+        isDarkMode ? Colors.grey.shade900 : Colors.grey.shade100;
     final Color textColor = isDarkMode ? Colors.white : Colors.black;
 
     return TextFormField(
@@ -29,7 +39,8 @@ class CustomSupportTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
-        hintStyle: TextStyle(color: isDarkMode ? Colors.grey.shade500 : Colors.grey.shade600),
+        hintStyle: TextStyle(
+            color: isDarkMode ? Colors.grey.shade500 : Colors.grey.shade600),
         filled: true,
         fillColor: fillColor,
         border: OutlineInputBorder(
@@ -49,7 +60,6 @@ class CustomSupportTextField extends StatelessWidget {
     );
   }
 }
-
 
 // class CustomSupportTextField extends StatelessWidget {
 //   final String hintText;

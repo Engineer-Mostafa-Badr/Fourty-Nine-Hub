@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
@@ -22,7 +19,12 @@ import 'package:lottie/lottie.dart';
 
 class BuildReactionsButtons extends StatefulWidget {
   const BuildReactionsButtons(
-      {super.key, required this.post, required this.from,this.handleReaction,this.showIcon=true,this.showTitle});
+      {super.key,
+      required this.post,
+      required this.from,
+      this.handleReaction,
+      this.showIcon = true,
+      this.showTitle});
   final dynamic post;
   final String from;
   final bool? showTitle;
@@ -59,7 +61,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
           boxRadius: 10,
           onReactionChanged: (Reaction<String>? reaction) async {
             ManageVibration.vibrate();
-            if(!context.read<UserCubit>().isLoggedIn){
+            if (!context.read<UserCubit>().isLoggedIn) {
               pleaseLoginDialog(context);
               return;
             }
@@ -74,7 +76,6 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
             icon: _buildReactionPlaceholder(),
           ),
           itemsSpacing: 0,
-
           itemSize: const Size(40, 40),
           reactions: context.isArabic
               ? _buildReactionsEnList()
@@ -91,7 +92,9 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
 
   Future<void> _handleReactionChange(
       Reaction<String> reaction, SocialPostsCubit controller) async {
-    if(widget.handleReaction!=null)widget.handleReaction!(reaction.value??'');
+    if (widget.handleReaction != null) {
+      widget.handleReaction!(reaction.value ?? '');
+    }
     if ((reaction.value == 'like' || reaction.value == 'likes') &&
         widget.post.isLikes == false) {
       var response = widget.from == 'posts' || widget.from == 'userPosts'
@@ -262,12 +265,12 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     bool? isAngry,
   }) {
     setState(() {
-      widget.post.isLikes=false;
-      widget.post.isHaha=false;
-      widget.post.isLove=false;
-      widget.post.isWow=false;
-      widget.post.isSad=false;
-      widget.post.isAngry=false;
+      widget.post.isLikes = false;
+      widget.post.isHaha = false;
+      widget.post.isLove = false;
+      widget.post.isWow = false;
+      widget.post.isSad = false;
+      widget.post.isAngry = false;
     });
     setState(() {
       if (isLikes != null) {
@@ -406,24 +409,35 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        (widget.showIcon==false && from == 'view')?SizedBox():SizedBox(
-          height: from == 'view' ? 28 : 28,
-          width: from == 'view' ? 28 : 28,
-          child: from == 'view'
-              ? Image.asset(
-                  item.imageAsset(),
-                  fit: BoxFit.fill,
-              // color: context.isDarkMode?Colors.white:null
-                )
-              : Lottie.asset(
-                  item.lottieAsset(),
-                  fit: BoxFit.fill,
-                  onLoaded: (loaded) {},
-                ),
-        ),
-        if ((widget.from == 'posts' && from == 'view')||(widget.showTitle==true&& from == 'view')) ...[
-          Label(text: name, style: Styles.mediumText(color:item.name=='like'?AppColors.c3897F0:(item.name=='wow'||item.name=='haha'||item.name=='sad')?AppColors.ACCENT_COLOR:AppColors.SECONDARY_COLOR)
-          ),
+        (widget.showIcon == false && from == 'view')
+            ? SizedBox()
+            : SizedBox(
+                height: from == 'view' ? 28 : 28,
+                width: from == 'view' ? 28 : 28,
+                child: from == 'view'
+                    ? Image.asset(
+                        item.imageAsset(),
+                        fit: BoxFit.fill,
+                        // color: context.isDarkMode?Colors.white:null
+                      )
+                    : Lottie.asset(
+                        item.lottieAsset(),
+                        fit: BoxFit.fill,
+                        onLoaded: (loaded) {},
+                      ),
+              ),
+        if ((widget.from == 'posts' && from == 'view') ||
+            (widget.showTitle == true && from == 'view')) ...[
+          Label(
+              text: name,
+              style: Styles.mediumText(
+                  color: item.name == 'like'
+                      ? AppColors.c3897F0
+                      : (item.name == 'wow' ||
+                              item.name == 'haha' ||
+                              item.name == 'sad')
+                          ? AppColors.ACCENT_COLOR
+                          : AppColors.SECONDARY_COLOR)),
         ],
       ],
     );
@@ -433,12 +447,16 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if(widget.showIcon==true)...[SvgPicture.asset(Assets.likeIcon,color:context.isDarkMode?AppColors.whiteColor:null),
-        SizedBox(width: 8.w)], // Space between icon and text
+        if (widget.showIcon == true) ...[
+          SvgPicture.asset(Assets.likeIcon,
+              // ignore: deprecated_member_use
+              color: context.isDarkMode ? AppColors.whiteColor : null),
+          SizedBox(width: 8.w)
+        ], // Space between icon and text
         Label(
           text: "${LocaleKeys.like.localize}.",
           style: TextStyle(
-              color:AppColors.getTextColor(context),
+              color: AppColors.getTextColor(context),
               fontSize: 14,
               fontWeight: FontWeight.w400),
         ),

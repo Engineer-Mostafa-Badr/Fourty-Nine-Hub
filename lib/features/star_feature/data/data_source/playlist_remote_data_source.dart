@@ -1,10 +1,8 @@
-import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import '../../domain/entity/playlist_entity.dart';
-import '../../domain/repository/playlist_repository.dart';
 import '../model/playlist_model.dart';
 
 abstract class PlaylistRemoteDataSource {

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
@@ -46,7 +45,7 @@ class TripJoinBottomSection extends StatefulWidget {
 class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
   String convertDigits(String input, {required bool toArabic}) {
     const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const arabic  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
     for (int i = 0; i < 10; i++) {
       input = input.replaceAll(
@@ -60,7 +59,7 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
         color: AppColors.getFillColor(context),
         borderRadius: BorderRadius.circular(15),
@@ -89,7 +88,8 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                             child: Text(
                               // "${expectedPriceTripEntity?.distance ?? 0} ${LocaleKeys.KM.tr()}",
                               widget.formatDistance(
-                                  widget.expectedPriceTripEntity?.distance ?? 0),
+                                  widget.expectedPriceTripEntity?.distance ??
+                                      0),
                               style: Styles.headerText(
                                   color: AppColors.getTextColor(context)),
                               overflow: TextOverflow.ellipsis,
@@ -136,7 +136,9 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                     ),
                   ],
                 ),
-                const Sizer(height: 8,),
+                const Sizer(
+                  height: 8,
+                ),
                 Row(
                   children: [
                     /// LEFT SIDE: Time Picker
@@ -165,7 +167,7 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                             child: Text(
                               widget.getTime(),
                               style: Styles.headerText(
-                                fontSize: 32,
+                                  fontSize: 32,
                                   color: AppColors.getTextColor(context)),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -215,7 +217,9 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                     ),
                   ],
                 ),
-                const Sizer(height: 8,),
+                const Sizer(
+                  height: 8,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -236,22 +240,23 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                             value: widget.selectedSeatNum,
                             isDense: true,
                             icon: const Icon(Icons.keyboard_arrow_down),
-
                             items: [1, 2, 3, 4, 5, 6].map((e) {
-                              final locale = Localizations.localeOf(context).languageCode;
+                              final locale =
+                                  Localizations.localeOf(context).languageCode;
                               final isArabic = context.isArabic;
-                              final displayNumber = convertDigits(e.toString(), toArabic: isArabic);
+                              final displayNumber = convertDigits(e.toString(),
+                                  toArabic: isArabic);
 
                               return DropdownMenuItem<int>(
                                 alignment: Alignment.center,
                                 value: e,
                                 child: Text(
                                   displayNumber,
-                                  style: TextStyle(color: AppColors.getTextColor(context)),
+                                  style: TextStyle(
+                                      color: AppColors.getTextColor(context)),
                                 ),
                               );
                             }).toList(),
-
                             onChanged: widget.onSeatNumChanged,
                           ),
                           const SizedBox(width: 8),
@@ -321,7 +326,6 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                               ),
                             ],
                           ),
-
                         ],
                       ),
                     ),

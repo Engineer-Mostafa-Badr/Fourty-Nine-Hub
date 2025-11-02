@@ -29,7 +29,7 @@ class RegisterExpansionTile extends StatefulWidget {
 }
 
 class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
-  var controller = ExpansionTileController();
+  var controller = ExpansibleController();
   late Widget selectedTitle;
 
   @override
@@ -43,13 +43,15 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
+        color:
+            context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
       ),
       child: ExpansionTile(
         controller: controller,
         title: selectedTitle, // Use state variable
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
+        backgroundColor:
+            context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         dense: true,
@@ -61,38 +63,46 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
           ),
           Container(
             constraints: const BoxConstraints(maxHeight: 250),
-            child: widget.children.isNotEmpty?ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: List.generate(
-                widget.children.length,
-                    (index) => InkWell(
-                  onTap: () {
-      ManageVibration.vibrate();
-                    if (widget.children.isNotEmpty) {
-                      setState(() {
-                        selectedTitle = widget.children[index]; // Update state
-                        controller.collapse();
-                      });
+            child: widget.children.isNotEmpty
+                ? ListView(
+                    padding: const EdgeInsets.all(16.0),
+                    children: List.generate(
+                      widget.children.length,
+                      (index) => InkWell(
+                        onTap: () {
+                          ManageVibration.vibrate();
+                          if (widget.children.isNotEmpty) {
+                            setState(() {
+                              selectedTitle =
+                                  widget.children[index]; // Update state
+                              controller.collapse();
+                            });
 
-                      if (widget.onChange != null) {
-                        widget.onChange!(widget.children[index]); // Notify parent
-                        if (widget.onSelect != null) {
-                          widget.onSelect!(index);
-                        }
-                      }
-                    }
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    width: double.infinity,
-                    height: 30,
-                    child: widget.children[index],
+                            if (widget.onChange != null) {
+                              widget.onChange!(
+                                  widget.children[index]); // Notify parent
+                              if (widget.onSelect != null) {
+                                widget.onSelect!(index);
+                              }
+                            }
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          width: double.infinity,
+                          height: 30,
+                          child: widget.children[index],
+                        ),
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: CustomEmptyWidget(
+                        label: widget.emptyText ??
+                            (context.isArabic
+                                ? 'لا يوجد نتائج'
+                                : 'No results found')),
                   ),
-                ),
-              ),
-            ):Center(
-              child: CustomEmptyWidget(label: widget.emptyText??(context.isArabic?'لا يوجد نتائج':'No results found')),
-            ),
           ),
         ],
       ),

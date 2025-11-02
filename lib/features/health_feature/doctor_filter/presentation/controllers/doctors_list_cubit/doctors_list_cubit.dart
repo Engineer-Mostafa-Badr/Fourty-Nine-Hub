@@ -231,10 +231,12 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
         final List<MostBookingEntity> filtered = data.where((doctor) {
           final docGovId = doctor.address?.governorate?.id ?? '';
           final docCityId = doctor.address?.city?.id ?? '';
-          if (selectedGovId.isNotEmpty && docGovId != selectedGovId)
+          if (selectedGovId.isNotEmpty && docGovId != selectedGovId) {
             return false;
-          if (selectedCityId.isNotEmpty && docCityId != selectedCityId)
+          }
+          if (selectedCityId.isNotEmpty && docCityId != selectedCityId) {
             return false;
+          }
           return true;
         }).toList();
 
@@ -458,10 +460,12 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
         final List<MostBookingEntity> filtered = data.where((doctor) {
           final docGovId = doctor.address?.governorate?.id ?? '';
           final docCityId = doctor.address?.city?.id ?? '';
-          if (selectedGovId.isNotEmpty && docGovId != selectedGovId)
+          if (selectedGovId.isNotEmpty && docGovId != selectedGovId) {
             return false;
-          if (selectedCityId.isNotEmpty && docCityId != selectedCityId)
+          }
+          if (selectedCityId.isNotEmpty && docCityId != selectedCityId) {
             return false;
+          }
           return true;
         }).toList();
 

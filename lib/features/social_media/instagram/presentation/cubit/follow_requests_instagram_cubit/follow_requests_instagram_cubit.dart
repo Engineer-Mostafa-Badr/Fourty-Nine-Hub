@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/data_suggest_follow_instagram_entity.dart';
 import '../../../domain/usecases/get_suggest_follow_instagram_use_case.dart';
-import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 

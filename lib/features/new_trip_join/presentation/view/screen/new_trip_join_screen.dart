@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/new_trip_join_body.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
 
 class NewTripJoinScreen extends StatefulWidget {

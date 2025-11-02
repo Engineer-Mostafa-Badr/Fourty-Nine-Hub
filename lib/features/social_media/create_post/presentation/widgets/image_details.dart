@@ -5,7 +5,6 @@ import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_i
 import '../../../../../res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../helpers/manage_vibration.dart';
 
 class ImageDetailsScreen extends StatefulWidget {
   const ImageDetailsScreen({

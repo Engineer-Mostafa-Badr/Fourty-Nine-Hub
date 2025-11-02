@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/spot_light/presentation/logi
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_stories.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 

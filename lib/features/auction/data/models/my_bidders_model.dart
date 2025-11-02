@@ -3,28 +3,17 @@ import '../../domain/entities/my_bidders_entity.dart';
 
 class MyBiddersModel extends MyBiddersEntity {
   const MyBiddersModel({
-    String? winnerId,
-    String? username,
-    num? price,
-    String? gender,
-    String? email,
-    String? phone,
-    String? auctionTitle,
-    String? auctionId,
-    String? subscriptionType,
-    int? views,
-  }) : super(
-    winnerId: winnerId,
-    username: username,
-    price: price,
-    gender: gender,
-    email: email,
-    phone: phone,
-    auctionTitle: auctionTitle,
-    auctionId: auctionId,
-    subscriptionType: subscriptionType,
-    views: views,
-  );
+    super.winnerId,
+    super.username,
+    super.price,
+    super.gender,
+    super.email,
+    super.phone,
+    super.auctionTitle,
+    super.auctionId,
+    super.subscriptionType,
+    super.views,
+  });
 
   factory MyBiddersModel.fromJson(Map<String, dynamic> json) {
     return MyBiddersModel(

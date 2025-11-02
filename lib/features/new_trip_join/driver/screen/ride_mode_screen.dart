@@ -10,7 +10,6 @@ import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dar
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/controllers/captain_share_dashboard_cubit/captain_share_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/widget/trip_join_sliders.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
@@ -76,7 +75,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
   @override
   initState() {
     if (context.read<UserCubit>().isLoggedIn) {
-    context.read<CaptainShareDashboardCubit>().initData();
+      context.read<CaptainShareDashboardCubit>().initData();
     }
     super.initState();
   }
@@ -140,9 +139,7 @@ class _RideModeTabsState extends State<RideModeTabs> {
             const SizedBox(
               height: 10,
             ),
-            Flexible(
-                fit: FlexFit.loose,
-                child: TripJoinSliders())
+            Flexible(fit: FlexFit.loose, child: TripJoinSliders())
           ],
         );
       },
@@ -176,38 +173,42 @@ class RideModeButton extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap:!context.read<UserCubit>().isLoggedIn?
-    ()=>pleaseLoginDialog(context): hasActiveTrip
-              ? () {
-                  showErrorMessage(
-                      context,
-                      context.isArabic
-                          ? 'برجاء اكمال الرحله الجاريه في توصيله اولا'
-                          : 'Please complete the running trip at ride first');
-                }
-              : isRegistered == false
-                  ? () async {
-                      await context.push(Routes.welcomeRideRegister,
-                          extra: false);
-                      if (onRefreshSettings != null) onRefreshSettings!();
+          onTap: !context.read<UserCubit>().isLoggedIn
+              ? () => pleaseLoginDialog(context)
+              : hasActiveTrip
+                  ? () {
+                      showErrorMessage(
+                          context,
+                          context.isArabic
+                              ? 'برجاء اكمال الرحله الجاريه في توصيله اولا'
+                              : 'Please complete the running trip at ride first');
                     }
-                  : (isApproved == false)
+                  : isRegistered == false
                       ? () async {
-                          await context.push(Routes.RIDE_HOME);
+                          await context.push(Routes.welcomeRideRegister,
+                              extra: false);
                           if (onRefreshSettings != null) onRefreshSettings!();
                         }
-                      : (isReady == false || isCaptain == false)
+                      : (isApproved == false)
                           ? () async {
-                              await context.push(Routes.rideModeScreen,
-                                  extra: const RideModeParams(
-                                      modeType: 'ride',
-                                      isSocket: true,
-                                      currentIndex: 3));
-
-                              if (onRefreshSettings != null)
+                              await context.push(Routes.RIDE_HOME);
+                              if (onRefreshSettings != null) {
                                 onRefreshSettings!();
+                              }
                             }
-                          : onTap,
+                          : (isReady == false || isCaptain == false)
+                              ? () async {
+                                  await context.push(Routes.rideModeScreen,
+                                      extra: const RideModeParams(
+                                          modeType: 'ride',
+                                          isSocket: true,
+                                          currentIndex: 3));
+
+                                  if (onRefreshSettings != null) {
+                                    onRefreshSettings!();
+                                  }
+                                }
+                              : onTap,
           child: Container(
             margin: EdgeInsets.all(5.w),
             width: double.infinity,

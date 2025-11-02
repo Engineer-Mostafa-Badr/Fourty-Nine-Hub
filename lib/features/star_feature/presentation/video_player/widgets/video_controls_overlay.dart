@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import '../../../../../helpers/manage_vibration.dart';
 
 /// Video player controls overlay

@@ -34,7 +34,6 @@ import '../../domain/entity/chance_ad_entity.dart';
 import '../../domain/use_case/join_chance_ad_use_case.dart';
 import '../../../../common/models/public/pagination_params.dart';
 
-import '../widgets/floating_action_button_widget.dart';
 import 'chance_detail_view.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';

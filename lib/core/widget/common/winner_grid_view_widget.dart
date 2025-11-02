@@ -166,7 +166,7 @@ class WinnerGridViewWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '${LocaleKeys.rating.localize}',
+            LocaleKeys.rating.localize,
             style: TextStyle(
               fontSize: 12,
               color: Colors.white70,

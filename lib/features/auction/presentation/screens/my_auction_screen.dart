@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
@@ -15,12 +14,9 @@ import '../../../../core/widget/custom_circular_progress_indicator.dart';
 import '../../../../core/widget/olx_pagination/banner.dart';
 import '../../../../core/widget/olx_pagination/olx_pagination_widget.dart';
 import '../../../../helpers/manage_vibration.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../subcategories/presentation/widgets/floating_add_button.dart';
 import '../cubit/auction_cubit.dart';
-import 'create_auction_screen.dart';
 class MyAuctionScreen extends StatefulWidget {
   const MyAuctionScreen({super.key});
 
