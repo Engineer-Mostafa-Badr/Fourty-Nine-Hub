@@ -1,34 +1,29 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/extensions/context_extension.dart';
-import '../../../../../core/extensions/string_extension.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/states/basic_state.dart';
-import '../../../../authentication/domain/entities/user_entity.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../instagram/presentation/cubit/instagram_cubit.dart';
-import '../../../instagram/presentation/pages/instgram_view.dart';
 import '../../../twitter/presentation/twitter/presentation/pages/twitter_view.dart';
-import '../widgets/facebook_widgets/build_facebook_body.dart';
-import '../widgets/facebook_widgets/build_global_facebook_body.dart';
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+// ignore: library_prefixes
+import '../../../../../helpers/manage_vibration.dart' as manageVibration;
+import '../../../../authentication/domain/entities/user_entity.dart';
+import '../../../instagram/presentation/cubit/instagram_cubit.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../instagram/presentation/pages/instgram_view.dart';
 import '../../../stories/presentation/cubit/stories_cubit.dart';
-import '../../../../../res/assets/assets.dart';
+import '../../../../../core/extensions/context_extension.dart';
+import '../widgets/facebook_widgets/build_facebook_body.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../common/widgets/dynamic/drawer.dart';
+import '../../../../../core/states/basic_state.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../res/assets/assets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../../common/widgets/dialogs/please_login_dialog.dart';
-import '../../../../../common/widgets/dynamic/drawer.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../widgets/posts/create_post_banner.dart';
-import '../../../../../helpers/manage_vibration.dart' as manageVibration;
+import 'package:flutter/rendering.dart';
+import 'package:flutter/material.dart';
 
 class SocialParams {
   final String userId;
@@ -42,6 +37,7 @@ class SocialParams {
   });
 }
 
+// ignore: must_be_immutable
 class SocialHomeView extends StatefulWidget {
   SocialParams? params;
 
@@ -297,30 +293,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
     );
   }
 
-  Widget _buildGuestFacebookView() {
-    return NestedAppbar(
-      scrollController: ScrollController(),
-      appBars: [
-        SliverAppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          automaticallyImplyLeading: false,
-          floating: true,
-          pinned: true,
-          flexibleSpace: const CreatePostBanner(),
-        ),
-        SliverAppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          automaticallyImplyLeading: false,
-          pinned: true,
-          flexibleSpace: _buildNestedTabBar(),
-        )
-      ],
-      body: FacebookGlobalBody(
-        scrollController: scrollController,
-      ),
-    );
-  }
-
   Widget _buildInstagramTab() {
     return MultiBlocProvider(
       providers: [
@@ -360,67 +332,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
       }
     }
     return false;
-  }
-
-  Widget _buildNestedTabBar() {
-    final user = context.read<UserCubit>().state.data;
-    return Container(
-      padding: EdgeInsets.all(10.r),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(2, (i) => _buildNestedTabItem(i, user)),
-      ),
-    );
-  }
-
-  Widget _buildNestedTabItem(int index, UserEntity? user) {
-    final isSelected = index == 0;
-    return GestureDetector(
-      onTap: () {
-        manageVibration.ManageVibration.vibrate();
-        if (index == 1) {
-          context.read<UserCubit>().isLoggedIn
-              ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
-              : pleaseLoginDialog(context);
-        }
-      },
-      child: Container(
-        decoration: isSelected
-            ? BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Theme.of(context).primaryColor,
-                    width: 2,
-                  ),
-                ),
-              )
-            : null,
-        child: Row(
-          children: [
-            Icon(
-              index == 0 ? Icons.home : Icons.person,
-              color: isSelected ? Theme.of(context).primaryColor : Colors.grey,
-              size: 40.w,
-            ),
-            SizedBox(width: 8.w),
-            Label(
-              text: index == 0
-                  ? LocaleKeys.home.localize
-                  : LocaleKeys.profile.localize,
-              style: Styles.headerText(
-                color:
-                    isSelected ? Theme.of(context).primaryColor : Colors.grey,
-                fontSize: 30,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  bool _shouldShowFloatingButton() {
-    return !_isScrollingDown && widget.params?.hideAppBar != true;
   }
 
   @override

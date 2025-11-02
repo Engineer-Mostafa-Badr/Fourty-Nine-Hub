@@ -71,8 +71,8 @@ class _FacebookBodyState extends State<FacebookBody>
               controller: tabController,
               padding: EdgeInsets.zero,
               labelPadding: EdgeInsets.zero,
-              onTap: (i){
-                if(i==0){
+              onTap: (i) {
+                if (i == 0) {
                   context.read<SocialPostsCubit>().loadData();
                 }
               },
@@ -86,6 +86,7 @@ class _FacebookBodyState extends State<FacebookBody>
                           Assets.home,
                           width: 30.h,
                           height: 30.h,
+                          // ignore: deprecated_member_use
                           color: tabController.index == 0
                               ? AppColors.getButtonPrimaryWhiteColor(context)
                               : AppColors.grey,
@@ -111,6 +112,7 @@ class _FacebookBodyState extends State<FacebookBody>
                           Assets.people,
                           width: 30.h,
                           height: 30.h,
+                          // ignore: deprecated_member_use
                           color: tabController.index == 1
                               ? AppColors.getButtonPrimaryWhiteColor(context)
                               : AppColors.grey,
@@ -136,6 +138,7 @@ class _FacebookBodyState extends State<FacebookBody>
                           Assets.profile,
                           width: 30.h,
                           height: 30.h,
+                          // ignore: deprecated_member_use
                           color: tabController.index == 2
                               ? AppColors.getButtonPrimaryWhiteColor(context)
                               : AppColors.grey,

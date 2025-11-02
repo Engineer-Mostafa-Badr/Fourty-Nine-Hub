@@ -10,17 +10,14 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
-import 'package:fourtyninehub/core/utils/whatsapp_notification_utils.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/live_gift_effects/presentation/pages/gift_effects_demo_page.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
-import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -113,17 +110,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 );
                 return;
-                await WhatsAppNotificationUtils.showWhatsAppMessage(
-                  senderName: 'Mohamed',
-                  message: 'Hello! How are you?',
-                  senderAvatar:
-                      'https://images.pexels.com/photos/34205159/pexels-photo-34205159.jpeg', // Optional
-                  useCollapsedIcon: true,
-                );
-                await WhatsAppNotificationUtils.showNoInternetNotification(
-                    title: 'CHAT',
-                    message: 'You may have new messages',
-                    isPersistent: true);
                 // bool isCustomPage = await CacheManager.getActivation() ?? false;
                 // if (isCustomPage) {
                 //   if (!isCurrentRoute(context, Routes.HOME)) {
@@ -300,8 +286,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isMenu)
             ClickableWidget(
               onTap: () {
-                var currentContext =
-                    AppPages.router.configuration.navigatorKey.currentContext!;
                 ManageVibration.vibrate();
                 HandleCashback.setCount('drawerCount', context);
                 Scaffold.of(context).openDrawer();
@@ -310,6 +294,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 padding: const EdgeInsetsDirectional.only(end: 12),
                 child: SvgPicture.asset(
                   Assets.menuSvg,
+                  // ignore: deprecated_member_use
                   color: context.isDarkMode
                       ? Colors.white
                       : AppColors.PRIMARY_COLOR,

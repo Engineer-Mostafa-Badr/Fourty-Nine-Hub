@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -22,11 +21,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../../helpers/manage_vibration.dart';
 import '../../../../RideFeature/presentation/pages/gmap_search_and_pick.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../social_posts/presentation/pages/social_home.dart';
 import '../../domain/entities/location_instagram_entity.dart';
 import '../cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
 
-class MusicScreenParams{
+class MusicScreenParams {
   final CreatePostInstagramCubit cubit;
   final Function? refreshUI;
   const MusicScreenParams({required this.cubit, this.refreshUI});
@@ -64,8 +63,7 @@ class _CreatePostSecondPageInstagramViewBodyState
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Column(
         children: [
-          Expanded(
-              child: SingleChildScrollView(
+          Expanded(child: SingleChildScrollView(
             child:
                 BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
               // buildWhen: (previous, current) =>
@@ -75,9 +73,9 @@ class _CreatePostSecondPageInstagramViewBodyState
               builder: (context, state) {
                 return Column(
                   children: [
-
                     const Padding(
-                      padding: EdgeInsets.only(right: 8.0, left: 8.0, top: 24.0),
+                      padding:
+                          EdgeInsets.only(right: 8.0, left: 8.0, top: 24.0),
                       child: ShowImagesCreatePostSecond(
                           // selectedImages: selectedImages,
                           ),
@@ -106,7 +104,9 @@ class _CreatePostSecondPageInstagramViewBodyState
                           ? (context.isDarkMode
                               ? const Color(0xffFF4622)
                               : const Color(0xffFF3308))
-                          : (context.isDarkMode ? Colors.white : AppColors.black),
+                          : (context.isDarkMode
+                              ? Colors.white
+                              : AppColors.black),
                       iconAction: state.usersTag.isNotEmpty
                           ? Icons.close_rounded
                           : Icons.arrow_forward_ios_rounded,
@@ -147,25 +147,25 @@ class _CreatePostSecondPageInstagramViewBodyState
                           ? LocaleKeys.addLocation.localize
                           : state.location!.name,
                       labelColor: state.location == null
-                          ? (context.isDarkMode ? Colors.white : AppColors.black)
+                          ? (context.isDarkMode
+                              ? Colors.white
+                              : AppColors.black)
                           : (context.isDarkMode
                               ? const Color(0xffFF4622)
                               : const Color(0xffFF3308)),
                       iconAction: state.location == null
                           ? Icons.arrow_forward_ios_rounded
                           : Icons.close_rounded,
-                onPressedActionButton:(){
-                  ManageVibration.vibrate();
-                  log('onPressedActionButton pressed');
-                  serviceLocator<InstagramAddLocationCubit>()
-                      .removeLocation();
-                  serviceLocator<CreatePostInstagramCubit>()
-                      .removeLocation();
-                  log(state.location?.name ?? 'location is null');
-                  setState(() {
-
-                  });
-                },
+                      onPressedActionButton: () {
+                        ManageVibration.vibrate();
+                        log('onPressedActionButton pressed');
+                        serviceLocator<InstagramAddLocationCubit>()
+                            .removeLocation();
+                        serviceLocator<CreatePostInstagramCubit>()
+                            .removeLocation();
+                        log(state.location?.name ?? 'location is null');
+                        setState(() {});
+                      },
                       onPressed: () {
                         // context.pushNamed(
                         //   Routes.INSTAGRAMADDLOCATION,
@@ -178,12 +178,14 @@ class _CreatePostSecondPageInstagramViewBodyState
                             extra: RideGoogleMapSearchAndPickParams(
                               onPicked: (pickedData) async {
                                 ManageVibration.vibrate();
-                                LocationInstagramEntity selectedPlace = LocationInstagramEntity(
-                                    formattedAddress: pickedData.address,
-                                    name: pickedData.address,
-                                    lat: pickedData.latitude,
-                                    lng: pickedData.longitude);
-                                serviceLocator<CreatePostInstagramCubit>().addLocation(selectedPlace);
+                                LocationInstagramEntity selectedPlace =
+                                    LocationInstagramEntity(
+                                        formattedAddress: pickedData.address,
+                                        name: pickedData.address,
+                                        lat: pickedData.latitude,
+                                        lng: pickedData.longitude);
+                                serviceLocator<CreatePostInstagramCubit>()
+                                    .addLocation(selectedPlace);
                                 context.pop();
                               },
                             ),
@@ -191,7 +193,6 @@ class _CreatePostSecondPageInstagramViewBodyState
                         } else {
                           context.push(Routes.LOGIN);
                         }
-
                       },
                     ),
                     const SizedBox(
@@ -205,35 +206,36 @@ class _CreatePostSecondPageInstagramViewBodyState
                           ? LocaleKeys.addMusic.localize
                           : state.song!.name,
                       labelColor: state.song == null
-                          ? (context.isDarkMode ? Colors.white : AppColors.black)
+                          ? (context.isDarkMode
+                              ? Colors.white
+                              : AppColors.black)
                           : (context.isDarkMode
-                          ? const Color(0xffFF4622)
-                          : const Color(0xffFF3308)),
+                              ? const Color(0xffFF4622)
+                              : const Color(0xffFF3308)),
                       iconAction: state.song == null
                           ? Icons.arrow_forward_ios_rounded
                           : Icons.close_rounded,
-                      onPressedActionButton:(){
+                      onPressedActionButton: () {
                         ManageVibration.vibrate();
                         log('onPressedActionButton pressed');
                         serviceLocator<CreatePostInstagramCubit>()
                             .makeSongNull();
-                        setState(() {
-                        });
+                        setState(() {});
                       },
                       onPressed: () async {
                         context.pushNamed(
                           Routes.INSTAGRAMADDMUSIC,
                           extra: MusicScreenParams(
                             refreshUI: () async {
-                              await serviceLocator<CreatePostInstagramCubit>().refreshUI();
-                              setState(() {
-                              });
+                              await serviceLocator<CreatePostInstagramCubit>()
+                                  .refreshUI();
+                              setState(() {});
                               log('set state called');
                             },
                             cubit: serviceLocator<CreatePostInstagramCubit>(),
                           ),
                         );
-                        },
+                      },
                     ),
                   ],
                 );
@@ -241,7 +243,8 @@ class _CreatePostSecondPageInstagramViewBodyState
             ),
           )),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: AppButton(
               label: LocaleKeys.share.localize,
               height: 51,
@@ -262,10 +265,13 @@ class _CreatePostSecondPageInstagramViewBodyState
                   return;
                 } else {
                   serviceLocator<CreatePostInstagramCubit>().createPost(
-                        caption: captionController.text,
-                      );
+                    caption: captionController.text,
+                  );
                   if (mounted) {
-                    context.go(Routes.SOCIAL, extra: SocialParams(userId: UserCubit.to.state.data?.id ?? '', index: 1));
+                    context.go(Routes.SOCIAL,
+                        extra: SocialParams(
+                            userId: UserCubit.to.state.data?.id ?? '',
+                            index: 1));
                   }
                 }
               },

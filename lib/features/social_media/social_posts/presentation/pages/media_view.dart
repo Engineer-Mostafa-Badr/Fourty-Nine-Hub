@@ -16,6 +16,7 @@ import '../../domain/entities/post_entity.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+// ignore: library_prefixes
 import '../../../../../helpers/manage_vibration.dart' as manageVibration;
 
 class MediaView extends StatefulWidget {
@@ -94,7 +95,7 @@ class _MediaViewState extends State<MediaView> {
                           child: ClipRRect(
                             child: CachedNetworkImage(
                               height: 300.h,
-                              imageUrl: sortedItem.images[0] ?? '',
+                              imageUrl: sortedItem.images[0],
                               fit: BoxFit.fill,
                               placeholder: (context, url) => const Center(
                                 child: CupertinoActivityIndicator(radius: 25),

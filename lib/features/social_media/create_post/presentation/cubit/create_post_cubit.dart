@@ -13,7 +13,7 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../social_posts/presentation/pages/social_home.dart';
 import '../../domain/entities/activity_entity.dart';
 import '../../domain/entities/feeling_entity.dart';
 import '../../domain/entities/life_event_entity.dart';
@@ -262,8 +262,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   void createTwitterPost({
     required BuildContext context,
-  }) async
-  {
+  }) async {
     emit(state.copyWith(status: CreatePostStates.loadingCreatePost));
 
     if (postContentTextController.text.isNotEmpty ||
@@ -299,7 +298,6 @@ class CreatePostCubit extends Cubit<CreatePostState> {
               : 'Post published successfully',
         );
 
-
         onDiscardPost();
 
         context.go(Routes.SOCIAL,
@@ -307,7 +305,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
                 userId: UserCubit.to.state.data?.id ?? '', index: 2));
       });
 
-       // }
+      // }
     }
   }
 

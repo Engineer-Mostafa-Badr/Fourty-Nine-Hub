@@ -26,7 +26,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
+import '../../../../social_media/social_posts/presentation/pages/social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 import '../../../../social_media/twitter/presentation/twitter/presentation/pages/twitter_view.dart';
 
@@ -233,8 +233,7 @@ class _PagePreviewState extends State<PagePreview>
                                   onPressed: () async {
                                     ManageVibration.vibrate();
                                     context
-                                        .read<
-                                        CustomPageCubit>()
+                                        .read<CustomPageCubit>()
                                         .updateActivate(true);
                                     GoRouter.of(context).push(Routes.HOME);
 
@@ -325,8 +324,7 @@ class _PagePreviewState extends State<PagePreview>
                                   onPressed: () async {
                                     ManageVibration.vibrate();
                                     context
-                                        .read<
-                                        CustomPageCubit>()
+                                        .read<CustomPageCubit>()
                                         .updateActivate(true);
                                     GoRouter.of(context).push(Routes.HOME);
                                     // showAnimatedDialog(

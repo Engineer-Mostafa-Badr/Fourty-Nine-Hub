@@ -13,13 +13,15 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
+
+import 'image_from_internet.dart';
 
 class BuildFacebookSuggestPeople extends StatefulWidget {
   const BuildFacebookSuggestPeople({super.key, required this.suggestedFriends});
@@ -162,8 +164,7 @@ class _BuildFacebookSuggestPeopleState
                                           top: Radius.circular(
                                               12), // Rounded top corners
                                         ),
-                                        child:
-                                        ImageFromInternet(
+                                        child: ImageFromInternet(
                                             image: widget
                                                 .suggestedFriends[index]
                                                 .profilePicture,

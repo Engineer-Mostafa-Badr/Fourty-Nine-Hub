@@ -1,22 +1,15 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/extensions/string_extension.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/extensions/string_extension.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../account_taps/lists/domain/entities/user_friend_entity.dart';
-import '../cubit/social_posts_cubit.dart';
-import '../widgets/facebook_widgets/user_image.dart';
-import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
-import '../../../../../service_locator/service_locator.dart';
-import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../helpers/manage_vibration.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../res/style/styles.dart';
+import 'package:go_router/go_router.dart';
+import '../cubit/social_posts_cubit.dart';
+import 'package:flutter/material.dart';
 
 class SearchAppUsers extends StatefulWidget {
   const SearchAppUsers({super.key});
@@ -100,56 +93,6 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
           );
         }),
       ),
-    );
-  }
-
-  Widget _buildListUsersWidget({
-    required PagingController<int, UserFriendEntity> controller,
-  }) {
-    return PagedListView(
-      pagingController: controller,
-      physics:
-          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
-          noItemsFoundIndicatorBuilder: (context) {
-            print(controller.itemList?.length);
-            return Padding(
-                padding: const EdgeInsets.only(top: 200),
-                child: Center(
-                  child: Text(
-                    "No Users",
-                    style: Styles.mediumText(),
-                  ),
-                ));
-          },
-          itemBuilder: (context, item, index) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: InkWell(
-                onTap: () => context.push(Routes.OTHERSACCOUNT, extra: item.id),
-                child: Row(
-                  children: [
-                    UserProfileImage(
-                      accountId: 0,
-                      imageURL: item.image,
-                      userId: '',
-                      fromProfile: true,
-                    ),
-                    const Sizer(),
-                    Expanded(
-                        child:
-                            Label(text: "${item.firstName}\t${item.lastName}")),
-                  ],
-                ),
-              ),
-            );
-          },
-          noMoreItemsIndicatorBuilder: (context) => Container(),
-          firstPageProgressIndicatorBuilder: (context) => Container(
-              margin: const EdgeInsets.only(top: 150),
-              child: const CupertinoActivityIndicator()),
-          newPageProgressIndicatorBuilder: (context) =>
-              const CupertinoActivityIndicator()),
     );
   }
 }

@@ -20,7 +20,7 @@ import '../widgets/build_create_post_header.dart';
 import '../widgets/build_media_card.dart';
 import '../widgets/build_search_friends.dart';
 import '../widgets/build_sheet_item.dart';
-import '../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../social_posts/presentation/pages/social_home.dart';
 import '../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -174,10 +174,8 @@ class _CreatePostViewState extends State<CreatePostView> {
             if (controller.handlePopAction() == true) {
               context.go(Routes.SOCIAL,
                   extra: SocialParams(
-                      userId: UserCubit.to.state.data?.id ?? '', index: 0)
-              );
-            } else
-            {
+                      userId: UserCubit.to.state.data?.id ?? '', index: 0));
+            } else {
               controller.handleBack(context);
             }
           },
@@ -201,7 +199,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         },
                       ),
                       BuildCreatePostHeader(
-                        isTwitter: false,
+                          isTwitter: false,
                           sheetController: sheetController,
                           controller: controller,
                           state: state),

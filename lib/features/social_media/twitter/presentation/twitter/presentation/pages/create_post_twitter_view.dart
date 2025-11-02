@@ -17,7 +17,7 @@ import '../../../../../create_post/presentation/widgets/build_create_post_app_ba
 import '../../../../../create_post/presentation/widgets/build_create_post_header.dart';
 import '../../../../../create_post/presentation/widgets/build_media_card.dart';
 import '../../../../../create_post/presentation/widgets/build_sheet_item.dart';
-import '../../../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../../../social_posts/presentation/pages/social_home.dart';
 import '../../../../../social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:go_router/go_router.dart';

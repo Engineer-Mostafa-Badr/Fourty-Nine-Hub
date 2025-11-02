@@ -456,7 +456,7 @@ import '../features/social_media/instagram/presentation/widgets/tag_user_view.da
 import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
 import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
+import '../features/social_media/social_posts/presentation/pages/social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/social_media/twitter/presentation/twitter/presentation/pages/create_post_twitter_view.dart';

@@ -5,7 +5,7 @@ import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/clickable_widget.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../social_posts/presentation/pages/Social_home.dart';
+import '../../../social_posts/presentation/pages/social_home.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';

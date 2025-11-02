@@ -1,25 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../../../common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
+import '../../../../twitter/domain/entities/twitter_user_entity.dart';
+import '../../../../create_post/domain/entities/activity_entity.dart';
+import '../../../../create_post/domain/entities/feeling_entity.dart';
 import '../../../../../../core/extensions/context_extension.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/widget/clickable_widget.dart';
-import '../../../../create_post/domain/entities/activity_entity.dart';
-import '../../../../create_post/domain/entities/feeling_entity.dart';
-import '../../../data/models/location_model.dart';
-import 'build_gradient_border.dart';
-import 'image_from_internet.dart';
-import '../posts/build_with_users.dart';
-import '../../../../twitter/domain/entities/twitter_user_entity.dart';
-import '../../../../../../res/assets/assets.dart';
+import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../res/style/app_colors.dart';
+import '../../../data/models/location_model.dart';
+import '../../../../../../res/assets/assets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/helpers/manage_vibration.dart';
+import '../posts/build_with_users.dart';
+import 'package:flutter/material.dart';
+import 'build_gradient_border.dart';
+import 'image_from_internet.dart';
 
 class BuildFacebookHeader extends StatelessWidget {
   const BuildFacebookHeader(
@@ -285,7 +285,7 @@ class BuildFacebookHeader extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text("${sinceTime ?? ''} .",
+                  Text("$sinceTime .",
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
@@ -295,6 +295,7 @@ class BuildFacebookHeader extends StatelessWidget {
                     Assets.publication,
                     width: 16,
                     height: 12.5,
+                    // ignore: deprecated_member_use
                     color: context.isDarkMode ? Colors.white : null,
                   )
                 ],

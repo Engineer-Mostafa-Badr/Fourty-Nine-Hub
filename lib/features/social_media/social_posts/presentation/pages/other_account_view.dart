@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:io';
 
@@ -35,6 +35,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/core/widget/custom_circular_progress_indicator.dart';
 import 'package:fourtyninehub/helpers/manage_vibration.dart';
 
+// ignore: must_be_immutable
 class OtherAccountView extends StatefulWidget {
   OtherAccountView({super.key, payload}) {
     print("objectitemId$payload");
@@ -48,6 +49,7 @@ class OtherAccountView extends StatefulWidget {
       userId = payload['userId'];
     }
   }
+  // ignore: prefer_typing_uninitialized_variables
   var userId;
 
   @override

@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,6 @@ import '../../domain/entities/post_entity.dart';
 import '../../domain/usecases/add_reply_usecase.dart';
 import '../cubit/social_posts_cubit.dart';
 import '../../../twitter/domain/entities/twitter_user_entity.dart';
-import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -147,6 +148,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         // Send postDetails before actually popping
@@ -247,8 +249,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                       SizedBox(
                                         height: 256,
                                         width: double.infinity,
-                                        child: _buildImageGrid(context,
-                                            state.postDetails!.images ?? []),
+                                        child: _buildImageGrid(
+                                            context, state.postDetails!.images),
                                       ),
                                   ],
                                 ),
@@ -366,6 +368,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                         children: [
                                           SvgPicture.asset(
                                             Assets.sendIcon,
+                                            // ignore: deprecated_member_use
                                             color: context.isDarkMode
                                                 ? Colors.white
                                                 : null,
@@ -391,6 +394,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                       Row(
                                         children: [
                                           SvgPicture.asset(Assets.shareIcon,
+                                              // ignore: deprecated_member_use
                                               color: context.isDarkMode
                                                   ? Colors.white
                                                   : null),
@@ -543,6 +547,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   ),
                                 );
                                 commentTextController.clear();
+                                // ignore: use_build_context_synchronously
                                 FocusScope.of(context).unfocus();
                                 setState(() {});
                               },
@@ -813,39 +818,5 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         ],
       );
     }
-  }
-
-  Widget _buildCommentCard(
-      {required CommentEntity comment,
-      required Function(ReplyOnCommentParams) onCommentReply,
-      required dynamic Function(String) onDeleteComment,
-      required dynamic Function(String) onDeleteReply}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CommentCard(
-          // onEditComment: (p0) {},
-          comment: comment,
-          onAddReply: (ReplyOnCommentParams params) async {
-            var result = await onCommentReply(params);
-            setState(() {});
-            return result;
-          },
-          onDeleteComment: (String id) => onDeleteComment(id),
-          onDeleteReply: (String id) => onDeleteReply(id),
-          from: 'feed',
-          onEditComment: (PostCommentParams params) =>
-              widget.onEditComment(params),
-        ),
-        if (comment.repliesCount != 0)
-          Container(
-              margin: const EdgeInsets.only(left: 30),
-              child: TextAppButton(
-                  label: 'show ${comment.repliesCount} replies',
-                  onPressed: () {
-                    ManageVibration.vibrate();
-                  }))
-      ],
-    );
   }
 }

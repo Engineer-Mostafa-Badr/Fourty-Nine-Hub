@@ -23,169 +23,174 @@ class MessageButton extends StatelessWidget {
   const MessageButton(
       {super.key,
       required this.user,
-        this.fromFacebook=false,
+      this.fromFacebook = false,
       required this.anonymousPress,
-      required this.normalPress, this.width, this.height});
+      required this.normalPress,
+      this.width,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final dialogWidth = MediaQuery.of(context).size.width * 0.75;
     final dialogHeight = screenHeight / 4;
     final titleFontSize = screenHeight * 0.05;
 
     return SizedBox(
-      height:height,
-      width:width ,
-      child: fromFacebook==true?_buildReactionPlaceHolder(
-          isImage: false,
-          icon: FontAwesomeIcons.whatsapp,
-          label: LocaleKeys.send.localize,
-          // image: Assets.comment,
-          onTap: () {
-      ManageVibration.vibrate();
-            showModalBottomSheet(
-                context: context,
-                builder: (_) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.r),
-                  ),
-                  height: dialogHeight,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(screenHeight * 0.02),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50.r),
-                              topRight: Radius.circular(50.r)),
-                          color: AppColors.GREY_NORMAL_COLOR,
-                        ),
-                        child: Text(
-                          LocaleKeys.chat_alert_dialog_pick_chat_type.tr(),
-                          style: Styles.headerText(
-                            fontSize: titleFontSize,
-                            fontWeight: FontWeight.bold,
+      height: height,
+      width: width,
+      child: fromFacebook == true
+          ? _buildReactionPlaceHolder(
+              isImage: false,
+              icon: FontAwesomeIcons.whatsapp,
+              label: LocaleKeys.send.localize,
+              // image: Assets.comment,
+              onTap: () {
+                ManageVibration.vibrate();
+                showModalBottomSheet(
+                    context: context,
+                    builder: (_) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.r),
                           ),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(screenHeight * 0.02),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
+                          height: dialogHeight,
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildChatOptionCard(
-                                context,
-                                icon: Icons.visibility_off,
-                                label: LocaleKeys
-                                    .chat_alert_dialog_anonymous
-                                    .tr(),
-                                cardUser: user,
-                                onPressed: () {
-      ManageVibration.vibrate();
-                                  anonymousPress();
-                                },
-                              ),
-                              SizedBox(height: screenHeight * 0.02),
-                              _buildChatOptionCard(context,
-                                  icon: Icons.visibility,
-                                  label: LocaleKeys
-                                      .chat_alert_dialog_regular
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(screenHeight * 0.02),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50.r),
+                                      topRight: Radius.circular(50.r)),
+                                  color: AppColors.GREY_NORMAL_COLOR,
+                                ),
+                                child: Text(
+                                  LocaleKeys.chat_alert_dialog_pick_chat_type
                                       .tr(),
-                                  cardUser: user, onPressed: () {
-      ManageVibration.vibrate();
-                                    normalPress();
-                                  }),
+                                  style: Styles.headerText(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(screenHeight * 0.02),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildChatOptionCard(
+                                        context,
+                                        icon: Icons.visibility_off,
+                                        label: LocaleKeys
+                                            .chat_alert_dialog_anonymous
+                                            .tr(),
+                                        cardUser: user,
+                                        onPressed: () {
+                                          ManageVibration.vibrate();
+                                          anonymousPress();
+                                        },
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      _buildChatOptionCard(context,
+                                          icon: Icons.visibility,
+                                          label: LocaleKeys
+                                              .chat_alert_dialog_regular
+                                              .tr(),
+                                          cardUser: user, onPressed: () {
+                                        ManageVibration.vibrate();
+                                        normalPress();
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              )
                             ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ));
-          },):AppButton(
-          // height: 120.h,
-          width: kToolbarHeight * 1.5,
-          label: LocaleKeys.send.localize,
-          style: Styles.mediumText(color: Colors.white, fontSize: 24),
-          onPressed: () {
-      ManageVibration.vibrate();
-            showModalBottomSheet(
-                context: context,
-                builder: (_) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.r),
-                      ),
-                      height: dialogHeight,
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(screenHeight * 0.02),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(50.r),
-                                  topRight: Radius.circular(50.r)),
-                              color: AppColors.GREY_NORMAL_COLOR,
-                            ),
-                            child: Text(
-                              LocaleKeys.chat_alert_dialog_pick_chat_type.tr(),
-                              style: Styles.headerText(
-                                fontSize: titleFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.start,
-                            ),
+                        ));
+              },
+            )
+          : AppButton(
+              // height: 120.h,
+              width: kToolbarHeight * 1.5,
+              label: LocaleKeys.send.localize,
+              style: Styles.mediumText(color: Colors.white, fontSize: 24),
+              onPressed: () {
+                ManageVibration.vibrate();
+                showModalBottomSheet(
+                    context: context,
+                    builder: (_) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.r),
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.all(screenHeight * 0.02),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildChatOptionCard(
-                                    context,
-                                    icon: Icons.visibility_off,
-                                    label: LocaleKeys
-                                        .chat_alert_dialog_anonymous
-                                        .tr(),
-                                    cardUser: user,
-                                    onPressed: () {
-      ManageVibration.vibrate();
-                                      anonymousPress();
-                                    },
+                          height: dialogHeight,
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(screenHeight * 0.02),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50.r),
+                                      topRight: Radius.circular(50.r)),
+                                  color: AppColors.GREY_NORMAL_COLOR,
+                                ),
+                                child: Text(
+                                  LocaleKeys.chat_alert_dialog_pick_chat_type
+                                      .tr(),
+                                  style: Styles.headerText(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  SizedBox(height: screenHeight * 0.02),
-                                  _buildChatOptionCard(context,
-                                      icon: Icons.visibility,
-                                      label: LocaleKeys
-                                          .chat_alert_dialog_regular
-                                          .tr(),
-                                      cardUser: user, onPressed: () {
-      ManageVibration.vibrate();
-                                    normalPress();
-                                  }),
-                                ],
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ));
-          },
-          ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(screenHeight * 0.02),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildChatOptionCard(
+                                        context,
+                                        icon: Icons.visibility_off,
+                                        label: LocaleKeys
+                                            .chat_alert_dialog_anonymous
+                                            .tr(),
+                                        cardUser: user,
+                                        onPressed: () {
+                                          ManageVibration.vibrate();
+                                          anonymousPress();
+                                        },
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      _buildChatOptionCard(context,
+                                          icon: Icons.visibility,
+                                          label: LocaleKeys
+                                              .chat_alert_dialog_regular
+                                              .tr(),
+                                          cardUser: user, onPressed: () {
+                                        ManageVibration.vibrate();
+                                        normalPress();
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ));
+              },
+            ),
     );
   }
-
 
   Widget _buildReactionPlaceHolder({
     IconData? icon,
@@ -256,7 +261,7 @@ class MessageButton extends StatelessWidget {
       height: 150.h,
       child: ElevatedButton(
           onPressed: () {
-      ManageVibration.vibrate();
+            ManageVibration.vibrate();
             onPressed();
           },
           style: ElevatedButton.styleFrom(
@@ -287,14 +292,5 @@ class MessageButton extends StatelessWidget {
             ],
           )),
     );
-  }
-
-  void _startChat(
-      BuildContext context, String label, UserProfileEntity cardUser) {
-    if (label == "Anonymous") {
-      print("Anonymous");
-    } else {
-      print("objectReg");
-    }
   }
 }
