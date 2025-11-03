@@ -48,8 +48,8 @@ class ProfileImage extends StatelessWidget {
           image: imageURL ?? '',
           isCircle: true,
           defaultLogo: false,
-          width: 40,
-          height: 40,
+          width: 50,
+          height: 50,
           // firstChar: user.firstName[0].toUpperCase(),
           charPadding: 0),
     );

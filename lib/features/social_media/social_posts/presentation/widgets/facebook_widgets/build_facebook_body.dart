@@ -110,7 +110,7 @@ class _FacebookBodyState extends State<FacebookBody>
                       children: [
                         SvgPicture.asset(
                           Assets.people,
-                          width: 30.h,
+                          width: 50.h,
                           height: 30.h,
                           // ignore: deprecated_member_use
                           color: tabController.index == 1

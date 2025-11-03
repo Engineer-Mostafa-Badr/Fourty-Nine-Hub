@@ -39,7 +39,6 @@ class _FacebookPeopleViewState extends State<FacebookPeopleView>
   @override
   void dispose() {
     tabController.dispose();
-    widget.scrollController.dispose();
     focusNode.dispose();
     super.dispose();
   }

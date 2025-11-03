@@ -98,7 +98,7 @@ class _FaceBookViewState extends State<FaceBookView>
                   if (UserCubit.to.isLoggedIn)
                     Container(
                       width: double.infinity,
-                      height: 5.h,
+                      height: 1.h,
                       color: AppColors.LIGHT_GRAY_COLOR,
                     ),
                   if (UserCubit.to.isLoggedIn) const Stories(),
@@ -119,7 +119,7 @@ class _FaceBookViewState extends State<FaceBookView>
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: controller.allFeed.length,
                             itemBuilder: (context, index) {
-                              final user = context.read<UserCubit>().state.data;
+                              // final user = context.read<UserCubit>().state.data;
                               var post = controller.allFeed[index];
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

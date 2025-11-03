@@ -42,7 +42,9 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (widget.country.isNotEmpty && widget.songName != null) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 

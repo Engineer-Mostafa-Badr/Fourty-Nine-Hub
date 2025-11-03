@@ -21,25 +21,25 @@ class CreatePostBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
-                  size: 44.w,
+                  size: 70.w,
                   userId: context.read<UserCubit>().state.data?.id ?? '',
                   imageURL:
                       context.read<UserCubit>().state.data?.profilePicture,
                   accountId: 0,
                 )
               : ProfileImage(
-                  size: 40.w,
+                  size: 80.w,
                   accountId: 0,
                   userId: '',
                 ),
           const Sizer(
-            width: 10,
+            width: 15,
           ),
           Expanded(
               child: InkWell(
@@ -52,12 +52,13 @@ class CreatePostBanner extends StatelessWidget {
             },
             child: Container(
               width: double.infinity, // Ensure full width
-              height: 38,
+              height: 50,
               padding: EdgeInsets.symmetric(
-                  vertical: 6.h, horizontal: 12), // Adjust left padding
+                  vertical: 10.h, horizontal: 20), // Adjust left padding
               decoration: BoxDecoration(
                 color: AppColors.getFillColor(context),
-                border: Border.all(color: Colors.grey, width: 1.5),
+                border:
+                    Border.all(color: Colors.grey.withOpacity(0.5), width: 1),
                 borderRadius: BorderRadius.circular(50.r),
               ),
               child: Align(
@@ -69,29 +70,23 @@ class CreatePostBanner extends StatelessWidget {
                       : 'بم تفكر؟',
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
+                      fontSize: 30.sp,
                       color: AppColors.getTextColor(context)),
                 ),
               ),
             ),
           )),
-          // const Sizer(
-          //   width: 13,
-          // ),
-          // InkWell(
-          //   onTap: () {
-          //     if (context.isUserLoggedIn) {
-          //       context.push(Routes.ZOOM);
-          //     } else {
-          //       context.push(Routes.LOGIN);
-          //     }
-          //   },
-          //   child:  SvgPicture.asset(
-          //     Assets.zoomVideo,
-          //     // height: 50.h,
-          //
-          //   ),
-          // ),
+          const Sizer(
+            width: 22,
+          ),
+          InkWell(
+            onTap: () {},
+            child: Icon(
+              Icons.photo_album_outlined,
+              size: 50.w,
+              color: Colors.green,
+            ),
+          ),
         ],
       ),
     );

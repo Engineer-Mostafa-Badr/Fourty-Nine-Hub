@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import '../../../../../core/constants/constants.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../social_posts/domain/usecases/get_post_comments_usecase.dart';

@@ -465,7 +465,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
   }
 
   Widget _buildCurrentReaction() {
-    if (widget.post.isLikes) {
+    if ((widget.post.isLikes ?? false) == false) {
       return _buildReactionItem(
           name: LocaleKeys.like.localize,
           item: Reactions.like,
